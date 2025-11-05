@@ -1,0 +1,30 @@
+{
+  "player": {
+    "id": "00000000-0000-0000-0000-000000000001",
+    "name": "Paaskyyy",
+    "culture": {
+      "amountForNext": 200
+    },
+    "faith": {
+      "amountForNext": 250
+    },
+    "government": {},
+    "cities": [],
+    "relations": [],
+    "technologies": [],
+    "tradeRoutes": [],
+    "units": [],
+    "yieldStorage": [
+      {"key": "yieldType:gold", "amount": 234},
+      {"key": "yieldType:science", "amount": 131},
+      {"key": "yieldType:culture", "amount": 40},
+      {"key": "yieldType:faith", "amount": 55},
+      {"key": "yieldType:influence", "amount": 420}
+    ]
+  },
+  "objects": [],
+  "world": {
+    "sizeX": 120,
+    "sizeY": 60
+  }
+}

@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* App-level styles */
+:root {
+    color-scheme: light dark;
+}
+
+
+@layer base {
+    /* Sharper, more consistent text rendering across platforms */
+    html, body {
+        /* Tailwind utility for -webkit-font-smoothing/-moz-osx-font-smoothing */
+        @apply antialiased;
+
+        /* Prefer better kerning and ligatures where available */
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+        font-variant-ligatures: common-ligatures;
+        font-feature-settings: 'kern' 1, 'liga' 1;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        @apply font-heading font-normal;
+        font-weight: bold;
+        text-shadow: #000 0 0 5px;
+    }
+}
