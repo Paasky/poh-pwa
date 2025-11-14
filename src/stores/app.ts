@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { useObjectsStore } from '@/stores/objects'
 import { useEncyclopediaStore } from '@/components/Encyclopedia/store'
-import { GameData, SaveData } from '@/types/api'
+import { GameData, StaticData } from '@/types/api'
 import { usePlayerScienceStore } from '@/components/PlayerDetails/Tabs/scienceStore'
 import { usePlayerFaithStore } from '@/components/PlayerDetails/Tabs/faithStore'
 import { usePlayerGovernmentStore } from '@/components/PlayerDetails/Tabs/governmentStore'
@@ -26,11 +26,11 @@ export const useAppStore = defineStore('app', {
       await new Promise(resolve => setTimeout(resolve, 1000))
 
       const [gameData, saveData] = await Promise.all([
-        fetchJSON<GameData>('/gameData.json'),
-        fetchJSON<SaveData>('/saveData.json')
+        fetchJSON<StaticData>('/gameData.json'),
+        fetchJSON<GameData>('/saveData.json')
       ])
 
-      useObjectsStore().init(gameData, saveData.objects)
+      useObjectsStore().init(gameData, saveData)
 
       usePlayersStore().init()
 

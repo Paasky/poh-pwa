@@ -1,12 +1,9 @@
-export interface GameData {
+export interface StaticData {
   categories: any[]
   types: any[]
 }
 
-export interface SaveData {
-  id: string
-  turn: number
-  size: {x: number, y: number}
-  currentPlayer: string
+export interface GameData {
   objects: any[]
+  world: any
 }

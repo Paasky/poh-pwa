@@ -67,16 +67,24 @@ onBeforeUnmount(() => stopAudio())
           </a>
         </UiButton>
       </div>
-      <div class="w-full xl:w-1/2 float-left mr-4 mb-2">
-        <img :src="`/media/${current.class}/${current.id}.jpg`" class="w-full rounded-xl mb-2" alt="image"/>
+      <div v-if="current.image || current.quote || current.p1" class="w-full xl:w-1/2 float-left mr-4 mb-2">
+        <img v-if="current.image" :src="current.image" class="w-full rounded-xl mb-2" alt="image"/>
         <div v-if="current.quote" class="bg-gray-100/10 rounded-xl p-4">
+          <div v-if="current.quote.greeting" class="italic mb-2">
+            {{ current.quote.greeting }}
+          </div>
           <div class="italic mb-2">
             {{ current.quote.text }}
           </div>
-          <div class="text-right whitespace-nowrap opacity-50 cursor-pointer" @click="playQuote" title="Play quote">
-            {{ current.quote.source }}
-            <UiIcon :icon="icons.play"/>
+          <div v-if="current.quote.source ||  current.quote.url"
+               class="text-right whitespace-nowrap opacity-50 cursor-pointer"
+               @click="current.quote.url ? playQuote() : null" title="Play quote"
+          >
+            <span v-if="current.quote.source">{{ current.quote.source }}</span>
+            <UiIcon v-if="current.quote.url" :icon="icons.play"/>
           </div>
+          <span v-if="current.quote.url" class="float-right">
+          </span>
         </div>
         <div v-if="current.p1 && !current.quote" class="bg-gray-100/10 rounded-xl p-4">
           <div class="italic mb-2">

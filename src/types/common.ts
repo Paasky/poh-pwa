@@ -1,34 +1,31 @@
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 import { reactive } from 'vue'
 import getIcon from '@/types/icons'
-import { CategoryObject, TypeObject } from '@/types/typeObjects'
-import { GameObject } from '@/types/gameObjects'
+import { CategoryClass, CategoryObject, TypeClass, TypeObject } from '@/types/typeObjects'
+import { GameClass, GameObject } from '@/types/gameObjects'
 
 export type ObjType = 'TypeObject' | 'CategoryObject' | 'GameObject'
+export type ObjKey = `${CategoryClass | TypeClass | GameClass}:${string}`
 
 export interface PohObject {
   objType: ObjType
+  class: CategoryClass | TypeClass | GameClass
   id: string
-  class: string
-  key: string
+  key: ObjKey
   name: string
-  concept: string
+  concept: `conceptType:${string}`
   icon: ObjectIcon
 }
 
 export function initPohObject (objType: ObjType, data: any): PohObject {
-  const obj = {
+  return {
     objType,
     ...classAndId(data.key),
+    key: data.key,
+    name: data.name ?? '',
+    concept: data.concept,
     icon: getIcon(data.key, data.concept, data.category),
-    ...data
   }
-
-  if (!('name' in data)) {
-    obj.name = ''
-  }
-
-  return obj
 }
 
 export function isCategoryObject (o: PohObject): o is CategoryObject {
@@ -48,9 +45,9 @@ export interface ObjectIcon {
   color: string
 }
 
-export function classAndId (key: string): { class: string, id: string } {
+export function classAndId (key: string): { class: CategoryClass | TypeClass | GameClass, id: string } {
   const [c, i] = key.split(':')
-  return { class: c, id: i }
+  return { class: c as CategoryClass | TypeClass | GameClass, id: i }
 }
 
 export interface Yield {

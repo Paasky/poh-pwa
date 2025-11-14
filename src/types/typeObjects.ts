@@ -1,5 +1,5 @@
 // Type object definitions (encyclopedia/types dataset)
-import { initPohObject, PohObject, Yield } from './common'
+import { initPohObject, ObjKey, PohObject, Yield } from './common'
 
 export type TypeClass =
   'actionType' |
@@ -65,16 +65,18 @@ export type CategoryClass =
 export interface CategoryObject extends PohObject {
   objType: 'CategoryObject',
   class: CategoryClass
-  relatesTo: string[]
+  relatesTo: ObjKey[]
 }
 
 export interface TypeObject extends PohObject {
   objType: 'TypeObject'
   class: TypeClass
+  category?: `${CategoryClass}:${string}`
   description?: string
   audio?: string[]
   image?: string
   quote?: {
+    greeting: string,
     text: string,
     source: string,
     url: string,
@@ -84,15 +86,19 @@ export interface TypeObject extends PohObject {
   p2?: string
   x?: number
   y?: number
-  category?: string
-  allows: string[]
-  requires: string[] | string[][]
+  hotkey?: string
+  moves?: number
+  heritageCost?: number
+  productionCost?: number
+  scienceCost?: number
+  allows: ObjKey[]
+  requires: ObjKey[] | ObjKey[][]
   yields: Yield[]
   gains: string[]
-  upgradesTo: string[]
-  upgradesFrom: string[]
-  specials: string[]
-  relatesTo: string[]
+  upgradesTo: ObjKey[]
+  upgradesFrom: ObjKey[]
+  specials: ObjKey[]
+  relatesTo: ObjKey[]
 }
 
 export function initCategoryObject (data: any): CategoryObject {

@@ -1,12 +1,20 @@
 import { markRaw, reactive, shallowReactive } from 'vue'
 import { defineStore } from 'pinia'
 import { isCategoryObject, isTypeObject, PohObject } from '@/types/common'
-import { GameData } from '@/types/api'
+import { GameData, StaticData } from '@/types/api'
 import { CategoryObject, initCategoryObject, initTypeObject, TypeClass, TypeObject } from '@/types/typeObjects'
-import { GameObject, initGameObject } from '@/types/gameObjects'
+import { GameObject, init } from '@/types/gameObjects'
 
 export const useObjectsStore = defineStore('objects', {
   state: () => ({
+    world: {
+      id: '',
+      sizeX: 0,
+      sizeY: 0,
+      turn: 0,
+      year: 0,
+    },
+
     // key: PohObject.key
     _gameObjects: shallowReactive<Record<string, GameObject>>({}),
     _staticObjects: {} as Readonly<Record<string, CategoryObject | TypeObject>>,
@@ -78,27 +86,35 @@ export const useObjectsStore = defineStore('objects', {
   },
 
   actions: {
-    init (rawGameData: GameData, rawObjects: any[]) {
+    init (staticData: StaticData, gameData: GameData) {
       if (this.ready) throw new Error('Objects Store already initialized')
 
-      // 1) Initialize objects from raw data
+      // 1) Initialize static objects
       const staticObjects = {} as Record<string, CategoryObject | TypeObject>
-      for (const data of rawGameData.types) {
+      for (const data of staticData.types) {
         staticObjects[data.key] = Object.freeze(markRaw(initTypeObject(data)))
       }
-      for (const data of rawGameData.categories) {
+      for (const data of staticData.categories) {
         staticObjects[data.key] = Object.freeze(markRaw(initCategoryObject(data)))
       }
       this._staticObjects = Object.freeze(staticObjects)
 
+      // 2) Initialize the world
+      this.world.id = gameData.world.id
+      this.world.sizeX = gameData.world.sizeX
+      this.world.sizeY = gameData.world.sizeY
+      this.world.turn = gameData.world.turn
+      this.world.year = gameData.world.year
+
+      // 3) Initialize game objects
       const gameObjects = {} as Record<string, GameObject>
-      for (const data of rawObjects) {
+      for (const data of gameData.objects) {
         // todo: freeze old game objects (eg dead units, ended deals, completed goals, etc)
-        gameObjects[data.key] = reactive(initGameObject(data))
+        gameObjects[data.key] = reactive(init(data))
       }
       Object.assign(this._gameObjects, gameObjects)
 
-      // 2) Build indexes
+      // 4) Build indexes
       for (const obj of Object.values(this._staticObjects)) {
         if (!isTypeObject(obj)) continue
 
@@ -133,7 +149,29 @@ export const useObjectsStore = defineStore('objects', {
     set (obj: GameObject) {
       if (!obj.key) throw new Error('GameObject must have a key')
       if (this._gameObjects[obj.key]) throw new Error(`GameObject ${obj.key} already exists`)
-      this._gameObjects[obj.key] = obj
+      this._gameObjects[obj.key] = reactive(obj)
+    },
+    bulkSet (objs: GameObject[]) {
+      if (!objs.length) return
+
+      // Validate and prepare in one pass
+      const incoming: Record<string, GameObject> = {}
+      const errors = []
+      for (const obj of objs) {
+        if (!obj.key) {
+          errors.push('GameObject must have a key: ' + JSON.stringify(obj))
+          continue
+        }
+        if (this._gameObjects[obj.key] || incoming[obj.key]) {
+          errors.push(`GameObject ${obj.key} already exists`)
+          continue
+        }
+        // Keep reactivity consistent with init
+        incoming[obj.key] = reactive(obj)
+      }
+      if (errors.length) throw new Error(errors.join('\n'))
+
+      Object.assign(this._gameObjects, incoming)
     },
     delete (gameObjKey: string) {
       if (!this._gameObjects[gameObjKey]) throw new Error(`GameObject ${gameObjKey} does not exist`)

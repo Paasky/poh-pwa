@@ -2,8 +2,8 @@ import { defineStore } from 'pinia'
 import { nextTick } from 'vue'
 import pluralize from 'pluralize'
 import { capitalCase } from 'change-case'
-import { CategoryObject, TypeObject } from '@/types/typeObjects'
-import { isCategoryObject, isTypeObject, ObjectIcon } from '@/types/common'
+import { TypeObject } from '@/types/typeObjects'
+import { ObjectIcon } from '@/types/common'
 import { useObjectsStore } from '@/stores/objects'
 import { icons } from '@/types/icons'
 
@@ -111,7 +111,7 @@ export const useEncyclopediaStore = defineStore('encyclopedia', {
     sections: {} as Record<string, Section>,
     openKeys: {} as Record<string, boolean>,
     keyMap: {} as Record<string, string>,
-    current: null as CategoryObject | TypeObject | null,
+    current: null as TypeObject | null,
   }),
   actions: {
     init () {
@@ -172,14 +172,7 @@ export const useEncyclopediaStore = defineStore('encyclopedia', {
       this.isOpen = true
     },
     openType (key: string) {
-      const obj = useObjectsStore().get(key)
-      if (isTypeObject(obj)) {
-        this.current = obj
-      } else if (isCategoryObject(obj)) {
-        this.current = obj
-      } else {
-        throw new Error(`[enc.openType] Invalid object type: ${typeof obj}`)
-      }
+      this.current = useObjectsStore().getTypeObject(key)
       this.scrollAndOpenType(key)
       this.isOpen = true
       this.scrollIntoViewById(key, 'center')

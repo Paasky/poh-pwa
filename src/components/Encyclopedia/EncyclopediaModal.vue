@@ -88,7 +88,7 @@ function clearQuery () {
 
     <div class="w-full h-full flex">
       <!-- Left menu -->
-      <aside ref="leftMenuEl" class="w-64 shrink-0 flex-none h-full overflow-y-auto bg-slate-950">
+      <aside ref="leftMenuEl" class="w-72 shrink-0 flex-none h-full overflow-y-auto bg-slate-950">
         sports: image in ancient greek pottery style
         sanitation: image in 19th century painting style
         guided ordnance: image in 1980s vhs style
