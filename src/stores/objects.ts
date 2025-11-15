@@ -70,6 +70,21 @@ export const useObjectsStore = defineStore('objects', {
       return Array.from(set).map(key => state._staticObjects[key] as TypeObject)
     },
 
+    getClassTypesPerCategory: (state) => (typeClass: TypeClass): {category: CategoryObject, types: TypeObject[]}[] => {
+      const output = [] as {category: CategoryObject, types: TypeObject[]}[]
+      const catsSet = state._classCatsIndex.get(typeClass)
+      if (!catsSet) return output
+
+        for (const catKey of catsSet) {
+          output.push({
+              category: state._staticObjects[catKey] as CategoryObject,
+              types: Array.from(state._categoryTypesIndex.get(catKey) ?? [])
+                  .map(key => state._staticObjects[key] as TypeObject)
+          })
+      }
+      return output
+    },
+
     getClassCategories: (state) => (typeClass: TypeClass): CategoryObject[] => {
       const set = state._classCatsIndex.get(typeClass)
       if (!set) return []
