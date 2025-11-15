@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { TypeObject } from '@/types/typeObjects'
-import { useObjectsStore } from '@/stores/objects'
+import { useObjectsStore } from '@/stores/objectStore'
 
 export interface TechData {
   type: TypeObject,

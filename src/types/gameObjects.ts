@@ -1,6 +1,6 @@
 import { initPohObject, ObjKey, PohObject, TypeStorage } from './common'
 import { TypeObject } from '@/types/typeObjects'
-import { useObjectsStore } from '@/stores/objects'
+import { useObjectsStore } from '@/stores/objectStore'
 
 const objects = useObjectsStore()
 

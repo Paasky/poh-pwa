@@ -7,7 +7,7 @@ import { TypeObject } from '@/types/typeObjects'
 import UiCardGrid from '@/components/Ui/UiCardGrid.vue'
 import UiCardGroup from '@/components/Ui/UiCardGroup.vue'
 import UiButton from '@/components/Ui/UiButton.vue'
-import { usePlayersStore } from '@/stores/players'
+import { usePlayersStore } from '@/stores/playerStore'
 
 const player = usePlayersStore().current
 

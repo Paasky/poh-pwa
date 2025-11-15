@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import UiTypePill from '@/components/Ui/UiTypePill.vue'
-import { useObjectsStore } from '@/stores/objects'
+import { useObjectsStore } from '@/stores/objectStore'
 
 const props = defineProps<{
   typeKeys: string[] | string[][],

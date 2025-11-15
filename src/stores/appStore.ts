@@ -1,11 +1,7 @@
 import { defineStore } from 'pinia'
-import { useObjectsStore } from '@/stores/objects'
+import { useObjectsStore } from '@/stores/objectStore'
 import { useEncyclopediaStore } from '@/components/Encyclopedia/store'
 import { GameData, StaticData } from '@/types/api'
-import { usePlayerScienceStore } from '@/components/PlayerDetails/Tabs/scienceStore'
-import { usePlayerFaithStore } from '@/components/PlayerDetails/Tabs/faithStore'
-import { usePlayerGovernmentStore } from '@/components/PlayerDetails/Tabs/governmentStore'
-import { usePlayersStore } from '@/stores/players'
 
 async function fetchJSON<T> (url: string): Promise<T> {
   const res = await fetch(url, { cache: 'no-store' })
@@ -31,12 +27,6 @@ export const useAppStore = defineStore('app', {
       ])
 
       useObjectsStore().init(gameData, saveData)
-
-      usePlayersStore().init()
-
-      usePlayerFaithStore().init()
-      usePlayerGovernmentStore().init()
-      usePlayerScienceStore().init()
 
       // Build encyclopedia menu once after types are ready
       const encyclopedia = useEncyclopediaStore()

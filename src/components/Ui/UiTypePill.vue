@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import UiIcon from '@/components/Ui/UiIcon.vue'
 import { useEncyclopediaStore } from '@/components/Encyclopedia/store'
-import { useObjectsStore } from '@/stores/objects'
+import { useObjectsStore } from '@/stores/objectStore'
 import UiButton from '@/components/Ui/UiButton.vue'
 import { PohObject } from '@/types/common'
 

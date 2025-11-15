@@ -21,7 +21,7 @@ const flipEffectTypes = [
 const noEffectTypes = [
   'yieldType:productionCost',
 ]
-const noPercentPlusTypes = [
+const noPlusTypes = [
   'yieldType:intercept',
 ]
 
@@ -31,7 +31,7 @@ const amount = computed(() => {
       ? props.data.amount + '%'
       : props.data.amount
 
-  return props.data.method === 'percent' && props.data.amount > 0 && !noPercentPlusTypes.includes(props.data.type)
+  return props.data.method !== 'set' && props.data.amount > 0 && !noPlusTypes.includes(props.data.type)
       ? '+' + output
       : output
 })

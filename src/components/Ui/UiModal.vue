@@ -3,7 +3,7 @@ import { onBeforeUnmount, onMounted, ref } from 'vue'
 import UiButton from '@/components/Ui/UiButton.vue'
 import UiIcon from '@/components/Ui/UiIcon.vue'
 import { icons } from '@/types/icons'
-import { useAppStore } from '@/stores/app'
+import { useAppStore } from '@/stores/appStore'
 
 const props = withDefaults(defineProps<{
   open: boolean

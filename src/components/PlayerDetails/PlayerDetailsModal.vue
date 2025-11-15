@@ -14,7 +14,7 @@ import CitiesTab from './Tabs/CitiesTab.vue'
 import MilitaryTab from './Tabs/MilitaryTab.vue'
 import TradeTab from './Tabs/TradeTab.vue'
 import GovernmentTab from './Tabs/GovernmentTab.vue'
-import { useObjectsStore } from '@/stores/objects'
+import { useObjectsStore } from '@/stores/objectStore'
 import UiModal from '@/components/Ui/UiModal.vue'
 
 const playerDetails = usePlayerDetailsStore()

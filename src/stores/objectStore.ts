@@ -1,6 +1,6 @@
 import { markRaw, reactive, shallowReactive } from 'vue'
 import { defineStore } from 'pinia'
-import { isCategoryObject, isTypeObject, PohObject } from '@/types/common'
+import { isCategoryObject, isTypeObject, PohObject, TypeStorage, World } from '@/types/common'
 import { GameData, StaticData } from '@/types/api'
 import { CategoryObject, initCategoryObject, initTypeObject, TypeClass, TypeObject } from '@/types/typeObjects'
 import { GameObject, init } from '@/types/gameObjects'
@@ -13,7 +13,7 @@ export const useObjectsStore = defineStore('objects', {
       sizeY: 0,
       turn: 0,
       year: 0,
-    },
+    } as World,
 
     // key: PohObject.key
     _gameObjects: shallowReactive<Record<string, GameObject>>({}),
@@ -76,6 +76,24 @@ export const useObjectsStore = defineStore('objects', {
       const set = state._classTypesIndex.get(typeClass)
       if (!set) return []
       return Array.from(set).map(key => state._staticObjects[key] as TypeObject)
+    },
+
+    getClassTypesPerCategory: (state) => (typeClass: TypeClass): {
+      category: CategoryObject,
+      types: TypeObject[]
+    }[] => {
+      const output = [] as { category: CategoryObject, types: TypeObject[] }[]
+      const catsSet = state._classCatsIndex.get(typeClass)
+      if (!catsSet) return output
+
+      for (const catKey of catsSet) {
+        output.push({
+          category: state._staticObjects[catKey] as CategoryObject,
+          types: Array.from(state._categoryTypesIndex.get(catKey) ?? [])
+            .map(key => state._staticObjects[key] as TypeObject)
+        })
+      }
+      return output
     },
 
     getClassCategories: (state) => (typeClass: TypeClass): CategoryObject[] => {
@@ -176,6 +194,28 @@ export const useObjectsStore = defineStore('objects', {
     delete (gameObjKey: string) {
       if (!this._gameObjects[gameObjKey]) throw new Error(`GameObject ${gameObjKey} does not exist`)
       delete this._gameObjects[gameObjKey]
+    },
+    toGameData (): GameData {
+      const output = {
+        objects: [] as any[],
+        world: this.world,
+      }
+
+      for (const obj of Object.values(this._gameObjects)) {
+        const outObj = { ...obj } as any
+
+        // TypeStorages are classes, so we need to serialize them separately
+        for (const attr of ['resourceStorage', 'stockpileStorage', 'yieldStorage']) {
+          if (attr in obj) {
+            const storage = obj[attr as keyof GameObject] as any as TypeStorage
+            outObj[attr] = storage.toJson()
+          }
+        }
+
+        output.objects.push(outObj)
+      }
+
+      return output
     }
   }
 })

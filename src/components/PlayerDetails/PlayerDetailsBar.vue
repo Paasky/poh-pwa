@@ -5,11 +5,11 @@ import { type TabKey, usePlayerDetailsStore } from '@/components/PlayerDetails/p
 import UiElement from '@/components/Ui/UiElement.vue'
 import UiValue from '@/components/Ui/UiValue.vue'
 import UiIcon from '@/components/Ui/UiIcon.vue'
-import { useObjectsStore } from '@/stores/objects'
+import { useObjectsStore } from '@/stores/objectStore'
 import UiButton from '@/components/Ui/UiButton.vue'
 import { usePlayerScienceStore } from '@/components/PlayerDetails/Tabs/scienceStore'
 import { usePlayerFaithStore } from '@/components/PlayerDetails/Tabs/faithStore'
-import { usePlayersStore } from '@/stores/players'
+import { usePlayersStore } from '@/stores/playerStore'
 
 const objects = useObjectsStore()
 const modal = usePlayerDetailsStore()

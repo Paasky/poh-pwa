@@ -1,3 +1,5 @@
+import { World } from '@/types/common'
+
 export interface StaticData {
   categories: any[]
   types: any[]
@@ -5,5 +7,5 @@ export interface StaticData {
 
 export interface GameData {
   objects: any[]
-  world: any
+  world: World
 }

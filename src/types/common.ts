@@ -7,6 +7,11 @@ import { GameClass, GameObject } from '@/types/gameObjects'
 export type ObjType = 'TypeObject' | 'CategoryObject' | 'GameObject'
 export type ObjKey = `${CategoryClass | TypeClass | GameClass}:${string}`
 
+export function classAndId (key: string): { class: CategoryClass | TypeClass | GameClass, id: string } {
+  const [c, i] = key.split(':')
+  return { class: c as CategoryClass | TypeClass | GameClass, id: i }
+}
+
 export interface PohObject {
   objType: ObjType
   class: CategoryClass | TypeClass | GameClass
@@ -40,17 +45,20 @@ export function isGameObject (o: PohObject): o is GameObject {
   return o.objType === 'GameObject'
 }
 
-export interface ObjectIcon {
+export type World = {
+  id: string,
+  sizeX: number,
+  sizeY: number,
+  turn: number,
+  year: number,
+}
+
+export type ObjectIcon = {
   icon: IconDefinition,
   color: string
 }
 
-export function classAndId (key: string): { class: CategoryClass | TypeClass | GameClass, id: string } {
-  const [c, i] = key.split(':')
-  return { class: c as CategoryClass | TypeClass | GameClass, id: i }
-}
-
-export interface Yield {
+export type Yield = {
   type: string
   amount: number
   method: string
@@ -97,5 +105,9 @@ export class TypeStorage {
     }
 
     return this
+  }
+
+  toJson (): Record<string, number> {
+    return this._items
   }
 }

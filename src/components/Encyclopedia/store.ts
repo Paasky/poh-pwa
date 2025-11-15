@@ -4,7 +4,7 @@ import pluralize from 'pluralize'
 import { capitalCase } from 'change-case'
 import { TypeObject } from '@/types/typeObjects'
 import { ObjectIcon } from '@/types/common'
-import { useObjectsStore } from '@/stores/objects'
+import { useObjectsStore } from '@/stores/objectStore'
 import { icons } from '@/types/icons'
 
 // Helpers to create and ensure sections without duplicating object literals

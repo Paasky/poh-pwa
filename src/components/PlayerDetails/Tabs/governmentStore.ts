@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { CategoryObject, TypeObject } from '@/types/typeObjects'
-import { useObjectsStore } from '@/stores/objects'
+import { useObjectsStore } from '@/stores/objectStore'
 
 export interface CategoryData {
   category: CategoryObject,

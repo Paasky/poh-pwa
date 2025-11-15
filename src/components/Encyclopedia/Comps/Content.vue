@@ -7,7 +7,7 @@ import UiIcon from '@/components/Ui/UiIcon.vue'
 import UiYieldList from '@/components/Ui/UiYieldList.vue'
 import UiButton from '@/components/Ui/UiButton.vue'
 import { useEncyclopediaStore } from '@/components/Encyclopedia/store'
-import { useObjectsStore } from '@/stores/objects'
+import { useObjectsStore } from '@/stores/objectStore'
 
 const objects = useObjectsStore()
 const encyclopedia = useEncyclopediaStore()
