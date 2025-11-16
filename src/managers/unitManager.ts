@@ -16,7 +16,7 @@ export class UnitManager {
     isMercenary = false,
     isMobilized = false,
   ): Unit {
-    return createUnit(
+    const unit = createUnit(
       player.key,
       unitDesign.key,
       tile.key,
@@ -27,10 +27,15 @@ export class UnitManager {
       health,
       city?.key,
     )
+    this._objects.set(unit)
+    return unit
   }
 
   getDesign (unit: Unit): UnitDesign {
     return this._objects.getGameObject(unit.design) as UnitDesign
+  }
+
+  calcTiles(player: Player): void {
   }
 
   resetMoves (unit: Unit): void {

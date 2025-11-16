@@ -16,7 +16,6 @@ export type PlayerBundle = {
 export const createPlayer = (
   name = '',
   isCurrent = false,
-  visibleTiles: ObjKey[] = [],
   relations: Record<ObjKey, Relation> = {},
   turnsToElection = 0,
   policyUnhappiness = 0,
@@ -48,7 +47,8 @@ export const createPlayer = (
     // Player-specific defaults
     isCurrent,
 
-    visibleTiles,
+    knownTiles: [],
+    visibleTiles: [],
     ownedTiles: [],
     unitDesigns: [],
     units: [],

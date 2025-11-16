@@ -149,6 +149,7 @@ export const initDeal = (rawData: any): Deal => {
 export type Player = GameObject & {
   isCurrent: boolean
 
+  knownTiles: ObjKey[]
   visibleTiles: ObjKey[]
   ownedTiles: ObjKey[]
   unitDesigns: ObjKey[]
@@ -172,6 +173,7 @@ export const initPlayer = (rawData: any): Player => {
 
   obj.isCurrent = rawData.isCurrent
 
+  obj.knownTiles = rawData.knownTiles
   obj.visibleTiles = rawData.visibleTiles
   obj.ownedTiles = rawData.ownedTiles
   obj.unitDesigns = rawData.unitDesigns

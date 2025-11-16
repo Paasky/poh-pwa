@@ -1,38 +1,44 @@
 import { markRaw, reactive, shallowReactive } from 'vue'
 import { defineStore } from 'pinia'
-import { isCategoryObject, isTypeObject, PohObject, TypeStorage, World } from '@/types/common'
+import { isCategoryObject, isTypeObject, ObjKey, PohObject, TypeStorage, World } from '@/types/common'
 import { GameData, StaticData } from '@/types/api'
 import { CategoryObject, initCategoryObject, initTypeObject, TypeClass, TypeObject } from '@/types/typeObjects'
-import { GameObject, init } from '@/types/gameObjects'
+import { GameClass, GameObject, init } from '@/types/gameObjects'
 
 export const useObjectsStore = defineStore('objects', {
   state: () => ({
+    // These will be filled in init() or WorldManager.create()
     world: {
       id: '',
       sizeX: 0,
       sizeY: 0,
       turn: 0,
       year: 0,
+      currentPlayer: '' as ObjKey,
+      tiles: {},
     } as World,
 
     // key: PohObject.key
-    _gameObjects: shallowReactive<Record<string, GameObject>>({}),
-    _staticObjects: {} as Readonly<Record<string, CategoryObject | TypeObject>>,
+    _gameObjects: shallowReactive<Record<ObjKey, GameObject>>({}),
+    _staticObjects: {} as Readonly<Record<ObjKey, CategoryObject | TypeObject>>,
 
     // key: CategoryObject.key, values: Set<TypeObject.key>
-    _categoryTypesIndex: new Map<string, Set<string>>(),
+    _categoryTypesIndex: new Map<ObjKey, Set<ObjKey>>(),
 
     // key: TypeObject.class, values: Set<TypeObject.key>
-    _classTypesIndex: new Map<TypeClass, Set<string>>(),
+    _classTypesIndex: new Map<TypeClass, Set<ObjKey>>(),
 
     // key: TypeObject.class, values: Set<CategoryObject.key>
-    _classCatsIndex: new Map<TypeClass, Set<string>>(),
+    _classCatsIndex: new Map<TypeClass, Set<ObjKey>>(),
+
+    // key: TypeObject.class, values: Set<TypeObject.key>
+    _classGameObjectsIndex: new Map<GameClass, Set<ObjKey>>(),
 
     ready: false as boolean
   }),
   getters: {
     // Generic getter
-    get: (state) => (key: string): PohObject => {
+    get: (state) => (key: ObjKey): PohObject => {
       const obj = state._staticObjects[key] ?? state._gameObjects[key]
       if (!obj) throw new Error(`[objects] Unknown key: ${key}`)
       return obj
@@ -40,20 +46,20 @@ export const useObjectsStore = defineStore('objects', {
 
     // Specific getters
 
-    getGameObject: (state) => (key: string): GameObject => {
+    getGameObject: (state) => (key: ObjKey): GameObject => {
       const obj = state._gameObjects[key]
       if (!obj) throw new Error(`[objects] Unknown GameObject key: ${key}`)
       return obj
     },
 
-    getTypeObject: (state) => (key: string): TypeObject => {
+    getTypeObject: (state) => (key: ObjKey): TypeObject => {
       const obj = state._staticObjects[key]
       if (!obj) throw new Error(`[objects] Unknown TypeObject key: ${key}`)
       if (!isTypeObject(obj)) throw new Error(`[objects] Not a TypeObject: ${key} : ${JSON.stringify(obj)}`)
       return obj
     },
 
-    getCategoryObject: (state) => (key: string): CategoryObject => {
+    getCategoryObject: (state) => (key: ObjKey): CategoryObject => {
       const obj = state._staticObjects[key]
       if (!obj) throw new Error(`[objects] Unknown CategoryObject key: ${key}`)
 
@@ -62,11 +68,11 @@ export const useObjectsStore = defineStore('objects', {
       return obj as CategoryObject
     },
 
-    // Types-array getters
+    // TypeObjects-array getters
 
     getAllTypes: (state) => (): TypeObject[] => Object.values(state._staticObjects).filter(isTypeObject),
 
-    getCategoryTypes: (state) => (catKey: string): TypeObject[] => {
+    getCategoryTypes: (state) => (catKey: ObjKey): TypeObject[] => {
       const set = state._categoryTypesIndex.get(catKey)
       if (!set) return []
       return Array.from(set).map(key => state._staticObjects[key] as TypeObject)
@@ -100,7 +106,15 @@ export const useObjectsStore = defineStore('objects', {
       const set = state._classCatsIndex.get(typeClass)
       if (!set) return []
       return Array.from(set).map(key => state._staticObjects[key] as CategoryObject)
-    }
+    },
+
+    // GameObjects-array getters
+
+    getClassGameObjects: (state) => (gameClass: GameClass): GameObject[] => {
+      const set = state._classGameObjectsIndex.get(gameClass)
+      if (!set) return []
+      return Array.from(set).map(key => state._gameObjects[key])
+    },
   },
 
   actions: {
@@ -132,7 +146,7 @@ export const useObjectsStore = defineStore('objects', {
       }
       Object.assign(this._gameObjects, gameObjects)
 
-      // 4) Build indexes
+      // 4) Build Type indexes
       for (const obj of Object.values(this._staticObjects)) {
         if (!isTypeObject(obj)) continue
 
@@ -157,6 +171,16 @@ export const useObjectsStore = defineStore('objects', {
           } else {
             this._classCatsIndex.set(obj.class, new Set([obj.category]))
           }
+        }
+      }
+
+      // 5) Build GameObject indexes
+      for (const obj of Object.values(this._gameObjects)) {
+        const classGameObjects = this._classGameObjectsIndex.get(obj.class)
+        if (classGameObjects) {
+          classGameObjects.add(obj.key)
+        } else {
+          this._classGameObjectsIndex.set(obj.class, new Set([obj.key]))
         }
       }
 
@@ -191,7 +215,7 @@ export const useObjectsStore = defineStore('objects', {
 
       Object.assign(this._gameObjects, incoming)
     },
-    delete (gameObjKey: string) {
+    delete (gameObjKey: ObjKey) {
       if (!this._gameObjects[gameObjKey]) throw new Error(`GameObject ${gameObjKey} does not exist`)
       delete this._gameObjects[gameObjKey]
     },
