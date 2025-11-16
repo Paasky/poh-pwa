@@ -41766,7 +41766,8 @@
                         "conceptType:citizen"
                     ]
                 }
-            ]
+            ],
+            "isPositive": true
         },
         {
             "key": "traitType:gluttonous",
@@ -41782,7 +41783,8 @@
                         "conceptType:citizen"
                     ]
                 }
-            ]
+            ],
+            "isPositive": false
         },
         {
             "key": "traitType:hardWorking",
@@ -41798,7 +41800,8 @@
                         "conceptType:citizen"
                     ]
                 }
-            ]
+            ],
+            "isPositive": true
         },
         {
             "key": "traitType:lazy",
@@ -41814,7 +41817,8 @@
                         "conceptType:citizen"
                     ]
                 }
-            ]
+            ],
+            "isPositive": false
         },
         {
             "key": "traitType:entrepreneuring",
@@ -41830,7 +41834,8 @@
                         "conceptType:citizen"
                     ]
                 }
-            ]
+            ],
+            "isPositive": true
         },
         {
             "key": "traitType:corrupt",
@@ -41846,7 +41851,8 @@
                         "conceptType:citizen"
                     ]
                 }
-            ]
+            ],
+            "isPositive": false
         },
         {
             "key": "traitType:inquisitive",
@@ -41862,7 +41868,8 @@
                         "conceptType:citizen"
                     ]
                 }
-            ]
+            ],
+            "isPositive": true
         },
         {
             "key": "traitType:ignorant",
@@ -41878,7 +41885,8 @@
                         "conceptType:citizen"
                     ]
                 }
-            ]
+            ],
+            "isPositive": false
         },
         {
             "key": "traitType:artistic",
@@ -41894,7 +41902,8 @@
                         "conceptType:citizen"
                     ]
                 }
-            ]
+            ],
+            "isPositive": true
         },
         {
             "key": "traitType:traditional",
@@ -41910,7 +41919,8 @@
                         "conceptType:citizen"
                     ]
                 }
-            ]
+            ],
+            "isPositive": false
         },
         {
             "key": "traitType:spiritual",
@@ -41926,7 +41936,8 @@
                         "conceptType:citizen"
                     ]
                 }
-            ]
+            ],
+            "isPositive": true
         },
         {
             "key": "traitType:agnostic",
@@ -41942,7 +41953,8 @@
                         "conceptType:citizen"
                     ]
                 }
-            ]
+            ],
+            "isPositive": false
         },
         {
             "key": "traitType:hygienic",
@@ -41958,7 +41970,8 @@
                         "conceptType:citizen"
                     ]
                 }
-            ]
+            ],
+            "isPositive": true
         },
         {
             "key": "traitType:unsanitary",
@@ -41974,7 +41987,8 @@
                         "conceptType:citizen"
                     ]
                 }
-            ]
+            ],
+            "isPositive": false
         },
         {
             "key": "traitType:joyful",
@@ -41990,7 +42004,8 @@
                         "conceptType:citizen"
                     ]
                 }
-            ]
+            ],
+            "isPositive": true
         },
         {
             "key": "traitType:jealous",
@@ -42006,7 +42021,8 @@
                         "conceptType:citizen"
                     ]
                 }
-            ]
+            ],
+            "isPositive": false
         },
         {
             "key": "traitType:obedient",
@@ -42022,7 +42038,8 @@
                         "conceptType:citizen"
                     ]
                 }
-            ]
+            ],
+            "isPositive": true
         },
         {
             "key": "traitType:rebellious",
@@ -42038,7 +42055,8 @@
                         "conceptType:citizen"
                     ]
                 }
-            ]
+            ],
+            "isPositive": false
         },
         {
             "key": "traitType:trading",
@@ -42054,7 +42072,8 @@
                         "conceptType:city"
                     ]
                 }
-            ]
+            ],
+            "isPositive": true
         },
         {
             "key": "traitType:sedentary",
@@ -42070,7 +42089,8 @@
                         "conceptType:city"
                     ]
                 }
-            ]
+            ],
+            "isPositive": false
         },
         {
             "key": "traitType:aggressive",
@@ -42086,7 +42106,8 @@
                         "conceptType:citizen"
                     ]
                 }
-            ]
+            ],
+            "isPositive": true
         },
         {
             "key": "traitType:peaceful",
@@ -42102,7 +42123,8 @@
                         "conceptType:citizen"
                     ]
                 }
-            ]
+            ],
+            "isPositive": false
         },
         {
             "key": "traitType:diplomatic",
@@ -42118,7 +42140,8 @@
                         "conceptType:citizen"
                     ]
                 }
-            ]
+            ],
+            "isPositive": true
         },
         {
             "key": "traitType:blunt",
@@ -42134,7 +42157,8 @@
                         "conceptType:citizen"
                     ]
                 }
-            ]
+            ],
+            "isPositive": false
         },
         {
             "key": "traitType:cosmopolitan",
@@ -42157,7 +42181,8 @@
                         "conceptType:citizen"
                     ]
                 }
-            ]
+            ],
+            "isPositive": true
         },
         {
             "key": "traitType:xenophobic",
@@ -42180,7 +42205,8 @@
                         "conceptType:citizen"
                     ]
                 }
-            ]
+            ],
+            "isPositive": false
         },
         {
             "key": "worldWonderType:hallstattSaltMines",

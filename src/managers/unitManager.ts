@@ -1,10 +1,9 @@
 import { City, Player, Tile, Unit, UnitDesign } from '@/types/gameObjects'
 import { createUnit } from '@/factories/unitFactory'
 import { useObjectsStore } from '@/stores/objectStore'
+import { Manager } from '@/managers/_manager'
 
-export class UnitManager {
-  private _objects = useObjectsStore()
-
+export class UnitManager extends Manager {
   create (
     player: Player,
     unitDesign: UnitDesign,
@@ -16,7 +15,7 @@ export class UnitManager {
     isMercenary = false,
     isMobilized = false,
   ): Unit {
-    return createUnit(
+    const unit = createUnit(
       player.key,
       unitDesign.key,
       tile.key,
@@ -27,10 +26,15 @@ export class UnitManager {
       health,
       city?.key,
     )
+    this._objects.set(unit)
+    return unit
   }
 
   getDesign (unit: Unit): UnitDesign {
     return this._objects.getGameObject(unit.design) as UnitDesign
+  }
+
+  calcTiles(player: Player): void {
   }
 
   resetMoves (unit: Unit): void {

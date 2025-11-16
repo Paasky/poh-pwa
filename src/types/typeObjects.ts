@@ -1,5 +1,5 @@
 // Type object definitions (encyclopedia/types dataset)
-import { initPohObject, ObjKey, PohObject, Yield } from './common'
+import { CatKey, initPohObject, PohObject, TypeKey, Yield } from './common'
 
 export type TypeClass =
   'actionType' |
@@ -65,12 +65,14 @@ export type CategoryClass =
 export interface CategoryObject extends PohObject {
   objType: 'CategoryObject',
   class: CategoryClass
-  relatesTo: ObjKey[]
+  key: CatKey
+  relatesTo: TypeKey[]
 }
 
 export interface TypeObject extends PohObject {
   objType: 'TypeObject'
   class: TypeClass
+  key: TypeKey
   category?: `${CategoryClass}:${string}`
   description?: string
   audio?: string[]
@@ -88,18 +90,21 @@ export interface TypeObject extends PohObject {
   y?: number
   hotkey?: string
   moves?: number
-  heritageCost?: number
+  heritagePointCost?: number
+  influenceCost?: number
+  moveCost?: number
   productionCost?: number
   scienceCost?: number
-  names: Record<ObjKey, string>
-  allows: ObjKey[]
-  requires: ObjKey[] | ObjKey[][]
+  isPositive?: boolean
+  names: Record<TypeKey, string>
+  allows: TypeKey[]
+  requires: TypeKey[] | TypeKey[][]
   yields: Yield[]
   gains: string[]
-  upgradesTo: ObjKey[]
-  upgradesFrom: ObjKey[]
-  specials: ObjKey[]
-  relatesTo: ObjKey[]
+  upgradesTo: TypeKey[]
+  upgradesFrom: TypeKey[]
+  specials: TypeKey[]
+  relatesTo: TypeKey[]
 }
 
 export function initCategoryObject (data: any): CategoryObject {
@@ -119,8 +124,8 @@ export function initTypeObject (data: any): TypeObject {
     ...data
   }) as TypeObject
 
-  // Fill yields with defaults
   for (const yieldObj of obj.yields) {
+    // Fill yields with defaults
     if (!yieldObj.method) {
       yieldObj.method = 'lump'
     }
@@ -129,6 +134,11 @@ export function initTypeObject (data: any): TypeObject {
     }
     if (!yieldObj.vs) {
       yieldObj.vs = []
+    }
+
+    // Add costs directly into object
+    if (yieldObj.method === 'lump' && ['heritagePointCost', 'influenceCost', 'moveCost', 'productionCost', 'scienceCost'].includes(yieldObj.type)) {
+      obj[yieldObj.type as 'heritagePointCost' | 'influenceCost' | 'moveCost' | 'productionCost' | 'scienceCost'] = yieldObj.amount
     }
   }
 

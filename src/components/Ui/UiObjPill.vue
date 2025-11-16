@@ -4,10 +4,10 @@ import UiIcon from '@/components/Ui/UiIcon.vue'
 import { useEncyclopediaStore } from '@/components/Encyclopedia/store'
 import { useObjectsStore } from '@/stores/objectStore'
 import UiButton from '@/components/Ui/UiButton.vue'
-import { PohObject } from '@/types/common'
+import { ObjKey, PohObject } from '@/types/common'
 
 const props = defineProps<{
-  objOrKey: string | PohObject
+  objOrKey: ObjKey | PohObject
   name?: string
   hideIcon?: boolean
   hideName?: boolean
@@ -15,9 +15,9 @@ const props = defineProps<{
 }>()
 const emit = defineEmits<{ (e: 'click', ev: MouseEvent): void }>()
 const obj = computed(() =>
-    typeof props.objOrKey === 'string'
-        ? useObjectsStore().get(props.objOrKey)
-        : props.objOrKey
+    typeof props.objOrKey === 'object'
+        ? props.objOrKey
+        : useObjectsStore().get(props.objOrKey)
 )
 const tooltip = computed(() => {
   const conceptName = useObjectsStore().getTypeObject(obj.value.concept).name
@@ -46,7 +46,7 @@ const displayName = computed(() => {
 </script>
 
 <template>
-  <UiButton @click="useEncyclopediaStore().openType(obj.key)" variant="pill" :tooltip="tooltip">
+  <UiButton @click="useEncyclopediaStore().open(obj.key)" variant="pill" :tooltip="tooltip">
     <slot/>
     <UiIcon v-if="!hideIcon" :icon="obj.icon"/>
     <span v-if="!hideName" class="ml-1 truncate max-w-16 lg:max-w-none">{{ displayName }}</span>
