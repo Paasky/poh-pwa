@@ -91,6 +91,7 @@ export interface TypeObject extends PohObject {
   heritageCost?: number
   productionCost?: number
   scienceCost?: number
+  names: Record<ObjKey, string>
   allows: ObjKey[]
   requires: ObjKey[] | ObjKey[][]
   yields: Yield[]

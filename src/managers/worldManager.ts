@@ -1,11 +1,13 @@
 import { useObjectsStore } from '@/stores/objectStore'
 import { World } from '@/types/common'
-import { Culture, Player } from '@/types/gameObjects'
+import { GameObject } from '@/types/gameObjects'
+import { createPlayer, PlayerBundle } from '@/factories/playerFactory'
+import { createUnitDesign } from '@/factories/unitDesignFactory'
 
 export class WorldManager {
   private _objects = useObjectsStore()
 
-  create (): WorldBundle {
+  create (size: 'sm'): WorldBundle {
     const bundle = {
       world: {
         id: crypto.randomUUID(),
@@ -14,50 +16,27 @@ export class WorldManager {
         turn: 0,
         year: this.getYearFromTurn(0),
       } as World,
-      objects: []
+      objects: [] as GameObject[],
     }
 
-    // Create first player (current)
-    const player1: Player = {
-      key: `player:${crypto.randomUUID()}`,
-      objType: 'Player',
-      isCurrent: true,
-      name: 'Player 1',
-      color: '#FF0000',
-      culture: '',
-    }
+    const designs = [
+      createUnitDesign(
+        this._objects.getTypeObject('equipmentType:tribe'),
+        this._objects.getTypeObject('platformType:human'),
+      ),
+      createUnitDesign(
+        this._objects.getTypeObject('equipmentType:javelin'),
+        this._objects.getTypeObject('platformType:human'),
+      ),
+    ]
 
-    // Create second player (non-current)
-    const player2: Player = {
-      key: `player:${crypto.randomUUID()}`,
-      objType: 'Player',
-      isCurrent: false,
-      name: 'Player 2',
-      color: '#0000FF',
-      culture: '',
-    }
-
-    // Create cultures for players
-    const culture1: Culture = {
-      key: `culture:${crypto.randomUUID()}`,
-      objType: 'Culture',
-      owner: player1.key,
-      name: 'Culture 1',
-    }
-
-    const culture2: Culture = {
-      key: `culture:${crypto.randomUUID()}`,
-      objType: 'Culture',
-      owner: player2.key,
-      name: 'Culture 2',
-    }
-
-    // Link cultures to players
-    player1.culture = culture1.key
-    player2.culture = culture2.key
+    const playerBundles = [
+      createPlayer('Paaskyyy', true) as PlayerBundle,
+      createPlayer('AI 1') as PlayerBundle
+    ]
 
     // Add all objects to bundle
-    bundle.objects.push(player1, player2, culture1, culture2)
+    bundle.objects.push(...playerBundles.map(b => b.toObjects()).flat())
 
     return bundle
   }
