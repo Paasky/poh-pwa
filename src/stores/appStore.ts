@@ -17,7 +17,7 @@ export const useAppStore = defineStore('app', {
   }),
   actions: {
     async init (gameDataUrl?: string) {
-      if (this.ready) throw new Error('App already initialized')
+      if (this.ready) return // Happens on hot-reload
 
       const objects = useObjectsStore()
       objects.init(

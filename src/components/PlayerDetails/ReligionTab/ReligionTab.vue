@@ -1,13 +1,17 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import UiCardGroup from '@/components/Ui/UiCardGroup.vue'
 import UiCard from '@/components/Ui/UiCard.vue'
 import UiYieldList from '@/components/Ui/UiYieldList.vue'
 import UiObjPillList from '@/components/Ui/UiObjPillList.vue'
 import UiHeader from '@/components/Ui/UiHeader.vue'
 import UiObjPill from '@/components/Ui/UiObjPill.vue'
-import { usePlayerReligionStore } from '@/components/PlayerDetails/ReligionTab/religionStore'
+import { useObjectsStore } from '@/stores/objectStore'
+import { Religion } from '@/types/gameObjects'
 
-const religion = usePlayerReligionStore()
+const objects = useObjectsStore()
+const player = objects.getCurrentPlayer()
+const religion = computed(() => player.religion ? objects.getGameObject(player.religion) as Religion : null)
 const layout = {
   'mythType': [
     0, // break on [0],
@@ -19,7 +23,7 @@ const layout = {
     // last row   [5, 6, 7, 8],
   ],
   'dogmaType': [
-    0, // break on     [0],
+    0, // break on     [0],ob
     2, // break on    [1, 2],
     5, // break on   [3, 4, 5],
     9, // break on [6, 7, 8, 9],
@@ -28,13 +32,29 @@ const layout = {
 }
 
 const pyramids = [
-  { title: 'Myths', concept: 'conceptType:myth', layout: layout.mythType, typesPerCategory: religion.mythsPerCategory },
-  { title: 'Gods', concept: 'conceptType:god', layout: layout.godType, typesPerCategory: religion.godsPerCategory },
+  {
+    title: 'Myths',
+    concept: 'conceptType:myth',
+    layout: layout.mythType,
+    typesPerCategory: objects.getClassTypesPerCategory('mythType'),
+    selected: religion.value?.myths ?? [],
+    selectable: religion.value?.selectableMyths ?? [],
+  },
+  {
+    title: 'Gods',
+    concept: 'conceptType:god',
+    layout: layout.godType,
+    typesPerCategory: objects.getClassTypesPerCategory('godType'),
+    selected: religion.value?.gods ?? [],
+    selectable: religion.value?.selectableGods ?? [],
+  },
   {
     title: 'Dogmas',
     concept: 'conceptType:dogma',
     layout: layout.dogmaType,
-    typesPerCategory: religion.dogmasPerCategory
+    typesPerCategory: objects.getClassTypesPerCategory('dogmaType'),
+    selected: religion.value?.dogmas ?? [],
+    selectable: religion.value?.selectableDogmas ?? [],
   },
 ]
 </script>
@@ -45,26 +65,26 @@ const pyramids = [
       <UiHeader class="mb-4" :title="pyramid.title" :type-object="pyramid.concept"/>
 
       <div class="flex flex-wrap justify-center gap-x-12 gap-y-2">
-        <template v-for="(catData, i) of Object.values(pyramid.typesPerCategory)">
+        <template v-for="(catData, i) of pyramid.typesPerCategory">
           <div class="inline-block">
             <UiCardGroup>
               <h3 class="text-center opacity-75">{{ catData.category.name }}</h3>
               <div class="gap-1 items-center"
                    :class="catData.category.id === 'creation' ? 'flex' : 'grid'">
-                <template v-for="(myth, i) of catData.typesData">
+                <template v-for="(type, i) of catData.types">
                   <div v-if="i!==0" class="text-xs text-center opacity-50 mb-0.5" style="line-height: 0.5rem;">or</div>
                   <UiCard
-                      :buttonText="myth.canSelect ? 'Select' : ''"
-                      :selected="myth.isSelected"
-                      :disabled="!myth.canSelect"
+                      :buttonText="pyramid.selectable.includes(type) ? 'Select' : ''"
+                      :selected="pyramid.selected.includes(type)"
+                      :disabled="!pyramid.selectable.includes(type)"
                       class="text-xs w-48"
                   >
                     <div class="border-b border-white/20 pb-1 mb-2">
-                      <UiObjPill :objOrKey="myth.type" :hide-icon="true"/>
+                      <UiObjPill :objOrKey="type" :hide-icon="true"/>
                     </div>
-                    <UiYieldList :yields="myth.type.yields" :hide-name="true"/>
-                    <UiObjPillList :obj-keys="myth.type.gains"/>
-                    <UiObjPillList :obj-keys="myth.type.specials"/>
+                    <UiYieldList :yields="type.yields" :hide-name="true"/>
+                    <UiObjPillList :obj-keys="type.gains"/>
+                    <UiObjPillList :obj-keys="type.specials"/>
                   </UiCard>
                 </template>
               </div>

@@ -7,29 +7,29 @@ const encyclopedia = useEncyclopediaStore()
 </script>
 
 <template>
-  <div :id="section.key"
-       @click.stop="encyclopedia.toggle(section.key)"
+  <div :id="section.elemId"
+       @click.stop="encyclopedia.toggle(section.elemId)"
        class="enc-section select-none rounded-tl-md bg-white/5 cursor-pointer border-b border-black/20">
     <div class="px-2 py-1 flex items-center gap-2 min-w-0 hover:bg-white/10">
       <UiIcon :icon="section.icon"/>
       <span class="truncate">{{ section.title }}</span>
       <span class="ml-auto w-4 text-center flex-none select-none"> 
-        <span v-if="encyclopedia.isKeyOpen(section.key)">-</span>
+        <span v-if="encyclopedia.isElemOpen(section.elemId)">-</span>
         <span v-else>+</span>
       </span>
     </div>
-    <div v-if="encyclopedia.isKeyOpen(section.key)" class="pl-4">
+    <div v-if="encyclopedia.isElemOpen(section.elemId)" class="pl-4">
       <MenuSection
           v-if="section.sections"
           v-for="subSection in section.sections"
-          :key="subSection.key"
+          :key="subSection.elemId"
           :section="subSection"
       />
       <div
           v-if="section.types"
           v-for="type in section.types"
           :key="type.key"
-          :id="type.key"
+          :id="'enc-type-' + type.key"
           class="type-row select-none cursor-pointer px-2 py-1 first:rounded-tl-md last:rounded-bl-md flex items-center gap-2 min-w-0"
           :class="encyclopedia.current?.key === type.key ? 'bg-yellow-700 rounded-l' : 'bg-white/5 hover:bg-white/10'"
           @click.stop="encyclopedia.open(type.key)"

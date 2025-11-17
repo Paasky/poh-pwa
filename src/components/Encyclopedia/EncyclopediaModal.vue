@@ -95,7 +95,11 @@ function clearQuery () {
 
         goals
         tournaments: image in medieval style
-        <MenuSection v-for="section of encyclopedia.sections" :key="section.key" :id="section.key" :section="section"/>
+        <MenuSection v-for="section of encyclopedia.sections"
+                     :key="section.key"
+                     :id="'enc-'+section.key"
+                     :section="section"
+        />
       </aside>
 
       <!-- Right content -->

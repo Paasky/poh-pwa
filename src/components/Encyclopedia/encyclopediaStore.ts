@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { nextTick } from 'vue'
+import { markRaw, nextTick } from 'vue'
 import pluralize from 'pluralize'
 import { capitalCase } from 'change-case'
 import { TypeObject } from '@/types/typeObjects'
@@ -12,137 +12,140 @@ export const useEncyclopediaStore = defineStore('encyclopedia', {
     isOpen: false as boolean,
     ready: false as boolean,
     sections: {} as Record<string, Section>,
-    openKeys: {} as Record<string, boolean>,
-    keyMap: {} as Record<ObjKey, string>,
+    openElems: {} as Record<string, boolean>,
+    elemMap: {} as Record<string, string[]>,
     current: null as TypeObject | null,
   }),
   actions: {
     init () {
-      if (this.ready) return
+      if (this.ready) throw new Error('Encyclopedia already initialized')
 
       const objects = useObjectsStore()
-      const sections = {} as Record<ObjKey, Section>
-      const keyMap = {} as Record<ObjKey, string>
 
-      // Seed top-level sections and configured concept subsections
-      for (const def of sectionMap.top) {
-        const topSection = ensureSection(sections, def.name, def.name, def.icon)
-        for (const conceptKey of def.concepts) {
-          const concept = objects.getTypeObject(conceptKey)
-          ensureSection(topSection.sections, conceptKey, conceptTitle(concept.name), concept.icon)
+      const sections = {} as Record<string, Section>
+      const elemMap = {} as Record<string, string[]>
+
+      // Build 1st-level group-sections first
+      for (const section of sectionMap) {
+        sections[section.name] = {
+          elemId: 'enc-section-' + section.name,
+          title: section.name,
+          icon: section.icon,
+          sections: {} as Record<ObjKey, Section>,
+          types: {} as Record<TypeKey, TypeObject>,
         }
       }
 
-      // Index types and ensure their concept/category sections
-      for (const obj of objects.getAllTypes()) {
-        const { name: top, icon: topIcon } = topForConcept(obj.concept)
-        const topSection = ensureSection(sections, top, top, topIcon)
+      // Build each Type
+      for (const type of objects.getAllTypes()) {
+        // Find the 1st-level section this type belongs to
+        const sectionName = sectionMap.find(
+          s => s.concepts.includes(type.concept)
+        )?.name ?? 'Other'
+        const sectionElemId = 'enc-section-' + sectionName
 
-        const concept = objects.getTypeObject(obj.concept)
-        const conceptSection = ensureSection(topSection.sections, obj.concept, conceptTitle(concept.name), concept.icon)
+        // Build/Get a 2nd-level Concept-section
+        const conceptElemId = 'enc-section-' + type.concept
+        if (!sections[sectionName].sections[type.concept]) {
+          const conceptType = objects.getTypeObject(type.concept)
+          sections[sectionName].sections[type.concept] = {
+            elemId: conceptElemId,
+            title: conceptTitle(conceptType.name),
+            icon: conceptType.icon,
+            sections: {} as Record<ObjKey, Section>,
+            types: {} as Record<TypeKey, TypeObject>
+          }
 
-        if (obj.category) {
-          const category = objects.getCategoryObject(obj.category)
-          const categorySection = ensureSection(conceptSection.sections, obj.category, category.name, category.icon)
-          categorySection.types[obj.key] = obj
-          keyMap[obj.key] = `${top}.${obj.concept}.${obj.category}.${obj.key}`
+          // To open this Concept-section, also open the top-level
+          elemMap[conceptElemId] = [sectionElemId]
+        }
+        const conceptSection = sections[sectionName].sections[type.concept]
+
+        if (type.category) {
+          const category = useObjectsStore().getCategoryObject(type.category)
+          const catElemId = 'enc-section-' + category.key
+
+          // Type has a category, so build/get a 3rd-level Category-section
+          if (!conceptSection.sections[category.key]) {
+            conceptSection.sections[category.key] = {
+              elemId: catElemId,
+              title: category.name,
+              icon: category.icon,
+              sections: {} as Record<TypeKey, Section>,
+              types: {},
+            }
+
+            // To open this category, also open the top-level and 2nd-level concept sections
+            elemMap[catElemId] = [sectionElemId, conceptElemId]
+          }
+          const categorySection = conceptSection.sections[category.key]
+
+          // Add as a 4th-level type
+          categorySection.types[type.key] = type
+
+          // To open this type, also open the top-level, 2nd-level concept and 3rd-level category sections
+          elemMap['enc-type-' + type.key] = [sectionElemId, conceptElemId, catElemId]
         } else {
-          conceptSection.types[obj.key] = obj
-          keyMap[obj.key] = `${top}.${obj.concept}.${obj.key}`
+          // No category, so this is a 3rd-level type
+          conceptSection.types[type.key] = type
+
+          // To open this type, also open the top-level and 2nd-level concept sections
+          elemMap['enc-type-' + type.key] = [sectionElemId, conceptElemId]
         }
       }
 
-      this.sections = sections
-      this.keyMap = keyMap
+      this.sections = Object.freeze(markRaw(sections))
+      this.elemMap = Object.freeze(markRaw(elemMap))
+
       this.ready = true
       console.log('Encyclopedia initialized')
     },
-    isKeyOpen (key: string): boolean {
-      return this.openKeys[key] === true
+    isElemOpen (elemId: string): boolean {
+      return this.openElems[elemId] === true
     },
-    toggle (key: string) {
-      if (this.isKeyOpen(key)) {
-        this.openKeys[key] = false
+    toggle (elemId: string) {
+      if (this.isElemOpen(elemId)) {
+        this.openElems[elemId] = false
       } else {
-        this.open(key)
+        this._openMenu(elemId, 'start')
       }
     },
-    open (key?: string) {
-      // Unified open(): handles both section keys and Type keys
-      if (!key) {
-        this.isOpen = true
-        return
-      }
-
-      // If this looks like a Type key (e.g., "conceptType:building")
-      if (key.includes('Type:')) {
-        const typeKey = key as TypeKey
-        this.current = useObjectsStore().getTypeObject(typeKey)
-        this.scrollAndOpenType(typeKey)
-        this.isOpen = true
-        this.scrollIntoViewById(typeKey, 'center')
-        this.scrollRightToTop()
-        return
-      }
-
-      // Otherwise treat as a section key
-      this.current = null
-      this.openKeys[key] = true
+    open (key?: ObjKey) {
       this.isOpen = true
-      this.scrollIntoViewById(key, 'center')
+
+      if (!key) {
+        return
+      }
+
+      if (key.includes('Type:')) {
+        this.current = useObjectsStore().getTypeObject(key as TypeKey)
+        this._scrollRightToTop()
+        this._openMenu('enc-type-' + key)
+      } else {
+        this._openMenu('enc-section-' + key)
+      }
     },
     close () {
       this.isOpen = false
     },
 
-    // Internal action: Ensure all ancestor sections for a type key are open, using keyMap when available
-    scrollAndOpenType (key: TypeKey) {
-      const path = this.keyMap[key]
-      if (path) {
-        const parts = path.split('.')
-        for (const p of parts.slice(0, -1)) this.openKeys[p] = true
-        return
-      }
-      const obj = useObjectsStore().getTypeObject(key)
-      const { name: top } = topForConcept(obj.concept)
-      const parts: string[] = [top, obj.concept]
-      if (obj.category) parts.push(obj.category)
-      for (const p of parts) this.openKeys[p] = true
+    _openMenu (elemId: string, block: ScrollLogicalPosition = 'center') {
+      this.openElems[elemId] = true
+      this.elemMap[elemId]?.forEach(parentElemId => this.openElems[parentElemId] = true)
+
+      console.log('scroll', elemId)
+      nextTick(() => document.getElementById(elemId)!.scrollIntoView({ behavior: 'smooth', block }))
     },
-    // Scroll a DOM element by id into view after the next tick
-    scrollIntoViewById (id: string, block: ScrollLogicalPosition = 'center') {
-      nextTick(() => {
-        const el = document.getElementById(id) as HTMLElement | null
-        if (el) el.scrollIntoView({ behavior: 'smooth', block })
-      })
-    },
-    // Scroll the right content pane to the top after next tick
-    scrollRightToTop () {
-      nextTick(() => {
-        const right = document.getElementById('enc-right') as HTMLElement | null
-        if (right) right.scrollTo({ top: 0, behavior: 'smooth' })
-      })
+
+    _scrollRightToTop () {
+      console.log('scroll right', 'enc-right')
+      nextTick(() => document.getElementById('enc-right')!.scrollTo({ top: 0, behavior: 'smooth' }))
     },
   }
 })
 
-// Helpers to create and ensure sections without duplicating object literals
-function newSection (key: string, title: string, icon: ObjectIcon): Section {
-  return { key, title, icon, sections: {}, types: {} }
-}
-
-function ensureSection (
-  parent: Record<string, Section>,
-  key: string,
-  title: string,
-  icon: ObjectIcon,
-): Section {
-  if (!parent[key]) parent[key] = newSection(key, title, icon)
-  return parent[key]
-}
-
 export interface Section {
-  key: string
+  elemId: string
   title: string
   icon: ObjectIcon
   sections: Record<ObjKey, Section>
@@ -155,71 +158,60 @@ function conceptTitle (cls: string): string {
   return base === 'Dogma' ? 'Dogmas' : pluralize(base)
 }
 
-const sectionMap = {
-  top: [
-    {
-      name: 'Player', icon: icons.user, concepts: [
-        'conceptType:majorCulture',
-        'conceptType:minorCulture',
-        'conceptType:majorLeader',
-        'conceptType:minorLeader',
-        'conceptType:heritage',
-        'conceptType:trait',
-        'conceptType:myth',
-        'conceptType:god',
-        'conceptType:dogma',
-        'conceptType:policy',
-        'conceptType:goal',
-      ] as TypeKey[],
-    },
-    {
-      name: 'Cities', icon: icons.city, concepts: [
-        'conceptType:building',
-        'conceptType:improvement',
-        'conceptType:route',
-        'conceptType:nationalWonder',
-        'conceptType:worldWonder',
-      ] as TypeKey[],
-    },
-    {
-      name: 'Units', icon: icons.unit, concepts: [
-        'conceptType:equipment',
-        'conceptType:platform',
-        'conceptType:stockpile',
-      ] as TypeKey[],
-    },
-    {
-      name: 'Technology', icon: icons.tech, concepts: [
-        'conceptType:era',
-        'conceptType:technology',
-      ] as TypeKey[],
-    },
-    {
-      name: 'World', icon: icons.world, concepts: [
-        'conceptType:domain',
-        'conceptType:continent',
-        'conceptType:ocean',
-        'conceptType:region',
-        'conceptType:climate',
-        'conceptType:terrain',
-        'conceptType:elevation',
-        'conceptType:feature',
-        'conceptType:resource',
-        'conceptType:naturalWonder',
-      ] as TypeKey[],
-    },
-    {
-      name: 'Other', icon: icons.concept, concepts: [] as TypeKey[],
-    },
-  ]
-}
-
-// Resolve the top-level section for a given concept key based on sectionMap.top
-function topForConcept (conceptKey: TypeKey): { name: string, icon: ObjectIcon } {
-  const def = sectionMap.top.find(t => t.concepts.includes(conceptKey))
-  if (def) return { name: def.name, icon: def.icon }
-  // Fallback to Other
-  const other = sectionMap.top.find(t => t.name === 'Other')
-  return { name: 'Other', icon: other ? other.icon : icons.concept }
-}
+const sectionMap = [
+  {
+    name: 'Player', icon: icons.user, concepts: [
+      'conceptType:majorCulture',
+      'conceptType:minorCulture',
+      'conceptType:majorLeader',
+      'conceptType:minorLeader',
+      'conceptType:heritage',
+      'conceptType:trait',
+      'conceptType:myth',
+      'conceptType:god',
+      'conceptType:dogma',
+      'conceptType:policy',
+      'conceptType:goal',
+    ] as TypeKey[],
+  },
+  {
+    name: 'Cities', icon: icons.city, concepts: [
+      'conceptType:building',
+      'conceptType:improvement',
+      'conceptType:route',
+      'conceptType:nationalWonder',
+      'conceptType:worldWonder',
+    ] as TypeKey[],
+  },
+  {
+    name: 'Units', icon: icons.unit, concepts: [
+      'conceptType:equipment',
+      'conceptType:platform',
+      'conceptType:stockpile',
+    ] as TypeKey[],
+  },
+  {
+    name: 'Technology', icon: icons.tech, concepts: [
+      'conceptType:era',
+      'conceptType:technology',
+    ] as TypeKey[],
+  },
+  {
+    name: 'World', icon: icons.world, concepts: [
+      'conceptType:domain',
+      'conceptType:continent',
+      'conceptType:ocean',
+      'conceptType:region',
+      'conceptType:climate',
+      'conceptType:terrain',
+      'conceptType:elevation',
+      'conceptType:feature',
+      'conceptType:resource',
+      'conceptType:naturalWonder',
+    ] as TypeKey[],
+  },
+  {
+    name: 'Other', icon: icons.concept, concepts: [] as TypeKey[],
+  },
+]
 

@@ -142,7 +142,7 @@ export const useObjectsStore = defineStore('objects', {
       for (const data of staticData.categories) {
         staticObjects[data.key] = Object.freeze(markRaw(initCategoryObject(data)))
       }
-      this._staticObjects = Object.freeze(staticObjects)
+      this._staticObjects = Object.freeze(markRaw(staticObjects))
 
       // 2) Initialize the world
       if (gameData) {
@@ -167,7 +167,6 @@ export const useObjectsStore = defineStore('objects', {
       // 4) Build Type indexes
       for (const obj of Object.values(this._staticObjects)) {
         if (!isTypeObject(obj)) continue
-        const type = obj as TypeObject
 
         const classTypes = this._classTypesIndex.get(obj.class)
         if (classTypes) {
@@ -227,16 +226,13 @@ export const useObjectsStore = defineStore('objects', {
         incoming[obj.key] = reactive(obj)
       }
       if (errors.length) throw new Error(errors.join('\n'))
-      console.log('Bulk validated', new Date())
 
       const hasExisting = Object.keys(this._gameObjects).length > 0
       this._gameObjects = hasExisting
         ? shallowReactive({ ...this._gameObjects, ...incoming })
         : shallowReactive(incoming)
-      console.log('Bulk assigned', new Date())
 
       this._cacheGameObjects(objs)
-      console.log('Bulk cached', new Date())
     },
 
     _cacheGameObjects (gameObjects?: GameObject[]) {
