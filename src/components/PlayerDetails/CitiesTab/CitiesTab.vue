@@ -14,7 +14,7 @@ const objects = useObjectsStore()
   <div>
     <div>
       <div>City</div>
-      <div :class="`col-span-${Object.keys(cities[0].yields).length}`">Stats</div>
+      <div :class="`col-span-${Object.keys(cities[0]?.yields ?? 1).length}`">Stats</div>
       <div>Status</div>
       <div>Construction</div>
       <div>Training</div>
@@ -31,10 +31,10 @@ const objects = useObjectsStore()
 
       <CityStatus :city="city"/>
 
-      <CityProduction v-if="city.construction" :prod="city.construction"/>
+      <CityProduction v-if="city" :prod="city"/>
       <div v-else>-</div>
 
-      <CityProduction v-if="city.training" :prod="city.training"/>
+      <CityProduction v-if="city" :prod="city"/>
       <div v-else>-</div>
 
       <div></div>

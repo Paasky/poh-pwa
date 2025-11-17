@@ -17,7 +17,7 @@ const keyStr = computed((): TypeKey | undefined => {
 function onClick () {
   if (keyStr.value) {
     // Open the encyclopedia entry for the provided key
-    useEncyclopediaStore().openType(keyStr.value)
+    useEncyclopediaStore().open(keyStr.value)
   }
 }
 </script>

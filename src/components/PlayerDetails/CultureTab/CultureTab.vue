@@ -3,51 +3,50 @@ import UiObjPillList from '@/components/Ui/UiObjPillList.vue'
 import UiYieldList from '@/components/Ui/UiYieldList.vue'
 import UiObjPill from '@/components/Ui/UiObjPill.vue'
 import UiCard from '@/components/Ui/UiCard.vue'
-import { TypeObject } from '@/types/typeObjects'
 import UiCardGrid from '@/components/Ui/UiCardGrid.vue'
 import UiCardGroup from '@/components/Ui/UiCardGroup.vue'
 import UiButton from '@/components/Ui/UiButton.vue'
-import { usePlayersStore } from '@/stores/playerStore'
+import { useObjectsStore } from '@/stores/objectStore'
+import { Culture } from '@/types/gameObjects'
+import { CultureManager } from '@/managers/cultureManager'
 
-const player = usePlayersStore().current
-
-function selectHeritage (heritage: TypeObject) {
-  // do something later
-  console.log(heritage)
-}
+const objects = useObjectsStore()
+const player = objects.getCurrentPlayer()
+const culture = objects.getGameObject(player.culture) as Culture
+const cultureManager = new CultureManager()
 </script>
 
 <template>
   <div class="px-4 py-2 w-full h-full">
     Debug:
-    <UiButton @click="player.culture.status = 'notSettled'">Not Settled</UiButton>
-    <UiButton @click="player.culture.status = 'canSettle'">Can Settle</UiButton>
-    <UiButton @click="player.culture.status = 'mustSettle'">Must Settle</UiButton>
-    <UiButton @click="player.culture.status = 'settled'">Is Settled</UiButton>
+    <UiButton @click="culture.status = 'notSettled'">Not Settled</UiButton>
+    <UiButton @click="culture.status = 'canSettle'">Can Settle</UiButton>
+    <UiButton @click="culture.status = 'mustSettle'">Must Settle</UiButton>
+    <UiButton @click="culture.status = 'settled'">Is Settled</UiButton>
     <!--
-    <UiButton @click="player.culture.positiveTraitsToSelect = player.culture.negativeTraitsToSelect = 0">0 Traits
+    <UiButton @click="culture.positiveTraitsToSelect = culture.negativeTraitsToSelect = 0">0 Traits
     </UiButton>
-    <UiButton @click="() => {player.culture.positiveTraitsToSelect = 3; player.culture.negativeTraitsToSelect = 2}">3+2
+    <UiButton @click="() => {culture.positiveTraitsToSelect = 3; culture.negativeTraitsToSelect = 2}">3+2
       Traits
     </UiButton>
-    <UiButton @click="() => {player.culture.positiveTraitsToSelect = 2; player.culture.negativeTraitsToSelect = 0}">2+0
+    <UiButton @click="() => {culture.positiveTraitsToSelect = 2; culture.negativeTraitsToSelect = 0}">2+0
       Traits
     </UiButton>
-    <UiButton @click="() => {player.culture.positiveTraitsToSelect = 0; player.culture.negativeTraitsToSelect = 1}">0+1
+    <UiButton @click="() => {culture.positiveTraitsToSelect = 0; culture.negativeTraitsToSelect = 1}">0+1
       Traits
     </UiButton>
 
     <!-- Trait selection
-    <div v-if="player.culture.status === 'settled'" class="mb-4">
+    <div v-if="culture.status === 'settled'" class="mb-4">
       <h1 class="text-xl mb-1">Traits</h1>
       <div class="text-sm grid gap-2 mb-4">
-        <p v-if="player.culture.positiveTraitsToSelect + player.culture.negativeTraitsToSelect">
+        <p v-if="culture.positiveTraitsToSelect + culture.negativeTraitsToSelect">
           You must select
-          <b v-if="player.culture.positiveTraitsToSelect">{{ player.culture.positiveTraitsToSelect }} positive</b>
-          <span v-if="player.culture.positiveTraitsToSelect && player.culture.negativeTraitsToSelect"> and </span>
-          <b v-if="player.culture.negativeTraitsToSelect">{{ player.culture.negativeTraitsToSelect }} negative</b>
+          <b v-if="culture.positiveTraitsToSelect">{{ culture.positiveTraitsToSelect }} positive</b>
+          <span v-if="culture.positiveTraitsToSelect && culture.negativeTraitsToSelect"> and </span>
+          <b v-if="culture.negativeTraitsToSelect">{{ culture.negativeTraitsToSelect }} negative</b>
           <UiObjPill type="conceptType:trait"
-                      :name="player.culture.positiveTraitsToSelect+player.culture.negativeTraitsToSelect === 1 ? 'Trait' : 'Traits'"/>
+                      :name="culture.positiveTraitsToSelect+culture.negativeTraitsToSelect === 1 ? 'Trait' : 'Traits'"/>
           for your Culture.
           These can only be modified during a
           <UiObjPill type="conceptType:revolution"/>
@@ -62,25 +61,25 @@ function selectHeritage (heritage: TypeObject) {
         </p>
       </div>
       <UiCardGrid gap="gap-4" :cols="['2xl:grid-cols-4', 'lg:grid-cols-3', 'sm:grid-cols-2', 'grid-cols-1']">
-        <UiCardGroup v-for="catData in player.culture.traitsPerCategory">
+        <UiCardGroup v-for="catData in culture.traitsPerCategory">
           <h3 class="text-center">
             {{ catData.category.name }}
           </h3>
           <div class="flex gap-2 text-center">
             <template v-for="(typeData, i) of catData.typesData">
-              <UiCard :title="typeData.type.name"
+              <UiCard :title="type.name"
                       :disabled="!typeData.canSelect"
                       :selected="typeData.isSelected"
-                      v-on:button-click="selectHeritage(typeData.type)"
+                      v-on:button-click="selectHeritage(type)"
               >
                 <div class="text-xs mt-0.5">
-                  <UiYieldList :yields="typeData.type.yields"/>
-                  <UiObjPillList :obj-keys="typeData.type.gains"/>
+                  <UiYieldList :yields="type.yields"/>
+                  <UiObjPillList :obj-keys="type.gains"/>
                 </div>
-                <UiButton v-if="player.culture.positiveTraitsToSelect + player.culture.negativeTraitsToSelect"
+                <UiButton v-if="culture.positiveTraitsToSelect + culture.negativeTraitsToSelect"
                           class="w-full my-1"
                           :disabled="!typeData.canSelect"
-                          @click.stop="selectHeritage(typeData.type)"
+                          @click.stop="selectHeritage(type)"
                 >{{ typeData.isSelected ? 'Selected' : 'Select' }}
                 </UiButton>
               </UiCard>
@@ -97,56 +96,56 @@ function selectHeritage (heritage: TypeObject) {
       <h1 class="text-xl my-2">Heritage</h1>
 
       <!-- Not yet settled -->
-      <div v-if="player.culture.status !== 'settled'" class="text-sm grid gap-2 mb-4">
-        <p v-if="player.culture.status === 'notSettled' || player.culture.status === 'canSettle'">
+      <div v-if="culture.status !== 'settled'" class="text-sm grid gap-2 mb-4">
+        <p v-if="culture.status === 'notSettled' || culture.status === 'canSettle'">
           Explore your surroundings to discover and learn from the nature around you. These skills and knowledge will
           stay as your Cultural
           <UiObjPill objOrKey="conceptType:heritage"/>
           for the rest of the game.
         </p>
-        <p v-if="player.culture.status === 'notSettled'">
+        <p v-if="culture.status === 'notSettled'">
           You must select at least <b>two Heritages</b> to settle your first city.
         </p>
-        <h2 v-if="player.culture.status === 'canSettle' || player.culture.status === 'mustSettle'" class="text-lg my-2">
+        <h2 v-if="culture.status === 'canSettle' || culture.status === 'mustSettle'" class="text-lg my-2">
           <b>You are ready to settle your first city!</b>
         </h2>
-        <p v-if="player.culture.status === 'canSettle' || player.culture.status === 'mustSettle'">
+        <p v-if="culture.status === 'canSettle' || culture.status === 'mustSettle'">
           Use your <b>Tribe</b> to create your first
           <UiObjPill objOrKey="conceptType:city"/>
           and turn the first page of your people's history.
         </p>
-        <p v-if="player.culture.status === 'canSettle'">
+        <p v-if="culture.status === 'canSettle'">
           Settling down will lock your current Heritage for the rest of the game.
         </p>
-        <p v-if="player.culture.status === 'mustSettle'">
+        <p v-if="culture.status === 'mustSettle'">
           Your Heritage is full, so exploration will not grant you any more points.
         </p>
       </div>
-      <UiCardGrid v-if="player.culture.status !== 'settled'">
-        <UiCardGroup v-for="catData in player.culture.heritagesPerCategory">
+      <UiCardGrid v-if="culture.status !== 'settled'">
+        <UiCardGroup v-for="catData in objects.getClassTypesPerCategory('heritageType')">
           <div>
             {{ catData.category.name }}
-            <h4 v-if="player.culture.status === 'notSettled' || player.culture.status === 'canSettle'"
+            <h4 v-if="culture.status === 'notSettled' || culture.status === 'canSettle'"
                 class="inline pl-1 text-xs">Get
               points from discovering:</h4>
-            <div v-if="player.culture.status === 'notSettled' || player.culture.status === 'canSettle'" class="text-xs">
-              <UiObjPillList :obj-keys="catData.typesData[0].type.requires" :no-margin="true"/>
+            <div v-if="culture.status === 'notSettled' || culture.status === 'canSettle'" class="text-xs">
+              <UiObjPillList :obj-keys="catData.types[0].requires" :no-margin="true"/>
             </div>
           </div>
-          <UiCard v-for="typeData of catData.typesData"
-                  :title="`${typeData.type.name} (${catData.points}/${typeData.pointsRequired})`"
-                  :disabled="!typeData.canSelect || typeData.isSelected"
-                  :selected="typeData.isSelected"
+          <UiCard v-for="type of catData.types"
+                  :title="`${type.name} (${culture.heritageCategoryPoints[type.category!] ?? 0}/${type.heritagePointCost!})`"
+                  :disabled="!culture.selectableHeritages.includes(type) || culture.heritages.includes(type)"
+                  :selected="culture.heritages.includes(type)"
                   :can-open="true"
-                  :is-open="typeData.canSelect || typeData.isSelected"
-                  :button-text="typeData.isSelected ? 'Selected' : 'Select'"
-                  :button-variant="typeData.isSelected ? 'selected' : 'solid'"
-                  v-on:button-click="selectHeritage(typeData.type)"
+                  :is-open="culture.selectableHeritages.includes(type) || culture.heritages.includes(type)"
+                  :button-text="culture.heritages.includes(type) ? 'Selected' : 'Select'"
+                  :button-variant="culture.heritages.includes(type) ? 'selected' : 'solid'"
+                  v-on:button-click="culture.selectableHeritages.includes(type) ? cultureManager.selectHeritage(culture, type) : null"
                   class="my-1"
           >
             <div class="text-xs">
-              <UiYieldList :yields="typeData.type.yields"/>
-              <UiObjPillList :obj-keys="typeData.type.gains"/>
+              <UiYieldList :yields="type.yields"/>
+              <UiObjPillList :obj-keys="type.gains"/>
             </div>
           </UiCard>
         </UiCardGroup>
@@ -154,14 +153,14 @@ function selectHeritage (heritage: TypeObject) {
 
       <!-- Settled -->
       <UiCardGrid v-else>
-        <template v-for="catData in player.culture.heritagesPerCategory">
-          <UiCard v-for="typeData of catData.typesData.filter(t => t.isSelected)"
-                  :title="typeData.type.name"
+        <template v-for="catData in objects.getClassTypesPerCategory('heritageType')">
+          <UiCard v-for="type of catData.types.filter(h => culture.heritages.includes(h))"
+                  :title="type.name"
                   class="my-1"
           >
             <div class="text-xs">
-              <UiYieldList :yields="typeData.type.yields"/>
-              <UiObjPillList :obj-keys="typeData.type.gains"/>
+              <UiYieldList :yields="type.yields"/>
+              <UiObjPillList :obj-keys="type.gains"/>
             </div>
           </UiCard>
         </template>

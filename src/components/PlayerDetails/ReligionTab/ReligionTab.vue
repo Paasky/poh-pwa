@@ -5,7 +5,7 @@ import UiYieldList from '@/components/Ui/UiYieldList.vue'
 import UiObjPillList from '@/components/Ui/UiObjPillList.vue'
 import UiHeader from '@/components/Ui/UiHeader.vue'
 import UiObjPill from '@/components/Ui/UiObjPill.vue'
-import { usePlayerReligionStore } from '@/components/PlayerDetails/ReligionTab/ReligionStore'
+import { usePlayerReligionStore } from '@/components/PlayerDetails/ReligionTab/religionStore'
 
 const religion = usePlayerReligionStore()
 const layout = {

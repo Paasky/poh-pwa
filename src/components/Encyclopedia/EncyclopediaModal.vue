@@ -5,8 +5,8 @@ import UiIcon from '@/components/Ui/UiIcon.vue'
 import { useEncyclopediaStore } from '@/components/Encyclopedia/encyclopediaStore'
 import { useObjectsStore } from '@/stores/objectStore'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import Content from '@/components/Encyclopedia/Comps/Content.vue'
-import MenuSection from '@/components/Encyclopedia/Comps/MenuSection.vue'
+import Content from '@/components/Encyclopedia/Content.vue'
+import MenuSection from '@/components/Encyclopedia/MenuSection.vue'
 
 const objects = useObjectsStore()
 const encyclopedia = useEncyclopediaStore()
@@ -75,7 +75,7 @@ function clearQuery () {
                 :key="t.key"
                 type="button"
                 class="w-full text-left px-3 py-1.5 hover:bg-slate-800/70 flex items-center gap-2"
-                @click="() => {clearQuery(); encyclopedia.openType(t.key)}"
+                @click="() => {clearQuery(); encyclopedia.open(t.key)}"
             >
               <UiIcon :icon="t.icon"/>
               <span class="truncate">{{ t.name }}</span>

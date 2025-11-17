@@ -32,7 +32,7 @@ const encyclopedia = useEncyclopediaStore()
           :id="type.key"
           class="type-row select-none cursor-pointer px-2 py-1 first:rounded-tl-md last:rounded-bl-md flex items-center gap-2 min-w-0"
           :class="encyclopedia.current?.key === type.key ? 'bg-yellow-700 rounded-l' : 'bg-white/5 hover:bg-white/10'"
-          @click.stop="encyclopedia.openType(type.key)"
+          @click.stop="encyclopedia.open(type.key)"
       >
         <UiIcon :icon="type.icon"/>
         <span class="truncate">{{ type.name }}</span>

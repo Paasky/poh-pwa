@@ -2,7 +2,6 @@
 import { onMounted, onUnmounted, ref } from 'vue'
 import UiElement from '@/components/Ui/UiElement.vue'
 import UiButton from '@/components/Ui/UiButton.vue'
-import PlayerDetailsModal from '@/components/PlayerDetails/PlayerDetailsModal.vue'
 import PlayerDetailsBar from '@/components/PlayerDetails/PlayerDetailsBar.vue'
 import { useEncyclopediaStore } from '@/components/Encyclopedia/encyclopediaStore'
 import { useAppStore } from '@/stores/appStore'
@@ -11,7 +10,7 @@ import { icons } from '@/types/icons'
 import EncyclopediaModal from '@/components/Encyclopedia/EncyclopediaModal.vue'
 import { useRouter } from 'vue-router'
 import { initModalStateSync } from '@/router/modalState'
-import { WorldManager } from '@/managers/worldManager'
+import PlayerDetailsModal from '@/components/PlayerDetails/PlayerDetailsModal.vue'
 
 const encyclopedia = useEncyclopediaStore()
 const app = useAppStore()
@@ -88,9 +87,6 @@ onMounted(async () => {
 
   // Bootstrap the app data once (types + gameData) before showing the game UI
   await app.init()
-
-  // Create a new world
-  new WorldManager().create()
 
   // Initialize URL/history syncing for modals and tabs/types after data is ready
   initModalStateSync(router)

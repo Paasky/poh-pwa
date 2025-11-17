@@ -57,7 +57,7 @@ function applyRouteToStores (route: RouteLocationNormalizedLoaded) {
     encyclopedia.open()
   } else if (encParam) {
     try {
-      encyclopedia.openType(encParam as TypeKey)
+      encyclopedia.open(encParam as TypeKey)
     } catch (_) {
       encyclopedia.open()
     }

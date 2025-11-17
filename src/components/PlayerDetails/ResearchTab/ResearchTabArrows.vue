@@ -1,13 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { TypeObject } from '@/types/typeObjects'
-import { usePlayerScienceStore } from '@/components/PlayerDetails/Tabs/scienceStore'
-
-interface TechData {
-  type: TypeObject,
-  x: number,
-  y: number,
-}
+import { useObjectsStore } from '@/stores/objectStore'
+import { TypeKey } from '@/types/common'
 
 const props = defineProps<{
   strokeColorRgb: string
@@ -26,18 +20,17 @@ const cornerSizeRem = computed(() => Math.min(props.xSize, props.ySize) * (2 / p
 const strokeOpacity = 1
 const strokeWidth = 0.15
 
-const science = usePlayerScienceStore()
-const techByKey = computed(() => Object.fromEntries(science.techs.map(t => [t.type.key, t])) as Record<string, TechData>)
+const objects = useObjectsStore()
 
-function pathBetween (fromKey: string, toKey: string): string | null {
-  const from = techByKey.value[fromKey]
-  const to = techByKey.value[toKey]
+function pathBetween (fromKey: TypeKey, toKey: TypeKey): string | null {
+  const from = objects.getTypeObject(fromKey)
+  const to = objects.getTypeObject(toKey)
   if (!from || !to) return null
 
-  const startX = from.x * props.xSize + props.cardWidthRem / 2
-  const startY = from.y * props.ySize + props.cardHeightRem
-  const endX = to.x * props.xSize + props.cardWidthRem / 2
-  const endY = to.y * props.ySize
+  const startX = from.x! * props.xSize + props.cardWidthRem / 2
+  const startY = from.y! * props.ySize + props.cardHeightRem
+  const endX = to.x! * props.xSize + props.cardWidthRem / 2
+  const endY = to.y! * props.ySize
 
   // Straight vertical if aligned
   if (startX === endX) {
@@ -67,10 +60,10 @@ function pathBetween (fromKey: string, toKey: string): string | null {
 
 const connections = computed(() => {
   const paths: string[] = []
-  for (const t of science.techs) {
-    const targets = t.type.allows.filter(a => a.startsWith('technologyType:'))
+  for (const t of objects.getClassTypes('technologyType')) {
+    const targets = t.allows.filter(a => a.startsWith('technologyType:'))
     for (const targetKey of targets) {
-      const d = pathBetween(t.type.key, targetKey)
+      const d = pathBetween(t.key, targetKey)
       if (d) paths.push(d)
     }
   }

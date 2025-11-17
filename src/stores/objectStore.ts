@@ -13,7 +13,7 @@ import {
 } from '@/types/common'
 import { GameData, StaticData } from '@/types/api'
 import { CategoryObject, initCategoryObject, initTypeObject, TypeClass, TypeObject } from '@/types/typeObjects'
-import { GameClass, GameObject, init } from '@/types/gameObjects'
+import { GameClass, GameObject, init, Player } from '@/types/gameObjects'
 
 export const useObjectsStore = defineStore('objects', {
   state: () => ({
@@ -61,6 +61,9 @@ export const useObjectsStore = defineStore('objects', {
       if (!obj) throw new Error(`[objects] Unknown GameObject key: ${key}`)
       return obj
     },
+
+    getCurrentPlayer: (state) => (): Player =>
+      state._gameObjects[state.world.currentPlayer] as Player,
 
     getTypeObject: (state) => (key: TypeKey): TypeObject => {
       const obj = state._staticObjects[key]
@@ -209,7 +212,7 @@ export const useObjectsStore = defineStore('objects', {
       if (!objs.length) return
 
       // Validate and prepare in one pass
-      const incoming: Record<string, GameObject> = {}
+      const incoming: Record<GameKey, GameObject> = {}
       const errors = []
       for (const obj of objs) {
         if (!obj.key) {
@@ -224,10 +227,16 @@ export const useObjectsStore = defineStore('objects', {
         incoming[obj.key] = reactive(obj)
       }
       if (errors.length) throw new Error(errors.join('\n'))
+      console.log('Bulk validated', new Date())
 
-      Object.assign(this._gameObjects, incoming)
+      const hasExisting = Object.keys(this._gameObjects).length > 0
+      this._gameObjects = hasExisting
+        ? shallowReactive({ ...this._gameObjects, ...incoming })
+        : shallowReactive(incoming)
+      console.log('Bulk assigned', new Date())
 
       this._cacheGameObjects(objs)
+      console.log('Bulk cached', new Date())
     },
 
     _cacheGameObjects (gameObjects?: GameObject[]) {

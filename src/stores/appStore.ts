@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { useObjectsStore } from '@/stores/objectStore'
 import { useEncyclopediaStore } from '@/components/Encyclopedia/encyclopediaStore'
 import { GameData, StaticData } from '@/types/api'
+import { WorldManager } from '@/managers/worldManager'
 
 async function fetchJSON<T> (url: string): Promise<T> {
   const res = await fetch(url, { cache: 'no-store' })
@@ -18,10 +19,8 @@ export const useAppStore = defineStore('app', {
     async init (gameDataUrl?: string) {
       if (this.ready) throw new Error('App already initialized')
 
-      // Wait 1s to simulate loading data from the server
-      await new Promise(resolve => setTimeout(resolve, 1000))
-
-      useObjectsStore().init(
+      const objects = useObjectsStore()
+      objects.init(
         await fetchJSON<StaticData>('/staticData.json'),
         gameDataUrl ? await fetchJSON<GameData>(gameDataUrl) : undefined
       )
@@ -30,8 +29,15 @@ export const useAppStore = defineStore('app', {
       const encyclopedia = useEncyclopediaStore()
       encyclopedia.init()
 
+      // Create a new world
+      if (!gameDataUrl) new WorldManager().create()
+
       this.ready = true
-      console.log('App initialized')
+      console.log(
+        'App initialized',
+        'static:' + Object.keys(objects._staticObjects).length,
+        'game:' + Object.keys(objects._gameObjects).length,
+      )
     }
   }
 })

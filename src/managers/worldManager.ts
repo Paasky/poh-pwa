@@ -8,19 +8,21 @@ import { CultureManager } from '@/managers/cultureManager'
 
 export class WorldManager extends Manager {
   create (): World {
+    console.time('world')
     const designManager = new UnitDesignManager()
     const playerManager = new PlayerManager()
     const unitManager = new UnitManager()
 
     const world = createWorld()
     Object.assign(this._objects.world, world)
-    console.log('Created world:', world)
+    console.log('world', new Date())
+
+    const tiles = Object.values(world.tiles)
+    console.log('Got tiles', new Date())
+    this._objects.bulkSet(tiles)
+    console.log('Set tiles', new Date())
 
     /*
-    const tiles = Object.values(world.tiles)
-    this._objects.bulkSet(tiles)
-    console.log('Created tiles:', tiles)
-
     const tribeDesign = designManager.create(
       this._objects.getTypeObject('equipmentType:tribe'),
       this._objects.getTypeObject('platformType:human'),
@@ -29,7 +31,7 @@ export class WorldManager extends Manager {
       this._objects.getTypeObject('equipmentType:javelin'),
       this._objects.getTypeObject('platformType:human'),
     )
-    console.log('Created unit designs:', tribeDesign, hunterDesign)
+    console.log('Created unit designs', new Date())
     */
 
     // Get random region
@@ -47,7 +49,7 @@ export class WorldManager extends Manager {
     for (let i = 0; i < 2; i++) {
       const player = playerManager.create('Player ' + (i + 1), cultures[i], i === 0)
       if (player.isCurrent) this._objects.world.currentPlayer = player.key
-      console.log('Created player:', player)
+      console.log('Created player', new Date())
 
       /*
       player.unitDesigns.push(
@@ -60,10 +62,10 @@ export class WorldManager extends Manager {
         unitManager.create(player, tribeDesign, tile).key,
         unitManager.create(player, hunterDesign, tile).key,
       )
-      console.log('Created player units:', player.units)
+      console.log('Created player units', new Date())
 
       playerManager.calcTiles(player)
-      console.log('Calculated tiles')
+      console.log('Calculated tiles', new Date())
       */
     }
 

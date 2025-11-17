@@ -68,18 +68,28 @@ export const useEncyclopediaStore = defineStore('encyclopedia', {
       }
     },
     open (key?: string) {
-      if (key) {
-        this.openKeys[key] = true
-        this.scrollIntoViewById(key, 'center')
+      // Unified open(): handles both section keys and Type keys
+      if (!key) {
+        this.isOpen = true
+        return
       }
-      this.isOpen = true
-    },
-    openType (key: TypeKey) {
-      this.current = useObjectsStore().getTypeObject(key)
-      this.scrollAndOpenType(key)
+
+      // If this looks like a Type key (e.g., "conceptType:building")
+      if (key.includes('Type:')) {
+        const typeKey = key as TypeKey
+        this.current = useObjectsStore().getTypeObject(typeKey)
+        this.scrollAndOpenType(typeKey)
+        this.isOpen = true
+        this.scrollIntoViewById(typeKey, 'center')
+        this.scrollRightToTop()
+        return
+      }
+
+      // Otherwise treat as a section key
+      this.current = null
+      this.openKeys[key] = true
       this.isOpen = true
       this.scrollIntoViewById(key, 'center')
-      this.scrollRightToTop()
     },
     close () {
       this.isOpen = false
@@ -102,15 +112,15 @@ export const useEncyclopediaStore = defineStore('encyclopedia', {
     // Scroll a DOM element by id into view after the next tick
     scrollIntoViewById (id: string, block: ScrollLogicalPosition = 'center') {
       nextTick(() => {
-        const el = document.getElementById(id) as HTMLElement
-        el!.scrollIntoView({ behavior: 'smooth', block })
+        const el = document.getElementById(id) as HTMLElement | null
+        if (el) el.scrollIntoView({ behavior: 'smooth', block })
       })
     },
     // Scroll the right content pane to the top after next tick
     scrollRightToTop () {
       nextTick(() => {
-        const right = document.getElementById('enc-right') as HTMLElement
-        right!.scrollTo({ top: 0, behavior: 'smooth' })
+        const right = document.getElementById('enc-right') as HTMLElement | null
+        if (right) right.scrollTo({ top: 0, behavior: 'smooth' })
       })
     },
   }
