@@ -3388,7 +3388,6 @@
             "concept": "conceptType:climate",
             "description": "Cold climates feature long winters with persistent snow cover and seasonal freezing of soils and waterways. From the fourteenth to nineteenth centuries, the Little Ice Age lowered temperatures in Europe, shortening growing seasons and contributing to crop failures and social strain. Napoleon\u2019s 1812 campaign into Russia encountered early frosts, supply collapse, and mass attrition. Fur trade enterprises pushed into boreal forests and subarctic rivers between the seventeenth and nineteenth centuries, spurring mapping, trading posts, and indigenous alliances. Cold conditions favored winter transport by sled and frozen river routes while constraining intensive agriculture.",
             "allows": [
-                "featureType:kelp",
                 "terrainType:tundra"
             ]
         },
@@ -3398,9 +3397,7 @@
             "concept": "conceptType:climate",
             "description": "Temperate zones have moderate temperatures and four seasons that support diverse cereals, livestock, and vines. In antiquity, Mediterranean temperate belts fostered Roman agriculture, viticulture, and grain trade that supplied cities and legions. River valleys in temperate East Asia and Europe supported dense settlement with paddy, wheat, and millet systems and extensive irrigation. Between the seventeenth and nineteenth centuries, the English Agricultural Revolution introduced crop rotations, selective breeding, and enclosure, raising yields and freeing labor for industry. Temperate climates enabled reliable maritime calendars and urban growth, yet also faced periodic frost, flood, and disease risks.",
             "allows": [
-                "featureType:forest",
-                "featureType:kelp",
-                "terrainType:grass"
+                "featureType:forest"
             ]
         },
         {
@@ -3418,9 +3415,6 @@
             "concept": "conceptType:climate",
             "description": "Hot climates maintain high temperatures in arid deserts or humid tropics, imposing heat stress and water constraints. Along the Nile, ancient Egyptian society organized floodplain agriculture with basin irrigation and storage to buffer the desert environment. Across Arabia, caravan routes linked oases and ports, moving incense, textiles, and metals through harsh dune and gravel landscapes. During European colonial expansion from the sixteenth to twentieth centuries, tropical rainforest zones were opened to rubber, timber, and mineral extraction, alongside medical campaigns against malaria and yellow fever. Urban design in hot regions used courtyards, wind catchers, and shaded markets.",
             "allows": [
-                "featureType:lagoon",
-                "featureType:atoll",
-                "featureType:tradeWind",
                 "terrainType:desert"
             ]
         },
@@ -3430,11 +3424,7 @@
             "concept": "conceptType:climate",
             "description": "Equatorial climates are warm and humid year round, with heavy rainfall and minimal temperature seasonality. The Amazon Basin supported diverse indigenous agriculture and later saw rubber booms and scientific expeditions in the nineteenth and twentieth centuries. In central Africa, the Congo Basin experienced colonial extraction of rubber and timber and major biodiversity surveys. The Malay Archipelago became a core of the spice trade, with colonial plantations for cloves, nutmeg, and sugar. On Borneo and Sumatra, logging expanded and later shifted to oil-palm estates. Pacific equatorial islands supported copra and plantation economies and served as strategic bases during the Second World War.",
             "allows": [
-                "featureType:jungle",
-                "featureType:lagoon",
-                "featureType:atoll",
-                "featureType:tradeWind",
-                "terrainType:grass"
+                "featureType:jungle"
             ]
         },
         {
@@ -4910,18 +4900,7 @@
                 "buildingType:railwayStation",
                 "buildingType:multimodalTerminal",
                 "buildingType:nuclearPowerPlant",
-                "buildingType:windPowerPlant",
                 "conceptType:flatLand",
-                "continentType:america",
-                "continentType:andea",
-                "continentType:taiga",
-                "continentType:europe",
-                "continentType:mediterra",
-                "continentType:africa",
-                "continentType:levantica",
-                "continentType:siberia",
-                "continentType:asia",
-                "continentType:oceania",
                 "elevationType:hill",
                 "elevationType:mountain",
                 "elevationType:snowMountain",
@@ -5065,22 +5044,13 @@
                 "buildingType:railwayStation",
                 "buildingType:multimodalTerminal",
                 "buildingType:nuclearPowerPlant",
-                "buildingType:windPowerPlant",
                 "conceptType:flatLand",
-                "featureType:pineForest",
-                "featureType:forest",
                 "featureType:jungle",
-                "featureType:shrubs",
                 "featureType:oasis",
                 "featureType:floodPlain",
                 "featureType:swamp",
                 "featureType:ice",
                 "improvementType:farm",
-                "improvementType:irrigatedFarm",
-                "improvementType:feudalFarm",
-                "improvementType:fertilizedFarm",
-                "improvementType:mechanizedFarm",
-                "improvementType:automatedFarm",
                 "improvementType:airfield",
                 "improvementType:airBase"
             ],
@@ -5092,107 +5062,10 @@
             "concept": "conceptType:elevation",
             "description": "Hills offer elevated positions with natural slopes that aid defense and observation. Communities adapted them for terrace farming, storage, and cult sites. In classical Athens the Acropolis combined fortress and sacred precinct. Across Iron Age Britain, hillforts such as Maiden Castle controlled territory and protected granaries. In the Philippine Cordillera, the Banaue Rice Terraces sustained highland populations through engineered irrigation and stonework. Masada in Judea shows the use of isolated heights as last refuges during siege. Hill landscapes often anchor trade routes and administrative centers while moderating climate and disease compared to valley lowlands.",
             "allows": [
-                "buildingType:stoneWorks",
-                "buildingType:smith",
-                "buildingType:forge",
-                "buildingType:factory",
-                "buildingType:assemblyLine",
-                "buildingType:automatedFactory",
-                "buildingType:taxCollector",
-                "buildingType:mint",
-                "buildingType:guildHall",
-                "buildingType:bank",
-                "buildingType:stockExchange",
-                "buildingType:startupHub",
-                "buildingType:scribery",
-                "buildingType:library",
-                "buildingType:printingPress",
-                "buildingType:university",
-                "buildingType:researchLab",
-                "buildingType:nanotechLab",
-                "buildingType:potter",
-                "buildingType:granary",
-                "buildingType:windmill",
-                "buildingType:dispensary",
-                "buildingType:metroSystem",
-                "buildingType:fullfillmentCenter",
-                "buildingType:obelisk",
-                "buildingType:amphitheater",
-                "buildingType:theater",
-                "buildingType:opera",
-                "buildingType:cinema",
-                "buildingType:internetProvider",
-                "buildingType:shrine",
-                "buildingType:temple",
-                "buildingType:cathedral",
-                "buildingType:congregation",
-                "buildingType:televangelist",
-                "buildingType:megachurch",
-                "buildingType:townHealer",
-                "buildingType:aqueduct",
-                "buildingType:apothecary",
-                "buildingType:hospital",
-                "buildingType:supermarket",
-                "buildingType:medicalClinic",
-                "buildingType:garden",
-                "buildingType:arena",
-                "buildingType:tavern",
-                "buildingType:coffeeHouse",
-                "buildingType:departmentStore",
-                "buildingType:amusementPark",
-                "buildingType:townWatch",
-                "buildingType:courthouse",
-                "buildingType:townHall",
-                "buildingType:magistrate",
-                "buildingType:policeStation",
-                "buildingType:riotPolice",
-                "buildingType:governor",
-                "buildingType:mansion",
-                "buildingType:royalCourt",
-                "buildingType:gentlemensClub",
-                "buildingType:embassyQuarter",
-                "buildingType:networkMonitoring",
-                "buildingType:palisades",
-                "buildingType:stoneWalls",
-                "buildingType:castle",
-                "buildingType:starFort",
-                "buildingType:civilDefense",
-                "buildingType:siegeWorkshop",
-                "buildingType:artilleryFactory",
-                "buildingType:archeryRange",
-                "buildingType:firingRange",
-                "buildingType:stables",
-                "buildingType:carFactory",
-                "buildingType:bronzeSmith",
-                "buildingType:steelMill",
-                "buildingType:syntheticOilPlant",
-                "buildingType:electronicsFactory",
-                "buildingType:coalPowerPlant",
-                "buildingType:oilPowerPlant",
-                "buildingType:hydroPowerPlant",
-                "buildingType:solarPowerPlant",
-                "buildingType:windPowerPlant",
-                "featureType:pineForest",
-                "featureType:forest",
-                "featureType:shrubs",
-                "heritageType:herderI",
-                "heritageType:herderII",
-                "improvementType:irrigatedFarm",
-                "improvementType:feudalFarm",
-                "improvementType:fertilizedFarm",
-                "improvementType:mechanizedFarm",
-                "improvementType:automatedFarm",
-                "improvementType:rockPit",
-                "improvementType:quarry",
-                "improvementType:feudalQuarry",
-                "improvementType:steamQuarry",
-                "improvementType:mechanizedQuarry",
-                "improvementType:automatedQuarry",
                 "resourceType:copper",
                 "resourceType:tin",
                 "resourceType:iron",
                 "resourceType:coal",
-                "resourceType:rareEarthMetals",
                 "resourceType:tungsten",
                 "resourceType:aluminium",
                 "resourceType:graphite",
@@ -5228,10 +5101,6 @@
             "name": "Mountain",
             "concept": "conceptType:elevation",
             "description": "Mountains create strong environmental gradients and barriers that shape migration, warfare, and state formation. Alpine and highland passes funnel trade and armies, while upland communities maintain distinct languages and economies. The Andes supported the Inca through a vertical exchange system linking coast, valley, and puna. The Himalayas constrained interaction between South and Central Asia and established enduring pilgrimage corridors. In Europe, the Alps controlled routes like the Great St Bernard, affecting imperial logistics and seasonal transhumance. The Rocky Mountains influenced continental settlement and resource extraction, from fur trade frontiers to twentieth century mineral and water projects.",
-            "allows": [
-                "buildingType:hydroPowerPlant",
-                "conceptType:mountains"
-            ],
             "yields": [
                 {
                     "type": "yieldType:production",
@@ -5259,9 +5128,6 @@
             "name": "Snow Mountain",
             "concept": "conceptType:elevation",
             "description": "Snow mountains are high, glaciated peaks that store water and generate powerful rivers. They draw pilgrims, scientists, and climbers, yet impose extreme risk. Mont Blanc\u2019s 1786 ascent inaugurated modern alpinism and systematic mountain science. Mount Everest became a global mountaineering focus after the 1953 ascent by Hillary and Norgay. K2, first climbed in 1954, gained a reputation for technical difficulty and fatal storms. Mount Kailash remains a major sacred goal for Hindu, Buddhist, Jain, and Bon traditions. Himalayan glaciers feed the Indus, Ganges, and Brahmaputra, a hydrological legacy central to agriculture and power generation across South Asia.",
-            "allows": [
-                "conceptType:mountains"
-            ],
             "yields": [
                 {
                     "type": "yieldType:production",
@@ -10112,11 +9978,6 @@
             "name": "Pine Forest",
             "concept": "conceptType:feature",
             "description": "Pine forests are coniferous woodlands spread across boreal and montane zones. They supplied straight timbers for building and ship masts, and resin, tar, and pitch for sealing and waterproofing. Norse and Viking communities felled pine for longships, halls, and farmsteads. Siberian peoples harvested resin and relied on pine for shelter and fuel. Early modern navies drew naval stores from Baltic and North American pines. Industrial logging fostered rail-linked sawmills and tar distilleries. Reforestation and plantation forestry reshaped landscapes in Sweden, Scotland, and Japan during the 19th and 20th centuries. Fire, pests, and climate variability drove new silviculture practices. Today pine forests are managed for timber, pulp, carbon storage, and watershed protection while sustaining local crafts and subsistence.",
-            "allows": [
-                "heritageType:arcticI",
-                "heritageType:arcticII",
-                "resourceType:hardwood"
-            ],
             "yields": [
                 {
                     "type": "yieldType:production",
@@ -10145,9 +10006,6 @@
             "name": "Forest",
             "concept": "conceptType:feature",
             "description": "Forests are tree-dominated ecosystems that have supported human subsistence, industry, and belief for millennia. They supplied timber, game, fodder, medicines, and charcoal for metalwork and glassmaking. Medieval forest law regulated access and hunting across Europe. The Black Forest furnished timber and charcoal and shaped regional crafts and folklore. The Amazon rainforest sustained Indigenous societies with agroforestry and terra preta soils. Colonial extraction and road building accelerated clearing. Conservation, sustainable forestry, and protected areas emerged in response to deforestation and habitat loss. Modern management balances production with biodiversity and watershed protection.",
-            "allows": [
-                "resourceType:hardwood"
-            ],
             "yields": [
                 {
                     "type": "yieldType:production",
@@ -10174,13 +10032,8 @@
             "concept": "conceptType:feature",
             "description": "Jungle denotes dense tropical rainforest with heavy undergrowth, difficult terrain, and high biodiversity. Thick vegetation, disease, and humidity challenged explorers, surveyors, and armies. Colonial narratives and adventure literature spread tales of hidden kingdoms and lost cities. Jungle terrain served as natural refuge, aiding guerrilla forces and displaced communities. Campaigns in Southeast Asia and Central Africa illustrated the logistical demands of such environments. Scientific expeditions cataloged species and mapped watersheds, while resource extraction opened interior routes. Conservation now addresses habitat fragmentation and Indigenous land rights.",
             "allows": [
-                "heritageType:equatorialI",
-                "heritageType:equatorialII",
-                "resourceType:hardwood",
                 "resourceType:elephants",
-                "resourceType:oil",
                 "resourceType:rubber",
-                "resourceType:rareEarthMetals",
                 "worldWonderType:chichenItza",
                 "worldWonderType:angkorWat"
             ],
@@ -10221,10 +10074,6 @@
             "name": "Shrubs",
             "concept": "conceptType:feature",
             "description": "Shrublands are landscapes dominated by hardy woody plants adapted to arid or seasonal climates. They provide forage, browse, fuelwood, and soil stabilization. Mediterranean maquis supplied grazing, tannins, and brush fuel for lime kilns and pottery. The African bush shaped herding routes, dry-season fodder reserves, and mobile subsistence practices. Fire and grazing regimes have long governed composition and productivity. Colonial forestry often suppressed burning; later policies reintroduced controlled fire to reduce fuel loads. Shrub encroachment and desertification remain management challenges under changing climates.",
-            "allows": [
-                "heritageType:nomadI",
-                "heritageType:nomadII"
-            ],
             "yields": [
                 {
                     "type": "yieldType:production",
@@ -10329,10 +10178,6 @@
             "name": "Kelp",
             "concept": "conceptType:feature",
             "description": "Kelp forests are underwater stands of large brown algae that form complex habitats. They buffer coasts, cycle nutrients, and support fisheries. California\u2019s Channel Islands sustained abalone and rockfish fisheries and modern marine reserves. Norwegian kelp beds underpin coastal ecosystems and small-boat fisheries. Chilean kelp ecosystems in Patagonia support productive cold-water food webs. Historical kelp burning produced potash and iodine, fueling 18th\u201319th century industries in Scotland and beyond. The alginate industry later commercialized kelp derivatives. Warming seas and sea urchin outbreaks have caused declines, prompting restoration and predator recovery programs.",
-            "allows": [
-                "heritageType:fisherI",
-                "heritageType:fisherII"
-            ],
             "yields": [
                 {
                     "type": "yieldType:food",
@@ -10359,10 +10204,6 @@
             "name": "Lagoon",
             "concept": "conceptType:feature",
             "description": "A lagoon is a shallow coastal basin separated from the sea by barriers or reefs. Brackish waters nurture fisheries, salt pans, and sheltered harbors. The Venice Lagoon supported maritime trade, shipyards, and complex hydraulic works to manage silt and tides. Chilika Lagoon sustained rich fisheries and a major stopover for migratory birds. The Banc d\u2019Arguin lagoons provided critical nurseries for fish and supported traditional fishing communities. Many lagoons saw land reclamation, dredging, and urban expansion. Modern management balances navigation, flood defense, and biodiversity through zoning, gates, and protected areas.",
-            "allows": [
-                "heritageType:fisherI",
-                "heritageType:fisherII"
-            ],
             "yields": [
                 {
                     "type": "yieldType:food",
@@ -10389,10 +10230,6 @@
             "name": "Atoll",
             "concept": "conceptType:feature",
             "description": "An atoll is a ring-shaped coral island enclosing a shallow lagoon, formed as reef-building corals grow upward around a sinking volcanic edifice. Most occur in warm, clear tropical oceans. Narrow motu and reef flats offer passes that serve as harbors yet pose navigational risks. Freshwater is scarce and stored in thin lenses, so subsistence depended on fishing, coconut cultivation, and rain collection. The Maldives comprise dozens of inhabited atolls that sustained maritime trade and cowrie exchange. In Polynesia, atolls anchored long-distance voyaging and maintained ritual spaces. The Tuamotu Archipelago supported copra and pearl fisheries and later cultured pearls. Bikini Atoll became a site of U.S. nuclear testing in the mid-twentieth century, causing displacement and environmental contamination that shaped global debates on nuclear safety.",
-            "allows": [
-                "heritageType:seafarerI",
-                "heritageType:seafarerII"
-            ],
             "yields": [
                 {
                     "type": "yieldType:food",
@@ -10420,10 +10257,6 @@
             "name": "Trade Wind",
             "concept": "conceptType:feature",
             "description": "Trade winds are persistent low-latitude easterlies driven by Hadley cell circulation and the Coriolis effect. Their reliability shaped early oceanic navigation. In the Atlantic, mariners of the fifteenth and sixteenth centuries used the northeast trades to cross toward the Caribbean and South America, then returned via mid-latitude westerlies. This enabled Iberian exploration and empire and supported transatlantic merchant traffic and the triangular trade. Polynesian navigators exploited Pacific trade wind bands for voyages between archipelagos. In the nineteenth century, clipper ships timed passages to seasonal trade wind strengths. They achieved fast routes for tea, guano, and mail. Steam power reduced reliance, but trade winds remain central to sailing and to modern climate and dust transport studies.",
-            "allows": [
-                "heritageType:seafarerI",
-                "heritageType:seafarerII"
-            ],
             "yields": [
                 {
                     "type": "yieldType:moveCost",
@@ -14370,9 +14203,6 @@
             "concept": "conceptType:majorCulture",
             "description": "The Ciboney, identified by Spanish sources as Guanahatabey in western Cuba, were preceramic foragers whose lifeways span the Caribbean Archaic Age into early colonial times. Archaeology places their core in Pinar del R\u00edo, Isla de la Juventud, and adjacent coasts. They lived in small, mobile bands, exploited marine shallows, and left extensive shell middens and cave occupations. Toolkits were dominated by lithic flakes and shell implements. Pottery and intensive agriculture are absent from their sites.\n\nFrom the late first millennium BCE, ceramic-bearing agriculturalists of Arawakan origin reached Cuba. In the west the Ciboney persisted in ecological niches and maintained distinct traditions. Some groups were absorbed by incoming villagers; others retreated to less accessible coasts. At European contact they still occupied parts of western Cuba, but disease, displacement, and labor drafts led to their rapid decline. Their deep coastal knowledge informed later Cuban subsistence and place-names.",
             "category": "majorCultureCategory:america",
-            "allows": [
-                "majorLeaderType:cacique"
-            ],
             "upgradesTo": [
                 "majorCultureType:arawak"
             ],
@@ -14386,9 +14216,6 @@
             "concept": "conceptType:majorCulture",
             "description": "Arawak is a linguistic and cultural horizon that expanded from the Orinoco basin into the Antilles during the Late Ceramic Age (roughly 500 BCE\u2013800 CE). In Cuba, Arawakan settlers established villages across the east and center of the island. They introduced pottery traditions, manioc-based horticulture, and large dugout canoes suited to inter-island travel. Material culture includes griddles for cassava processing, stone celts, and shell ornaments.\n\nSettlement growth and lineage leadership produced more complex village networks. Exchange moved lithic raw materials and prestige goods across islands. In Cuba these communities met and interacted with older foraging groups. Over centuries, insular Arawakan populations generated distinct island identities. In the Greater Antilles this process culminated in the Ta\u00edno, whose chiefdoms dominated the archipelago on the eve of European arrival and shaped Cuba\u2019s eastern cultural landscape.",
             "category": "majorCultureCategory:america",
-            "allows": [
-                "majorLeaderType:cacique"
-            ],
             "upgradesTo": [
                 "majorCultureType:taino"
             ],
@@ -14637,9 +14464,6 @@
             "concept": "conceptType:majorCulture",
             "description": "The Taquara (Taquara-Itarar\u00e9 Tradition) occupied the Southern Brazilian Plateau from c. 400 CE to the early colonial period. Archaeology documents pit houses on upland ridges, circular or oval village plans, and corrugated or brushed ceramics. Toolkits include polished stone axes and projectile points. Subsistence combined small-scale horticulture with intense exploitation of the Araucaria angustifolia pine forests. Seasonal movements tracked nut harvests and deer ranges. Fire management and selective clearing created mosaic landscapes.\nContacts linked the highlands to coastal and riverine groups through exchange of lithics, ornaments, and possibly maize varieties. The tradition aligns with ancestors of Southern J\u00ea speakers (Kaingang, Xokleng). As Tupi-Guarani groups expanded along lowlands after 1000 CE, Taquara communities held upland refuges and negotiated shifting frontiers. Many sites remained occupied into early colonial times, when disease and missionization disrupted settlement patterns. Taquara legacies persist in Southern J\u00ea social geography and forest-use knowledge.",
             "category": "majorCultureCategory:andea",
-            "allows": [
-                "majorLeaderType:cacique"
-            ],
             "upgradesTo": [
                 "majorCultureType:kuhikugu"
             ],
@@ -14726,9 +14550,6 @@
             "concept": "conceptType:majorCulture",
             "description": "The Chinchorro were preceramic fisher-hunter-gatherers of the Atacama Desert coast, active c. 7000\u20131500 BCE. They occupied shores from southern Peru to northern Chile, clustering near Arica and the Camarones Valley. Their economy relied on maritime foraging: fish, shellfish, sea mammals, and seabirds. They used reed rafts, nets of plant fiber, harpoons, and bone hooks. Camps and cemeteries show long-term coastal settlement and seasonal mobility.\n\nThe Chinchorro developed the world\u2019s earliest artificial mummification, beginning before 5000 BCE. Black and red mummy techniques used skin removal, reed supports, clay masks, and mineral pigments. Mortuary care extended to adults, children, and infants, indicating broad social concern. Material exchange with highland groups moved obsidian and pigments along the coast\u2013Andes corridor. The tradition waned after the mid 2nd millennium BCE as new coastal lifeways and later ceramic cultures appeared, but their mortuary innovations shaped the deep cultural record of northern Chile.",
             "category": "majorCultureCategory:andea",
-            "allows": [
-                "majorLeaderType:curaca"
-            ],
             "upgradesTo": [
                 "majorCultureType:mapuche"
             ],
@@ -14815,9 +14636,6 @@
             "concept": "conceptType:majorCulture",
             "description": "The Tumaco\u2013La Tolita cultural tradition flourished along the Pacific lowlands of southern Colombia and northern Ecuador, roughly 300 BCE to 600 CE. Communities occupied mangrove estuaries and river mouths, building mound centers and craft workshops near Isla de La Tolita. Tumaco artisans developed advanced ceramic sculpture and metalwork, including sophisticated sintering of platinum with gold and tumbaga. They produced masks, figurines, and fine ornaments that circulated widely.\nMaritime and riverine exchange linked Tumaco settlements to interior Andean valleys. Salted fish, marine shell, and metals moved inland, while highland goods returned to the coast. Tumaco networks and coastal technologies formed a durable corridor later used by highland cultures such as Nari\u00f1o groups. Environmental change and sociopolitical shifts led to reorganization after 500 CE, but craft repertoires and exchange patterns persisted in successor societies.",
             "category": "majorCultureCategory:andea",
-            "allows": [
-                "majorLeaderType:curaca"
-            ],
             "upgradesTo": [
                 "majorCultureType:narino"
             ],
@@ -14831,9 +14649,6 @@
             "concept": "conceptType:majorCulture",
             "description": "The Nari\u00f1o cultural sphere occupied the high valleys straddling today\u2019s southern Colombia and northern Ecuador, c. 800\u20131500 CE. It featured dense hilltop settlements, terraced slopes, and ridge-field agriculture adapted to cold Andean climates. Nari\u00f1o potters developed Pasto-style negative-painted ceramics and modeled effigies. Metallurgists worked gold-copper alloys into pectorals and ritual items. Trade routes bound the highlands to the Pacific coast, channeling shell, salt, and metals between Tumaco-descended coastal groups and interior communities.\nNari\u00f1o chiefdoms interacted with neighboring Quillacinga and Pasto polities and resisted Inca advances near Rumichaca in the late 15th century. Political organization remained segmented, with fortified nodes controlling passes and market sites. At Spanish arrival, these highland networks still managed cross-ecological exchange, providing a bridge between older coastal traditions and the later Muisca-dominated uplands farther north.",
             "category": "majorCultureCategory:andea",
-            "allows": [
-                "majorLeaderType:curaca"
-            ],
             "upgradesTo": [
                 "majorCultureType:muisca"
             ],
@@ -14904,9 +14719,6 @@
             "concept": "conceptType:majorCulture",
             "description": "Caral-Supe, also known as the Norte Chico civilization, flourished in the Supe and adjacent valleys of coastal Peru c. 3000\u20131800 BCE. It developed one of the earliest urban traditions in the Americas. Major centers such as Caral had platform mounds, sunken circular plazas, and formal residential zones. The economy combined irrigated agriculture with intensive fishing supported by cotton nets. Cotton and food moved between coastal and inland communities through stable exchange networks. Monumental building used shicra bag fill and well planned terraces. Flutes and other instruments attest to organized ritual. Knotted strings found on site may indicate early record-keeping. Long-distance items such as marine shells and exotic stones circulated. Although ceramics were absent, textile production and irrigation engineering were advanced. Caral-Supe established enduring Andean patterns of communal labor, canal management, and valley-centered polities that later cultures on the south coast and highlands adapted to local environments.",
             "category": "majorCultureCategory:andea",
-            "allows": [
-                "majorLeaderType:curaca"
-            ],
             "upgradesTo": [
                 "majorCultureType:nazca"
             ],
@@ -14920,9 +14732,6 @@
             "concept": "conceptType:majorCulture",
             "description": "Nazca culture dominated the southern Peruvian coast c. 100 BCE\u2013800 CE. Its core lay in the Nazca and Ica valleys, with Cahuachi as a major ceremonial center. Agriculture relied on river floodplains and subterranean puquio aqueducts that tapped groundwater. Communities coordinated maintenance of canals and galleries to stabilize production in an arid zone. Nazca artisans produced polychrome ceramics and fine textiles with complex iconography. On the pampas, geoglyphs were laid out as lines, trapezoids, and large biomorphs. These were created by clearing desert pavement and were used for processions and ritual observation. Political power was segmented among valley groups linked by pilgrimage and exchange. Environmental shocks, including El Ni\u00f1o events and river downcutting, stressed settlements after 500 CE. By the eighth century, Cahuachi waned, populations shifted, and influences from highland polities entered the region. Coastal traditions nevertheless provided techniques and routes that facilitated later Middle Horizon interaction.",
             "category": "majorCultureCategory:andea",
-            "allows": [
-                "majorLeaderType:curaca"
-            ],
             "upgradesTo": [
                 "majorCultureType:tiwanaku"
             ],
@@ -15082,9 +14891,6 @@
             "concept": "conceptType:majorCulture",
             "description": "The Harappan, or Indus Valley Civilization, flourished across the Indus and Ghaggar-Hakra systems c. 2600\u20131900 BCE, with antecedents from c. 3300 BCE. Major urban centers included Mohenjo-daro, Harappa, Dholavira, and Lothal. Cities followed orthogonal street plans, used baked-brick architecture, and maintained covered drainage and standardized weights. Artisans worked copper-bronze, faience, shell, and carnelian. Trade reached across the Arabian Sea to Oman and Mesopotamia; Lothal\u2019s dockyard suggests maritime capacity.\n\nAn undeciphered script occurs on seals and tablets. Evidence for palaces or large temples is limited; storage and craft precincts indicate complex urban management. Agriculture produced wheat, barley, millets, and cotton; zebu cattle were prominent. After c. 1900 BCE, urban systems contracted, with regional Late Harappan traditions and population shifts eastward. Aridification and river reorganization are leading explanations for decline. Cultural continuities persisted in craft techniques, weights, and agricultural practices into later northern Indian cultures.",
             "category": "majorCultureCategory:asia",
-            "allows": [
-                "majorLeaderType:rajan"
-            ],
             "upgradesTo": [
                 "majorCultureType:maurya"
             ],
@@ -16595,9 +16401,6 @@
             "concept": "conceptType:majorCulture",
             "description": "The Sinhala ethnocultural tradition formed on the island from a base of Mesolithic communities and Early Iron Age settlers. Later chronicles recount origin legends, but archaeology indicates village agriculture, megalithic burial, and iron metallurgy by the first millennium BCE. An Indo-Aryan Prakrit became dominant in inscriptions from the 3rd-2nd centuries BCE, giving rise to the Sinhala language and script. Theravada Buddhism took root under Mauryan influence, creating monastic networks and literacy. Early irrigation, paddy cultivation, and tank building spread across the Dry Zone. Stone architecture, cave temples, and donor records show a stratified society tied to long-distance trade. The consolidation of this culture under local kings created the conditions for a durable state. Its language, Buddhist institutions, and hydraulic engineering became the core of the Anuradhapura civilization.",
             "category": "majorCultureCategory:oceania",
-            "allows": [
-                "majorLeaderType:rajan"
-            ],
             "upgradesTo": [
                 "majorCultureType:anuradhapura"
             ],
@@ -17129,9 +16932,6 @@
             "concept": "conceptType:majorCulture",
             "description": "The Venedi were Iron Age and Late Antiquity peoples recorded by Roman authors around the Baltic\u2013Vistula zone. Tacitus, Pliny, and Ptolemy located them east of the Vistula and along the forest-steppe fringe. Archaeology links their horizon to groups interacting with the Przeworsk and Zarubintsy cultures. Their settlements combined small farmsteads with periodic hillforts that controlled river routes. Economy mixed cereal farming, animal husbandry, and exploitation of bog iron. Long-distance exchange tied them to the Amber Road and to markets on the Black Sea.\n\nEthnic attribution is debated, yet many scholars treat the Venedi as ancestors of early Slavic-speaking communities. Burial customs shifted from cremation to inhumation in Late Antiquity, showing contacts with Germanic and Baltic neighbors. Metalworking and weapon finds indicate organized war bands. By the 5th\u20136th centuries their population fed into the broader Slavic expansion toward the Elbe, the Danube, and the upper Dnieper.",
             "category": "majorCultureCategory:taiga",
-            "allows": [
-                "majorLeaderType:knyaz"
-            ],
             "upgradesTo": [
                 "majorCultureType:polans"
             ],
@@ -17218,9 +17018,6 @@
             "concept": "conceptType:majorCulture",
             "description": "Early Slavic communities emerged from Late Bronze and Early Iron Age societies of the East European forest and forest-steppe. Archaeology links them to cultures such as Zarubintsy, Przeworsk, Kiev, and later Prague\u2013Korchak and Penkovka. They practiced mixed farming, kept livestock, and used iron tools. Settlements featured sunken-floor houses and small hillforts. Pottery was handmade with simple forms. Social life centered on kin groups and village assemblies. Metalworking and textile production were widespread.\n\nFrom the fifth to seventh centuries, Slavic groups expanded across Central and Southeastern Europe. They moved along the Vistula, Dnieper, and Danube corridors into the Balkans and toward the Elbe. Dialect diversification produced East, West, and South Slavic branches. Contacts with steppe peoples and Byzantium accelerated military and political change. These communities formed the demographic and cultural base for early medieval polities, including Great Moravia, the First Bulgarian Empire, and, later, the Rus' principalities. Their language and agrarian traditions framed subsequent regional state formation.",
             "category": "majorCultureCategory:taiga",
-            "allows": [
-                "majorLeaderType:knyaz"
-            ],
             "upgradesTo": [
                 "majorCultureType:antes"
             ],
@@ -21085,9 +20882,6 @@
             "concept": "conceptType:minorCulture",
             "description": "Redware in the pre-Columbian Caribbean denotes red-slipped pottery widely produced during the Late Ceramic Age. Artisans prepared fine clays with mineral temper, applied iron-rich slips, and achieved burnished surfaces through controlled open firing. Forms included bowls, bottles, and ritual vessels. Ostionoid assemblages in Puerto Rico, Hispaniola, and Jamaica carried this tradition into the centuries before European contact. Excavations near Ban\u00ed in Hispaniola have yielded diagnostic rims and bowls used in cooking and ceremony. Distribution across islands points to canoe-borne exchange networks that moved finished wares and ideas. Redware served domestic needs and conveyed social signaling through shape, finish, and context. It anchors ceramic chronologies and links Antillean communities that shared technology while adapting local styles.",
             "category": "minorCultureCategory:america",
-            "allows": [
-                "minorLeaderType:cacique"
-            ],
             "upgradesTo": [
                 "minorCultureType:jamaica"
             ],
@@ -21117,9 +20911,6 @@
             "concept": "conceptType:minorCulture",
             "description": "The Lucayans were Ta\u00edno-related peoples inhabiting the Bahamian archipelago by the first millennium CE. Settlements clustered near fresh water on low islands and cays. Subsistence combined reef fishing, turtle and conch harvests, and small garden plots. Fishing weirs and canoe navigation supported seasonal mobility and inter-island ties. Shell ornaments and worked bone objects mark craft specialization and exchange. Villages on Guanahani and neighboring islands lay on routes to Hispaniola and Cuba. In 1492 Christopher Columbus made first contact in the Bahamas, initiating rapid disruption. Enslavement raids and forced relocations to Hispaniola emptied the islands within a few decades. Archaeology preserves village plans, burials, and tools that link Lucayan lifeways to wider Ta\u00edno traditions while reflecting the constraints of a limestone archipelago.",
             "category": "minorCultureCategory:america",
-            "allows": [
-                "minorLeaderType:cacique"
-            ],
             "upgradesTo": [
                 "minorCultureType:bahamas"
             ],
@@ -21469,9 +21260,6 @@
             "concept": "conceptType:minorCulture",
             "description": "The Pano-Tacana language family spans western Amazonia, from Peru\u2019s Ucayali to Bolivia\u2019s Beni and Madre de Dios. Peoples such as the Shipibo-Conibo, Cashinahua, Yaminahua, Tacana, and Ese Eja developed riverine lifeways centered on cassava, plantains, fishing, and seasonal mobility. Trade moved ceramics, salt, pigments, and feathers along canoe routes, while ritual specialists mediated health and warfare. Shipibo-Conibo pottery and textiles, marked by geometric ken\u00e9 designs, reveal sophisticated aesthetic systems and social signaling. Many groups resisted Inca encroachment and later evaded early colonial control, though missionization and the rubber boom brought forced labor, displacement, and new settlement patterns. Community defenses and kin alliances buffered epidemics and slaving raids. Lexical and oral traditions preserve shared origins and long-standing interactions across headwater basins.",
             "category": "minorCultureCategory:andea",
-            "allows": [
-                "minorLeaderType:curaca"
-            ],
             "upgradesTo": [
                 "minorCultureType:ecuador"
             ],
@@ -21501,9 +21289,6 @@
             "concept": "conceptType:minorCulture",
             "description": "The Valdivia culture flourished on Ecuador\u2019s Santa Elena Peninsula and nearby coasts during the late fourth to second millennia BCE. It is noted for early pottery in the Americas, organized into phases I\u2013VIII that trace stylistic and technological change. Settlements combined small agricultural villages with shell middens, reflecting mixed farming and marine gathering. Female figurines appear in ritual contexts, suggesting household cults and social marking. Potters experimented with firing and surface treatments, while exchange moved tools and ideas along the littoral. Botanical remains indicate maize and gourds, with cotton likely used for textiles and fishing gear. Valdivia traditions influenced later coastal cultures, establishing ceramic and village patterns that endured into the Formative period.",
             "category": "minorCultureCategory:andea",
-            "allows": [
-                "minorLeaderType:curaca"
-            ],
             "upgradesTo": [
                 "minorCultureType:bolivia"
             ],
@@ -41765,13 +41550,6 @@
             "description": "The tundra is a cold, treeless biome defined by permafrost, low vegetation, and short summers. Human activity adapted to its constraints through mobile pastoralism and seasonal hunting. On Siberia\u2019s expanses, Nenets and related cultures manage large reindeer herds along traditional routes. Alaska\u2019s North Slope introduced a modern extractive phase, with Prudhoe Bay oil fields and pipeline infrastructure built on frozen ground. Conservation areas such as the Arctic National Wildlife Refuge protect migratory caribou and bird habitats. Thawing permafrost now destabilizes settlements, releases methane, and alters hydrology across northern Canada, reshaping land use, engineering standards, and ecological baselines.",
             "allows": [
                 "featureType:pineForest",
-                "featureType:swamp",
-                "heritageType:arcticI",
-                "heritageType:arcticII",
-                "resourceType:gas",
-                "resourceType:oil",
-                "resourceType:rareEarthMetals",
-                "resourceType:uranium",
                 "worldWonderType:lofotrLonghouse"
             ],
             "yields": [
@@ -41798,8 +41576,7 @@
             "description": "Grasslands cover steppes, savannas, and prairies, supporting pastoralism and cereal agriculture. The Eurasian steppes enabled swift mounted warfare and long-distance migrations, exemplified by Mongol armies and tribute networks. In Africa\u2019s savannas, Maasai and other peoples developed transhumant systems aligned with rainfall and pasture cycles. North America\u2019s Great Plains shifted from bison ecology to wheat, corn, and cattle ranching under railroads and homesteading. The Argentine Pampas became a global exporter of beef and grain, tied to refrigerated shipping. Many societies used controlled burns to renew forage and control woody encroachment, maintaining habitat mosaics that sustained both wildlife and herds.",
             "allows": [
                 "featureType:forest",
-                "featureType:jungle",
-                "featureType:swamp"
+                "featureType:jungle"
             ],
             "yields": [
                 {
@@ -41823,10 +41600,7 @@
             "description": "Plains are broad, level lands formed by rivers and wind, often with deep, fertile soils. Early urban civilization coalesced on the Mesopotamian plains, where irrigation supported cities and writing. The North China Plain sustained intensive cereal cultivation and dense state structures. In North America, settlement of the Great Plains followed rail expansion, land surveys, and mechanized farming. The Argentine Pampas evolved into a major grain and beef region integrated into world markets. Along the Nile, predictable floodplains underpinned ancient Egyptian agriculture and administration. Plains frequently serve as corridors for trade and war, but also face dust storms and drought.",
             "allows": [
                 "featureType:shrubs",
-                "heritageType:nomadI",
-                "heritageType:nomadII",
                 "resourceType:horses",
-                "resourceType:gas",
                 "worldWonderType:unionStockyards"
             ],
             "yields": [
@@ -41851,12 +41625,7 @@
             "description": "Deserts are arid landscapes defined by scarce precipitation, wide temperature ranges, and sparse vegetation. Human survival centers on oases, wells, and caravan routes. The Sahara supported trans-Saharan commerce in gold, salt, and enslaved people, aided by camel caravans. On the Arabian Peninsula, Bedouin nomadism balanced herding with oasis trade. The Silk Road skirted the Taklamakan and Gobi, using fortified waystations and seasonal passages. In North America, the Mojave and Sonoran deserts prompted irrigation projects and adapted ranching. Australia\u2019s Outback sustained Indigenous knowledge systems for water and fire. Modern states extract minerals and energy while confronting fragile desert ecologies.",
             "allows": [
                 "featureType:oasis",
-                "heritageType:bedouinI",
-                "heritageType:bedouinII",
                 "resourceType:camels",
-                "resourceType:gas",
-                "resourceType:oil",
-                "resourceType:uranium",
                 "worldWonderType:petra",
                 "worldWonderType:mosqueOfDjenne"
             ],
@@ -41889,20 +41658,6 @@
             "name": "Lake",
             "concept": "conceptType:terrain",
             "description": "Lakes are enclosed freshwater basins that concentrate resources, transport, and ritual life. Shores provide fish protein, reeds, and arable deltas, while ice or calm waters allow seasonal travel. The Great Lakes formed a continental shipping corridor linking inland North America to the Atlantic via canals and locks, and they supported large fisheries. Lake Titicaca served Andean communities as a sacred landscape and a hub for canoe transport and interregional exchange. Lake Baikal preserved unique biodiversity and a vast share of Earth\u2019s liquid freshwater. Lake systems have often anchored fortified towns, monasteries, and later hydroelectric and tourism economies.",
-            "allows": [
-                "continentType:america",
-                "continentType:andea",
-                "continentType:taiga",
-                "continentType:europe",
-                "continentType:mediterra",
-                "continentType:africa",
-                "continentType:levantica",
-                "continentType:siberia",
-                "continentType:asia",
-                "continentType:oceania",
-                "featureType:kelp",
-                "featureType:lagoon"
-            ],
             "yields": [
                 {
                     "type": "yieldType:food",
@@ -41931,9 +41686,6 @@
                 "buildingType:port",
                 "buildingType:containerPort",
                 "buildingType:automatedPort",
-                "buildingType:windPowerPlant",
-                "featureType:kelp",
-                "featureType:lagoon",
                 "improvementType:fisher",
                 "improvementType:boats",
                 "improvementType:feudalBoats",
@@ -41944,13 +41696,6 @@
                 "nationalWonderType:eastIndiaCompany",
                 "nationalWonderType:marineInstitute",
                 "nationalWonderType:voyageOfMagellan",
-                "oceanType:arctic",
-                "oceanType:atlantic",
-                "oceanType:pacific",
-                "oceanType:indian",
-                "oceanType:antarctic",
-                "oceanType:caribbean",
-                "oceanType:mediterranean",
                 "worldWonderType:cristoRedentor",
                 "worldWonderType:prora",
                 "worldWonderType:statueOfLiberty",
@@ -41985,20 +41730,6 @@
             "name": "Sea",
             "concept": "conceptType:terrain",
             "description": "Seas are marginal or enclosed saltwater bodies that foster dense maritime exchange. The Aegean Sea linked Greek city-states through short-haul trade, colonization, and naval warfare in the classical era. The Baltic hosted Viking voyages and later the Hanseatic League, which tied port towns by convoyed trade and law. In the Caribbean, early modern empires contended for sugar islands, enslaved labor, and shipping lanes, producing syncretic cultures and piracy. Seas often host seasonal fisheries and coastal cabotage, and they serve as staging grounds for blue-water ventures into the wider ocean.",
-            "allows": [
-                "featureType:atoll",
-                "heritageType:seafarerI",
-                "heritageType:seafarerII",
-                "oceanType:arctic",
-                "oceanType:atlantic",
-                "oceanType:pacific",
-                "oceanType:indian",
-                "oceanType:antarctic",
-                "oceanType:caribbean",
-                "oceanType:mediterranean",
-                "resourceType:gas",
-                "resourceType:oil"
-            ],
             "relatesTo": [
                 "heritageType:seafarerI",
                 "worldWonderType:moaiStatues"
@@ -42014,18 +41745,7 @@
             "concept": "conceptType:terrain",
             "description": "Oceans are vast interconnected waters that regulate climate and sustain global navigation. Prevailing winds and currents offered predictable routes for sailing empires. Across the Atlantic, the Age of Exploration linked Europe, Africa, and the Americas, establishing plantation economies and the transatlantic slave trade. The Pacific preserved long traditions of Polynesian wayfinding and later became a major theater of World War II. The Indian Ocean bound East Africa, Arabia, India, and Southeast Asia through monsoon-timed commerce, diasporas, and religious exchange. Modern cables, container shipping, and fisheries deepen dependence on ocean corridors while raising stewardship and security challenges.",
             "allows": [
-                "featureType:atoll",
-                "featureType:tradeWind",
-                "heritageType:seafarerII",
-                "oceanType:arctic",
-                "oceanType:atlantic",
-                "oceanType:pacific",
-                "oceanType:indian",
-                "oceanType:antarctic",
-                "oceanType:caribbean",
-                "oceanType:mediterranean",
-                "resourceType:gas",
-                "resourceType:oil"
+                "featureType:tradeWind"
             ],
             "audio": [],
             "requires": [

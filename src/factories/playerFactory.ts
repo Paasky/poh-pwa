@@ -1,8 +1,9 @@
 import { Culture, GameObject, Player, Relation } from '@/types/gameObjects'
 import { ObjKey, TypeStorage } from '@/types/common'
-import { createCulture } from '@/factories/cultureFactory'
 import { TypeObject } from '@/types/typeObjects'
-import { createObject } from '@/factories/_gameObjectFactory'
+import { createGameObject } from '@/factories/_gameObjectFactory'
+import { createCulture } from '@/factories/cultureFactory'
+import { CultureManager } from '@/managers/cultureManager'
 
 export type PlayerBundle = {
   // Direct references for tests
@@ -14,13 +15,15 @@ export type PlayerBundle = {
 }
 
 export const createPlayer = (
-  name = '',
+  name: string,
+  cultureType: TypeObject,
   isCurrent = false,
   relations: Record<ObjKey, Relation> = {},
   turnsToElection = 0,
   policyUnhappiness = 0,
   corruptionDisorder = 0,
   inRevolution = false,
+  religion?: ObjKey,
   policies: TypeObject[] = [],
   research: {
     researched: TypeObject[]
@@ -33,32 +36,29 @@ export const createPlayer = (
     current: null,
     queue: []
   },
-  // If given, returns Player
-  // If not given, returns PlayerBundle and creates a new Culture
-  cultureKey?: ObjKey
-): Player | PlayerBundle => {
-  const base = createObject('player', name)
+): PlayerBundle => {
+  const base = createGameObject('player', name)
 
-  const culture = cultureKey ? createCulture(base.key) : null
-
+  const culture = createCulture(base, cultureType)
+  const leader = new CultureManager().getLeader(cultureType)
   const player = {
     ...base,
-
-    // Player-specific defaults
     isCurrent,
+    leader,
 
-    knownTiles: [],
-    visibleTiles: [],
-    ownedTiles: [],
-    unitDesigns: [],
-    units: [],
-    cities: [],
-    tradeRoutes: [],
+    knownTiles: [] as ObjKey[],
+    visibleTiles: [] as ObjKey[],
+    ownedTiles: [] as ObjKey[],
+    unitDesigns: [] as ObjKey[],
+    units: [] as ObjKey[],
+    cities: [] as ObjKey[],
+    tradeRoutes: [] as ObjKey[],
 
-    culture: culture ? culture.key : cultureKey,
+    culture: culture.key,
+    religion: religion ?? undefined,
 
     diplomacy: {
-      deals: [],
+      deals: [] as ObjKey[],
       relations
     },
     government: {
@@ -70,8 +70,8 @@ export const createPlayer = (
       inRevolution,
 
       policies,
-      selectablePolicies: [],
-      agenda: []
+      selectablePolicies: [] as TypeObject[],
+      agenda: [] as ObjKey[]
     },
     research,
 
@@ -80,9 +80,9 @@ export const createPlayer = (
     yieldStorage: new TypeStorage()
   } as Player
 
-  return culture ? {
-    player,
+  return {
     culture,
-    toObjects: () => [player, culture]
-  } : player
+    player,
+    toObjects: (): GameObject[] => [player, culture]
+  }
 }

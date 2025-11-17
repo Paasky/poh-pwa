@@ -27,6 +27,7 @@ export interface PohObject {
 
 export function initPohObject (objType: ObjType, data: any): PohObject {
   return {
+    ...data,
     objType,
     ...classAndId(data.key),
     key: data.key,

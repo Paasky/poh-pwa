@@ -15,18 +15,16 @@ export const useAppStore = defineStore('app', {
     isProcessing: false,
   }),
   actions: {
-    async init (force = false) {
-      if (this.ready && !force) return
+    async init (gameDataUrl?: string) {
+      if (this.ready) throw new Error('App already initialized')
 
       // Wait 1s to simulate loading data from the server
       await new Promise(resolve => setTimeout(resolve, 1000))
 
-      const [gameData, saveData] = await Promise.all([
-        fetchJSON<StaticData>('/gameData.json'),
-        fetchJSON<GameData>('/saveData.json')
-      ])
-
-      useObjectsStore().init(gameData, saveData)
+      useObjectsStore().init(
+        await fetchJSON<StaticData>('/staticData.json'),
+        gameDataUrl ? await fetchJSON<GameData>(gameDataUrl) : undefined
+      )
 
       // Build encyclopedia menu once after types are ready
       const encyclopedia = useEncyclopediaStore()

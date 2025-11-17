@@ -128,7 +128,7 @@ export const useObjectsStore = defineStore('objects', {
   },
 
   actions: {
-    init (staticData: StaticData, gameData: GameData) {
+    init (staticData: StaticData, gameData?: GameData) {
       if (this.ready) throw new Error('Objects Store already initialized')
 
       // 1) Initialize static objects
@@ -142,20 +142,24 @@ export const useObjectsStore = defineStore('objects', {
       this._staticObjects = Object.freeze(staticObjects)
 
       // 2) Initialize the world
-      this.world.id = gameData.world.id
-      this.world.sizeX = gameData.world.sizeX
-      this.world.sizeY = gameData.world.sizeY
-      this.world.turn = gameData.world.turn
-      this.world.year = gameData.world.year
-      this.world.currentPlayer = gameData.world.currentPlayer
+      if (gameData) {
+        this.world.id = gameData.world.id
+        this.world.sizeX = gameData.world.sizeX
+        this.world.sizeY = gameData.world.sizeY
+        this.world.turn = gameData.world.turn
+        this.world.year = gameData.world.year
+        this.world.currentPlayer = gameData.world.currentPlayer
+      }
 
       // 3) Initialize game objects
-      const gameObjects = {} as Record<string, GameObject>
-      for (const data of gameData.objects) {
-        // todo: freeze old game objects (eg dead units, ended deals, completed goals, etc)
-        gameObjects[data.key] = reactive(init(data))
+      if (gameData) {
+        const gameObjects = {} as Record<string, GameObject>
+        for (const data of gameData.objects) {
+          // todo: freeze old game objects (eg dead units, ended deals, completed goals, etc)
+          gameObjects[data.key] = reactive(init(data))
+        }
+        Object.assign(this._gameObjects, gameObjects)
       }
-      Object.assign(this._gameObjects, gameObjects)
 
       // 4) Build Type indexes
       for (const obj of Object.values(this._staticObjects)) {
@@ -187,14 +191,7 @@ export const useObjectsStore = defineStore('objects', {
       }
 
       // 5) Build GameObject indexes
-      for (const obj of Object.values(this._gameObjects)) {
-        const classGameObjects = this._classGameObjectsIndex.get(obj.class)
-        if (classGameObjects) {
-          classGameObjects.add(obj.key)
-        } else {
-          this._classGameObjectsIndex.set(obj.class, new Set([obj.key]))
-        }
-      }
+      this._cacheGameObjects()
 
       this.ready = true
       console.log('Objects Store initialized')
@@ -204,7 +201,10 @@ export const useObjectsStore = defineStore('objects', {
       if (!obj.key) throw new Error('GameObject must have a key')
       if (this._gameObjects[obj.key]) throw new Error(`GameObject ${obj.key} already exists`)
       this._gameObjects[obj.key] = reactive(obj)
+
+      this._cacheGameObjects([obj])
     },
+
     bulkSet (objs: GameObject[]) {
       if (!objs.length) return
 
@@ -226,11 +226,30 @@ export const useObjectsStore = defineStore('objects', {
       if (errors.length) throw new Error(errors.join('\n'))
 
       Object.assign(this._gameObjects, incoming)
+
+      this._cacheGameObjects(objs)
     },
+
+    _cacheGameObjects (gameObjects?: GameObject[]) {
+      for (const obj of gameObjects ?? Object.values(this._gameObjects)) {
+        const classGameObjects = this._classGameObjectsIndex.get(obj.class)
+        if (classGameObjects) {
+          classGameObjects.add(obj.key)
+        } else {
+          this._classGameObjectsIndex.get(obj.class)?.delete(obj.key)
+        }
+      }
+
+    },
+
     delete (gameKey: GameKey) {
       if (!this._gameObjects[gameKey]) throw new Error(`GameObject ${gameKey} does not exist`)
+
+      // Delete it from indexes and objects
+      this._classGameObjectsIndex.get(this.getGameObject(gameKey).class)?.delete(gameKey)
       delete this._gameObjects[gameKey]
     },
+
     toGameData (): GameData {
       const output = {
         objects: [] as any[],

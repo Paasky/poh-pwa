@@ -37,6 +37,28 @@ export class CultureManager extends Manager {
     })
   }
 
+  getLeader (cultureType: TypeObject): TypeObject {
+    const key = cultureType.allows?.find(a => a.indexOf('LeaderType:') >= 0)
+    if (!key) throw new Error(`[cultureManager] No LeaderType in ${JSON.stringify(cultureType)}`)
+
+    return this._objects.getTypeObject(key)
+  }
+
+  getMajorTypeForRegion (region: TypeObject, evolution: 0 | 1 | 2 | 3 | 4 = 0): TypeObject {
+    const key = region.allows?.find(a => a.startsWith('majorCultureType:'))
+    if (!key) throw new Error(`[cultureManager] No majorCultureType in ${JSON.stringify(region)}`)
+
+    return this._objects.getTypeObject(key)
+  }
+
+  getMinorTypeForRegion (region: TypeObject, group: 0 | 1 = 0, evolution: 0 | 1 = 0): TypeObject {
+    const i = group * 2 + evolution
+    const key = region.allows?.filter(a => a.startsWith('minorCultureType:'))[i] ?? null
+    if (!key) throw new Error(`[cultureManager] No minorCultureType[${i}] in ${JSON.stringify(region)}`)
+
+    return this._objects.getTypeObject(key)
+  }
+
   selectHeritage (culture: Culture, heritage: TypeObject): void {
     if (culture.heritages.includes(heritage)) throw new Error(`[cultureManager] ${culture.key}: ${heritage.key} already selected`)
     if (!culture.selectableHeritages.includes(heritage)) throw new Error(`[cultureManager] ${culture.key}: ${heritage.name} not selectable`)

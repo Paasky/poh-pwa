@@ -124,6 +124,10 @@ export function initTypeObject (data: any): TypeObject {
     ...data
   }) as TypeObject
 
+  if (data.key === 'regionType:aegean') {
+    console.log(data, obj)
+  }
+
   for (const yieldObj of obj.yields ?? []) {
     // Fill yields with defaults
     if (!yieldObj.method) {

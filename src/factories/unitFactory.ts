@@ -1,6 +1,6 @@
 import { ObjKey } from '@/types/common'
 import { Unit } from '@/types/gameObjects'
-import { createObject } from '@/factories/_gameObjectFactory'
+import { createGameObject } from '@/factories/_gameObjectFactory'
 
 export const createUnit = (
   playerKey: ObjKey,
@@ -14,7 +14,7 @@ export const createUnit = (
   cityKey?: ObjKey,
   tradeRouteKey?: ObjKey,
 ): Unit => {
-  const base = createObject('unit')
+  const base = createGameObject('unit')
 
   const unit = {
     ...base,

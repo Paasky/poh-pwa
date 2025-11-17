@@ -1,6 +1,6 @@
 import { ObjKey, World, yearsPerTurnConfig } from '@/types/common'
 import { Tile } from '@/types/gameObjects'
-import { createObject } from '@/factories/_gameObjectFactory'
+import { createGameObject } from '@/factories/_gameObjectFactory'
 import { useObjectsStore } from '@/stores/objectStore'
 
 export const createWorld = (
@@ -24,7 +24,7 @@ export const createWorld = (
     // iterate correctly over x within each row
     for (let x = 0; x < world.sizeX; x++) {
       const tile = {
-        ...createObject('tile', `[${x},${y}]`),
+        ...createGameObject('tile', `[${x},${y}]`),
         x,
         y,
         domain: objects.getTypeObject('domainType:land'),
