@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import UiTypePillList from '@/components/Ui/UiTypePillList.vue'
+import UiObjPillList from '@/components/Ui/UiObjPillList.vue'
 import UiYieldList from '@/components/Ui/UiYieldList.vue'
-import UiTypePill from '@/components/Ui/UiTypePill.vue'
+import UiObjPill from '@/components/Ui/UiObjPill.vue'
 import UiCard from '@/components/Ui/UiCard.vue'
 import { TypeObject } from '@/types/typeObjects'
 import UiCardGrid from '@/components/Ui/UiCardGrid.vue'
@@ -46,18 +46,18 @@ function selectHeritage (heritage: TypeObject) {
           <b v-if="player.culture.positiveTraitsToSelect">{{ player.culture.positiveTraitsToSelect }} positive</b>
           <span v-if="player.culture.positiveTraitsToSelect && player.culture.negativeTraitsToSelect"> and </span>
           <b v-if="player.culture.negativeTraitsToSelect">{{ player.culture.negativeTraitsToSelect }} negative</b>
-          <UiTypePill type="conceptType:trait"
+          <UiObjPill type="conceptType:trait"
                       :name="player.culture.positiveTraitsToSelect+player.culture.negativeTraitsToSelect === 1 ? 'Trait' : 'Traits'"/>
           for your Culture.
           These can only be modified during a
-          <UiTypePill type="conceptType:revolution"/>
+          <UiObjPill type="conceptType:revolution"/>
           .
         </p>
         <p v-else>
           You have selected all of your
-          <UiTypePill type="conceptType:trait" name="Traits"/>
+          <UiObjPill type="conceptType:trait" name="Traits"/>
           . They can only be modified during a
-          <UiTypePill type="conceptType:revolution"/>
+          <UiObjPill type="conceptType:revolution"/>
           .
         </p>
       </div>
@@ -75,7 +75,7 @@ function selectHeritage (heritage: TypeObject) {
               >
                 <div class="text-xs mt-0.5">
                   <UiYieldList :yields="typeData.type.yields"/>
-                  <UiTypePillList :type-keys="typeData.type.gains"/>
+                  <UiObjPillList :obj-keys="typeData.type.gains"/>
                 </div>
                 <UiButton v-if="player.culture.positiveTraitsToSelect + player.culture.negativeTraitsToSelect"
                           class="w-full my-1"
@@ -101,7 +101,7 @@ function selectHeritage (heritage: TypeObject) {
         <p v-if="player.culture.status === 'notSettled' || player.culture.status === 'canSettle'">
           Explore your surroundings to discover and learn from the nature around you. These skills and knowledge will
           stay as your Cultural
-          <UiTypePill objOrKey="conceptType:heritage"/>
+          <UiObjPill objOrKey="conceptType:heritage"/>
           for the rest of the game.
         </p>
         <p v-if="player.culture.status === 'notSettled'">
@@ -112,7 +112,7 @@ function selectHeritage (heritage: TypeObject) {
         </h2>
         <p v-if="player.culture.status === 'canSettle' || player.culture.status === 'mustSettle'">
           Use your <b>Tribe</b> to create your first
-          <UiTypePill objOrKey="conceptType:city"/>
+          <UiObjPill objOrKey="conceptType:city"/>
           and turn the first page of your people's history.
         </p>
         <p v-if="player.culture.status === 'canSettle'">
@@ -130,7 +130,7 @@ function selectHeritage (heritage: TypeObject) {
                 class="inline pl-1 text-xs">Get
               points from discovering:</h4>
             <div v-if="player.culture.status === 'notSettled' || player.culture.status === 'canSettle'" class="text-xs">
-              <UiTypePillList :type-keys="catData.typesData[0].type.requires" :no-margin="true"/>
+              <UiObjPillList :obj-keys="catData.typesData[0].type.requires" :no-margin="true"/>
             </div>
           </div>
           <UiCard v-for="typeData of catData.typesData"
@@ -146,7 +146,7 @@ function selectHeritage (heritage: TypeObject) {
           >
             <div class="text-xs">
               <UiYieldList :yields="typeData.type.yields"/>
-              <UiTypePillList :type-keys="typeData.type.gains"/>
+              <UiObjPillList :obj-keys="typeData.type.gains"/>
             </div>
           </UiCard>
         </UiCardGroup>
@@ -161,7 +161,7 @@ function selectHeritage (heritage: TypeObject) {
           >
             <div class="text-xs">
               <UiYieldList :yields="typeData.type.yields"/>
-              <UiTypePillList :type-keys="typeData.type.gains"/>
+              <UiObjPillList :obj-keys="typeData.type.gains"/>
             </div>
           </UiCard>
         </template>

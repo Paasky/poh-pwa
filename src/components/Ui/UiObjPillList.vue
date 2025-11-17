@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import UiObjPill from '@/components/Ui/UiTypePill.vue'
+import UiObjPill from '@/components/Ui/UiObjPill.vue'
 import { useObjectsStore } from '@/stores/objectStore'
 import { ObjKey } from '@/types/common'
 

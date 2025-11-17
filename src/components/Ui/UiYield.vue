@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import UiTypePill from '@/components/Ui/UiTypePill.vue'
+import UiObjPill from '@/components/Ui/UiObjPill.vue'
 import { Yield } from '@/types/common'
 
 const props = defineProps<{
@@ -56,21 +56,21 @@ const colorClass = computed<string>(() => {
 
 <template>
   <span class="select-none">
-    <UiTypePill :objOrKey="data.type" :hide-name="hideName">
+    <UiObjPill :objOrKey="data.type" :hide-name="hideName">
       <span :class="colorClass" class="mr-1">{{ amount }}</span>
-    </UiTypePill>
+    </UiObjPill>
     <template v-if="data.for.length">
       for
       <template v-for="(type, i) in data.for" :key="JSON.stringify(type)">
         <span v-if="i !== 0">, </span>
-        <UiTypePill :objOrKey="type"/>
+        <UiObjPill :objOrKey="type"/>
       </template>
     </template>
     <template v-if="data.vs.length">
       vs
       <template v-for="(type, i) in data.vs" :key="JSON.stringify(type)">
         <span v-if="i !== 0">, </span>
-        <UiTypePill :objOrKey="type"/>
+        <UiObjPill :objOrKey="type"/>
       </template>
     </template>
   </span>

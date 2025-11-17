@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import UiCard from '@/components/Ui/UiCard.vue'
-import { usePlayerScienceStore } from '@/components/PlayerDetails/Tabs/scienceStore'
-import UiTypePill from '@/components/Ui/UiTypePill.vue'
+import UiObjPill from '@/components/Ui/UiObjPill.vue'
 import UiIcon from '@/components/Ui/UiIcon.vue'
-import UiTypePillList from '@/components/Ui/UiTypePillList.vue'
-import ScienceTabArrows from '@/components/PlayerDetails/Tabs/ScienceTabArrows.vue'
+import UiObjPillList from '@/components/Ui/UiObjPillList.vue'
 import UiHeader from '@/components/Ui/UiHeader.vue'
+import { usePlayerResearchStore } from '@/components/PlayerDetails/ResearchTab/researchStore'
+import ResearchTabArrows from '@/components/PlayerDetails/ResearchTab/ResearchTabArrows.vue'
 
-const science = usePlayerScienceStore()
-const maxY = Math.max(...science.techs.map(t => t.y))
-const maxX = Math.max(...science.techs.map(t => t.x))
+const research = usePlayerResearchStore()
+const maxY = Math.max(...research.techs.map(t => t.y))
+const maxX = Math.max(...research.techs.map(t => t.x))
 
 // Base size controls (rem units)
 const xSize = 5.5
@@ -26,7 +26,7 @@ const containerHeightRem = computed(() => (maxY + 1.6) * ySize)
   <div class="mt-28 m-4 relative text-sm"
        :style="{ height: `${containerHeightRem}rem`, width: `${containerWidthRem}rem` }">
     <!-- connector lines -->
-    <ScienceTabArrows
+    <ResearchTabArrows
         stroke-color-rgb="rgb(48, 48, 48)"
         :container-width-rem="containerWidthRem"
         :container-height-rem="containerHeightRem"
@@ -36,7 +36,7 @@ const containerHeightRem = computed(() => (maxY + 1.6) * ySize)
         :card-height-rem="cardHeightRem"
     />
 
-    <UiHeader v-for="(era, i) of science.eras"
+    <UiHeader v-for="(era, i) of research.eras"
               class="absolute"
               :class="i > 0 ? 'border-t border-yellow-800/75' : ''"
               :style="{
@@ -48,7 +48,7 @@ const containerHeightRem = computed(() => (maxY + 1.6) * ySize)
               :type-object="{ key: era.era.key }"
     />
 
-    <UiCard v-for="tech of science.techs"
+    <UiCard v-for="tech of research.techs"
             class="absolute border-4 select-none"
             :class="{
               'cursor-pointer': !tech.isResearched && !tech.isResearching,
@@ -57,10 +57,10 @@ const containerHeightRem = computed(() => (maxY + 1.6) * ySize)
             :style="{ left: `${tech.x * xSize}rem`, top: `${tech.y * ySize}rem`, width: `${cardWidthRem}rem`, height: `${cardHeightRem}rem` }"
             :selected="tech.queuePos !== null"
             :disabled="!tech.canResearch && !tech.isResearched"
-            @click="() => {tech.isResearched ? null : science.start(tech.type)}"
+            @click="() => {tech.isResearched ? null : research.start(tech.type)}"
     >
       <div class="border-b border-white/20 pb-1 mb-2">
-        <UiTypePill :objOrKey="tech.type" :hide-icon="true"/>
+        <UiObjPill :objOrKey="tech.type" :hide-icon="true"/>
         <span v-if="tech.queuePos !== null">({{ tech.queuePos + 1 }})</span>
         <span class="float-right">
           <UiIcon :icon="tech.type.icon"/>
@@ -69,8 +69,8 @@ const containerHeightRem = computed(() => (maxY + 1.6) * ySize)
       </div>
       <div class="text-xs flex flex-wrap items-start content-start gap-x-1 overflow-y-auto"
            :style="{ height: `${ySize}rem` }">
-        <UiTypePillList :type-keys="tech.type.allows.filter(t => !t.startsWith('technologyType:'))" :no-margin="true"
-                        :short-name="tech.type.allows.length > 6"/>
+        <UiObjPillList :obj-keys="tech.type.allows.filter(t => !t.startsWith('technologyType:'))" :no-margin="true"
+                       :short-name="tech.type.allows.length > 6"/>
       </div>
     </UiCard>
   </div>

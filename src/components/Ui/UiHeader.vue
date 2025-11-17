@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useEncyclopediaStore } from '@/components/Encyclopedia/store'
+import { useEncyclopediaStore } from '@/components/Encyclopedia/encyclopediaStore'
 import { computed } from 'vue'
 import { TypeKey } from '@/types/common'
 import { TypeObject } from '@/types/typeObjects'

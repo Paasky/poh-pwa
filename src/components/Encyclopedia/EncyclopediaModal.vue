@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue'
 import UiModal from '@/components/Ui/UiModal.vue'
 import UiIcon from '@/components/Ui/UiIcon.vue'
-import { useEncyclopediaStore } from '@/components/Encyclopedia/store'
+import { useEncyclopediaStore } from '@/components/Encyclopedia/encyclopediaStore'
 import { useObjectsStore } from '@/stores/objectStore'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import Content from '@/components/Encyclopedia/Comps/Content.vue'

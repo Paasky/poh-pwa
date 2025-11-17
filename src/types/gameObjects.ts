@@ -2,8 +2,6 @@ import { CatKey, GameKey, initPohObject, ObjKey, PohObject, TypeKey, TypeStorage
 import { TypeObject } from '@/types/typeObjects'
 import { useObjectsStore } from '@/stores/objectStore'
 
-const objects = useObjectsStore()
-
 export type GameClass =
   'agenda' |
   'building' |
@@ -32,7 +30,7 @@ const _initGameObject = (rawData: any): GameObject => {
 
   // Load TypeObject if present and set the name from it
   if ('type' in rawData) {
-    obj.type = objects.getTypeObject(rawData.type)
+    obj.type = useObjectsStore().getTypeObject(rawData.type)
     if (!obj.name) {
       obj.name = obj.type.name
     }
@@ -108,11 +106,11 @@ export const initCulture = (rawData: any): Culture => {
   const obj = _initGameObject(rawData) as Culture
 
   obj.status = rawData.status
-  obj.heritages = rawData.heritages.map((h: TypeKey) => objects.getTypeObject(h))
+  obj.heritages = rawData.heritages.map((h: TypeKey) => useObjectsStore().getTypeObject(h))
   obj.heritageCategoryPoints = rawData.heritageCategoryPoints
   obj.selectableHeritages = []
 
-  obj.traits = rawData.traits.map((t: TypeKey) => objects.getTypeObject(t))
+  obj.traits = rawData.traits.map((t: TypeKey) => useObjectsStore().getTypeObject(t))
   obj.selectableTraits = []
   obj.mustSelectTraits = rawData.mustSelectTraits
 
@@ -140,7 +138,7 @@ export const initDeal = (rawData: any): Deal => {
   obj.items = rawData.items.map((it: any) => ({
     to: it.to,
     from: it.from,
-    type: objects.getTypeObject(it.type),
+    type: useObjectsStore().getTypeObject(it.type),
     amount: it.amount,
     value: it.value
   }))
@@ -202,24 +200,25 @@ export const initPlayer = (rawData: any): Player => {
     revolutionChance: rawData.government.revolutionChance,
     inRevolution: rawData.government.inRevolution,
 
-    policies: rawData.government.policies.map((k: TypeKey) => objects.getTypeObject(k)),
+    policies: rawData.government.policies.map((k: TypeKey) => useObjectsStore().getTypeObject(k)),
     selectablePolicies: [],
     agenda: rawData.government.agenda
   }
 
   // Research
-  const researched = (rawData.research.researched).map((k: TypeKey) => objects.getTypeObject(k))
+  const researched = (rawData.research.researched).map((k: TypeKey) => useObjectsStore().getTypeObject(k))
   const researchingRaw = rawData.research.researching
   const researching: Record<TypeKey, { type: TypeObject, progress: number }> = {}
   for (const [key, val] of Object.entries(researchingRaw)) {
     const v = val as any
-    researching[key as TypeKey] = { type: objects.getTypeObject(v.type), progress: v.progress }
+    researching[key as TypeKey] = { type: useObjectsStore().getTypeObject(v.type), progress: v.progress }
   }
   obj.research = {
     researched,
     researching,
-    current: rawData.research.current ? objects.getTypeObject(rawData.research.current) : null,
-    queue: rawData.research.queue.map((k: TypeKey) => objects.getTypeObject(k))
+    current: rawData.research.current ? useObjectsStore().getTypeObject(rawData.research.current) : null,
+    turnsLeft: 0,
+    queue: rawData.research.queue.map((k: TypeKey) => useObjectsStore().getTypeObject(k))
   }
 
   // Storages
@@ -240,16 +239,18 @@ export type Religion = GameObject & {
 
   gods: TypeObject[]
   selectableGods: TypeObject[]
+
+  canEvolve: boolean
 }
 export const initReligion = (rawData: any): Religion => {
   const obj = _initGameObject(rawData) as Religion
 
   obj.status = rawData.status
-  obj.myths = rawData.myths.map((k: TypeKey) => objects.getTypeObject(k))
+  obj.myths = rawData.myths.map((k: TypeKey) => useObjectsStore().getTypeObject(k))
   obj.selectableMyths = []
-  obj.dogmas = rawData.dogmas.map((k: TypeKey) => objects.getTypeObject(k))
+  obj.dogmas = rawData.dogmas.map((k: TypeKey) => useObjectsStore().getTypeObject(k))
   obj.selectableDogmas = []
-  obj.gods = rawData.gods.map((k: TypeKey) => objects.getTypeObject(k))
+  obj.gods = rawData.gods.map((k: TypeKey) => useObjectsStore().getTypeObject(k))
   obj.selectableGods = []
 
   return obj
@@ -300,17 +301,17 @@ export const initTile = (rawData: any): Tile => {
 
   obj.x = rawData.x
   obj.y = rawData.y
-  obj.domain = objects.getTypeObject(rawData.domain)
-  obj.area = objects.getTypeObject(rawData.area)
-  obj.terrain = objects.getTypeObject(rawData.terrain)
-  obj.elevation = objects.getTypeObject(rawData.elevation)
-  if ('feature' in rawData) obj.feature = objects.getTypeObject(rawData.feature)
+  obj.domain = useObjectsStore().getTypeObject(rawData.domain)
+  obj.area = useObjectsStore().getTypeObject(rawData.area)
+  obj.terrain = useObjectsStore().getTypeObject(rawData.terrain)
+  obj.elevation = useObjectsStore().getTypeObject(rawData.elevation)
+  if ('feature' in rawData) obj.feature = useObjectsStore().getTypeObject(rawData.feature)
   if ('river' in rawData) obj.river = rawData.river
-  if ('resource' in rawData) obj.resource = objects.getTypeObject(rawData.resource)
+  if ('resource' in rawData) obj.resource = useObjectsStore().getTypeObject(rawData.resource)
   if ('route' in rawData) obj.route = rawData.route
   if ('player' in rawData) obj.player = rawData.player
   if ('construction' in rawData) obj.construction = rawData.construction
-  if ('pollution' in rawData) obj.pollution = objects.getTypeObject(rawData.pollution)
+  if ('pollution' in rawData) obj.pollution = useObjectsStore().getTypeObject(rawData.pollution)
   obj.citizens = rawData.citizens
   obj.tradeRoutes = rawData.tradeRoutes
   obj.units = rawData.units
@@ -354,7 +355,7 @@ export type Building = TileObject & {
 export const initBuilding = (rawData: any): Building => {
   const obj = initTileObject(rawData) as Building
 
-  obj.type = objects.getTypeObject(rawData.type)
+  obj.type = useObjectsStore().getTypeObject(rawData.type)
   obj.health = rawData.health
   obj.citizens = rawData.citizens
 
@@ -369,7 +370,7 @@ export type NationalWonder = TileObject & {
 export const initNationalWonder = (rawData: any): NationalWonder => {
   const obj = initTileObject(rawData) as NationalWonder
 
-  obj.type = objects.getTypeObject(rawData.type)
+  obj.type = useObjectsStore().getTypeObject(rawData.type)
   obj.health = rawData.health
   if ('citizen' in rawData) obj.citizen = rawData.citizen
 
@@ -384,7 +385,7 @@ export type WorldWonder = TileObject & {
 export const initWorldWonder = (rawData: any): WorldWonder => {
   const obj = initTileObject(rawData) as WorldWonder
 
-  obj.type = objects.getTypeObject(rawData.type)
+  obj.type = useObjectsStore().getTypeObject(rawData.type)
   obj.health = rawData.health
   if ('citizen' in rawData) obj.citizen = rawData.citizen
 
@@ -399,7 +400,7 @@ export type Improvement = TileObject & {
 export const initImprovement = (rawData: any): Improvement => {
   const obj = initTileObject(rawData) as Improvement
 
-  obj.type = objects.getTypeObject(rawData.type)
+  obj.type = useObjectsStore().getTypeObject(rawData.type)
   obj.health = rawData.health
   obj.citizens = rawData.citizens
 
@@ -419,7 +420,7 @@ export const initCitizen = (rawData: any): Citizen => {
   obj.city = rawData.city
   obj.culture = rawData.culture
   if ('religion' in rawData) obj.religion = rawData.religion
-  if ('policy' in rawData) obj.policy = objects.getTypeObject(rawData.policy)
+  if ('policy' in rawData) obj.policy = useObjectsStore().getTypeObject(rawData.policy)
   if ('workplace' in rawData) obj.workplace = rawData.workplace
 
   return obj
@@ -465,8 +466,8 @@ export const initUnitDesign = (rawData: any): UnitDesign => {
   const obj = _initGameObject(rawData) as UnitDesign
 
   obj.player = rawData.player
-  obj.equipment = objects.getTypeObject(rawData.equipment)
-  obj.platform = objects.getTypeObject(rawData.platform)
+  obj.equipment = useObjectsStore().getTypeObject(rawData.equipment)
+  obj.platform = useObjectsStore().getTypeObject(rawData.platform)
   obj.isArmored = rawData.isArmored
   obj.isActive = rawData.isActive
 

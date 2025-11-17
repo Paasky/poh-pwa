@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import UiCard from '@/components/Ui/UiCard.vue'
 import UiYieldList from '@/components/Ui/UiYieldList.vue'
-import UiTypePillList from '@/components/Ui/UiTypePillList.vue'
-import { usePlayerGovernmentStore } from '@/components/PlayerDetails/Tabs/governmentStore'
+import UiObjPillList from '@/components/Ui/UiObjPillList.vue'
+import { usePlayerGovernmentStore } from '@/components/PlayerDetails/GovernmentTab/governmentStore'
 
 const government = usePlayerGovernmentStore()
 </script>
@@ -26,7 +26,7 @@ const government = usePlayerGovernmentStore()
                 <UiYieldList :yields="policy.type.yields"/>
               </div>
               <div v-if="policy.type.specials.length" class="mt-auto mb-[-0.25rem] pt-1 border-t border-green-900/25">
-                <UiTypePillList :type-keys="policy.type.specials"/>
+                <UiObjPillList :obj-keys="policy.type.specials"/>
               </div>
             </div>
           </div>

@@ -100,7 +100,7 @@ export interface TypeObject extends PohObject {
   allows: TypeKey[]
   requires: TypeKey[] | TypeKey[][]
   yields: Yield[]
-  gains: string[]
+  gains: TypeKey[]
   upgradesTo: TypeKey[]
   upgradesFrom: TypeKey[]
   specials: TypeKey[]
@@ -124,7 +124,7 @@ export function initTypeObject (data: any): TypeObject {
     ...data
   }) as TypeObject
 
-  for (const yieldObj of obj.yields) {
+  for (const yieldObj of obj.yields ?? []) {
     // Fill yields with defaults
     if (!yieldObj.method) {
       yieldObj.method = 'lump'

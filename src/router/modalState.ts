@@ -1,8 +1,9 @@
 import type { RouteLocationNormalizedLoaded, Router } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { watch } from 'vue'
-import { useEncyclopediaStore } from '@/components/Encyclopedia/store'
-import { ALL_TABS, type TabKey, usePlayerDetailsStore } from '@/components/PlayerDetails/playerDetailsStore'
+import { useEncyclopediaStore } from '@/components/Encyclopedia/encyclopediaStore'
+import { TabName, tabsConfig, usePlayerDetailsStore } from '@/components/PlayerDetails/playerDetailsStore'
+import { TypeKey } from '@/types/common'
 
 // Query param keys (new simplified schema)
 const Q_PD = 'pd'       // value: TabKey or '' (exists but empty => open PD without switching)
@@ -42,9 +43,8 @@ function applyRouteToStores (route: RouteLocationNormalizedLoaded) {
   // PlayerDetails
   if (pdParam === '') {
     playerDetails.open() // keep current tab
-  } else if ((ALL_TABS as readonly string[]).includes(pdParam)) {
-    playerDetails.open(pdParam as TabKey)
-    playerDetails.switchTab(pdParam as TabKey)
+  } else if ((tabsConfig).find((c) => c.name === pdParam)) {
+    playerDetails.open(pdParam as TabName)
   } else {
     // Invalid tab -> just ensure closed
     playerDetails.close()
@@ -57,7 +57,7 @@ function applyRouteToStores (route: RouteLocationNormalizedLoaded) {
     encyclopedia.open()
   } else if (encParam) {
     try {
-      encyclopedia.openType(encParam)
+      encyclopedia.openType(encParam as TypeKey)
     } catch (_) {
       encyclopedia.open()
     }

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { useObjectsStore } from '@/stores/objectStore'
-import { useEncyclopediaStore } from '@/components/Encyclopedia/store'
+import { useEncyclopediaStore } from '@/components/Encyclopedia/encyclopediaStore'
 import { GameData, StaticData } from '@/types/api'
 
 async function fetchJSON<T> (url: string): Promise<T> {

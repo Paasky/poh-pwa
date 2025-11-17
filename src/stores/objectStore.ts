@@ -147,6 +147,7 @@ export const useObjectsStore = defineStore('objects', {
       this.world.sizeY = gameData.world.sizeY
       this.world.turn = gameData.world.turn
       this.world.year = gameData.world.year
+      this.world.currentPlayer = gameData.world.currentPlayer
 
       // 3) Initialize game objects
       const gameObjects = {} as Record<string, GameObject>

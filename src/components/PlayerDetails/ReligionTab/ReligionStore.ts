@@ -13,7 +13,7 @@ export interface CategoryData {
   }[],
 }
 
-export const usePlayerFaithStore = defineStore('faithStore', {
+export const usePlayerReligionStore = defineStore('religionStore', {
   state: () => ({
     mythsPerCategory: {} as Record<string, CategoryData>,
     godsPerCategory: {} as Record<string, CategoryData>,
@@ -52,7 +52,7 @@ export const usePlayerFaithStore = defineStore('faithStore', {
       this.dogmasPerCategory = dogmasPerCategory
 
       this.ready = true
-      console.log('Faith Store initialized')
+      console.log('Religion Store initialized')
     }
   }
 })

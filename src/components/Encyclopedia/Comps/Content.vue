@@ -2,11 +2,11 @@
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { icons } from '@/types/icons'
-import UiTypePillList from '@/components/Ui/UiTypePillList.vue'
+import UiObjPillList from '@/components/Ui/UiObjPillList.vue'
 import UiIcon from '@/components/Ui/UiIcon.vue'
 import UiYieldList from '@/components/Ui/UiYieldList.vue'
 import UiButton from '@/components/Ui/UiButton.vue'
-import { useEncyclopediaStore } from '@/components/Encyclopedia/store'
+import { useEncyclopediaStore } from '@/components/Encyclopedia/encyclopediaStore'
 import { useObjectsStore } from '@/stores/objectStore'
 
 const objects = useObjectsStore()
@@ -116,31 +116,31 @@ onBeforeUnmount(() => stopAudio())
       </div>
       <div v-if="current.gains.length" class="mt-4">
         <h3>Gains</h3>
-        <UiTypePillList :type-keys="current.gains"/>
+        <UiObjPillList :obj-keys="current.gains"/>
       </div>
       <div v-if="current.allows.length" class="mt-4">
         <h3>Allows</h3>
-        <UiTypePillList :type-keys="current.allows"/>
+        <UiObjPillList :obj-keys="current.allows"/>
       </div>
       <div v-if="current.requires.length" class="mt-4">
         <h3>Requires</h3>
-        <UiTypePillList :type-keys="current.requires"/>
+        <UiObjPillList :obj-keys="current.requires"/>
       </div>
       <div v-if="current.upgradesFrom.length" class="mt-4">
         <h3>Upgrades From</h3>
-        <UiTypePillList :type-keys="current.upgradesFrom"/>
+        <UiObjPillList :obj-keys="current.upgradesFrom"/>
       </div>
       <div v-if="current.upgradesTo.length" class="mt-4">
         <h3>Upgrades To</h3>
-        <UiTypePillList :type-keys="current.upgradesTo"/>
+        <UiObjPillList :obj-keys="current.upgradesTo"/>
       </div>
       <div v-if="current.specials.length" class="mt-4">
         <h3>Special</h3>
-        <UiTypePillList :type-keys="current.specials"/>
+        <UiObjPillList :obj-keys="current.specials"/>
       </div>
       <div v-if="current.relatesTo.length" class="mt-4">
         <h3>Relates To</h3>
-        <UiTypePillList :type-keys="current.relatesTo"/>
+        <UiObjPillList :obj-keys="current.relatesTo"/>
       </div>
     </div>
   </div>

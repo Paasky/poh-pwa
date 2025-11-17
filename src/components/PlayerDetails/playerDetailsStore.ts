@@ -1,48 +1,70 @@
 import { defineStore } from 'pinia'
+import { TypeKey } from '@/types/common'
 
-export type TabKey =
-  | 'gold'
-  | 'science'
-  | 'culture'
-  | 'faith'
-  | 'influence'
-  | 'cities'
-  | 'military'
-  | 'trade'
-  | 'government'
-
-export const ALL_TABS: readonly TabKey[] = [
-  'gold',
-  'science',
-  'culture',
-  'faith',
-  'influence',
-  'cities',
-  'military',
-  'trade',
-  'government'
-] as const
+export type TabName =
+  'Economy'
+  | 'Research'
+  | 'Culture'
+  | 'Religion'
+  | 'Diplomacy'
+  | 'Cities'
+  | 'Military'
+  | 'Trade'
+  | 'Government'
+export const tabsConfig = [
+  {
+    name: 'Economy',
+    type: 'yieldType:gold',
+  },
+  {
+    name: 'Research',
+    type: 'yieldType:science',
+  },
+  {
+    name: 'Culture',
+    type: 'yieldType:culture',
+  },
+  {
+    name: 'Religion',
+    type: 'yieldType:faith',
+  },
+  {
+    name: 'Diplomacy',
+    type: 'yieldType:influence',
+  },
+  {
+    name: 'Cities',
+    type: 'conceptType:city',
+  },
+  {
+    name: 'Military',
+    type: 'yieldType:defense',
+  },
+  {
+    name: 'Trade',
+    type: 'conceptType:tradeRoute',
+  },
+  {
+    name: 'Government',
+    type: 'conceptType:policy',
+  },
+] as { name: TabName, type: TypeKey }[]
 
 export const usePlayerDetailsStore = defineStore('playerDetails', {
   state: () => ({
     isOpen: false as boolean,
-    activeTab: 'gold' as TabKey,
-    // Placeholder for per-tab persistent states (kept even when tab is not active)
-    tabState: {} as Record<TabKey, unknown>
+    activeTab: 'Economy' as TabName,
   }),
   actions: {
-    open (tab?: TabKey) {
+    open (tab?: TabName) {
       if (tab) this.activeTab = tab
       this.isOpen = true
     },
     close () {
       this.isOpen = false
     },
-    switchTab (tab: TabKey) {
+    switchTab (tab: TabName) {
       this.activeTab = tab
     },
-    setTabState<T = unknown> (tab: TabKey, value: T) {
-      this.tabState[tab] = value as unknown
-    }
   }
 })

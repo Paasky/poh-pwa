@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { usePlayerFaithStore } from '@/components/PlayerDetails/Tabs/faithStore'
 import UiCardGroup from '@/components/Ui/UiCardGroup.vue'
 import UiCard from '@/components/Ui/UiCard.vue'
 import UiYieldList from '@/components/Ui/UiYieldList.vue'
-import UiTypePillList from '@/components/Ui/UiTypePillList.vue'
+import UiObjPillList from '@/components/Ui/UiObjPillList.vue'
 import UiHeader from '@/components/Ui/UiHeader.vue'
-import UiTypePill from '@/components/Ui/UiTypePill.vue'
+import UiObjPill from '@/components/Ui/UiObjPill.vue'
+import { usePlayerReligionStore } from '@/components/PlayerDetails/ReligionTab/ReligionStore'
 
-const faith = usePlayerFaithStore()
+const religion = usePlayerReligionStore()
 const layout = {
   'mythType': [
     0, // break on [0],
@@ -28,13 +28,13 @@ const layout = {
 }
 
 const pyramids = [
-  { title: 'Myths', concept: 'conceptType:myth', layout: layout.mythType, typesPerCategory: faith.mythsPerCategory },
-  { title: 'Gods', concept: 'conceptType:god', layout: layout.godType, typesPerCategory: faith.godsPerCategory },
+  { title: 'Myths', concept: 'conceptType:myth', layout: layout.mythType, typesPerCategory: religion.mythsPerCategory },
+  { title: 'Gods', concept: 'conceptType:god', layout: layout.godType, typesPerCategory: religion.godsPerCategory },
   {
     title: 'Dogmas',
     concept: 'conceptType:dogma',
     layout: layout.dogmaType,
-    typesPerCategory: faith.dogmasPerCategory
+    typesPerCategory: religion.dogmasPerCategory
   },
 ]
 </script>
@@ -60,11 +60,11 @@ const pyramids = [
                       class="text-xs w-48"
                   >
                     <div class="border-b border-white/20 pb-1 mb-2">
-                      <UiTypePill :objOrKey="myth.type" :hide-icon="true"/>
+                      <UiObjPill :objOrKey="myth.type" :hide-icon="true"/>
                     </div>
                     <UiYieldList :yields="myth.type.yields" :hide-name="true"/>
-                    <UiTypePillList :type-keys="myth.type.gains"/>
-                    <UiTypePillList :type-keys="myth.type.specials"/>
+                    <UiObjPillList :obj-keys="myth.type.gains"/>
+                    <UiObjPillList :obj-keys="myth.type.specials"/>
                   </UiCard>
                 </template>
               </div>

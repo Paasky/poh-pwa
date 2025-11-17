@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { TypeObject } from '@/types/typeObjects'
 import { useObjectsStore } from '@/stores/objectStore'
+import { TypeKey } from '@/types/common'
 
 export interface TechData {
   type: TypeObject,
@@ -14,7 +15,7 @@ export interface TechData {
   queuePos: number | null,
 }
 
-export const usePlayerScienceStore = defineStore('scienceStore', {
+export const usePlayerResearchStore = defineStore('researchStore', {
   state: () => ({
     techs: [] as TechData[],
     eras: [] as { era: TypeObject, y: number }[],
@@ -38,7 +39,7 @@ export const usePlayerScienceStore = defineStore('scienceStore', {
 
         if (!eraData[tech.category!]) {
           eraData[tech.category!] = {
-            era: useObjectsStore().getTypeObject(tech.category!),
+            era: useObjectsStore().getTypeObject(tech.category! as TypeKey),
             y: tech.y!,
           }
         }
@@ -60,7 +61,7 @@ export const usePlayerScienceStore = defineStore('scienceStore', {
       this.eras = Object.values(eraData)
 
       this.ready = true
-      console.log('Science Store initialized')
+      console.log('Research Store initialized')
     },
     async start (tech: TypeObject) {
       const techsByKey = {} as Record<string, TechData>
@@ -104,22 +105,12 @@ export const usePlayerScienceStore = defineStore('scienceStore', {
 
       function findRequired (tech: TechData, chain: Record<string, TechData>): void {
         tech.type.requires.forEach(reqKey => {
-          if (typeof reqKey === 'string') {
-            // Already added
-            if (chain[reqKey]) return
-
-            // Always required
-            const required = techsByKey[reqKey]
-            if (required && !required.isResearched) {
-              chain[required.type.key] = required
-              findRequired(required, chain)
-            }
-          } else {
+          if (Array.isArray(reqKey)) {
 
             // Find cheapest from the "anyOf" required
             let cheapest = null as TechData | null
             reqKey.forEach(orReqKey => {
-              // Already added
+              // Already added?
               if (chain[orReqKey]) {
                 cheapest = null
                 return
@@ -142,6 +133,16 @@ export const usePlayerScienceStore = defineStore('scienceStore', {
             if (cheapest) {
               chain[cheapest.type.key] = cheapest
               findRequired(cheapest, chain)
+            }
+          } else {
+            // Already added?
+            if (chain[reqKey]) return
+
+            // Always required
+            const required = techsByKey[reqKey]
+            if (required && !required.isResearched) {
+              chain[required.type.key] = required
+              findRequired(required, chain)
             }
           }
         })
