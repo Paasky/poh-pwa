@@ -11,7 +11,7 @@ const routes: Readonly<RouteRecordRaw[]> = [
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
-  scrollBehavior() {
+  scrollBehavior () {
     return { top: 0 }
   }
 })
@@ -20,6 +20,7 @@ const router = createRouter({
 router.beforeEach((to, from) => {
   // If we're currently on the game route and trying to go anywhere else, block it
   // Allow staying on the same named route (e.g., query-only changes)
+  // noinspection RedundantIfStatementJS
   if (from.name === 'game' && to.name !== 'game') {
     return false // cancel navigation
   }

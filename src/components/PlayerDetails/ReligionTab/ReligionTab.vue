@@ -62,7 +62,7 @@ const pyramids = [
 <template>
   <div class="select-none">
     <div v-for="(pyramid, i) of pyramids" class="mb-6" :class="i > 0 ? 'border-t border-yellow-800/75' : ''">
-      <UiHeader class="mb-4" :title="pyramid.title" :type-object="pyramid.concept"/>
+      <UiHeader class="mb-4" :title="pyramid.title" :type="pyramid.concept"/>
 
       <div class="flex flex-wrap justify-center gap-x-12 gap-y-2">
         <template v-for="(catData, i) of pyramid.typesPerCategory">

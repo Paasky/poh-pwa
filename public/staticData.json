@@ -3541,8 +3541,6 @@
                 "traitType:jealous",
                 "traitType:obedient",
                 "traitType:rebellious",
-                "traitType:aggressive",
-                "traitType:peaceful",
                 "traitType:diplomatic",
                 "traitType:blunt"
             ]
@@ -3926,6 +3924,8 @@
                 "stockpileType:atomBomb",
                 "stockpileType:hydrogenBomb",
                 "stockpileType:planetBuster",
+                "traitType:aggressive",
+                "traitType:peaceful",
                 "worldWonderType:brandenburgGate",
                 "worldWonderType:pentagon"
             ]
@@ -42463,9 +42463,10 @@
             "yields": [
                 {
                     "type": "yieldType:strength",
-                    "amount": 1,
+                    "amount": 10,
+                    "method": "percent",
                     "for": [
-                        "conceptType:citizen"
+                        "conceptType:unit"
                     ]
                 }
             ],
@@ -42480,9 +42481,10 @@
             "yields": [
                 {
                     "type": "yieldType:strength",
-                    "amount": -1,
+                    "amount": -10,
+                    "method": "percent",
                     "for": [
-                        "conceptType:citizen"
+                        "conceptType:unit"
                     ]
                 }
             ],

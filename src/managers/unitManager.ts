@@ -1,6 +1,5 @@
 import { City, Player, Tile, Unit, UnitDesign } from '@/types/gameObjects'
 import { createUnit } from '@/factories/unitFactory'
-import { useObjectsStore } from '@/stores/objectStore'
 import { Manager } from '@/managers/_manager'
 
 export class UnitManager extends Manager {
@@ -27,6 +26,7 @@ export class UnitManager extends Manager {
       city?.key,
     )
     this._objects.set(unit)
+    player.units.push(unit.key)
     return unit
   }
 
@@ -34,7 +34,7 @@ export class UnitManager extends Manager {
     return this._objects.getGameObject(unit.design) as UnitDesign
   }
 
-  calcTiles(player: Player): void {
+  calcTiles (player: Player): void {
   }
 
   resetMoves (unit: Unit): void {

@@ -1,4 +1,5 @@
 import { CatKey, GameKey, initPohObject, ObjKey, PohObject, TypeKey, TypeStorage } from './common'
+import { EventSetting, EventType } from '@/types/events'
 import { TypeObject } from '@/types/typeObjects'
 import { useObjectsStore } from '@/stores/objectStore'
 
@@ -170,6 +171,9 @@ export type Player = GameObject & {
   resourceStorage: TypeStorage
   stockpileStorage: TypeStorage
   yieldStorage: TypeStorage
+
+  // UI / Player preferences
+  eventSettings: Record<EventType, EventSetting>
 }
 export const initPlayer = (rawData: any): Player => {
   const obj = _initGameObject(rawData) as Player
@@ -217,6 +221,7 @@ export const initPlayer = (rawData: any): Player => {
   }
   obj.research = {
     available: [],
+    era: null,
     researched,
     researching,
     current: rawData.research.current ? useObjectsStore().getTypeObject(rawData.research.current) : null,
@@ -228,6 +233,9 @@ export const initPlayer = (rawData: any): Player => {
   obj.resourceStorage = new TypeStorage().load(rawData.resourceStorage)
   obj.stockpileStorage = new TypeStorage().load(rawData.stockpileStorage)
   obj.yieldStorage = new TypeStorage().load(rawData.yieldStorage)
+
+  // Preferences
+  obj.eventSettings = rawData.eventSettings
 
   return obj
 }
@@ -500,9 +508,10 @@ export type Government = {
 }
 export type Research = {
   available: TypeObject[]
+  current: TypeObject | null
+  era: TypeObject | null
+  queue: TypeObject[]
   researched: TypeObject[]
   researching: Record<TypeKey, { type: TypeObject, progress: number }>
-  current: TypeObject | null
-  queue: TypeObject[]
   turnsLeft: number
 }

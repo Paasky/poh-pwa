@@ -1,4 +1,5 @@
 import { Culture, GameObject, Player, Relation, Research } from '@/types/gameObjects'
+import { EventSetting, EventType } from '@/types/events'
 import { ObjKey, TypeStorage } from '@/types/common'
 import { TypeObject } from '@/types/typeObjects'
 import { createGameObject } from '@/factories/_gameObjectFactory'
@@ -27,6 +28,7 @@ export const createPlayer = (
   policies: TypeObject[] = [],
   research: Research = {
     available: [],
+    era: null,
     researched: [],
     researching: {},
     current: null,
@@ -74,7 +76,11 @@ export const createPlayer = (
 
     resourceStorage: new TypeStorage(),
     stockpileStorage: new TypeStorage(),
-    yieldStorage: new TypeStorage()
+    yieldStorage: new TypeStorage(),
+    eventSettings: {
+      'settled': 'splash',
+      'cultureEvolved': 'splash',
+    } as Record<EventType, EventSetting>
   } as Player
 
   return {

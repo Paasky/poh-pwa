@@ -4,5 +4,30 @@ import { GameEvent } from '@/types/events'
 export const useEventStore = defineStore('events', {
   state: () => ({
     turnEvents: [] as GameEvent[],
-  })
+    current: null as GameEvent | null,
+  }),
+  getters: {
+    unreadEvents: (state): GameEvent[] => state.turnEvents.filter(e => !e.read),
+  },
+  actions: {
+    splash (event: GameEvent) {
+      if (this.current?.id === event.id) return
+
+      this.current = event
+    },
+
+    closeCurrent () {
+      if (!this.current) throw new Error('No current event')
+
+      this.current.read = true
+
+      // Move to next unread or close
+      const next = this.turnEvents.reverse().find(e => !e.read)
+      if (next) {
+        this.current = next
+      } else {
+        this.current = null
+      }
+    },
+  }
 })

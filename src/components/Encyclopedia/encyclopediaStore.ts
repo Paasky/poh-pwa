@@ -134,12 +134,14 @@ export const useEncyclopediaStore = defineStore('encyclopedia', {
       this.elemMap[elemId]?.forEach(parentElemId => this.openElems[parentElemId] = true)
 
       console.log('scroll', elemId)
-      nextTick(() => document.getElementById(elemId)!.scrollIntoView({ behavior: 'smooth', block }))
+      // noinspection JSIgnoredPromiseFromCall
+      nextTick(() => document.getElementById(elemId)?.scrollIntoView({ behavior: 'smooth', block }))
     },
 
     _scrollRightToTop () {
       console.log('scroll right', 'enc-right')
-      nextTick(() => document.getElementById('enc-right')!.scrollTo({ top: 0, behavior: 'smooth' }))
+      // noinspection JSIgnoredPromiseFromCall
+      nextTick(() => document.getElementById('enc-right')?.scrollTo({ top: 0, behavior: 'smooth' }))
     },
   }
 })

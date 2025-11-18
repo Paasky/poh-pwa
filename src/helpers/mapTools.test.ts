@@ -99,24 +99,16 @@ const buildMockWorld = (sizeX: number, sizeY: number): World => {
 
   for (let y = 0; y < sizeY; y++) {
     for (let x = 0; x < sizeX; x++) {
-      const key = `tile:${x},${y}` as ObjKey
-      const tile = {
+      const id = crypto.randomUUID()
+      world.tiles[`[${x},${y}]` as `${number},${number}`] = {
         objType: 'GameObject',
         class: 'tile',
-        id: `${x},${y}`,
-        key,
-        name: '',
+        id: id,
+        key: `tile:${id}`,
         concept: 'conceptType:tile',
-        icon: { icon: {} as any, color: '' },
         x,
         y,
-        // The rest of Tile fields are not used by getNeighbors; cast for test
-        citizens: [],
-        tradeRoutes: [],
-        units: [],
-      } as unknown as Tile
-
-      world.tiles[`[${x},${y}]` as `${number},${number}`] = tile
+      } as any as Tile
     }
   }
 
@@ -148,15 +140,15 @@ const expectedRingIdxSet = (world: World, sx: number, sy: number, dist: number):
     const isOdd = (y & 1) === 1
     return isOdd
       ? [
-          [x - 1, y], [x + 1, y],
-          [x, y - 1], [x + 1, y - 1],
-          [x, y + 1], [x + 1, y + 1],
-        ]
+        [x - 1, y], [x + 1, y],
+        [x, y - 1], [x + 1, y - 1],
+        [x, y + 1], [x + 1, y + 1],
+      ]
       : [
-          [x - 1, y], [x + 1, y],
-          [x - 1, y - 1], [x, y - 1],
-          [x - 1, y + 1], [x, y + 1],
-        ]
+        [x - 1, y], [x + 1, y],
+        [x - 1, y - 1], [x, y - 1],
+        [x - 1, y + 1], [x, y + 1],
+      ]
   }
 
   type Node = { x: number; y: number; d: number }

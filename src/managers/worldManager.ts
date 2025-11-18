@@ -22,7 +22,6 @@ export class WorldManager extends Manager {
     this._objects.bulkSet(tiles)
     console.log('Set tiles', new Date())
 
-    /*
     const tribeDesign = designManager.create(
       this._objects.getTypeObject('equipmentType:tribe'),
       this._objects.getTypeObject('platformType:human'),
@@ -32,7 +31,6 @@ export class WorldManager extends Manager {
       this._objects.getTypeObject('platformType:human'),
     )
     console.log('Created unit designs', new Date())
-    */
 
     // Get random region
     const regions = this._objects.getClassTypes('regionType')
@@ -51,22 +49,16 @@ export class WorldManager extends Manager {
       if (player.isCurrent) this._objects.world.currentPlayer = player.key
       console.log('Created player', new Date())
 
-      /*
       player.unitDesigns.push(
         tribeDesign.key,
         hunterDesign.key
       )
 
       const tile = tiles[Math.floor(Math.random() * tiles.length)]
-      player.units.push(
-        unitManager.create(player, tribeDesign, tile).key,
-        unitManager.create(player, hunterDesign, tile).key,
-      )
       console.log('Created player units', new Date())
 
       playerManager.calcTiles(player)
       console.log('Calculated tiles', new Date())
-      */
     }
 
     return world

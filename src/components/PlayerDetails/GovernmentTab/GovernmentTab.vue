@@ -26,6 +26,9 @@ const government = objects.getCurrentPlayer().government
               <div>
                 <UiYieldList :yields="policy.yields"/>
               </div>
+              <div v-if="policy.requires.length" class="pt-1 border-t border-green-900/25">
+                <UiObjPillList :obj-keys="policy.requires"/>
+              </div>
               <div v-if="policy.specials.length" class="mt-auto mb-[-0.25rem] pt-1 border-t border-green-900/25">
                 <UiObjPillList :obj-keys="policy.specials"/>
               </div>

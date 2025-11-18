@@ -31,10 +31,10 @@ const objects = useObjectsStore()
 
       <CityStatus :city="city"/>
 
-      <CityProduction v-if="city" :prod="city"/>
+      <CityProduction v-if="city" :city="city"/>
       <div v-else>-</div>
 
-      <CityProduction v-if="city" :prod="city"/>
+      <CityProduction v-if="city" :city="city"/>
       <div v-else>-</div>
 
       <div></div>

@@ -2,6 +2,7 @@ import { Player } from '@/types/gameObjects'
 import { createPlayer, PlayerBundle } from '@/factories/playerFactory'
 import { Manager } from '@/managers/_manager'
 import { TypeObject } from '@/types/typeObjects'
+import { TechnologyManager } from '@/managers/technologyManager'
 
 export class PlayerManager extends Manager {
   create (
@@ -11,6 +12,9 @@ export class PlayerManager extends Manager {
   ): Player {
     const playerBundle = createPlayer(name, cultureType, isCurrent) as PlayerBundle
     this._objects.bulkSet([playerBundle.player, playerBundle.culture])
+
+    new TechnologyManager().calcAvailable(playerBundle.player.research)
+
     return playerBundle.player
   }
 

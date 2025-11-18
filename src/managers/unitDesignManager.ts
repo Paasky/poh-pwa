@@ -1,8 +1,6 @@
-import { useObjectsStore } from '@/stores/objectStore'
-import { UnitDesign } from '@/types/gameObjects'
+import { Player, UnitDesign } from '@/types/gameObjects'
 import { createUnitDesign } from '@/factories/unitDesignFactory'
 import { TypeObject } from '@/types/typeObjects'
-import { ObjKey } from '@/types/common'
 import { Manager } from '@/managers/_manager'
 
 export class UnitDesignManager extends Manager {
@@ -10,17 +8,20 @@ export class UnitDesignManager extends Manager {
     equipment: TypeObject,
     platform: TypeObject,
     name?: string,
-    playerKey?: ObjKey,
+    player?: Player,
     isArmored: boolean = false,
   ): UnitDesign {
     const design = createUnitDesign(
       equipment,
       platform,
       name,
-      playerKey,
+      player?.key,
       isArmored,
     )
     this._objects.set(design)
+    if (player) {
+      player.unitDesigns.push(design.key)
+    }
     return design
   }
 }

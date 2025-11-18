@@ -9,11 +9,13 @@ import { useObjectsStore } from '@/stores/objectStore'
 import { TypeObject } from '@/types/typeObjects'
 import { CatKey } from '@/types/common'
 import ResearchTabArrows from '@/components/PlayerDetails/ResearchTab/ResearchTabArrows.vue'
+import { TechnologyManager } from '@/managers/technologyManager'
 
 const objects = useObjectsStore()
 const techs = objects.getClassTypes('technologyType')
 const player = objects.getCurrentPlayer()
 const research = player.research
+const manager = new TechnologyManager()
 const maxY = Math.max(...techs.map(t => t.y!))
 const maxX = Math.max(...techs.map(t => t.x!))
 
@@ -33,56 +35,6 @@ function eraY (era: TypeObject): number {
       .map(t => t.y ?? 0)
 
   return ys.length ? Math.min(...ys) : 0
-}
-
-function progress (tech: TypeObject) {
-  return research.researching[tech.key]?.progress ?? 0
-}
-
-function start (target: TypeObject) {
-  if (research.researched.includes(target)) return
-
-  const chain: TypeObject[] = []
-  collectRequired(target, chain)
-  chain.push(target)
-
-  // Deduplicate while preserving order
-  const unique = Array.from(new Set(chain))
-
-  // Sort top-to-bottom then left-to-right (fallback if y equal)
-  unique.sort((a, b) => (a.y! - b.y!) || (a.x! - b.x!))
-
-  research.current = unique[0] ?? null
-  research.queue = unique
-
-  function collectRequired (tech: TypeObject, acc: TypeObject[]): void {
-    tech.requires.forEach(reqKey => {
-      if (Array.isArray(reqKey)) {
-        let cheapest: TypeObject | false | null = null
-        reqKey.forEach(orReqKey => {
-          if (cheapest === false) return
-          const required = objects.getTypeObject(orReqKey)
-          if (required.class !== 'technologyType' || acc.includes(required)) return
-          if (research.researched.includes(required)) {
-            cheapest = false
-            return
-          }
-          if (!cheapest || required.scienceCost! - progress(required) < cheapest.scienceCost! - progress(cheapest)) {
-            cheapest = required
-          }
-        })
-        if (cheapest) {
-          acc.push(cheapest)
-          collectRequired(cheapest, acc)
-        }
-      } else {
-        const required = objects.getTypeObject(reqKey)
-        if (required.class !== 'technologyType' || research.researched.includes(required) || acc.includes(required)) return
-        acc.push(required)
-        collectRequired(required, acc)
-      }
-    })
-  }
 }
 </script>
 
@@ -108,7 +60,7 @@ function start (target: TypeObject) {
                  width: `${containerWidthRem+2.8}rem`
                }"
               :title="`${era.name} Era`"
-              :type-object="{ key: era.key }"
+              :type="era"
     />
 
     <UiCard v-for="tech of techs"
@@ -117,7 +69,7 @@ function start (target: TypeObject) {
               'cursor-pointer': !research.researched.includes(tech) && research.current !== tech,
             }"
             :bg-color="research.current === tech
-              ? 'bg-blue-800'
+              ? 'bg-blue-800 animate-pulse'
               : (
                   research.researched.includes(tech)
                     ? 'bg-green-950'
@@ -130,14 +82,17 @@ function start (target: TypeObject) {
             :style="{ left: `${tech.x! * xSize}rem`, top: `${tech.y! * ySize}rem`, width: `${cardWidthRem}rem`, height: `${cardHeightRem}rem` }"
             :selected="research.queue.indexOf(tech) >= 0"
             :disabled="research.researched.includes(tech)"
-            @click="() => {research.researched.includes(tech) ? null : start(tech)}"
+            @click="() => {research.researched.includes(tech) ? null : manager.start(research, tech)}"
     >
       <div class="border-b border-white/20 pb-1 mb-2">
         <UiObjPill :objOrKey="tech" :hide-icon="true"/>
-        <span v-if="research.queue.includes(tech)">({{ research.queue.indexOf(tech) + 1 }})</span>
+        <span v-if="research.queue.includes(tech)"
+              class="font-bold text-yellow-400">({{ research.queue.indexOf(tech) + 1 }})</span>
         <span class="float-right">
           <UiIcon :icon="tech.icon"/>
-          <span v-if="research.current === tech || progress(tech)">{{ progress(tech) }}/</span>{{ tech.scienceCost }}
+          <span v-if="research.current === tech || manager.getProgress(research, tech)">{{
+              manager.getProgress(research, tech)
+            }}/</span>{{ tech.scienceCost }}
         </span>
       </div>
       <div class="text-xs flex flex-wrap items-start content-start gap-x-1 overflow-y-auto"

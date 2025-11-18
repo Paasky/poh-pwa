@@ -1,7 +1,8 @@
 import { Manager } from '@/managers/_manager'
 import { Culture, Player } from '@/types/gameObjects'
-import { CatKey } from '@/types/common'
+import { CatKey, TypeKey } from '@/types/common'
 import { TypeObject } from '@/types/typeObjects'
+import { EventManager } from '@/managers/eventManager'
 
 export class CultureManager extends Manager {
   addHeritagePoints (culture: Culture, category: CatKey, points: number): void {
@@ -14,30 +15,54 @@ export class CultureManager extends Manager {
   calcSelectable (culture: Culture): void {
     culture.selectableHeritages = []
     culture.selectableTraits = []
+
+    // Must settle -> can't select anything
     if (culture.status === 'mustSettle') return
 
+    // Not settled -> can select heritages
     if (['notSettled', 'canSettle'].includes(culture.status)) {
-      for (const heritage of this._objects.getClassTypes('heritageType')) {
-        if (culture.heritages.includes(heritage)) continue
-        if ((culture.heritageCategoryPoints[heritage.category!] ?? 0) < heritage.heritagePointCost!) continue
-
-        culture.selectableHeritages.push(heritage)
-      }
-    } else {
-      if (culture.mustSelectTraits.positive + culture.mustSelectTraits.negative <= 0) return
-
-      for (const catData of this._objects.getClassTypesPerCategory('traitType')) {
+      for (const catData of this._objects.getClassTypesPerCategory('heritageType')) {
         let catIsSelected = false
-        for (const trait of catData.types) {
-          if (culture.traits.includes(trait)) catIsSelected = true
+        for (const heritage of catData.types) {
+          if (culture.heritages.includes(heritage)) catIsSelected = true
         }
-        for (const trait of catData.types) {
-          if (catIsSelected || culture.traits.includes(trait)) continue
-          if (trait.isPositive! && culture.mustSelectTraits.positive <= 0) continue
-          if (!trait.isPositive! && culture.mustSelectTraits.negative <= 0) continue
 
-          culture.selectableTraits.push(trait)
+        for (const heritage of catData.types) {
+          // Already selected
+          if (culture.heritages.includes(heritage)) continue
+
+          // If it's stage II -> must have stage I heritage selected
+          if (heritage.heritagePointCost! > 10 && !catIsSelected) continue
+
+          // Not enough points
+          if ((culture.heritageCategoryPoints[heritage.category!] ?? 0) < heritage.heritagePointCost!) continue
+
+          culture.selectableHeritages.push(heritage)
         }
+      }
+      return
+    }
+
+    // Is Settled -> can select Traits
+
+    // Nothing to select?
+    if (culture.mustSelectTraits.positive + culture.mustSelectTraits.negative <= 0) return
+
+    for (const catData of this._objects.getClassTypesPerCategory('traitType')) {
+      let catIsSelected = false
+      for (const trait of catData.types) {
+        if (culture.traits.includes(trait)) catIsSelected = true
+      }
+
+      for (const trait of catData.types) {
+        // Category already selected
+        if (catIsSelected) continue
+
+        // No more positive/negative slots left to select
+        if (trait.isPositive! && culture.mustSelectTraits.positive <= 0) continue
+        if (!trait.isPositive! && culture.mustSelectTraits.negative <= 0) continue
+
+        culture.selectableTraits.push(trait)
       }
     }
   }
@@ -45,15 +70,19 @@ export class CultureManager extends Manager {
   evolve (culture: Culture): void {
     culture.type = this._objects.getTypeObject(culture.type.upgradesTo[0])
     const player = this._objects.getGameObject(culture.player) as Player
-    player.leader = this._objects.getTypeObject(
-      culture.type.allows.find(a => a.indexOf('LeaderType:') >= 0)!
-    )
+    player.leader = this.getLeader(culture.type)
 
-    this._events.turnEvents.push({
-      type: 'cultureEvolved',
-      target: culture.key,
-      description: `${culture.name} has evolved to ${culture.type.name}!`,
-    })
+    if (culture.traits.length < 11) {
+      culture.mustSelectTraits.positive++
+      culture.mustSelectTraits.negative++
+      this.calcSelectable(culture)
+    }
+
+    new EventManager().create(
+      'cultureEvolved',
+      culture.key,
+      `${culture.name} has evolved to ${culture.type.name}!`,
+    )
   }
 
   getLeader (cultureType: TypeObject): TypeObject {
@@ -76,6 +105,11 @@ export class CultureManager extends Manager {
     if (!key) throw new Error(`[cultureManager] No minorCultureType[${i}] in ${JSON.stringify(region)}`)
 
     return this._objects.getTypeObject(key)
+  }
+
+  getRegion (cultureType: TypeObject): TypeObject {
+    const key = cultureType.requires?.find(a => (a as string).startsWith('regionType:'))!
+    return this._objects.getTypeObject(key as TypeKey)
   }
 
   selectHeritage (culture: Culture, heritage: TypeObject): void {
@@ -117,11 +151,12 @@ export class CultureManager extends Manager {
     if (culture.status === 'settled') throw new Error(`[cultureManager] ${culture.key}: already settled`)
 
     culture.status = 'settled'
+    culture.mustSelectTraits = { positive: 2, negative: 2 }
     this.calcSelectable(culture)
-    this._events.turnEvents.push({
-      type: 'settled',
-      target: culture.player,
-      description: `${culture.name} has settled their first city!`,
-    })
+    new EventManager().create(
+      'settled',
+      culture.player,
+      `${culture.name} has settled their first city!`,
+    )
   }
 }

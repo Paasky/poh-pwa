@@ -1,9 +1,13 @@
 import { ObjKey } from '@/types/common'
 
-export type EventType = 'settled' | 'cultureEvolved'
+export type EventType = 'settled' | 'cultureEvolved' | 'technologyDiscovered' | 'eraEntered'
+export type EventSetting = 'hide' | 'note' | 'splash'
 
 export type GameEvent = {
+  id: string,
   type: EventType,
   target: ObjKey,
+  title: string,
   description: string,
+  read: boolean,
 }
