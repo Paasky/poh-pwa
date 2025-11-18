@@ -40,67 +40,46 @@ function progress (tech: TypeObject) {
 }
 
 function start (target: TypeObject) {
-  // Find the tech to start, stop if already researched
   if (research.researched.includes(target)) return
 
-  const chain = [] as TypeObject[]
-  findRequired(target, chain)
+  const chain: TypeObject[] = []
+  collectRequired(target, chain)
   chain.push(target)
 
-  // Simple sorting: go top to bottom, then left to right
-  const queue = chain.sort((a, b) => a.y! - b.y!)
-  let pos = 0
-  for (const tech of queue) {
-    if (pos === 0) {
-      research.current = tech
-    }
-    queue.push(tech)
-    pos++
-  }
-  research.queue = queue
+  // Deduplicate while preserving order
+  const unique = Array.from(new Set(chain))
 
-  return
+  // Sort top-to-bottom then left-to-right (fallback if y equal)
+  unique.sort((a, b) => (a.y! - b.y!) || (a.x! - b.x!))
 
-  function findRequired (tech: TypeObject, chain: TypeObject[]): void {
+  research.current = unique[0] ?? null
+  research.queue = unique
+
+  function collectRequired (tech: TypeObject, acc: TypeObject[]): void {
     tech.requires.forEach(reqKey => {
       if (Array.isArray(reqKey)) {
-
-        // Find cheapest from the "anyOf" required
-        let cheapest = null as TypeObject | false | null
+        let cheapest: TypeObject | false | null = null
         reqKey.forEach(orReqKey => {
-          // One of the requirements is already researched -> skip
           if (cheapest === false) return
-
           const required = objects.getTypeObject(orReqKey)
-
-          // Not a tech / already in chain -> skip
-          if (required.class !== 'technologyType' || chain.includes(required)) return
-
-          // already researched -> stop searching
+          if (required.class !== 'technologyType' || acc.includes(required)) return
           if (research.researched.includes(required)) {
             cheapest = false
             return
           }
-
-          // This is cheaper than cheapest so far -> update
           if (!cheapest || required.scienceCost! - progress(required) < cheapest.scienceCost! - progress(cheapest)) {
             cheapest = required
           }
         })
-
-        // Found a cheapest required tech -> add to chain
         if (cheapest) {
-          chain.push(cheapest)
-          findRequired(cheapest, chain)
+          acc.push(cheapest)
+          collectRequired(cheapest, acc)
         }
       } else {
         const required = objects.getTypeObject(reqKey)
-
-        // Not a tech / already researched / already in chain -> skip
-        if (required.class !== 'technologyType' || research.researched.includes(required) || chain.includes(required)) return
-
-        chain.push(required)
-        findRequired(required, chain)
+        if (required.class !== 'technologyType' || research.researched.includes(required) || acc.includes(required)) return
+        acc.push(required)
+        collectRequired(required, acc)
       }
     })
   }
@@ -137,7 +116,17 @@ function start (target: TypeObject) {
             :class="{
               'cursor-pointer': !research.researched.includes(tech) && research.current !== tech,
             }"
-            :bg-color="research.current === tech ? 'bg-blue-950' : undefined"
+            :bg-color="research.current === tech
+              ? 'bg-blue-800'
+              : (
+                  research.researched.includes(tech)
+                    ? 'bg-green-950'
+                    : (
+                        research.available.includes(tech)
+                          ? 'bg-blue-950'
+                          : 'bg-neutral-800'
+                    )
+              )"
             :style="{ left: `${tech.x! * xSize}rem`, top: `${tech.y! * ySize}rem`, width: `${cardWidthRem}rem`, height: `${cardHeightRem}rem` }"
             :selected="research.queue.indexOf(tech) >= 0"
             :disabled="research.researched.includes(tech)"

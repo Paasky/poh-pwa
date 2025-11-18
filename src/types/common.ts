@@ -64,10 +64,11 @@ export type ObjectIcon = {
   color: string
 }
 
+export type YieldMethod = 'lump' | 'percent' | 'set'
 export type Yield = {
   type: TypeKey
   amount: number
-  method: string
+  method: YieldMethod
   for: TypeKey[]
   vs: TypeKey[]
 }

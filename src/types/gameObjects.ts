@@ -38,6 +38,9 @@ const _initGameObject = (rawData: any): GameObject => {
 
   return obj
 }
+
+export interface HasType {type: TypeObject}
+
 export const init = (rawData: any): GameObject => {
   const cls = rawData.class as GameClass
 
@@ -89,9 +92,8 @@ export const initAgenda = (rawData: any): Agenda => {
 }
 
 export type CultureStatus = 'notSettled' | 'canSettle' | 'mustSettle' | 'settled'
-export type Culture = GameObject & {
+export type Culture = GameObject & HasType & {
   player: GameKey,
-  type: TypeObject,
   status: CultureStatus
 
   heritages: TypeObject[]
@@ -214,6 +216,7 @@ export const initPlayer = (rawData: any): Player => {
     researching[key as TypeKey] = { type: useObjectsStore().getTypeObject(v.type), progress: v.progress }
   }
   obj.research = {
+    available: [],
     researched,
     researching,
     current: rawData.research.current ? useObjectsStore().getTypeObject(rawData.research.current) : null,
@@ -347,8 +350,7 @@ export const initCity = (rawData: any): City => {
   return obj
 }
 
-export type Building = TileObject & {
-  type: TypeObject
+export type Building = TileObject & HasType & {
   health: number
   citizens: GameKey[]
 }
@@ -362,8 +364,7 @@ export const initBuilding = (rawData: any): Building => {
   return obj
 }
 
-export type NationalWonder = TileObject & {
-  type: TypeObject
+export type NationalWonder = TileObject & HasType & {
   health: number
   citizen?: GameKey
 }
@@ -377,8 +378,7 @@ export const initNationalWonder = (rawData: any): NationalWonder => {
   return obj
 }
 
-export type WorldWonder = TileObject & {
-  type: TypeObject
+export type WorldWonder = TileObject & HasType & {
   health: number
   citizen?: GameKey
 }
@@ -392,8 +392,7 @@ export const initWorldWonder = (rawData: any): WorldWonder => {
   return obj
 }
 
-export type Improvement = TileObject & {
-  type: TypeObject
+export type Improvement = TileObject & HasType & {
   health: number
   citizens: GameKey[]
 }
@@ -500,6 +499,7 @@ export type Government = {
   agenda: GameKey[]
 }
 export type Research = {
+  available: TypeObject[]
   researched: TypeObject[]
   researching: Record<TypeKey, { type: TypeObject, progress: number }>
   current: TypeObject | null

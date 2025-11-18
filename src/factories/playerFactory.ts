@@ -1,4 +1,4 @@
-import { Culture, GameObject, Player, Relation } from '@/types/gameObjects'
+import { Culture, GameObject, Player, Relation, Research } from '@/types/gameObjects'
 import { ObjKey, TypeStorage } from '@/types/common'
 import { TypeObject } from '@/types/typeObjects'
 import { createGameObject } from '@/factories/_gameObjectFactory'
@@ -25,16 +25,13 @@ export const createPlayer = (
   inRevolution = false,
   religion?: ObjKey,
   policies: TypeObject[] = [],
-  research: {
-    researched: TypeObject[]
-    researching: Record<ObjKey, { type: TypeObject, progress: number }>
-    current: TypeObject | null
-    queue: TypeObject[]
-  } = {
+  research: Research = {
+    available: [],
     researched: [],
     researching: {},
     current: null,
-    queue: []
+    queue: [],
+    turnsLeft: 0,
   },
 ): PlayerBundle => {
   const base = createGameObject('player', name)

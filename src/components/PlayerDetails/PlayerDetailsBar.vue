@@ -43,7 +43,7 @@ const tabs = tabsConfig.map(tabConfig => {
     data.isHidden = computed(() => culture.status !== 'settled')
     data.text = computed((): string =>
         player.research.current
-            ? player.research.researching[player.research.current.key].progress
+            ? (player.research.researching[player.research.current.key]?.progress ?? 0)
             + '/'
             + player.research.current.scienceCost
             + ` (${player.research.turnsLeft})`

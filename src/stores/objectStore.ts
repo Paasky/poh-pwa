@@ -1,4 +1,4 @@
-import { markRaw, reactive, shallowReactive } from 'vue'
+import { markRaw } from 'vue'
 import { defineStore } from 'pinia'
 import {
   CatKey,
@@ -28,20 +28,12 @@ export const useObjectsStore = defineStore('objects', {
       tiles: {},
     } as World,
 
-    // key: PohObject.key
-    _gameObjects: shallowReactive<Record<GameKey, GameObject>>({}),
     _staticObjects: {} as Readonly<Record<CatKey | TypeKey, CategoryObject | TypeObject>>,
-
-    // key: CategoryObject.key, values: Set<TypeObject.key>
     _categoryTypesIndex: new Map<CatKey, Set<TypeKey>>(),
-
-    // key: TypeObject.class, values: Set<TypeObject.key>
     _classTypesIndex: new Map<TypeClass, Set<TypeKey>>(),
-
-    // key: TypeObject.class, values: Set<CategoryObject.key>
     _classCatsIndex: new Map<TypeClass, Set<CatKey>>(),
 
-    // key: TypeObject.class, values: Set<TypeObject.key>
+    _gameObjects: {} as Record<GameKey, GameObject>,
     _classGameObjectsIndex: new Map<GameClass, Set<GameKey>>(),
 
     ready: false as boolean
@@ -159,9 +151,9 @@ export const useObjectsStore = defineStore('objects', {
         const gameObjects = {} as Record<string, GameObject>
         for (const data of gameData.objects) {
           // todo: freeze old game objects (eg dead units, ended deals, completed goals, etc)
-          gameObjects[data.key] = reactive(init(data))
+          gameObjects[data.key] = init(data)
         }
-        Object.assign(this._gameObjects, gameObjects)
+        this._gameObjects = gameObjects
       }
 
       // 4) Build Type indexes
@@ -202,7 +194,7 @@ export const useObjectsStore = defineStore('objects', {
     set (obj: GameObject) {
       if (!obj.key) throw new Error('GameObject must have a key')
       if (this._gameObjects[obj.key]) throw new Error(`GameObject ${obj.key} already exists`)
-      this._gameObjects[obj.key] = reactive(obj)
+      this._gameObjects[obj.key] = obj
 
       this._cacheGameObjects([obj])
     },
@@ -223,14 +215,14 @@ export const useObjectsStore = defineStore('objects', {
           continue
         }
         // Keep reactivity consistent with init
-        incoming[obj.key] = reactive(obj)
+        incoming[obj.key] = obj
       }
       if (errors.length) throw new Error(errors.join('\n'))
 
       const hasExisting = Object.keys(this._gameObjects).length > 0
       this._gameObjects = hasExisting
-        ? shallowReactive({ ...this._gameObjects, ...incoming })
-        : shallowReactive(incoming)
+        ? { ...this._gameObjects, ...incoming }
+        : incoming
 
       this._cacheGameObjects(objs)
     },

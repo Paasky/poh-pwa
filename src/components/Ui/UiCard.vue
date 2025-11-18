@@ -27,10 +27,10 @@ const bgColor2 = computed(() => props.bgColor || (props.disabled ? 'bg-neutral-8
 
 <template>
   <div
-      class="px-2 py-1 rounded-lg flex-grow border flex flex-col"
+      class="px-2 py-1 rounded-lg flex-grow border-2 flex flex-col"
       :class="[
           bgColor2,
-          selected ? 'border-yellow-900' : 'border-neutral-700',
+          selected ? 'border-yellow-400' : 'border-neutral-400',
           canOpen ? 'cursor-pointer' : '',
           isOpen ? '' : 'h-8',
       ]"

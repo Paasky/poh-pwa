@@ -105,6 +105,7 @@ export interface TypeObject extends PohObject {
   upgradesFrom: TypeKey[]
   specials: TypeKey[]
   relatesTo: TypeKey[]
+  getYield: (type: TypeKey) => Yield
 }
 
 export function initCategoryObject (data: any): CategoryObject {
@@ -121,11 +122,18 @@ export function initTypeObject (data: any): TypeObject {
     specials: [],
     relatesTo: [],
     yields: [],
+    getYield: (type: TypeKey) => {
+      const lump = obj.yields
+        .filter(y => y.type === type && y.method === 'lump' && y.for.length === 0 && y.vs.length === 0)
+        .reduce((acc, y) => acc + y.amount, 0)
+
+      return { type, method: 'lump', amount: lump }
+    },
     ...data
   }) as TypeObject
 
+  // Fill yields with defaults
   for (const yieldObj of obj.yields ?? []) {
-    // Fill yields with defaults
     if (!yieldObj.method) {
       yieldObj.method = 'lump'
     }
@@ -135,10 +143,20 @@ export function initTypeObject (data: any): TypeObject {
     if (!yieldObj.vs) {
       yieldObj.vs = []
     }
+  }
 
-    // Add costs directly into object
-    if (yieldObj.method === 'lump' && ['heritagePointCost', 'influenceCost', 'moveCost', 'productionCost', 'scienceCost'].includes(yieldObj.type)) {
-      obj[yieldObj.type as 'heritagePointCost' | 'influenceCost' | 'moveCost' | 'productionCost' | 'scienceCost'] = yieldObj.amount
+  // Add cost yields
+  const costYieldTypes = [
+    'yieldType:heritagePointCost',
+    'yieldType:influenceCost',
+    'yieldType:moveCost',
+    'yieldType:productionCost',
+    'yieldType:scienceCost'
+  ] as TypeKey[]
+  for (const type of costYieldTypes) {
+    const costYield = obj.getYield(type)
+    if (costYield.amount > 0) {
+      obj[type.replace('yieldType:', '') as 'heritagePointCost' | 'influenceCost' | 'moveCost' | 'productionCost' | 'scienceCost'] = costYield.amount
     }
   }
 

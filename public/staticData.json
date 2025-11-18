@@ -3544,9 +3544,7 @@
                 "traitType:aggressive",
                 "traitType:peaceful",
                 "traitType:diplomatic",
-                "traitType:blunt",
-                "traitType:cosmopolitan",
-                "traitType:xenophobic"
+                "traitType:blunt"
             ]
         },
         {
@@ -11286,6 +11284,10 @@
             "category": "heritageCategory:arctic",
             "yields": [
                 {
+                    "type": "yieldType:heritagePointCost",
+                    "amount": 10
+                },
+                {
                     "type": "yieldType:food",
                     "amount": 1,
                     "for": [
@@ -11326,6 +11328,10 @@
             "category": "heritageCategory:arctic",
             "yields": [
                 {
+                    "type": "yieldType:heritagePointCost",
+                    "amount": 25
+                },
+                {
                     "type": "yieldType:food",
                     "amount": 1,
                     "for": [
@@ -11350,6 +11356,10 @@
             "description": "Bedouin I describes nomadic desert pastoralism structured around camels, seasonal migration, and tribal autonomy. Herding routes followed rains and pasture, linking steppe margins, wadis, and desert interiors. Camels provided transport, milk, meat, and status. Tents of woven goat hair allowed rapid movement and shelter. Customary law and clan alliances managed grazing rights and conflict. Caravan guiding and raiding formed additional income. Arabian and Sinai groups maintained detailed knowledge of wells and tracks. Oral poetry and lineage memory preserved agreements and history. The system endured from late antiquity into the twentieth century, adapting to borders, firearms, and motor transport.",
             "category": "heritageCategory:bedouin",
             "yields": [
+                {
+                    "type": "yieldType:heritagePointCost",
+                    "amount": 10
+                },
                 {
                     "type": "yieldType:food",
                     "amount": 1,
@@ -11384,6 +11394,10 @@
             "description": "Bedouin II denotes desert communities that combined oasis agriculture with caravan trade networks. Date palms, cereals, and garden crops at oases supported travelers and residents. Pastoralists exchanged animal products and services for grain, tools, and textiles. Caravans carried incense, spices, slaves, and later manufactured goods across Arabian and Saharan routes. Caravanserai provided security, fodder, and taxation points. Guides negotiated water access and tribal tolls. Seasonal fairs linked towns to hinterlands. Hajj caravans and Red Sea ports tied local systems to wider markets. The rise of steamships, railways, and motor roads shifted routes but many oasis towns persisted.",
             "category": "heritageCategory:bedouin",
             "yields": [
+                {
+                    "type": "yieldType:heritagePointCost",
+                    "amount": 25
+                },
                 {
                     "type": "yieldType:food",
                     "amount": 1,
@@ -11424,6 +11438,10 @@
             "category": "heritageCategory:equatorial",
             "yields": [
                 {
+                    "type": "yieldType:heritagePointCost",
+                    "amount": 10
+                },
+                {
                     "type": "yieldType:food",
                     "amount": 1,
                     "for": [
@@ -11458,6 +11476,10 @@
             "category": "heritageCategory:equatorial",
             "yields": [
                 {
+                    "type": "yieldType:heritagePointCost",
+                    "amount": 25
+                },
+                {
                     "type": "yieldType:culture",
                     "amount": 1,
                     "for": [
@@ -11490,6 +11512,10 @@
             "description": "Seafarer I characterizes maritime lifeways based on coastal foraging, boatbuilding, and open-water navigation. Early shore communities harvested shellfish, fish, and sea mammals while moving seasonally along littorals. Austronesian peoples expanded across island Southeast Asia using outriggers and sailing canoes. Polynesians crossed vast Pacific distances in double-hulled vessels. Navigation relied on stars, swell patterns, winds, and bird behavior. Fishing gear included nets, hooks, and traps suited to reefs and pelagic zones. Settlement spread followed safe anchorages and freshwater access. Maritime exchange linked islands and coasts through obsidian, ceramics, and foodstuffs long before state-backed fleets emerged.",
             "category": "heritageCategory:seafarer",
             "yields": [
+                {
+                    "type": "yieldType:heritagePointCost",
+                    "amount": 10
+                },
                 {
                     "type": "yieldType:food",
                     "amount": 1,
@@ -11527,6 +11553,12 @@
             "concept": "conceptType:heritage",
             "description": "Seafarer II traces advances in sailing technology and the mobility of seafaring societies. Phoenician mariners used early sailing craft and coastal pilotage to knit a Mediterranean trade web. Viking shipwrights developed clinker-built longships and sails for raiding, commerce, and colonization. Later innovators refined rigs, hull forms, and navigation, enabling the Age of Sail. Lateen and square sails, sternpost rudders, and improved compasses extended range and speed. Oceanic crossings brought botanical exchanges and new ports into global circuits. Naval warfare and convoy systems evolved in parallel. These tools widened access to resources, routes, and distant settlements.",
             "category": "heritageCategory:seafarer",
+            "yields": [
+                {
+                    "type": "yieldType:heritagePointCost",
+                    "amount": 25
+                }
+            ],
             "gains": [
                 "technologyType:sailing"
             ],
@@ -11549,6 +11581,10 @@
             "description": "Engineer I concerns adaptation to rugged mountains through access routes, mining, and land engineering. Classical states cut roads, tunnels, and adits to reach ores and passes. Romans and Greeks deployed hydraulic mining, ventilation shafts, and paved ways in high terrain. In the Andes, the Inca built terraces, rope bridges, and storehouses that stabilized slopes and fed labor. Medieval Alpine miners opened silver and salt works with galleries, water-powered pumps, and pack trails. Surveying, stonework, and timbering mitigated hazards such as rockfall and avalanches. These systems tied uplands to lowland markets and state extraction.",
             "category": "heritageCategory:engineer",
             "yields": [
+                {
+                    "type": "yieldType:heritagePointCost",
+                    "amount": 10
+                },
                 {
                     "type": "yieldType:food",
                     "amount": 1,
@@ -11588,6 +11624,12 @@
             "concept": "conceptType:heritage",
             "description": "Engineer II covers animal husbandry and logistics that sustained mountain mining and settlement. Andean societies bred llamas for pack transport of ore, tools, and food between high camps and valleys. Transhumant shepherds in Europe moved flocks seasonally while supplying wool, meat, and traction animals to towns and mines. Mule and horse caravans linked smelters, adits, and markets along narrow paths. Fodder production, corrals, and waystations supported the flows. Agreements governed pasture rights and maintenance of trails. Livestock enabled steady provisioning of remote sites and lowered transport costs. These practices persisted into the industrial era in many regions.",
             "category": "heritageCategory:engineer",
+            "yields": [
+                {
+                    "type": "yieldType:heritagePointCost",
+                    "amount": 25
+                }
+            ],
             "gains": [
                 "technologyType:animalHusbandry"
             ],
@@ -11608,6 +11650,10 @@
             "description": "Fisher I covers inshore fishing and shoreline gathering practiced by early coastal communities. People used simple nets, hooks, traps, and weirs. Boats were small and stayed close to land. Kelp, shellfish, and lagoon fish formed a major share of diet and trade. Drying and smoking preserved catches. Shell middens, fish bones, and net weights mark these economies archaeologically. Ancient Mediterranean villagers, Norse and Viking coastal households, and Polynesian lagoon fishers followed seasonal cycles and local tides. Knowledge of reefs, currents, and spawning grounds guided effort. Labor was family based. Exchange linked fishing hamlets with inland farmers for grain, pottery, and tools.",
             "category": "heritageCategory:fisher",
             "yields": [
+                {
+                    "type": "yieldType:heritagePointCost",
+                    "amount": 10
+                },
                 {
                     "type": "yieldType:food",
                     "amount": 1,
@@ -11648,6 +11694,10 @@
             "category": "heritageCategory:fisher",
             "yields": [
                 {
+                    "type": "yieldType:heritagePointCost",
+                    "amount": 25
+                },
+                {
                     "type": "yieldType:food",
                     "amount": 0.5,
                     "for": [
@@ -11673,6 +11723,10 @@
             "description": "Herder I describes early pastoral subsistence on hills and open pastures. Communities managed cattle, sheep, goats, or camelids for meat, milk, hides, and wool. Mobility followed water and seasonal forage. Neolithic and Bronze Age groups in the Fertile Crescent grazed flocks near village fields. Steppe herders moved across grasslands with corrals and tents. In the Andes, llama and alpaca supported transport and textiles on highland ranges. Herding shaped kin groups, grazing rights, and seasonal camps. Milk processing into yoghurt and cheese extended storage. Pathways of transhumance linked uplands and lowlands. Exchange traded wool, hides, and animals for grain and metal tools.",
             "category": "heritageCategory:herder",
             "yields": [
+                {
+                    "type": "yieldType:heritagePointCost",
+                    "amount": 10
+                },
                 {
                     "type": "yieldType:food",
                     "amount": 1,
@@ -11712,6 +11766,10 @@
             "category": "heritageCategory:herder",
             "yields": [
                 {
+                    "type": "yieldType:heritagePointCost",
+                    "amount": 25
+                },
+                {
                     "type": "yieldType:moveCost",
                     "amount": -1,
                     "for": [
@@ -11737,6 +11795,10 @@
             "description": "Nomad I covers seasonal mobile lifeways on plains and shrublands. Groups moved camps to match water, pasture, and game. Livestock herding, hunting, and caravan service combined in flexible economies. Scythian and related steppe peoples used composite bows and carts on grassland routes. Bedouin clans crossed Arabian deserts with camels and tents. Native American Plains communities traced bison migrations and managed trade and ritual gatherings. Portable dwellings, herd guards, and strict grazing customs organized daily work. Mobility reduced risk from drought and disease. Alliances and feuds shaped access to wells and pastures. Goods moved between farmers, towns, and camps.",
             "category": "heritageCategory:nomad",
             "yields": [
+                {
+                    "type": "yieldType:heritagePointCost",
+                    "amount": 10
+                },
                 {
                     "type": "yieldType:food",
                     "amount": 1,
@@ -11774,6 +11836,10 @@
             "category": "heritageCategory:nomad",
             "yields": [
                 {
+                    "type": "yieldType:heritagePointCost",
+                    "amount": 25
+                },
+                {
                     "type": "yieldType:production",
                     "amount": 25,
                     "method": "percent",
@@ -11799,6 +11865,10 @@
             "description": "Settled I marks early sedentary villages with basic farming and nearby resource use. Families built mudbrick or wattle houses near water and arable soils. Simple irrigation, hand tools, and digging sticks supported cereals and pulses. Storage pits, granaries, and pottery stabilized food supply. Neolithic Levantine sites show plant and animal domestication. Small Nile floodplain hamlets grew grains in receding soils. Mesopotamian villages combined fields with fishing and reed gathering. Kin elders coordinated labor and defense. Ritual spaces and burial grounds anchored identity. Paths linked farms, herds, and fishing spots. Surplus enabled craft niches such as pottery and weaving.",
             "category": "heritageCategory:settled",
             "yields": [
+                {
+                    "type": "yieldType:heritagePointCost",
+                    "amount": 10
+                },
                 {
                     "type": "yieldType:food",
                     "amount": 0.5,
@@ -11838,6 +11908,10 @@
             "category": "heritageCategory:settled",
             "yields": [
                 {
+                    "type": "yieldType:heritagePointCost",
+                    "amount": 25
+                },
+                {
                     "type": "yieldType:production",
                     "amount": 10,
                     "method": "percent",
@@ -11864,6 +11938,10 @@
             "description": "Trader I focuses on local river and coastal exchange by small boats. Dugouts, reed craft, and barges moved grain, fish, timber, and pottery between settlements. Cabotage kept vessels within sight of land and predictable currents. Mesopotamian traffic linked towns along the Tigris and Euphrates. Egyptian Nile boats carried food and stone between Upper and Lower Egypt. Early Phoenician coastal merchants joined villages through short hops. Harbors grew from natural coves with simple quays. Tolls and market days structured commerce. Tokens and early tablets recorded deliveries. Boatbuilding, rope making, and pilotage formed durable skills within these communities.",
             "category": "heritageCategory:trader",
             "yields": [
+                {
+                    "type": "yieldType:heritagePointCost",
+                    "amount": 10
+                },
                 {
                     "type": "yieldType:gold",
                     "amount": 1,
@@ -11905,6 +11983,10 @@
                     "type": "yieldType:tradeRange",
                     "amount": 25,
                     "method": "percent"
+                },
+                {
+                    "type": "yieldType:heritagePointCost",
+                    "amount": 25
                 }
             ],
             "gains": [
@@ -31667,7 +31749,7 @@
                 },
                 {
                     "type": "yieldType:upkeep",
-                    "amount": -20,
+                    "amount": 20,
                     "method": "percent",
                     "for": [
                         "conceptType:unit"
@@ -31695,7 +31777,7 @@
                 },
                 {
                     "type": "yieldType:upkeep",
-                    "amount": -10,
+                    "amount": 10,
                     "method": "percent",
                     "for": [
                         "conceptType:unit"
@@ -31720,7 +31802,7 @@
                 },
                 {
                     "type": "yieldType:upkeep",
-                    "amount": 10,
+                    "amount": -10,
                     "method": "percent",
                     "for": [
                         "conceptType:unit"
@@ -31748,7 +31830,7 @@
                 },
                 {
                     "type": "yieldType:upkeep",
-                    "amount": 20,
+                    "amount": -20,
                     "method": "percent",
                     "for": [
                         "conceptType:unit"
@@ -31784,7 +31866,7 @@
                 },
                 {
                     "type": "yieldType:upkeep",
-                    "amount": 20,
+                    "amount": -20,
                     "method": "percent",
                     "for": [
                         "conceptType:unit"
@@ -42441,54 +42523,6 @@
             "isPositive": false
         },
         {
-            "key": "traitType:cosmopolitan",
-            "name": "Cosmopolitan",
-            "concept": "conceptType:trait",
-            "description": "Cosmopolitan societies welcome diverse peoples, faiths, and ideas, and build institutions that protect cross\u2011cultural exchange. Port cities and imperial capitals often serve as hubs linking trade, scholarship, and migration. Hellenistic Alexandria housed libraries, lecture halls, and mixed communities of Greeks, Egyptians, Jews, and others. Baghdad during the Islamic Golden Age fostered translation movements, science, and commerce across vast networks. Venice and Constantinople integrated merchants and artisans from many regions under flexible legal regimes. Cosmopolitanism supports innovation and resilience through plurality, though it requires careful administration to mediate tensions and protect minorities in periods of stress.",
-            "category": "traitCategory:others",
-            "yields": [
-                {
-                    "type": "yieldType:otherCulture",
-                    "amount": 1,
-                    "for": [
-                        "conceptType:citizen"
-                    ]
-                },
-                {
-                    "type": "yieldType:otherFaith",
-                    "amount": 1,
-                    "for": [
-                        "conceptType:citizen"
-                    ]
-                }
-            ],
-            "isPositive": true
-        },
-        {
-            "key": "traitType:xenophobic",
-            "name": "Xenophobic",
-            "concept": "conceptType:trait",
-            "description": "Xenophobia denotes organized distrust and hostility toward foreigners and minority outsiders. States and movements channel this sentiment into exclusionary laws, segregation, and violence. Tokugawa Japan\u2019s sakoku restricted contact and travel for two centuries, limiting external influence while controlling domestic order. Nineteenth\u2011century American nativists promoted anti\u2011immigrant platforms culminating in measures such as the Chinese Exclusion Act. Many European realms expelled Jewish communities in the medieval and early modern eras. Nazi Germany fused xenophobia with racial ideology to catastrophic effect. Such policies can disrupt trade and innovation, intensify scapegoating during crisis, and leave lasting demographic and moral damage.",
-            "category": "traitCategory:others",
-            "yields": [
-                {
-                    "type": "yieldType:otherCulture",
-                    "amount": -1,
-                    "for": [
-                        "conceptType:citizen"
-                    ]
-                },
-                {
-                    "type": "yieldType:otherFaith",
-                    "amount": -1,
-                    "for": [
-                        "conceptType:citizen"
-                    ]
-                }
-            ],
-            "isPositive": false
-        },
-        {
             "key": "worldWonderType:hallstattSaltMines",
             "name": "Hallstatt Salt Mines",
             "concept": "conceptType:worldWonder",
@@ -44805,18 +44839,6 @@
         {
             "key": "yieldType:order",
             "name": "Order",
-            "concept": "conceptType:yield",
-            "description": ""
-        },
-        {
-            "key": "yieldType:otherCulture",
-            "name": "Other Culture",
-            "concept": "conceptType:yield",
-            "description": ""
-        },
-        {
-            "key": "yieldType:otherFaith",
-            "name": "Other Faith",
             "concept": "conceptType:yield",
             "description": ""
         },
@@ -48211,16 +48233,6 @@
             "relatesTo": [
                 "traitType:diplomatic",
                 "traitType:blunt"
-            ]
-        },
-        {
-            "key": "traitCategory:others",
-            "concept": "conceptType:trait",
-            "name": "Others",
-            "description": "",
-            "relatesTo": [
-                "traitType:cosmopolitan",
-                "traitType:xenophobic"
             ]
         },
         {

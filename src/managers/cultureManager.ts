@@ -12,14 +12,33 @@ export class CultureManager extends Manager {
   }
 
   calcSelectable (culture: Culture): void {
+    culture.selectableHeritages = []
     culture.selectableTraits = []
-    if (['mustSettle', 'settled'].includes(culture.status)) return
+    if (culture.status === 'mustSettle') return
 
-    for (const heritage of this._objects.getClassTypes('heritageType')) {
-      if (culture.heritages.includes(heritage)) continue
-      if ((culture.heritageCategoryPoints[heritage.category!] ?? 0) < heritage.heritagePointCost!) continue
+    if (['notSettled', 'canSettle'].includes(culture.status)) {
+      for (const heritage of this._objects.getClassTypes('heritageType')) {
+        if (culture.heritages.includes(heritage)) continue
+        if ((culture.heritageCategoryPoints[heritage.category!] ?? 0) < heritage.heritagePointCost!) continue
 
-      culture.selectableHeritages.push(heritage)
+        culture.selectableHeritages.push(heritage)
+      }
+    } else {
+      if (culture.mustSelectTraits.positive + culture.mustSelectTraits.negative <= 0) return
+
+      for (const catData of this._objects.getClassTypesPerCategory('traitType')) {
+        let catIsSelected = false
+        for (const trait of catData.types) {
+          if (culture.traits.includes(trait)) catIsSelected = true
+        }
+        for (const trait of catData.types) {
+          if (catIsSelected || culture.traits.includes(trait)) continue
+          if (trait.isPositive! && culture.mustSelectTraits.positive <= 0) continue
+          if (!trait.isPositive! && culture.mustSelectTraits.negative <= 0) continue
+
+          culture.selectableTraits.push(trait)
+        }
+      }
     }
   }
 
@@ -64,6 +83,19 @@ export class CultureManager extends Manager {
     if (!culture.selectableHeritages.includes(heritage)) throw new Error(`[cultureManager] ${culture.key}: ${heritage.name} not selectable`)
 
     culture.heritages.push(heritage)
+    if (culture.heritages.length === 2) {
+      culture.status = 'canSettle'
+    }
+    if (culture.heritages.length > 2) {
+      culture.status = 'mustSettle'
+    }
+    for (const gainKey of heritage.gains) {
+      const player = this._objects.getGameObject(culture.player) as Player
+      const gain = this._objects.getTypeObject(gainKey)
+      if (gain.class === 'technologyType') {
+        player.research.researched.push(gain)
+      }
+    }
     this.calcSelectable(culture)
   }
 
