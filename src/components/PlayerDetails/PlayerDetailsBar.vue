@@ -14,6 +14,7 @@ type TabData = {
   name: TabName,
   type: TypeObject,
   text: ComputedRef<string>,
+  reqSettled: boolean
   tooltip?: ComputedRef<string>,
   isHidden?: ComputedRef<boolean>
 }
@@ -31,6 +32,7 @@ const tabs = tabsConfig.map(tabConfig => {
     text: undefined as any,
     tooltip: undefined as any,
     isHidden: undefined as any,
+    reqSettled: tabConfig.reqSettled,
   }
 
   if (tabConfig.name === 'Economy') {
@@ -149,13 +151,15 @@ const tabs = tabsConfig.map(tabConfig => {
 <template>
   <UiElement position="top-left" class="z-50 text-base">
     <div class="flex items-center gap-1 pb-0.5 pr-1">
-      <UiButton v-for="tab of tabs" :key="tab.type.key"
-                @click="modal.open(tab.name)" variant="pill"
-                :tooltip="tab.tooltip?.value"
-      >
-        <UiIcon :icon="tab.type.icon" class="pr-1"/>
-        <UiValue :value="tab.text.value"/>
-      </UiButton>
+      <template v-for="tab of tabs" :key="tab.type.key">
+        <UiButton v-if="!tab.reqSettled || culture.status === 'settled'" :key="tab.type.key"
+                  @click="modal.open(tab.name)" variant="pill"
+                  :tooltip="tab.tooltip?.value"
+        >
+          <UiIcon :icon="tab.type.icon" class="pr-1"/>
+          <UiValue :value="tab.text.value"/>
+        </UiButton>
+      </template>
     </div>
   </UiElement>
 </template>

@@ -15,40 +15,49 @@ export const tabsConfig = [
   {
     name: 'Economy',
     type: 'yieldType:gold',
+    reqSettled: true,
   },
   {
     name: 'Research',
     type: 'yieldType:science',
+    reqSettled: true,
   },
   {
     name: 'Culture',
     type: 'yieldType:culture',
+    reqSettled: false,
   },
   {
     name: 'Religion',
     type: 'yieldType:faith',
+    reqSettled: true,
   },
   {
     name: 'Diplomacy',
     type: 'yieldType:influence',
+    reqSettled: true,
   },
   {
     name: 'Cities',
     type: 'conceptType:city',
+    reqSettled: true,
   },
   {
     name: 'Military',
     type: 'yieldType:defense',
+    reqSettled: false,
   },
   {
     name: 'Trade',
     type: 'conceptType:tradeRoute',
+    reqSettled: true,
   },
   {
     name: 'Government',
     type: 'conceptType:policy',
+    reqSettled: true,
   },
-] as { name: TabName, type: TypeKey }[]
+] as { name: TabName, type: TypeKey, reqSettled: boolean }[]
 
 export const usePlayerDetailsStore = defineStore('playerDetails', {
   state: () => ({

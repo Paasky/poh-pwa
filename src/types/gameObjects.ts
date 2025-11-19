@@ -172,13 +172,13 @@ export type Player = GameObject & {
   stockpileStorage: TypeStorage
   yieldStorage: TypeStorage
 
-  // UI / Player preferences
   eventSettings: Record<EventType, EventSetting>
 }
 export const initPlayer = (rawData: any): Player => {
   const obj = _initGameObject(rawData) as Player
 
   obj.isCurrent = rawData.isCurrent
+  obj.leader = useObjectsStore().getTypeObject(rawData.leader)
 
   obj.knownTiles = rawData.knownTiles
   obj.visibleTiles = rawData.visibleTiles
