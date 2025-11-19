@@ -1,4 +1,4 @@
-import { ObjKey } from '@/types/common'
+import { GameKey, ObjKey } from '@/types/common'
 import { Manager } from '@/managers/_manager'
 import { EventType, GameEvent } from '@/types/events'
 import { useEventStore } from '@/stores/eventStore'
@@ -8,6 +8,7 @@ export class EventManager extends Manager {
 
   create (
     type: EventType,
+    player: GameKey | undefined,
     target: ObjKey,
     title: string,
     description?: string,
@@ -15,6 +16,7 @@ export class EventManager extends Manager {
     const event = {
       id: crypto.randomUUID(),
       type,
+      player,
       target,
       title,
       description,

@@ -43,13 +43,22 @@ export class TechnologyManager extends Manager {
     }
 
     const eventManager = new EventManager()
-    eventManager.create('technologyDiscovered', tech.key, `discovered ${tech.name}!`)
+    eventManager.create(
+      'technologyDiscovered',
+      player.key,
+      tech.key,
+      `discovered ${tech.name}`
+    )
 
     const techEra = this.getEra(tech)
     if (!player.research.era || this.isLaterEra(player.research.era, techEra)) {
       player.research.era = techEra
-      eventManager.create('eraEntered', techEra.key,
-        `entered the ${techEra.name} Era!`)
+      eventManager.create(
+        'eraEntered',
+        player.key,
+        techEra.key,
+        `entered the ${techEra.name} Era`
+      )
     }
   }
 

@@ -11,6 +11,7 @@ import EncyclopediaModal from '@/components/Encyclopedia/EncyclopediaModal.vue'
 import { useRouter } from 'vue-router'
 import { initModalStateSync } from '@/router/modalState'
 import PlayerDetailsModal from '@/components/PlayerDetails/PlayerDetailsModal.vue'
+import EventModal from '@/components/Events/EventModal.vue'
 
 const encyclopedia = useEncyclopediaStore()
 const app = useAppStore()
@@ -159,6 +160,7 @@ function onBeforeUnload (e: BeforeUnloadEvent) {
 
       <!-- Modals  -->
       <PlayerDetailsModal/>
+      <EventModal/>
       <EncyclopediaModal/>
 
     </div>

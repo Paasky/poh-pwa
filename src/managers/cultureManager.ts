@@ -80,8 +80,9 @@ export class CultureManager extends Manager {
 
     new EventManager().create(
       'cultureEvolved',
+      player.key,
       culture.key,
-      `${culture.name} has evolved to ${culture.type.name}!`,
+      `evolved to the ${culture.type.name} culture`,
     )
   }
 
@@ -156,7 +157,8 @@ export class CultureManager extends Manager {
     new EventManager().create(
       'settled',
       culture.player,
-      `${culture.name} has settled their first city!`,
+      culture.key,
+      `settled down`
     )
   }
 }
