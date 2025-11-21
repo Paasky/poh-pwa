@@ -153,6 +153,7 @@ export type Player = GameObject & {
   isCurrent: boolean
   leader: TypeObject
 
+  knownTypes: TypeObject[]
   knownTiles: GameKey[]
   visibleTiles: GameKey[]
   ownedTiles: GameKey[]
@@ -180,35 +181,36 @@ export const initPlayer = (rawData: any): Player => {
   obj.isCurrent = rawData.isCurrent
   obj.leader = useObjectsStore().getTypeObject(rawData.leader)
 
-  obj.knownTiles = rawData.knownTiles
-  obj.visibleTiles = rawData.visibleTiles
-  obj.ownedTiles = rawData.ownedTiles
-  obj.unitDesigns = rawData.unitDesigns
-  obj.units = rawData.units
-  obj.cities = rawData.cities
-  obj.tradeRoutes = rawData.tradeRoutes
+  obj.knownTypes = rawData.knownTypes ?? []
+  obj.knownTiles = rawData.knownTiles ?? []
+  obj.visibleTiles = rawData.visibleTiles ?? []
+  obj.ownedTiles = rawData.ownedTiles ?? []
+  obj.unitDesigns = rawData.unitDesigns ?? []
+  obj.units = rawData.units ?? []
+  obj.cities = rawData.cities ?? []
+  obj.tradeRoutes = rawData.tradeRoutes ?? []
 
   obj.culture = rawData.culture
   if ('religion' in rawData) obj.religion = rawData.religion
 
   // Diplomacy
   obj.diplomacy = {
-    deals: (rawData.diplomacy?.deals),
-    relations: (rawData.diplomacy?.relations ?? {})
+    deals: rawData.diplomacy?.deals ?? [],
+    relations: rawData.diplomacy?.relations ?? {}
   }
 
   // Government
   obj.government = {
-    turnsToElection: rawData.government.turnsToElection,
-    hasElections: rawData.government.hasElections,
-    policyUnhappiness: rawData.government.policyUnhappiness,
-    corruptionDisorder: rawData.government.corruptionDisorder,
-    revolutionChance: rawData.government.revolutionChance,
-    inRevolution: rawData.government.inRevolution,
+    turnsToElection: rawData.government.turnsToElection ?? 0,
+    hasElections: rawData.government.hasElections ?? false,
+    policyUnhappiness: rawData.government.policyUnhappiness ?? 0,
+    corruptionDisorder: rawData.government.corruptionDisorder ?? 0,
+    revolutionChance: rawData.government.revolutionChance ?? 0,
+    inRevolution: rawData.government.inRevolution ?? false,
 
-    policies: rawData.government.policies.map((k: TypeKey) => useObjectsStore().getTypeObject(k)),
+    policies: (rawData.government.policies ?? []).map((k: TypeKey) => useObjectsStore().getTypeObject(k)),
     selectablePolicies: [],
-    agenda: rawData.government.agenda
+    agenda: rawData.government.agenda ?? []
   }
 
   // Research

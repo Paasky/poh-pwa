@@ -45,6 +45,7 @@ export const createPlayer = (
     isCurrent,
     leader,
 
+    knownTypes: [] as TypeObject[],
     knownTiles: [] as ObjKey[],
     visibleTiles: [] as ObjKey[],
     ownedTiles: [] as ObjKey[],

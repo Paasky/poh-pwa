@@ -124,7 +124,7 @@ function onBeforeUnload (e: BeforeUnloadEvent) {
     <div v-else id="game" key="game" ref="gameRootEl" class="absolute w-screen h-screen bg-gray-100 text-sm"
          :class="{'processing': app.isProcessing}">
       <!-- Game engine -->
-      <Engine class="absolute top-0 left-0 w-full h-full bg-black/50" />
+      <Engine class="absolute top-0 left-0 w-full h-full bg-black/50"/>
 
       <!-- todo: Game hover tooltip -->
 

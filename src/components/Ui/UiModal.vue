@@ -75,12 +75,12 @@ onBeforeUnmount(() => {
       >
         <!-- Header -->
         <header class="flex items-center gap-2 border-b border-slate-700 bg-green-950 select-none">
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2 overflow-x-auto">
             <slot name="header-left">
               <h2 v-if="props.title" id="ui-modal-title" class="text-lg font-normal px-3 py-1">{{ props.title }}</h2>
             </slot>
           </div>
-          <div class="ml-auto flex items-center gap-1">
+          <div class="ml-auto flex items-center gap-1 border-l border-green-900/75">
             <slot name="header-right"/>
             <UiButton v-if="props.showClose" variant="ghost" :tooltip="'Close (Esc)'" @click="emit('close')">
               <UiIcon :icon="icons.close"/>

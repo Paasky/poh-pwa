@@ -10,6 +10,7 @@ import { TypeObject } from '@/types/typeObjects'
 import { CatKey } from '@/types/common'
 import ResearchTabArrows from '@/components/PlayerDetails/ResearchTab/ResearchTabArrows.vue'
 import { TechnologyManager } from '@/managers/technologyManager'
+import UiButton from '@/components/Ui/UiButton.vue'
 
 const objects = useObjectsStore()
 const techs = objects.getClassTypes('technologyType')
@@ -89,6 +90,9 @@ function eraY (era: TypeObject): number {
         <span v-if="research.queue.includes(tech)"
               class="font-bold text-yellow-400">({{ research.queue.indexOf(tech) + 1 }})</span>
         <span class="float-right">
+          <UiButton v-if="research.current?.key === tech.key"
+                    @click="manager.complete(player, tech)"
+          >Complete</UiButton>
           <UiIcon :icon="tech.icon"/>
           <span v-if="research.current === tech || manager.getProgress(research, tech)">{{
               manager.getProgress(research, tech)

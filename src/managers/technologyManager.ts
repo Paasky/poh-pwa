@@ -35,11 +35,20 @@ export class TechnologyManager extends Manager {
   }
 
   complete (player: Player, tech: TypeObject): void {
+    if (player.research.researched.includes(tech)) throw new Error(`[technologyManager] ${player.key}: ${tech.key} already researched`)
+
     player.research.researched.push(tech)
-    const prevProgress = this.getProgress(player.research, tech)
-    if (prevProgress) {
-      player.yieldStorage.add('yieldType:science', prevProgress)
-      delete player.research.researching[tech.key]
+    delete player.research.researching[tech.key]
+
+    // Process research queue
+    if (player.research.current === tech) player.research.current = null
+    player.research.queue = player.research.queue.filter(t => t !== tech)
+    if (player.research.queue.length > 0) player.research.current = player.research.queue[0]
+
+    // Add available types
+    for (const allowsKey of tech.allows) {
+      const allows = this._objects.getTypeObject(allowsKey)
+      if (allows.class !== 'technologyType') player.knownTypes.push(this._objects.getTypeObject(allowsKey))
     }
 
     const eventManager = new EventManager()
