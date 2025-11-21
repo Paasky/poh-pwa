@@ -2,6 +2,7 @@
 import { useObjectsStore } from '@/stores/objectStore'
 import { useEventStore } from '@/stores/eventStore'
 import { capitalize } from '@vue/shared'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 const objects = useObjectsStore()
 const events = useEventStore()
@@ -15,6 +16,16 @@ const events = useEventStore()
        :class="event.read ? 'text-yellow-800' : 'text-yellow-600'"
   >
     {{ capitalize(event.title) }}
+
+    <button
+        type="button"
+        class="text-slate-600 hover:text-slate-400 ml-1 float-right"
+        aria-label="Clear"
+        title="Clear"
+        @click.stop="() => events.turnEvents.splice(events.turnEvents.indexOf(event), 1)"
+    >
+      <font-awesome-icon :icon="['fas','xmark']" class="fa-fw"/>
+    </button>
   </div>
 </template>
 
