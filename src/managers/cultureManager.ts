@@ -3,6 +3,7 @@ import { Culture, Player } from '@/types/gameObjects'
 import { CatKey, TypeKey } from '@/types/common'
 import { TypeObject } from '@/types/typeObjects'
 import { EventManager } from '@/managers/eventManager'
+import { TechnologyManager } from '@/managers/technologyManager'
 
 export class CultureManager extends Manager {
   addHeritagePoints (culture: Culture, category: CatKey, points: number): void {
@@ -128,7 +129,7 @@ export class CultureManager extends Manager {
       const player = this._objects.getGameObject(culture.player) as Player
       const gain = this._objects.getTypeObject(gainKey)
       if (gain.class === 'technologyType') {
-        player.research.researched.push(gain)
+        new TechnologyManager().complete(player, gain)
       }
     }
     this.calcSelectable(culture)

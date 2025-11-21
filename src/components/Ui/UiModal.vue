@@ -8,7 +8,7 @@ import { useAppStore } from '@/stores/appStore'
 const props = withDefaults(defineProps<{
   open: boolean
   title?: string
-  size?: 'sm' | 'md' | 'lg'
+  size?: 'sm' | 'md' | 'lg' | 'auto'
   showClose?: boolean
 }>(), {
   size: 'lg',
@@ -67,8 +67,13 @@ onBeforeUnmount(() => {
 
       <!-- Panel -->
       <section
-          class="absolute left-1/2 top-1/2 mt-2 -translate-x-1/2 -translate-y-1/2 w-[95vw] h-[95vh] bg-slate-900 text-slate-100 border border-slate-700 rounded-xl shadow-2xl overflow-hidden flex flex-col"
-          :class="size === 'lg' ? 'max-w-[100rem]' : (size === 'md' ? 'max-w-[64rem] max-h-[64rem]' : 'max-w-[32rem] max-h-[32rem]')"
+          class="absolute left-1/2 top-1/2 mt-2 -translate-x-1/2 -translate-y-1/2 bg-slate-900 text-slate-100 border border-slate-700 rounded-xl shadow-2xl overflow-hidden flex flex-col"
+          :class="{
+            'max-w-[100rem] w-[95vw] h-[95vh]': size === 'lg',
+            'max-w-[64rem] max-h-[64rem] w-[95vw] h-[95vh]': size === 'md',
+            'max-w-[32rem] max-h-[32rem] w-[95vw] h-[95vh]': size === 'sm',
+            'max-w-[95vw] max-h-[64rem] h-[95vh]': size === 'auto',
+          }"
           role="dialog"
           aria-modal="true"
           :aria-labelledby="props.title ? 'ui-modal-title' : undefined"

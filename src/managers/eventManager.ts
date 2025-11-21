@@ -24,9 +24,9 @@ export class EventManager extends Manager {
     } as GameEvent
 
     this._events.turnEvents.push(event)
-    const setting = this._objects.getCurrentPlayer().eventSettings[type] ?? 'note'
-    if (setting === 'splash') {
-      this._events.splash(event)
+    const setting = this._objects.getCurrentPlayer().eventSettings[type] ?? 'full'
+    if (setting === 'full') {
+      this._events.open(event)
     }
     return event
   }

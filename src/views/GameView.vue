@@ -14,6 +14,7 @@ import PlayerDetailsModal from '@/components/PlayerDetails/PlayerDetailsModal.vu
 import EventModal from '@/components/Events/EventModal.vue'
 import { useObjectsStore } from '@/stores/objectStore'
 import Engine from '@/components/Engine/Engine.vue'
+import EventList from '@/components/Events/EventList.vue'
 
 const encyclopedia = useEncyclopediaStore()
 const app = useAppStore()
@@ -150,7 +151,9 @@ function onBeforeUnload (e: BeforeUnloadEvent) {
       <UiElement position="left-center">Ongoing</UiElement>
 
       <!-- Right-center -->
-      <UiElement position="right-center">Notifications</UiElement>
+      <UiElement position="right-center">
+        <EventList/>
+      </UiElement>
 
       <!-- Bottom-left -->
       <UiElement position="bottom-left">Map</UiElement>

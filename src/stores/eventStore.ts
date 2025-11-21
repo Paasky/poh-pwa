@@ -10,7 +10,7 @@ export const useEventStore = defineStore('events', {
     unreadEvents: (state): GameEvent[] => state.turnEvents.filter(e => !e.read),
   },
   actions: {
-    splash (event: GameEvent) {
+    open (event: GameEvent) {
       if (this.current?.id === event.id) return
 
       this.current = event

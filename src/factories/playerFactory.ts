@@ -79,8 +79,8 @@ export const createPlayer = (
     stockpileStorage: new TypeStorage(),
     yieldStorage: new TypeStorage(),
     eventSettings: {
-      'settled': 'splash',
-      'cultureEvolved': 'splash',
+      'settled': 'full',
+      'cultureEvolved': 'full',
     } as Record<EventType, EventSetting>
   } as Player
 
