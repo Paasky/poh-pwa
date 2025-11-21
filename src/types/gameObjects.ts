@@ -152,6 +152,7 @@ export const initDeal = (rawData: any): Deal => {
 export type Player = GameObject & {
   isCurrent: boolean
   leader: TypeObject
+  canProduce: TypeObject[]
 
   knownTypes: TypeObject[]
   knownTiles: GameKey[]
@@ -180,6 +181,7 @@ export const initPlayer = (rawData: any): Player => {
 
   obj.isCurrent = rawData.isCurrent
   obj.leader = useObjectsStore().getTypeObject(rawData.leader)
+  obj.canProduce = []
 
   obj.knownTypes = rawData.knownTypes ?? []
   obj.knownTiles = rawData.knownTiles ?? []
@@ -344,6 +346,7 @@ export const initTileObject = (rawData: any): TileObject => {
 }
 
 export type City = TileObject & {
+  canProduce: TypeObject[]
   player: GameKey
   health: number
   citizens: GameKey[]

@@ -5,6 +5,15 @@ import { TypeObject } from '@/types/typeObjects'
 import { TechnologyManager } from '@/managers/technologyManager'
 
 export class PlayerManager extends Manager {
+  calcCanProduce (player: Player): void {
+  }
+
+  calcTiles (player: Player): void {
+  }
+
+  calcYields (player: Player): void {
+  }
+
   create (
     name: string,
     cultureType: TypeObject,
@@ -18,6 +27,9 @@ export class PlayerManager extends Manager {
     return playerBundle.player
   }
 
-  calcTiles (player: Player): void {
+  endTurn (player: Player): void {
+  }
+
+  startTurn (player: Player): void {
   }
 }
