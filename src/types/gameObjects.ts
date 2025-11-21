@@ -152,7 +152,6 @@ export const initDeal = (rawData: any): Deal => {
 export type Player = GameObject & {
   isCurrent: boolean
   leader: TypeObject
-  canProduce: TypeObject[]
 
   knownTypes: TypeObject[]
   knownTiles: GameKey[]
@@ -181,7 +180,6 @@ export const initPlayer = (rawData: any): Player => {
 
   obj.isCurrent = rawData.isCurrent
   obj.leader = useObjectsStore().getTypeObject(rawData.leader)
-  obj.canProduce = []
 
   obj.knownTypes = rawData.knownTypes ?? []
   obj.knownTiles = rawData.knownTiles ?? []
@@ -224,7 +222,6 @@ export const initPlayer = (rawData: any): Player => {
     researching[key as TypeKey] = { type: useObjectsStore().getTypeObject(v.type), progress: v.progress }
   }
   obj.research = {
-    available: [],
     era: null,
     researched,
     researching,
@@ -355,6 +352,7 @@ export type City = TileObject & {
 export const initCity = (rawData: any): City => {
   const obj = initTileObject(rawData) as City
 
+  obj.canProduce = rawData.canProduce
   obj.player = rawData.player
   obj.health = rawData.health
   obj.citizens = rawData.citizens
@@ -512,7 +510,6 @@ export type Government = {
   agenda: GameKey[]
 }
 export type Research = {
-  available: TypeObject[]
   current: TypeObject | null
   era: TypeObject | null
   queue: TypeObject[]

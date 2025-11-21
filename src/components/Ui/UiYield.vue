@@ -8,6 +8,8 @@ const props = defineProps<{
   hideName?: boolean
   positive?: boolean
   negative?: boolean
+  noLumpPlus?: boolean
+  noLumpPlus?: boolean
 }>()
 const emit = defineEmits<{ (e: 'click', ev: MouseEvent): void }>()
 
@@ -24,6 +26,10 @@ const noEffectTypes = [
 const noPlusTypes = [
   'yieldType:intercept',
 ]
+const noLumpPlusTypes = [
+  'yieldType:productionCost',
+  'yieldType:scienceCost',
+]
 
 const amount = computed(() => {
   if (props.data.method === 'set') return 'Set to ' + props.data.amount
@@ -31,9 +37,13 @@ const amount = computed(() => {
       ? props.data.amount + '%'
       : props.data.amount
 
-  return props.data.method !== 'set' && props.data.amount > 0 && !noPlusTypes.includes(props.data.type)
-      ? '+' + output
-      : output
+  if (props.data.method === 'set') return output
+  if (props.data.amount <= 0) return output
+  if (noPlusTypes.includes(props.data.type)) return output
+  if (props.data.method === 'lump' && props.noLumpPlus) return output
+  if (props.data.method === 'lump' && noLumpPlusTypes.includes(props.data.type)) return output
+
+  return '+' + output
 })
 
 const colorClass = computed<string>(() => {

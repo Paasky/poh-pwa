@@ -75,7 +75,7 @@ function eraY (era: TypeObject): number {
                   research.researched.includes(tech)
                     ? 'bg-green-950'
                     : (
-                        research.available.includes(tech)
+                        player.knownTypes.includes(tech)
                           ? 'bg-blue-950'
                           : 'bg-neutral-800'
                     )

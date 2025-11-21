@@ -5,12 +5,18 @@ import { Manager } from '@/managers/_manager'
 
 export class UnitDesignManager extends Manager {
   create (
-    equipment: TypeObject,
     platform: TypeObject,
+    equipment: TypeObject,
     name?: string,
     player?: Player,
     isArmored: boolean = false,
+    isFree: boolean = false,
   ): UnitDesign {
+    if (player && !isFree) {
+      if (!player.yieldStorage.has('yieldType:designPoints', 2)) {
+        throw new Error('Not enough design points to create a unit design')
+      }
+    }
     const design = createUnitDesign(
       equipment,
       platform,
@@ -21,6 +27,9 @@ export class UnitDesignManager extends Manager {
     this._objects.set(design)
     if (player) {
       player.unitDesigns.push(design.key)
+      if (!isFree) {
+        player.yieldStorage.take('yieldType:designPoints', 2)
+      }
     }
     return design
   }

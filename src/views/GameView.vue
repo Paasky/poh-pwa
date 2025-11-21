@@ -160,9 +160,9 @@ function onBeforeUnload (e: BeforeUnloadEvent) {
 
       <!-- Bottom-center -->
       <UiElement position="bottom-center">
-        <pre>
-          {{ JSON.stringify(useObjectsStore().getCurrentPlayer().units, null, 2) }}
-        </pre>
+        <div class="max-h-48 overflow-y-auto">
+          <p v-for="type in useObjectsStore().getCurrentPlayer().knownTypes">{{ type.class }} - {{ type.name }}</p>
+        </div>
       </UiElement>
 
       <!-- Bottom-right -->

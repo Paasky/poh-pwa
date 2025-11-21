@@ -27,7 +27,6 @@ export const createPlayer = (
   religion?: ObjKey,
   policies: TypeObject[] = [],
   research: Research = {
-    available: [],
     era: null,
     researched: [],
     researching: {},

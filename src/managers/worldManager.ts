@@ -22,13 +22,22 @@ export class WorldManager extends Manager {
     this._objects.bulkSet(tiles)
     console.log('Set tiles', new Date())
 
+    // Create common unit designs
     const tribeDesign = designManager.create(
-      this._objects.getTypeObject('equipmentType:tribe'),
       this._objects.getTypeObject('platformType:human'),
+      this._objects.getTypeObject('equipmentType:tribe'),
+    )
+    const workerDesign = designManager.create(
+      this._objects.getTypeObject('platformType:human'),
+      this._objects.getTypeObject('equipmentType:worker'),
     )
     const hunterDesign = designManager.create(
-      this._objects.getTypeObject('equipmentType:javelin'),
       this._objects.getTypeObject('platformType:human'),
+      this._objects.getTypeObject('equipmentType:javelin'),
+    )
+    const warbandDesign = designManager.create(
+      this._objects.getTypeObject('platformType:human'),
+      this._objects.getTypeObject('equipmentType:spear'),
     )
     console.log('Created unit designs', new Date())
 
@@ -50,8 +59,9 @@ export class WorldManager extends Manager {
       console.log('Created player', new Date())
 
       player.unitDesigns.push(
-        tribeDesign.key,
-        hunterDesign.key
+        workerDesign.key,
+        hunterDesign.key,
+        warbandDesign.key,
       )
 
       const tile = tiles[Math.floor(Math.random() * tiles.length)]

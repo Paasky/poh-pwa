@@ -5315,8 +5315,8 @@
                 "equipmentType:bronzeAxe"
             ],
             "names": {
-                "Human": "Warrior",
-                "Chariot": "Chariot"
+                "platformType:human": "Warrior",
+                "platformType:chariot": "Chariot"
             },
             "image": "\/media\/images\/equipmentType\/axe.jpg",
             "audio": [],
@@ -5360,9 +5360,9 @@
                 "equipmentType:axe"
             ],
             "names": {
-                "Human": "Axeman",
-                "Chariot": "War Chariot",
-                "Horse": "Rider"
+                "platformType:human": "Axeman",
+                "platformType:chariot": "War Chariot",
+                "platformType:horse": "Rider"
             },
             "image": "\/media\/images\/equipmentType\/bronzeAxe.jpg",
             "audio": [],
@@ -5407,8 +5407,8 @@
                 "equipmentType:bronzeAxe"
             ],
             "names": {
-                "Human": "Swordsman",
-                "Horse": "Horseman"
+                "platformType:human": "Swordsman",
+                "platformType:horse": "Horseman"
             },
             "image": "\/media\/images\/equipmentType\/ironSword.jpg",
             "audio": [],
@@ -5453,8 +5453,8 @@
                 "equipmentType:ironSword"
             ],
             "names": {
-                "Human": "Longswordsman",
-                "Horse": "Knight"
+                "platformType:human": "Longswordsman",
+                "platformType:horse": "Knight"
             },
             "image": "\/media\/images\/equipmentType\/longsword.jpg",
             "audio": [],
@@ -5499,8 +5499,8 @@
                 "equipmentType:longsword"
             ],
             "names": {
-                "Human": "Man-at-Arms",
-                "Horse": "Cuirassier"
+                "platformType:human": "Man-at-Arms",
+                "platformType:horse": "Cuirassier"
             },
             "image": "\/media\/images\/equipmentType\/saber.jpg",
             "audio": [],
@@ -5543,8 +5543,8 @@
                 "specialType:canLevy"
             ],
             "names": {
-                "Human": "Musketman",
-                "Horse": "Cavalry"
+                "platformType:human": "Musketman",
+                "platformType:horse": "Cavalry"
             },
             "image": "\/media\/images\/equipmentType\/musket.jpg",
             "audio": [],
@@ -5586,8 +5586,8 @@
                 "specialType:canLevy"
             ],
             "names": {
-                "Human": "Infantry",
-                "Truck": "Mot. Infantry"
+                "platformType:human": "Infantry",
+                "platformType:truck": "Mot. Infantry"
             },
             "image": "\/media\/images\/equipmentType\/rifle.jpg",
             "audio": [],
@@ -5629,8 +5629,8 @@
                 "specialType:canLevy"
             ],
             "names": {
-                "Human": "Assault Infantry",
-                "Truck": "Mech. Infantry"
+                "platformType:human": "Assault Infantry",
+                "platformType:truck": "Mech. Infantry"
             },
             "image": "\/media\/images\/equipmentType\/assaultRifle.jpg",
             "audio": [],
@@ -5672,8 +5672,8 @@
                 "specialType:canLevy"
             ],
             "names": {
-                "Human": "Modern Infantry",
-                "Truck": "IFV"
+                "platformType:human": "Modern Infantry",
+                "platformType:truck": "IFV"
             },
             "image": "\/media\/images\/equipmentType\/scopedRifle.jpg",
             "audio": [],
@@ -5712,8 +5712,8 @@
                 "specialType:canLevy"
             ],
             "names": {
-                "Human": "Laser Infantry",
-                "Truck": "Laser IFV"
+                "platformType:human": "Laser Infantry",
+                "platformType:truck": "Laser IFV"
             },
             "image": "\/media\/images\/equipmentType\/laserRifle.jpg",
             "audio": [],
@@ -5753,7 +5753,7 @@
                 "specialType:canLevy"
             ],
             "names": {
-                "Human": "Warband"
+                "platformType:human": "Warband"
             },
             "image": "\/media\/images\/equipmentType\/spear.jpg",
             "audio": []
@@ -5792,7 +5792,7 @@
                 "specialType:canLevy"
             ],
             "names": {
-                "Human": "Spearman"
+                "platformType:human": "Spearman"
             },
             "image": "\/media\/images\/equipmentType\/bronzeSpear.jpg",
             "audio": [],
@@ -5834,7 +5834,7 @@
                 "specialType:canLevy"
             ],
             "names": {
-                "Human": "Phalanx"
+                "platformType:human": "Phalanx"
             },
             "image": "\/media\/images\/equipmentType\/ironSpear.jpg",
             "audio": [],
@@ -5876,7 +5876,7 @@
                 "specialType:canLevy"
             ],
             "names": {
-                "Human": "Pikeman"
+                "platformType:human": "Pikeman"
             },
             "image": "\/media\/images\/equipmentType\/pike.jpg",
             "audio": [],
@@ -5918,7 +5918,7 @@
                 "specialType:canLevy"
             ],
             "names": {
-                "Human": "Halberdier"
+                "platformType:human": "Halberdier"
             },
             "image": "\/media\/images\/equipmentType\/halberd.jpg",
             "audio": [],
@@ -5962,7 +5962,7 @@
                 "equipmentType:halberd"
             ],
             "names": {
-                "Human": "Grenadier"
+                "platformType:human": "Grenadier"
             },
             "image": "\/media\/images\/equipmentType\/grenadier.jpg",
             "audio": [],
@@ -6001,7 +6001,7 @@
                 "equipmentType:grenadier"
             ],
             "names": {
-                "Human": "AT-Rifle"
+                "platformType:human": "AT-Rifle"
             },
             "image": "\/media\/images\/equipmentType\/aTRifle.jpg",
             "audio": [],
@@ -6040,7 +6040,7 @@
                 "equipmentType:aTRifle"
             ],
             "names": {
-                "Human": "RPG"
+                "platformType:human": "RPG"
             },
             "image": "\/media\/images\/equipmentType\/rPG.jpg",
             "audio": [],
@@ -6079,7 +6079,7 @@
                 "equipmentType:rPG"
             ],
             "names": {
-                "Human": "AT-Drone"
+                "platformType:human": "AT-Drone"
             },
             "image": "\/media\/images\/equipmentType\/aTDrone.jpg",
             "audio": [],
@@ -6116,7 +6116,7 @@
                 "equipmentType:aTDrone"
             ],
             "names": {
-                "Human": "AI-Drone"
+                "platformType:human": "AI-Drone"
             },
             "image": "\/media\/images\/equipmentType\/aIDrone.jpg",
             "audio": [],
@@ -6153,7 +6153,7 @@
                 "equipmentType:highVelocityGun"
             ],
             "names": {
-                "Tracked": "Tank"
+                "platformType:tracked": "Tank"
             },
             "image": "\/media\/images\/equipmentType\/aTGun.jpg",
             "audio": [],
@@ -6192,7 +6192,7 @@
                 "equipmentType:aTGun"
             ],
             "names": {
-                "Tracked": "Main Battle Tank"
+                "platformType:tracked": "Main Battle Tank"
             },
             "image": "\/media\/images\/equipmentType\/highVelocityGun.jpg",
             "audio": [],
@@ -6231,7 +6231,7 @@
                 "equipmentType:highVelocityGun"
             ],
             "names": {
-                "Tracked": "Modern Tank"
+                "platformType:tracked": "Modern Tank"
             },
             "image": "\/media\/images\/equipmentType\/smoothboreGun.jpg",
             "audio": [],
@@ -6267,7 +6267,7 @@
                 "equipmentType:smoothboreGun"
             ],
             "names": {
-                "Tracked": "Laser Tank"
+                "platformType:tracked": "Laser Tank"
             },
             "image": "\/media\/images\/equipmentType\/laserGun.jpg",
             "audio": [],
@@ -6307,8 +6307,8 @@
                 "specialType:pillageRange"
             ],
             "names": {
-                "Raft": "Raft",
-                "Galley": "Galley"
+                "platformType:raft": "Raft",
+                "platformType:galley": "Galley"
             },
             "image": "\/media\/images\/equipmentType\/woodRam.jpg",
             "audio": [],
@@ -6350,7 +6350,7 @@
                 "specialType:pillageRange"
             ],
             "names": {
-                "Galley": "Bireme"
+                "platformType:galley": "Bireme"
             },
             "image": "\/media\/images\/equipmentType\/bronzeRam.jpg",
             "audio": [],
@@ -6392,8 +6392,8 @@
                 "specialType:pillageRange"
             ],
             "names": {
-                "Galley": "Trireme",
-                "Clinker": "Galleass"
+                "platformType:galley": "Trireme",
+                "platformType:clinker": "Galleass"
             },
             "image": "\/media\/images\/equipmentType\/ironRam.jpg",
             "audio": [],
@@ -6435,8 +6435,8 @@
                 "specialType:pillageRange"
             ],
             "names": {
-                "Clinker": "Longship",
-                "Carvel": "Xebec"
+                "platformType:clinker": "Longship",
+                "platformType:carvel": "Xebec"
             },
             "image": "\/media\/images\/equipmentType\/raiders.jpg",
             "audio": [],
@@ -6478,7 +6478,7 @@
                 "specialType:pillageRange"
             ],
             "names": {
-                "Carvel": "Brigantine"
+                "platformType:carvel": "Brigantine"
             },
             "image": "\/media\/images\/equipmentType\/buccaneers.jpg",
             "audio": [],
@@ -6520,8 +6520,8 @@
                 "specialType:pillageRange"
             ],
             "names": {
-                "Carvel": "Brig",
-                "Steamer": "Gunboat"
+                "platformType:carvel": "Brig",
+                "platformType:steamer": "Gunboat"
             },
             "image": "\/media\/images\/equipmentType\/musketMarines.jpg",
             "audio": [],
@@ -6567,7 +6567,7 @@
                 "specialType:canSelectTarget"
             ],
             "names": {
-                "Submersible": "Submarine"
+                "platformType:submersible": "Submarine"
             },
             "image": "\/media\/images\/equipmentType\/torpedo.jpg",
             "audio": [],
@@ -6613,7 +6613,7 @@
                 "specialType:canSelectTarget"
             ],
             "names": {
-                "Submersible": "Adv. Submarine"
+                "platformType:submersible": "Adv. Submarine"
             },
             "image": "\/media\/images\/equipmentType\/guidedTorpedo.jpg",
             "audio": [],
@@ -6659,7 +6659,7 @@
                 "specialType:canSelectTarget"
             ],
             "names": {
-                "Submersible": "Stealth Submarine"
+                "platformType:submersible": "Stealth Submarine"
             },
             "image": "\/media\/images\/equipmentType\/homingTorpedo.jpg",
             "audio": [],
@@ -6703,7 +6703,7 @@
                 "specialType:canSelectTarget"
             ],
             "names": {
-                "Submersible": "AI Submarine"
+                "platformType:submersible": "AI Submarine"
             },
             "image": "\/media\/images\/equipmentType\/aITorpedo.jpg",
             "audio": [],
@@ -6740,8 +6740,8 @@
                 "equipmentType:airMissile"
             ],
             "names": {
-                "Biplane": "Biplane",
-                "Monocoque": "Fighter"
+                "platformType:biplane": "Biplane",
+                "platformType:monocoque": "Fighter"
             },
             "image": "\/media\/images\/equipmentType\/airGun.jpg",
             "audio": [],
@@ -6780,8 +6780,8 @@
                 "equipmentType:airGun"
             ],
             "names": {
-                "Monocoque": "Jet Fighter (Gen I)",
-                "Supersonic": "Jet Fighter (Gen II)"
+                "platformType:monocoque": "Jet Fighter (Gen I)",
+                "platformType:supersonic": "Jet Fighter (Gen II)"
             },
             "image": "\/media\/images\/equipmentType\/airMissile.jpg",
             "audio": [],
@@ -6817,9 +6817,9 @@
                 "equipmentType:airMissile"
             ],
             "names": {
-                "Supersonic": "Jet Fighter (Gen III)",
-                "Superagile": "Jet Fighter (Gen IV)",
-                "Stealth": "Stealth Fighter"
+                "platformType:supersonic": "Jet Fighter (Gen III)",
+                "platformType:superagile": "Jet Fighter (Gen IV)",
+                "platformType:stealth": "Stealth Fighter"
             },
             "image": "\/media\/images\/equipmentType\/airHomingMissile.jpg",
             "audio": [],
@@ -6866,7 +6866,7 @@
                 "specialType:canSelectTarget"
             ],
             "names": {
-                "Human": "Hunter"
+                "platformType:human": "Hunter"
             },
             "image": "\/media\/images\/equipmentType\/javelin.jpg",
             "audio": []
@@ -6912,10 +6912,10 @@
                 "specialType:canSelectTarget"
             ],
             "names": {
-                "Human": "Scout",
-                "Chariot": "Chariot Scout",
-                "Horse": "Horse Scout",
-                "Elephant": "Elephant Scout"
+                "platformType:human": "Scout",
+                "platformType:chariot": "Chariot Scout",
+                "platformType:horse": "Horse Scout",
+                "platformType:elephant": "Elephant Scout"
             },
             "image": "\/media\/images\/equipmentType\/bronzeJavelin.jpg",
             "audio": [],
@@ -6964,9 +6964,9 @@
                 "specialType:canSelectTarget"
             ],
             "names": {
-                "Human": "Peltast",
-                "Horse": "Horse Peltast",
-                "Elephant": "Elephant Peltast"
+                "platformType:human": "Peltast",
+                "platformType:horse": "Horse Peltast",
+                "platformType:elephant": "Elephant Peltast"
             },
             "image": "\/media\/images\/equipmentType\/ironJavelin.jpg",
             "audio": [],
@@ -7015,9 +7015,9 @@
                 "specialType:canSelectTarget"
             ],
             "names": {
-                "Human": "Crossbowman",
-                "Horse": "Horse Crossbow",
-                "Elephant": "Elephant Crossbow"
+                "platformType:human": "Crossbowman",
+                "platformType:horse": "Horse Crossbow",
+                "platformType:elephant": "Elephant Crossbow"
             },
             "image": "\/media\/images\/equipmentType\/crossbow.jpg",
             "audio": [],
@@ -7066,9 +7066,9 @@
                 "specialType:canSelectTarget"
             ],
             "names": {
-                "Human": "Arquebusier",
-                "Horse": "Harquebusier",
-                "Elephant": "Elephant Arquebus"
+                "platformType:human": "Arquebusier",
+                "platformType:horse": "Harquebusier",
+                "platformType:elephant": "Elephant Arquebus"
             },
             "image": "\/media\/images\/equipmentType\/arquebus.jpg",
             "audio": [],
@@ -7117,9 +7117,9 @@
                 "specialType:canSelectTarget"
             ],
             "names": {
-                "Human": "Light Infantry",
-                "Horse": "Light Cavalry",
-                "Elephant": "Elephant Rifles"
+                "platformType:human": "Light Infantry",
+                "platformType:horse": "Light Cavalry",
+                "platformType:elephant": "Elephant Rifles"
             },
             "image": "\/media\/images\/equipmentType\/rifledMusket.jpg",
             "audio": [],
@@ -7168,8 +7168,8 @@
                 "specialType:canSelectTarget"
             ],
             "names": {
-                "Human": "Sniper",
-                "Truck": "Ranger"
+                "platformType:human": "Sniper",
+                "platformType:truck": "Ranger"
             },
             "image": "\/media\/images\/equipmentType\/sniper.jpg",
             "audio": [],
@@ -7227,8 +7227,8 @@
                 "specialType:canSelectTarget"
             ],
             "names": {
-                "Human": "Paratrooper",
-                "Truck": "Mot. Paratrooper"
+                "platformType:human": "Paratrooper",
+                "platformType:truck": "Mot. Paratrooper"
             },
             "image": "\/media\/images\/equipmentType\/sMG.jpg",
             "audio": [],
@@ -7283,8 +7283,8 @@
                 "specialType:canSelectTarget"
             ],
             "names": {
-                "Human": "Special Forces",
-                "Truck": "Mot. Special Forces"
+                "platformType:human": "Special Forces",
+                "platformType:truck": "Mot. Special Forces"
             },
             "image": "\/media\/images\/equipmentType\/nightVision.jpg",
             "audio": [],
@@ -7332,8 +7332,8 @@
                 "specialType:damagesAllUnitsInTile"
             ],
             "names": {
-                "Human": "Slinger",
-                "Chariot": "Chariot Slinger"
+                "platformType:human": "Slinger",
+                "platformType:chariot": "Chariot Slinger"
             },
             "image": "\/media\/images\/equipmentType\/sling.jpg",
             "audio": [],
@@ -7383,10 +7383,10 @@
                 "specialType:damagesAllUnitsInTile"
             ],
             "names": {
-                "Human": "Bowman",
-                "Chariot": "Chariot Bowman",
-                "Horse": "Horse Bowman",
-                "Elephant": "Elephant Bowman"
+                "platformType:human": "Bowman",
+                "platformType:chariot": "Chariot Bowman",
+                "platformType:horse": "Horse Bowman",
+                "platformType:elephant": "Elephant Bowman"
             },
             "image": "\/media\/images\/equipmentType\/bow.jpg",
             "audio": [],
@@ -7436,9 +7436,9 @@
                 "specialType:damagesAllUnitsInTile"
             ],
             "names": {
-                "Human": "Archer",
-                "Horse": "Horse Archer",
-                "Elephant": "Elephant Archer"
+                "platformType:human": "Archer",
+                "platformType:horse": "Horse Archer",
+                "platformType:elephant": "Elephant Archer"
             },
             "image": "\/media\/images\/equipmentType\/compositeBow.jpg",
             "audio": [],
@@ -7488,9 +7488,9 @@
                 "specialType:damagesAllUnitsInTile"
             ],
             "names": {
-                "Human": "Longbowman",
-                "Horse": "Horse Longbowman",
-                "Elephant": "Elephant Longbowman"
+                "platformType:human": "Longbowman",
+                "platformType:horse": "Horse Longbowman",
+                "platformType:elephant": "Elephant Longbowman"
             },
             "image": "\/media\/images\/equipmentType\/longbow.jpg",
             "audio": [],
@@ -7540,9 +7540,9 @@
                 "specialType:damagesAllUnitsInTile"
             ],
             "names": {
-                "Human": "Cannoneer",
-                "Horse": "Horse Cannoneer",
-                "Elephant": "Elephant Cannoneer"
+                "platformType:human": "Cannoneer",
+                "platformType:horse": "Horse Cannoneer",
+                "platformType:elephant": "Elephant Cannoneer"
             },
             "image": "\/media\/images\/equipmentType\/handCannon.jpg",
             "audio": [],
@@ -7592,9 +7592,9 @@
                 "specialType:damagesAllUnitsInTile"
             ],
             "names": {
-                "Human": "Light Cannon",
-                "Horse": "Horse Cannon",
-                "Elephant": "Elephant Cannon"
+                "platformType:human": "Light Cannon",
+                "platformType:horse": "Horse Cannon",
+                "platformType:elephant": "Elephant Cannon"
             },
             "image": "\/media\/images\/equipmentType\/lightCannon.jpg",
             "audio": [],
@@ -7644,8 +7644,8 @@
                 "specialType:damagesAllUnitsInTile"
             ],
             "names": {
-                "Human": "Mortar",
-                "Truck": "Mot. Mortar"
+                "platformType:human": "Mortar",
+                "platformType:truck": "Mot. Mortar"
             },
             "image": "\/media\/images\/equipmentType\/mortar.jpg",
             "audio": [],
@@ -7695,8 +7695,8 @@
                 "specialType:damagesAllUnitsInTile"
             ],
             "names": {
-                "Human": "Guided Mortar",
-                "Truck": "Mot. Guided Mortar"
+                "platformType:human": "Guided Mortar",
+                "platformType:truck": "Mot. Guided Mortar"
             },
             "image": "\/media\/images\/equipmentType\/guidedMortar.jpg",
             "audio": [],
@@ -7743,8 +7743,8 @@
                 "specialType:damagesAllUnitsInTile"
             ],
             "names": {
-                "Human": "Attack Drone",
-                "Truck": "Mot. Attack Drone"
+                "platformType:human": "Attack Drone",
+                "platformType:truck": "Mot. Attack Drone"
             },
             "image": "\/media\/images\/equipmentType\/attackDrone.jpg",
             "audio": [],
@@ -7781,7 +7781,7 @@
                 "equipmentType:catapult"
             ],
             "names": {
-                "Carriage": "Battering Ram"
+                "platformType:carriage": "Battering Ram"
             },
             "image": "\/media\/images\/equipmentType\/batteringRam.jpg",
             "audio": [],
@@ -7835,8 +7835,8 @@
                 "specialType:canCarryStockpile"
             ],
             "names": {
-                "Carriage": "Catapult",
-                "Heavy Galley": "Quadreme"
+                "platformType:carriage": "Catapult",
+                "platformType:heavyGalley": "Quadreme"
             },
             "image": "\/media\/images\/equipmentType\/catapult.jpg",
             "audio": [],
@@ -7890,8 +7890,8 @@
                 "specialType:canCarryStockpile"
             ],
             "names": {
-                "Carriage": "Trebuchet",
-                "Heavy Clinker": "Heavy Galleass"
+                "platformType:carriage": "Trebuchet",
+                "platformType:heavyClinker": "Heavy Galleass"
             },
             "image": "\/media\/images\/equipmentType\/trebuchet.jpg",
             "audio": [],
@@ -7945,9 +7945,9 @@
                 "specialType:canCarryStockpile"
             ],
             "names": {
-                "Carriage": "Bombard",
-                "Heavy Clinker": "Carrack",
-                "Heavy Carvel": "Galleon"
+                "platformType:carriage": "Bombard",
+                "platformType:heavyClinker": "Carrack",
+                "platformType:heavyCarvel": "Galleon"
             },
             "image": "\/media\/images\/equipmentType\/bombard.jpg",
             "audio": [],
@@ -8001,9 +8001,9 @@
                 "specialType:canCarryStockpile"
             ],
             "names": {
-                "Carriage": "Cannon",
-                "Heavy Carvel": "Ship-of-the-Line",
-                "Heavy Steamer": "Ironclad"
+                "platformType:carriage": "Cannon",
+                "platformType:heavyCarvel": "Ship-of-the-Line",
+                "platformType:heavySteamer": "Ironclad"
             },
             "image": "\/media\/images\/equipmentType\/cannon.jpg",
             "audio": [],
@@ -8057,12 +8057,12 @@
                 "specialType:canCarryStockpile"
             ],
             "names": {
-                "Carriage": "Howitzer",
-                "Tracked": "Assault Gun",
-                "Steamer": "Steam Destroyer",
-                "Diesel Hull": "Destroyer",
-                "Heavy Steamer": "Dreadnought",
-                "Heavy Diesel": "Battleship"
+                "platformType:carriage": "Howitzer",
+                "platformType:tracked": "Assault Gun",
+                "platformType:steamer": "Steam Destroyer",
+                "platformType:dieselHull": "Destroyer",
+                "platformType:heavySteamer": "Dreadnought",
+                "platformType:heavyDiesel": "Battleship"
             },
             "image": "\/media\/images\/equipmentType\/howitzer.jpg",
             "audio": [],
@@ -8116,10 +8116,10 @@
                 "specialType:canCarryStockpile"
             ],
             "names": {
-                "Carriage": "Rocket Artillery",
-                "Tracked": "Mech. Rocket Artillery",
-                "Diesel Hull": "Rocket Frigate",
-                "Heavy Diesel": "Rocket Cruiser"
+                "platformType:carriage": "Rocket Artillery",
+                "platformType:tracked": "Mech. Rocket Artillery",
+                "platformType:dieselHull": "Rocket Frigate",
+                "platformType:heavyDiesel": "Rocket Cruiser"
             },
             "image": "\/media\/images\/equipmentType\/rocketArtillery.jpg",
             "audio": [],
@@ -8173,10 +8173,10 @@
                 "specialType:canCarryStockpile"
             ],
             "names": {
-                "Carriage": "MLRS",
-                "Tracked": "Mech. MLRS",
-                "Diesel Hull": "Missile Frigate",
-                "Heavy Diesel": "Missile Cruiser"
+                "platformType:carriage": "MLRS",
+                "platformType:tracked": "Mech. MLRS",
+                "platformType:dieselHull": "Missile Frigate",
+                "platformType:heavyDiesel": "Missile Cruiser"
             },
             "image": "\/media\/images\/equipmentType\/mLRS.jpg",
             "audio": [],
@@ -8228,10 +8228,10 @@
                 "specialType:canCarryStockpile"
             ],
             "names": {
-                "Carriage": "Drone Swarm",
-                "Tracked": "Mech. Drone Swarm",
-                "Diesel Hull": "Drone Frigate",
-                "Heavy Diesel": "Drone Cruiser"
+                "platformType:carriage": "Drone Swarm",
+                "platformType:tracked": "Mech. Drone Swarm",
+                "platformType:dieselHull": "Drone Frigate",
+                "platformType:heavyDiesel": "Drone Cruiser"
             },
             "image": "\/media\/images\/equipmentType\/droneSwarm.jpg",
             "audio": [],
@@ -8269,7 +8269,7 @@
                 "equipmentType:catapultDeck"
             ],
             "names": {
-                "Diesel Hull": "Carrier"
+                "platformType:dieselHull": "Carrier"
             },
             "image": "\/media\/images\/equipmentType\/woodDeck.jpg",
             "audio": [],
@@ -8309,7 +8309,7 @@
                 "equipmentType:woodDeck"
             ],
             "names": {
-                "Diesel Hull": "Heavy Carrier"
+                "platformType:dieselHull": "Heavy Carrier"
             },
             "image": "\/media\/images\/equipmentType\/catapultDeck.jpg",
             "audio": [],
@@ -8346,8 +8346,8 @@
                 "equipmentType:catapultDeck"
             ],
             "names": {
-                "Diesel Hull": "Fleet Carrier",
-                "Nuclear Hull": "Nuclear Carrier"
+                "platformType:dieselHull": "Fleet Carrier",
+                "platformType:nuclearHull": "Nuclear Carrier"
             },
             "image": "\/media\/images\/equipmentType\/radarDeck.jpg",
             "audio": [],
@@ -8381,8 +8381,8 @@
                 }
             ],
             "names": {
-                "Submersible": "Missile Submarine",
-                "Nuclear Sub": "Nuclear Submarine"
+                "platformType:submersible": "Missile Submarine",
+                "platformType:nuclearSub": "Nuclear Submarine"
             },
             "image": "\/media\/images\/equipmentType\/missileBay.jpg",
             "audio": [],
@@ -8427,10 +8427,10 @@
                 "equipmentType:aAMissile"
             ],
             "names": {
-                "Carriage": "AA-Gun",
-                "Truck": "Mobile AA",
-                "Steamer": "AA-Steamer",
-                "Diesel Hull": "AA-Destroyer"
+                "platformType:carriage": "AA-Gun",
+                "platformType:truck": "Mobile AA",
+                "platformType:steamer": "AA-Steamer",
+                "platformType:dieselHull": "AA-Destroyer"
             },
             "image": "\/media\/images\/equipmentType\/aAGun.jpg",
             "audio": [],
@@ -8478,9 +8478,9 @@
                 "equipmentType:aAGun"
             ],
             "names": {
-                "Carriage": "SAM",
-                "Truck": "Mobile SAM",
-                "Diesel Hull": "SAM-Destroyer"
+                "platformType:carriage": "SAM",
+                "platformType:truck": "Mobile SAM",
+                "platformType:dieselHull": "SAM-Destroyer"
             },
             "image": "\/media\/images\/equipmentType\/aAMissile.jpg",
             "audio": [],
@@ -8525,9 +8525,9 @@
                 "equipmentType:aAMissile"
             ],
             "names": {
-                "Carriage": "Homing SAM",
-                "Truck": "Mot. Homing SAM",
-                "Diesel Hull": "AEGIS Destroyer"
+                "platformType:carriage": "Homing SAM",
+                "platformType:truck": "Mot. Homing SAM",
+                "platformType:dieselHull": "AEGIS Destroyer"
             },
             "image": "\/media\/images\/equipmentType\/aAHomingMissile.jpg",
             "audio": [],
@@ -8575,8 +8575,8 @@
                 "specialType:canSelectTarget"
             ],
             "names": {
-                "Monocoque": "Dive Bomber",
-                "Supersonic": "Strike Fighter (Gen I)"
+                "platformType:monocoque": "Dive Bomber",
+                "platformType:supersonic": "Strike Fighter (Gen I)"
             },
             "image": "\/media\/images\/equipmentType\/rocketPod.jpg",
             "audio": [],
@@ -8626,8 +8626,8 @@
                 "specialType:canSelectTarget"
             ],
             "names": {
-                "Supersonic": "Strike Fighter (Gen II)",
-                "Superagile": "Strike Fighter (Gen III)"
+                "platformType:supersonic": "Strike Fighter (Gen II)",
+                "platformType:superagile": "Strike Fighter (Gen III)"
             },
             "image": "\/media\/images\/equipmentType\/aTMissile.jpg",
             "audio": [],
@@ -8674,7 +8674,7 @@
                 "specialType:canSelectTarget"
             ],
             "names": {
-                "Superagile": "Strike Fighter (Gen IV)"
+                "platformType:superagile": "Strike Fighter (Gen IV)"
             },
             "image": "\/media\/images\/equipmentType\/droneMissile.jpg",
             "audio": [],
@@ -8728,8 +8728,8 @@
                 "specialType:canCarryStockpile"
             ],
             "names": {
-                "Biplane": "Light Bomber",
-                "Monocoque": "Heavy Bomber"
+                "platformType:biplane": "Light Bomber",
+                "platformType:monocoque": "Heavy Bomber"
             },
             "image": "\/media\/images\/equipmentType\/bomb.jpg",
             "audio": [],
@@ -8785,8 +8785,8 @@
                 "specialType:canCarryStockpile"
             ],
             "names": {
-                "Monocoque": "Jet Bomber (Gen I)",
-                "Supersonic": "Jet Bomber (Gen II)"
+                "platformType:monocoque": "Jet Bomber (Gen I)",
+                "platformType:supersonic": "Jet Bomber (Gen II)"
             },
             "image": "\/media\/images\/equipmentType\/guidedBomb.jpg",
             "audio": [],
@@ -8839,8 +8839,8 @@
                 "specialType:canCarryStockpile"
             ],
             "names": {
-                "Supersonic": "Jet Bomber (Gen III)",
-                "Superagile": "Jet Bomber (Gen IV)"
+                "platformType:supersonic": "Jet Bomber (Gen III)",
+                "platformType:superagile": "Jet Bomber (Gen IV)"
             },
             "image": "\/media\/images\/equipmentType\/homingBomb.jpg",
             "audio": [],
@@ -8878,7 +8878,7 @@
                 }
             ],
             "names": {
-                "Satellite": "Comms Satellite"
+                "platformType:satellite": "Comms Satellite"
             },
             "image": "\/media\/images\/equipmentType\/commsSatellite.jpg",
             "audio": [],
@@ -8904,7 +8904,7 @@
                 }
             ],
             "names": {
-                "Satellite": "Spy Satellite"
+                "platformType:satellite": "Spy Satellite"
             },
             "image": "\/media\/images\/equipmentType\/spySatellite.jpg",
             "audio": [],
@@ -8932,7 +8932,7 @@
                 "specialType:maxPerCity"
             ],
             "names": {
-                "Human": "Worker"
+                "platformType:human": "Worker"
             },
             "image": "\/media\/images\/equipmentType\/worker.jpg",
             "audio": []
@@ -8959,7 +8959,7 @@
                 "specialType:maxPerCity"
             ],
             "names": {
-                "Human": "Builder"
+                "platformType:human": "Builder"
             },
             "image": "\/media\/images\/equipmentType\/builder.jpg",
             "audio": [],
@@ -8989,7 +8989,7 @@
                 "specialType:maxPerCity"
             ],
             "names": {
-                "Human": "Peasant"
+                "platformType:human": "Peasant"
             },
             "image": "\/media\/images\/equipmentType\/peasant.jpg",
             "audio": [],
@@ -9019,7 +9019,7 @@
                 "specialType:maxPerCity"
             ],
             "names": {
-                "Human": "Engineer"
+                "platformType:human": "Engineer"
             },
             "image": "\/media\/images\/equipmentType\/engineer.jpg",
             "audio": [],
@@ -9049,7 +9049,7 @@
                 "specialType:maxPerCity"
             ],
             "names": {
-                "Human": "Tractor"
+                "platformType:human": "Tractor"
             },
             "image": "\/media\/images\/equipmentType\/tractor.jpg",
             "audio": [],
@@ -9076,7 +9076,7 @@
                 "specialType:maxPerCity"
             ],
             "names": {
-                "Human": "Contractor"
+                "platformType:human": "Contractor"
             },
             "image": "\/media\/images\/equipmentType\/contractor.jpg",
             "audio": [],
@@ -9111,7 +9111,7 @@
                 "specialType:startSize"
             ],
             "names": {
-                "Human": "Tribe"
+                "platformType:human": "Tribe"
             },
             "image": "\/media\/images\/equipmentType\/tribe.jpg",
             "audio": [],
@@ -9149,8 +9149,8 @@
                 "specialType:startSize"
             ],
             "names": {
-                "Human": "Settler",
-                "Clinker": "Settler Cog"
+                "platformType:human": "Settler",
+                "platformType:clinker": "Settler Cog"
             },
             "image": "\/media\/images\/equipmentType\/settler.jpg",
             "audio": [],
@@ -9188,9 +9188,9 @@
                 "specialType:startSize"
             ],
             "names": {
-                "Human": "Colonist",
-                "Clinker": "Colonist Cog",
-                "Carvel": "Colonist Caravel"
+                "platformType:human": "Colonist",
+                "platformType:clinker": "Colonist Cog",
+                "platformType:carvel": "Colonist Caravel"
             },
             "image": "\/media\/images\/equipmentType\/colonist.jpg",
             "audio": [],
@@ -9225,7 +9225,7 @@
                 "specialType:startSize"
             ],
             "names": {
-                "Human": "Migrant"
+                "platformType:human": "Migrant"
             },
             "image": "\/media\/images\/equipmentType\/migrant.jpg",
             "audio": [],
@@ -9253,10 +9253,10 @@
                 "equipmentType:merchant"
             ],
             "names": {
-                "Human": "Trader",
-                "Raft": "Trade Raft",
-                "Galley": "Trade Galley",
-                "Clinker": "Trade Cog"
+                "platformType:human": "Trader",
+                "platformType:raft": "Trade Raft",
+                "platformType:galley": "Trade Galley",
+                "platformType:clinker": "Trade Cog"
             },
             "image": "\/media\/images\/equipmentType\/trader.jpg",
             "audio": [],
@@ -9287,9 +9287,9 @@
                 "equipmentType:trader"
             ],
             "names": {
-                "Human": "Merchant",
-                "Clinker": "Merchant Cog",
-                "Carvel": "Schooner"
+                "platformType:human": "Merchant",
+                "platformType:clinker": "Merchant Cog",
+                "platformType:carvel": "Schooner"
             },
             "image": "\/media\/images\/equipmentType\/merchant.jpg",
             "audio": [],
@@ -9320,10 +9320,10 @@
                 "equipmentType:merchant"
             ],
             "names": {
-                "Human": "Capitalist",
-                "Carvel": "Clipper",
-                "Steamer": "Paddle Steamer",
-                "Diesel Hull": "Ocean Liner"
+                "platformType:human": "Capitalist",
+                "platformType:carvel": "Clipper",
+                "platformType:steamer": "Paddle Steamer",
+                "platformType:dieselHull": "Ocean Liner"
             },
             "image": "\/media\/images\/equipmentType\/capitalist.jpg",
             "audio": [],
@@ -9351,8 +9351,8 @@
                 "equipmentType:capitalist"
             ],
             "names": {
-                "Human": "Freighter",
-                "Diesel Hull": "Container Ship"
+                "platformType:human": "Freighter",
+                "platformType:dieselHull": "Container Ship"
             },
             "image": "\/media\/images\/equipmentType\/freighter.jpg",
             "audio": [],
@@ -9376,7 +9376,7 @@
                 "equipmentType:priest"
             ],
             "names": {
-                "Human": "Shaman"
+                "platformType:human": "Shaman"
             },
             "image": "\/media\/images\/equipmentType\/shaman.jpg",
             "audio": [],
@@ -9403,7 +9403,7 @@
                 "equipmentType:shaman"
             ],
             "names": {
-                "Human": "Priest"
+                "platformType:human": "Priest"
             },
             "image": "\/media\/images\/equipmentType\/priest.jpg",
             "audio": [],
@@ -9430,7 +9430,7 @@
                 "equipmentType:priest"
             ],
             "names": {
-                "Human": "Missionary"
+                "platformType:human": "Missionary"
             },
             "image": "\/media\/images\/equipmentType\/monk.jpg",
             "audio": [],
@@ -9454,7 +9454,7 @@
                 "equipmentType:monk"
             ],
             "names": {
-                "Human": "Preacher"
+                "platformType:human": "Preacher"
             },
             "image": "\/media\/images\/equipmentType\/preacher.jpg",
             "audio": [],
@@ -9478,7 +9478,7 @@
                 "equipmentType:envoy"
             ],
             "names": {
-                "Human": "Emissary"
+                "platformType:human": "Emissary"
             },
             "image": "\/media\/images\/equipmentType\/emissary.jpg",
             "audio": [],
@@ -9505,7 +9505,7 @@
                 "equipmentType:emissary"
             ],
             "names": {
-                "Human": "Envoy"
+                "platformType:human": "Envoy"
             },
             "image": "\/media\/images\/equipmentType\/envoy.jpg",
             "audio": [],
@@ -9532,7 +9532,7 @@
                 "equipmentType:envoy"
             ],
             "names": {
-                "Human": "Ambassador"
+                "platformType:human": "Ambassador"
             },
             "image": "\/media\/images\/equipmentType\/ambassador.jpg",
             "audio": [],
@@ -9556,7 +9556,7 @@
                 "equipmentType:ambassador"
             ],
             "names": {
-                "Human": "Diplomat"
+                "platformType:human": "Diplomat"
             },
             "image": "\/media\/images\/equipmentType\/diplomat.jpg",
             "audio": [],
@@ -9580,7 +9580,7 @@
                 "equipmentType:courtier"
             ],
             "names": {
-                "Human": "Thief"
+                "platformType:human": "Thief"
             },
             "image": "\/media\/images\/equipmentType\/thief.jpg",
             "audio": [],
@@ -9607,7 +9607,7 @@
                 "equipmentType:thief"
             ],
             "names": {
-                "Human": "Courtier"
+                "platformType:human": "Courtier"
             },
             "image": "\/media\/images\/equipmentType\/courtier.jpg",
             "audio": [],
@@ -9634,7 +9634,7 @@
                 "equipmentType:courtier"
             ],
             "names": {
-                "Human": "Gentleman"
+                "platformType:human": "Gentleman"
             },
             "image": "\/media\/images\/equipmentType\/gentleman.jpg",
             "audio": [],
@@ -9658,7 +9658,7 @@
                 "equipmentType:gentleman"
             ],
             "names": {
-                "Human": "Spy"
+                "platformType:human": "Spy"
             },
             "image": "\/media\/images\/equipmentType\/spy.jpg",
             "audio": [],

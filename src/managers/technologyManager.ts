@@ -5,35 +5,6 @@ import { EventManager } from '@/managers/eventManager'
 import { TypeKey } from '@/types/common'
 
 export class TechnologyManager extends Manager {
-
-  calcAvailable (research: Research): void {
-    research.available = []
-
-    for (const tech of this._objects.getClassTypes('technologyType')) {
-      // Already researched -> skip
-      if (research.researched.includes(tech)) continue
-
-      // Get required techs
-      const techReqs = this.getRequiredTechs(tech)
-
-      // Nothing required -> available
-      if (techReqs.length === 0) {
-        research.available.push(tech)
-        continue
-      }
-
-      // Check if all required techs are researched
-      let allReqsResearched = true
-      for (const require of techReqs) {
-        if (!research.researched.includes(require)) {
-          allReqsResearched = false
-          break
-        }
-      }
-      if (allReqsResearched) research.available.push(tech)
-    }
-  }
-
   complete (player: Player, tech: TypeObject): void {
     if (player.research.researched.includes(tech)) throw new Error(`[technologyManager] ${player.key}: ${tech.key} already researched`)
 
@@ -50,6 +21,9 @@ export class TechnologyManager extends Manager {
       const allows = this._objects.getTypeObject(allowsKey)
       if (allows.class !== 'technologyType') player.knownTypes.push(this._objects.getTypeObject(allowsKey))
     }
+
+    // Add a unit design point
+    player.yieldStorage.add('yieldType:designPoints', 1)
 
     const eventManager = new EventManager()
     eventManager.create(
