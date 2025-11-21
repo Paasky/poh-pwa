@@ -44737,6 +44737,12 @@
             "description": ""
         },
         {
+            "key": "yieldType:designPoints",
+            "name": "Design Points",
+            "concept": "conceptType:yield",
+            "description": ""
+        },
+        {
             "key": "yieldType:evasion",
             "name": "Evasion",
             "concept": "conceptType:yield",

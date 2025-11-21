@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// Ui components
 import UiElement from '@/components/Ui/UiElement.vue'
 import UiValue from '@/components/Ui/UiValue.vue'
 import UiIcon from '@/components/Ui/UiIcon.vue'
@@ -49,11 +48,11 @@ const tabs = tabsConfig.map(tabConfig => {
             + '/'
             + player.research.current.scienceCost
             + ` (${player.research.turnsLeft})`
-            : 'Choose'
+            : 'Select'
     )
     data.tooltip = computed(() => player.research.current
-        ? `${player.research.current.name} (ready in ${player.research.turnsLeft} turns)`
-        : 'Choose a Technology to research'
+        ? `Research: ${player.research.current.name} (ready in ${player.research.turnsLeft} turns)`
+        : 'Research: Select next Technology'
     )
 
     return data as TabData
@@ -61,8 +60,8 @@ const tabs = tabsConfig.map(tabConfig => {
 
   if (tabConfig.name === 'Culture') {
     data.text = computed((): string => {
-      if (culture.selectableHeritages.length) return 'Choose'
-      if (culture.selectableTraits.length) return 'Choose'
+      if (culture.selectableHeritages.length) return 'Select'
+      if (culture.selectableTraits.length) return 'Select'
 
       if (culture.status === 'notSettled') return 'Explore'
       if (culture.status === 'canSettle') return 'Can Settle'
@@ -72,20 +71,20 @@ const tabs = tabsConfig.map(tabConfig => {
     })
     data.tooltip = computed((): string => {
       if (culture.selectableHeritages.length) {
-        return 'Can choose a Heritage'
+        return 'Culture: Can select a Heritage'
       }
       if (culture.status === 'notSettled') {
-        return 'Explore your surroundings to gain Heritage Points'
+        return 'Culture: Explore your surroundings to gain Heritage Points'
       }
       if (culture.status === 'canSettle') {
-        return 'Can use your Tribe to settle your first City'
+        return 'Culture: Can use your Tribe to settle your first City'
       }
       if (culture.status === 'mustSettle') {
-        return 'Use your Tribe to settle your first City'
+        return 'Culture: Use your Tribe to settle your first City'
       }
 
       if (culture.selectableTraits.length) {
-        return 'Choose Traits for your Culture'
+        return 'Culture: Select Traits for your Culture'
       }
 
       return culture.name
@@ -97,16 +96,16 @@ const tabs = tabsConfig.map(tabConfig => {
   if (tabConfig.name === 'Religion') {
     data.text = computed((): string => {
       if (religion?.canEvolve) return 'Evolve'
-      if (religion?.selectableMyths || religion?.selectableGods || religion?.selectableDogmas) return 'Choose'
+      if (religion?.selectableMyths || religion?.selectableGods || religion?.selectableDogmas) return 'Select'
 
       return player.yieldStorage.amount('yieldType:faith') + ''
     })
     data.tooltip = computed((): string => {
-      if (!religion) return 'No State Religion'
-      if (religion.canEvolve) return 'You can evolve your Religion'
-      if (religion.selectableMyths) return 'You can choose a Myth for your Religion'
-      if (religion.selectableGods) return 'You can choose a God for your Religion'
-      if (religion.selectableDogmas) return 'You can choose a Dogma for your Religion'
+      if (!religion) return 'Religion: No State Religion'
+      if (religion.canEvolve) return 'Religion: Can be evolved'
+      if (religion.selectableMyths) return 'Religion: Cn select a Myth'
+      if (religion.selectableGods) return 'Religion: Cn select a God'
+      if (religion.selectableDogmas) return 'Religion: Cn select a Dogma'
 
       return religion.name
     })
@@ -116,24 +115,35 @@ const tabs = tabsConfig.map(tabConfig => {
 
   if (tabConfig.name === 'Diplomacy') {
     data.text = computed((): string => player.yieldStorage.amount('yieldType:influence') + '')
+    data.tooltip = computed((): string => `Diplomacy: ${player.yieldStorage.amount('yieldType:influence')} influence`)
 
     return data as TabData
   }
 
   if (tabConfig.name === 'Cities') {
     data.text = computed((): string => player.cities.length + '')
+    data.tooltip = computed((): string => `Cities: ${player.cities.length}`)
 
     return data as TabData
   }
 
   if (tabConfig.name === 'Military') {
-    data.text = computed((): string => player.units.length + '')
+    data.text = computed((): string => player.yieldStorage.amount('yieldType:designPoints') + '')
+    data.tooltip = computed((): string => {
+      const points = player.yieldStorage.amount('yieldType:designPoints')
+      if (points < 2) {
+        return `Military: ${points} Design Points (need 2 for new Unit Design)`
+      }
+
+      return `Military: ${points} Design Points (can create a new Unit Design)`
+    })
 
     return data as TabData
   }
 
   if (tabConfig.name === 'Trade') {
     data.text = computed((): string => player.tradeRoutes.length + '')
+    data.tooltip = computed((): string => `Trade: ${player.tradeRoutes.length} active Trade Routes`)
 
     return data as TabData
   }

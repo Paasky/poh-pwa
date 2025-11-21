@@ -1,4 +1,4 @@
-import { ObjKey } from '@/types/common'
+import { GameKey } from '@/types/common'
 import { UnitDesign } from '@/types/gameObjects'
 import { createGameObject } from '@/factories/_gameObjectFactory'
 import { TypeObject } from '@/types/typeObjects'
@@ -7,7 +7,7 @@ export const createUnitDesign = (
   equipment: TypeObject,
   platform: TypeObject,
   name?: string,
-  playerKey?: ObjKey,
+  playerKey?: GameKey,
   isArmored: boolean = false,
 ): UnitDesign => {
   name = name ?? `${platform.name} ${equipment.name}`
@@ -16,6 +16,8 @@ export const createUnitDesign = (
   const design = {
     ...base,
 
+    equipment,
+    platform,
     isArmored,
     isActive: true
   } as UnitDesign

@@ -55,6 +55,8 @@ export class WorldManager extends Manager {
       )
 
       const tile = tiles[Math.floor(Math.random() * tiles.length)]
+      unitManager.create(player, tribeDesign, tile)
+      unitManager.create(player, hunterDesign, tile)
       console.log('Created player units', new Date())
 
       playerManager.calcTiles(player)
