@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { useObjectsStore } from '@/stores/objectStore'
 import { useEncyclopediaStore } from '@/components/Encyclopedia/encyclopediaStore'
 import { GameData, StaticData } from '@/types/api'
+import { EngineService } from '@/components/Engine/engine'
 import { WorldManager } from '@/managers/worldManager'
 
 async function fetchJSON<T> (url: string): Promise<T> {
@@ -31,6 +32,9 @@ export const useAppStore = defineStore('app', {
 
       // Create a new world
       if (!gameDataUrl) new WorldManager().create()
+
+      // Initialize the game engine
+      await EngineService.init(objects.world)
 
       this.ready = true
       console.log(
