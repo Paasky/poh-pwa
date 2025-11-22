@@ -11,6 +11,7 @@ import { Culture } from '@/types/gameObjects'
 import { CultureManager } from '@/managers/cultureManager'
 import UiHeader from '@/components/Ui/UiHeader.vue'
 import { useEncyclopediaStore } from '@/components/Encyclopedia/encyclopediaStore'
+import UiRequires from '@/components/Ui/UiRequires.vue'
 
 const objects = useObjectsStore()
 const manager = new CultureManager()
@@ -163,7 +164,7 @@ const region = manager.getRegion(culture.type)
 
               </h4>
               <div v-if="culture.status === 'notSettled' || culture.status === 'canSettle'" class="text-xs">
-                <UiObjPillList :obj-keys="catData.types[0].requires" :no-margin="true"/>
+                <UiRequires :requires="catData.types[0].requires" :no-margin="true"/>
               </div>
             </div>
             <UiCard v-for="type of catData.types"
@@ -178,7 +179,7 @@ const region = manager.getRegion(culture.type)
                     class="my-1"
             >
               <div class="text-xs">
-                <UiYieldList :yields="type.yields.filter(y => y.type !== 'yieldType:heritagePointCost')"/>
+                <UiYieldList :yields="type.yields.not(['yieldType:heritagePointCost'])"/>
                 <UiObjPillList :obj-keys="type.gains"/>
               </div>
             </UiCard>
@@ -193,7 +194,7 @@ const region = manager.getRegion(culture.type)
                     class="my-1"
             >
               <div class="text-xs">
-                <UiYieldList :yields="type.yields.filter(y => y.type !== 'yieldType:heritagePointCost')"/>
+                <UiYieldList :yields="type.yields.not(['yieldType:heritagePointCost'])"/>
                 <UiObjPillList :obj-keys="type.gains"/>
               </div>
             </UiCard>

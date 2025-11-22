@@ -9,7 +9,6 @@ const props = defineProps<{
   positive?: boolean
   negative?: boolean
   noLumpPlus?: boolean
-  noLumpPlus?: boolean
 }>()
 const emit = defineEmits<{ (e: 'click', ev: MouseEvent): void }>()
 

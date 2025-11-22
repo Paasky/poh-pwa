@@ -1,7 +1,8 @@
-import { CatKey, GameKey, initPohObject, ObjKey, PohObject, TypeKey, TypeStorage } from './common'
+import { CatKey, GameKey, initPohObject, ObjKey, PohObject, TypeKey, TypeStorage, Yield, Yields } from './common'
 import { EventSetting, EventType } from '@/types/events'
 import { TypeObject } from '@/types/typeObjects'
 import { useObjectsStore } from '@/stores/objectStore'
+import { CultureManager } from '@/managers/cultureManager'
 
 export type GameClass =
   'agenda' |
@@ -104,6 +105,8 @@ export type Culture = GameObject & HasType & {
   traits: TypeObject[]
   selectableTraits: TypeObject[]
   mustSelectTraits: { positive: number, negative: number }
+
+  yields: Yields
 }
 export const initCulture = (rawData: any): Culture => {
   const obj = _initGameObject(rawData) as Culture
@@ -116,6 +119,12 @@ export const initCulture = (rawData: any): Culture => {
   obj.traits = rawData.traits.map((t: TypeKey) => useObjectsStore().getTypeObject(t))
   obj.selectableTraits = []
   obj.mustSelectTraits = rawData.mustSelectTraits
+
+  obj.yields = new Yields()
+
+  const manager = new CultureManager()
+  manager.calcSelectable(obj)
+  manager.calcStatic(obj)
 
   return obj
 }
@@ -168,6 +177,8 @@ export type Player = GameObject & {
   diplomacy: Diplomacy
   government: Government
   research: Research
+  unitDesigner: UnitDesigner
+  yields: Yields
 
   resourceStorage: TypeStorage
   stockpileStorage: TypeStorage
@@ -210,7 +221,10 @@ export const initPlayer = (rawData: any): Player => {
 
     policies: (rawData.government.policies ?? []).map((k: TypeKey) => useObjectsStore().getTypeObject(k)),
     selectablePolicies: [],
-    agenda: rawData.government.agenda ?? []
+    agenda: rawData.government.agenda ?? [],
+
+    specials: [],
+    yields: new Yields(),
   }
 
   // Research
@@ -227,13 +241,15 @@ export const initPlayer = (rawData: any): Player => {
     researching,
     current: rawData.research.current ? useObjectsStore().getTypeObject(rawData.research.current) : null,
     turnsLeft: 0,
-    queue: rawData.research.queue.map((k: TypeKey) => useObjectsStore().getTypeObject(k))
+    queue: rawData.research.queue.map((k: TypeKey) => useObjectsStore().getTypeObject(k)),
+    yields: new Yields(),
   }
 
   // Storages
   obj.resourceStorage = new TypeStorage().load(rawData.resourceStorage)
   obj.stockpileStorage = new TypeStorage().load(rawData.stockpileStorage)
   obj.yieldStorage = new TypeStorage().load(rawData.yieldStorage)
+  obj.yields = new Yields()
 
   // Preferences
   obj.eventSettings = rawData.eventSettings
@@ -243,6 +259,8 @@ export const initPlayer = (rawData: any): Player => {
 
 export type Religion = GameObject & {
   status: 'myths' | 'gods' | 'dogmas'
+  city: GameKey
+
   myths: TypeObject[]
   selectableMyths: TypeObject[]
 
@@ -253,17 +271,23 @@ export type Religion = GameObject & {
   selectableGods: TypeObject[]
 
   canEvolve: boolean
+  yields: Yields
 }
 export const initReligion = (rawData: any): Religion => {
   const obj = _initGameObject(rawData) as Religion
 
   obj.status = rawData.status
+  obj.city = rawData.city
+
   obj.myths = rawData.myths.map((k: TypeKey) => useObjectsStore().getTypeObject(k))
   obj.selectableMyths = []
   obj.dogmas = rawData.dogmas.map((k: TypeKey) => useObjectsStore().getTypeObject(k))
   obj.selectableDogmas = []
   obj.gods = rawData.gods.map((k: TypeKey) => useObjectsStore().getTypeObject(k))
   obj.selectableGods = []
+
+  obj.canEvolve = rawData.canEvolve
+  obj.yields = new Yields()
 
   return obj
 }
@@ -307,6 +331,8 @@ export type Tile = GameObject & {
   citizens: GameKey[]
   tradeRoutes: GameKey[]
   units: GameKey[]
+
+  yields: Yields
 }
 export const initTile = (rawData: any): Tile => {
   const obj = _initGameObject(rawData) as Tile
@@ -328,6 +354,8 @@ export const initTile = (rawData: any): Tile => {
   obj.tradeRoutes = rawData.tradeRoutes
   obj.units = rawData.units
 
+  obj.yields = new Yields()
+
   return obj
 }
 
@@ -348,6 +376,8 @@ export type City = TileObject & {
   health: number
   citizens: GameKey[]
   units: GameKey[]
+
+  yields: Yield[]
 }
 export const initCity = (rawData: any): City => {
   const obj = initTileObject(rawData) as City
@@ -357,6 +387,8 @@ export const initCity = (rawData: any): City => {
   obj.health = rawData.health
   obj.citizens = rawData.citizens
   obj.units = rawData.units
+
+  obj.yields = []
 
   return obj
 }
@@ -423,6 +455,8 @@ export type Citizen = TileObject & {
   religion?: GameKey
   policy?: TypeObject
   workplace?: GameKey
+
+  yields: Yield[]
 }
 export const initCitizen = (rawData: any): Citizen => {
   const obj = initTileObject(rawData) as Citizen
@@ -432,6 +466,8 @@ export const initCitizen = (rawData: any): Citizen => {
   if ('religion' in rawData) obj.religion = rawData.religion
   if ('policy' in rawData) obj.policy = useObjectsStore().getTypeObject(rawData.policy)
   if ('workplace' in rawData) obj.workplace = rawData.workplace
+
+  obj.yields = []
 
   return obj
 }
@@ -469,8 +505,13 @@ export type UnitDesign = GameObject & {
   player: GameKey
   equipment: TypeObject
   platform: TypeObject
-  isArmored: boolean
+  isElite: boolean
   isActive: boolean
+
+  actions: TypeObject[]
+  requires: TypeObject[] | TypeObject[][]
+  specials: TypeObject[]
+  yields: Yield[]
 }
 export const initUnitDesign = (rawData: any): UnitDesign => {
   const obj = _initGameObject(rawData) as UnitDesign
@@ -478,8 +519,13 @@ export const initUnitDesign = (rawData: any): UnitDesign => {
   obj.player = rawData.player
   obj.equipment = useObjectsStore().getTypeObject(rawData.equipment)
   obj.platform = useObjectsStore().getTypeObject(rawData.platform)
-  obj.isArmored = rawData.isArmored
+  obj.isElite = rawData.isElite
   obj.isActive = rawData.isActive
+
+  obj.actions = []
+  obj.requires = []
+  obj.specials = []
+  obj.yields = []
 
   return obj
 }
@@ -508,6 +554,9 @@ export type Government = {
   policies: TypeObject[]
   selectablePolicies: TypeObject[]
   agenda: GameKey[]
+
+  specials: TypeObject[]
+  yields: Yields
 }
 export type Research = {
   current: TypeObject | null
@@ -516,4 +565,9 @@ export type Research = {
   researched: TypeObject[]
   researching: Record<TypeKey, { type: TypeObject, progress: number }>
   turnsLeft: number
+  yields: Yields
+}
+export type UnitDesigner = {
+  levyDesign: GameKey
+  upgradePaths: Record<GameKey, GameKey[]>
 }

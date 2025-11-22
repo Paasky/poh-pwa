@@ -8,10 +8,10 @@ export const createUnitDesign = (
   platform: TypeObject,
   name?: string,
   playerKey?: GameKey,
-  isArmored: boolean = false,
+  isElite: boolean = false,
 ): UnitDesign => {
 
-  name = name ?? equipment.names[platform.key] ?? `${platform.name} ${equipment.name}`
+  name = name ?? equipment.names![platform.key] ?? `${platform.name} ${equipment.name}`
   const base = createGameObject('unitDesign', name)
 
   const design = {
@@ -19,7 +19,7 @@ export const createUnitDesign = (
 
     equipment,
     platform,
-    isArmored,
+    isElite,
     isActive: true
   } as UnitDesign
 

@@ -26,7 +26,7 @@ const possibleDesigns = computed(() => {
   for (const platform of knownPlatforms.value) {
     for (const equipment of knownEquipment.value) {
       // Platform must be available for the equipment
-      if (!equipment.names[platform.key]) continue
+      if (!equipment.names![platform.key]) continue
 
       // Design cannot exist
       if (designs.value.filter(d => d.platform === platform && d.equipment === equipment).length > 0) continue
@@ -178,7 +178,7 @@ watch(newDesign, () => {
         <div>
           <h3 class="text-xl mb-2">Yields</h3>
           <UiYieldList
-              :yields="[...newDesign.platform.yields, ...newDesign.equipment.yields]"
+              :yields="newDesign.platform!.yields.merge(newDesign.equipment!.yields)"
               :as-total="true"
           />
         </div>
@@ -187,7 +187,7 @@ watch(newDesign, () => {
         <div>
           <h3 class="text-xl mb-2">Requires</h3>
           <UiObjPillList
-              :obj-keys="[...newDesign.platform.requires, ...newDesign.equipment.requires].filter(r => !r.startsWith( 'technologyType:'))"/>
+              :obj-keys="[...newDesign.platform.requires.allTypes, ...newDesign.equipment.requires.allTypes].filter(r => !r.startsWith( 'technologyType:'))"/>
           <h3 class="text-xl mb-2">Special</h3>
           <UiObjPillList :obj-keys="[...newDesign.platform.specials, ...newDesign.equipment.specials]"/>
         </div>

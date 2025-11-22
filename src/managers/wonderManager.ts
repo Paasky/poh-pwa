@@ -1,15 +1,13 @@
 import { Manager } from '@/managers/_manager'
 import { TypeObject } from '@/types/typeObjects'
-import { City, Player, Tile, WorldWonder } from '@/types/gameObjects'
-import { GameKey } from '@/types/common'
+import { City, Tile, WorldWonder } from '@/types/gameObjects'
 
 export class WonderManager extends Manager {
   create (type: TypeObject, tile: Tile, city: City): WorldWonder {
-    const wonder = {
+    return {
       tile: tile.key,
       type,
-      health: number,
-      citizen?: GameKey,
+      health: 0,
     } as WorldWonder
   }
 

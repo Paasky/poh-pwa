@@ -3,7 +3,6 @@ import { onBeforeUnmount, onMounted, ref } from 'vue'
 import UiButton from '@/components/Ui/UiButton.vue'
 import UiIcon from '@/components/Ui/UiIcon.vue'
 import { icons } from '@/types/icons'
-import { useAppStore } from '@/stores/appStore'
 
 const props = withDefaults(defineProps<{
   open: boolean
@@ -16,8 +15,6 @@ const props = withDefaults(defineProps<{
 })
 
 const emit = defineEmits<{ (e: 'close'): void }>()
-
-const app = useAppStore()
 
 function onKey (e: KeyboardEvent) {
   if (e.key === 'Escape') emit('close')
@@ -56,8 +53,7 @@ onBeforeUnmount(() => {
 
 <template>
   <Teleport :to="teleportTarget">
-    <div v-show="open" class="fixed inset-0"
-         :class="{'processing': app.isProcessing}">
+    <div v-show="open" class="fixed inset-0">
       <!-- Backdrop -->
       <div
           class="absolute inset-0 bg-black/50"

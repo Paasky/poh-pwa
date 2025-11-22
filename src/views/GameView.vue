@@ -122,8 +122,7 @@ function onBeforeUnload (e: BeforeUnloadEvent) {
     </div>
 
     <!-- Game Screen -->
-    <div v-else id="game" key="game" ref="gameRootEl" class="absolute w-screen h-screen bg-gray-100 text-sm"
-         :class="{'processing': app.isProcessing}">
+    <div v-else id="game" key="game" ref="gameRootEl" class="absolute w-screen h-screen bg-gray-100 text-sm">
       <!-- Game engine -->
       <Engine class="absolute top-0 left-0 w-full h-full bg-black/50"/>
 
@@ -190,9 +189,5 @@ function onBeforeUnload (e: BeforeUnloadEvent) {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
-}
-
-.processing > * {
-  cursor: wait !important;
 }
 </style>

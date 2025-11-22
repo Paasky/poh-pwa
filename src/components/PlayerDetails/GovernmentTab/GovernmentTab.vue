@@ -3,6 +3,7 @@ import UiCard from '@/components/Ui/UiCard.vue'
 import UiYieldList from '@/components/Ui/UiYieldList.vue'
 import UiObjPillList from '@/components/Ui/UiObjPillList.vue'
 import { useObjectsStore } from '@/stores/objectStore'
+import UiRequires from '@/components/Ui/UiRequires.vue'
 
 const objects = useObjectsStore()
 const government = objects.getCurrentPlayer().government
@@ -26,8 +27,8 @@ const government = objects.getCurrentPlayer().government
               <div>
                 <UiYieldList :yields="policy.yields"/>
               </div>
-              <div v-if="policy.requires.length" class="pt-1 border-t border-green-900/25">
-                <UiObjPillList :obj-keys="policy.requires"/>
+              <div v-if="!policy.requires.isEmpty" class="pt-1 border-t border-green-900/25">
+                <UiRequires :requires="policy.requires"/>
               </div>
               <div v-if="policy.specials.length" class="mt-auto mb-[-0.25rem] pt-1 border-t border-green-900/25">
                 <UiObjPillList :obj-keys="policy.specials"/>

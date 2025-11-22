@@ -1,4 +1,4 @@
-import { City, Player, Tile, Unit, UnitDesign } from '@/types/gameObjects'
+import { Citizen, Player, Tile, Unit, UnitDesign } from '@/types/gameObjects'
 import { createUnit } from '@/factories/unitFactory'
 import { Manager } from '@/managers/_manager'
 
@@ -7,7 +7,7 @@ export class UnitManager extends Manager {
     player: Player,
     unitDesign: UnitDesign,
     tile: Tile,
-    city?: City,
+    citizen?: Citizen,
     moves?: number,
     health: number = 100,
     isLevy = false,
@@ -23,7 +23,7 @@ export class UnitManager extends Manager {
       isMercenary,
       isMobilized,
       health,
-      city?.key,
+      citizen?.city,
     )
     this._objects.set(unit)
     player.units.push(unit.key)

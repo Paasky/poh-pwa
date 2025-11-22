@@ -1,9 +1,25 @@
-import { Player } from '@/types/gameObjects'
+import { Culture, Player, Religion, UnitDesign } from '@/types/gameObjects'
 import { createPlayer, PlayerBundle } from '@/factories/playerFactory'
 import { Manager } from '@/managers/_manager'
 import { TypeObject } from '@/types/typeObjects'
+import { Yields } from '@/types/common'
 
 export class PlayerManager extends Manager {
+  calcStatic (player: Player): void {
+    this.calcKnownTypes(player)
+    this.calcTiles(player)
+    this.calcYields(player)
+
+    /*
+    new UnitManager().calcStatic(player)
+
+    new DiplomacyManager().calcStatic(player)
+    new GovernmentManager().calcStatic(player)
+    new TechnologyManager().calcStatic(player)
+    new UnitDesignManager().calcStatic(player)
+    */
+  }
+
   /*
    * Set all types the player has already researched
    */
@@ -11,6 +27,7 @@ export class PlayerManager extends Manager {
     const knownTypes = []
 
     for (const type of this._objects.getAllTypes()) {
+      // Only types that can be researched
       if (![
         'equipmentType',
         'improvementType',
@@ -25,47 +42,8 @@ export class PlayerManager extends Manager {
       ].includes(type.class)
       ) continue
 
-      // No requirements -> always known
-      if (type.requires.length === 0) {
-        knownTypes.push(type)
-        continue
-      }
-
-      // Check if all required technologies are researched
-      let hasAll = true
-      for (const requireKey of type.requires) {
-        if (Array.isArray(requireKey)) {
-          // If the player has researched any of the techs
-          let hasAny = false
-          for (const reqAnyKey of requireKey) {
-            // Ignore non-tech
-            if (!reqAnyKey.startsWith('technologyType:')) continue
-
-            const require = this._objects.getTypeObject(reqAnyKey)
-            if (player.research.researched.includes(require)) {
-              hasAny = true
-              break
-            }
-          }
-          if (!hasAny) {
-            hasAll = false
-            break
-          }
-        } else {
-          // Ignore non-tech
-          if (!requireKey.startsWith('technologyType:')) continue
-
-          // If the player has researched this tech
-          const require = this._objects.getTypeObject(requireKey)
-          if (!player.research.researched.includes(require)) {
-            hasAll = false
-            break
-          }
-        }
-      }
-
-      // All requirements met -> add to known types
-      if (hasAll) {
+      // If all required techs of the type are researched -> add to knownTypes
+      if (type.requires.filter(['technologyType']).isSatisfied(player.research.researched)) {
         knownTypes.push(type)
       }
     }
@@ -77,6 +55,17 @@ export class PlayerManager extends Manager {
   }
 
   calcYields (player: Player): void {
+    const culture = this._objects.getGameObject(player.culture) as Culture
+    const religion = player.religion
+      ? this._objects.getGameObject(player.religion) as Religion
+      : null
+
+    player.yields = new Yields([
+      ...culture.yields.all(),
+      ...religion?.yields.all() ?? [],
+      ...player.government.yields.all(),
+      ...player.research.yields.all(),
+    ])
   }
 
   create (
@@ -93,6 +82,14 @@ export class PlayerManager extends Manager {
   }
 
   endTurn (player: Player): void {
+  }
+
+  getLevyUnit (player: Player): UnitDesign | null {
+    const designs = player.unitDesigns
+      .map(d => this._objects.getGameObject(d) as UnitDesign)
+      .filter(d => d.specials.filter(s => s.id === 'canLevy').length > 0)
+
+    return designs[0] ?? null
   }
 
   startTurn (player: Player): void {

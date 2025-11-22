@@ -8,6 +8,7 @@ import UiYieldList from '@/components/Ui/UiYieldList.vue'
 import UiButton from '@/components/Ui/UiButton.vue'
 import { useEncyclopediaStore } from '@/components/Encyclopedia/encyclopediaStore'
 import { useObjectsStore } from '@/stores/objectStore'
+import UiRequires from '@/components/Ui/UiRequires.vue'
 
 const objects = useObjectsStore()
 const encyclopedia = useEncyclopediaStore()
@@ -110,7 +111,7 @@ onBeforeUnmount(() => stopAudio())
           <span class="ml-1">{{ currentCategory.name }}</span>
         </div>
       </div>
-      <div v-if="current.yields.length" class="mt-4">
+      <div v-if="!current.yields.isEmpty" class="mt-4">
         <h3>Yields</h3>
         <UiYieldList :yields="current.yields"/>
       </div>
@@ -122,9 +123,9 @@ onBeforeUnmount(() => stopAudio())
         <h3>Allows</h3>
         <UiObjPillList :obj-keys="current.allows"/>
       </div>
-      <div v-if="current.requires.length" class="mt-4">
+      <div v-if="!current.requires.isEmpty" class="mt-4">
         <h3>Requires</h3>
-        <UiObjPillList :obj-keys="current.requires"/>
+        <UiRequires :requires="current.requires"/>
       </div>
       <div v-if="current.upgradesFrom.length" class="mt-4">
         <h3>Upgrades From</h3>

@@ -1,6 +1,6 @@
 import { Manager } from '@/managers/_manager'
 import { Culture, Player } from '@/types/gameObjects'
-import { CatKey, TypeKey } from '@/types/common'
+import { CatKey, TypeKey, Yields } from '@/types/common'
 import { TypeObject } from '@/types/typeObjects'
 import { EventManager } from '@/managers/eventManager'
 import { TechnologyManager } from '@/managers/technologyManager'
@@ -68,6 +68,13 @@ export class CultureManager extends Manager {
     }
   }
 
+  calcStatic (culture: Culture): void {
+    culture.yields = new Yields([
+      ...culture.heritages.flatMap(heritage => heritage.yields.all()),
+      ...culture.traits.flatMap(trait => trait.yields.all()),
+    ])
+  }
+
   evolve (culture: Culture): void {
     culture.type = this._objects.getTypeObject(culture.type.upgradesTo[0])
     const player = this._objects.getGameObject(culture.player) as Player
@@ -110,8 +117,8 @@ export class CultureManager extends Manager {
   }
 
   getRegion (cultureType: TypeObject): TypeObject {
-    const key = cultureType.requires?.find(a => (a as string).startsWith('regionType:'))!
-    return this._objects.getTypeObject(key as TypeKey)
+    const key = cultureType.requires!.filter(['regionType']).allTypes[0] as TypeKey
+    return this._objects.getTypeObject(key)
   }
 
   selectHeritage (culture: Culture, heritage: TypeObject): void {
@@ -133,6 +140,7 @@ export class CultureManager extends Manager {
       }
     }
     this.calcSelectable(culture)
+    this.calcStatic(culture)
   }
 
   selectTrait (culture: Culture, trait: TypeObject): void {
@@ -147,6 +155,7 @@ export class CultureManager extends Manager {
     }
 
     this.calcSelectable(culture)
+    this.calcStatic(culture)
   }
 
   settle (culture: Culture): void {

@@ -53,13 +53,6 @@ export class TechnologyManager extends Manager {
     return research.researching[tech.key]?.progress ?? 0
   }
 
-  getRequiredTechs (tech: TypeObject): TypeObject[] {
-    return tech.requires
-      .flatMap(reqKey => Array.isArray(reqKey) ? reqKey : [reqKey])
-      .map(reqKey => this._objects.getTypeObject(reqKey))
-      .filter(req => req.class === 'technologyType')
-  }
-
   isLaterEra (from: TypeObject, to: TypeObject): boolean {
     const eras = this._objects.getClassTypes('eraType')
     return eras.indexOf(from) < eras.indexOf(to)
@@ -84,30 +77,29 @@ export class TechnologyManager extends Manager {
     research.queue = unique
 
     function collectRequired (tech: TypeObject, acc: TypeObject[]): void {
-      tech.requires.forEach(reqKey => {
-        if (Array.isArray(reqKey)) {
-          let cheapest: TypeObject | false | null = null
-          reqKey.forEach(orReqKey => {
-            if (cheapest === false) return
-            const required = that._objects.getTypeObject(orReqKey)
-            if (required.class !== 'technologyType' || acc.includes(required)) return
-            if (research.researched.includes(required)) {
-              cheapest = false
-              return
-            }
-            if (!cheapest || required.scienceCost! - that.getProgress(research, required) < cheapest.scienceCost! - that.getProgress(research, cheapest)) {
-              cheapest = required
-            }
-          })
-          if (cheapest) {
-            acc.push(cheapest)
-            collectRequired(cheapest, acc)
+      tech.requires.requireAll.forEach(reqKey => {
+        const required = that._objects.getTypeObject(reqKey as TypeKey)
+        if (required.class !== 'technologyType' || research.researched.includes(required) || acc.includes(required)) return
+        acc.push(required)
+        collectRequired(required, acc)
+      })
+      tech.requires.requireAny.forEach(anyKeys => {
+        let cheapest: TypeObject | false | null = null
+        anyKeys.forEach(orReqKey => {
+          if (cheapest === false) return
+          const required = that._objects.getTypeObject(orReqKey as TypeKey)
+          if (required.class !== 'technologyType' || acc.includes(required)) return
+          if (research.researched.includes(required)) {
+            cheapest = false
+            return
           }
-        } else {
-          const required = that._objects.getTypeObject(reqKey)
-          if (required.class !== 'technologyType' || research.researched.includes(required) || acc.includes(required)) return
-          acc.push(required)
-          collectRequired(required, acc)
+          if (!cheapest || required.scienceCost! - that.getProgress(research, required) < cheapest.scienceCost! - that.getProgress(research, cheapest)) {
+            cheapest = required
+          }
+        })
+        if (cheapest) {
+          acc.push(cheapest)
+          collectRequired(cheapest, acc)
         }
       })
     }

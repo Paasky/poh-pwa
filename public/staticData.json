@@ -3441,7 +3441,8 @@
             "key": "conceptType:action",
             "name": "Action",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:building",
@@ -3468,6 +3469,25 @@
                 "worldWonderType:luxembourgGarden",
                 "worldWonderType:oldBailey",
                 "worldWonderType:eiffelTower"
+            ],
+            "yieldTypesFromTile": [
+                "yieldType:culture",
+                "yieldType:defense",
+                "yieldType:faith",
+                "yieldType:food",
+                "yieldType:gold",
+                "yieldType:happiness",
+                "yieldType:health",
+                "yieldType:influence",
+                "yieldType:moveCost",
+                "yieldType:order",
+                "yieldType:production",
+                "yieldType:productionCost",
+                "yieldType:science",
+                "yieldType:strength",
+                "yieldType:tradeRange",
+                "yieldType:tradeSlot",
+                "yieldType:tradeYield"
             ]
         },
         {
@@ -3543,6 +3563,21 @@
                 "traitType:rebellious",
                 "traitType:diplomatic",
                 "traitType:blunt"
+            ],
+            "yieldTypesFromTile": [
+                "yieldType:culture",
+                "yieldType:faith",
+                "yieldType:food",
+                "yieldType:gold",
+                "yieldType:happiness",
+                "yieldType:health",
+                "yieldType:influence",
+                "yieldType:order",
+                "yieldType:production",
+                "yieldType:science",
+                "yieldType:tradeRange",
+                "yieldType:tradeSlot",
+                "yieldType:tradeYield"
             ]
         },
         {
@@ -3587,31 +3622,53 @@
                 "traitType:trading",
                 "traitType:sedentary",
                 "worldWonderType:suomenlinna"
+            ],
+            "yieldTypesFromTile": [
+                "yieldType:culture",
+                "yieldType:defense",
+                "yieldType:faith",
+                "yieldType:food",
+                "yieldType:gold",
+                "yieldType:happiness",
+                "yieldType:health",
+                "yieldType:influence",
+                "yieldType:moveCost",
+                "yieldType:order",
+                "yieldType:production",
+                "yieldType:science",
+                "yieldType:strength",
+                "yieldType:tradeRange",
+                "yieldType:tradeSlot",
+                "yieldType:tradeYield"
             ]
         },
         {
             "key": "conceptType:climate",
             "name": "Climate",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:concept",
             "name": "Concept",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:continent",
             "name": "Continent",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:culture",
             "name": "Culture",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:dogma",
@@ -3620,25 +3677,29 @@
             "description": "",
             "relatesTo": [
                 "worldWonderType:notreDame"
-            ]
+            ],
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:domain",
             "name": "Domain",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:elevation",
             "name": "Elevation",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:equipment",
             "name": "Equipment",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:era",
@@ -3647,25 +3708,29 @@
             "description": "",
             "relatesTo": [
                 "worldWonderType:tombOfMausolus"
-            ]
+            ],
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:event",
             "name": "Event",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:feature",
             "name": "Feature",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:flatLand",
             "name": "Flat Land",
             "concept": "conceptType:concept",
             "description": "",
+            "yieldTypesFromTile": [],
             "requires": [
                 "elevationType:flat",
                 "domainType:land"
@@ -3675,25 +3740,29 @@
             "key": "conceptType:freshWater",
             "name": "Fresh Water",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:goal",
             "name": "Goal",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:god",
             "name": "God",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:heritage",
             "name": "Heritage",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:improvement",
@@ -3704,37 +3773,60 @@
                 "stockpileType:atomBomb",
                 "stockpileType:hydrogenBomb",
                 "stockpileType:planetBuster"
+            ],
+            "yieldTypesFromTile": [
+                "yieldType:culture",
+                "yieldType:defense",
+                "yieldType:faith",
+                "yieldType:food",
+                "yieldType:gold",
+                "yieldType:happiness",
+                "yieldType:health",
+                "yieldType:influence",
+                "yieldType:moveCost",
+                "yieldType:order",
+                "yieldType:production",
+                "yieldType:science",
+                "yieldType:strength",
+                "yieldType:tradeRange",
+                "yieldType:tradeSlot",
+                "yieldType:tradeYield"
             ]
         },
         {
             "key": "conceptType:interaction",
             "name": "Interaction",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:majorCulture",
             "name": "Major Culture",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:majorLeader",
             "name": "Major Leader",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:minorCulture",
             "name": "Minor Culture",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:minorLeader",
             "name": "Minor Leader",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:mountains",
@@ -3746,6 +3838,7 @@
                 "worldWonderType:machuPicchu",
                 "worldWonderType:neuschwanstein"
             ],
+            "yieldTypesFromTile": [],
             "requires": [
                 [
                     "elevationType:mountain",
@@ -3757,115 +3850,170 @@
             "key": "conceptType:myth",
             "name": "Myth",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:nationalWonder",
             "name": "National Wonder",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": [
+                "yieldType:culture",
+                "yieldType:defense",
+                "yieldType:faith",
+                "yieldType:food",
+                "yieldType:gold",
+                "yieldType:happiness",
+                "yieldType:health",
+                "yieldType:influence",
+                "yieldType:moveCost",
+                "yieldType:order",
+                "yieldType:production",
+                "yieldType:productionCost",
+                "yieldType:science",
+                "yieldType:strength",
+                "yieldType:tradeRange",
+                "yieldType:tradeSlot",
+                "yieldType:tradeYield"
+            ]
         },
         {
             "key": "conceptType:naturalWonder",
             "name": "Natural Wonder",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": [
+                "yieldType:culture",
+                "yieldType:defense",
+                "yieldType:faith",
+                "yieldType:food",
+                "yieldType:gold",
+                "yieldType:happiness",
+                "yieldType:health",
+                "yieldType:influence",
+                "yieldType:moveCost",
+                "yieldType:order",
+                "yieldType:production",
+                "yieldType:productionCost",
+                "yieldType:science",
+                "yieldType:strength",
+                "yieldType:tradeRange",
+                "yieldType:tradeSlot",
+                "yieldType:tradeYield"
+            ]
         },
         {
             "key": "conceptType:navigableRiver",
             "name": "Navigable River",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:ocean",
             "name": "Ocean",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:platform",
             "name": "Platform",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:player",
             "name": "Player",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:policy",
             "name": "Policy",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:region",
             "name": "Region",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:religion",
             "name": "Religion",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:resource",
             "name": "Resource",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:revolution",
             "name": "Revolution",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:river",
             "name": "River",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:route",
             "name": "Route",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:special",
             "name": "Special",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:stockpile",
             "name": "Stockpile",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:technology",
             "name": "Technology",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:terrain",
             "name": "Terrain",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:tile",
             "name": "Tile",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:tradeRoute",
@@ -3881,25 +4029,29 @@
                 "worldWonderType:burjKhalifa",
                 "worldWonderType:statueOfLiberty",
                 "worldWonderType:panamaCanal"
-            ]
+            ],
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:trait",
             "name": "Trait",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:turn",
             "name": "Turn",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:turnStart",
             "name": "Turn Start",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:unit",
@@ -3928,13 +4080,28 @@
                 "traitType:peaceful",
                 "worldWonderType:brandenburgGate",
                 "worldWonderType:pentagon"
+            ],
+            "yieldTypesFromTile": [
+                "yieldType:attack",
+                "yieldType:damage",
+                "yieldType:defense",
+                "yieldType:evasion",
+                "yieldType:hitRadius",
+                "yieldType:intercept",
+                "yieldType:moves",
+                "yieldType:paradropRange",
+                "yieldType:range",
+                "yieldType:sightRadius",
+                "yieldType:strength",
+                "yieldType:upkeep"
             ]
         },
         {
             "key": "conceptType:unitDesign",
             "name": "Unit Design",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:urban",
@@ -3961,6 +4128,7 @@
                 "platformType:truck",
                 "platformType:tracked"
             ],
+            "yieldTypesFromTile": [],
             "requires": [
                 [
                     "conceptType:city",
@@ -3974,19 +4142,40 @@
             "key": "conceptType:world",
             "name": "World",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "conceptType:worldWonder",
             "name": "World Wonder",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": [
+                "yieldType:culture",
+                "yieldType:defense",
+                "yieldType:faith",
+                "yieldType:food",
+                "yieldType:gold",
+                "yieldType:happiness",
+                "yieldType:health",
+                "yieldType:influence",
+                "yieldType:moveCost",
+                "yieldType:order",
+                "yieldType:production",
+                "yieldType:productionCost",
+                "yieldType:science",
+                "yieldType:strength",
+                "yieldType:tradeRange",
+                "yieldType:tradeSlot",
+                "yieldType:tradeYield"
+            ]
         },
         {
             "key": "conceptType:yield",
             "name": "Yield",
             "concept": "conceptType:concept",
-            "description": ""
+            "description": "",
+            "yieldTypesFromTile": []
         },
         {
             "key": "continentType:america",
@@ -44704,19 +44893,19 @@
             "key": "yieldType:airSlot",
             "name": "Air Slot",
             "concept": "conceptType:yield",
-            "description": ""
+            "description": "Amount of air units that can be based here."
         },
         {
             "key": "yieldType:attack",
             "name": "Attack",
             "concept": "conceptType:yield",
-            "description": ""
+            "description": "Melee attack strength against other units or cities."
         },
         {
             "key": "yieldType:citizenSlot",
             "name": "Citizen Slot",
             "concept": "conceptType:yield",
-            "description": ""
+            "description": "Amount of citizens that can work here."
         },
         {
             "key": "yieldType:culture",
@@ -44734,19 +44923,19 @@
             "key": "yieldType:defense",
             "name": "Defense",
             "concept": "conceptType:yield",
-            "description": ""
+            "description": "Defense strength when under attack."
         },
         {
             "key": "yieldType:designPoints",
             "name": "Design Points",
             "concept": "conceptType:yield",
-            "description": ""
+            "description": "Points used to create or upgrade Unit Designs."
         },
         {
             "key": "yieldType:evasion",
             "name": "Evasion",
             "concept": "conceptType:yield",
-            "description": ""
+            "description": "Chance to evade an attack if intercepted while bombarding."
         },
         {
             "key": "yieldType:faith",
@@ -44770,85 +44959,85 @@
             "key": "yieldType:gold",
             "name": "Gold",
             "concept": "conceptType:yield",
-            "description": ""
+            "description": "Gold is used to pay for upkeep of your land and units. They can also be used to hurry production in cities."
         },
         {
             "key": "yieldType:happiness",
             "name": "Happiness",
             "concept": "conceptType:yield",
-            "description": ""
+            "description": "Happy citizens increase city output, while unhappy citizens may rise up in revolt or even revolution."
         },
         {
             "key": "yieldType:heal",
             "name": "Heal",
             "concept": "conceptType:yield",
-            "description": ""
+            "description": "Used to heal damage."
         },
         {
             "key": "yieldType:health",
             "name": "Health",
             "concept": "conceptType:yield",
-            "description": ""
+            "description": "Healthy citizens increase city output, while unhealthy citizens decrease order."
         },
         {
             "key": "yieldType:heritagePoint",
             "name": "Heritage Point",
             "concept": "conceptType:yield",
-            "description": ""
+            "description": "Heritage points are gathered by exploring the world and are used to select cultural heritage before settling the first city."
         },
         {
             "key": "yieldType:heritagePointCost",
             "name": "Heritage Point Cost",
             "concept": "conceptType:yield",
-            "description": ""
+            "description": "Heritage points are gathered by exploring the world and are used to select cultural heritage before settling the first city."
         },
         {
             "key": "yieldType:hitRadius",
             "name": "Hit Radius",
             "concept": "conceptType:yield",
-            "description": ""
+            "description": "When bombarding a tile, all tiles within this radius will be hit."
         },
         {
             "key": "yieldType:influence",
             "name": "Influence",
             "concept": "conceptType:yield",
-            "description": ""
+            "description": "Influence is used to force trade deals and diplomatic incidents."
         },
         {
             "key": "yieldType:influenceCost",
             "name": "Influence Cost",
             "concept": "conceptType:yield",
-            "description": ""
+            "description": "Influence is used to force trade deals and diplomatic incidents."
         },
         {
             "key": "yieldType:intercept",
             "name": "Intercept",
             "concept": "conceptType:yield",
-            "description": ""
+            "description": "The chance to intercept air units bombarding within range."
         },
         {
             "key": "yieldType:missileSlot",
             "name": "Missile Slot",
             "concept": "conceptType:yield",
-            "description": ""
+            "description": "Amount of missile units that can be based here."
         },
         {
             "key": "yieldType:moves",
             "name": "Moves",
             "concept": "conceptType:yield",
-            "description": ""
+            "description": "Moves that the unit can make per turn."
         },
         {
             "key": "yieldType:moveCost",
             "name": "Move Cost",
             "concept": "conceptType:yield",
-            "description": ""
+            "description": "Move cost into a tile."
         },
         {
             "key": "yieldType:order",
             "name": "Order",
             "concept": "conceptType:yield",
-            "description": ""
+            "description": "Order is used to suppress unhappy citizens from revolting."
         },
         {
             "key": "yieldType:paradropRange",
@@ -44902,13 +45091,13 @@
             "key": "yieldType:span",
             "name": "Span",
             "concept": "conceptType:yield",
-            "description": ""
+            "description": "Maximum tile length of a bridge."
         },
         {
             "key": "yieldType:settleSize",
             "name": "Settle size",
             "concept": "conceptType:yield",
-            "description": ""
+            "description": "Amount of citizens a new city will start with."
         },
         {
             "key": "yieldType:strength",
@@ -44920,25 +45109,25 @@
             "key": "yieldType:tradeRange",
             "name": "Trade Range",
             "concept": "conceptType:yield",
-            "description": ""
+            "description": "Maximum distance a trade route can be."
         },
         {
             "key": "yieldType:tradeSlot",
             "name": "Trade Slot",
             "concept": "conceptType:yield",
-            "description": ""
+            "description": "Number of trade routes the city can have."
         },
         {
             "key": "yieldType:tradeYield",
             "name": "Trade Yield",
             "concept": "conceptType:yield",
-            "description": ""
+            "description": "Amount of gold a trade route will yield per turn."
         },
         {
             "key": "yieldType:upkeep",
             "name": "Upkeep",
             "concept": "conceptType:yield",
-            "description": ""
+            "description": "Gold per turn cost."
         }
     ],
     "categories": [

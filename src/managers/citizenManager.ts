@@ -7,8 +7,10 @@ export class CitizenManager extends Manager {
 
   }
 
-  create (city: City) {
-
+  create (city: City): Citizen {
+    const citizen = {} as Citizen
+    city.citizens.push(citizen.key)
+    return citizen
   }
 
   delete (citizen: Citizen) {

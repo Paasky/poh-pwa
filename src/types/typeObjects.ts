@@ -1,5 +1,5 @@
 // Type object definitions (encyclopedia/types dataset)
-import { CatKey, initPohObject, PohObject, TypeKey, Yield } from './common'
+import { CatKey, initPohObject, PohObject, Requires, TypeKey, Yield, Yields } from './common'
 
 export type TypeClass =
   'actionType' |
@@ -96,16 +96,17 @@ export interface TypeObject extends PohObject {
   productionCost?: number
   scienceCost?: number
   isPositive?: boolean
-  names: Record<TypeKey, string>
+  names?: Record<TypeKey, string>
+  yieldTypesFromTile?: TypeKey[]
+
   allows: TypeKey[]
-  requires: TypeKey[] | TypeKey[][]
-  yields: Yield[]
+  requires: Requires
+  yields: Yields
   gains: TypeKey[]
   upgradesTo: TypeKey[]
   upgradesFrom: TypeKey[]
   specials: TypeKey[]
   relatesTo: TypeKey[]
-  getYield: (type: TypeKey) => Yield
 }
 
 export function initCategoryObject (data: any): CategoryObject {
@@ -115,34 +116,27 @@ export function initCategoryObject (data: any): CategoryObject {
 export function initTypeObject (data: any): TypeObject {
   const obj = initPohObject('TypeObject', {
     allows: [],
-    requires: [],
     gains: [],
     upgradesFrom: [],
     upgradesTo: [],
     specials: [],
     relatesTo: [],
-    yields: [],
-    getYield: (type: TypeKey) => {
-      const lump = obj.yields
-        .filter(y => y.type === type && y.method === 'lump' && y.for.length === 0 && y.vs.length === 0)
-        .reduce((acc, y) => acc + y.amount, 0)
-
-      return { type, method: 'lump', amount: lump }
-    },
     ...data
   }) as TypeObject
 
-  // Fill yields with defaults
-  for (const yieldObj of obj.yields ?? []) {
-    if (!yieldObj.method) {
-      yieldObj.method = 'lump'
-    }
-    if (!yieldObj.for) {
-      yieldObj.for = []
-    }
-    if (!yieldObj.vs) {
-      yieldObj.vs = []
-    }
+  // Init requires
+  obj.requires = new Requires(data.requires)
+
+  // Init yields
+  obj.yields = new Yields()
+  for (const yieldObj of data.yields ?? []) {
+    obj.yields.add({
+      type: yieldObj.type,
+      method: yieldObj.method ?? 'lump',
+      amount: yieldObj.amount ?? 0,
+      for: yieldObj.for ?? [],
+      vs: yieldObj.vs ?? []
+    } as Yield)
   }
 
   // Add cost yields
@@ -154,9 +148,9 @@ export function initTypeObject (data: any): TypeObject {
     'yieldType:scienceCost'
   ] as TypeKey[]
   for (const type of costYieldTypes) {
-    const costYield = obj.getYield(type)
-    if (costYield.amount > 0) {
-      obj[type.replace('yieldType:', '') as 'heritagePointCost' | 'influenceCost' | 'moveCost' | 'productionCost' | 'scienceCost'] = costYield.amount
+    const amount = obj.yields.getLumpAmount(type)
+    if (amount > 0) {
+      obj[type.replace('yieldType:', '') as 'heritagePointCost' | 'influenceCost' | 'moveCost' | 'productionCost' | 'scienceCost'] = amount
     }
   }
 

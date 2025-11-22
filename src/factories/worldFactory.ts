@@ -1,4 +1,4 @@
-import { ObjKey, World, yearsPerTurnConfig } from '@/types/common'
+import { ObjKey, World, yearsPerTurnConfig, Yields } from '@/types/common'
 import { Tile } from '@/types/gameObjects'
 import { createGameObject } from '@/factories/_gameObjectFactory'
 import { useObjectsStore } from '@/stores/objectStore'
@@ -34,6 +34,7 @@ export const createWorld = (
         citizens: [],
         tradeRoutes: [],
         units: [],
+        yields: new Yields(),
       }
       tiles.push(tile)
     }

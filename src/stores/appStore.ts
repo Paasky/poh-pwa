@@ -14,7 +14,6 @@ async function fetchJSON<T> (url: string): Promise<T> {
 export const useAppStore = defineStore('app', {
   state: () => ({
     ready: false,
-    isProcessing: false,
   }),
   actions: {
     async init (gameDataUrl?: string) {

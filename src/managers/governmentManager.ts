@@ -1,38 +1,22 @@
 import { Manager } from '@/managers/_manager'
-import { Player } from '@/types/gameObjects'
+import { Government, Player } from '@/types/gameObjects'
+import { Yields } from '@/types/common'
 
 export class GovernmentManager extends Manager {
   calcSelectable (player: Player) {
-    const policies = []
+    player.government.selectablePolicies = this._objects.getClassTypes('policyType')
+      .filter(p => p.requires.isSatisfied(player.research.researched))
+  }
 
-    for (const policy of this._objects.getClassTypes('policyType')) {
-      let hasAll = true
-      for (const requireKey of policy.requires) {
-        if (Array.isArray(requireKey)) {
-          let hasAny = false
-          for (const reqAnyKey of requireKey) {
-            if (player.knownTypes.includes(this._objects.getTypeObject(reqAnyKey))) {
-              hasAny = true
-              break
-            }
-          }
-          if (!hasAny) {
-            hasAll = false
-            break
-          }
-        } else {
-          if (!player.knownTypes.includes(this._objects.getTypeObject(requireKey))) {
-            hasAll = false
-            break
-          }
-        }
-      }
-      if (hasAll) {
-        policies.push(policy)
-      }
-    }
-
-    player.government.selectablePolicies = policies
+  calcStatic (government: Government): void {
+    government.specials = government.policies.flatMap(
+      p => p.specials.map(
+        s => this._objects.getTypeObject(s)
+      )
+    )
+    government.yields = new Yields(government.policies.flatMap(
+      p => p.yields.all()
+    ))
   }
 
   startTurn () {

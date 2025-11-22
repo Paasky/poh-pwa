@@ -42,6 +42,7 @@ const encyclopedia = useEncyclopediaStore()
 </template>
 
 <style scoped>
+/*noinspection CssUnusedSymbol*/
 .enc-section:hover:not(:has(.type-row:hover, .enc-section:hover)) {
   /* Tailwind bg-white/10 equivalent */
   background-color: rgba(255, 255, 255, 0.1);

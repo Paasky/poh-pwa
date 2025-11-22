@@ -5,8 +5,8 @@ import UiIcon from '@/components/Ui/UiIcon.vue'
 import { useEncyclopediaStore } from '@/components/Encyclopedia/encyclopediaStore'
 import { useObjectsStore } from '@/stores/objectStore'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import Content from '@/components/Encyclopedia/Content.vue'
 import MenuSection from '@/components/Encyclopedia/MenuSection.vue'
+import EncyclopediaContent from '@/components/Encyclopedia/EncyclopediaContent.vue'
 
 const objects = useObjectsStore()
 const encyclopedia = useEncyclopediaStore()
@@ -96,15 +96,15 @@ function clearQuery () {
         goals
         tournaments: image in medieval style
         <MenuSection v-for="section of encyclopedia.sections"
-                     :key="section.key"
-                     :id="'enc-'+section.key"
+                     :key="section.elemId"
+                     :id="'enc-'+section.elemId"
                      :section="section"
         />
       </aside>
 
       <!-- Right content -->
       <section id="enc-right" ref="rightContentEl" class="flex-1 min-w-0 h-full overflow-y-auto p-4">
-        <Content/>
+        <EncyclopediaContent/>
       </section>
     </div>
   </UiModal>

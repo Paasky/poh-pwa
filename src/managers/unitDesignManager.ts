@@ -9,7 +9,7 @@ export class UnitDesignManager extends Manager {
     equipment: TypeObject,
     name?: string,
     player?: Player,
-    isArmored: boolean = false,
+    isElite: boolean = false,
     isFree: boolean = false,
   ): UnitDesign {
     if (player && !isFree) {
@@ -22,7 +22,7 @@ export class UnitDesignManager extends Manager {
       platform,
       name,
       player?.key,
-      isArmored,
+      isElite,
     )
     this._objects.set(design)
     if (player) {
