@@ -1,93 +1,9 @@
-/*
-Static Objects: markRaw(obj) && Object.freeze(markRaw(objs))
-  - Types
-  - Categories
-
-Game Objects: markRaw(obj), obj.key = reactive(data) when needed
-  - Tile
-  - Unit
-  - Goals
-  - Events
-
---------
-gameClasses.ts:
-const objStore = useObjStore()
-
-class Player extends GameObject {
-  key!: GameKey
-  name!: string
-  storage = new TypeStorage()
-  knownTileKeys = ref([] as GameKey[])
-  knownTiles = computed(() => this.knownTileKeys.value.map(k => objStore.get(k) as Tile))
-  unitKeys = ref([] as GameKey[])
-  units = computed(() => this.unitKeys.value.map(k => objStore.get(k) as Unit))
-}
-class Unit extends GameObject {
-  key!: GameKey
-  name!: string
-  tileKey = ref('tile:123' as GameKey)
-  tile = computed(() => objStore.get(this.tileKey.value) as Tile))
-  playerKey = ref('player:123' as GameKey)
-  player = computed(() => objStore.get(this.playerKey.value) as Player))
-}
-class Tile extends GameObject {
-  key!: GameKey
-  name!: string
-  playerKey = ref('player:123' as GameKey)
-  player = computed(() => objStore.get(this.playerKey.value) as Player))
-  knownByKeys = ref([] as GameKey[])
-  knownBy = computed(() => this.knownByKeys.value.map(k => objStore.get(k) as Player))
-  unitKeys = ref([] as GameKey[])
-  units = computed(() => this.unitKeys.value.map(k => objStore.get(k) as Unit))
-}
-
-// todo: all obj = new Obj() eg player1 = new Player() etc
-
-objStore.bulkSet([
-  player1, player2, player3,
-   tile1, tile2, tile3,
-   unit1, unit2, unit3,
-])
-
-// in objStore:
-state: {
-  _objects: Record<GameKey, GameObject> = {}
-}
-getters: {
-  get: (state) => (key: ObjKey) => this._objects[key] ?? throw new Error(`[Objstore] Unknown key: ${key}`)
-}
-actions: {
-  bulkSet(objs: GameObject[]) {
-    objs.map(o => markRaw(o))
-    this._objects = { ...this._objects, ...objs }
-  }
-}
----------
-
-Data Objects: computed(() => {})
-  - Player.yieldStockpile
-
-UiObjects: never in store
-
- */
-
 import { markRaw } from 'vue'
 import { defineStore } from 'pinia'
-import {
-  CatKey,
-  GameKey,
-  isCategoryObject,
-  isTypeObject,
-  ObjKey,
-  PohObject,
-  TypeKey,
-  TypeStorage,
-  World
-} from '@/types/common'
+import { CatKey, GameKey, isCategoryObject, isTypeObject, ObjKey, TypeKey, World } from '@/types/common'
 import { GameData, StaticData } from '@/types/api'
 import { CategoryObject, initCategoryObject, initTypeObject, TypeClass, TypeObject } from '@/types/typeObjects'
-import { GameClass, GameObject, init, Player } from '@/types/gameObjects'
-import { GameObject as NewGameObject } from '@/objects/gameObjects'
+import { GameClass, GameObject, Player } from '@/objects/gameObjects'
 
 export const useObjectsStore = defineStore('objects', {
   state: () => ({
@@ -114,7 +30,7 @@ export const useObjectsStore = defineStore('objects', {
   }),
   getters: {
     // Generic getter
-    get: (state) => (key: ObjKey): PohObject | NewGameObject => {
+    get: (state) => (key: ObjKey): CategoryObject | GameObject | TypeObject => {
       const obj = state._staticObjects[key as CatKey | TypeKey] ?? state._gameObjects[key as GameKey]
       if (!obj) throw new Error(`[objects] Unknown key: ${key}`)
       return obj
@@ -225,7 +141,7 @@ export const useObjectsStore = defineStore('objects', {
         const gameObjects = {} as Record<string, GameObject>
         for (const data of gameData.objects) {
           // todo: freeze old game objects (eg dead units, ended deals, completed goals, etc)
-          gameObjects[data.key] = init(data)
+          // gameObjects[data.key] = init(data)
         }
         this._gameObjects = gameObjects
       }
@@ -320,28 +236,5 @@ export const useObjectsStore = defineStore('objects', {
       this._classGameObjectsIndex.get(this.getGameObject(gameKey).class)?.delete(gameKey)
       delete this._gameObjects[gameKey]
     },
-
-    toGameData (): GameData {
-      const output = {
-        objects: [] as any[],
-        world: this.world,
-      }
-
-      for (const obj of Object.values(this._gameObjects)) {
-        const outObj = { ...obj } as any
-
-        // TypeStorages are classes, so we need to serialize them separately
-        for (const attr of ['resourceStorage', 'stockpileStorage', 'yieldStorage']) {
-          if (attr in obj) {
-            const storage = obj[attr as keyof GameObject] as any as TypeStorage
-            outObj[attr] = storage.toJson()
-          }
-        }
-
-        output.objects.push(outObj)
-      }
-
-      return output
-    }
   }
 })

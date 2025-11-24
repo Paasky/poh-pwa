@@ -1,30 +1,26 @@
-import { GameKey } from '@/types/common'
-import { UnitDesign } from '@/types/gameObjects'
-import { createGameObject } from '@/factories/_gameObjectFactory'
 import { TypeObject } from '@/types/typeObjects'
+import { generateKey, Player, UnitDesign } from '@/objects/gameObjects'
 
 export const createUnitDesign = (
   equipment: TypeObject,
   platform: TypeObject,
-  name?: string,
-  playerKey?: GameKey,
+  name: string,
+  player?: Player,
   isElite: boolean = false,
 ): UnitDesign => {
-
-  name = name ?? equipment.names![platform.key] ?? `${platform.name} ${equipment.name}`
-  const base = createGameObject('unitDesign', name)
-
-  const design = {
-    ...base,
-
+  const design = new UnitDesign(
+    generateKey('unitDesign'),
     equipment,
     platform,
-    isElite,
-    isActive: true
-  } as UnitDesign
+    isElite
+      ? (name.endsWith(' (E)') ? name : name + ' (E)')
+      : (name.endsWith(' (E)') ? name.slice(0, -3) : name),
+    player?.key,
+    isElite
+  )
 
-  if (playerKey) {
-    design.player = playerKey
+  if (player) {
+    player.designKeys.value.push(design.key)
   }
 
   return design

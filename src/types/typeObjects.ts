@@ -1,6 +1,7 @@
 // Type object definitions (encyclopedia/types dataset)
-import { CatKey, initPohObject, PohObject, Requires, TypeKey } from './common'
-import { Yield, Yields } from '@/types/yield'
+import { CatKey, initPohObject, PohObject, TypeKey } from './common'
+import { Yield, Yields } from '@/objects/yield'
+import { Requires } from '@/objects/requires'
 
 export type TypeClass =
   'actionType' |

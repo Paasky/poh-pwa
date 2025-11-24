@@ -1,30 +1,21 @@
-import { Culture, CultureStatus, GameObject } from '@/types/gameObjects'
 import { ObjKey } from '@/types/common'
 import { TypeObject } from '@/types/typeObjects'
-import { createGameObject } from '@/factories/_gameObjectFactory'
+import { Culture, CultureStatus, GameKey, generateKey } from '@/objects/gameObjects'
 
 export const createCulture = (
-  player: GameObject, // Allow passing in the base game object to avoid circular dependencies
+  playerKey: GameKey,
   type: TypeObject,
   status: CultureStatus = 'notSettled',
   heritages: TypeObject[] = [],
   heritageCategoryPoints: Record<ObjKey, number> = {},
   traits: TypeObject[] = [],
 ): Culture => {
-  const base = createGameObject('culture', `${player.name} Culture`)
+  const culture = new Culture(generateKey('culture'), type, playerKey)
 
-  return {
-    ...base,
-    player: player.key,
-    type,
-    status,
+  culture.status = status
+  culture.heritages.value = heritages
+  culture.heritageCategoryPoints.value = heritageCategoryPoints
+  culture.traits.value = traits
 
-    heritages,
-    heritageCategoryPoints,
-    selectableHeritages: [] as TypeObject[],
-
-    traits,
-    selectableTraits: [] as TypeObject[],
-    mustSelectTraits: { positive: 0, negative: 0 }
-  }
+  return culture
 }

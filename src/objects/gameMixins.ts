@@ -1,7 +1,6 @@
 import { computed, Ref, ref } from 'vue'
-import { GameKey } from '@/types/common'
 import { useObjectsStore } from '@/stores/objectStore'
-import { Citizen, City, Culture, Player, Religion, Tile, Unit } from './gameObjects'
+import { Citizen, City, Culture, GameKey, Player, Religion, Tile, Unit } from '@/objects/gameObjects'
 
 const objStore = useObjectsStore()
 
@@ -90,7 +89,7 @@ export function CanHavePlayer<T extends new (...args: any[]) => {}> (Base: T) {
 
 export function HasPlayer<T extends new (...args: any[]) => {}> (Base: T) {
   return class extends Base {
-    playerKey = ref('' as GameKey)
+    playerKey = ref<GameKey>('' as GameKey)
     player = hasOne(this.playerKey, Player)
   }
 }

@@ -1,10 +1,11 @@
 import { World } from '@/types/common'
-import { UnitDesignManager } from '@/managers/unitDesignManager'
 import { UnitManager } from '@/managers/unitManager'
 import { PlayerManager } from '@/managers/playerManager'
 import { createWorld } from '@/factories/worldFactory'
 import { Manager } from '@/managers/_manager'
 import { CultureManager } from '@/managers/cultureManager'
+import { UnitDesignPrototype } from '@/objects/player'
+import { UnitDesignManager } from '@/managers/unitDesignManager'
 
 export class WorldManager extends Manager {
   create (): World {
@@ -13,32 +14,31 @@ export class WorldManager extends Manager {
     const playerManager = new PlayerManager()
     const unitManager = new UnitManager()
 
-    const world = createWorld()
-    Object.assign(this._objects.world, world)
+    const worldBundle = createWorld()
+    Object.assign(this._objects.world, worldBundle.world)
     console.log('world', new Date())
 
-    const tiles = Object.values(world.tiles)
     console.log('Got tiles', new Date())
-    this._objects.bulkSet(tiles)
+    this._objects.bulkSet(worldBundle.tiles)
     console.log('Set tiles', new Date())
 
     // Create common unit designs
-    const tribeDesign = designManager.create(
+    const tribeDesign = designManager.create(new UnitDesignPrototype(null,
       this._objects.getTypeObject('platformType:human'),
       this._objects.getTypeObject('equipmentType:tribe'),
-    )
-    const workerDesign = designManager.create(
+    ))
+    const workerDesign = designManager.create(new UnitDesignPrototype(null,
       this._objects.getTypeObject('platformType:human'),
       this._objects.getTypeObject('equipmentType:worker'),
-    )
-    const hunterDesign = designManager.create(
+    ))
+    const hunterDesign = designManager.create(new UnitDesignPrototype(null,
       this._objects.getTypeObject('platformType:human'),
       this._objects.getTypeObject('equipmentType:javelin'),
-    )
-    const warbandDesign = designManager.create(
+    ))
+    const warbandDesign = designManager.create(new UnitDesignPrototype(null,
       this._objects.getTypeObject('platformType:human'),
       this._objects.getTypeObject('equipmentType:spear'),
-    )
+    ))
     console.log('Created unit designs', new Date())
 
     // Get random region
@@ -64,7 +64,7 @@ export class WorldManager extends Manager {
         warbandDesign.key,
       )
 
-      const tile = tiles[Math.floor(Math.random() * tiles.length)]
+      const tile = worldBundle.tiles[Math.floor(Math.random() * worldBundle.tiles.length)]
       unitManager.create(player, tribeDesign, tile)
       unitManager.create(player, hunterDesign, tile)
       console.log('Created player units', new Date())
@@ -73,6 +73,6 @@ export class WorldManager extends Manager {
       console.log('Calculated tiles', new Date())
     }
 
-    return world
+    return worldBundle.world
   }
 }

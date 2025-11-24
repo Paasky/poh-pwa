@@ -1,40 +1,20 @@
-import { ObjKey } from '@/types/common'
-import { Unit } from '@/types/gameObjects'
-import { createGameObject } from '@/factories/_gameObjectFactory'
+import { generateKey, Player, Tile, Unit, UnitDesign } from '@/objects/gameObjects'
 
 export const createUnit = (
-  playerKey: ObjKey,
-  unitDesignKey: ObjKey,
-  tileKey: ObjKey,
-  moves: number,
-  isLevy: boolean,
-  isMercenary: boolean,
-  isMobilized: boolean,
-  health: number = 100,
-  cityKey?: ObjKey,
-  tradeRouteKey?: ObjKey,
+  player: Player,
+  unitDesign: UnitDesign,
+  tile: Tile,
 ): Unit => {
-  const base = createGameObject('unit')
+  const unit = new Unit(
+    generateKey('unit'),
+    player.key,
+    unitDesign.key,
+    tile.key,
+  )
 
-  const unit = {
-    ...base,
-
-    player: playerKey,
-    design: unitDesignKey,
-    tile: tileKey,
-    health,
-    moves,
-    isLevy,
-    isMercenary,
-    isMobilized,
-  } as Unit
-
-  if (cityKey) {
-    unit.city = cityKey
-  }
-  if (tradeRouteKey) {
-    unit.tradeRoute = tradeRouteKey
-  }
+  player.unitKeys.value.push(unit.key)
+  unitDesign.unitKeys.value.push(unit.key)
+  tile.unitKeys.value.push(unit.key)
 
   return unit
 }

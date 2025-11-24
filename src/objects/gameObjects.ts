@@ -13,18 +13,33 @@ import {
   HasPlayers,
   HasTile,
   HasUnits
-} from './gameMixins'
+} from '@/objects/gameMixins'
 import { TypeObject } from '@/types/typeObjects'
-import { Yield, Yields } from '@/types/yield'
-import { CatKey, ObjType, TypeStorage } from '@/types/common'
-import { ConstructionQueue, TrainingQueue } from '@/types/queues'
+import { Yield, Yields } from '@/objects/yield'
+import { CatKey, ObjType } from '@/types/common'
+import { ConstructionQueue, TrainingQueue } from '@/objects/queues'
+import { TypeStorage } from '@/objects/storage'
+import { Government, Research } from '@/objects/player'
 
 const objStore = useObjectsStore()
 
-type GameClass = 'tile' | 'player' | 'unit'
-type GameKey = `${GameClass}:${string}`
+export type GameClass =
+  'agenda' |
+  'citizen' |
+  'city' |
+  'culture' |
+  'deal' |
+  'player' |
+  'religion' |
+  'tile' |
+  'tradeRoute' |
+  'unit' |
+  'unitDesign'
 
-const generateKey = (cls: GameClass, id: string): GameKey => `${cls}:${id}`
+export type GameKey = `${GameClass}:${string}`
+
+export const generateKey = (cls: GameClass) => getKey(cls, crypto.randomUUID())
+export const getKey = (cls: GameClass, id: string): GameKey => `${cls}:${id}`
 
 export class GameObject {
   objType: ObjType = 'GameObject'
@@ -91,7 +106,7 @@ export class Construction extends HasCitizens(CanHaveCity(HasPlayer(HasTile(Game
 }
 
 export class Citizen extends HasCity(HasCulture(CanHaveReligion(HasPlayer(HasTile(GameObject))))) {
-  policy = ref(null as TypeObject | null)
+  policy = ref<TypeObject | null>(null)
 
   workKey = ref(null as GameKey | null)
   work = canHaveOne(this.workKey, Construction)
@@ -100,16 +115,16 @@ export class Citizen extends HasCity(HasCulture(CanHaveReligion(HasPlayer(HasTil
     this.concept.inheritYieldTypes!,
     [this.concept]
   ))
+
   private _workYields = computed((): Yields | null => this.work.value?.yields.value.only(
     this.concept.inheritYieldTypes!,
     [this.concept]
   ) ?? null)
-  yields = computed(() => {
-    const yields = [] as Yield[]
-    yields.push(...this._tileYields.value.all())
-    if (this._workYields.value) yields.push(...this._workYields.value.all())
-    return new Yields(yields)
-  })
+
+  yields = computed(() => new Yields([
+    ...this._tileYields.value.all(),
+    ...(this._workYields.value?.all() ?? [])
+  ]))
 }
 
 export class City extends HasCitizens(HasPlayer(HasTile(HasUnits(GameObject)))) {
@@ -120,6 +135,7 @@ export class City extends HasCitizens(HasPlayer(HasTile(HasUnits(GameObject)))) 
 
   constructionQueue = new ConstructionQueue()
   trainingQueue = new TrainingQueue()
+  storage = new TypeStorage()
 
   holyCityForKeys = ref([] as GameKey[])
   holyCityFor = hasMany(this.holyCityForKeys, Religion)
@@ -133,22 +149,16 @@ export class City extends HasCitizens(HasPlayer(HasTile(HasUnits(GameObject)))) 
   ))
 
   private _citizenYields = computed((): Yields => {
-    const yields: Yield[] = []
     const inherit = this.concept.inheritYieldTypes!
-
-    for (const c of this.citizens.value) {
-      yields.push(...c.yields.value.only(inherit).all())
-    }
-
-    return new Yields(yields)
+    return new Yields(this.citizens.value.flatMap(
+      c => c.yields.value.only(inherit).all()
+    ))
   })
 
-  yields = computed((): Yields => {
-    const yields: Yield[] = []
-    yields.push(...this._tileYields.value.all())
-    yields.push(...this._citizenYields.value.all())
-    return new Yields(yields)
-  })
+  yields = computed((): Yields => new Yields([
+    ...this._tileYields.value.all(),
+    ...this._citizenYields.value.all(),
+  ]))
 
   constructor (
     key: GameKey, playerKey: GameKey, tileKey: GameKey, name: string
@@ -161,39 +171,54 @@ export class City extends HasCitizens(HasPlayer(HasTile(HasUnits(GameObject)))) 
   }
 }
 
+export type CultureStatus = 'notSettled' | 'canSettle' | 'mustSettle' | 'settled'
+
 export class Culture extends HasCitizens(HasPlayer(GameObject)) {
+  type: TypeObject
+  status: CultureStatus = 'notSettled'
+
   heritages = ref([] as TypeObject[])
   heritageCategoryPoints = ref({} as Record<CatKey, number>)
+  selectableHeritages = computed(() => [] as TypeObject[])
+
   traits = ref([] as TypeObject[])
+  mustSelectTraits = ref({ positive: 0, negative: 0 })
+  selectableTraits = computed(() => [] as TypeObject[])
 
   types = computed(() => [this.concept, ...this.heritages.value, ...this.traits.value])
+  yields = computed(() => new Yields(this.types.value.flatMap(
+    t => t.yields.all()
+  )))
+
+  constructor (key: GameKey, type: TypeObject, playerKey: GameKey) {
+    super(key)
+    this.type = type
+    this.playerKey.value = playerKey
+  }
 }
 
-export class Government extends HasPlayer(GameObject) {
-  policies = ref([] as TypeObject[])
-
-  canLevy = computed(() => !!this.policies.value.find(
-    (p) => p.specials.includes('specialType:canLevy'))
-  )
-  canMobilize = computed(() => !!this.policies.value.find(
-    (p) => p.specials.includes('specialType:canMobilize'))
-  )
-  hasElections = computed(() => !!this.policies.value.find(
-    (p) => p.specials.includes('specialType:elections'))
-  )
-}
-
-export class Player extends HasCulture(CanHaveReligion(HasUnits(GameObject))) {
+export class Player extends HasCitizens(HasCulture(CanHaveReligion(HasUnits(GameObject)))) {
   name: string
+  isCurrent = false
+  knownTypes = computed(() => [] as TypeObject[])
+  government: Government
+  research: Research
+
+  designKeys = ref([] as GameKey[])
+  designs = hasMany(this.designKeys, UnitDesign)
+
   knownTileKeys = ref([] as GameKey[])
   knownTiles = hasMany(this.knownTileKeys, Tile)
 
   storage = new TypeStorage()
   yields = computed(() => new Yields())
 
-  constructor (key: GameKey, name: string) {
+  constructor (key: GameKey, name: string, isCurrent = false) {
     super(key)
     this.name = name
+    this.isCurrent = isCurrent
+    this.government = new Government(key)
+    this.research = new Research(key)
   }
 }
 
@@ -218,9 +243,9 @@ export class Tile extends CanHavePlayer(HasUnits(GameObject)) {
   area: TypeObject
   terrain: TypeObject
   elevation: TypeObject
-  feature = ref(null as TypeObject | null)
-  resource = ref(null as TypeObject | null)
-  pollution = ref(null as TypeObject | null)
+  feature = ref<TypeObject | null>(null)
+  resource = ref<TypeObject | null>(null)
+  pollution = ref<TypeObject | null>(null)
   naturalWonder = null as TypeObject | null
 
   private _staticTypes: TypeObject[]
@@ -237,11 +262,10 @@ export class Tile extends CanHavePlayer(HasUnits(GameObject)) {
     return this._staticTypes.concat(this._dynamicTypes)
   })
 
-  yields = computed(() => {
-    const yields = this._staticYields.all()
-    for (const t of this._dynamicTypes) yields.push(...t.yields.all())
-    return new Yields(yields)
-  })
+  yields = computed(() => new Yields([
+    ...this._staticYields.all(),
+    ...this._dynamicTypes.flatMap(t => t.yields.all()),
+  ]))
 
   constructor (
     x: number, y: number, domain: TypeObject, area: TypeObject, terrain: TypeObject, elevation: TypeObject,
@@ -267,7 +291,7 @@ export class Tile extends CanHavePlayer(HasUnits(GameObject)) {
   }
 
   static getKey (x: number, y: number): GameKey {
-    return generateKey('tile', `${x},${y}`)
+    return getKey('tile', `${x},${y}`)
   }
 }
 
@@ -307,13 +331,11 @@ export class Unit extends HasPlayer(HasTile(GameObject)) {
     this.tile.value.yields.value.only(this.concept.inheritYieldTypes!, this.types.value)
   )
 
-  yields = computed(() => {
-    const yields: Yield[] = []
-    yields.push(...this.design.value.yields.all())
-    yields.push(...this._playerYields.value.all())
-    yields.push(...this._tileYields.value.all())
-    return new Yields(yields)
-  })
+  yields = computed(() => new Yields([
+    ...this.design.value.yields.all(),
+    ...this._playerYields.value.all(),
+    ...this._tileYields.value.all(),
+  ]))
 
   constructor (
     key: GameKey, playerKey: GameKey, tileKey: GameKey, designKey: GameKey,
@@ -328,21 +350,23 @@ export class Unit extends HasPlayer(HasTile(GameObject)) {
 }
 
 export class UnitDesign extends CanHavePlayer(HasUnits(GameObject)) {
+  platform: TypeObject
   equipment: TypeObject
   name: string
-  platform: TypeObject
+  isElite: boolean
   productionCost: number
   types: TypeObject[]
   yields: Yields
 
   constructor (
     key: GameKey, platform: TypeObject, equipment: TypeObject, name: string,
-    playerKey?: GameKey
+    playerKey?: GameKey, isElite?: boolean
   ) {
     super(key)
     this.platform = platform
     this.equipment = equipment
     this.name = name
+    this.isElite = !!isElite
     if (playerKey) this.playerKey.value = playerKey
 
     this.types = [this.platform, this.equipment]
@@ -350,4 +374,3 @@ export class UnitDesign extends CanHavePlayer(HasUnits(GameObject)) {
     this.productionCost = this.yields.applyMods().getLumpAmount('yieldType:productionCost')
   }
 }
-

@@ -1,10 +1,12 @@
-import { CatKey, GameKey, initPohObject, ObjKey, PohObject, TypeKey, TypeStorage, Yield, Yields } from './common'
+import { CatKey, GameKey, initPohObject, ObjKey, PohObject, TypeKey } from './common'
 import { EventSetting, EventType } from '@/types/events'
 import { TypeObject } from '@/types/typeObjects'
 import { useObjectsStore } from '@/stores/objectStore'
 import { CultureManager } from '@/managers/cultureManager'
+import { Yield, Yields } from '@/objects/yield'
+import { TypeStorage } from '@/objects/storage'
 
-export type GameClass =
+type GameClass =
   'agenda' |
   'building' |
   'citizen' |
@@ -21,7 +23,7 @@ export type GameClass =
   'unitDesign' |
   'worldWonder'
 
-export type GameObject = PohObject & {
+type GameObject = PohObject & {
   objType: 'GameObject'
   class: GameClass
   key: GameKey
@@ -41,9 +43,9 @@ const _initGameObject = (rawData: any): GameObject => {
   return obj
 }
 
-export interface HasType {type: TypeObject}
+interface HasType {type: TypeObject}
 
-export const init = (rawData: any): GameObject => {
+const init = (rawData: any): GameObject => {
   const cls = rawData.class as GameClass
 
   if (cls === 'agenda') return initAgenda(rawData)
@@ -68,7 +70,7 @@ export const init = (rawData: any): GameObject => {
 /////////////////////////////
 /////  Non-Tile Objects /////
 
-export type Agenda = GameObject & {
+type Agenda = GameObject & {
   name: string
   size: 'moderate' | 'ambitious'
   startTurn: number
@@ -80,7 +82,7 @@ export type Agenda = GameObject & {
     currentAmount: number
   }[]
 }
-export const initAgenda = (rawData: any): Agenda => {
+const initAgenda = (rawData: any): Agenda => {
   const obj = _initGameObject(rawData) as Agenda
 
   obj.name = rawData.name
@@ -93,8 +95,8 @@ export const initAgenda = (rawData: any): Agenda => {
   return obj
 }
 
-export type CultureStatus = 'notSettled' | 'canSettle' | 'mustSettle' | 'settled'
-export type Culture = GameObject & HasType & {
+type CultureStatus = 'notSettled' | 'canSettle' | 'mustSettle' | 'settled'
+type Culture = GameObject & HasType & {
   player: GameKey,
   status: CultureStatus
 
@@ -108,7 +110,7 @@ export type Culture = GameObject & HasType & {
 
   yields: Yields
 }
-export const initCulture = (rawData: any): Culture => {
+const initCulture = (rawData: any): Culture => {
   const obj = _initGameObject(rawData) as Culture
 
   obj.status = rawData.status
@@ -129,7 +131,7 @@ export const initCulture = (rawData: any): Culture => {
   return obj
 }
 
-export type Deal = GameObject & {
+type Deal = GameObject & {
   startTurn: number
   endTurn: number
   isComplete: boolean
@@ -141,7 +143,7 @@ export type Deal = GameObject & {
     value: number
   }[]
 }
-export const initDeal = (rawData: any): Deal => {
+const initDeal = (rawData: any): Deal => {
   const obj = _initGameObject(rawData) as Deal
 
   obj.startTurn = rawData.startTurn
@@ -158,7 +160,7 @@ export const initDeal = (rawData: any): Deal => {
   return obj
 }
 
-export type Player = GameObject & {
+type Player = GameObject & {
   isCurrent: boolean
   leader: TypeObject
 
@@ -186,7 +188,7 @@ export type Player = GameObject & {
 
   eventSettings: Record<EventType, EventSetting>
 }
-export const initPlayer = (rawData: any): Player => {
+const initPlayer = (rawData: any): Player => {
   const obj = _initGameObject(rawData) as Player
 
   obj.isCurrent = rawData.isCurrent
@@ -257,7 +259,7 @@ export const initPlayer = (rawData: any): Player => {
   return obj
 }
 
-export type Religion = GameObject & {
+type Religion = GameObject & {
   status: 'myths' | 'gods' | 'dogmas'
   city: GameKey
 
@@ -273,7 +275,7 @@ export type Religion = GameObject & {
   canEvolve: boolean
   yields: Yields
 }
-export const initReligion = (rawData: any): Religion => {
+const initReligion = (rawData: any): Religion => {
   const obj = _initGameObject(rawData) as Religion
 
   obj.status = rawData.status
@@ -292,14 +294,14 @@ export const initReligion = (rawData: any): Religion => {
   return obj
 }
 
-export type TradeRoute = GameObject & {
+type TradeRoute = GameObject & {
   from: GameKey
   to: GameKey
   tiles: GameKey[]
   distance: number
   resources: TypeKey[]
 }
-export const initTradeRoute = (rawData: any): TradeRoute => {
+const initTradeRoute = (rawData: any): TradeRoute => {
   const obj = _initGameObject(rawData) as TradeRoute
 
   obj.from = rawData.from
@@ -314,7 +316,7 @@ export const initTradeRoute = (rawData: any): TradeRoute => {
 /////////////////////////
 /////  Tile Objects /////
 
-export type Tile = GameObject & {
+type Tile = GameObject & {
   x: number
   y: number
   domain: TypeObject
@@ -334,7 +336,7 @@ export type Tile = GameObject & {
 
   yields: Yields
 }
-export const initTile = (rawData: any): Tile => {
+const initTile = (rawData: any): Tile => {
   const obj = _initGameObject(rawData) as Tile
 
   obj.x = rawData.x
@@ -359,10 +361,10 @@ export const initTile = (rawData: any): Tile => {
   return obj
 }
 
-export type TileObject = GameObject & {
+type TileObject = GameObject & {
   tile: GameKey
 }
-export const initTileObject = (rawData: any): TileObject => {
+const initTileObject = (rawData: any): TileObject => {
   const obj = _initGameObject(rawData) as TileObject
 
   obj.tile = rawData.tile
@@ -370,7 +372,7 @@ export const initTileObject = (rawData: any): TileObject => {
   return obj
 }
 
-export type City = TileObject & {
+type City = TileObject & {
   canProduce: TypeObject[]
   player: GameKey
   health: number
@@ -379,7 +381,7 @@ export type City = TileObject & {
 
   yields: Yield[]
 }
-export const initCity = (rawData: any): City => {
+const initCity = (rawData: any): City => {
   const obj = initTileObject(rawData) as City
 
   obj.canProduce = rawData.canProduce
@@ -393,11 +395,11 @@ export const initCity = (rawData: any): City => {
   return obj
 }
 
-export type Building = TileObject & HasType & {
+type Building = TileObject & HasType & {
   health: number
   citizens: GameKey[]
 }
-export const initBuilding = (rawData: any): Building => {
+const initBuilding = (rawData: any): Building => {
   const obj = initTileObject(rawData) as Building
 
   obj.type = useObjectsStore().getTypeObject(rawData.type)
@@ -407,11 +409,11 @@ export const initBuilding = (rawData: any): Building => {
   return obj
 }
 
-export type NationalWonder = TileObject & HasType & {
+type NationalWonder = TileObject & HasType & {
   health: number
   citizen?: GameKey
 }
-export const initNationalWonder = (rawData: any): NationalWonder => {
+const initNationalWonder = (rawData: any): NationalWonder => {
   const obj = initTileObject(rawData) as NationalWonder
 
   obj.type = useObjectsStore().getTypeObject(rawData.type)
@@ -421,11 +423,11 @@ export const initNationalWonder = (rawData: any): NationalWonder => {
   return obj
 }
 
-export type WorldWonder = TileObject & HasType & {
+type WorldWonder = TileObject & HasType & {
   health: number
   citizen?: GameKey
 }
-export const initWorldWonder = (rawData: any): WorldWonder => {
+const initWorldWonder = (rawData: any): WorldWonder => {
   const obj = initTileObject(rawData) as WorldWonder
 
   obj.type = useObjectsStore().getTypeObject(rawData.type)
@@ -435,11 +437,11 @@ export const initWorldWonder = (rawData: any): WorldWonder => {
   return obj
 }
 
-export type Improvement = TileObject & HasType & {
+type Improvement = TileObject & HasType & {
   health: number
   citizens: GameKey[]
 }
-export const initImprovement = (rawData: any): Improvement => {
+const initImprovement = (rawData: any): Improvement => {
   const obj = initTileObject(rawData) as Improvement
 
   obj.type = useObjectsStore().getTypeObject(rawData.type)
@@ -449,7 +451,7 @@ export const initImprovement = (rawData: any): Improvement => {
   return obj
 }
 
-export type Citizen = TileObject & {
+type Citizen = TileObject & {
   city: GameKey
   culture: GameKey
   religion?: GameKey
@@ -458,7 +460,7 @@ export type Citizen = TileObject & {
 
   yields: Yield[]
 }
-export const initCitizen = (rawData: any): Citizen => {
+const initCitizen = (rawData: any): Citizen => {
   const obj = initTileObject(rawData) as Citizen
 
   obj.city = rawData.city
@@ -472,7 +474,7 @@ export const initCitizen = (rawData: any): Citizen => {
   return obj
 }
 
-export type Unit = TileObject & {
+type Unit = TileObject & {
   design: GameKey
   player: GameKey
   originalPlayer?: GameKey
@@ -484,7 +486,7 @@ export type Unit = TileObject & {
   isMercenary: boolean
   isMobilized: boolean
 }
-export const initUnit = (rawData: any): Unit => {
+const initUnit = (rawData: any): Unit => {
   const obj = initTileObject(rawData) as Unit
 
   obj.design = rawData.design
@@ -501,7 +503,7 @@ export const initUnit = (rawData: any): Unit => {
   return obj
 }
 
-export type UnitDesign = GameObject & {
+type UnitDesign = GameObject & {
   player: GameKey
   equipment: TypeObject
   platform: TypeObject
@@ -513,7 +515,7 @@ export type UnitDesign = GameObject & {
   specials: TypeObject[]
   yields: Yield[]
 }
-export const initUnitDesign = (rawData: any): UnitDesign => {
+const initUnitDesign = (rawData: any): UnitDesign => {
   const obj = _initGameObject(rawData) as UnitDesign
 
   obj.player = rawData.player
@@ -533,17 +535,17 @@ export const initUnitDesign = (rawData: any): UnitDesign => {
 ////////////////////
 /////  Helpers /////
 
-export type Relation = {
+type Relation = {
   trust: { amount: number, from: GameKey }[]
   friendship: { amount: number, from: GameKey }[]
   strength: number
   distance: number
 }
-export type Diplomacy = {
+type Diplomacy = {
   deals: GameKey[]
   relations: Record<GameKey, Relation>
 }
-export type Government = {
+type Government = {
   turnsToElection: number
   hasElections: boolean
   policyUnhappiness: number
@@ -558,7 +560,7 @@ export type Government = {
   specials: TypeObject[]
   yields: Yields
 }
-export type Research = {
+type Research = {
   current: TypeObject | null
   era: TypeObject | null
   queue: TypeObject[]
@@ -567,7 +569,7 @@ export type Research = {
   turnsLeft: number
   yields: Yields
 }
-export type UnitDesigner = {
+type UnitDesigner = {
   levyDesign: GameKey
   upgradePaths: Record<GameKey, GameKey[]>
 }

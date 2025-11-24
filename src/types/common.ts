@@ -1,13 +1,12 @@
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
-import { reactive } from 'vue'
 import getIcon from '@/types/icons'
 import { CategoryClass, CategoryObject, TypeClass, TypeObject } from '@/types/typeObjects'
-import { GameClass, GameObject, Tile } from '@/types/gameObjects'
+import { useObjectsStore } from '@/stores/objectStore'
+import { GameClass, GameKey, GameObject } from '@/objects/gameObjects'
 
 export type ObjType = 'TypeObject' | 'CategoryObject' | 'GameObject'
 export type CatKey = `${CategoryClass}:${string}`
 export type TypeKey = `${TypeClass}:${string}`
-export type GameKey = `${GameClass}:${string}`
 export type ObjKey = CatKey | TypeKey | GameKey
 
 export interface PohObject {
@@ -37,141 +36,16 @@ export function initPohObject (objType: ObjType, data: any): PohObject {
   }
 }
 
-export function isCategoryObject (o: PohObject): o is CategoryObject {
+export function isCategoryObject (o: GameObject | PohObject): o is CategoryObject {
   return o.objType === 'CategoryObject'
 }
 
-export function isTypeObject (o: PohObject): o is TypeObject {
+export function isTypeObject (o: GameObject | PohObject): o is TypeObject {
   return o.objType === 'TypeObject'
 }
 
-export function isGameObject (o: PohObject): o is GameObject {
+export function isGameObject (o: GameObject | PohObject): o is GameObject {
   return o.objType === 'GameObject'
-}
-
-export class Requires {
-  private _requireAll: ObjKey[] = []
-  private _requireAny: ObjKey[][] = []
-  private _allTypes: ObjKey[] = []
-
-  constructor (requires: ObjKey[] | ObjKey[][] = []) {
-    for (const r of requires) {
-      if (Array.isArray(r)) {
-        this._requireAny.push(r)
-        this._allTypes.push(...r)
-      } else {
-        this._requireAll.push(r)
-        this._allTypes.push(r)
-      }
-    }
-  }
-
-  get allTypes (): ObjKey[] { return this._allTypes }
-
-  get isEmpty (): boolean { return this._allTypes.length === 0 }
-
-  get requireAll (): ObjKey[] { return this._requireAll }
-
-  get requireAny (): ObjKey[][] { return this._requireAny }
-
-  isSatisfied (types: TypeObject[]): boolean {
-    // Need to check type.key, type.category && type.concept
-
-    // At least one of the given objects must match each "require all"-keys
-    for (const require of this._requireAll) {
-      if (!types.some(
-        t => t.key === require || t.category === require || t.concept === require
-      )) return false
-    }
-
-    // At least one of the given objects must match any "require any"-key
-    for (const require of this._requireAny) {
-      if (!types.some(
-        t => require.includes(t.key) || (t.category && require.includes(t.category)) || require.includes(t.concept)
-      )) return false
-    }
-
-    // Both checks pass
-    return true
-  }
-
-  filter (classes: TypeClass[]): Requires {
-    const all: ObjKey[] = []
-    const any: ObjKey[][] = []
-
-    for (const req of this._requireAll) {
-      if (classes.some(c => req.startsWith(`${c}:`))) {
-        all.push(req)
-      }
-    }
-
-    for (const reqAny of this._requireAny) {
-      for (const req of reqAny) {
-        if (classes.some(c => req.startsWith(`${c}:`))) {
-          any.push(reqAny)
-          break
-        }
-      }
-    }
-
-    return new Requires([...all, ...any] as ObjKey[] | ObjKey[][])
-  }
-}
-
-export class TypeStorage {
-  private _items = reactive<Record<TypeKey, number>>({})
-
-  has (key: TypeKey, amount?: number): boolean {
-    if (!(key in this._items)) return false
-
-    return amount === undefined ? true : this._items[key] >= amount
-  }
-
-  amount (key: TypeKey): number {
-    return this._items[key] ?? 0
-  }
-
-  add (key: TypeKey, amount: number): TypeStorage {
-    this._items[key] = roundToTenth((this._items[key] ?? 0) + amount)
-
-    return this
-  }
-
-  take (key: TypeKey, amount: number): TypeStorage {
-    if (!this.has(key, amount)) throw new Error(
-      `Not enough ${key} in storage: ${this._items[key] ?? 0} < ${amount}`
-    )
-    this._items[key] = roundToTenth(this._items[key] - amount)
-
-    return this
-  }
-
-  takeAll (key: TypeKey): number {
-    const amount = this._items[key] ?? 0
-    this._items[key] = 0
-
-    return amount
-  }
-
-  takeUpTo (key: TypeKey, amount: number): number {
-    const available = this.amount(key)
-    const taken = Math.min(available, amount)
-    this._items[key] = roundToTenth(available - taken)
-
-    return taken
-  }
-
-  load (yields: Record<TypeKey, number>): TypeStorage {
-    for (const [key, amount] of Object.entries(yields)) {
-      if (amount > 0) this._items[key as TypeKey] = roundToTenth(amount)
-    }
-
-    return this
-  }
-
-  toJson (): Record<TypeKey, number> {
-    return this._items
-  }
 }
 
 export type World = {
@@ -181,7 +55,6 @@ export type World = {
   turn: number,
   year: number,
   currentPlayer: GameKey
-  tiles: Record<`${number},${number}`, Tile>
 }
 
 export type ObjectIcon = {
@@ -213,4 +86,14 @@ export const yearsPerTurnConfig = [
 
 export function roundToTenth (v: number): number {
   return Math.round(v * 10) / 10
+}
+
+export function upgradeTree (type: TypeObject, tree: TypeObject[]): void {
+  for (const key of type.upgradesFrom) {
+    const from = useObjectsStore().getTypeObject(key)
+    if (tree.includes(from)) continue
+
+    tree.push(from)
+    upgradeTree(from, tree)
+  }
 }
