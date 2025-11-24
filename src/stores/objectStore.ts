@@ -1,3 +1,76 @@
+/*
+Static Objects: markRaw(obj) && Object.freeze(markRaw(objs))
+  - Types
+  - Categories
+
+Game Objects: markRaw(obj), obj.key = reactive(data) when needed
+  - Tile
+  - Unit
+  - Goals
+  - Events
+
+--------
+gameClasses.ts:
+const objStore = useObjStore()
+
+class Player extends GameObject {
+  key!: GameKey
+  name!: string
+  storage = new TypeStorage()
+  knownTileKeys = ref([] as GameKey[])
+  knownTiles = computed(() => this.knownTileKeys.value.map(k => objStore.get(k) as Tile))
+  unitKeys = ref([] as GameKey[])
+  units = computed(() => this.unitKeys.value.map(k => objStore.get(k) as Unit))
+}
+class Unit extends GameObject {
+  key!: GameKey
+  name!: string
+  tileKey = ref('tile:123' as GameKey)
+  tile = computed(() => objStore.get(this.tileKey.value) as Tile))
+  playerKey = ref('player:123' as GameKey)
+  player = computed(() => objStore.get(this.playerKey.value) as Player))
+}
+class Tile extends GameObject {
+  key!: GameKey
+  name!: string
+  playerKey = ref('player:123' as GameKey)
+  player = computed(() => objStore.get(this.playerKey.value) as Player))
+  knownByKeys = ref([] as GameKey[])
+  knownBy = computed(() => this.knownByKeys.value.map(k => objStore.get(k) as Player))
+  unitKeys = ref([] as GameKey[])
+  units = computed(() => this.unitKeys.value.map(k => objStore.get(k) as Unit))
+}
+
+// todo: all obj = new Obj() eg player1 = new Player() etc
+
+objStore.bulkSet([
+  player1, player2, player3,
+   tile1, tile2, tile3,
+   unit1, unit2, unit3,
+])
+
+// in objStore:
+state: {
+  _objects: Record<GameKey, GameObject> = {}
+}
+getters: {
+  get: (state) => (key: ObjKey) => this._objects[key] ?? throw new Error(`[Objstore] Unknown key: ${key}`)
+}
+actions: {
+  bulkSet(objs: GameObject[]) {
+    objs.map(o => markRaw(o))
+    this._objects = { ...this._objects, ...objs }
+  }
+}
+---------
+
+Data Objects: computed(() => {})
+  - Player.yieldStockpile
+
+UiObjects: never in store
+
+ */
+
 import { markRaw } from 'vue'
 import { defineStore } from 'pinia'
 import {
@@ -14,6 +87,7 @@ import {
 import { GameData, StaticData } from '@/types/api'
 import { CategoryObject, initCategoryObject, initTypeObject, TypeClass, TypeObject } from '@/types/typeObjects'
 import { GameClass, GameObject, init, Player } from '@/types/gameObjects'
+import { GameObject as NewGameObject } from '@/objects/gameObjects'
 
 export const useObjectsStore = defineStore('objects', {
   state: () => ({
@@ -40,7 +114,7 @@ export const useObjectsStore = defineStore('objects', {
   }),
   getters: {
     // Generic getter
-    get: (state) => (key: ObjKey): PohObject => {
+    get: (state) => (key: ObjKey): PohObject | NewGameObject => {
       const obj = state._staticObjects[key as CatKey | TypeKey] ?? state._gameObjects[key as GameKey]
       if (!obj) throw new Error(`[objects] Unknown key: ${key}`)
       return obj

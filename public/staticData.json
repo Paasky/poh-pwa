@@ -3442,7 +3442,7 @@
             "name": "Action",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:building",
@@ -3470,7 +3470,7 @@
                 "worldWonderType:oldBailey",
                 "worldWonderType:eiffelTower"
             ],
-            "yieldTypesFromTile": [
+            "inheritYieldTypes": [
                 "yieldType:culture",
                 "yieldType:defense",
                 "yieldType:faith",
@@ -3564,7 +3564,7 @@
                 "traitType:diplomatic",
                 "traitType:blunt"
             ],
-            "yieldTypesFromTile": [
+            "inheritYieldTypes": [
                 "yieldType:culture",
                 "yieldType:faith",
                 "yieldType:food",
@@ -3623,7 +3623,7 @@
                 "traitType:sedentary",
                 "worldWonderType:suomenlinna"
             ],
-            "yieldTypesFromTile": [
+            "inheritYieldTypes": [
                 "yieldType:culture",
                 "yieldType:defense",
                 "yieldType:faith",
@@ -3647,28 +3647,28 @@
             "name": "Climate",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:concept",
             "name": "Concept",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:continent",
             "name": "Continent",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:culture",
             "name": "Culture",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:dogma",
@@ -3678,28 +3678,28 @@
             "relatesTo": [
                 "worldWonderType:notreDame"
             ],
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:domain",
             "name": "Domain",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:elevation",
             "name": "Elevation",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:equipment",
             "name": "Equipment",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:era",
@@ -3709,28 +3709,28 @@
             "relatesTo": [
                 "worldWonderType:tombOfMausolus"
             ],
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:event",
             "name": "Event",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:feature",
             "name": "Feature",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:flatLand",
             "name": "Flat Land",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": [],
+            "inheritYieldTypes": [],
             "requires": [
                 "elevationType:flat",
                 "domainType:land"
@@ -3741,28 +3741,28 @@
             "name": "Fresh Water",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:goal",
             "name": "Goal",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:god",
             "name": "God",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:heritage",
             "name": "Heritage",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:improvement",
@@ -3774,7 +3774,7 @@
                 "stockpileType:hydrogenBomb",
                 "stockpileType:planetBuster"
             ],
-            "yieldTypesFromTile": [
+            "inheritYieldTypes": [
                 "yieldType:culture",
                 "yieldType:defense",
                 "yieldType:faith",
@@ -3798,35 +3798,35 @@
             "name": "Interaction",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:majorCulture",
             "name": "Major Culture",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:majorLeader",
             "name": "Major Leader",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:minorCulture",
             "name": "Minor Culture",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:minorLeader",
             "name": "Minor Leader",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:mountains",
@@ -3838,7 +3838,7 @@
                 "worldWonderType:machuPicchu",
                 "worldWonderType:neuschwanstein"
             ],
-            "yieldTypesFromTile": [],
+            "inheritYieldTypes": [],
             "requires": [
                 [
                     "elevationType:mountain",
@@ -3851,14 +3851,14 @@
             "name": "Myth",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:nationalWonder",
             "name": "National Wonder",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": [
+            "inheritYieldTypes": [
                 "yieldType:culture",
                 "yieldType:defense",
                 "yieldType:faith",
@@ -3883,7 +3883,7 @@
             "name": "Natural Wonder",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": [
+            "inheritYieldTypes": [
                 "yieldType:culture",
                 "yieldType:defense",
                 "yieldType:faith",
@@ -3908,112 +3908,112 @@
             "name": "Navigable River",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:ocean",
             "name": "Ocean",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:platform",
             "name": "Platform",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:player",
             "name": "Player",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:policy",
             "name": "Policy",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:region",
             "name": "Region",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:religion",
             "name": "Religion",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:resource",
             "name": "Resource",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:revolution",
             "name": "Revolution",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:river",
             "name": "River",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:route",
             "name": "Route",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:special",
             "name": "Special",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:stockpile",
             "name": "Stockpile",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:technology",
             "name": "Technology",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:terrain",
             "name": "Terrain",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:tile",
             "name": "Tile",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:tradeRoute",
@@ -4030,28 +4030,28 @@
                 "worldWonderType:statueOfLiberty",
                 "worldWonderType:panamaCanal"
             ],
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:trait",
             "name": "Trait",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:turn",
             "name": "Turn",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:turnStart",
             "name": "Turn Start",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:unit",
@@ -4081,7 +4081,7 @@
                 "worldWonderType:brandenburgGate",
                 "worldWonderType:pentagon"
             ],
-            "yieldTypesFromTile": [
+            "inheritYieldTypes": [
                 "yieldType:attack",
                 "yieldType:damage",
                 "yieldType:defense",
@@ -4101,7 +4101,7 @@
             "name": "Unit Design",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:urban",
@@ -4128,7 +4128,7 @@
                 "platformType:truck",
                 "platformType:tracked"
             ],
-            "yieldTypesFromTile": [],
+            "inheritYieldTypes": [],
             "requires": [
                 [
                     "conceptType:city",
@@ -4143,14 +4143,14 @@
             "name": "World",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "conceptType:worldWonder",
             "name": "World Wonder",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": [
+            "inheritYieldTypes": [
                 "yieldType:culture",
                 "yieldType:defense",
                 "yieldType:faith",
@@ -4175,7 +4175,7 @@
             "name": "Yield",
             "concept": "conceptType:concept",
             "description": "",
-            "yieldTypesFromTile": []
+            "inheritYieldTypes": []
         },
         {
             "key": "continentType:america",

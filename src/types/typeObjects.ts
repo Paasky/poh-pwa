@@ -1,5 +1,6 @@
 // Type object definitions (encyclopedia/types dataset)
-import { CatKey, initPohObject, PohObject, Requires, TypeKey, Yield, Yields } from './common'
+import { CatKey, initPohObject, PohObject, Requires, TypeKey } from './common'
+import { Yield, Yields } from '@/types/yield'
 
 export type TypeClass =
   'actionType' |
@@ -97,7 +98,7 @@ export interface TypeObject extends PohObject {
   scienceCost?: number
   isPositive?: boolean
   names?: Record<TypeKey, string>
-  yieldTypesFromTile?: TypeKey[]
+  inheritYieldTypes?: TypeKey[]
 
   allows: TypeKey[]
   requires: Requires
