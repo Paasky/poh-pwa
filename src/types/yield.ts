@@ -23,11 +23,11 @@ export class Yields {
     this.add(...yields)
   }
 
-  get lump (): Record<TypeKey, Yield[]> { return this._lump.slice() }
+  get lump (): Record<TypeKey, Yield[]> { return this._lump }
 
-  get percent (): Record<TypeKey, Yield[]> { return this._percent.slice() }
+  get percent (): Record<TypeKey, Yield[]> { return this._percent }
 
-  get set (): Record<TypeKey, Yield[]> { return this._set.slice() }
+  get set (): Record<TypeKey, Yield[]> { return this._set }
 
   get isEmpty (): boolean { return this._all.length === 0 }
 

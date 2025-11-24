@@ -132,27 +132,39 @@ export class TypeStorage {
   }
 
   add (key: TypeKey, amount: number): TypeStorage {
-    this._items[key] = (this._items[key] ?? 0) + amount
+    this._items[key] = roundToTenth((this._items[key] ?? 0) + amount)
 
     return this
   }
 
   take (key: TypeKey, amount: number): TypeStorage {
-    this._items[key] = Math.max(0, (this._items[key] ?? 0) - amount)
+    if (!this.has(key, amount)) throw new Error(
+      `Not enough ${key} in storage: ${this._items[key] ?? 0} < ${amount}`
+    )
+    this._items[key] = roundToTenth(this._items[key] - amount)
 
     return this
+  }
+
+  takeAll (key: TypeKey): number {
+    const amount = this._items[key] ?? 0
+    this._items[key] = 0
+
+    return amount
   }
 
   takeUpTo (key: TypeKey, amount: number): number {
     const available = this.amount(key)
     const taken = Math.min(available, amount)
-    this._items[key] = available - taken
+    this._items[key] = roundToTenth(available - taken)
 
     return taken
   }
 
   load (yields: Record<TypeKey, number>): TypeStorage {
-    Object.assign(this._items, yields)
+    for (const [key, amount] of Object.entries(yields)) {
+      if (amount > 0) this._items[key as TypeKey] = roundToTenth(amount)
+    }
 
     return this
   }
@@ -198,3 +210,7 @@ export const yearsPerTurnConfig = [
   { start: 2015, end: 2030, yearsPerTurn: 0.333 },
   { start: 2030, end: 99999999, yearsPerTurn: 0.333 },
 ]
+
+export function roundToTenth (v: number): number {
+  return Math.round(v * 10) / 10
+}

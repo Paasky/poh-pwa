@@ -17,6 +17,7 @@ import {
 import { TypeObject } from '@/types/typeObjects'
 import { Yield, Yields } from '@/types/yield'
 import { CatKey, ObjType, TypeStorage } from '@/types/common'
+import { ConstructionQueue, TrainingQueue } from '@/types/queues'
 
 const objStore = useObjectsStore()
 
@@ -49,6 +50,7 @@ export class Construction extends HasCitizens(CanHaveCity(HasPlayer(HasTile(Game
   progress = ref(0)
   completedAtTurn = ref(null as number | null)
 
+  types: TypeObject[]
   yields = computed(() => {
     // Is a Wonder or full health -> no yield changes
     if (this.type.class === 'nationalWonderType'
@@ -73,6 +75,7 @@ export class Construction extends HasCitizens(CanHaveCity(HasPlayer(HasTile(Game
         })
       }
     }
+    return new Yields(yields)
   })
 
   constructor (
@@ -83,6 +86,7 @@ export class Construction extends HasCitizens(CanHaveCity(HasPlayer(HasTile(Game
     this.cityKey.value = cityKey
     this.type = type
     this.name = type.name
+    this.types = [type]
   }
 }
 
@@ -112,6 +116,10 @@ export class City extends HasCitizens(HasPlayer(HasTile(HasUnits(GameObject)))) 
   name = ref('')
   canAttack = ref(false)
   health = ref(100)
+  isCapital = ref(false)
+
+  constructionQueue = new ConstructionQueue()
+  trainingQueue = new TrainingQueue()
 
   holyCityForKeys = ref([] as GameKey[])
   holyCityFor = hasMany(this.holyCityForKeys, Religion)
@@ -164,6 +172,12 @@ export class Culture extends HasCitizens(HasPlayer(GameObject)) {
 export class Government extends HasPlayer(GameObject) {
   policies = ref([] as TypeObject[])
 
+  canLevy = computed(() => !!this.policies.value.find(
+    (p) => p.specials.includes('specialType:canLevy'))
+  )
+  canMobilize = computed(() => !!this.policies.value.find(
+    (p) => p.specials.includes('specialType:canMobilize'))
+  )
   hasElections = computed(() => !!this.policies.value.find(
     (p) => p.specials.includes('specialType:elections'))
   )
@@ -257,6 +271,15 @@ export class Tile extends CanHavePlayer(HasUnits(GameObject)) {
   }
 }
 
+// mercenary: +10% strength, +50% upkeep, 1/city/t;
+// regular: no effects
+// levy: -20% strength, -1 happy if not at war, 1/city/t; can be demobilized -> becomes citizen
+// reserve: -90% strength and upkeep, cannot move;        can be mobilized -> becomes mobilized and remove citizen
+// mobilizing1: -60% strength, -1 happy if not at war;    can be demobilized -> becomes reserve and citizen
+// mobilizing2: -30% strength, -1 happy if not at war;    can be demobilized -> becomes reserve and citizen
+// mobilized: -10% strength, -1 happy if not at war;      can be demobilized -> becomes reserve and citizen
+export type UnitStatus = 'mercenary' | 'regular' | 'levy' | 'reserve' | 'mobilizing1' | 'mobilizing2' | 'mobilized'
+
 export class Unit extends HasPlayer(HasTile(GameObject)) {
   private _customName = ref('')
   name = computed(() => this._customName.value || this.design.value.name)
@@ -264,6 +287,7 @@ export class Unit extends HasPlayer(HasTile(GameObject)) {
   canAttack = ref(false)
   moves = ref(0)
   health = ref(100)
+  status = ref('regular' as UnitStatus)
 
   designKey: GameKey
   design = computed(() => objStore.get(this.designKey) as UnitDesign)
@@ -304,9 +328,11 @@ export class Unit extends HasPlayer(HasTile(GameObject)) {
 }
 
 export class UnitDesign extends CanHavePlayer(HasUnits(GameObject)) {
+  equipment: TypeObject
   name: string
   platform: TypeObject
-  equipment: TypeObject
+  productionCost: number
+  types: TypeObject[]
   yields: Yields
 
   constructor (
@@ -319,7 +345,9 @@ export class UnitDesign extends CanHavePlayer(HasUnits(GameObject)) {
     this.name = name
     if (playerKey) this.playerKey.value = playerKey
 
-    this.yields = new Yields([...platform.yields.all(), ...equipment.yields.all()])
+    this.types = [this.platform, this.equipment]
+    this.yields = new Yields(this.types.flatMap(t => t.yields.all()))
+    this.productionCost = this.yields.applyMods().getLumpAmount('yieldType:productionCost')
   }
 }
 
