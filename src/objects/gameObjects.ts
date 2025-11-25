@@ -57,54 +57,6 @@ export class GameObject {
   }
 }
 
-export class Construction extends HasCitizens(CanHaveCity(HasPlayer(HasTile(GameObject)))) {
-  type: TypeObject // buildingType/improvementType/nationalWonderType/worldWonderType
-  name: string
-
-  health = ref(100)
-  progress = ref(0)
-  completedAtTurn = ref(null as number | null)
-
-  types: TypeObject[]
-  yields = computed(() => {
-    // Is a Wonder or full health -> no yield changes
-    if (this.type.class === 'nationalWonderType'
-      || this.type.class === 'worldWonderType'
-      || this.health.value >= 100
-    ) {
-      return this.type.yields
-    }
-
-    const yields = [] as Yield[]
-    for (const y of this.type.yields.all()) {
-
-      // Include the original yield
-      yields.push(y)
-
-      // If it's a lump yield, add a -health% modifier
-      if (y.method === 'lump') {
-        yields.push({
-          ...y,
-          method: 'percent',
-          amount: this.health.value - 100
-        })
-      }
-    }
-    return new Yields(yields)
-  })
-
-  constructor (
-    key: GameKey, type: TypeObject,
-    cityKey: GameKey | null = null
-  ) {
-    super(key)
-    this.cityKey.value = cityKey
-    this.type = type
-    this.name = type.name
-    this.types = [type]
-  }
-}
-
 export class Citizen extends HasCity(HasCulture(CanHaveReligion(HasPlayer(HasTile(GameObject))))) {
   policy = ref<TypeObject | null>(null)
 
@@ -168,6 +120,54 @@ export class City extends HasCitizens(HasPlayer(HasTile(HasUnits(GameObject)))) 
     this.playerKey.value = playerKey
     this.tileKey.value = tileKey
     this.name.value = name
+  }
+}
+
+export class Construction extends HasCitizens(CanHaveCity(HasPlayer(HasTile(GameObject)))) {
+  type: TypeObject // buildingType/improvementType/nationalWonderType/worldWonderType
+  name: string
+
+  health = ref(100)
+  progress = ref(0)
+  completedAtTurn = ref(null as number | null)
+
+  types: TypeObject[]
+  yields = computed(() => {
+    // Is a Wonder or full health -> no yield changes
+    if (this.type.class === 'nationalWonderType'
+      || this.type.class === 'worldWonderType'
+      || this.health.value >= 100
+    ) {
+      return this.type.yields
+    }
+
+    const yields = [] as Yield[]
+    for (const y of this.type.yields.all()) {
+
+      // Include the original yield
+      yields.push(y)
+
+      // If it's a lump yield, add a -health% modifier
+      if (y.method === 'lump') {
+        yields.push({
+          ...y,
+          method: 'percent',
+          amount: this.health.value - 100
+        })
+      }
+    }
+    return new Yields(yields)
+  })
+
+  constructor (
+    key: GameKey, type: TypeObject,
+    cityKey: GameKey | null = null
+  ) {
+    super(key)
+    this.cityKey.value = cityKey
+    this.type = type
+    this.name = type.name
+    this.types = [type]
   }
 }
 
