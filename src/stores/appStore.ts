@@ -4,6 +4,7 @@ import { useEncyclopediaStore } from '@/components/Encyclopedia/encyclopediaStor
 import { GameData, StaticData } from '@/types/api'
 import { EngineService } from '@/components/Engine/engine'
 import { WorldManager } from '@/managers/worldManager'
+import { worldSizes } from '@/factories/worldFactory'
 
 async function fetchJSON<T> (url: string): Promise<T> {
   const res = await fetch(url, { cache: 'no-store' })
@@ -30,7 +31,7 @@ export const useAppStore = defineStore('app', {
       encyclopedia.init()
 
       // Create a new world
-      if (!gameDataUrl) new WorldManager().create()
+      if (!gameDataUrl) new WorldManager().create(worldSizes[0])
 
       // Initialize the game engine
       await EngineService.init(objects.world)

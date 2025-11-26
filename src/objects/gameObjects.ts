@@ -1,4 +1,4 @@
-import { computed, ref } from 'vue'
+import { computed, Ref, ref, UnwrapRef } from 'vue'
 import { useObjectsStore } from '@/stores/objectStore'
 import {
   CanHaveCity,
@@ -16,10 +16,11 @@ import {
 } from '@/objects/gameMixins'
 import { TypeObject } from '@/types/typeObjects'
 import { Yield, Yields } from '@/objects/yield'
-import { CatKey, ObjType } from '@/types/common'
+import { CatKey, ObjType, roundToTenth, TypeKey } from '@/types/common'
 import { ConstructionQueue, TrainingQueue } from '@/objects/queues'
 import { TypeStorage } from '@/objects/storage'
 import { Government, Research } from '@/objects/player'
+import { EventManager } from '@/managers/eventManager'
 
 const objStore = useObjectsStore()
 
@@ -77,6 +78,21 @@ export class Citizen extends HasCity(HasCulture(CanHaveReligion(HasPlayer(HasTil
     ...this._tileYields.value.all(),
     ...(this._workYields.value?.all() ?? [])
   ]))
+
+  constructor (key: GameKey, city: City, culture: Culture,
+    religion: Religion | null = null, tile?: Tile
+  ) {
+    super(key)
+    this.cityKey.value = city.key
+    this.cultureKey.value = culture.key
+    if (religion) this.religionKey.value = religion.key
+    this.tileKey.value = tile?.key ?? city.tileKey.value
+
+    if (tile?.constructionKey.value) {
+      this.workKey.value = tile.constructionKey.value
+      this.work.value!.citizenKeys.value.push(this.key)
+    }
+  }
 }
 
 export class City extends HasCitizens(HasPlayer(HasTile(HasUnits(GameObject)))) {
@@ -88,6 +104,8 @@ export class City extends HasCitizens(HasPlayer(HasTile(HasUnits(GameObject)))) 
   constructionQueue = new ConstructionQueue()
   trainingQueue = new TrainingQueue()
   storage = new TypeStorage()
+
+  trainableDesigns = computed(() => this.player.value.designs.value)
 
   holyCityForKeys = ref([] as GameKey[])
   holyCityFor = hasMany(this.holyCityForKeys, Religion)
@@ -174,16 +192,142 @@ export class Construction extends HasCitizens(CanHaveCity(HasPlayer(HasTile(Game
 export type CultureStatus = 'notSettled' | 'canSettle' | 'mustSettle' | 'settled'
 
 export class Culture extends HasCitizens(HasPlayer(GameObject)) {
-  type: TypeObject
-  status: CultureStatus = 'notSettled'
+  type: Ref<UnwrapRef<TypeObject>, UnwrapRef<TypeObject> | TypeObject>
+  leader = computed(() => objStore.getTypeObject(
+    this.type.value.allows.find(
+      a => a.indexOf('LeaderType:') >= 0
+    ) as TypeKey
+  ))
+  region = computed(() => objStore.getTypeObject(this.type.value.requires
+    .filter(['regionType'])
+    .allTypes[0] as TypeKey
+  ))
+  status = ref<CultureStatus>('notSettled')
 
   heritages = ref([] as TypeObject[])
   heritageCategoryPoints = ref({} as Record<CatKey, number>)
-  selectableHeritages = computed(() => [] as TypeObject[])
+
+  selectableHeritages = computed((): TypeObject[] => {
+    if (this.status.value === 'mustSettle') return []
+    if (this.status.value === 'settled') return []
+
+    const selectable: TypeObject[] = []
+    for (const catData of objStore.getClassTypesPerCategory('heritageType')) {
+      const catIsSelected = catData.types.some(
+        h => this.heritages.value.includes(h)
+      )
+
+      for (const heritage of catData.types) {
+        // Already selected
+        if (this.heritages.value.includes(heritage)) continue
+
+        // If it's stage II -> must have stage I heritage selected
+        if (heritage.heritagePointCost! > 10 && !catIsSelected) continue
+
+        // Not enough points
+        if ((this.heritageCategoryPoints.value[heritage.category!] ?? 0) < heritage.heritagePointCost!) continue
+
+        selectable.push(heritage)
+      }
+    }
+    return selectable
+  })
 
   traits = ref([] as TypeObject[])
   mustSelectTraits = ref({ positive: 0, negative: 0 })
-  selectableTraits = computed(() => [] as TypeObject[])
+
+  selectableTraits = computed((): TypeObject[] => {
+    if (this.status.value !== 'settled') return []
+
+    // Nothing to select?
+    if (this.mustSelectTraits.value.positive + this.mustSelectTraits.value.negative <= 0) return []
+
+    const selectable: TypeObject[] = []
+    for (const catData of objStore.getClassTypesPerCategory('traitType')) {
+      const catIsSelected = catData.types.some(
+        t => this.traits.value.includes(t)
+      )
+
+      for (const trait of catData.types) {
+        // Category already selected
+        if (catIsSelected) continue
+
+        // No more positive/negative slots left to select
+        if (trait.isPositive! && this.mustSelectTraits.value.positive <= 0) continue
+        if (!trait.isPositive! && this.mustSelectTraits.value.negative <= 0) continue
+
+        selectable.push(trait)
+      }
+    }
+    return selectable
+  })
+
+  evolve () {
+    const nextTypeKey = this.type.value.upgradesTo[0]
+    if (!nextTypeKey) throw new Error(`${this.key} cannot evolve further`)
+
+    this.type.value = objStore.getTypeObject(nextTypeKey)
+
+    // If all traits have not been selected yet (4 = two categories to select: one must be pos, one neg)
+    if (this.selectableTraits.value.length >= 4) {
+      this.mustSelectTraits.value.positive++
+      this.mustSelectTraits.value.negative++
+    }
+
+    new EventManager().create(
+      'cultureEvolved',
+      `evolved to the ${this.type.value.name} culture`,
+      this.player.value,
+      this,
+    )
+  }
+
+  selectHeritage (heritage: TypeObject) {
+    if (this.heritages.value.includes(heritage)) return
+    if (!this.selectableHeritages.value.includes(heritage)) throw new Error(`${this.key}: ${heritage.name} not selectable`)
+
+    // Add the heritage
+    this.heritages.value.push(heritage)
+
+    // Check if culture status needs to change
+    if (this.heritages.value.length === 2) {
+      this.status.value = 'canSettle'
+    }
+    if (this.heritages.value.length > 2) {
+      this.status.value = 'mustSettle'
+    }
+
+    // If gains a tech, complete it immediately
+    for (const gainKey of heritage.gains) {
+      if (gainKey.startsWith('technologyType:')) {
+        this.player.value.research.complete(objStore.getTypeObject(gainKey))
+      }
+    }
+  }
+
+  selectTrait (trait: TypeObject) {
+    if (this.traits.value.includes(trait)) return
+    if (!this.selectableTraits.value.includes(trait)) throw new Error(`${this.key}: ${trait.name} not selectable`)
+
+    this.traits.value.push(trait)
+    if (trait.isPositive!) {
+      this.mustSelectTraits.value.positive--
+    } else {
+      this.mustSelectTraits.value.negative--
+    }
+  }
+
+  settle () {
+    if (this.status.value === 'settled') return
+    this.status.value = 'settled'
+    this.mustSelectTraits.value = { positive: 2, negative: 2 }
+    new EventManager().create(
+      'settled',
+      `settled down`,
+      this.player.value,
+      this,
+    )
+  }
 
   types = computed(() => [this.concept, ...this.heritages.value, ...this.traits.value])
   yields = computed(() => new Yields(this.types.value.flatMap(
@@ -192,7 +336,7 @@ export class Culture extends HasCitizens(HasPlayer(GameObject)) {
 
   constructor (key: GameKey, type: TypeObject, playerKey: GameKey) {
     super(key)
-    this.type = type
+    this.type = ref(type)
     this.playerKey.value = playerKey
   }
 }
@@ -204,8 +348,13 @@ export class Player extends HasCitizens(HasCulture(CanHaveReligion(HasUnits(Game
   government: Government
   research: Research
 
+  cityKeys = ref([] as GameKey[])
+  cities = hasMany(this.cityKeys, City)
+
   designKeys = ref([] as GameKey[])
   designs = hasMany(this.designKeys, UnitDesign)
+
+  activeDesigns = computed(() => this.designs.value.filter(d => d.isActive.value))
 
   knownTileKeys = ref([] as GameKey[])
   knownTiles = hasMany(this.knownTileKeys, Tile)
@@ -236,7 +385,7 @@ export class Religion extends HasCitizens(HasCity(HasPlayers(GameObject))) {
   }
 }
 
-export class Tile extends CanHavePlayer(HasUnits(GameObject)) {
+export class Tile extends CanHaveCity(CanHavePlayer(HasUnits(GameObject))) {
   x: number
   y: number
   domain: TypeObject
@@ -247,6 +396,9 @@ export class Tile extends CanHavePlayer(HasUnits(GameObject)) {
   resource = ref<TypeObject | null>(null)
   pollution = ref<TypeObject | null>(null)
   naturalWonder = null as TypeObject | null
+
+  constructionKey = ref<GameKey | null>(null)
+  construction = canHaveOne(this.constructionKey, Construction)
 
   private _staticTypes: TypeObject[]
   private _dynamicTypes: TypeObject[] = []
@@ -304,7 +456,7 @@ export class Tile extends CanHavePlayer(HasUnits(GameObject)) {
 // mobilized: -10% strength, -1 happy if not at war;      can be demobilized -> becomes reserve and citizen
 export type UnitStatus = 'mercenary' | 'regular' | 'levy' | 'reserve' | 'mobilizing1' | 'mobilizing2' | 'mobilized'
 
-export class Unit extends HasPlayer(HasTile(GameObject)) {
+export class Unit extends CanHaveCity(HasPlayer(HasTile(GameObject))) {
   private _customName = ref('')
   name = computed(() => this._customName.value || this.design.value.name)
 
@@ -315,6 +467,9 @@ export class Unit extends HasPlayer(HasTile(GameObject)) {
 
   designKey: GameKey
   design = computed(() => objStore.get(this.designKey) as UnitDesign)
+
+  origPlayerKey: GameKey
+  origPlayer = computed(() => objStore.get(this.origPlayerKey) as Player)
 
   myTypes = computed((): TypeObject[] => [this.concept, this.design.value.platform, this.design.value.equipment])
   types = computed((): TypeObject[] => {
@@ -337,6 +492,39 @@ export class Unit extends HasPlayer(HasTile(GameObject)) {
     ...this._tileYields.value.all(),
   ]))
 
+  delete () {
+    this.design.value.unitKeys.value = this.design.value.unitKeys.value.filter(k => k !== this.key)
+    this.player.value.unitKeys.value = this.player.value.unitKeys.value.filter(k => k !== this.key)
+    this.tile.value.unitKeys.value = this.tile.value.unitKeys.value.filter(k => k !== this.key)
+    if (this.city.value) this.city.value.unitKeys.value = this.city.value.unitKeys.value.filter(u => u !== this.key)
+  }
+
+  modifyHealth (amount: number) {
+    this.health.value = Math.max(0, Math.min(100, roundToTenth(this.health.value + amount)))
+
+    if (this.health.value <= 0) {
+      new EventManager().create(
+        'unitKilled',
+        `${this.name.value} was killed`,
+        this.player.value,
+        this,
+      )
+
+      this.delete()
+      return
+    }
+
+    if (this.health.value >= 100 && this.action.value?.key === 'actionType:heal') {
+      new EventManager().create(
+        'unitHealed',
+        `${this.name.value} is fully healed`,
+        this.player.value,
+        this,
+      )
+      this.action.value = null
+    }
+  }
+
   constructor (
     key: GameKey, playerKey: GameKey, tileKey: GameKey, designKey: GameKey,
     name: string = ''
@@ -344,6 +532,7 @@ export class Unit extends HasPlayer(HasTile(GameObject)) {
     super(key)
     this.designKey = designKey
     this.playerKey.value = playerKey
+    this.origPlayerKey = playerKey
     this.tileKey.value = tileKey
     this._customName.value = name
   }
@@ -353,6 +542,7 @@ export class UnitDesign extends CanHavePlayer(HasUnits(GameObject)) {
   platform: TypeObject
   equipment: TypeObject
   name: string
+  isActive = ref(true)
   isElite: boolean
   productionCost: number
   types: TypeObject[]

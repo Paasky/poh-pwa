@@ -135,7 +135,7 @@ export class Government extends HasPlayer(Object) {
 
 export class Research extends HasPlayer(Object) {
   researched = ref<TypeObject[]>([])
-  researching = ref<Record<string, { progress: number, target: TypeObject }>>({})
+  researching = ref<Record<TypeKey, { progress: number, target: TypeObject }>>({})
   current = ref<TypeObject | null>(null)
   queue = ref<TypeObject[]>([])
   era = computed((): TypeObject | null => {
@@ -152,6 +152,21 @@ export class Research extends HasPlayer(Object) {
     // Fallback: earliest era
     return objStore.getTypeObject(highestType!.category as TypeKey)
   })
+
+  complete (tech: TypeObject) {
+    if (this.researched.value.includes(tech)) return
+
+    // It's now researched
+    this.researched.value.push(tech)
+    delete this.researching.value[tech.key]
+
+    // Remove from current and queue if it was in either
+    if (this.current.value === tech) this.current.value = null
+    this.queue.value = this.queue.value.filter(t => t !== tech)
+
+    // Not researching anything anymore and there is something in the queue: start next in the queue
+    if (!this.current.value && this.queue.value.length) this.current.value = this.queue.value[0]
+  }
 
   constructor (playerKey: GameKey) {
     super()

@@ -1,9 +1,9 @@
 import { markRaw } from 'vue'
 import { defineStore } from 'pinia'
-import { CatKey, GameKey, isCategoryObject, isTypeObject, ObjKey, TypeKey, World } from '@/types/common'
+import { CatKey, isCategoryObject, isTypeObject, ObjKey, TypeKey, World } from '@/types/common'
 import { GameData, StaticData } from '@/types/api'
 import { CategoryObject, initCategoryObject, initTypeObject, TypeClass, TypeObject } from '@/types/typeObjects'
-import { GameClass, GameObject, Player } from '@/objects/gameObjects'
+import { GameClass, GameKey, GameObject, Player } from '@/objects/gameObjects'
 
 export const useObjectsStore = defineStore('objects', {
   state: () => ({

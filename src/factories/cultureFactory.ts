@@ -12,7 +12,7 @@ export const createCulture = (
 ): Culture => {
   const culture = new Culture(generateKey('culture'), type, playerKey)
 
-  culture.status = status
+  culture.status.value = status
   culture.heritages.value = heritages
   culture.heritageCategoryPoints.value = heritageCategoryPoints
   culture.traits.value = traits

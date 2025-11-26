@@ -1,5 +1,4 @@
-import { Citizen, Player, Tile, Unit, UnitDesign } from '@/types/gameObjects'
-import { createUnit } from '@/factories/unitFactory'
+import { City, generateKey, Player, Tile, Unit, UnitDesign, UnitStatus } from '@/objects/gameObjects'
 import { Manager } from '@/managers/_manager'
 
 export class UnitManager extends Manager {
@@ -7,37 +6,33 @@ export class UnitManager extends Manager {
     player: Player,
     unitDesign: UnitDesign,
     tile: Tile,
-    citizen?: Citizen,
+    city?: City,
+    status?: UnitStatus,
     moves?: number,
-    health: number = 100,
-    isLevy = false,
-    isMercenary = false,
-    isMobilized = false,
+    health?: number,
   ): Unit {
-    const unit = createUnit(
+    const unit = new Unit(
+      generateKey('unit'),
       player.key,
-      unitDesign.key,
       tile.key,
-      moves ?? unitDesign.equipment.moves!,
-      isLevy,
-      isMercenary,
-      isMobilized,
-      health,
-      citizen?.city,
+      unitDesign.key,
     )
-    this._objects.set(unit)
-    player.units.push(unit.key)
-    return unit
-  }
+    if (city) unit.cityKey.value = city.key
+    if (status) unit.status.value = status
+    if (moves !== undefined) unit.moves.value = moves
+    if (health !== undefined) unit.health.value = health
 
-  getDesign (unit: Unit): UnitDesign {
-    return this._objects.getGameObject(unit.design) as UnitDesign
+    this._objects.set(unit)
+
+    player.unitKeys.value.push(unit.key)
+
+    return unit
   }
 
   calcTiles (player: Player): void {
   }
 
   resetMoves (unit: Unit): void {
-    unit.moves = this.getDesign(unit).equipment.moves!
+    unit.moves.value = unit.design.value.equipment.moves!
   }
 }

@@ -1,5 +1,5 @@
 import { Manager } from '@/managers/_manager'
-import { Culture, Player } from '@/types/gameObjects'
+import { Culture, Player } from '@/objects/gameObjects'
 import { CatKey, TypeKey, Yields } from '@/types/common'
 import { TypeObject } from '@/types/typeObjects'
 import { EventManager } from '@/managers/eventManager'

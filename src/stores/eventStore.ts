@@ -1,19 +1,20 @@
 import { defineStore } from 'pinia'
-import { GameEvent } from '@/types/events'
+import { EventSetting, EventType, GameEvent } from '@/types/events'
 
 export const useEventStore = defineStore('events', {
   state: () => ({
     turnEvents: [] as GameEvent[],
     current: null as GameEvent | null,
+    eventSettings: {} as Record<EventType, EventSetting>,
   }),
   getters: {
-    unreadEvents: (state): GameEvent[] => state.turnEvents.filter(e => !e.read),
+    unreadEvents: (state): GameEvent[] => (state.turnEvents as GameEvent[]).filter(e => !e.read),
   },
   actions: {
     open (event: GameEvent) {
       if (this.current?.id === event.id) return
 
-      this.current = event
+      this.current = event as any
     },
 
     closeCurrent () {

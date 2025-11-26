@@ -1,35 +1,25 @@
 import { Manager } from '@/managers/_manager'
-import { Citizen, City, Culture, Religion, Tile } from '@/types/gameObjects'
-import { TypeObject } from '@/types/typeObjects'
+import { Citizen, City, generateKey, Tile } from '@/objects/gameObjects'
 
 export class CitizenManager extends Manager {
-  calcYields (citizen: Citizen) {
+  create (city: City, tile?: Tile): Citizen {
+    const citizen = new Citizen(
+      generateKey('citizen'),
+      city,
+      city.player.value.culture.value,
+      city.player.value.religion.value,
+      tile
+    )
+    this._objects.set(citizen)
 
-  }
+    city.citizenKeys.value.push(citizen.key)
 
-  create (city: City): Citizen {
-    const citizen = {} as Citizen
-    city.citizens.push(citizen.key)
     return citizen
   }
 
   delete (citizen: Citizen) {
-
-  }
-
-  setCulture (citizen: Citizen, culture: Culture) {
-
-  }
-
-  setPolicy (citizen: Citizen, policy: TypeObject) {
-
-  }
-
-  setReligion (citizen: Citizen, religion: Religion) {
-
-  }
-
-  setTile (citizen: Citizen, tile: Tile) {
-
+    citizen.city.value.citizenKeys.value = citizen.city.value.citizenKeys.value.filter(k => k !== citizen.key)
+    if (citizen.work.value) citizen.work.value.citizens.value = citizen.work.value.citizens.value.filter(k => k !== citizen.key)
+    this._objects.delete(citizen.key)
   }
 }

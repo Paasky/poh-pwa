@@ -1,37 +1,21 @@
 import { World } from '@/types/common'
 import { UnitManager } from '@/managers/unitManager'
 import { PlayerManager } from '@/managers/playerManager'
-import { createWorld } from '@/factories/worldFactory'
+import { createWorld, WorldSize } from '@/factories/worldFactory'
 import { Manager } from '@/managers/_manager'
 import { CultureManager } from '@/managers/cultureManager'
 import { UnitDesignPrototype } from '@/objects/player'
 import { UnitDesignManager } from '@/managers/unitDesignManager'
 
-export type WorldSize = {
-  name: string
-  x: number
-  y: number
-  continents: 4 | 5 | 6 | 7 | 8 | 9 | 10
-  majorsPerContinent: 1 | 2 | 3 | 4
-  minorsPerPlayer: 0 | 1 | 2
-}
-
-export const worldSizes: WorldSize[] = [
-  { name: 'Tiny', x: 72, y: 36, continents: 4, majorsPerContinent: 1, minorsPerPlayer: 0 },
-  { name: 'Small', x: 120, y: 60, continents: 4, majorsPerContinent: 2, minorsPerPlayer: 2 },
-  { name: 'Regular', x: 168, y: 84, continents: 5, majorsPerContinent: 3, minorsPerPlayer: 2 },
-  { name: 'Large', x: 208, y: 104, continents: 6, majorsPerContinent: 4, minorsPerPlayer: 2 },
-  { name: 'Huge', x: 264, y: 132, continents: 10, majorsPerContinent: 4, minorsPerPlayer: 2 },
-]
-
 export class WorldManager extends Manager {
-  create (): World {
+  create (size: WorldSize): World {
     console.time('world')
     const designManager = new UnitDesignManager()
     const playerManager = new PlayerManager()
     const unitManager = new UnitManager()
 
-    const worldBundle = createWorld()
+    const worldBundle = createWorld(size)
+
     Object.assign(this._objects.world, worldBundle.world)
     console.log('world', new Date())
 

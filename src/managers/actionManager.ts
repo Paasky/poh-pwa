@@ -1,6 +1,6 @@
 import { Manager } from '@/managers/_manager'
-import { Tile, Unit } from '@/types/gameObjects'
 import { TypeObject } from '@/types/typeObjects'
+import { Tile, Unit } from '@/objects/gameObjects'
 
 export class ActionManager extends Manager {
   attack (unit: Unit, target: Tile | Unit) {
