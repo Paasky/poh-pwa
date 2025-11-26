@@ -5,161 +5,7 @@ import { WorldSize } from '@/factories/worldFactory'
 import { useObjectsStore } from '@/stores/objectStore'
 import { getRandom, takeRandom } from '@/helpers/arrayTools'
 import { mountainRange, removeOrphanArea } from '@/factories/TerraGenerator/postProcessors'
-
-const climateBands = [
-  ['climateType:frozen'],
-  ['climateType:frozen', 'climateType:cold'],
-  ['climateType:cold', 'climateType:temperate'],
-  ['climateType:temperate', 'climateType:temperate', 'climateType:warm'],
-  ['climateType:temperate', 'climateType:warm'],
-  ['climateType:warm', 'climateType:hot', 'climateType:hot'],
-  ['climateType:hot'],
-  ['climateType:hot', 'climateType:hot', 'climateType:warm'],
-  ['climateType:warm', 'climateType:equatorial'],
-  ['climateType:equatorial'],
-  ['climateType:equatorial', 'climateType:warm'],
-  ['climateType:warm', 'climateType:cold'],
-  ['climateType:cold', 'climateType:frozen'],
-  ['climateType:frozen'],
-] as TypeKey[][]
-
-const climateTerrain = {
-  'climateType:frozen': 'terrainType:snow',
-  'climateType:cold': 'terrainType:tundra',
-  'climateType:temperate': 'terrainType:grass',
-  'climateType:warm': 'terrainType:plains',
-  'climateType:hot': 'terrainType:desert',
-  'climateType:equatorial': 'terrainType:grass',
-} as Record<TypeKey, TypeKey>
-
-// The top and bottom rows are ocean
-const yTypes = {
-  0: 'oceanType:arctic',
-
-  13: 'oceanType:antarctic',
-} as Record<number, TypeKey>
-
-// The left and right columns are ocean; so is the middle
-const xTypes = {
-  0: 'oceanType:pacific',
-
-  11: 'oceanType:atlantic',
-  12: 'oceanType:atlantic',
-
-  27: 'oceanType:pacific',
-} as Record<number, TypeKey>
-
-// Set continents and fine-tune oceans/seas
-const yxTypes = {
-  1: {
-    1: 'oceanType:pacific',
-
-    26: 'oceanType:pacific',
-  },
-  2: {
-    13: 'oceanType:atlantic',
-    15: 'continentType',
-  },
-  3: {
-    1: 'oceanType:pacific',
-
-    7: 'continentType',
-
-    19: 'continentType',
-
-    26: 'oceanType:pacific',
-  },
-  4: {
-    3: 'continentType',
-
-    13: 'oceanType:atlantic',
-  },
-  5: {
-    1: 'oceanType:pacific',
-
-    13: 'oceanType:atlantic', // med is attached to atlantic
-    14: 'oceanType:mediterranean',
-    15: 'oceanType:mediterranean',
-    16: 'oceanType:mediterranean',
-    17: 'oceanType:mediterranean',
-    18: 'oceanType:mediterranean',
-    19: 'oceanType:mediterranean',
-
-    24: 'continentType',
-    26: 'oceanType:pacific',
-  },
-  6: {
-    13: 'oceanType:atlantic',
-  },
-  7: {
-    1: 'oceanType:pacific',
-
-    4: 'oceanType:caribbean',
-    5: 'oceanType:caribbean',
-    6: 'oceanType:caribbean',
-    7: 'oceanType:caribbean',
-    8: 'oceanType:caribbean',
-    9: 'oceanType:caribbean',
-    10: 'oceanType:atlantic', // carib is attached to atlantic
-
-    26: 'oceanType:pacific',
-  },
-  8: {
-    13: 'oceanType:atlantic',
-
-    20: 'continentType',
-  },
-  9: {
-    1: 'oceanType:pacific',
-
-    4: 'continentType',
-
-    16: 'continentType',
-
-    26: 'oceanType:pacific',
-  },
-  10: {
-    8: 'continentType',
-
-    13: 'oceanType:atlantic',
-
-    18: 'oceanType:indian',
-    19: 'oceanType:indian',
-    20: 'oceanType:indian',
-    21: 'oceanType:indian',
-  },
-  11: {
-    1: 'oceanType:pacific',
-
-    18: 'oceanType:indian',
-    19: 'oceanType:indian',
-    20: 'oceanType:indian',
-    21: 'oceanType:indian',
-
-    24: 'continentType',
-    26: 'oceanType:pacific',
-  },
-  12: {
-    13: 'oceanType:atlantic',
-
-    18: 'oceanType:indian',
-    19: 'oceanType:indian',
-    20: 'oceanType:indian',
-    21: 'oceanType:indian',
-  },
-} as Record<number, Record<number, TypeClass | TypeKey>>
-
-export function example () {
-  return new TerraGenerator({
-    name: 'Terra',
-    x: 28 * 9,
-    y: 14 * 9,
-    continents: 10,
-    majorsPerContinent: 4,
-    minorsPerPlayer: 2,
-    seaLevel: 2,
-  }).generateStratLevel().generateRegLevel()
-}
+import { Tetris } from '@/factories/TerraGenerator/tetris'
 
 export class TerraGenerator {
   size: WorldSize
@@ -190,7 +36,18 @@ export class TerraGenerator {
   coastTerrain: TypeObject
   lakeTerrain: TypeObject
 
-  constructor (size: WorldSize) {
+  private readonly _xTypes: Record<number, TypeKey> = {}
+  private readonly _yTypes: Record<number, TypeKey> = {}
+  private readonly _yxTypes: Record<number, Record<number, TypeClass | TypeKey>> = {}
+  private readonly _climateBands: TypeKey[][] = []
+
+  constructor (size: WorldSize, flipX: boolean = true, flipY: boolean = true, flipClimate: boolean = true) {
+    if (size.y % 9 !== 0) throw new Error(
+      `World size must be a multiple of 9, got [x${size.x}, y${size.y}]`
+    )
+    if ((size.y * 2) !== size.x) throw new Error(
+      `World size must be a 2:1 rectangle, got [x${size.x}, y${size.y}]`
+    )
     this.size = size
     this.stratSize = { x: size.x / 9, y: size.y / 9 }
     this.regSize = { x: size.x / 3, y: size.y / 3 }
@@ -207,6 +64,12 @@ export class TerraGenerator {
     this.seaTerrain = this._objStore.getTypeObject('terrainType:sea')
     this.coastTerrain = this._objStore.getTypeObject('terrainType:coast')
     this.lakeTerrain = this._objStore.getTypeObject('terrainType:lake')
+
+    // Initialize flipped presets according to options
+    this._climateBands = getClimateBands(flipClimate)
+    this._yTypes = getYTypes(this.stratSize.y, flipY)
+    this._xTypes = getXTypes(this.stratSize.x, flipX)
+    this._yxTypes = getYXTypes(this.stratSize.x, this.stratSize.y, flipY, flipX)
   }
 
   // Generate str-level tiles
@@ -232,7 +95,7 @@ export class TerraGenerator {
     for (let y = 0; y < this.stratSize.y; y++) {
       for (let x = 0; x < this.stratSize.x; x++) {
         // Get preset type from x/y types
-        const type = (xTypes[x] ?? yTypes[y] ?? (yxTypes[y] ?? [])[x] ?? null) as TypeClass | TypeKey | null
+        const type = (this._xTypes[x] ?? this._yTypes[y] ?? (this._yxTypes[y] ?? [])[x] ?? null) as TypeClass | TypeKey | null
 
         // If no preset type, skip tile
         if (!type) {
@@ -508,6 +371,30 @@ export class TerraGenerator {
       }
     }
 
+    // Find large blobs of Sea: add random tetris-shape of land
+    for (let y = 0; y < this.regSize.y; y++) {
+      for (let x = 0; x < this.regSize.x; x++) {
+        const key = Tile.getKey(x, y)
+        const tile = this.regTiles[key]!
+        if (tile.terrain !== this.seaTerrain) continue
+
+        const neighbors = this._getRegNeighbors(x, y, 'manhattan', 3)
+        const allAreSameTerrain = neighbors.every(n => n.terrain === tile.terrain)
+
+        if (!allAreSameTerrain) continue
+
+        // Generate a small "tetris"-like island in a 2x2 or 3x3 footprint
+        const offsets = Tetris.randomOffsets()
+        for (const o of offsets) {
+          const tt = this._getTile(x + o.dx, y + o.dy, this.regSize, this.regTiles)
+          if (!tt) continue
+          tt.domain = this.land
+          tt.terrain = this._getLandTerrainFromClimate(tile.climate)
+          tt.elevation = this.hill
+        }
+      }
+    }
+
     const landTilesPerContinent: Record<string, Record<string, Tile>> = {}
     for (const tile of Object.values(this.regTiles)) {
       if (tile.domain !== this.land) continue
@@ -552,8 +439,12 @@ export class TerraGenerator {
     }
   }
 
+  /*
+   * Internal helper functions
+   */
+
   private _getClimateFromStratY (y: number): TypeObject {
-    const climateBandCount = climateBands.length
+    const climateBandCount = this._climateBands.length
 
     // Use the center of the row to reduce boundary artifacts
     const pos = (y + 0.5) / this.stratSize.y // in [0, 1)
@@ -566,8 +457,8 @@ export class TerraGenerator {
     if (lo < 0) lo = 0
 
     const options = lo === hi
-      ? climateBands[lo]
-      : [...climateBands[lo], ...climateBands[hi]]
+      ? this._climateBands[lo]
+      : [...this._climateBands[lo], ...this._climateBands[hi]]
 
     const climateKey = getRandom(options)
     const climate = this._objStore
@@ -743,6 +634,22 @@ export class TerraGenerator {
     return out
   }
 
+  // Wrap X, clamp Y for provided size and tiles; null when Y is out of bounds.
+  // Throws if a valid (wrapped) key is missing from the tiles map.
+  private _getTile (
+    x: number,
+    y: number,
+    size: { x: number, y: number },
+    tiles: Record<string, Tile>
+  ): Tile | null {
+    if (y < 0 || y >= size.y) return null
+    const nx = ((x % size.x) + size.x) % size.x
+    const key = Tile.getKey(nx, y)
+    const t = tiles[key]
+    if (!t) throw new Error(`Tile not found for key ${key} (nx=${nx}, y=${y})`)
+    return t
+  }
+
   private _getRegNeighbors (
     x: number,
     y: number,
@@ -806,4 +713,204 @@ export class TerraGenerator {
     }
     return neighbors
   }
+}
+
+/*
+ * Map Config
+ */
+
+const climateBands = [
+  ['climateType:frozen'],
+  ['climateType:frozen', 'climateType:cold'],
+  ['climateType:cold', 'climateType:temperate'],
+  ['climateType:temperate', 'climateType:temperate', 'climateType:warm'],
+  ['climateType:temperate', 'climateType:warm'],
+  ['climateType:warm', 'climateType:hot', 'climateType:hot'],
+  ['climateType:hot'],
+  ['climateType:hot', 'climateType:hot', 'climateType:warm'],
+  ['climateType:warm', 'climateType:equatorial'],
+  ['climateType:equatorial'],
+  ['climateType:equatorial', 'climateType:warm'],
+  ['climateType:warm', 'climateType:cold'],
+  ['climateType:cold', 'climateType:frozen'],
+  ['climateType:frozen'],
+] as TypeKey[][]
+
+// Wrap climate bands in a function allowing Y flip
+function getClimateBands (flipY: boolean): TypeKey[][] {
+  return flipY ? [...climateBands].reverse() : climateBands
+}
+
+const climateTerrain = {
+  'climateType:frozen': 'terrainType:snow',
+  'climateType:cold': 'terrainType:tundra',
+  'climateType:temperate': 'terrainType:grass',
+  'climateType:warm': 'terrainType:plains',
+  'climateType:hot': 'terrainType:desert',
+  'climateType:equatorial': 'terrainType:grass',
+} as Record<TypeKey, TypeKey>
+
+// The top and bottom rows are ocean
+const yTypes = {
+  0: 'oceanType:arctic',
+
+  13: 'oceanType:antarctic',
+} as Record<number, TypeKey>
+
+// Wrap yTypes in a function allowing Y flip
+function getYTypes (stratHeight: number, flipY: boolean): Record<number, TypeKey> {
+  if (!flipY) return yTypes
+  const out: Record<number, TypeKey> = {}
+  const max = stratHeight - 1
+  for (const [k, v] of Object.entries(yTypes)) {
+    const y = Number(k)
+    out[max - y] = v
+  }
+  return out
+}
+
+// The left and right columns are ocean; so is the middle
+const xTypes = {
+  0: 'oceanType:pacific',
+
+  11: 'oceanType:atlantic',
+  12: 'oceanType:atlantic',
+
+  27: 'oceanType:pacific',
+} as Record<number, TypeKey>
+
+// Wrap xTypes in a function allowing X flip
+function getXTypes (stratWidth: number, flipX: boolean): Record<number, TypeKey> {
+  if (!flipX) return xTypes
+  const out: Record<number, TypeKey> = {}
+  const max = stratWidth - 1
+  for (const [k, v] of Object.entries(xTypes)) {
+    const x = Number(k)
+    out[max - x] = v
+  }
+  return out
+}
+
+// Set continents and fine-tune oceans/seas
+const yxTypes = {
+  1: {
+    1: 'oceanType:pacific',
+
+    26: 'oceanType:pacific',
+  },
+  2: {
+    13: 'oceanType:atlantic',
+    15: 'continentType',
+  },
+  3: {
+    1: 'oceanType:pacific',
+
+    7: 'continentType',
+
+    19: 'continentType',
+
+    26: 'oceanType:pacific',
+  },
+  4: {
+    3: 'continentType',
+
+    13: 'oceanType:atlantic',
+  },
+  5: {
+    1: 'oceanType:pacific',
+
+    13: 'oceanType:atlantic', // med is attached to atlantic
+    14: 'oceanType:mediterranean',
+    15: 'oceanType:mediterranean',
+    16: 'oceanType:mediterranean',
+    17: 'oceanType:mediterranean',
+    18: 'oceanType:mediterranean',
+    19: 'oceanType:mediterranean',
+
+    24: 'continentType',
+    26: 'oceanType:pacific',
+  },
+  6: {
+    13: 'oceanType:atlantic',
+  },
+  7: {
+    1: 'oceanType:pacific',
+
+    4: 'oceanType:caribbean',
+    5: 'oceanType:caribbean',
+    6: 'oceanType:caribbean',
+    7: 'oceanType:caribbean',
+    8: 'oceanType:caribbean',
+    9: 'oceanType:caribbean',
+    10: 'oceanType:atlantic', // carib is attached to atlantic
+
+    26: 'oceanType:pacific',
+  },
+  8: {
+    13: 'oceanType:atlantic',
+
+    20: 'continentType',
+  },
+  9: {
+    1: 'oceanType:pacific',
+
+    4: 'continentType',
+
+    16: 'continentType',
+
+    26: 'oceanType:pacific',
+  },
+  10: {
+    8: 'continentType',
+
+    13: 'oceanType:atlantic',
+
+    18: 'oceanType:indian',
+    19: 'oceanType:indian',
+    20: 'oceanType:indian',
+    21: 'oceanType:indian',
+  },
+  11: {
+    1: 'oceanType:pacific',
+
+    18: 'oceanType:indian',
+    19: 'oceanType:indian',
+    20: 'oceanType:indian',
+    21: 'oceanType:indian',
+
+    24: 'continentType',
+    26: 'oceanType:pacific',
+  },
+  12: {
+    13: 'oceanType:atlantic',
+
+    18: 'oceanType:indian',
+    19: 'oceanType:indian',
+    20: 'oceanType:indian',
+    21: 'oceanType:indian',
+  },
+} as Record<number, Record<number, TypeClass | TypeKey>>
+
+// Wrap yxTypes in a function allowing X/Y flips
+function getYXTypes (
+  stratWidth: number,
+  stratHeight: number,
+  flipY: boolean,
+  flipX: boolean,
+): Record<number, Record<number, TypeClass | TypeKey>> {
+  if (!flipY && !flipX) return yxTypes
+  const out: Record<number, Record<number, TypeClass | TypeKey>> = {}
+  const maxY = stratHeight - 1
+  const maxX = stratWidth - 1
+  for (const [yStr, row] of Object.entries(yxTypes)) {
+    const y = Number(yStr)
+    const ny = flipY ? maxY - y : y
+    out[ny] = out[ny] ?? {}
+    for (const [xStr, v] of Object.entries(row)) {
+      const x = Number(xStr)
+      const nx = flipX ? maxX - x : x
+      out[ny][nx] = v
+    }
+  }
+  return out
 }

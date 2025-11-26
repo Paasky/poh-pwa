@@ -10,8 +10,7 @@
     "typecheck": "vue-tsc --noEmit -p tsconfig.json",
     "rename:media": "node ./scripts/rename-media.mjs",
     "test": "vitest run",
-    "test:watch": "vitest",
-    "example:textmap": "tsx scripts/example-textmap.ts"
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@babylonjs/core": "8.37.3",

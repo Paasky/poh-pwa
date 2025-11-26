@@ -2,54 +2,28 @@
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useObjectsStore } from '@/stores/objectStore'
 import type { WorldSize } from '@/factories/worldFactory'
-import { Tile } from '@/objects/gameObjects'
+import { worldSizes } from '@/factories/worldFactory'
 import { TerraGenerator } from '@/factories/TerraGenerator/terraGenerator'
 import UiButton from '@/components/Ui/UiButton.vue'
 import UiIcon from '@/components/Ui/UiIcon.vue'
+import UiDropdown from '@/components/Ui/UiDropdown.vue'
+import { WorldManager } from '@/managers/worldManager'
+import { StaticData } from '@/types/api'
+import { Tile } from '@/objects/gameObjects'
+import { takeRandom } from '@/helpers/arrayTools'
 
-type Toggles = {
-  showAreaInitials: boolean
-  showAreas: boolean
-  showMajorStarts: boolean
-  showTerrainColors: boolean
-  showElevation: boolean
-  showFeatures: boolean
-}
-
-const objects = useObjectsStore()
-
-// Defaults from example()
-const defaults: WorldSize = {
-  name: 'Terra',
-  x: 28 * 9,
-  y: 14 * 9,
-  continents: 10,
-  majorsPerContinent: 4,
-  minorsPerPlayer: 2,
-  seaLevel: 2,
-}
-
-const form = reactive<WorldSize>({ ...defaults })
-const toggles = reactive<Toggles>({
-  showAreaInitials: false,
-  showAreas: false,
-  showMajorStarts: true,
-  showTerrainColors: true,
-  showElevation: false,
-  showFeatures: true,
-})
-
+const objStore = useObjectsStore()
+const worldConfig = WorldManager.mapConfig()
 const gen = ref<TerraGenerator | null>(null)
 
 // Ensure static types are loaded for the generator
 async function ensureTypesReady () {
   // If already initialized (via Game route), do nothing
-  if ((objects as any).ready) return
-  // If static types present, skip
-  if (Object.keys((objects as any)._staticObjects ?? {}).length > 0) return
-  const res = await fetch('/staticData.json', { cache: 'no-store' })
-  const staticData = await res.json()
-  objects.initStatic(staticData)
+  if (objStore.ready) return
+
+  const res = (await fetch('/staticData.json', { cache: 'no-store' }))
+  const staticData: StaticData = await res.json()
+  objStore.initStatic(staticData)
 }
 
 onMounted(async () => {
@@ -57,22 +31,143 @@ onMounted(async () => {
   generate()
 })
 
+// Row 1: World Options
+const worldValues = ref<WorldSize>({
+  name: 'Terra',
+
+  // Size
+  x: 28 * 9,
+  y: 14 * 9,
+
+  // Count-dropdowns
+  continents: 10,
+  majorsPerContinent: 4,
+  minorsPerPlayer: 2,
+  seaLevel: 2,
+})
+
+// 1.1) Size-dropdown options: from Tiny (36) to Huge (132); new opt every 9*y; x = 2*y
+const sizeOptions = computed(() => {
+  const ys = worldSizes.map(ws => ws.y)
+  const minY = Math.min(...ys) // typically 36
+  const maxY = Math.max(...ys) // typically 132
+
+  // Build dropdown options
+  const opts: { label: string, value: { x: number, y: number } }[] = []
+  const presetByY = Object.fromEntries(worldSizes.map(ws => [ws.y, ws])) as Record<number, WorldSize>
+  for (let y = minY; y <= maxY; y += 9) {
+    const x = y * 2
+    const preset = presetByY[y]
+    const label = preset ? `${preset.name} (${x}×${y})` : `${x}×${y}`
+    opts.push({ label, value: { x, y } })
+  }
+  return opts
+})
+
+// 1.2) Memory usage info under Size (depends on continents/majors/minors)
+const memInfo = computed(() => {
+  const { minMB, maxMB, cpuImpact } = worldConfig.getMemReq(
+      worldValues.value.continents,
+      worldValues.value.majorsPerContinent,
+      worldValues.value.minorsPerPlayer,
+  )
+  const cpuLabels = ['tiny', 'low', 'some', 'medium', 'high'] as const
+  const cpu = cpuLabels[cpuImpact - 1]
+  return { minMB, maxMB, cpu }
+})
+
+// 1.3) Count-dropdowns options
+const continentsOptions = [
+  { label: '10', value: 10 },
+  { label: '9', value: 9 },
+  { label: '8', value: 8 },
+  { label: '7', value: 7 },
+  { label: '6', value: 6 },
+  { label: '5', value: 5 },
+  { label: '4', value: 4 },
+] // todo: from worldConfig min-max
+const majorsOptions = [
+  { label: '4', value: 4 },
+  { label: '3', value: 3 },
+  { label: '2', value: 2 },
+  { label: '1', value: 1 },
+] // todo: from worldConfig min-max
+const minorsOptions = [
+  { label: '2', value: 2 },
+  { label: '1', value: 1 },
+  { label: '0', value: 0 },
+] // todo: from worldConfig min-max
+const seaLevelOptions = [
+  { label: 'Low', value: 1 },
+  { label: 'Normal', value: 2 },
+  { label: 'High', value: 3 },
+]
+
+// 1.4) Alignment dropdown options
+const alignmentOptions = [
+  { label: 'Earth-like', value: { mirrorX: false, mirrorY: false, mirrorClimate: false } },
+  { label: 'Mirror Latitude', value: { mirrorX: false, mirrorY: true, mirrorClimate: true } },
+  { label: 'Mirror Longitude', value: { mirrorX: true, mirrorY: false, mirrorClimate: false } },
+  { label: 'Mirror Both', value: { mirrorX: true, mirrorY: true, mirrorClimate: true } },
+  { label: 'Random', value: { mirrorX: null, mirrorY: null, mirrorClimate: null } },
+]
+// Store only the value object in the v-model to match UiDropdown's emitted value
+const alignment = ref<{
+  mirrorX: boolean | null,
+  mirrorY: boolean | null,
+  mirrorClimate: boolean | null
+}>(alignmentOptions[0].value)
+
+// Row 2: Preview Toggles
+const toggles = reactive({
+  showLegends: false,
+  showTerrain: true,
+  showElevation: true,
+  showFeatures: true,
+  showMajorStarts: true,
+  showAreas: false,
+  showAreaInitials: false,
+})
+
 function generate () {
-  gen.value = new TerraGenerator({ ...form }).generateStratLevel().generateRegLevel()
+  gen.value = new TerraGenerator(
+      worldValues.value,
+      alignment.value.mirrorX === null ? Math.random() < 0.5 : alignment.value.mirrorX,
+      alignment.value.mirrorY === null ? Math.random() < 0.5 : alignment.value.mirrorY,
+      alignment.value.mirrorClimate === null ? Math.random() < 0.5 : alignment.value.mirrorClimate,
+  )
+      .generateStratLevel()
+      .generateRegLevel()
 }
 
-const stratSize = computed(() => gen.value?.stratSize ?? { x: 0, y: 0 })
-const regSize = computed(() => gen.value?.regSize ?? { x: 0, y: 0 })
+const renderTiles = computed(() => {
+  const out = {
+    strat: [] as Tile[][],
+    reg: [] as Tile[][],
+    game: [] as Tile[][],
+  }
+  for (const stratTile of Object.values(gen.value!.stratTiles)) {
+    const x = stratTile.x
+    const y = stratTile.y
+    out.strat[y] = out.strat[y] || []
+    out.strat[y][x] = stratTile
+  }
+  for (const regTile of Object.values(gen.value!.regTiles)) {
+    const x = regTile.x
+    const y = regTile.y
+    out.reg[y] = out.reg[y] || []
+    out.reg[y][x] = regTile
+  }
+  for (const gameTile of Object.values(gen.value!.gameTiles)) {
+    const x = gameTile.x
+    const y = gameTile.y
+    out.game[y] = out.game[y] || []
+    out.game[y][x] = gameTile
+  }
+  return out
+})
 
-function getStratTile (x: number, y: number) {
-  return gen.value!.stratTiles[Tile.getKey(x, y)]
-}
-
-function getRegTile (x: number, y: number) {
-  return gen.value!.regTiles[Tile.getKey(x, y)]
-}
-
-// Area legend/colors
+// Unique Areas
 const areaKeys = computed(() => {
   if (!gen.value) return [] as string[]
   const keys = new Set<string>()
@@ -81,36 +176,49 @@ const areaKeys = computed(() => {
   return Array.from(keys)
 })
 
-function hashStr (s: string): number {
-  let h = 2166136261
-  for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 16777619)
-  return (h >>> 0)
-}
-
-function areaBorderColor (areaKey: string, isOcean: boolean): string {
-  // Generate hues using the golden‑angle method to maximize perceived distinctness
-  // while keeping saturation/lightness moderate so borders don't overpower terrain fills.
-  const GOLDEN_ANGLE = 137.508
-  const base = hashStr(areaKey)
-  const h = (base * GOLDEN_ANGLE) % 360
-
-  // Slightly higher saturation than before for clearer separation, but still muted.
-  // Oceans: a touch darker and a bit less saturated than continents.
-  const sat = isOcean ? 30 : 40
-  const light = isOcean ? 35 : 55
-
-  // Use HSL (space-separated syntax) to avoid matching fixed HEX terrain colors.
-  return `hsl(${h} ${sat}% ${light}%)`
-}
+// Semi-random area borders
+const CONTINENT_COLORS = [
+  'hsl(285 65% 70%)',
+  'hsl(330 80% 60%)',
+  'hsl(0 90% 55%)',
+  'hsl(25 90% 55%)',
+  'hsl(35 90% 55%)',
+  'hsl(45 90% 55%)',
+  'hsl(55 90% 55%)',
+  'hsl(70 85% 50%)',
+  'hsl(85 75% 48%)',
+  'hsl(100 70% 45%)',
+]
+const OCEAN_COLORS = [
+  'hsl(190 80% 60%)',
+  'hsl(200 75% 65%)',
+  'hsl(220 75% 65%)',
+  'hsl(230 80% 62%)',
+  'hsl(240 85% 60%)',
+  'hsl(255 80% 62%)',
+  'hsl(265 75% 65%)',
+]
+const areaColors = {} as Record<string, string>
 
 const areaLegend = computed(() => {
-  if (!gen.value) return [] as { key: string, name: string, color: string }[]
-  return areaKeys.value.map(key => {
-    const area = objects.getTypeObject(key as any)
-    const isOcean = area.class === 'oceanType'
-    return { key, name: area.name, color: areaBorderColor(key, isOcean) }
-  })
+  return areaKeys.value
+      .map(key => {
+        const area = objStore.getTypeObject(key as any)
+        const isOcean = area.class === 'oceanType'
+        if (!areaColors[area.key]) {
+          areaColors[area.key] = isOcean ? takeRandom(OCEAN_COLORS) : takeRandom(CONTINENT_COLORS)
+        }
+        const color = areaColors[area.key]
+        return { key, name: area.name, color }
+      })
+      .sort((a, b) => a.name.localeCompare(b.name))
 })
+const continentsLegend = computed(() => areaLegend.value
+    .filter(a => objStore.getTypeObject(a.key as any).class === 'continentType')
+    .sort((a, b) => a.name.localeCompare(b.name)))
+const oceansLegend = computed(() => areaLegend.value
+    .filter(a => objStore.getTypeObject(a.key as any).class === 'oceanType')
+    .sort((a, b) => a.name.localeCompare(b.name)))
 
 // Background color from terrain id
 function terrainColor (tile: Tile): string {
@@ -131,19 +239,18 @@ function terrainColor (tile: Tile): string {
           ? '#094200' // custom
           : '#3f6212' // lime-800
     case 'plains':
-      return '#ca8a04' // yellow-600
+      return '#575310' // custom
     case 'desert':
-      return '#facc15' // yellow-400
+      return '#b8b83b' // yellow-400
     case 'tundra':
       return '#3e5234' // custom
     case 'snow':
       return '#e5e7eb' // gray-200
   }
-  // Fallback deterministic
-  const h = hashStr(tile.terrain.id) % 360
-  return `hsl(${h} 50% 50%)`
+  return `hsl(50% 50% 50%)`
 }
 
+// Tiles that have a major player starting location
 const tileKeysWithStart = computed(() => ({
   strat: Object.values(gen.value?.continents ?? {}).flatMap(c => c.majorStarts.strat.map(t => t.key)),
   reg: Object.values(gen.value?.continents ?? {}).flatMap(c => c.majorStarts.reg.map(t => t.key)),
@@ -157,6 +264,13 @@ function tileAreaInitials (tile: Tile): string {
 
 const selectedLevel = ref<'strat' | 'reg'>('reg')
 
+// Always-visible legends for Terrain, Elevation, Features
+const terrainTypes = computed(() => [...objStore.getClassTypes('terrainType')].sort((a, b) => a.name.localeCompare(b.name)))
+const elevationTypes = computed(() => [...objStore.getClassTypes('elevationType')]
+    .filter(e => e.id !== 'flat')
+    .sort((a, b) => a.name.localeCompare(b.name)))
+const featureTypes = computed(() => [...objStore.getClassTypes('featureType')].sort((a, b) => a.name.localeCompare(b.name)))
+
 </script>
 
 <template>
@@ -168,80 +282,121 @@ const selectedLevel = ref<'strat' | 'reg'>('reg')
       </div>
       <div v-else>
         <!-- Controls -->
-        <form
-            class="mx-auto w-full max-w-full min-w-[72rem] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 items-end">
-          <label class="block">
-            <span class="text-sm text-slate-300">Width (x)</span>
-            <input v-model.number="form.x" type="number" min="9" step="9"
-                   class="w-full mt-1 px-2 py-1 rounded bg-gray-800 border border-gray-700"/>
-          </label>
-          <label class="block">
-            <span class="text-sm text-slate-300">Height (y)</span>
-            <input v-model.number="form.y" type="number" min="9" step="9"
-                   class="w-full mt-1 px-2 py-1 rounded bg-gray-800 border border-gray-700"/>
-          </label>
-          <label class="block">
-            <span class="text-sm text-slate-300">Continents</span>
-            <input v-model.number="form.continents" type="number" min="1" max="10"
-                   class="w-full mt-1 px-2 py-1 rounded bg-gray-800 border border-gray-700"/>
-          </label>
-          <label class="block">
-            <span class="text-sm text-slate-300">Majors / Continent</span>
-            <input v-model.number="form.majorsPerContinent" type="number" min="1" max="4"
-                   class="w-full mt-1 px-2 py-1 rounded bg-gray-800 border border-gray-700"/>
-          </label>
-          <label class="block">
-            <span class="text-sm text-slate-300">Minors / Player</span>
-            <input v-model.number="form.minorsPerPlayer" type="number" min="0" max="2"
-                   class="w-full mt-1 px-2 py-1 rounded bg-gray-800 border border-gray-700"/>
-          </label>
-          <label class="block">
-            <span class="text-sm text-slate-300">Sea Level</span>
-            <input v-model.number="form.seaLevel" type="number" min="1" max="3"
-                   class="w-full mt-1 px-2 py-1 rounded bg-gray-800 border border-gray-700"/>
-          </label>
-          <div class="col-span-2 sm:col-span-3 md:col-span-6 flex flex-wrap items-center gap-4">
-            <button type="button" @click="generate"
-                    class="px-4 py-2 rounded bg-sky-500 text-slate-900 hover:bg-sky-400">
-              Generate
-            </button>
-            <label class="inline-flex items-center gap-2"><input v-model="toggles.showTerrainColors" type="checkbox"
-                                                                 class="accent-sky-500"/>
-              <span>Terrain colors</span></label>
-            <label class="inline-flex items-center gap-2"><input v-model="toggles.showAreaInitials" type="checkbox"
-                                                                 class="accent-sky-500"/>
-              <span>Area initials</span></label>
-            <label class="inline-flex items-center gap-2"><input v-model="toggles.showAreas" type="checkbox"
-                                                                 class="accent-sky-500"/>
-              <span>Area borders & legend</span></label>
-            <label class="inline-flex items-center gap-2"><input v-model="toggles.showMajorStarts" type="checkbox"
-                                                                 class="accent-sky-500"/>
-              <span>Major starts</span></label>
-            <label class="inline-flex items-center gap-2"><input v-model="toggles.showElevation" type="checkbox"
-                                                                 class="accent-sky-500"/>
-              <span class="inline-flex items-center gap-1">
-                <UiIcon :icon="objects.getTypeObject('elevationType:flat').icon" class="w-4 h-4"/>
-                Elevation
-              </span>
-            </label>
-            <label class="inline-flex items-center gap-2"><input v-model="toggles.showFeatures" type="checkbox"
-                                                                 class="accent-sky-500"/>
-              <span class="inline-flex items-center gap-1">
-                <UiIcon :icon="objects.getTypeObject('conceptType:feature').icon" class="w-4 h-4"/>
-                Features
-              </span>
-            </label>
+        <div class="mx-auto w-full max-w-full min-w-[72rem] flex flex-wrap items-start gap-3">
+          <div class="min-w-[14rem]">
+            <UiDropdown
+                :options="sizeOptions"
+                :model-value="{ x: worldValues.x, y: worldValues.y }"
+                label="Size"
+                @update:modelValue="(v: any) => {
+                worldValues.x = v.x; worldValues.y = v.y;
+                // Set other params from the nearest preset size
+                const nearest = [...worldSizes].sort((a,b)=> Math.abs(a.y - v.y) - Math.abs(b.y - v.y))[0]
+                if (nearest) {
+                  worldValues.continents = nearest.continents
+                  worldValues.majorsPerContinent = nearest.majorsPerContinent
+                  worldValues.minorsPerPlayer = nearest.minorsPerPlayer
+                }
+              }"
+            />
+            <div class="text-xs text-slate-400 mt-1">
+              Est. memory {{ memInfo.minMB }}–{{ memInfo.maxMB }} MB • CPU {{ memInfo.cpu }}
+            </div>
           </div>
-        </form>
+          <UiDropdown label="Continents" v-model="worldValues.continents as any" :options="continentsOptions"/>
+          <UiDropdown label="Majors / Continent" v-model="worldValues.majorsPerContinent as any"
+                      :options="majorsOptions"/>
+          <UiDropdown label="Minors / Player" v-model="worldValues.minorsPerPlayer as any" :options="minorsOptions"/>
+          <UiDropdown label="Sea Level" v-model="worldValues.seaLevel as any" :options="seaLevelOptions"/>
+          <UiDropdown label="Alignment" v-model="alignment as any" :options="alignmentOptions as any"/>
 
-        <!-- Legend for Areas -->
-        <div v-if="areaLegend.length" class="mx-auto w-full max-w-full min-w-[72rem] bg-gray-800 rounded p-3">
-          <h2 class="text-lg mb-2">Areas</h2>
-          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
-            <div v-for="a in areaLegend" :key="a.key" class="flex items-center gap-2">
-            <span class="inline-block w-5 h-5 rounded border"
-                  :style="{ backgroundColor: 'transparent', borderColor: a.color }"></span>
-              <span class="text-slate-200 text-sm">{{ a.name }}</span>
+          <UiButton @click.prevent="generate">Generate</UiButton>
+        </div>
+
+        <!-- VIEW FILTERS (above legends) as toggle buttons -->
+        <div class="mx-auto w-full max-w-full min-w-[72rem] mt-2 flex flex-wrap items-center gap-2">
+          <UiButton :variant="toggles.showLegends ? 'selected' : 'ghost'"
+                    @click="toggles.showLegends = !toggles.showLegends">Show legends
+          </UiButton>
+          <UiButton :variant="toggles.showTerrain ? 'selected' : 'ghost'"
+                    @click="toggles.showTerrain = !toggles.showTerrain">Terrain colors
+          </UiButton>
+          <UiButton :variant="toggles.showAreaInitials ? 'selected' : 'ghost'"
+                    @click="toggles.showAreaInitials = !toggles.showAreaInitials">Area initials
+          </UiButton>
+          <UiButton :variant="toggles.showAreas ? 'selected' : 'ghost'" @click="toggles.showAreas = !toggles.showAreas">
+            Area borders & legend
+          </UiButton>
+          <UiButton :variant="toggles.showMajorStarts ? 'selected' : 'ghost'"
+                    @click="toggles.showMajorStarts = !toggles.showMajorStarts">Major starts
+          </UiButton>
+          <UiButton :variant="toggles.showElevation ? 'selected' : 'ghost'"
+                    @click="toggles.showElevation = !toggles.showElevation">
+            <span class="inline-flex items-center gap-1">
+              <UiIcon :icon="objStore.getTypeObject('elevationType:flat').icon" class="w-4 h-4"/>
+              Elevation
+            </span>
+          </UiButton>
+          <UiButton :variant="toggles.showFeatures ? 'selected' : 'ghost'"
+                    @click="toggles.showFeatures = !toggles.showFeatures">
+            <span class="inline-flex items-center gap-1">
+              <UiIcon :icon="objStore.getTypeObject('conceptType:feature').icon" class="w-4 h-4"/>
+              Features
+            </span>
+          </UiButton>
+        </div>
+
+        <!-- Legends: Areas split and always-visible type legends (toggleable) -->
+        <div v-if="toggles.showLegends" class="mx-auto w-full max-w-full min-w-[72rem] flex flex-col gap-3">
+          <div v-if="areaLegend.length" class="flex flex-wrap gap-3">
+            <div class="bg-gray-800 rounded p-3 flex flex-col gap-2">
+              <h2 class="text-lg mb-2">Continents</h2>
+              <div class="flex flex-wrap gap-2">
+                <div v-for="a in continentsLegend" :key="'cont-'+a.key" class="flex items-center gap-2">
+                  <span class="inline-block w-5 h-5 rounded border" :style="{ borderColor: a.color }"></span>
+                  <span class="text-slate-200 text-sm">{{ a.name }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="bg-gray-800 rounded p-3 flex flex-col gap-2">
+              <h2 class="text-lg mb-2">Oceans</h2>
+              <div class="flex flex-wrap gap-2">
+                <div v-for="a in oceansLegend" :key="'ocean-'+a.key" class="flex items-center gap-2">
+                  <span class="inline-block w-5 h-5 rounded border" :style="{ borderColor: a.color }"></span>
+                  <span class="text-slate-200 text-sm">{{ a.name }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-3">
+            <div class="bg-gray-800 rounded p-3 flex flex-col gap-2">
+              <h2 class="text-lg mb-2">Terrain</h2>
+              <div class="flex flex-wrap gap-2">
+                <div v-for="t in terrainTypes" :key="t.key" class="flex items-center gap-2">
+                  <span class="inline-block w-5 h-5 rounded-sm border border-gray-700"
+                        :style="{ backgroundColor: terrainColor({terrain: t, climate:{id:'temperate'}} as Tile) }"></span>
+                  <span class="text-slate-200 text-sm">{{ t.name }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="bg-gray-800 rounded p-3 flex flex-col gap-2">
+              <h2 class="text-lg mb-2">Elevation</h2>
+              <div class="flex flex-wrap gap-2">
+                <div v-for="e in elevationTypes" :key="e.key" class="flex items-center gap-2">
+                  <UiIcon :icon="e.icon" class="w-4 h-4"/>
+                  <span class="text-slate-200 text-sm">{{ e.name }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="bg-gray-800 rounded p-3 flex flex-col gap-2">
+              <h2 class="text-lg mb-2">Features</h2>
+              <div class="flex flex-wrap gap-2">
+                <div v-for="f in featureTypes" :key="f.key" class="flex items-center gap-2">
+                  <UiIcon :icon="f.icon" class="w-4 h-4"/>
+                  <span class="text-slate-200 text-sm">{{ f.name }}</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -260,30 +415,30 @@ const selectedLevel = ref<'strat' | 'reg'>('reg')
           <div class="">
             <div
                 class="inline-grid"
-                :style="{ gridTemplateColumns: `repeat(${stratSize.x}, 24px)` }"
+                :style="{ gridTemplateColumns: `repeat(${gen.stratSize.x}, 24px)` }"
             >
-              <div v-for="y in stratSize.y" :key="'srow'+y" class="contents">
-                <div v-for="x in stratSize.x" :key="'st'+x+'-'+y"
+              <div v-for="(row, y) of renderTiles.strat" :key="'srow'+y" class="contents">
+                <div v-for="(tile, x) of row" :key="'st'+x+'-'+y"
                      class="w-[24px] h-[24px] relative border"
                      :style="({
-                     backgroundColor: toggles.showTerrainColors ? terrainColor(getStratTile(x-1,y-1)) : 'transparent',
-                     borderColor: toggles.showAreas ? areaBorderColor(getStratTile(x-1,y-1).area.key || 'none', (getStratTile(x-1,y-1).area.class === 'oceanType')) : 'transparent'
+                     backgroundColor: toggles.showTerrain ? terrainColor(tile) : 'transparent',
+                     borderColor: toggles.showAreas ? areaColors[tile.area.key] : 'transparent'
                    })"
                 >
                   <span v-if="toggles.showAreaInitials"
                         class="absolute inset-0 text-[12px] leading-[24px] text-white text-center drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
-                    {{ tileAreaInitials(getStratTile(x - 1, y - 1)) }}
+                    {{ tileAreaInitials(tile) }}
                   </span>
                   <span v-if="toggles.showMajorStarts && tileKeysWithStart.strat.includes(Tile.getKey(x-1,y-1))"
                         class="absolute inset-0 text-[18px] font-bold leading-[18px] text-black text-center border-white border-2 rounded-full"
                   >X</span>
-                  <div v-if="toggles.showElevation && getStratTile(x-1,y-1).elevation.id !== 'flat'"
+                  <div v-if="toggles.showElevation && tile.elevation.id !== 'flat'"
                        class="absolute inset-0 flex items-center justify-center">
-                    <UiIcon :icon="getStratTile(x-1,y-1).elevation.icon" class="w-4 h-4 drop-shadow"/>
+                    <UiIcon :icon="tile.elevation.icon" class="w-4 h-4 drop-shadow"/>
                   </div>
-                  <div v-if="toggles.showFeatures && getStratTile(x-1,y-1).feature"
+                  <div v-if="toggles.showFeatures && tile.feature"
                        class="absolute inset-0 flex items-center justify-center">
-                    <UiIcon :icon="getStratTile(x-1,y-1).feature.icon" class="w-4 h-4 drop-shadow"/>
+                    <UiIcon :icon="(tile.feature as any).icon" class="w-4 h-4 drop-shadow"/>
                   </div>
                 </div>
               </div>
@@ -296,27 +451,27 @@ const selectedLevel = ref<'strat' | 'reg'>('reg')
           <div class="">
             <div
                 class="inline-grid"
-                :style="{ gridTemplateColumns: `repeat(${regSize.x}, 24px)` }"
+                :style="{ gridTemplateColumns: `repeat(${gen.regSize.x}, 24px)` }"
             >
-              <div v-for="y in regSize.y" :key="'rrow'+y" class="contents">
-                <div v-for="x in regSize.x" :key="'rt'+x+'-'+y"
+              <div v-for="(row, y) of renderTiles.reg" :key="'rrow'+y" class="contents">
+                <div v-for="(tile, x) of row" :key="'st'+x+'-'+y"
                      class="w-[24px] h-[24px] relative border"
                      :style="({
-                     backgroundColor: toggles.showTerrainColors ? terrainColor(getRegTile(x-1,y-1)) : 'transparent',
-                     borderColor: toggles.showAreas ? areaBorderColor(getRegTile(x-1,y-1).area.key || 'none', (getRegTile(x-1,y-1).area.class === 'oceanType')) : 'transparent'
+                     backgroundColor: toggles.showTerrain ? terrainColor(tile) : 'transparent',
+                     borderColor: toggles.showAreas ? areaColors[tile.area.key] : 'transparent'
                    })"
                 >
                   <span v-if="toggles.showAreaInitials"
                         class="absolute inset-0 text-[12px] leading-[24px] text-white text-center drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
-                    {{ getRegTile(x - 1, y - 1) ? tileAreaInitials(getRegTile(x - 1, y - 1)) : '' }}
+                    {{ tileAreaInitials(tile) }}
                   </span>
-                  <div v-if="toggles.showElevation && getRegTile(x-1,y-1).elevation.id !== 'flat'"
+                  <div v-if="toggles.showElevation && tile.elevation.id !== 'flat'"
                        class="absolute inset-0 flex items-center justify-center">
-                    <UiIcon :icon="getRegTile(x-1,y-1).elevation.icon" class="w-3.5 h-3.5 drop-shadow"/>
+                    <UiIcon :icon="tile.elevation.icon" class="w-3.5 h-3.5 drop-shadow"/>
                   </div>
-                  <div v-if="toggles.showFeatures && getRegTile(x-1,y-1).feature"
+                  <div v-if="toggles.showFeatures && tile.feature"
                        class="absolute inset-0 flex items-center justify-center">
-                    <UiIcon :icon="getRegTile(x-1,y-1).feature.icon" class="w-3.5 h-3.5 drop-shadow"/>
+                    <UiIcon :icon="(tile.feature as any).icon" class="w-3.5 h-3.5 drop-shadow"/>
                   </div>
                   <span v-if="toggles.showMajorStarts && tileKeysWithStart.reg.includes(Tile.getKey(x-1,y-1))"
                         class="absolute inset-0 text-[18px] font-bold leading-[18px] text-black text-center border-white border-2 rounded-full"

@@ -59,7 +59,7 @@ export class WorldManager extends Manager {
       if (player.isCurrent) this._objects.world.currentPlayer = player.key
       console.log('Created player', new Date())
 
-      player.unitDesigns.push(
+      player.designKeys.value.push(
         workerDesign.key,
         hunterDesign.key,
         warbandDesign.key,
