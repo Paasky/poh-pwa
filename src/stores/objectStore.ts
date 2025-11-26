@@ -117,14 +117,7 @@ export const useObjectsStore = defineStore('objects', {
       if (this.ready) throw new Error('Objects Store already initialized')
 
       // 1) Initialize static objects
-      const staticObjects = {} as Record<string, CategoryObject | TypeObject>
-      for (const data of staticData.types) {
-        staticObjects[data.key] = Object.freeze(markRaw(initTypeObject(data)))
-      }
-      for (const data of staticData.categories) {
-        staticObjects[data.key] = Object.freeze(markRaw(initCategoryObject(data)))
-      }
-      this._staticObjects = Object.freeze(markRaw(staticObjects))
+      this.initStatic(staticData)
 
       // 2) Initialize the world
       if (gameData) {
@@ -146,7 +139,26 @@ export const useObjectsStore = defineStore('objects', {
         this._gameObjects = gameObjects
       }
 
-      // 4) Build Type indexes
+      // 5) Build GameObject indexes
+      this._cacheGameObjects()
+
+      this.ready = true
+      console.log('Objects Store initialized')
+    },
+
+    initStatic (staticData: StaticData) {
+      if (this.ready) throw new Error('Objects Store already initialized')
+
+      const staticObjects = {} as Record<string, CategoryObject | TypeObject>
+      for (const data of staticData.types) {
+        staticObjects[data.key] = Object.freeze(markRaw(initTypeObject(data)))
+      }
+      for (const data of staticData.categories) {
+        staticObjects[data.key] = Object.freeze(markRaw(initCategoryObject(data)))
+      }
+      this._staticObjects = Object.freeze(markRaw(staticObjects))
+
+      // Build Type indexes
       for (const obj of Object.values(this._staticObjects)) {
         if (!isTypeObject(obj)) continue
 
@@ -173,12 +185,6 @@ export const useObjectsStore = defineStore('objects', {
           }
         }
       }
-
-      // 5) Build GameObject indexes
-      this._cacheGameObjects()
-
-      this.ready = true
-      console.log('Objects Store initialized')
     },
 
     set (obj: GameObject) {

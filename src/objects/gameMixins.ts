@@ -2,7 +2,7 @@ import { computed, Ref, ref } from 'vue'
 import { useObjectsStore } from '@/stores/objectStore'
 import { Citizen, City, Culture, GameKey, Player, Religion, Tile, Unit } from '@/objects/gameObjects'
 
-const objStore = useObjectsStore()
+const objStore = () => useObjectsStore()
 
 export function hasMany<T> (keysRef: Ref<GameKey[]>, ctor: new (...args: any[]) => T) {
   const out: T[] = []
@@ -16,7 +16,7 @@ export function hasMany<T> (keysRef: Ref<GameKey[]>, ctor: new (...args: any[]) 
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i]
       // Always read – creates a dependency on the store entry for this key
-      const obj = objStore.get(key) as T
+      const obj = objStore().get(key) as T
       if (out[i] !== obj) out[i] = obj
     }
 
@@ -34,7 +34,7 @@ export function hasOne<T> (
       throw new Error(`Empty relation value for ${ctor.name}`)
     }
 
-    return objStore.get(key) as T
+    return objStore().get(key) as T
   })
 }
 
@@ -48,7 +48,7 @@ export function canHaveOne<T> (
       return null
     }
 
-    return objStore.get(key) as T
+    return objStore().get(key) as T
   })
 }
 

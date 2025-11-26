@@ -6,7 +6,7 @@ import { CatKey, roundToTenth, TypeKey, upgradeTree } from '@/types/common'
 import { useObjectsStore } from '@/stores/objectStore'
 import { Yields } from '@/objects/yield'
 
-const objStore = useObjectsStore()
+const objStore = () => useObjectsStore()
 
 export class Government extends HasPlayer(Object) {
   corruption = ref(0)
@@ -150,7 +150,7 @@ export class Research extends HasPlayer(Object) {
     }, null)
 
     // Fallback: earliest era
-    return objStore.getTypeObject(highestType!.category as TypeKey)
+    return objStore().getTypeObject(highestType!.category as TypeKey)
   })
 
   complete (tech: TypeObject) {

@@ -19,6 +19,12 @@
         >
           Start
         </RouterLink>
+        <RouterLink
+          to="/generator"
+          class="inline-flex items-center gap-2 px-6 py-3 ml-3 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400"
+        >
+          Generator
+        </RouterLink>
       </div>
     </div>
   </main>

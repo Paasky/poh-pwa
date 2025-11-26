@@ -1,9 +1,10 @@
 import { Manager } from '@/managers/_manager'
 import { Culture, Player } from '@/objects/gameObjects'
-import { CatKey, TypeKey, Yields } from '@/types/common'
+import { CatKey, TypeKey } from '@/types/common'
 import { TypeObject } from '@/types/typeObjects'
 import { EventManager } from '@/managers/eventManager'
 import { TechnologyManager } from '@/managers/technologyManager'
+import { Yields } from '@/objects/yield'
 
 export class CultureManager extends Manager {
   addHeritagePoints (culture: Culture, category: CatKey, points: number): void {

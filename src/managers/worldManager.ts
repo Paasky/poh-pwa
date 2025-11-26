@@ -84,7 +84,7 @@ export class WorldManager extends Manager {
       minorsPerPlayer: { min: 0, max: 2 },
 
       // x & y size to fit everyone on land, plus the same amount of water
-      getSize: (continents: 4 | 5 | 6 | 7 | 8 | 9 | 10, majorsPerContinent: 1 | 2 | 3 | 4, minorsPerPlayer: 0 | 1 | 2): WorldSize => {
+      getSize: (continents: 4 | 5 | 6 | 7 | 8 | 9 | 10, majorsPerContinent: 1 | 2 | 3 | 4, minorsPerPlayer: 0 | 1 | 2, seaLevel: 1 | 2 | 3): WorldSize => {
         // City area = 61 (4-radius)
         // 5 cities per major + 1 per minor
         // * 2 for oceans
@@ -95,18 +95,19 @@ export class WorldManager extends Manager {
         const minSize = 61 * cities * 2
 
         // Find a map x & y that fits the min size (x increments by 8)
-        // Start with the smallest size 72x36 = 2 592 tiles up to 264x132 = 34 848 tiles
-        let xSize = 72
+        // Start with the smallest size 72x36 = 2 592 tiles up to 270x135 = 36 450 tiles
+        let ySize = 36
         while (true) {
-          if (xSize * (xSize / 2) >= minSize) return {
+          if ((ySize * 2) * ySize >= minSize) return {
             name: 'Custom',
-            x: xSize,
-            y: xSize / 2,
+            x: ySize * 2,
+            y: ySize,
             continents,
             majorsPerContinent,
             minorsPerPlayer,
+            seaLevel,
           }
-          xSize = xSize + 8
+          ySize = ySize + 8
         }
       },
 

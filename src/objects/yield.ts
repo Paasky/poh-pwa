@@ -1,5 +1,6 @@
-import { ObjKey, TypeKey, TypeStorage } from '@/types/common'
+import { ObjKey, TypeKey } from '@/types/common'
 import { TypeObject } from '@/types/typeObjects'
+import { TypeStorage } from '@/objects/storage'
 
 export type YieldMethod = 'lump' | 'percent' | 'set'
 export type Yield = {

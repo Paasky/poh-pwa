@@ -22,7 +22,7 @@ import { TypeStorage } from '@/objects/storage'
 import { Government, Research } from '@/objects/player'
 import { EventManager } from '@/managers/eventManager'
 
-const objStore = useObjectsStore()
+const objStore = () => useObjectsStore()
 
 export type GameClass =
   'agenda' |
@@ -53,7 +53,7 @@ export class GameObject {
     this.key = key
     const classAndId = key.split(':')
     this.class = classAndId[0] as GameClass
-    this.concept = objStore.getTypeObject(`conceptType:${this.class}`)
+    this.concept = objStore().getTypeObject(`conceptType:${this.class}`)
     this.id = classAndId[1]
   }
 }
@@ -111,7 +111,7 @@ export class City extends HasCitizens(HasPlayer(HasTile(HasUnits(GameObject)))) 
   holyCityFor = hasMany(this.holyCityForKeys, Religion)
 
   origPlayerKey: GameKey
-  origPlayer = computed(() => objStore.get(this.origPlayerKey) as Player)
+  origPlayer = computed(() => objStore().get(this.origPlayerKey) as Player)
 
   private _tileYields = computed(() => this.tile.value.yields.value.only(
     this.concept.inheritYieldTypes!,
@@ -193,12 +193,12 @@ export type CultureStatus = 'notSettled' | 'canSettle' | 'mustSettle' | 'settled
 
 export class Culture extends HasCitizens(HasPlayer(GameObject)) {
   type: Ref<UnwrapRef<TypeObject>, UnwrapRef<TypeObject> | TypeObject>
-  leader = computed(() => objStore.getTypeObject(
+  leader = computed(() => objStore().getTypeObject(
     this.type.value.allows.find(
       a => a.indexOf('LeaderType:') >= 0
     ) as TypeKey
   ))
-  region = computed(() => objStore.getTypeObject(this.type.value.requires
+  region = computed(() => objStore().getTypeObject(this.type.value.requires
     .filter(['regionType'])
     .allTypes[0] as TypeKey
   ))
@@ -212,7 +212,7 @@ export class Culture extends HasCitizens(HasPlayer(GameObject)) {
     if (this.status.value === 'settled') return []
 
     const selectable: TypeObject[] = []
-    for (const catData of objStore.getClassTypesPerCategory('heritageType')) {
+    for (const catData of objStore().getClassTypesPerCategory('heritageType')) {
       const catIsSelected = catData.types.some(
         h => this.heritages.value.includes(h)
       )
@@ -243,7 +243,7 @@ export class Culture extends HasCitizens(HasPlayer(GameObject)) {
     if (this.mustSelectTraits.value.positive + this.mustSelectTraits.value.negative <= 0) return []
 
     const selectable: TypeObject[] = []
-    for (const catData of objStore.getClassTypesPerCategory('traitType')) {
+    for (const catData of objStore().getClassTypesPerCategory('traitType')) {
       const catIsSelected = catData.types.some(
         t => this.traits.value.includes(t)
       )
@@ -266,7 +266,7 @@ export class Culture extends HasCitizens(HasPlayer(GameObject)) {
     const nextTypeKey = this.type.value.upgradesTo[0]
     if (!nextTypeKey) throw new Error(`${this.key} cannot evolve further`)
 
-    this.type.value = objStore.getTypeObject(nextTypeKey)
+    this.type.value = objStore().getTypeObject(nextTypeKey)
 
     // If all traits have not been selected yet (4 = two categories to select: one must be pos, one neg)
     if (this.selectableTraits.value.length >= 4) {
@@ -300,7 +300,7 @@ export class Culture extends HasCitizens(HasPlayer(GameObject)) {
     // If gains a tech, complete it immediately
     for (const gainKey of heritage.gains) {
       if (gainKey.startsWith('technologyType:')) {
-        this.player.value.research.complete(objStore.getTypeObject(gainKey))
+        this.player.value.research.complete(objStore().getTypeObject(gainKey))
       }
     }
   }
@@ -390,6 +390,7 @@ export class Tile extends CanHaveCity(CanHavePlayer(HasUnits(GameObject))) {
   y: number
   domain: TypeObject
   area: TypeObject
+  climate: TypeObject
   terrain: TypeObject
   elevation: TypeObject
   feature = ref<TypeObject | null>(null)
@@ -420,7 +421,7 @@ export class Tile extends CanHaveCity(CanHavePlayer(HasUnits(GameObject))) {
   ]))
 
   constructor (
-    x: number, y: number, domain: TypeObject, area: TypeObject, terrain: TypeObject, elevation: TypeObject,
+    x: number, y: number, domain: TypeObject, area: TypeObject, climate: TypeObject, terrain: TypeObject, elevation: TypeObject,
     feature?: TypeObject, resource?: TypeObject, naturalWonder?: TypeObject, pollution?: TypeObject
   ) {
     super(Tile.getKey(x, y))
@@ -428,6 +429,7 @@ export class Tile extends CanHaveCity(CanHavePlayer(HasUnits(GameObject))) {
     this.y = y
     this.domain = domain
     this.area = area
+    this.climate = climate
     this.terrain = terrain
     this.elevation = elevation
     if (feature) this.feature.value = feature
@@ -460,16 +462,17 @@ export class Unit extends CanHaveCity(HasPlayer(HasTile(GameObject))) {
   private _customName = ref('')
   name = computed(() => this._customName.value || this.design.value.name)
 
+  action = ref<TypeObject | null>(null)
   canAttack = ref(false)
   moves = ref(0)
   health = ref(100)
   status = ref('regular' as UnitStatus)
 
   designKey: GameKey
-  design = computed(() => objStore.get(this.designKey) as UnitDesign)
+  design = computed(() => objStore().get(this.designKey) as UnitDesign)
 
   origPlayerKey: GameKey
-  origPlayer = computed(() => objStore.get(this.origPlayerKey) as Player)
+  origPlayer = computed(() => objStore().get(this.origPlayerKey) as Player)
 
   myTypes = computed((): TypeObject[] => [this.concept, this.design.value.platform, this.design.value.equipment])
   types = computed((): TypeObject[] => {

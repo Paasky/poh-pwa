@@ -45,6 +45,7 @@ import {
   faLocationArrow,
   faMasksTheater,
   faMoon,
+  faMound,
   faMountain,
   faMountainSun,
   faParachuteBox,
@@ -391,6 +392,10 @@ const conceptKeys: Record<string, ObjectIcon> = {
 }
 
 const keys: Record<string, ObjectIcon> = {
+  'elevationType:hill': { icon: faMound, color: colors.trade },
+  'elevationType:mountain': { icon: faMountainSun, color: colors.military },
+  'elevationType:snowMountain': { icon: faMountain, color: colors.default },
+
   'yieldType:airSlot': { icon: faInbox, color: colors.military },
   'yieldType:attack': { icon: faArrowsToDot, color: colors.military },
   'yieldType:citizenSlot': { icon: faInbox, color: colors.default },

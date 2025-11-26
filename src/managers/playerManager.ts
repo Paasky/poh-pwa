@@ -1,8 +1,8 @@
-import { Culture, Player, Religion, UnitDesign } from '@/types/gameObjects'
+import { Culture, Player, Religion, UnitDesign } from '@/objects/gameObjects'
 import { createPlayer, PlayerBundle } from '@/factories/playerFactory'
 import { Manager } from '@/managers/_manager'
 import { TypeObject } from '@/types/typeObjects'
-import { Yields } from '@/types/common'
+import { Yields } from '@/objects/yield'
 
 export class PlayerManager extends Manager {
   calcStatic (player: Player): void {

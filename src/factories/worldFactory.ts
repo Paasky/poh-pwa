@@ -10,14 +10,15 @@ export type WorldSize = {
   continents: 4 | 5 | 6 | 7 | 8 | 9 | 10
   majorsPerContinent: 1 | 2 | 3 | 4
   minorsPerPlayer: 0 | 1 | 2
+  seaLevel: 1 | 2 | 3
 }
 
 export const worldSizes: WorldSize[] = [
-  { name: 'Tiny', x: 72, y: 36, continents: 4, majorsPerContinent: 1, minorsPerPlayer: 0 },
-  { name: 'Small', x: 120, y: 60, continents: 4, majorsPerContinent: 2, minorsPerPlayer: 2 },
-  { name: 'Regular', x: 168, y: 84, continents: 5, majorsPerContinent: 3, minorsPerPlayer: 2 },
-  { name: 'Large', x: 208, y: 104, continents: 6, majorsPerContinent: 4, minorsPerPlayer: 2 },
-  { name: 'Huge', x: 264, y: 132, continents: 10, majorsPerContinent: 4, minorsPerPlayer: 2 },
+  { name: 'Tiny', x: 72, y: 36, continents: 4, majorsPerContinent: 1, minorsPerPlayer: 0, seaLevel: 2 },
+  { name: 'Small', x: 120, y: 60, continents: 4, majorsPerContinent: 2, minorsPerPlayer: 2, seaLevel: 2 },
+  { name: 'Regular', x: 168, y: 84, continents: 5, majorsPerContinent: 3, minorsPerPlayer: 2, seaLevel: 2 },
+  { name: 'Large', x: 208, y: 104, continents: 6, majorsPerContinent: 4, minorsPerPlayer: 2, seaLevel: 2 },
+  { name: 'Huge', x: 264, y: 132, continents: 10, majorsPerContinent: 4, minorsPerPlayer: 2, seaLevel: 2 },
 ]
 
 export type WorldBundle = {
@@ -62,6 +63,7 @@ export const createWorld = (size: WorldSize): WorldBundle => {
           y,
           objects.getTypeObject('domainType:land'),
           objects.getTypeObject('continentType:taiga'),
+          objects.getTypeObject('climateType:temperate'),
           objects.getTypeObject('terrainType:grass'),
           objects.getTypeObject('elevationType:flat'),
         )
