@@ -14,6 +14,7 @@ import {
   faCarrot,
   faCircleDot,
   faCity,
+  faClover,
   faCoins,
   faCompress,
   faCrown,
@@ -21,6 +22,7 @@ import {
   faExpand,
   faEye,
   faFaceSmile,
+  faFaucet,
   faFaucetDrip,
   faFireFlameSimple,
   faFish,
@@ -58,6 +60,7 @@ import {
   faPlaneCircleExclamation,
   faPlaneSlash,
   faPlaneUp,
+  faPlantWilt,
   faPlay,
   faQuestion,
   faRadiation,
@@ -71,6 +74,7 @@ import {
   faShirt,
   faShop,
   faSkull,
+  faSnowflake,
   faSquare,
   faStar,
   faSun,
@@ -83,6 +87,7 @@ import {
   faUserShield,
   faWater,
   faWheatAwn,
+  faWind,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons'
 import { ObjectIcon } from '@/types/common'
@@ -95,6 +100,7 @@ const colors = {
   faith: '#8b5cf6', // violet-500
   influence: '#94a3b8', // slate-400
   happiness: '#4ade80', // green-400
+  darkGreen: '#052e16', // green-950
   danger: '#ef4444', // red-500
   military: '#a8a29e', // stone-400
   trade: '#fb923c', // orange-400
@@ -395,6 +401,20 @@ const keys: Record<string, ObjectIcon> = {
   'elevationType:hill': { icon: faMound, color: colors.trade },
   'elevationType:mountain': { icon: faMountainSun, color: colors.military },
   'elevationType:snowMountain': { icon: faMountain, color: colors.default },
+
+  // Features
+  'featureType:pineForest': { icon: faTree, color: colors.darkGreen },
+  'featureType:forest': { icon: faClover, color: colors.happiness },
+  'featureType:jungle': { icon: faClover, color: colors.darkGreen },
+  'featureType:shrubs': { icon: faSeedling, color: colors.trade },
+  'featureType:oasis': { icon: faFaucet, color: colors.science },
+  'featureType:floodPlain': { icon: faWater, color: colors.science },
+  'featureType:swamp': { icon: faWater, color: colors.military },
+  'featureType:ice': { icon: faSnowflake, color: colors.default },
+  'featureType:kelp': { icon: faPlantWilt, color: colors.happiness },
+  'featureType:lagoon': { icon: faWater, color: colors.trade },
+  'featureType:atoll': { icon: faMound, color: colors.science },
+  'featureType:tradeWind': { icon: faWind, color: colors.default },
 
   'yieldType:airSlot': { icon: faInbox, color: colors.military },
   'yieldType:attack': { icon: faArrowsToDot, color: colors.military },

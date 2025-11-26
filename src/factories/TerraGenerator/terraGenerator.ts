@@ -220,51 +220,7 @@ export class TerraGenerator {
 
   generateRegLevel (): TerraGenerator {
     this._regFillFromStrat()
-
-    // Clean orphaned areas
-    for (let y = 0; y < this.regSize.y; y++) {
-      for (let x = 0; x < this.regSize.x; x++) {
-        const key = Tile.getKey(x, y)
-        const tile = this.regTiles[key]
-        if (!tile) throw new Error(`regTile[${key}] does not exist`)
-
-        const neighbors = this._getRegNeighbors(x, y, 'manhattan')
-        removeOrphanArea(tile, neighbors)
-      }
-    }
-
-    const landTilesPerContinent: Record<string, Record<string, Tile>> = {}
-    for (const tile of Object.values(this.regTiles)) {
-      if (tile.domain !== this.land) continue
-
-      if (!landTilesPerContinent[tile.area.key]) {
-        landTilesPerContinent[tile.area.key] = {}
-      }
-      landTilesPerContinent[tile.area.key][tile.key] = tile
-    }
-    for (const continent of Object.values(this.continents)) {
-      // Add starts per continent
-      for (const stratStartTile of continent.majorStarts.strat) {
-        const startTile = getRandom(
-          this._getRegTilesFromStratCoords(stratStartTile.x, stratStartTile.y).filter(t => t.domain === this.land)
-        )
-        continent.majorStarts.reg.push(startTile)
-
-        // Reserved as a start -> remove from landTilesPerContinent
-        delete landTilesPerContinent[startTile.area.key][startTile.key]
-      }
-
-      // Add 3 mountain ranges per continent
-      const landTiles = Object.values(landTilesPerContinent[continent.continent.key])
-      for (let i = 0; i < 3; i++) {
-        const rangeStart = takeRandom(landTiles)
-        mountainRange(
-          rangeStart,
-          this.regTiles,
-          this.regSize,
-        )
-      }
-    }
+    this._regPostProcess()
 
     return this
   }
@@ -462,9 +418,8 @@ export class TerraGenerator {
     // Find big chunks of Land/Water and convert center to Lake/Island
     const potentialLakes = [] as Tile[]
 
-    // Also on the same pass, add hills
-    // Ignore poles
-    for (let y = 1; y < this.stratSize.y - 1; y++) {
+    // Also on the same pass, add hills on land
+    for (let y = 0; y < this.stratSize.y; y++) {
       for (let x = 0; x < this.stratSize.x; x++) {
         const key = Tile.getKey(x, y)
         const tile = this.stratTiles[key]
@@ -513,16 +468,12 @@ export class TerraGenerator {
         const stratNeighbors = regNeighborCoords.map(c => this._getStratFromRegCoords(c.x, c.y))
         const strat = getRandom(stratNeighbors)
 
-        // Allow a 25% chance for elevation/feature swap for extra variety
+        // Allow a 25% chance for elevation swap for extra variety
         const elevation = strat.domain === this.land && Math.random() < 0.25
           ? (strat.elevation === this.flat ? this.hill : this.flat)
           : strat.elevation
 
-        const feature = strat.domain === this.land && Math.random() < 0.25
-          ? (strat.feature.value ? undefined : this._getFeatureForTile(strat))
-          : strat.feature.value
-
-        this.regTiles[Tile.getKey(x, y)] = new Tile(
+        const tile = new Tile(
           x,
           y,
           strat.domain,
@@ -530,8 +481,73 @@ export class TerraGenerator {
           strat.climate,
           strat.terrain,
           elevation,
-          feature as any,
         )
+        const distToPole = (y === 0 || y === this.regSize.y - 1)
+          ? 0
+          : (
+            (y === 1 || y === this.regSize.y - 2)
+              ? 1
+              : 2
+          )
+        tile.feature = this._getFeatureForTile(tile, distToPole) as any
+        this.regTiles[Tile.getKey(x, y)] = tile
+      }
+    }
+  }
+
+  private _regPostProcess (): void {
+    // Clean orphaned areas
+    for (let y = 0; y < this.regSize.y; y++) {
+      for (let x = 0; x < this.regSize.x; x++) {
+        const key = Tile.getKey(x, y)
+        const tile = this.regTiles[key]
+        if (!tile) throw new Error(`regTile[${key}] does not exist`)
+
+        const neighbors = this._getRegNeighbors(x, y, 'manhattan')
+        removeOrphanArea(tile, neighbors)
+      }
+    }
+
+    const landTilesPerContinent: Record<string, Record<string, Tile>> = {}
+    for (const tile of Object.values(this.regTiles)) {
+      if (tile.domain !== this.land) continue
+
+      if (!landTilesPerContinent[tile.area.key]) {
+        landTilesPerContinent[tile.area.key] = {}
+      }
+      landTilesPerContinent[tile.area.key][tile.key] = tile
+    }
+    for (const continent of Object.values(this.continents)) {
+      // Add starts per continent
+      for (const stratStartTile of continent.majorStarts.strat) {
+        const startTile = getRandom(
+          this._getRegTilesFromStratCoords(stratStartTile.x, stratStartTile.y).filter(t => t.domain === this.land)
+        )
+        continent.majorStarts.reg.push(startTile)
+
+        // Reserved as a start -> remove from landTilesPerContinent
+        delete landTilesPerContinent[startTile.area.key][startTile.key]
+      }
+
+      // Add 3 mountain ranges per continent
+      const landTiles = Object.values(landTilesPerContinent[continent.continent.key])
+      for (let i = 0; i < 3; i++) {
+        const rangeStart = takeRandom(landTiles)
+        const mountainTiles = mountainRange(
+          rangeStart,
+          this.regTiles,
+          this.regSize,
+        )
+
+        // Flat Mountain neighbors have a 50% chance of becoming hill
+        for (const tile of mountainTiles) {
+          for (const neighbor of this._getRegNeighbors(tile.x, tile.y, 'manhattan')) {
+            // Skip non-lake water
+            if (neighbor.domain === this.water && neighbor.terrain !== this.lakeTerrain) continue
+
+            if (neighbor.elevation === this.flat && Math.random() < 0.5) neighbor.elevation = this.hill
+          }
+        }
       }
     }
   }
@@ -562,12 +578,16 @@ export class TerraGenerator {
     return climate
   }
 
-  private _getFeatureForTile (tile: Tile): TypeObject | undefined {
+  private _getFeatureForTile (tile: Tile, distToPole: number): TypeObject | undefined {
     const rand = Math.random()
+
+    if ((!distToPole && rand < 0.75) || (distToPole === 1 && rand < 0.25)) {
+      return this._objStore.getTypeObject('featureType:ice')
+    }
 
     if (tile.climate.key === 'climateType:frozen') {
       if (tile.terrain === this.oceanTerrain) {
-        return rand < 0.5 ? this._objStore.getTypeObject('featureType:ice') : undefined
+        return rand < 0.2 ? this._objStore.getTypeObject('featureType:ice') : undefined
       }
     }
 
@@ -576,16 +596,12 @@ export class TerraGenerator {
         return rand < 0.75
           ? (rand < 0.25
               ? this._objStore.getTypeObject('featureType:swamp')
-              : this._objStore.getTypeObject('featureType:forest')
+              : this._objStore.getTypeObject('featureType:pineForest')
           ) : undefined
       }
 
       if (tile.terrain === this.coastTerrain || tile.terrain === this.lakeTerrain) {
-        return rand < 0.1 ? this._objStore.getTypeObject('featureType:kelp') : undefined
-      }
-
-      if (tile.terrain === this.oceanTerrain) {
-        return rand < 0.25 ? this._objStore.getTypeObject('featureType:ice') : undefined
+        return rand < 0.2 ? this._objStore.getTypeObject('featureType:kelp') : undefined
       }
     }
 
@@ -618,7 +634,7 @@ export class TerraGenerator {
       }
 
       if (tile.terrain === this.oceanTerrain) {
-        return rand < 0.25
+        return rand < 0.1
           ? this._objStore.getTypeObject('featureType:atoll')
           : undefined
       }
@@ -638,7 +654,7 @@ export class TerraGenerator {
       }
 
       if (tile.terrain === this.oceanTerrain) {
-        return rand < 0.25
+        return rand < 0.1
           ? this._objStore.getTypeObject('featureType:atoll')
           : undefined
       }

@@ -13,6 +13,7 @@ type Toggles = {
   showMajorStarts: boolean
   showTerrainColors: boolean
   showElevation: boolean
+  showFeatures: boolean
 }
 
 const objects = useObjectsStore()
@@ -34,7 +35,8 @@ const toggles = reactive<Toggles>({
   showAreas: false,
   showMajorStarts: true,
   showTerrainColors: true,
-  showElevation: true,
+  showElevation: false,
+  showFeatures: true,
 })
 
 const gen = ref<TerraGenerator | null>(null)
@@ -153,7 +155,7 @@ function tileAreaInitials (tile: Tile): string {
   return tile.domain.id === 'land' ? id.slice(0, 2).toUpperCase() : id.slice(0, 2).toLowerCase()
 }
 
-const selectedLevel = ref<'strat' | 'reg'>('strat')
+const selectedLevel = ref<'strat' | 'reg'>('reg')
 
 </script>
 
@@ -222,6 +224,13 @@ const selectedLevel = ref<'strat' | 'reg'>('strat')
                 Elevation
               </span>
             </label>
+            <label class="inline-flex items-center gap-2"><input v-model="toggles.showFeatures" type="checkbox"
+                                                                 class="accent-sky-500"/>
+              <span class="inline-flex items-center gap-1">
+                <UiIcon :icon="objects.getTypeObject('conceptType:feature').icon" class="w-4 h-4"/>
+                Features
+              </span>
+            </label>
           </div>
         </form>
 
@@ -258,7 +267,7 @@ const selectedLevel = ref<'strat' | 'reg'>('strat')
                      class="w-[24px] h-[24px] relative border"
                      :style="({
                      backgroundColor: toggles.showTerrainColors ? terrainColor(getStratTile(x-1,y-1)) : 'transparent',
-                     borderColor: toggles.showAreas ? areaBorderColor(getStratTile(x-1,y-1)?.area.key || 'none', (getStratTile(x-1,y-1)?.area.class === 'oceanType')) : 'transparent'
+                     borderColor: toggles.showAreas ? areaBorderColor(getStratTile(x-1,y-1).area.key || 'none', (getStratTile(x-1,y-1).area.class === 'oceanType')) : 'transparent'
                    })"
                 >
                   <span v-if="toggles.showAreaInitials"
@@ -266,11 +275,15 @@ const selectedLevel = ref<'strat' | 'reg'>('strat')
                     {{ tileAreaInitials(getStratTile(x - 1, y - 1)) }}
                   </span>
                   <span v-if="toggles.showMajorStarts && tileKeysWithStart.strat.includes(Tile.getKey(x-1,y-1))"
-                        class="absolute inset-0 text-[12px] font-bold leading-[24px] text-black text-center"
+                        class="absolute inset-0 text-[18px] font-bold leading-[18px] text-black text-center border-white border-2 rounded-full"
                   >X</span>
                   <div v-if="toggles.showElevation && getStratTile(x-1,y-1).elevation.id !== 'flat'"
                        class="absolute inset-0 flex items-center justify-center">
-                    <UiIcon :icon="getStratTile(x-1,y-1)?.elevation.icon" class="w-4 h-4 drop-shadow"/>
+                    <UiIcon :icon="getStratTile(x-1,y-1).elevation.icon" class="w-4 h-4 drop-shadow"/>
+                  </div>
+                  <div v-if="toggles.showFeatures && getStratTile(x-1,y-1).feature"
+                       class="absolute inset-0 flex items-center justify-center">
+                    <UiIcon :icon="getStratTile(x-1,y-1).feature.icon" class="w-4 h-4 drop-shadow"/>
                   </div>
                 </div>
               </div>
@@ -290,20 +303,24 @@ const selectedLevel = ref<'strat' | 'reg'>('strat')
                      class="w-[24px] h-[24px] relative border"
                      :style="({
                      backgroundColor: toggles.showTerrainColors ? terrainColor(getRegTile(x-1,y-1)) : 'transparent',
-                     borderColor: toggles.showAreas ? areaBorderColor(getRegTile(x-1,y-1)?.area.key || 'none', (getRegTile(x-1,y-1)?.area.class === 'oceanType')) : 'transparent'
+                     borderColor: toggles.showAreas ? areaBorderColor(getRegTile(x-1,y-1).area.key || 'none', (getRegTile(x-1,y-1).area.class === 'oceanType')) : 'transparent'
                    })"
                 >
                   <span v-if="toggles.showAreaInitials"
                         class="absolute inset-0 text-[12px] leading-[24px] text-white text-center drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
                     {{ getRegTile(x - 1, y - 1) ? tileAreaInitials(getRegTile(x - 1, y - 1)) : '' }}
                   </span>
-                  <span v-if="toggles.showMajorStarts && tileKeysWithStart.reg.includes(Tile.getKey(x-1,y-1))"
-                        class="absolute inset-0 text-[12px] font-bold leading-[24px] text-black text-center"
-                  >X</span>
                   <div v-if="toggles.showElevation && getRegTile(x-1,y-1).elevation.id !== 'flat'"
                        class="absolute inset-0 flex items-center justify-center">
                     <UiIcon :icon="getRegTile(x-1,y-1).elevation.icon" class="w-3.5 h-3.5 drop-shadow"/>
                   </div>
+                  <div v-if="toggles.showFeatures && getRegTile(x-1,y-1).feature"
+                       class="absolute inset-0 flex items-center justify-center">
+                    <UiIcon :icon="getRegTile(x-1,y-1).feature.icon" class="w-3.5 h-3.5 drop-shadow"/>
+                  </div>
+                  <span v-if="toggles.showMajorStarts && tileKeysWithStart.reg.includes(Tile.getKey(x-1,y-1))"
+                        class="absolute inset-0 text-[18px] font-bold leading-[18px] text-black text-center border-white border-2 rounded-full"
+                  >X</span>
                 </div>
               </div>
             </div>

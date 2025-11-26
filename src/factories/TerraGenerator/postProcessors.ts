@@ -66,7 +66,7 @@ export const mountainRange = (
     [4, 5],
     [3, 4],
     (tile: Tile): boolean => {
-      if (tile.domain.id === 'water') {
+      if (tile.domain.id === 'water' && tile.terrain.id !== 'lake') {
         waterCount++
         return waterCount < 3
       }
