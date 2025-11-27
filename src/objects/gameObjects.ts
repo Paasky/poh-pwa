@@ -397,6 +397,8 @@ export class Tile extends CanHaveCity(CanHavePlayer(HasUnits(GameObject))) {
   resource = ref<TypeObject | null>(null)
   pollution = ref<TypeObject | null>(null)
   naturalWonder = null as TypeObject | null
+  isFresh = false
+  isSalt = false
 
   constructionKey = ref<GameKey | null>(null)
   construction = canHaveOne(this.constructionKey, Construction)
@@ -445,7 +447,7 @@ export class Tile extends CanHaveCity(CanHavePlayer(HasUnits(GameObject))) {
   }
 
   static getKey (x: number, y: number): GameKey {
-    return getKey('tile', `${x},${y}`)
+    return getKey('tile', `x${x},y${y}`)
   }
 }
 

@@ -7,22 +7,45 @@ import { getRandom, takeRandom } from '@/helpers/arrayTools'
 import { mountainRange, removeOrphanArea } from '@/factories/TerraGenerator/postProcessors'
 import { Tetris } from '@/factories/TerraGenerator/tetris'
 
+export class GenTile extends Tile {
+  isContinentCenter = false
+  isStart: 'major' | 'minor' | null = null
+
+  canBeLand () {
+    return !this.isSalt
+  }
+
+  canBeStart () {
+    return !this.isStart && this.domain.key === 'domainType:land'
+  }
+
+  canBeWater () {
+    return !this.isStart && !this.isContinentCenter
+  }
+
+  canChangeDomain () {
+    return this.domain.key === 'domainType:land'
+      ? this.canBeWater()
+      : this.canBeLand()
+  }
+}
+
+export type ContinentData = {
+  type: TypeObject,
+  center: GenTile,
+  majorStarts: { strat: GenTile[], reg: GenTile[], game: GenTile[] },
+  minorStarts: { strat: GenTile[], reg: GenTile[], game: GenTile[] },
+}
+
 export class TerraGenerator {
   size: WorldSize
   regSize: { x: number, y: number }
   stratSize: { x: number, y: number }
 
-  continents: Record<string, {
-    continent: TypeObject,
-    majorStarts: {
-      strat: Tile[],
-      reg: Tile[],
-      game: Tile[],
-    }
-  }> = {}
-  stratTiles: Record<string, Tile> = {}
-  regTiles: Record<string, Tile> = {}
-  gameTiles: Record<string, Tile> = {}
+  continents: Record<string, ContinentData> = {}
+  stratTiles: Record<string, GenTile> = {}
+  regTiles: Record<string, GenTile> = {}
+  gameTiles: Record<string, GenTile> = {}
 
   private _objStore = useObjectsStore()
   land: TypeObject
@@ -92,8 +115,12 @@ export class TerraGenerator {
     // Make a copy so we don't mutate the store
     const continents = [...this._objStore.getClassTypes('continentType')]
 
-    for (let y = 0; y < this.stratSize.y; y++) {
-      for (let x = 0; x < this.stratSize.x; x++) {
+    // Shuffle x & y values to randomize preset continent order & placement
+    const ys = [...Array(this.stratSize.y).keys()]
+    const xs = [...Array(this.stratSize.x).keys()]
+
+    for (const y of ys) {
+      for (const x of xs) {
         // Get preset type from x/y types
         const type = (this._xTypes[x] ?? this._yTypes[y] ?? (this._yxTypes[y] ?? [])[x] ?? null) as TypeClass | TypeKey | null
 
@@ -106,16 +133,26 @@ export class TerraGenerator {
 
         // It's Land
         if (type === 'continentType') {
+          // All continents already generated?
+          if (Object.values(this.continents).length >= this.size.continents) continue
+
           const continent = takeRandom(continents)
+
+          // Init continent data
+          this.continents[key] = {
+            type: continent,
+            majorStarts: { strat: [] as GenTile[], reg: [] as GenTile[], game: [] as GenTile[] },
+            minorStarts: { strat: [] as GenTile[], reg: [] as GenTile[], game: [] as GenTile[] },
+          } as any as ContinentData
 
           // Add a 3x3 grid of land tiles around the continent center
           const neighborCoords = this._getNeighborCoords(x, y, 'chebyshev', 1, this.stratSize)
           for (const coords of [{ x, y }, ...neighborCoords]) {
-            const key = Tile.getKey(coords.x, coords.y)
+            const gridKey = Tile.getKey(coords.x, coords.y)
 
             const climate = this._getClimateFromStratY(y)
 
-            this.stratTiles[key] = new Tile(
+            const tile = new GenTile(
               coords.x,
               coords.y,
               this.land,
@@ -124,14 +161,14 @@ export class TerraGenerator {
               this._getLandTerrainFromClimate(climate),
               this.flat
             )
+            if (coords.x === x && coords.y === y) {
+              tile.isContinentCenter = true
+              this.continents[key].center = tile
+            }
+            this.stratTiles[gridKey] = tile
           }
 
-          // Init continent data
-          this.continents[key] = {
-            continent,
-            majorStarts: { strat: [] as Tile[], reg: [] as Tile[], game: [] as Tile[] },
-          }
-
+          // Add Major Start locations
           // Add Major start tiles
           const startCoords = [
             { x: x - 1, y: y - 1 },
@@ -139,10 +176,28 @@ export class TerraGenerator {
             { x: x - 1, y: y + 1 },
             { x: x + 1, y: y + 1 },
           ]
-          for (let i = 0; i < this.size.majorsPerContinent; i++) {
-            const majorStart = takeRandom(startCoords)
+          // If it's a small continent, look in more directions
+          const backupStartCoords = [
+            { x, y: y - 1 },
+            { x: x, y: y + 1 },
+            { x: x - 1, y },
+            { x: x + 1, y },
+            { x: x - 2, y },
+            { x: x + 2, y },
+          ]
+
+          while (
+            this.continents[key].majorStarts.strat.length < this.size.majorsPerContinent
+            && (startCoords.length > 0 || backupStartCoords.length > 0)
+            ) {
+            const coords = takeRandom(startCoords.length > 0 ? startCoords : backupStartCoords)
+
+            const startTile = this.stratTiles[Tile.getKey(coords.x, coords.y)]
+            if (!startTile?.canBeStart()) continue
+
+            startTile.isStart = 'major'
             this.continents[key].majorStarts.strat.push(
-              this.stratTiles[Tile.getKey(majorStart.x, majorStart.y)]
+              startTile
             )
           }
 
@@ -160,7 +215,7 @@ export class TerraGenerator {
 
         const climate = this._getClimateFromStratY(y)
 
-        this.stratTiles[key] = new Tile(
+        this.stratTiles[key] = new GenTile(
           x,
           y,
           this.water,
@@ -169,6 +224,7 @@ export class TerraGenerator {
           ['caribbean', 'mediterranean'].includes(ocean.id) ? this.seaTerrain : this.oceanTerrain,
           this.flat
         )
+        this.stratTiles[key].isSalt = true
 
         //Continue to the next X
       }
@@ -225,7 +281,7 @@ export class TerraGenerator {
       if (rand.domain === this.land) {
         // Copy tile (except climate and terrain from Y)
         const climate = this._getClimateFromStratY(y)
-        this.stratTiles[key] = new Tile(
+        this.stratTiles[key] = new GenTile(
           x,
           y,
           rand.domain,
@@ -248,7 +304,7 @@ export class TerraGenerator {
         || rand
 
       const climate = this._getClimateFromStratY(y)
-      this.stratTiles[key] = new Tile(
+      this.stratTiles[key] = new GenTile(
         x,
         y,
         preferredOcean.domain,
@@ -257,6 +313,9 @@ export class TerraGenerator {
         preferredOcean.terrain,
         preferredOcean.elevation
       )
+      // mark salt water spreading
+      this.stratTiles[key].isSalt = preferredOcean.terrain === this.seaTerrain || preferredOcean.terrain === this.oceanTerrain
+      this.stratTiles[key].isFresh = false
 
       // Remove from emptyCoords
       emptyCoords.splice(randI, 1)
@@ -279,7 +338,7 @@ export class TerraGenerator {
     }
 
     // Find big chunks of Land/Water and convert center to Lake/Island
-    const potentialLakes = [] as Tile[]
+    const potentialLakes = [] as GenTile[]
 
     // Also on the same pass, add hills on land
     for (let y = 0; y < this.stratSize.y; y++) {
@@ -292,7 +351,8 @@ export class TerraGenerator {
           // 25% chance to become a hill
           if (Math.random() < 0.25) tile.elevation = this.hill
 
-          if (Object.values(this.continents).some(c => c.majorStarts.strat.includes(tile))) continue
+          // Check if it can become a Lake
+          if (!tile.canBeWater()) continue
 
           const neighbors = this._getStratNeighbors(x, y, 'manhattan', 2)
           const allAreSameDomain = neighbors.every(n => n.domain === tile.domain)
@@ -300,13 +360,18 @@ export class TerraGenerator {
           // Lakes can grow next to each other
           if (allAreSameDomain) potentialLakes.push(tile)
         } else {
+          // Check if Water can become an Island
+          if (!tile.canBeLand()) continue
+
           const neighbors = this._getStratNeighbors(x, y, 'chebyshev', 2)
           const allAreSameDomain = neighbors.every(n => n.domain === tile.domain)
 
-          // 25% chance to become an ocean island (and prevent another island near-by)
-          if (allAreSameDomain && Math.random() < 0.25) {
+          // 50% chance to become an ocean island (and prevent another island near-by)
+          if (allAreSameDomain && Math.random() < 0.5) {
             tile.domain = this.land
             tile.terrain = this._getLandTerrainFromClimate(tile.climate)
+            tile.isSalt = false
+            tile.isFresh = false
           }
         }
       }
@@ -317,6 +382,8 @@ export class TerraGenerator {
       if (Math.random() < 0.5) {
         tile.domain = this.water
         tile.terrain = this.lakeTerrain
+        tile.isFresh = true
+        tile.isSalt = false
         // NOTE: allow lakes and hills at strategic/region level, fix in game level
         // (allows for lakes surrounded by hills)
       }
@@ -336,7 +403,7 @@ export class TerraGenerator {
           ? (strat.elevation === this.flat ? this.hill : this.flat)
           : strat.elevation
 
-        const tile = new Tile(
+        const tile = new GenTile(
           x,
           y,
           strat.domain,
@@ -345,6 +412,7 @@ export class TerraGenerator {
           strat.terrain,
           elevation,
         )
+
         const distToPole = (y === 0 || y === this.regSize.y - 1)
           ? 0
           : (
@@ -388,14 +456,17 @@ export class TerraGenerator {
         for (const o of offsets) {
           const tt = this._getTile(x + o.dx, y + o.dy, this.regSize, this.regTiles)
           if (!tt) continue
+          if (!tt.canChangeDomain()) continue
           tt.domain = this.land
           tt.terrain = this._getLandTerrainFromClimate(tile.climate)
           tt.elevation = this.hill
+          tt.isFresh = false
+          tt.isSalt = false
         }
       }
     }
 
-    const landTilesPerContinent: Record<string, Record<string, Tile>> = {}
+    const landTilesPerContinent: Record<string, Record<string, GenTile>> = {}
     for (const tile of Object.values(this.regTiles)) {
       if (tile.domain !== this.land) continue
 
@@ -410,6 +481,7 @@ export class TerraGenerator {
         const startTile = getRandom(
           this._getRegTilesFromStratCoords(stratStartTile.x, stratStartTile.y).filter(t => t.domain === this.land)
         )
+        startTile.isStart = 'major'
         continent.majorStarts.reg.push(startTile)
 
         // Reserved as a start -> remove from landTilesPerContinent
@@ -417,7 +489,7 @@ export class TerraGenerator {
       }
 
       // Add 3 mountain ranges per continent
-      const landTiles = Object.values(landTilesPerContinent[continent.continent.key])
+      const landTiles = Object.values(landTilesPerContinent[continent.type.key])
       for (let i = 0; i < 3; i++) {
         const rangeStart = takeRandom(landTiles)
         const mountainTiles = mountainRange(
@@ -469,7 +541,7 @@ export class TerraGenerator {
     return climate
   }
 
-  private _getFeatureForTile (tile: Tile, distToPole: number): TypeObject | undefined {
+  private _getFeatureForTile (tile: GenTile, distToPole: number): TypeObject | undefined {
     const rand = Math.random()
 
     if ((!distToPole && rand < 0.75) || (distToPole === 1 && rand < 0.25)) {
@@ -570,28 +642,28 @@ export class TerraGenerator {
     return terrain
   }
 
-  private _getStratFromGameCoords (x: number, y: number): Tile {
+  private _getStratFromGameCoords (x: number, y: number): GenTile {
     const key = Tile.getKey(Math.floor(x / 9), Math.floor(y / 9))
     const tile = this.regTiles[key]
     if (!tile) throw new Error(`game[${x}, ${y}] -> regTile[${key}] does not exist`)
     return tile
   }
 
-  private _getStratFromRegCoords (x: number, y: number): Tile {
+  private _getStratFromRegCoords (x: number, y: number): GenTile {
     const key = Tile.getKey(Math.floor(x / 3), Math.floor(y / 3))
     const tile = this.stratTiles[key]
     if (!tile) throw new Error(`reg[${x}, ${y}] -> stratTile[${key}] does not exist`)
     return tile
   }
 
-  private _getRegFromGameCoords (x: number, y: number): Tile {
+  private _getRegFromGameCoords (x: number, y: number): GenTile {
     const key = Tile.getKey(Math.floor(x / 3), Math.floor(y / 3))
     const tile = this.regTiles[key]
     if (!tile) throw new Error(`game[${x}, ${y}] -> regTile[${key}] does not exist`)
     return tile
   }
 
-  private _getGameTilesFromRegCoords (x: number, y: number): Tile[] {
+  private _getGameTilesFromRegCoords (x: number, y: number): GenTile[] {
     // Return the 3x3 grid of game tiles inside this region tile
     const cx = x * 3 + 1
     const cy = y * 3 + 1
@@ -600,7 +672,7 @@ export class TerraGenerator {
     return center ? [center, ...neighbors] : neighbors
   }
 
-  private _getGameTilesFromStratCoords (x: number, y: number): Tile[] {
+  private _getGameTilesFromStratCoords (x: number, y: number): GenTile[] {
     // Return the 9x9 grid of game tiles inside this strategic tile
     const cx = x * 9 + 4
     const cy = y * 9 + 4
@@ -609,7 +681,7 @@ export class TerraGenerator {
     return center ? [center, ...neighbors] : neighbors
   }
 
-  private _getRegTilesFromStratCoords (x: number, y: number): Tile[] {
+  private _getRegTilesFromStratCoords (x: number, y: number): GenTile[] {
     // Return the 3x3 grid of region tiles inside this strategic tile
     const cx = x * 3 + 1
     const cy = y * 3 + 1
@@ -623,9 +695,9 @@ export class TerraGenerator {
     y: number,
     metric: 'chebyshev' | 'manhattan' = 'chebyshev',
     dist = 1,
-  ): Tile[] {
+  ): GenTile[] {
     const coords = this._getNeighborCoords(x, y, metric, dist, this.size)
-    const out: Tile[] = []
+    const out: GenTile[] = []
     for (const c of coords) {
       const key = Tile.getKey(c.x, c.y)
       const t = this.gameTiles[key]
@@ -640,8 +712,8 @@ export class TerraGenerator {
     x: number,
     y: number,
     size: { x: number, y: number },
-    tiles: Record<string, Tile>
-  ): Tile | null {
+    tiles: Record<string, GenTile>
+  ): GenTile | null {
     if (y < 0 || y >= size.y) return null
     const nx = ((x % size.x) + size.x) % size.x
     const key = Tile.getKey(nx, y)
@@ -655,9 +727,9 @@ export class TerraGenerator {
     y: number,
     metric: 'chebyshev' | 'manhattan' = 'chebyshev',
     dist = 1,
-  ): Tile[] {
+  ): GenTile[] {
     const coords = this._getNeighborCoords(x, y, metric, dist, this.regSize)
-    const out: Tile[] = []
+    const out: GenTile[] = []
     for (const c of coords) {
       const key = Tile.getKey(c.x, c.y)
       const t = this.regTiles[key]
@@ -671,9 +743,9 @@ export class TerraGenerator {
     y: number,
     metric: 'chebyshev' | 'manhattan' = 'chebyshev',
     dist = 1,
-  ): Tile[] {
+  ): GenTile[] {
     const coords = this._getNeighborCoords(x, y, metric, dist, this.stratSize)
-    const out: Tile[] = []
+    const out: GenTile[] = []
     for (const c of coords) {
       const key = Tile.getKey(c.x, c.y)
       const t = this.stratTiles[key]

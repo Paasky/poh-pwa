@@ -1,11 +1,11 @@
-import { Tile } from '@/objects/gameObjects'
 import { getRandom } from '@/helpers/arrayTools'
 import { snake } from '@/factories/TerraGenerator/snake'
 import { useObjectsStore } from '@/stores/objectStore'
+import { GenTile } from '@/factories/TerraGenerator/terraGenerator'
 
 export const removeOrphanArea = (
-  tile: Tile,
-  neighbors: Tile[]
+  tile: GenTile,
+  neighbors: GenTile[]
 ) => {
   if (neighbors.length === 0) return
 
@@ -17,7 +17,7 @@ export const removeOrphanArea = (
 
   const ref = getRandom(neighbors)
   // If the domain changes, also change climate and terrain
-  if (tile.domain !== ref.domain) {
+  if (tile.domain !== ref.domain && tile.canChangeDomain()) {
     tile.domain = ref.domain
     tile.climate = ref.climate
     tile.terrain = ref.terrain
@@ -26,8 +26,8 @@ export const removeOrphanArea = (
 }
 
 export const removeOrphanTerrain = (
-  tile: Tile,
-  neighbors: Tile[]
+  tile: GenTile,
+  neighbors: GenTile[]
 ) => {
   if (neighbors.length === 0) return
 
@@ -40,6 +40,7 @@ export const removeOrphanTerrain = (
   const ref = getRandom(neighbors)
   // If the domain changes, also change the area
   if (ref.domain !== tile.domain) {
+    if (!tile.canChangeDomain()) return
     tile.area = ref.area
   }
   tile.domain = ref.domain
@@ -48,15 +49,15 @@ export const removeOrphanTerrain = (
 }
 
 export const mountainRange = (
-  start: Tile,
-  tiles: Record<string, Tile>,
+  start: GenTile,
+  tiles: Record<string, GenTile>,
   size: { x: number, y: number }
 ) => {
   const flat = useObjectsStore().getTypeObject('elevationType:flat')
   const mountain = useObjectsStore().getTypeObject('elevationType:mountain')
   const snowMountain = useObjectsStore().getTypeObject('elevationType:snowMountain')
 
-  const walkedTiles: Tile[] = []
+  const walkedTiles: GenTile[] = []
   let waterCount = 0
   snake(
     start,
@@ -65,7 +66,7 @@ export const mountainRange = (
     size,
     [4, 5],
     [3, 4],
-    (tile: Tile): boolean => {
+    (tile: GenTile): boolean => {
       if (tile.domain.id === 'water' && tile.terrain.id !== 'lake') {
         waterCount++
         return waterCount < 3

@@ -1,14 +1,14 @@
-import { Tile } from '@/objects/gameObjects'
 import { getRandom } from '@/helpers/arrayTools'
+import { GenTile } from '@/factories/TerraGenerator/terraGenerator'
 
 export const snake = (
-  start: Tile,
-  tiles: Record<string, Tile>,
-  walkedTiles: Tile[] = [],
+  start: GenTile,
+  tiles: Record<string, GenTile>,
+  walkedTiles: GenTile[] = [],
   size: { x: number, y: number },
   legs: number[] = [3],
   tilesPerLeg: number[] = [3],
-  acceptTile?: (tile: Tile) => boolean,
+  acceptTile?: (tile: GenTile) => boolean,
 ) => {
   type compass = 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw'
   const dirs = {
@@ -38,7 +38,7 @@ export const snake = (
       x += dirs[dir].x
       y += dirs[dir].y
 
-      const nextTile = tiles[Tile.getKey(x, y)]
+      const nextTile = tiles[GenTile.getKey(x, y)]
       if (!nextTile) break
       if (acceptTile?.(nextTile) === false) break
 

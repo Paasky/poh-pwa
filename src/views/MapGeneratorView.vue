@@ -3,13 +3,12 @@ import { computed, onMounted, reactive, ref } from 'vue'
 import { useObjectsStore } from '@/stores/objectStore'
 import type { WorldSize } from '@/factories/worldFactory'
 import { worldSizes } from '@/factories/worldFactory'
-import { TerraGenerator } from '@/factories/TerraGenerator/terraGenerator'
+import { GenTile, TerraGenerator } from '@/factories/TerraGenerator/terraGenerator'
 import UiButton from '@/components/Ui/UiButton.vue'
 import UiIcon from '@/components/Ui/UiIcon.vue'
 import UiDropdown from '@/components/Ui/UiDropdown.vue'
 import { WorldManager } from '@/managers/worldManager'
 import { StaticData } from '@/types/api'
-import { Tile } from '@/objects/gameObjects'
 import { takeRandom } from '@/helpers/arrayTools'
 
 const objStore = useObjectsStore()
@@ -125,6 +124,7 @@ const toggles = reactive({
   showElevation: true,
   showFeatures: true,
   showMajorStarts: true,
+  showFreshSalt: false,
   showAreas: false,
   showAreaInitials: false,
 })
@@ -142,9 +142,9 @@ function generate () {
 
 const renderTiles = computed(() => {
   const out = {
-    strat: [] as Tile[][],
-    reg: [] as Tile[][],
-    game: [] as Tile[][],
+    strat: [] as GenTile[][],
+    reg: [] as GenTile[][],
+    game: [] as GenTile[][],
   }
   for (const stratTile of Object.values(gen.value!.stratTiles)) {
     const x = stratTile.x
@@ -221,7 +221,7 @@ const oceansLegend = computed(() => areaLegend.value
     .sort((a, b) => a.name.localeCompare(b.name)))
 
 // Background color from terrain id
-function terrainColor (tile: Tile): string {
+function terrainColor (tile: GenTile): string {
   // Common ids first
   switch (tile.terrain.id) {
     case 'ocean':
@@ -250,19 +250,12 @@ function terrainColor (tile: Tile): string {
   return `hsl(50% 50% 50%)`
 }
 
-// Tiles that have a major player starting location
-const tileKeysWithStart = computed(() => ({
-  strat: Object.values(gen.value?.continents ?? {}).flatMap(c => c.majorStarts.strat.map(t => t.key)),
-  reg: Object.values(gen.value?.continents ?? {}).flatMap(c => c.majorStarts.reg.map(t => t.key)),
-  game: Object.values(gen.value?.continents ?? {}).flatMap(c => c.majorStarts.game.map(t => t.key))
-}))
-
-function tileAreaInitials (tile: Tile): string {
+function tileAreaInitials (tile: GenTile): string {
   const id: string = tile.area.id
   return tile.domain.id === 'land' ? id.slice(0, 2).toUpperCase() : id.slice(0, 2).toLowerCase()
 }
 
-const selectedLevel = ref<'strat' | 'reg'>('reg')
+const selectedLevel = ref<'strat' | 'reg'>('strat')
 
 // Always-visible legends for Terrain, Elevation, Features
 const terrainTypes = computed(() => [...objStore.getClassTypes('terrainType')].sort((a, b) => a.name.localeCompare(b.name)))
@@ -330,6 +323,9 @@ const featureTypes = computed(() => [...objStore.getClassTypes('featureType')].s
           <UiButton :variant="toggles.showMajorStarts ? 'selected' : 'ghost'"
                     @click="toggles.showMajorStarts = !toggles.showMajorStarts">Major starts
           </UiButton>
+          <UiButton :variant="toggles.showFreshSalt ? 'selected' : 'ghost'"
+                    @click="toggles.showFreshSalt = !toggles.showFreshSalt">Fresh/Salt
+          </UiButton>
           <UiButton :variant="toggles.showElevation ? 'selected' : 'ghost'"
                     @click="toggles.showElevation = !toggles.showElevation">
             <span class="inline-flex items-center gap-1">
@@ -375,7 +371,7 @@ const featureTypes = computed(() => [...objStore.getClassTypes('featureType')].s
               <div class="flex flex-wrap gap-2">
                 <div v-for="t in terrainTypes" :key="t.key" class="flex items-center gap-2">
                   <span class="inline-block w-5 h-5 rounded-sm border border-gray-700"
-                        :style="{ backgroundColor: terrainColor({terrain: t, climate:{id:'temperate'}} as Tile) }"></span>
+                        :style="{ backgroundColor: terrainColor({terrain: t, climate:{id:'temperate'}} as GenTile) }"></span>
                   <span class="text-slate-200 text-sm">{{ t.name }}</span>
                 </div>
               </div>
@@ -429,9 +425,14 @@ const featureTypes = computed(() => [...objStore.getClassTypes('featureType')].s
                         class="absolute inset-0 text-[12px] leading-[24px] text-white text-center drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
                     {{ tileAreaInitials(tile) }}
                   </span>
-                  <span v-if="toggles.showMajorStarts && tileKeysWithStart.strat.includes(Tile.getKey(x-1,y-1))"
+                  <span v-if="toggles.showMajorStarts && tile.isStart"
                         class="absolute inset-0 text-[18px] font-bold leading-[18px] text-black text-center border-white border-2 rounded-full"
                   >X</span>
+                  <!-- Fresh/Salt marker -->
+                  <span v-if="toggles.showFreshSalt && (tile.isSalt || tile.isFresh)"
+                        class="absolute top-0.5 left-0.5 text-[10px] font-bold leading-none px-1 py-0.5 rounded bg-black/50 text-white border border-white/40">
+                    {{ tile.isSalt ? 'S' : 'F' }}
+                  </span>
                   <div v-if="toggles.showElevation && tile.elevation.id !== 'flat'"
                        class="absolute inset-0 flex items-center justify-center">
                     <UiIcon :icon="tile.elevation.icon" class="w-4 h-4 drop-shadow"/>
@@ -473,9 +474,14 @@ const featureTypes = computed(() => [...objStore.getClassTypes('featureType')].s
                        class="absolute inset-0 flex items-center justify-center">
                     <UiIcon :icon="(tile.feature as any).icon" class="w-3.5 h-3.5 drop-shadow"/>
                   </div>
-                  <span v-if="toggles.showMajorStarts && tileKeysWithStart.reg.includes(Tile.getKey(x-1,y-1))"
+                  <span v-if="toggles.showMajorStarts && tile.isStart"
                         class="absolute inset-0 text-[18px] font-bold leading-[18px] text-black text-center border-white border-2 rounded-full"
                   >X</span>
+                  <!-- Fresh/Salt marker -->
+                  <span v-if="toggles.showFreshSalt && (tile.isSalt || tile.isFresh)"
+                        class="absolute top-0.5 left-0.5 text-[10px] font-bold leading-none px-1 py-0.5 rounded bg-black/50 text-white border border-white/40">
+                    {{ tile.isSalt ? 'S' : 'F' }}
+                  </span>
                 </div>
               </div>
             </div>
