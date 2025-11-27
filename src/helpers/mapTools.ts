@@ -1,7 +1,7 @@
-import { Tile } from '@/types/gameObjects'
+import { Tile } from '@/objects/gameObjects'
 import { ObjKey, World } from '@/types/common'
 
-export function getNeighbors (world: World, tile: Tile, dist = 1): Record<ObjKey, Tile> {
+export function getNeighbors (world: World, tiles: Record<string, Tile>, tile: Tile, dist = 1): Record<ObjKey, Tile> {
   const neighbors = {} as Record<ObjKey, Tile>
 
   const sizeX = world.sizeX
@@ -20,7 +20,7 @@ export function getNeighbors (world: World, tile: Tile, dist = 1): Record<ObjKey
   const getByXY = (x: number, y: number): Tile | undefined => {
     if (y < 0 || y >= sizeY) return undefined
     const wx = wrapX(x)
-    const tile = world.tiles[idxKey(wx, y) as `${number},${number}`]
+    const tile = tiles[idxKey(wx, y) as `${number},${number}`]
     if (!tile) throw new Error(`Tile not found at [${x},${y}]`)
     return tile
   }

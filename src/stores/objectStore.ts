@@ -129,7 +129,7 @@ export const useObjectsStore = defineStore('objects', {
 
       this.world = gameData.world
 
-      new GameDataLoader(this as any).load(gameData)
+      new GameDataLoader().load(gameData)
       this._cacheGameObjects()
     },
 
