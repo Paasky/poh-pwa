@@ -39,15 +39,28 @@ export type GameClass =
 
 export type GameKey = `${GameClass}:${string}`
 
+export type GameObjAttr = {
+  isTypeObj?: boolean
+  isTypeObjArray?: boolean
+  attrName: string
+  isOptional?: boolean
+  related?: {
+    theirKeyAttr: string
+    isOne?: boolean
+  }
+}
+
 export const generateKey = (cls: GameClass) => getKey(cls, crypto.randomUUID())
 export const getKey = (cls: GameClass, id: string): GameKey => `${cls}:${id}`
 
 export class GameObject {
+  // noinspection JSUnusedGlobalSymbols
   objType: ObjType = 'GameObject'
   key: GameKey
   class: GameClass
   concept: TypeObject
   id: string
+  static attrsConf: GameObjAttr[] = []
 
   constructor (key: GameKey) {
     this.key = key
@@ -56,9 +69,54 @@ export class GameObject {
     this.concept = objStore().getTypeObject(`conceptType:${this.class}`)
     this.id = classAndId[1]
   }
+
+  toJSON () {
+    const out = {
+      key: this.key,
+    } as Record<string, any>
+
+    for (const attr of (this.constructor as typeof GameObject).attrsConf) {
+      const value = (this as any)[attr.attrName]
+
+      // Empty data: only add if not optional
+      if (value === undefined || value === null) {
+        if (!attr.isOptional) {
+          out[attr.attrName] = value
+        }
+        continue
+      }
+
+      // Special handling for TypeObjects
+      if (attr.isTypeObj) {
+        out[attr.attrName] = value.key
+        continue
+      }
+      if (attr.isTypeObjArray) {
+        out[attr.attrName] = value.map((v: TypeObject) => v.key)
+        continue
+      }
+
+      // Normal attribute
+      out[attr.attrName] = value
+    }
+
+    return out
+  }
+}
+
+export class Agenda extends HasPlayer(GameObject) {
+  static attrsConf: GameObjAttr[] = [
+    { attrName: 'playerKey', related: { theirKeyAttr: 'agendaKeys' } },
+  ]
 }
 
 export class Citizen extends HasCity(HasCulture(CanHaveReligion(HasPlayer(HasTile(GameObject))))) {
+  static attrsConf: GameObjAttr[] = [
+    { attrName: 'cityKey', related: { theirKeyAttr: 'citizenKeys' } },
+    { attrName: 'cultureKey', related: { theirKeyAttr: 'citizenKeys' } },
+    { attrName: 'religionKey', isOptional: true, related: { theirKeyAttr: 'citizenKeys' } },
+    { attrName: 'tileKey', related: { theirKeyAttr: 'citizenKeys' } },
+  ]
   policy = ref<TypeObject | null>(null)
 
   workKey = ref(null as GameKey | null)
@@ -96,6 +154,12 @@ export class Citizen extends HasCity(HasCulture(CanHaveReligion(HasPlayer(HasTil
 }
 
 export class City extends HasCitizens(HasPlayer(HasTile(HasUnits(GameObject)))) {
+  static attrsConf: GameObjAttr[] = [
+    { attrName: 'playerKey', related: { theirKeyAttr: 'cityKeys' } },
+    { attrName: 'tileKey', related: { theirKeyAttr: 'cityKey', isOne: true } },
+    { attrName: 'name' },
+  ]
+
   name = ref('')
   canAttack = ref(false)
   health = ref(100)
@@ -142,6 +206,13 @@ export class City extends HasCitizens(HasPlayer(HasTile(HasUnits(GameObject)))) 
 }
 
 export class Construction extends HasCitizens(CanHaveCity(HasPlayer(HasTile(GameObject)))) {
+  static attrsConf: GameObjAttr[] = [
+    { attrName: 'cityKey', isOptional: true, related: { theirKeyAttr: 'citizenKeys' } },
+    { attrName: 'playerKey', related: { theirKeyAttr: 'cultureKey', isOne: true } },
+    { attrName: 'tileKey', related: { theirKeyAttr: 'cityKey', isOne: true } },
+    { attrName: 'type', isTypeObj: true },
+  ]
+
   type: TypeObject // buildingType/improvementType/nationalWonderType/worldWonderType
   name: string
 
@@ -192,6 +263,11 @@ export class Construction extends HasCitizens(CanHaveCity(HasPlayer(HasTile(Game
 export type CultureStatus = 'notSettled' | 'canSettle' | 'mustSettle' | 'settled'
 
 export class Culture extends HasCitizens(HasPlayer(GameObject)) {
+  static attrsConf: GameObjAttr[] = [
+    { attrName: 'type', isTypeObj: true },
+    { attrName: 'playerKey', related: { theirKeyAttr: 'cultureKey', isOne: true } },
+  ]
+
   type: Ref<UnwrapRef<TypeObject>, UnwrapRef<TypeObject> | TypeObject>
   leader = computed(() => objStore().getTypeObject(
     this.type.value.allows.find(
@@ -341,7 +417,20 @@ export class Culture extends HasCitizens(HasPlayer(GameObject)) {
   }
 }
 
+export class Deal extends HasPlayer(GameObject) {
+  static attrsConf: GameObjAttr[] = [
+    { attrName: 'playerKey', related: { theirKeyAttr: 'dealKeys' } },
+  ]
+
+}
+
 export class Player extends HasCitizens(HasCulture(CanHaveReligion(HasUnits(GameObject)))) {
+  static attrsConf: GameObjAttr[] = [
+    { attrName: 'name' },
+    { attrName: 'isCurrent', isOptional: true },
+    { attrName: 'religionKey', isOptional: true, related: { theirKeyAttr: 'playerKeys' } },
+  ]
+
   name: string
   isCurrent = false
   knownTypes = computed(() => [] as TypeObject[])
@@ -372,6 +461,14 @@ export class Player extends HasCitizens(HasCulture(CanHaveReligion(HasUnits(Game
 }
 
 export class Religion extends HasCitizens(HasCity(HasPlayers(GameObject))) {
+  static attrsConf: GameObjAttr[] = [
+    { attrName: 'name' },
+    { attrName: 'myths', isTypeObjArray: true },
+    { attrName: 'gods', isTypeObjArray: true },
+    { attrName: 'dogmas', isTypeObjArray: true },
+    { attrName: 'cityKey', related: { theirKeyAttr: 'holyCityKeys' } },
+  ]
+
   name: string
   myths: TypeObject[] = []
   gods: TypeObject[] = []
@@ -386,6 +483,20 @@ export class Religion extends HasCitizens(HasCity(HasPlayers(GameObject))) {
 }
 
 export class Tile extends CanHaveCity(CanHavePlayer(HasUnits(GameObject))) {
+  static attrsConf: GameObjAttr[] = [
+    { attrName: 'x' },
+    { attrName: 'y' },
+    { attrName: 'domain', isTypeObj: true },
+    { attrName: 'area', isTypeObj: true },
+    { attrName: 'climate', isTypeObj: true },
+    { attrName: 'terrain', isTypeObj: true },
+    { attrName: 'elevation', isTypeObj: true },
+    { attrName: 'feature', isTypeObj: true, isOptional: true },
+    { attrName: 'resource', isTypeObj: true, isOptional: true },
+    { attrName: 'naturalWonder', isTypeObj: true, isOptional: true },
+    { attrName: 'pollution', isTypeObj: true, isOptional: true },
+  ]
+
   x: number
   y: number
   domain: TypeObject
@@ -451,6 +562,13 @@ export class Tile extends CanHaveCity(CanHavePlayer(HasUnits(GameObject))) {
   }
 }
 
+export class TradeRoute extends HasPlayer(GameObject) {
+  static attrsConf: GameObjAttr[] = [
+    { attrName: 'playerKey' },
+  ]
+
+}
+
 // mercenary: +10% strength, +50% upkeep, 1/city/t;
 // regular: no effects
 // levy: -20% strength, -1 happy if not at war, 1/city/t; can be demobilized -> becomes citizen
@@ -461,6 +579,18 @@ export class Tile extends CanHaveCity(CanHavePlayer(HasUnits(GameObject))) {
 export type UnitStatus = 'mercenary' | 'regular' | 'levy' | 'reserve' | 'mobilizing1' | 'mobilizing2' | 'mobilized'
 
 export class Unit extends CanHaveCity(HasPlayer(HasTile(GameObject))) {
+  static attrsConf: GameObjAttr[] = [
+    { attrName: 'cityKey', related: { theirKeyAttr: 'unitKeys' } },
+    { attrName: 'designKey', related: { theirKeyAttr: 'unitKeys' } },
+    { attrName: 'playerKey', related: { theirKeyAttr: 'unitKeys' } },
+    { attrName: 'tileKey', related: { theirKeyAttr: 'unitKeys' } },
+    { attrName: 'name', isOptional: true },
+    { attrName: 'action', isTypeObj: true, isOptional: true },
+    { attrName: 'canAttack' },
+    { attrName: 'health' },
+    { attrName: 'moves' }
+  ]
+
   private _customName = ref('')
   name = computed(() => this._customName.value || this.design.value.name)
 
@@ -544,6 +674,15 @@ export class Unit extends CanHaveCity(HasPlayer(HasTile(GameObject))) {
 }
 
 export class UnitDesign extends CanHavePlayer(HasUnits(GameObject)) {
+  static attrsConf: GameObjAttr[] = [
+    { attrName: 'platform', isTypeObj: true },
+    { attrName: 'equipment', isTypeObj: true },
+    { attrName: 'name' },
+    { attrName: 'playerKey', isOptional: true, related: { theirKeyAttr: 'designKeys' } },
+    { attrName: 'isElite' },
+    { attrName: 'isActive' }
+  ]
+
   platform: TypeObject
   equipment: TypeObject
   name: string
@@ -555,13 +694,14 @@ export class UnitDesign extends CanHavePlayer(HasUnits(GameObject)) {
 
   constructor (
     key: GameKey, platform: TypeObject, equipment: TypeObject, name: string,
-    playerKey?: GameKey, isElite?: boolean
+    playerKey?: GameKey, isElite?: boolean, isActive?: boolean
   ) {
     super(key)
     this.platform = platform
     this.equipment = equipment
     this.name = name
     this.isElite = !!isElite
+    this.isActive.value = isActive ?? true
     if (playerKey) this.playerKey.value = playerKey
 
     this.types = [this.platform, this.equipment]

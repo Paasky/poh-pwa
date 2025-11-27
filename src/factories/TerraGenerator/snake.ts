@@ -1,6 +1,8 @@
 import { getRandom } from '@/helpers/arrayTools'
 import { GenTile } from '@/factories/TerraGenerator/terraGenerator'
 
+export type Compass = 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw'
+
 export const snake = (
   start: GenTile,
   tiles: Record<string, GenTile>,
@@ -9,8 +11,8 @@ export const snake = (
   legs: number[] = [3],
   tilesPerLeg: number[] = [3],
   acceptTile?: (tile: GenTile) => boolean,
+  initialDir?: Compass
 ) => {
-  type compass = 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw'
   const dirs = {
     n: { x: 0, y: -1 },
     ne: { x: 1, y: -1 },
@@ -20,14 +22,14 @@ export const snake = (
     sw: { x: -1, y: 1 },
     w: { x: -1, y: 0 },
     nw: { x: -1, y: -1 }
-  } as Record<compass, { x: number, y: number }>
+  } as Record<Compass, { x: number, y: number }>
 
   // Start towards the equator
   let x = start.x
   let y = start.y
   walkedTiles.push(start)
   let legsDone = 0
-  const initialDir = start.y < size.y / 2 ? 's' : 'n' as compass
+  initialDir = initialDir ?? start.y < size.y / 2 ? 's' : 'n' as Compass
   let dir = initialDir
 
   const legsTotal = getRandom(legs)
@@ -49,7 +51,7 @@ export const snake = (
     dir = nextDir(dir, initialDir)
   }
 
-  function nextDir (dir: compass, initialDir: compass): compass {
+  function nextDir (dir: Compass, initialDir: Compass): Compass {
     // Can turn 90 or 45 degrees
     const possibleTurns = {
       n: ['w', 'nw', 'ne', 'e'],
@@ -60,7 +62,7 @@ export const snake = (
       sw: ['se', 's', 'w', 'nw'],
       w: ['s', 'sw', 'nw', 'n'],
       nw: ['sw', 'w', 'n', 'ne'],
-    } as Record<compass, compass[]>
+    } as Record<Compass, Compass[]>
 
     // Never go against the initial dir (135+ deg against it)
     const impossibleTurns = {
@@ -72,7 +74,7 @@ export const snake = (
       sw: ['n', 'ne', 'e'],
       w: ['ne', 'e', 'se'],
       nw: ['e', 'se', 's'],
-    } as Record<compass, compass[]>
+    } as Record<Compass, Compass[]>
 
     const candidates = possibleTurns[dir].filter(
       pt => !impossibleTurns[initialDir].includes(pt)
