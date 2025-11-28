@@ -4,13 +4,13 @@ import { ObjKey, World } from '../../src/types/common'
 import { Tile } from '../../src/objects/gameObjects'
 
 describe('mapTools.getNeighbors', () => {
-  const world = buildMockWorld(60, 30)
+  const { world, tiles } = buildMockWorld(60, 30)
 
   it('returns correct neighbor counts at distances 1, 2, 3 for a center tile', () => {
-    const center = tileAt(world, 30, 15)
-    const n1 = getNeighbors(world, center, 1)
-    const n2 = getNeighbors(world, center, 2)
-    const n3 = getNeighbors(world, center, 3)
+    const center = tileAt(tiles, 30, 15)
+    const n1 = getNeighbors(world, tiles, center, 1)
+    const n2 = getNeighbors(world, tiles, center, 2)
+    const n3 = getNeighbors(world, tiles, center, 3)
     const d1 = Object.keys(n1).length
     const d2 = Object.keys(n2).length
     const d3 = Object.keys(n3).length
@@ -33,10 +33,10 @@ describe('mapTools.getNeighbors', () => {
   })
 
   it('returns correct neighbor counts at distances 1, 2, 3 for the top-left tile (0,0)', () => {
-    const topLeft = tileAt(world, 0, 0)
-    const n1 = getNeighbors(world, topLeft, 1)
-    const n2 = getNeighbors(world, topLeft, 2)
-    const n3 = getNeighbors(world, topLeft, 3)
+    const topLeft = tileAt(tiles, 0, 0)
+    const n1 = getNeighbors(world, tiles, topLeft, 1)
+    const n2 = getNeighbors(world, tiles, topLeft, 2)
+    const n3 = getNeighbors(world, tiles, topLeft, 3)
     const d1 = Object.keys(n1).length
     const d2 = Object.keys(n2).length
     const d3 = Object.keys(n3).length
@@ -59,10 +59,10 @@ describe('mapTools.getNeighbors', () => {
   })
 
   it('returns correct neighbor counts at distances 1, 2, 3 for the bottom-left tile (0,sizeY-1)', () => {
-    const bottomLeft = tileAt(world, 0, world.sizeY - 1)
-    const n1 = getNeighbors(world, bottomLeft, 1)
-    const n2 = getNeighbors(world, bottomLeft, 2)
-    const n3 = getNeighbors(world, bottomLeft, 3)
+    const bottomLeft = tileAt(tiles, 0, world.sizeY - 1)
+    const n1 = getNeighbors(world, tiles, bottomLeft, 1)
+    const n2 = getNeighbors(world, tiles, bottomLeft, 2)
+    const n3 = getNeighbors(world, tiles, bottomLeft, 3)
     const d1 = Object.keys(n1).length
     const d2 = Object.keys(n2).length
     const d3 = Object.keys(n3).length
@@ -86,7 +86,7 @@ describe('mapTools.getNeighbors', () => {
 })
 
 // Minimal, self-contained world builder for testing getNeighbors without store deps
-const buildMockWorld = (sizeX: number, sizeY: number): World => {
+const buildMockWorld = (sizeX: number, sizeY: number) => {
   const world = {
     id: 'w',
     sizeX,
@@ -94,13 +94,13 @@ const buildMockWorld = (sizeX: number, sizeY: number): World => {
     turn: 0,
     year: 0,
     currentPlayer: '' as ObjKey,
-    tiles: {} as World['tiles']
   } as World
 
+  const tiles = {}
   for (let y = 0; y < sizeY; y++) {
     for (let x = 0; x < sizeX; x++) {
       const id = crypto.randomUUID()
-      world.tiles[`[${x},${y}]` as `${number},${number}`] = {
+      tiles[`[${x},${y}]` as `${number},${number}`] = {
         objType: 'GameObject',
         class: 'tile',
         id: id,
@@ -112,12 +112,12 @@ const buildMockWorld = (sizeX: number, sizeY: number): World => {
     }
   }
 
-  return world
+  return { world, tiles }
 }
 
 // Helper to access a tile by coordinates using the world's index key format
-const tileAt = (world: World, x: number, y: number) => {
-  return world.tiles[`[${x},${y}]` as `${number},${number}`]
+const tileAt = (tiles: Record<string, Tile>, x: number, y: number) => {
+  return tiles[`[${x},${y}]` as `${number},${number}`]
 }
 
 // ---------- Precise coordinate verification helpers ----------

@@ -4,6 +4,7 @@ import { CatKey, isCategoryObject, isTypeObject, ObjKey, TypeKey, World } from '
 import { GameData, StaticData } from '@/types/api'
 import { CategoryObject, initCategoryObject, initTypeObject, TypeClass, TypeObject } from '@/types/typeObjects'
 import { GameClass, GameKey, GameObject, Player } from '@/objects/gameObjects'
+import { GameDataLoader } from '@/dataLoaders/gameDataLoader'
 
 export const useObjectsStore = defineStore('objects', {
   state: () => ({
@@ -113,37 +114,23 @@ export const useObjectsStore = defineStore('objects', {
   },
 
   actions: {
-    init (staticData: StaticData, gameData?: GameData) {
+    init (staticData: StaticData, gameData: GameData) {
       if (this.ready) throw new Error('Objects Store already initialized')
 
-      // 1) Initialize static objects
       this.initStatic(staticData)
-
-      // 2) Initialize the world
-      if (gameData) {
-        this.world.id = gameData.world.id
-        this.world.sizeX = gameData.world.sizeX
-        this.world.sizeY = gameData.world.sizeY
-        this.world.turn = gameData.world.turn
-        this.world.year = gameData.world.year
-        this.world.currentPlayer = gameData.world.currentPlayer
-      }
-
-      // 3) Initialize game objects
-      if (gameData) {
-        const gameObjects = {} as Record<string, GameObject>
-        for (const data of gameData.objects) {
-          // todo: freeze old game objects (eg dead units, ended deals, completed goals, etc)
-          // gameObjects[data.key] = init(data)
-        }
-        this._gameObjects = gameObjects
-      }
-
-      // 5) Build GameObject indexes
-      this._cacheGameObjects()
+      this.initGame(gameData)
 
       this.ready = true
       console.log('Objects Store initialized')
+    },
+
+    initGame (gameData: GameData) {
+      if (this.ready) throw new Error('Objects Store already initialized')
+
+      this.world = gameData.world
+
+      new GameDataLoader().load(gameData)
+      this._cacheGameObjects()
     },
 
     initStatic (staticData: StaticData) {
