@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Citizen, City } from '@/types/gameObjects'
+import { Citizen, City } from '@/objects/gameObjects'
 import CityProduction from '@/components/City/CityProduction.vue'
 import CityStatus from '@/components/City/CityStatus.vue'
 import CityYields from '@/components/City/CityYields.vue'

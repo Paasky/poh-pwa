@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { getNeighbors } from '../../src/helpers/mapTools'
 import { ObjKey, World } from '../../src/types/common'
-import { Tile } from '../../src/types/gameObjects'
+import { Tile } from '../../src/objects/gameObjects'
 
 describe('mapTools.getNeighbors', () => {
   const world = buildMockWorld(60, 30)

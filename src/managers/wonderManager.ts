@@ -1,6 +1,6 @@
 import { Manager } from '@/managers/_manager'
 import { TypeObject } from '@/types/typeObjects'
-import { City, Tile, WorldWonder } from '@/types/gameObjects'
+import { City, Tile, WorldWonder } from '@/objects/gameObjects'
 
 export class WonderManager extends Manager {
   create (type: TypeObject, tile: Tile, city: City): WorldWonder {

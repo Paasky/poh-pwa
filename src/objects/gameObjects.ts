@@ -12,6 +12,7 @@ import {
   HasPlayer,
   HasPlayers,
   HasTile,
+  HasTiles,
   HasUnits
 } from '@/objects/gameMixins'
 import { TypeObject } from '@/types/typeObjects'
@@ -30,6 +31,7 @@ export type GameClass =
   'city' |
   'culture' |
   'deal' |
+  'river' |
   'player' |
   'religion' |
   'tile' |
@@ -398,10 +400,14 @@ export class Tile extends CanHaveCity(CanHavePlayer(HasUnits(GameObject))) {
   pollution = ref<TypeObject | null>(null)
   naturalWonder = null as TypeObject | null
   isFresh = false
+  isMajorRiver = false
   isSalt = false
 
   constructionKey = ref<GameKey | null>(null)
   construction = canHaveOne(this.constructionKey, Construction)
+
+  riverKey: GameKey | null = null
+  river = computed(() => this.riverKey ? objStore().get(this.riverKey) as River : null)
 
   private _staticTypes: TypeObject[]
   private _dynamicTypes: TypeObject[] = []
@@ -410,9 +416,9 @@ export class Tile extends CanHaveCity(CanHavePlayer(HasUnits(GameObject))) {
   types = computed(() => {
     this._dynamicTypes.length = 0
 
-    if (this.feature.value) this._dynamicTypes.push(this.feature.value as TypeObject)
-    if (this.resource.value) this._dynamicTypes.push(this.resource.value as TypeObject)
-    if (this.pollution.value) this._dynamicTypes.push(this.pollution.value as TypeObject)
+    if (this.feature.value) this._dynamicTypes.push(this.feature.value)
+    if (this.resource.value) this._dynamicTypes.push(this.resource.value)
+    if (this.pollution.value) this._dynamicTypes.push(this.pollution.value)
 
     return this._staticTypes.concat(this._dynamicTypes)
   })
@@ -448,6 +454,12 @@ export class Tile extends CanHaveCity(CanHavePlayer(HasUnits(GameObject))) {
 
   static getKey (x: number, y: number): GameKey {
     return getKey('tile', `x${x},y${y}`)
+  }
+}
+
+export class River extends HasTiles(GameObject) {
+  constructor (key: GameKey) {
+    super(key)
   }
 }
 

@@ -1,5 +1,5 @@
 import { Manager } from '@/managers/_manager'
-import { Government, Player } from '@/types/gameObjects'
+import { Government, Player } from '@/objects/gameObjects'
 import { Yields } from '@/types/common'
 
 export class GovernmentManager extends Manager {

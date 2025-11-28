@@ -2,7 +2,7 @@
 import { useObjectsStore } from '@/stores/objectStore'
 import UiHeader from '@/components/Ui/UiHeader.vue'
 import { computed } from 'vue'
-import { UnitDesign } from '@/types/gameObjects'
+import { UnitDesign } from '@/objects/gameObjects'
 import UiObjPill from '@/components/Ui/UiObjPill.vue'
 import UiButton from '@/components/Ui/UiButton.vue'
 import UnitDesigner from '@/components/PlayerDetails/MilitaryTab/UnitDesigner.vue'

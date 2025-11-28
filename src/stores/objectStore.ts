@@ -148,6 +148,7 @@ export const useObjectsStore = defineStore('objects', {
 
     initStatic (staticData: StaticData) {
       if (this.ready) throw new Error('Objects Store already initialized')
+      if (Object.keys(this._staticObjects).length > 0) return
 
       const staticObjects = {} as Record<string, CategoryObject | TypeObject>
       for (const data of staticData.types) {

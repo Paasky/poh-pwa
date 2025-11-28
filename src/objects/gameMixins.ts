@@ -115,6 +115,13 @@ export function HasTile<T extends new (...args: any[]) => {}> (Base: T) {
   }
 }
 
+export function HasTiles<TBase extends new (...args: any[]) => {}> (Base: TBase) {
+  return class extends Base {
+    tileKeys = ref([] as GameKey[])
+    tiles = hasMany(this.tileKeys, Tile)
+  }
+}
+
 export function HasUnits<TBase extends new (...args: any[]) => {}> (Base: TBase) {
   return class extends Base {
     unitKeys = ref([] as GameKey[])
