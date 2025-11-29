@@ -1,4 +1,5 @@
 import { Tile } from '@/objects/gameObjects'
+import { GenTile } from '@/factories/TerraGenerator/gen-tile'
 
 export type Coords = { x: number, y: number }
 export type NeighborMethod = 'chebyshev' | 'manhattan' | 'hex'
@@ -26,7 +27,8 @@ export function getNeighborCoords (
   distance = 1,
 ): Coords[] {
   const neighbors: Coords[] = []
-  const seen = new Set<Coords>()
+  // Track neighbors we've already added using a stable string key
+  const seen = new Set<string>()
 
   // TODO(hex): implement real hex adjacency using axial/offset coordinates
   // For now, fall back to chebyshev behavior for 'hex' to avoid breakage
@@ -48,12 +50,18 @@ export function getNeighborCoords (
 
       // Skip self, skip duplicates
       if (nx === tile.x && ny === tile.y) continue
-      if (seen.has(tile)) continue
+      const nKey = Tile.getKey(nx, ny)
+      if (seen.has(nKey)) continue
 
       // Add to neighbors and seen-list
       neighbors.push({ x: nx, y: ny })
-      seen.add(tile)
+      seen.add(nKey)
     }
+  }
+
+  // 3 is the minimum of manhattan dist 1, something is off! Stop here to not cause strange bugs further down the line
+  if (neighbors.length < 3) {
+    throw new Error(`Not enough neighbors found for tile ${Tile.getKey(tile.x, tile.y)}: ${neighbors.length}`)
   }
   return neighbors
 }
@@ -69,4 +77,16 @@ export function getRealCoords (size: Coords, tile: Coords): Coords | null {
   }
 
   return { x: wrapX(tile.x), y: tile.y }
+}
+
+export function getTile (
+  size: Coords,
+  coords: Coords,
+  tiles: Record<string, GenTile>
+): GenTile | null {
+  const realCoords = getRealCoords(size, coords)
+  const t = realCoords
+    ? tiles[Tile.getKey(realCoords.x, realCoords.y)]
+    : undefined
+  return t || null
 }

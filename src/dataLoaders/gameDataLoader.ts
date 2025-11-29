@@ -11,6 +11,7 @@ import {
   GameObject,
   Player,
   Religion,
+  River,
   Tile,
   TradeRoute,
   Unit,
@@ -33,6 +34,7 @@ const classConf = {
   'culture': Culture,
   'deal': Deal,
   'player': Player,
+  'river': River,
   'religion': Religion,
   'tile': Tile,
   'tradeRoute': TradeRoute,
@@ -131,7 +133,7 @@ export class GameDataLoader {
 
         if (value === undefined || value === null) {
           if (!attrConf.isOptional) throw new Error(
-            `Required attribute '${attrConf.attrName}' missing from ${JSON.stringify(obj)}`
+            `Required attribute ${JSON.stringify(attrConf)} missing from ${JSON.stringify(obj)}`
           )
           continue
         }
@@ -139,13 +141,9 @@ export class GameDataLoader {
         const relatedObj = this._objStore.get(value)
 
         if (attrConf.related.isOne) {
-          attrConf.attrNotRef
-            ? (relatedObj as any)[attrConf.related.theirKeyAttr] = obj.key
-            : (relatedObj as any)[attrConf.related.theirKeyAttr].value = obj.key
+          (relatedObj as any)[attrConf.related.theirKeyAttr] = obj.key
         } else {
-          attrConf.attrNotRef
-            ? (relatedObj as any)[attrConf.related.theirKeyAttr].push(obj.key)
-            : (relatedObj as any)[attrConf.related.theirKeyAttr].value.push(obj.key)
+          (relatedObj as any)[attrConf.related.theirKeyAttr].push(obj.key)
         }
       } catch (e) {
         const msg = `obj: ${obj.key}, conf: ${JSON.stringify(attrConf)}, msg: ${(e as any).message}`

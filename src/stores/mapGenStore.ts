@@ -1,11 +1,13 @@
 import { defineStore } from 'pinia'
-import { computed, reactive, ref } from 'vue'
+import { computed, markRaw, reactive, ref, shallowRef } from 'vue'
+import { pauseTracking, resetTracking } from '@vue/reactivity'
 import type { WorldSize } from '@/factories/worldFactory'
 import { worldSizes } from '@/factories/worldFactory'
 import { WorldManager } from '@/managers/worldManager'
 import { TerraGenerator } from '@/factories/TerraGenerator/terra-generator'
 import { useObjectsStore } from '@/stores/objectStore'
 import { takeRandom } from '@/helpers/arrayTools'
+import { GenTile } from '@/factories/TerraGenerator/gen-tile'
 
 export type AlignmentValue = {
   mirrorX: boolean | null
@@ -21,7 +23,7 @@ type Toggles = {
   showMajorStarts: boolean
   showFreshSalt: boolean
   showAreas: boolean
-  showAreaInitials: boolean
+  showRivers: boolean
 }
 
 type SizeOption = { label: string, value: { x: number, y: number } }
@@ -80,12 +82,12 @@ export const useMapGenStore = defineStore('mapGen', () => {
     showMajorStarts: true,
     showFreshSalt: false,
     showAreas: false,
-    showAreaInitials: false,
+    showRivers: true,
   })
 
   const selectedLevel = ref<'strat' | 'reg' | 'game'>('strat')
 
-  const gen = ref<TerraGenerator | null>(null)
+  const gen = shallowRef<TerraGenerator | null>(null)
 
   // Options for dropdowns
   const sizeOptions = computed<SizeOption[]>(() => {
@@ -143,28 +145,22 @@ export const useMapGenStore = defineStore('mapGen', () => {
   // Render helpers
   const renderTiles = computed(() => {
     const out = {
-      strat: [] as any[][],
-      reg: [] as any[][],
-      game: [] as any[][],
+      strat: [] as GenTile[][],
+      reg: [] as GenTile[][],
+      game: [] as GenTile[][],
     }
     if (!gen.value) return out
     for (const t of Object.values(gen.value.stratTiles)) {
-      const x = (t as any).x
-      const y = (t as any).y
-      out.strat[y] = out.strat[y] || []
-      out.strat[y][x] = t
+      out.strat[t.y] = out.strat[t.y] || []
+      out.strat[t.y][t.x] = t
     }
     for (const t of Object.values(gen.value.regTiles)) {
-      const x = (t as any).x
-      const y = (t as any).y
-      out.reg[y] = out.reg[y] || []
-      out.reg[y][x] = t
+      out.reg[t.y] = out.reg[t.y] || []
+      out.reg[t.y][t.x] = t
     }
     for (const t of Object.values(gen.value.gameTiles)) {
-      const x = (t as any).x
-      const y = (t as any).y
-      out.game[y] = out.game[y] || []
-      out.game[y][x] = t
+      out.game[t.y] = out.game[t.y] || []
+      out.game[t.y][t.x] = t
     }
     return out
   })
@@ -178,9 +174,9 @@ export const useMapGenStore = defineStore('mapGen', () => {
   const areaKeys = computed(() => {
     if (!gen.value) return [] as string[]
     const keys = new Set<string>()
-    for (const t of Object.values(gen.value.stratTiles)) keys.add((t as any).area.key)
-    for (const t of Object.values(gen.value.regTiles)) keys.add((t as any).area.key)
-    for (const t of Object.values(gen.value.gameTiles)) keys.add((t as any).area.key)
+    for (const t of Object.values(gen.value.stratTiles)) keys.add(t.area.key)
+    for (const t of Object.values(gen.value.regTiles)) keys.add(t.area.key)
+    for (const t of Object.values(gen.value.gameTiles)) keys.add(t.area.key)
     return Array.from(keys)
   })
 
@@ -235,11 +231,6 @@ export const useMapGenStore = defineStore('mapGen', () => {
     return `hsl(50% 50% 50%)`
   }
 
-  function tileAreaInitials (tile: any): string {
-    const id: string = tile.area.id
-    return tile.domain.id === 'land' ? id.slice(0, 2).toUpperCase() : id.slice(0, 2).toLowerCase()
-  }
-
   // Actions
   function updateWorld<K extends keyof WorldSize> (key: K, value: WorldSize[K]) {
     worldValues.value = { ...(worldValues.value as any), [key]: value } as WorldSize
@@ -265,18 +256,32 @@ export const useMapGenStore = defineStore('mapGen', () => {
   }
 
   function generate () {
+    objStore.resetGame()
+
     const ax = alignment.value.mirrorX === null ? Math.random() < 0.5 : alignment.value.mirrorX
     const ay = alignment.value.mirrorY === null ? Math.random() < 0.5 : alignment.value.mirrorY
     const ac = alignment.value.mirrorClimate === null ? Math.random() < 0.5 : alignment.value.mirrorClimate
-    gen.value = new TerraGenerator(worldValues.value, ax, ay, ac)
-      .generateStratLevel()
-      .generateRegLevel()
-      .generateGameLevel()
+    pauseTracking()
+    try {
+      gen.value = markRaw(
+        new TerraGenerator(worldValues.value, ax, ay, ac)
+          .generateStratLevel()
+          .generateRegLevel()
+          .generateGameLevel()
+      )
+    } finally {
+      resetTracking()
+    }
   }
 
   return {
     init: () => {
-      gen.value = new TerraGenerator(worldValues.value)
+      pauseTracking()
+      try {
+        gen.value = markRaw(new TerraGenerator(worldValues.value))
+      } finally {
+        resetTracking()
+      }
     },
     // state
     worldValues,
@@ -309,7 +314,6 @@ export const useMapGenStore = defineStore('mapGen', () => {
 
     // helpers
     terrainColor,
-    tileAreaInitials,
 
     // actions
     updateWorld,

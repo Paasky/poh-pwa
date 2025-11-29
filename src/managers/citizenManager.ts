@@ -5,10 +5,10 @@ export class CitizenManager extends Manager {
   create (city: City, tile?: Tile): Citizen {
     const citizen = new Citizen(
       generateKey('citizen'),
-      city,
-      city.player.value.culture.value,
-      city.player.value.religion.value,
-      tile
+      city.key,
+      city.player.value.cultureKey.value,
+      tile?.key ?? city.tileKey.value,
+      city.player.value.religionKey.value,
     )
     this._objects.set(citizen)
 
@@ -19,7 +19,7 @@ export class CitizenManager extends Manager {
 
   delete (citizen: Citizen) {
     citizen.city.value.citizenKeys.value = citizen.city.value.citizenKeys.value.filter(k => k !== citizen.key)
-    if (citizen.work.value) citizen.work.value.citizens.value = citizen.work.value.citizens.value.filter(k => k !== citizen.key)
+    if (citizen.work.value) citizen.work.value.citizenKeys.value = citizen.work.value.citizenKeys.value.filter(k => k !== citizen.key)
     this._objects.delete(citizen.key)
   }
 }

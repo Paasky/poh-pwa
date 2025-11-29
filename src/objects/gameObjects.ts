@@ -20,8 +20,8 @@ import { Yield, Yields } from '@/objects/yield'
 import { CatKey, ObjType, roundToTenth, TypeKey } from '@/types/common'
 import { ConstructionQueue, TrainingQueue } from '@/objects/queues'
 import { TypeStorage } from '@/objects/storage'
-import { Government, Research } from '@/objects/player'
 import { EventManager } from '@/managers/eventManager'
+import { Government, Research } from './player'
 
 const objStore = () => useObjectsStore()
 
@@ -82,6 +82,11 @@ export class GameObject {
 
       // Most data is actually a ref(data) so extract the .value
       const directValue = (this as any)[attr.attrName]
+
+      // Quick data integrity check
+      if (!attr.attrNotRef && (!directValue || !(typeof directValue === 'object' && 'value' in directValue))) {
+        throw new Error(`Expected ${attr.attrName} to be a ref`)
+      }
       const value = attr.attrNotRef
         ? directValue
         : directValue.value
@@ -130,12 +135,14 @@ export class Citizen extends HasCity(HasCulture(CanHaveReligion(HasPlayer(HasTil
     cultureKey: GameKey,
     tileKey: GameKey,
     religionKey: GameKey | null = null,
+    policy: TypeObject | null = null
   ) {
     super(key)
     this.cityKey.value = cityKey
     this.cultureKey.value = cultureKey
     this.tileKey.value = tileKey
     if (religionKey) this.religionKey.value = religionKey
+    if (policy) this.policy.value = policy
   }
 
   static attrsConf: GameObjAttr[] = [
@@ -143,7 +150,6 @@ export class Citizen extends HasCity(HasCulture(CanHaveReligion(HasPlayer(HasTil
     { attrName: 'cultureKey', related: { theirKeyAttr: 'citizenKeys' } },
     { attrName: 'tileKey', related: { theirKeyAttr: 'citizenKeys' } },
     { attrName: 'religionKey', isOptional: true, related: { theirKeyAttr: 'citizenKeys' } },
-    { attrName: 'workKey', isOptional: true, related: { theirKeyAttr: 'citizenKeys' } },
     { attrName: 'policy', isOptional: true, isTypeObj: true },
   ]
 
@@ -172,19 +178,31 @@ export class City extends HasCitizens(HasPlayer(HasTile(HasUnits(GameObject)))) 
     key: GameKey,
     playerKey: GameKey,
     tileKey: GameKey,
-    name: string
+    name: string,
+    canAttack = false,
+    health = 100,
+    isCapital = false,
+    origPlayerKey?: GameKey,
   ) {
     super(key)
     this.origPlayerKey = playerKey
     this.playerKey.value = playerKey
     this.tileKey.value = tileKey
     this.name.value = name
+    this.canAttack.value = canAttack
+    this.health.value = health
+    this.isCapital.value = isCapital
+    this.origPlayerKey = origPlayerKey ?? playerKey
   }
 
   static attrsConf: GameObjAttr[] = [
     { attrName: 'playerKey', related: { theirKeyAttr: 'cityKeys' } },
     { attrName: 'tileKey', related: { theirKeyAttr: 'cityKey', isOne: true } },
     { attrName: 'name' },
+    { attrName: 'canAttack', isOptional: true },
+    { attrName: 'health', isOptional: true },
+    { attrName: 'isCapital', isOptional: true },
+    { attrName: 'origPlayerKey', isOptional: true, attrNotRef: true },
   ]
 
   name = ref('')
@@ -518,8 +536,8 @@ export class Religion extends HasCitizens(HasCity(HasPlayers(GameObject))) {
   }
 
   static attrsConf: GameObjAttr[] = [
-    { attrName: 'name' },
-    { attrName: 'cityKey', related: { theirKeyAttr: 'holyCityKeys' } },
+    { attrName: 'name', attrNotRef: true },
+    { attrName: 'cityKey', related: { theirKeyAttr: 'holyCityForKeys' } },
     { attrName: 'myths', isOptional: true, isTypeObjArray: true },
     { attrName: 'gods', isOptional: true, isTypeObjArray: true },
     { attrName: 'dogmas', isOptional: true, isTypeObjArray: true },
@@ -533,7 +551,7 @@ export class Religion extends HasCitizens(HasCity(HasPlayers(GameObject))) {
   types = computed(() => [this.concept, ...this.myths.value, ...this.gods.value, ...this.dogmas.value])
 }
 
-export class Tile extends CanHaveCity(CanHavePlayer(HasUnits(GameObject))) {
+export class Tile extends HasCitizens(CanHaveCity(CanHavePlayer(HasUnits(GameObject)))) {
   constructor (
     key: GameKey,
     x: number,
@@ -543,10 +561,10 @@ export class Tile extends CanHaveCity(CanHavePlayer(HasUnits(GameObject))) {
     climate: TypeObject,
     terrain: TypeObject,
     elevation: TypeObject,
-    feature?: TypeObject,
-    resource?: TypeObject,
-    naturalWonder?: TypeObject,
-    pollution?: TypeObject
+    feature: TypeObject | null = null,
+    resource: TypeObject | null = null,
+    naturalWonder: TypeObject | null = null,
+    pollution: TypeObject | null = null,
   ) {
     super(key)
     this.x = x
@@ -568,16 +586,16 @@ export class Tile extends CanHaveCity(CanHavePlayer(HasUnits(GameObject))) {
   }
 
   static attrsConf: GameObjAttr[] = [
-    { attrName: 'x' },
-    { attrName: 'y' },
-    { attrName: 'domain', isTypeObj: true },
-    { attrName: 'area', isTypeObj: true },
-    { attrName: 'climate', isTypeObj: true },
-    { attrName: 'terrain', isTypeObj: true },
-    { attrName: 'elevation', isTypeObj: true },
+    { attrName: 'x', attrNotRef: true },
+    { attrName: 'y', attrNotRef: true },
+    { attrName: 'domain', attrNotRef: true, isTypeObj: true },
+    { attrName: 'area', attrNotRef: true, isTypeObj: true },
+    { attrName: 'climate', attrNotRef: true, isTypeObj: true },
+    { attrName: 'terrain', attrNotRef: true, isTypeObj: true },
+    { attrName: 'elevation', attrNotRef: true, isTypeObj: true },
     { attrName: 'feature', isOptional: true, isTypeObj: true },
     { attrName: 'resource', isOptional: true, isTypeObj: true },
-    { attrName: 'naturalWonder', isOptional: true, isTypeObj: true },
+    { attrName: 'naturalWonder', isOptional: true, attrNotRef: true, isTypeObj: true },
     { attrName: 'pollution', isOptional: true, isTypeObj: true },
   ]
 
@@ -609,9 +627,9 @@ export class Tile extends CanHaveCity(CanHavePlayer(HasUnits(GameObject))) {
   types = computed(() => {
     this._dynamicTypes.length = 0
 
-    if (this.feature.value) this._dynamicTypes.push(this.feature.value)
-    if (this.resource.value) this._dynamicTypes.push(this.resource.value)
-    if (this.pollution.value) this._dynamicTypes.push(this.pollution.value)
+    if (this.feature.value) this._dynamicTypes.push(this.feature.value as TypeObject)
+    if (this.resource.value) this._dynamicTypes.push(this.resource.value as TypeObject)
+    if (this.pollution.value) this._dynamicTypes.push(this.pollution.value as TypeObject)
 
     return this._staticTypes.concat(this._dynamicTypes)
   })
@@ -667,12 +685,13 @@ export class Unit extends CanHaveCity(HasPlayer(HasTile(GameObject))) {
     canAttack = false,
     health = 100,
     moves = 0,
-    status: UnitStatus = 'regular'
+    status: UnitStatus = 'regular',
+    origPlayerKey?: GameKey,
   ) {
     super(key)
     this.designKey = designKey
     this.playerKey.value = playerKey
-    this.origPlayerKey = playerKey
+    this.origPlayerKey = origPlayerKey ?? playerKey
     this.tileKey.value = tileKey
     if (cityKey) this.cityKey.value = cityKey
     if (name) this.name.value = name
@@ -684,7 +703,7 @@ export class Unit extends CanHaveCity(HasPlayer(HasTile(GameObject))) {
   }
 
   static attrsConf: GameObjAttr[] = [
-    { attrName: 'designKey', related: { theirKeyAttr: 'unitKeys' } },
+    { attrName: 'designKey', attrNotRef: true, related: { theirKeyAttr: 'unitKeys' } },
     { attrName: 'playerKey', related: { theirKeyAttr: 'unitKeys' } },
     { attrName: 'tileKey', related: { theirKeyAttr: 'unitKeys' } },
     { attrName: 'cityKey', isOptional: true, related: { theirKeyAttr: 'unitKeys' } },
@@ -692,7 +711,8 @@ export class Unit extends CanHaveCity(HasPlayer(HasTile(GameObject))) {
     { attrName: 'action', isOptional: true, isTypeObj: true },
     { attrName: 'canAttack', isOptional: true },
     { attrName: 'health', isOptional: true },
-    { attrName: 'moves', isOptional: true }
+    { attrName: 'moves', isOptional: true },
+    { attrName: 'origPlayerKey', isOptional: true, attrNotRef: true, related: { theirKeyAttr: 'unitKeys' } },
   ]
 
   name = ref('')
@@ -787,11 +807,11 @@ export class UnitDesign extends CanHavePlayer(HasUnits(GameObject)) {
   }
 
   static attrsConf: GameObjAttr[] = [
-    { attrName: 'platform', isTypeObj: true },
-    { attrName: 'equipment', isTypeObj: true },
-    { attrName: 'name' },
+    { attrName: 'platform', attrNotRef: true, isTypeObj: true },
+    { attrName: 'equipment', attrNotRef: true, isTypeObj: true },
+    { attrName: 'name', attrNotRef: true },
     { attrName: 'playerKey', isOptional: true, related: { theirKeyAttr: 'designKeys' } },
-    { attrName: 'isElite', isOptional: true },
+    { attrName: 'isElite', attrNotRef: true, isOptional: true },
     { attrName: 'isActive', isOptional: true }
   ]
 

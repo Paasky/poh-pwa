@@ -1,9 +1,11 @@
-import { getRandom, takeRandom } from '@/helpers/arrayTools'
-import { snake } from '@/factories/TerraGenerator/helpers/snake'
+import { getRandom } from '@/helpers/arrayTools'
 import { useObjectsStore } from '@/stores/objectStore'
 import { GenTile } from '@/factories/TerraGenerator/gen-tile'
 import { Tetris } from '@/factories/TerraGenerator/helpers/tetris'
-import { GameKey, generateKey, River, Tile } from '@/objects/gameObjects'
+import { generateKey, River, Tile } from '@/objects/gameObjects'
+import { Coords, getNeighborCoords, getTile } from '@/factories/TerraGenerator/helpers/neighbors'
+import { TerraGenerator } from '@/factories/TerraGenerator/terra-generator'
+import { AcceptResult, Snake } from '@/factories/TerraGenerator/helpers/snake'
 
 export const removeOrphanArea = (
   tile: GenTile,
@@ -62,9 +64,8 @@ export const removeOrphanTerrain = (
  * - Respects tile.canChangeDomain() and stays within bounds with wrapping X.
  */
 export const makeIsland = (
-  gen: any,
-  cx: number,
-  cy: number,
+  gen: TerraGenerator,
+  coords: Coords,
   level: 'reg' | 'game',
   hillChance: number = 0.5,
 ): void => {
@@ -73,9 +74,9 @@ export const makeIsland = (
   const tiles = level === 'reg' ? gen.regTiles : gen.gameTiles
   const elevType = Math.random() < hillChance ? gen.hill : gen.flat
 
-  const center = gen.getTile(cx, cy, size, tiles)
+  const center = getTile(size, coords, tiles)
   for (const o of offsets) {
-    const t = gen.getTile(cx + o.dx, cy + o.dy, size, tiles)
+    const t = getTile(size, { x: coords.x + o.dx, y: coords.y + o.dy }, tiles)
     if (!t) continue
     if (!t.canChangeDomain()) continue
     const climate = (center || t).climate
@@ -95,26 +96,24 @@ export const mountainRange = (
   const mountain = useObjectsStore().getTypeObject('elevationType:mountain')
   const snowMountain = useObjectsStore().getTypeObject('elevationType:snowMountain')
 
-  const walkedTiles: GenTile[] = []
   let waterCount = 0
-  snake(
-    start,
-    tiles,
-    walkedTiles,
+  return new Snake(
     size,
-    [4, 5],
-    [3, 4],
-    (tile: GenTile): boolean => {
+    tiles,
+    (tile) => {
+      // If we've hit too many non-lake water tiles, stop early
       if (tile.domain.id === 'water' && tile.terrain.id !== 'lake') {
         waterCount++
         return waterCount < 3
       }
 
-      tile.elevation = tile.elevation === mountain || tile.elevation === snowMountain || Math.random() > 0.9 ? snowMountain : mountain
+      tile.elevation = tile.elevation === mountain || tile.elevation === snowMountain || Math.random() > 0.9
+        ? snowMountain
+        : mountain
+
       return true
     }
-  )
-  return walkedTiles
+  ).walk(start)
 }
 
 /**
@@ -151,11 +150,11 @@ export const crawlTiles = (
     const cx = (current as GenTile).x
     const cy = (current as GenTile).y
     if (level === 'game') {
-      neighborTiles = gen.getGameNeighbors(cx, cy, 'chebyshev', 1)
+      neighborTiles = gen.getGameNeighbors({ x: cx, y: cy }, 'chebyshev', 1)
     } else if (level === 'reg') {
-      neighborTiles = gen.getRegNeighbors(cx, cy, 'chebyshev', 1)
+      neighborTiles = gen.getRegNeighbors({ x: cx, y: cy }, 'chebyshev', 1)
     } else {
-      neighborTiles = gen.getStratNeighbors(cx, cy, 'chebyshev', 1)
+      neighborTiles = gen.getStratNeighbors({ x: cx, y: cy }, 'chebyshev', 1)
     }
 
     for (const neighbor of neighborTiles) {
@@ -176,13 +175,13 @@ export const crawlTiles = (
 export const spreadSalt = (
   gen: any,
   level: 'strat' | 'reg' | 'game',
-  start: GenTile | Tile,
+  start: Tile,
 ): void => {
   const seen = new Set<string>()
-  const waterCheck = (t: GenTile | Tile) => t.domain.id === 'water'
+  const waterCheck = (t: Tile) => t.domain.id === 'water'
   const visited = crawlTiles(gen, level, start, seen, waterCheck)
   for (const t of visited) {
-    ;(t as GenTile).isSalt = true
+    t.isSalt = true
   }
 }
 
@@ -195,84 +194,96 @@ export const spreadSalt = (
  * - If it hits another river, marks that river's tiles from the confluence onward as isMajorRiver = true.
  * - Keeps all other tile data intact.
  */
-export const river = (
-  gen: any,
+export const makeRiver = (
+  size: Coords,
   start: GenTile,
-  level: 'reg' | 'game' = 'game'
+  tiles: Record<string, GenTile>,
+  rivers: Record<string, River>,
 ): River => {
-  const obj = useObjectsStore()
-
-  // Resolve tile map and size for the chosen level
-  const tiles: Record<string, GenTile> = level === 'reg' ? gen.regTiles : gen.gameTiles
-  const size: { x: number, y: number } = level === 'reg' ? gen.regSize : gen.size
-
-  // Elevation references
-  const mountain = obj.getTypeObject('elevationType:mountain')
-  const snowMountain = obj.getTypeObject('elevationType:snowMountain')
-
-  // Create and register a new River object
+  const floodPlain = useObjectsStore().getTypeObject('featureType:floodPlain')
   const river = new River(generateKey('river'))
-  obj.set(river)
+  rivers[river.key] = river
+  console.log(`[terraGenerator] river ${river.key}: starting at ${start.key}`)
 
-  const walked: GenTile[] = []
-  let metRiverKey: GameKey | null = null
-  let metAtTileKey: GameKey | null = null
+  // Keep track of the current/end-state
+  let majorMode = false
+  let metRiverTile: GenTile | null = null
 
-  // Pick a random initial direction
-  const initialDir = takeRandom(['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw']) as any
-
-  snake(
-    start,
-    tiles,
-    walked,
+  new Snake(
     size,
-    // "Endless" meander with variability
-    [9999],
-    [2, 3, 4],
-    // acceptTile: decide whether to continue, block, or stop
-    (tile: GenTile) => {
-      const actual = tiles[tile.key] || tile
-      if (actual.isSalt) return false
+    tiles,
+    (tile): boolean => {
+      // Convert tile to River
+      tile.isFresh = true
+      tile.riverKey = river.key
+      river.tileKeys.value.push(tile.key)
+      if (majorMode) tile.isMajorRiver = true
 
-      // If we encountered an existing river, stop and record confluence
-      if (actual.riverKey && actual.riverKey !== river.key) {
-        metRiverKey = actual.riverKey
-        metAtTileKey = actual.key
-        return false
+      const neighbors = getNeighborCoords(size, tile)
+        .map(c => getTile(size, c, tiles)!)
+
+      // First pass: update neighbors
+      for (const neighbor of neighbors) {
+        // Spread Fresh water to all land neighbors
+        if (neighbor.domain.id === 'land') {
+          neighbor.isFresh = true
+        }
+
+        // Spread Flood Plains to empty desert neighbors
+        if (neighbor.terrain.id === 'desert' && !neighbor.feature.value) {
+          neighbor.feature.value = floodPlain
+        }
+
+        // If we're next to a lake, turn on major mode
+        if (neighbor.terrain.id === 'lake') {
+          majorMode = true
+        }
       }
 
-      // Mountains block; try rerouting
-      if (actual.elevation === mountain || actual.elevation === snowMountain) return 'blocked'
+      // Second pass: stop if needed
+      for (const neighbor of neighbors) {
+        // If we're at the coast, stop
+        if (neighbor.isSalt) {
+          return false
+        }
 
-      // Otherwise we can proceed
+        // If we're next to another river, stop and mark the confluence tile for downstream promotion
+        if (neighbor.riverKey && neighbor.riverKey !== river.key) {
+          metRiverTile = neighbor
+          return false
+        }
+      }
+
+      // Otherwise keep going
       return true
     },
-    initialDir,
-    // onVisit: mutate tile to include river
-    (tile: GenTile) => {
-      // Always mutate the canonical tile object from the tiles map
-      const real = tiles[tile.key] || tile
-      real.riverKey = river.key
-      real.isFresh = true
-    }
-  )
+    (tile): AcceptResult => {
+      // Block mountain tiles
+      if (tile.elevation.id === 'mountain' || tile.elevation.id === 'snowMountain') {
+        return 'blocked'
+      }
 
-  // Finalize the new river's path and make neighbors fresh water sources
-  for (const t of walked) {
-    const neighs = gen.getGameNeighbors
-      ? (level === 'reg' ? gen.getRegNeighbors(t.x, t.y, 'chebyshev', 1) : gen.getGameNeighbors(t.x, t.y, 'chebyshev', 1))
-      : []
-    for (const n of neighs) {
-      n.isFresh = true
-    }
-  }
-  river.tileKeys.value.push(...walked.map(t => t.key))
+      // Block if the tile has my river neighbors
+      if (getNeighborCoords(size, tile)
+        .map(c => getTile(size, c, tiles)!)
+        .some(n => n.riverKey === river.key && n.key !== tile.key)
+      ) {
+        return 'blocked'
+      }
 
-  // If we merged into another river, mark its downstream as major
-  if (metRiverKey && metAtTileKey) {
-    const otherRiver = obj.get(metRiverKey) as River
+      // Otherwise trust onVisit to stop on bad neighbors
+      return true
+    },
+    {
+      legs: [9999]
+    }
+  ).walk(start)
+
+  // If we merged into another river, mark downstream as major
+  if (metRiverTile) {
+    const otherRiver = rivers[(metRiverTile as GenTile).riverKey!] as River
     const otherRiverTileKeys = otherRiver.tileKeys.value
-    const metAtIdx = otherRiverTileKeys.indexOf(metAtTileKey)
+    const metAtIdx = otherRiverTileKeys.indexOf((metRiverTile as GenTile).key)
     if (metAtIdx !== -1) {
       for (let i = metAtIdx; i < otherRiverTileKeys.length; i++) {
         const tileKey = otherRiverTileKeys[i]

@@ -1,182 +1,188 @@
-import { getRandom, takeRandom } from '@/helpers/arrayTools'
+import { getRandom } from '@/helpers/arrayTools'
 import { GenTile } from '@/factories/TerraGenerator/gen-tile'
 import { Tile } from '@/objects/gameObjects'
+import { Coords, getRealCoords } from '@/factories/TerraGenerator/helpers/neighbors'
 
-type Compass = 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw'
+export type Compass = 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw'
 
-type AcceptResult = boolean | 'blocked'
+export type AcceptResult = boolean | 'blocked'
 
-export const snake = (
-  start: GenTile,
-  tiles: Record<string, GenTile>,
-  walkedTiles: GenTile[] = [],
-  size: { x: number, y: number },
-  legs: number[] = [3],
-  tilesPerLeg: number[] = [3],
-  acceptTile?: (tile: GenTile) => AcceptResult,
-  initialDir?: Compass,
-  onVisit?: (tile: GenTile) => void,
-) => {
-  const dirs = {
-    n: { x: 0, y: -1 },
-    ne: { x: 1, y: -1 },
-    e: { x: 1, y: 0 },
-    se: { x: 1, y: 1 },
-    s: { x: 0, y: 1 },
-    sw: { x: -1, y: 1 },
-    w: { x: -1, y: 0 },
-    nw: { x: -1, y: -1 }
-  } as Record<Compass, { x: number, y: number }>
+// By default, prefer turning 45deg left or right
+export const preferredPossibleTurns: Record<Compass, Compass[]> = {
+  n: ['nw', 'ne'],
+  ne: ['n', 'e'],
+  e: ['ne', 'se'],
+  se: ['e', 's'],
+  s: ['se', 'sw'],
+  sw: ['s', 'w'],
+  w: ['sw', 'nw'],
+  nw: ['w', 'n'],
+}
 
-  // Start at given tile
-  let x = start.x
-  let y = start.y
-  walkedTiles.push(start)
-  onVisit?.(start)
-  let legsDone = 0
-  // Respect provided initialDir if given; otherwise default away from equator
-  initialDir = (initialDir ?? (start.y < size.y / 2 ? 's' : 'n')) as Compass
-  let dir = initialDir
+// By default, allow 90 & 45deg turns, or keep going straight
+export const allPossibleTurns: Record<Compass, Compass[]> = {
+  n: ['w', 'nw', 'n', 'ne', 'e'],
+  ne: ['nw', 'n', 'ne', 'e', 'se'],
+  e: ['n', 'ne', 'e', 'se', 's'],
+  se: ['ne', 'e', 'se', 's', 'sw'],
+  s: ['e', 'se', 's', 'sw', 'w'],
+  sw: ['se', 's', 'sw', 'w', 'nw'],
+  w: ['s', 'sw', 'w', 'nw', 'n'],
+  nw: ['sw', 'w', 'nw', 'n', 'ne'],
+}
 
-  const legsTotal = getRandom(legs)
-  let halt = false
-  const wrapX = (vx: number) => ((vx % size.x) + size.x) % size.x
+// By default, deny turning back against the initial direction
+export const impossibleTurnsPerInitDir: Record<Compass, Compass[]> = {
+  n: ['se', 's', 'sw'],
+  ne: ['s', 'sw', 'w'],
+  e: ['sw', 'w', 'nw'],
+  se: ['w', 'nw', 'n'],
+  s: ['nw', 'n', 'ne'],
+  sw: ['n', 'ne', 'e'],
+  w: ['ne', 'e', 'se'],
+  nw: ['e', 'se', 's'],
+}
 
-  while (legsDone < legsTotal && !halt) {
-    const tilesToWalk = getRandom(tilesPerLeg)
-    for (let i = 0; i < tilesToWalk && !halt; i++) {
-      // Compute next in current dir (don't move until accepted)
-      const nx = wrapX(x + dirs[dir].x)
-      const ny = y + dirs[dir].y
+// These work on square grids
+const directionCoordsChanges = {
+  n: { x: 0, y: -1 },
+  ne: { x: 1, y: -1 },
+  e: { x: 1, y: 0 },
+  se: { x: 1, y: 1 },
+  s: { x: 0, y: 1 },
+  sw: { x: -1, y: 1 },
+  w: { x: -1, y: 0 },
+  nw: { x: -1, y: -1 }
+} as Record<Compass, { x: number, y: number }>
 
-      // Stop if we smash against top/bottom (no Y wrap)
-      if (ny < 0 || ny >= size.y) { halt = true; break }
+export class Snake<T extends GenTile> {
+  size: Coords
+  tiles: Record<string, T>
+  isAccepted?: (tile: T) => AcceptResult
+  onVisit: (tile: T) => boolean
 
-      const nextTile = getByCoords(tiles, nx, ny)
-      if (!nextTile) { halt = true; break }
+  initialDir: Compass
+  legs = [2, 3]
+  tilesPerLeg = [2, 3]
+  preferredPossibleTurns = preferredPossibleTurns
+  allPossibleTurns = allPossibleTurns
+  impossibleTurnsPerInitDir = impossibleTurnsPerInitDir
 
-      const res = acceptTile?.(nextTile)
-      if (res === false) { halt = true; break }
+  constructor (
+    size: Coords,
+    tiles: Record<string, T>,
+    onVisit: (tile: T) => boolean,
+    isAccepted?: (tile: T) => AcceptResult,
+    opts?: {
+      initialDir?: Compass
+      legs?: number[]
+      tilesPerLeg?: number[]
+      possible45degTurns?: Record<Compass, Compass[]>
+      allPossibleDirections?: Record<Compass, Compass[]>
+      impossibleTurns?: Record<Compass, Compass[]>
+    }
+  ) {
+    this.size = size
+    this.tiles = tiles
+    this.isAccepted = isAccepted
+    this.onVisit = onVisit
 
-      if (res === 'blocked') {
-        // Try alternative directions in random order (avoid going against initial direction)
-        const possibleTurns: Record<Compass, Compass[]> = {
-          n: ['w', 'nw', 'ne', 'e'],
-          ne: ['nw', 'n', 'e', 'se'],
-          e: ['n', 'ne', 'se', 's'],
-          se: ['ne', 'e', 's', 'sw'],
-          s: ['e', 'se', 'sw', 'w'],
-          sw: ['se', 's', 'w', 'nw'],
-          w: ['s', 'sw', 'nw', 'n'],
-          nw: ['sw', 'w', 'n', 'ne'],
-        }
-        const impossibleTurns: Record<Compass, Compass[]> = {
-          n: ['se', 's', 'sw'],
-          ne: ['s', 'sw', 'w'],
-          e: ['sw', 'w', 'nw'],
-          se: ['w', 'nw', 'n'],
-          s: ['nw', 'n', 'ne'],
-          sw: ['n', 'ne', 'e'],
-          w: ['ne', 'e', 'se'],
-          nw: ['e', 'se', 's'],
-        }
+    this.initialDir = opts?.initialDir ?? getRandom(Object.keys(preferredPossibleTurns)) as Compass
+    if (opts?.legs) this.legs = opts.legs
+    if (opts?.tilesPerLeg) this.tilesPerLeg = opts.tilesPerLeg
+    if (opts?.possible45degTurns) this.preferredPossibleTurns = opts.possible45degTurns
+    if (opts?.allPossibleDirections) this.allPossibleTurns = opts.allPossibleDirections
+    if (opts?.impossibleTurns) this.impossibleTurnsPerInitDir = opts.impossibleTurns
+  }
 
-        const candidates = possibleTurns[dir].filter(
-          c => !impossibleTurns[initialDir].includes(c)
-        ) as Compass[]
+  walk (start: T): T[] {
+    // Choose legs count
+    const legsTotal = getRandom(this.legs)
+    let legsDone = 0
 
-        // Random order using takeRandom()
-        const pool = [...candidates]
-        let found = false
-        while (pool.length) {
-          const cand = takeRandom(pool)
-          const nx2 = wrapX(x + dirs[cand].x)
-          const ny2 = y + dirs[cand].y
-          if (ny2 < 0 || ny2 >= size.y) { continue }
-          const next2 = getByCoords(tiles, nx2, ny2)
-          if (!next2) continue
-          const r2 = acceptTile?.(next2)
-          if (r2 === false) { halt = true; break }
-          if (r2 === 'blocked') continue
-          // accept
-          x = nx2; y = ny2
-          walkedTiles.push(next2)
-          onVisit?.(next2)
-          found = true
+    // Keep track of the previous tile & walked tiles
+    const walkedTiles = []
+    let prevTile = null as T | null
+    let dir = this.initialDir
+    let halt = false
+    while (!halt || legsDone < legsTotal) {
+      // Start a new leg: Choose the number of steps
+      const steps = getRandom(this.tilesPerLeg)
+
+      // Walk the steps
+      for (let i = 0; i < steps && !halt; i++) {
+        if (halt) break
+
+        // Either: a) start or b) step into the direction
+        let stepTile = !prevTile ? start : this.getNextTile(prevTile, dir)
+        if (!stepTile) {
+          halt = true
           break
         }
-        if (halt) break
-        if (!found) {
-          // Go through original blocked tile
-          x = nx; y = ny
-          walkedTiles.push(nextTile)
-          onVisit?.(nextTile)
+
+        // If an acceptor-func was given:
+        // Check if this step is: a) accepted (true), b) 'blocked', or c) needs to halt (false)
+        const accepted = !this.isAccepted || this.isAccepted(stepTile)
+        if (!accepted) {
+          halt = true
+          break
         }
-        continue
+
+        if (accepted === 'blocked') {
+          if (!prevTile) {
+            throw new Error('Starting tile was blocked')
+          }
+
+          // The chosen preferred direction is blocked -> try other directions
+          const otherDirections = [...this.allPossibleTurns[dir]].filter(
+            d => !this.impossibleTurnsPerInitDir[this.initialDir].includes(d)
+          )
+
+          const possibleTiles = [] as T[]
+          otherDirections.forEach((d) => {
+            const otherDirTile = this.getNextTile(prevTile!, d)
+            if (otherDirTile && this.isAccepted!(otherDirTile) === true) possibleTiles.push(otherDirTile)
+          })
+
+          // If any other tile is possible, pick a random one
+          // NOTE: if nothing was possible, we will walk into the block
+          if (possibleTiles.length > 0) {
+            stepTile = getRandom(possibleTiles)
+          }
+        }
+
+        // Step accepted -> walk into it
+        const keepGoing = this.onVisit(stepTile)
+        walkedTiles.push(stepTile)
+        prevTile = stepTile
+        if (!keepGoing) {
+          halt = true
+          break
+        }
       }
 
-      // Accept normal step
-      x = nx
-      y = ny
-      walkedTiles.push(nextTile)
-      onVisit?.(nextTile)
+      // End of leg
+
+      if (halt) {
+        break
+      } else {
+        legsDone++
+        dir = getRandom(this.preferredPossibleTurns[dir].filter(
+          d => !impossibleTurnsPerInitDir[this.initialDir].includes(d)
+        ))
+      }
     }
-    if (!halt) {
-      legsDone++
-      dir = nextDir(dir, initialDir)
-    }
+
+    // All legs walked -> return the walked tiles
+    return walkedTiles
   }
 
-  function nextDir (dir: Compass, initialDir: Compass): Compass {
-    // Can turn 90 or 45 degrees
-    const possibleTurns = {
-      n: ['w', 'nw', 'ne', 'e'],
-      ne: ['nw', 'n', 'e', 'se'],
-      e: ['n', 'ne', 'se', 's'],
-      se: ['ne', 'e', 's', 'sw'],
-      s: ['e', 'se', 'sw', 'w'],
-      sw: ['se', 's', 'w', 'nw'],
-      w: ['s', 'sw', 'nw', 'n'],
-      nw: ['sw', 'w', 'n', 'ne'],
-    } as Record<Compass, Compass[]>
-
-    // Never go against the initial dir (135+ deg against it)
-    const impossibleTurns = {
-      n: ['se', 's', 'sw'],
-      ne: ['s', 'sw', 'w'],
-      e: ['sw', 'w', 'nw'],
-      se: ['w', 'nw', 'n'],
-      s: ['nw', 'n', 'ne'],
-      sw: ['n', 'ne', 'e'],
-      w: ['ne', 'e', 'se'],
-      nw: ['e', 'se', 's'],
-    } as Record<Compass, Compass[]>
-
-    const candidates = possibleTurns[dir].filter(
-      pt => !impossibleTurns[initialDir].includes(pt)
-    )
-
-    return getRandom(candidates)
-  }
-
-  function getByCoords (map: Record<string, GenTile>, gx: number, gy: number): GenTile | undefined {
-    // Try multiple key formats to be robust in tests and production
-    const candidates = [
-      // canonical tile key
-      Tile.getKey(gx, gy),
-      // gen-tile key (same as Tile.getKey in prod, but included for clarity)
-      (GenTile as any).getKey ? (GenTile as any).getKey(gx, gy) : undefined,
-      // terse formats used in unit tests
-      `${gx}:${gy}`,
-      `x${gx},y${gy}`,
-      `[${gx},${gy}]`,
-      // common "kX,Y" format used in tests
-      `k${gx},${gy}`,
-    ].filter(Boolean) as string[]
-    for (const k of candidates) {
-      const t = map[k]
-      if (t) return t
-    }
-    return undefined
+  private getNextTile (tile: T, dir: Compass): T | null {
+    const nextCoords = getRealCoords(this.size, {
+      x: tile.x + directionCoordsChanges[dir].x,
+      y: tile.y + directionCoordsChanges[dir].y
+    })
+    if (!nextCoords) return null
+    return this.tiles[Tile.getKey(nextCoords.x, nextCoords.y)]
   }
 }

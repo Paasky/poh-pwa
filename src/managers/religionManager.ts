@@ -10,8 +10,8 @@ export class ReligionManager extends Manager {
     const dogmas = [] as TypeObject[]
 
     // Run checks if the religion's holy city owner has it as the state religion
-    const holyCity = this._objects.getGameObject(religion.city) as City
-    const owner = this._objects.getGameObject(holyCity.player) as Player
+    const city = this._objects.getGameObject(religion.city) as City
+    const owner = this._objects.getGameObject(city.player) as Player
     if (owner.religion === religion.key) {
       // todo check religion status & already selected myths/gods/dogmas
     }
