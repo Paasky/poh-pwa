@@ -2,25 +2,11 @@
 import { computed } from 'vue'
 import UiIcon from '@/components/Ui/UiIcon.vue'
 import { useMapGenStore } from '@/stores/mapGenStore'
+import { TypeObject } from '@/types/typeObjects'
 
 const props = defineProps<{ variant: 'strat' | 'reg' | 'game' }>()
 
 const store = useMapGenStore()
-
-const iconSize = computed(() => props.variant === 'strat' ? 'w-4 h-4' : 'w-3.5 h-3.5')
-
-const size = computed(() => {
-  switch (props.variant) {
-    case 'strat':
-      return store.stratSize
-    case 'reg':
-      return store.regSize
-    case 'game':
-      return store.gameSize
-    default:
-      return store.stratSize
-  }
-})
 
 const tiles = computed(() => {
   switch (props.variant) {
@@ -38,34 +24,50 @@ const tiles = computed(() => {
 </script>
 
 <template>
-  <section class="mx-auto w-full max-w-full min-w-[72rem] select-none">
-    <div class="inline-grid" :style="{ gridTemplateColumns: `repeat(${size.x}, 24px)` }">
-      <div v-for="(row, y) of tiles" :key="'row-'+variant+'-'+y" class="contents">
-        <div v-for="(tile, x) of row" :key="'t-'+variant+'-'+x+'-'+y"
-             class="w-[24px] h-[24px] relative border"
-             :style="({
-               backgroundColor: store.toggles.showTerrain ? store.terrainColor(tile) : 'transparent',
-               borderColor: store.toggles.showAreas ? store.areaColors[tile.area.key] : 'transparent'
-             })"
-        >
-          <span v-if="store.toggles.showAreaInitials"
-                class="absolute inset-0 text-[12px] leading-[24px] text-white text-center drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
-            {{ store.tileAreaInitials(tile) }}
-          </span>
-          <span v-if="store.toggles.showMajorStarts && tile.isStart"
-                class="absolute inset-0 text-[18px] font-bold leading-[18px] text-black text-center border-white border-2 rounded-full">X</span>
-          <span v-if="store.toggles.showFreshSalt && (tile.isSalt || tile.isFresh)"
-                class="absolute top-0.5 left-0.5 text-[10px] font-bold leading-none px-1 py-0.5 rounded bg-black/50 text-white border border-white/40">
-            {{ tile.isSalt ? 'S' : 'F' }}
-          </span>
-          <div v-if="store.toggles.showElevation && tile.elevation.id !== 'flat'"
-               class="absolute inset-0 flex items-center justify-center">
-            <UiIcon :icon="tile.elevation.icon" :class="iconSize + ' drop-shadow'"/>
-          </div>
-          <div v-if="store.toggles.showFeatures && tile.feature"
-               class="absolute inset-0 flex items-center justify-center">
-            <UiIcon :icon="tile.feature.icon" :class="iconSize + ' drop-shadow'"/>
-          </div>
+  <section class="select-none map-gen-preview" :class="{
+    'terrain': store.toggles.showTerrain,
+    'areas': store.toggles.showAreas,
+    'starts': store.toggles.showMajorStarts,
+    'rivers': store.toggles.showRivers,
+    'fresh-salt': store.toggles.showFreshSalt,
+    'elevation': store.toggles.showElevation,
+    'features': store.toggles.showFeatures,
+  }">
+    <div v-for="(row, y) of tiles" :key="y" class="map-gen-row">
+      <div v-for="(tile, x) of row"
+           :key="x"
+           :class="[
+            tile.domain.key.replace(':','-'),
+            tile.climate.key.replace(':','-'),
+            tile.terrain.key.replace(':','-'),
+            tile.elevation.key.replace(':','-'),
+            (tile.feature as any as TypeObject)?.key,
+            (tile.resource as any as TypeObject)?.key,
+            tile.naturalWonder?.key,
+            tile.isSalt ? 'salt' : (tile.isFresh ? 'fresh' : null),
+           ].filter(Boolean)"
+      >
+        <div class="area" :class="[tile.area.key.replace(':','-'), tile.area.key.substring(0, 1)]">
+          {{
+            tile.area.key.startsWith('continentType:')
+                ? tile.area.key.split(':')[1].substring(0, 2).toUpperCase()
+                : tile.area.key.split(':')[1].substring(0, 2)
+          }}
+        </div>
+        <div v-if="tile.elevation.id !== 'flat'" class="e-i">
+          <UiIcon :icon="tile.elevation.icon"/>
+        </div>
+        <div v-if="tile.feature.value" class="f-i">
+          <UiIcon :icon="tile.feature.value.icon"/>
+        </div>
+        <div v-if="tile.isFresh || tile.isSalt" class="fr-sa">
+          {{ tile.isFresh ? 'F' : 's' }}
+        </div>
+        <div v-if="tile.isStart" class="start">
+          {{ tile.isStart === 'major' ? 'x' : 'o' }}
+        </div>
+        <div v-if="tile.riverKey" class="river">
+          {{ tile.isMajorRiver ? 'R' : 'r' }}
         </div>
       </div>
     </div>
@@ -73,4 +75,215 @@ const tiles = computed(() => {
 </template>
 
 <style scoped>
+.map-gen-preview {
+  font-size: 0.5rem;
+}
+
+.map-gen-row {
+  height: 2em;
+  white-space: nowrap;
+}
+
+.map-gen-row > div {
+  display: inline-block;
+  height: 2em;
+  width: 2em;
+  overflow: hidden;
+}
+
+.map-gen-row > div > div {
+  opacity: 0;
+  height: 2em;
+  width: 2em;
+  line-height: 2em;
+  position: absolute;
+  text-align: center;
+}
+
+.map-gen-preview.elevation .e-i {
+  opacity: 1;
+  margin-top: -0.5em;
+}
+
+.map-gen-preview.features .f-i {
+  opacity: 1;
+  margin-top: 0.25em;
+}
+
+.map-gen-preview.fresh-salt .fr-sa {
+  opacity: 1;
+}
+
+.map-gen-preview.starts .start {
+  opacity: 1;
+  margin-top: 0.5em;
+  margin-left: 0.5em;
+  height: 1em;
+  width: 1em;
+  line-height: 0.75em;
+  border-radius: 100%;
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.map-gen-preview.rivers .river {
+  opacity: 1;
+  margin-top: 0.5em;
+  margin-left: 0.5em;
+  height: 1em;
+  width: 1em;
+  line-height: 0.75em;
+  border-radius: 100%;
+  background: rgba(30, 58, 138, 0.75);
+}
+
+.map-gen-preview.areas .area {
+  opacity: 1;
+  width: 2em;
+  line-height: 2em;
+  position: absolute;
+  text-align: center;
+}
+
+.map-gen-preview.areas .area.c {
+  color: #000;
+}
+
+.map-gen-preview.areas .area.o {
+  color: #33f;
+}
+
+
+/****************************************
+  * Terrain
+  */
+
+.map-gen-preview.terrain .terrainType-ocean {
+  background: #172554;
+}
+
+.map-gen-preview.terrain .terrainType-sea {
+  background: #1e3a8a;
+}
+
+.map-gen-preview.terrain .terrainType-ocean {
+  background: #172554;
+}
+
+.map-gen-preview.terrain .terrainType-sea {
+  background: #1e3a8a;
+}
+
+.map-gen-preview.terrain .terrainType-coast {
+  background: #1E5F8AFF;
+}
+
+.map-gen-preview.terrain .terrainType-lake {
+  background: #164e63;
+}
+
+.map-gen-preview.terrain .terrainType-river {
+  background: #1e3a8a;
+}
+
+.map-gen-preview.terrain .terrainType-grass {
+  background: #3f6212;
+}
+
+.map-gen-preview.terrain .terrainType-grass.climateType-tropical {
+  background: #094200;
+}
+
+.map-gen-preview.terrain .terrainType-plains {
+  background: #575310;
+}
+
+.map-gen-preview.terrain .terrainType-desert {
+  background: #b8b83b;
+}
+
+.map-gen-preview.terrain .terrainType-tundra {
+  background: #3e5234;
+}
+
+.map-gen-preview.terrain .terrainType-snow {
+  background: #A0A1A8FF;
+}
+
+
+/****************************************
+  * Continents
+  */
+
+.map-gen-preview.areas .continentType-america {
+  background: hsla(285, 65%, 70%, 1);
+}
+
+.map-gen-preview.areas .continentType-andea {
+  background: hsla(330, 80%, 60%, 1);
+}
+
+.map-gen-preview.areas .continentType-taiga {
+  background: hsla(0, 90%, 55%, 1);
+}
+
+.map-gen-preview.areas .continentType-europe {
+  background: hsla(25, 90%, 55%, 1);
+}
+
+.map-gen-preview.areas .continentType-mediterra {
+  background: hsla(35, 90%, 55%, 1);
+}
+
+.map-gen-preview.areas .continentType-africa {
+  background: hsla(45, 90%, 55%, 1);
+}
+
+.map-gen-preview.areas .continentType-levantica {
+  background: hsla(55, 90%, 55%, 1);
+}
+
+.map-gen-preview.areas .continentType-siberia {
+  background: hsla(70, 85%, 50%, 1);
+}
+
+.map-gen-preview.areas .continentType-asia {
+  background: hsla(85, 75%, 48%, 1);
+}
+
+.map-gen-preview.areas .continentType-oceania {
+  background: hsla(100, 70%, 45%, 1);
+}
+
+
+/****************************************
+  * Oceans
+  */
+
+.map-gen-preview.areas .oceanType-arctic {
+  background: hsla(190, 80%, 60%, 1);
+}
+
+.map-gen-preview.areas .oceanType-atlantic {
+  background: hsla(200, 75%, 65%, 1);
+}
+
+.map-gen-preview.areas .oceanType-pacific {
+  background: hsla(220, 75%, 65%, 1);
+}
+
+.map-gen-preview.areas .oceanType-indian {
+  background: hsla(230, 80%, 62%, 1);
+}
+
+.map-gen-preview.areas .oceanType-antarctic {
+  background: hsla(240, 85%, 60%, 1);
+}
+
+.map-gen-preview.areas .oceanType-caribbean {
+  background: hsla(255, 80%, 62%, 1);
+}
+
+.map-gen-preview.areas .oceanType-mediterranean {
+  background: hsla(265, 75%, 65%, 1);
+}
 </style>

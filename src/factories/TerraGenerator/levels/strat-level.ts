@@ -25,8 +25,8 @@ export class StratLevel {
 
     for (const y of ys) {
       for (const x of xs) {
-        // Get preset type from x/y types
-        const type = (this.gen.xTypes[x] ?? this.gen.yTypes[y] ?? (this.gen.yxTypes[y] ?? [])[x] ?? null) as TypeClass | TypeKey | null
+        // Get preset type from x/y types: 1. arctic/antarctic, 2. atlantic/pacific, 3. specific
+        const type = (this.gen.yTypes[y] ?? this.gen.xTypes[x] ?? (this.gen.yxTypes[y] ?? [])[x] ?? null) as TypeClass | TypeKey | null
 
         // If no preset type, skip tile
         if (!type) {
@@ -50,13 +50,14 @@ export class StratLevel {
           } as any as ContinentData
 
           // Add a 3x3 grid of land tiles around the continent center
-          const neighborCoords = getNeighborCoords({ x, y }, this.gen.stratSize, 'chebyshev', 1)
+          const neighborCoords = getNeighborCoords(this.gen.stratSize, { x, y }, 'chebyshev', 1)
           for (const coords of [{ x, y }, ...neighborCoords]) {
             const gridKey = Tile.getKey(coords.x, coords.y)
 
             const climate = this.gen.getClimateFromStratY(y)
 
             const tile = new GenTile(
+              GenTile.getKey(x, y),
               coords.x,
               coords.y,
               this.gen.land,
@@ -120,6 +121,7 @@ export class StratLevel {
         const climate = this.gen.getClimateFromStratY(y)
 
         this.gen.stratTiles[key] = new GenTile(
+          GenTile.getKey(x, y),
           x,
           y,
           this.gen.water,
@@ -188,6 +190,7 @@ export class StratLevel {
         // Copy tile (except climate and terrain from Y)
         const climate = this.gen.getClimateFromStratY(y)
         this.gen.stratTiles[key] = new GenTile(
+          GenTile.getKey(x, y),
           x,
           y,
           rand.domain,
@@ -211,6 +214,7 @@ export class StratLevel {
 
       const climate = this.gen.getClimateFromStratY(y)
       this.gen.stratTiles[key] = new GenTile(
+        GenTile.getKey(x, y),
         x,
         y,
         preferredOcean.domain,

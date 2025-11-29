@@ -3,18 +3,19 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { GenTile } from '../../../../src/factories/TerraGenerator/gen-tile'
 import * as arrayTools from '../../../../src/helpers/arrayTools'
 import { snake } from '../../../../src/factories/TerraGenerator/helpers/snake'
+import { Tile } from '../../../../src/objects/gameObjects'
 
 describe('snake()', () => {
 
-  const mkTile = (x: number, y: number): GenTile =>
-    ({ x, y, key: `${x}:${y}` } as any)
+  const mkTile = (x: number, y: number): Tile =>
+    ({ x, y, key: Tile.getKey(x, y) } as any as Tile)
 
   const mkGrid = (w: number, h: number) => {
-    const tiles: Record<string, GenTile> = {}
+    const tiles: Record<string, Tile> = {}
     for (let y = 0; y < h; y++) {
       for (let x = 0; x < w; x++) {
         const t = mkTile(x, y)
-        tiles[`${x}:${y}`] = t
+        tiles[(t as any).key] = t
       }
     }
     return tiles
@@ -29,7 +30,7 @@ describe('snake()', () => {
     const tiles = mkGrid(10, 10)
     const walked: GenTile[] = []
 
-    const start = tiles['5:2'] // above midline → initialDir = 's'
+    const start = tiles[Tile.getKey(5, 2)] // above midline → initialDir = 's'
 
     // Explicit initialDir per contract
     snake(start, tiles, walked, { x: 10, y: 10 }, [2], [3], undefined, 's')
@@ -46,7 +47,7 @@ describe('snake()', () => {
   it('stops a leg when next tile is missing', () => {
     const tiles = mkGrid(10, 3)
     const walked: GenTile[] = []
-    const start = tiles['5:1'] // middle row in 3-high grid
+    const start = tiles[Tile.getKey(5, 1)] // middle row in 3-high grid
 
     // walking south will do exactly one valid step then hit bottom and stop leg
     snake(start, tiles, walked, { x: 10, y: 3 }, [1], [5], undefined, 's')
@@ -58,7 +59,7 @@ describe('snake()', () => {
   it('stops early when acceptTile returns false', () => {
     const tiles = mkGrid(10, 10)
     const walked: GenTile[] = []
-    const start = tiles['5:2']
+    const start = tiles[Tile.getKey(5, 2)]
 
     // allow first moved tile only (moving south keeps x=5, so accept once at y=3, then reject)
     const accept = vi.fn().mockImplementation(tile => tile.y <= 3)
@@ -75,22 +76,22 @@ describe('snake()', () => {
     const tiles = mkGrid(10, 10)
     const walked: GenTile[] = []
 
-    const northStart = tiles['2:1'] // y < 10/2 => initialDir = 's'
-    const southStart = tiles['2:7'] // y >= 10/2 => initialDir = 'n'
+    const northStart = tiles[Tile.getKey(2, 1)] // y < 10/2 => initialDir = 's'
+    const southStart = tiles[Tile.getKey(2, 7)] // y >= 10/2 => initialDir = 'n'
 
     let lastWalk: any[] = []
     snake(northStart, tiles, lastWalk, { x: 10, y: 10 }, [1], [1], undefined, 's')
-    expect(lastWalk[1]).toEqual(tiles['2:2']) // moved south
+    expect(lastWalk[1]).toEqual(tiles[Tile.getKey(2, 2)]) // moved south
 
     lastWalk.length = 0
     snake(southStart, tiles, lastWalk, { x: 10, y: 10 }, [1], [1], undefined, 'n')
-    expect(lastWalk[1]).toEqual(tiles['2:6']) // moved north
+    expect(lastWalk[1]).toEqual(tiles[Tile.getKey(2, 6)]) // moved north
   })
 
   it('never picks a forbidden turn according to initialDir', () => {
     const tiles = mkGrid(10, 10)
-    const walked: GenTile[] = []
-    const start = tiles['5:2']
+    const walked: Tile[] = []
+    const start = tiles[Tile.getKey(5, 2)]
 
     // force a situation where nextDir() is called
     snake(start, tiles, walked, { x: 10, y: 10 }, [2], [1], undefined, 's')

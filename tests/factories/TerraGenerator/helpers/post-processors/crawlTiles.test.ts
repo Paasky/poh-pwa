@@ -1,10 +1,12 @@
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { crawlTiles } from '../../../../../src/factories/TerraGenerator/helpers/post-processors'
+import { Tile } from '../../../../../src/objects/gameObjects'
+import { initTestPinia, loadStaticData } from '../../../../_setup/pinia'
 
 // Minimal tile object factory
-const t = (x: number, y: number) => ({ key: `k${x},${y}`, x, y })
+const t = (x: number, y: number) => ({ key: Tile.getKey(x, y), x, y })
 
-// Fake gen that returns neighbors per level
+// Fake gen that returns neighbors per level (accepts coords with x,y)
 const mkGen = () => {
   const tiles: Record<string, any> = {}
   const add = (tile: any) => {
@@ -18,13 +20,17 @@ const mkGen = () => {
     tiles,
     add,
     setN,
-    getGameNeighbors: (x: number, y: number) => get(tiles[`k${x},${y}`]),
-    getRegNeighbors: (x: number, y: number) => get(tiles[`k${x},${y}`]),
-    getStratNeighbors: (x: number, y: number) => get(tiles[`k${x},${y}`]),
+    getGameNeighbors: (coords: { x: number, y: number }) => get(tiles[Tile.getKey(coords.x, coords.y)]),
+    getRegNeighbors: (coords: { x: number, y: number }) => get(tiles[Tile.getKey(coords.x, coords.y)]),
+    getStratNeighbors: (coords: { x: number, y: number }) => get(tiles[Tile.getKey(coords.x, coords.y)]),
   }
 }
 
 describe('crawlTiles', () => {
+  beforeEach(() => {
+    initTestPinia()
+    loadStaticData()
+  })
   it('performs DFS over valid neighbors without cycles', () => {
     const gen = mkGen()
     const a = gen.add(t(0, 0))
@@ -67,7 +73,7 @@ describe('crawlTiles', () => {
         grid.push(gen.add(t(x, y)))
       }
     }
-    const key = (x: number, y: number) => `k${x},${y}`
+    const key = (x: number, y: number) => Tile.getKey(x, y)
     const tile = (x: number, y: number) => gen.tiles[key(x, y)]
     // Define full 8-dir adjacency for all tiles
     for (let y = 0; y < 3; y++) {

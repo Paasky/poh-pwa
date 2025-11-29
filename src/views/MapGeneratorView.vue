@@ -28,7 +28,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="w-screen h-screen overflow-auto bg-gray-900 text-slate-100">
+  <div class="w-screen bg-gray-900 text-slate-100">
     <div class="w-full p-4 space-y-6">
       <h1 class="text-3xl font-semibold">Map Generator</h1>
       <div v-if="!mapGenStore.gen" class="text-center text-lg opacity-50 animate-pulse">
@@ -58,13 +58,13 @@ onMounted(async () => {
         </div>
 
         <!-- STRATEGIC LEVEL -->
-        <LevelSection v-show="mapGenStore.selectedLevel === 'strat'" variant="strat"/>
+        <LevelSection v-if="mapGenStore.selectedLevel === 'strat'" variant="strat"/>
 
         <!-- REGION LEVEL -->
-        <LevelSection v-show="mapGenStore.selectedLevel === 'reg'" variant="reg"/>
+        <LevelSection v-if="mapGenStore.selectedLevel === 'reg'" variant="reg"/>
 
         <!-- GAME LEVEL -->
-        <LevelSection v-show="mapGenStore.selectedLevel === 'game'" variant="game"/>
+        <LevelSection v-if="mapGenStore.selectedLevel === 'game'" variant="game"/>
       </div>
     </div>
   </div>

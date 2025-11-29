@@ -100,7 +100,7 @@ const colors = {
   faith: '#8b5cf6', // violet-500
   influence: '#94a3b8', // slate-400
   happiness: '#4ade80', // green-400
-  darkGreen: '#052e16', // green-950
+  darkGreen: '#174308', // green-950
   danger: '#ef4444', // red-500
   military: '#a8a29e', // stone-400
   trade: '#fb923c', // orange-400

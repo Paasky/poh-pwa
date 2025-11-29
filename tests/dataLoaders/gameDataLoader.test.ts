@@ -47,7 +47,7 @@ describe('gameDataLoader', () => {
     expect(() =>
       loader.load({ objects: [invalidTypeKey] })
     ).toThrow(
-      `[objects] Unknown key: majorCultureType:test`
+      `[objStore] Tried to get(majorCultureType:test), key does not exist in store`
     )
 
     const playerData = {
@@ -62,24 +62,27 @@ describe('gameDataLoader', () => {
     expect(() =>
       loader.load({ objects: [playerData, invalidRelationKey] })
     ).toThrow(
-      `Error processing attr 'playerKey' of culture:1: Error: [objects] Unknown key: player:2`
+      `obj: culture:1, conf: {"attrName":"playerKey","related":{"theirKeyAttr":"cultureKey","isOne":true}}, msg: [objStore] Tried to get(player:2), key does not exist in store`
     )
   })
 
   it('Build game objects and returns correct JSON, without optional', () => {
     const loader = new GameDataLoader()
 
+    const tileCoords = { x: 12, y: 23 }
+    const tileKey = Tile.getKey(tileCoords.x, tileCoords.y)
+
     // todo Agenda
     const citizenData = {
       key: 'citizen:1',
       cityKey: 'city:1',
       cultureKey: 'culture:1',
-      tileKey: 'tile:1',
+      tileKey: tileKey,
     }
     const cityData = {
       key: 'city:1',
       playerKey: 'player:1',
-      tileKey: 'tile:1',
+      tileKey: tileKey,
       name: 'test city',
     }
     // todo Construction
@@ -102,9 +105,9 @@ describe('gameDataLoader', () => {
       cityKey: 'city:1',
     }
     const tileData = {
-      key: Tile.getKey(12, 23),
-      x: 12,
-      y: 23,
+      key: tileKey,
+      x: tileCoords.x,
+      y: tileCoords.y,
       domain: 'domainType:land',
       area: 'continentType:taiga',
       climate: 'climateType:cold',
@@ -118,9 +121,9 @@ describe('gameDataLoader', () => {
     const unitData = {
       key: 'unit:1',
       cityKey: 'city:1',
-      designKey: 'design:1',
+      designKey: 'unitDesign:1',
       playerKey: 'player:1',
-      tileKey: 'tile:1',
+      tileKey: tileKey,
     }
     const unitDesignData = {
       key: 'unitDesign:1',
@@ -144,19 +147,17 @@ describe('gameDataLoader', () => {
       ]
     })
 
-    const playerDataWithDefaults = { ...playerData, 'isCurrent': false }
+    // output = input + defaults
     expect(gameObjects.map(o => o.toJSON())).toEqual([
-      [
-        citizenData,
-        cityData,
-        cultureData,
-        playerDataWithDefaults,
-        religionData,
-        tileData,
-        tradeRouteData,
-        unitData,
-        unitDesignData,
-      ]
+      citizenData,
+      { ...cityData, canAttack: false, health: 100, isCapital: false, origPlayerKey: 'player:1' },
+      cultureData,
+      { ...playerData, 'isCurrent': false },
+      religionData,
+      tileData,
+      tradeRouteData,
+      { ...unitData, canAttack: false, health: 100, moves: 0, name: '', origPlayerKey: 'player:1' },
+      { ...unitDesignData, isActive: true, isElite: false },
     ])
   })
 

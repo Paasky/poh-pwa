@@ -13,28 +13,39 @@ export class RegLevel {
   }
 
   fillFromStrat (): RegLevel {
+    this.gen.forEachRegTile((tile) => {
+
+    })
     for (let y = 0; y < this.gen.regSize.y; y++) {
       for (let x = 0; x < this.gen.regSize.x; x++) {
-        // Choose a random stratLevel neighbor
-        const neighborCoords = getNeighborCoords({ x, y }, this.gen.regSize, 'manhattan', 1)
-        const stratNeighbors = neighborCoords.map(c => this.gen.getStratFromRegCoords(c.x, c.y))
-        const strat = getRandom(stratNeighbors)
+        let stratTile = this.gen.getStratFromRegCoords(x, y)
+
+        // If the parent stratTile is not a start, allow for variety from neighbors
+        if (!stratTile.isStart) {
+          // Choose a random stratLevel neighbor
+          const neighbors = getNeighborCoords(this.gen.regSize, { x, y }, 'manhattan', 1)
+          stratTile = getRandom(neighbors.map(
+            n => this.gen.getStratFromRegCoords(n.x, n.y)
+          ))
+        }
 
         // Allow a 25% chance for elevation swap for extra variety
-        const elevation = strat.domain === this.gen.land && Math.random() < 0.25
-          ? (strat.elevation === this.gen.flat ? this.gen.hill : this.gen.flat)
-          : strat.elevation
+        const elevation = stratTile.domain === this.gen.land && Math.random() < 0.25
+          ? (stratTile.elevation === this.gen.flat ? this.gen.hill : this.gen.flat)
+          : stratTile.elevation
 
         const tile = new GenTile(
+          GenTile.getKey(x, y),
           x,
           y,
-          strat.domain,
-          strat.area,
-          strat.climate,
-          strat.terrain,
+          stratTile.domain,
+          stratTile.area,
+          stratTile.climate,
+          stratTile.terrain,
           elevation,
         )
 
+        // Set terrain based on distance from pole (allow for polar ice)
         const distToPole = this.gen.getDistToPole(y, this.gen.regSize.y)
         tile.feature.value = this.gen.getFeatureForTile(tile, distToPole) as any
         this.gen.regTiles[Tile.getKey(x, y)] = tile
@@ -45,45 +56,50 @@ export class RegLevel {
   }
 
   postProcess (): RegLevel {
-    // Clean orphaned areas
-    for (let y = 0; y < this.gen.regSize.y; y++) {
-      for (let x = 0; x < this.gen.regSize.x; x++) {
-        const key = Tile.getKey(x, y)
-        const tile = this.gen.regTiles[key]
-        if (!tile) throw new Error(`regTile[${key}] does not exist`)
+    this.removeOrphans()
+      .addIslands()
+      .processContinents()
 
-        const neighbors = this.gen.getRegNeighbors({ x, y }, 'manhattan')
-        removeOrphanArea(tile, neighbors)
+    return this
+  }
+
+  private removeOrphans (): RegLevel {
+    this.gen.forEachRegTile((tile) => removeOrphanArea(
+      tile,
+      this.gen.getRegNeighbors(tile, 'manhattan')
+    ))
+
+    return this
+  }
+
+  private addIslands (): RegLevel {
+    this.gen.forEachRegTile((tile) => {
+      // Check 50% on Sea, 1% on Ocean (there's a lot of Ocean)
+      if (tile.terrain === this.gen.seaTerrain && Math.random() > 0.5) return
+      if (tile.terrain === this.gen.oceanTerrain && Math.random() > 0.01) return
+
+      const neighbors = this.gen.getRegNeighbors(tile, 'manhattan', 3)
+      const allAreSameTerrain = neighbors.every(n => n.terrain === tile.terrain)
+      if (allAreSameTerrain) {
+        makeIsland(this.gen, tile, 'reg', 0.75)
       }
-    }
+    })
 
-    // Find large blobs of Sea: add random tetris-shape of land
-    for (let y = 0; y < this.gen.regSize.y; y++) {
-      for (let x = 0; x < this.gen.regSize.x; x++) {
-        const key = Tile.getKey(x, y)
-        const tile = this.gen.regTiles[key]!
-        if (tile.terrain !== this.gen.seaTerrain) continue
+    return this
+  }
 
-        const neighbors = this.gen.getRegNeighbors({ x, y }, 'manhattan', 3)
-        const allAreSameTerrain = neighbors.every(n => n.terrain === tile.terrain)
-
-        if (!allAreSameTerrain) continue
-
-        // Generate a small "tetris"-like island in a 2x2 or 3x3 footprint
-        // Prefer hill elevation for sea islands
-        makeIsland(this.gen, x, y, 'reg', 0.75)
-      }
-    }
-
+  private processContinents (): RegLevel {
+    // Group land tiles per continent
     const landTilesPerContinent: Record<string, Record<string, GenTile>> = {}
     for (const tile of Object.values(this.gen.regTiles)) {
-      if (tile.domain !== this.gen.land) continue
-
-      if (!landTilesPerContinent[tile.area.key]) {
-        landTilesPerContinent[tile.area.key] = {}
+      if (tile.domain === this.gen.land) {
+        if (!landTilesPerContinent[tile.area.key]) {
+          landTilesPerContinent[tile.area.key] = {}
+        }
+        landTilesPerContinent[tile.area.key][tile.key] = tile
       }
-      landTilesPerContinent[tile.area.key][tile.key] = tile
     }
+
     for (const continent of Object.values(this.gen.continents)) {
       // Add starts per continent
       for (const stratStartTile of continent.majorStarts.strat) {

@@ -4,7 +4,10 @@ import { Citizen, City, Culture, GameKey, Player, Religion, Tile, Unit } from '@
 
 const objStore = () => useObjectsStore()
 
-export function hasMany<T> (keysRef: Ref<GameKey[]>, ctor: new (...args: any[]) => T) {
+export function hasMany<T> (
+  keysRef: Ref<GameKey[]>,
+  ctor: new (...args: any[]) => T
+) {
   const out: T[] = []
 
   return computed<T[]>(() => {
@@ -16,8 +19,12 @@ export function hasMany<T> (keysRef: Ref<GameKey[]>, ctor: new (...args: any[]) 
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i]
       // Always read – creates a dependency on the store entry for this key
-      const obj = objStore().get(key) as T
-      if (out[i] !== obj) out[i] = obj
+      try {
+        const obj = objStore().get(key) as T
+        if (out[i] !== obj) out[i] = obj
+      } catch (e) {
+        throw new Error(`${ctor.name} HasMany: ${e}`)
+      }
     }
 
     return out
@@ -31,7 +38,7 @@ export function hasOne<T> (
   return computed<T>(() => {
     const key = keyRef.value
     if (!key) {
-      throw new Error(`Empty relation value for ${ctor.name}`)
+      throw new Error(`${ctor.name} HasOne: Empty relation value for ${ctor.name}`)
     }
 
     return objStore().get(key) as T

@@ -1,15 +1,16 @@
 import { TerraGenerator } from '@/factories/TerraGenerator/terra-generator'
-import { getRandom, takeRandom } from '@/helpers/arrayTools'
+import { getRandom, shuffle } from '@/helpers/arrayTools'
 import { GenTile } from '@/factories/TerraGenerator/gen-tile'
-import { Tile } from '@/objects/gameObjects'
+import { GameKey, River, Tile } from '@/objects/gameObjects'
 import {
   makeIsland,
+  makeRiver,
   removeOrphanArea,
   removeOrphanTerrain,
-  river,
   spreadSalt
 } from '@/factories/TerraGenerator/helpers/post-processors'
 import { getNeighborCoords } from '@/factories/TerraGenerator/helpers/neighbors'
+import { TypeKey } from '@/types/common'
 
 export class GameLevel {
   gen: TerraGenerator
@@ -26,15 +27,23 @@ export class GameLevel {
         const regNeighbors = neighborCoords.map(c => this.gen.getRegFromGameCoords(c.x, c.y))
         const regTile = getRandom(regNeighbors)
 
-        // Allow a 25% chance for elevation swap for extra variety
-        let elevation = regTile.domain === this.gen.land && Math.random() < 0.25
-          ? (regTile.elevation === this.gen.flat ? this.gen.hill : this.gen.flat)
-          : regTile.elevation
-
-        // Force water-domain tiles to be flat for gameplay readability
-        if (regTile.domain === this.gen.water) elevation = this.gen.flat
+        const elevChance = Math.random()
+        const elevation = regTile.domain.id === this.gen.water.id
+          // Water tiles are always flat
+          ? this.gen.flat
+          : (
+            // 25% chance of flat, 25% chance for elevation swap for extra variety
+            elevChance < 0.25
+              ? this.gen.flat
+              : (
+                elevChance < 0.5
+                  ? (regTile.elevation === this.gen.flat ? this.gen.hill : this.gen.flat)
+                  : regTile.elevation
+              )
+          )
 
         const tile = new GenTile(
+          GenTile.getKey(x, y),
           x,
           y,
           regTile.domain,
@@ -42,181 +51,216 @@ export class GameLevel {
           regTile.climate,
           regTile.terrain,
           elevation,
-          regTile.feature.value as any
         )
 
-        // Allow a 25% chance for feature swap for extra variety
-        if (Math.random() < 0.25) {
-          regTile.feature.value = regTile.feature.value
-            // Had a feature -> swap to empty
-            ? null
+        // Oasis and Atoll are handled in postProcessPass1()
+        const setFeatureLater = regTile.feature.value?.id === 'oasis' || regTile.feature.value?.id == 'atoll'
+        if (!setFeatureLater) {
+          // Allow a 25% chance for feature swap for extra variety
+          tile.feature.value = Math.random() < 0.25
+            ? (
+              regTile.feature.value
+                // Had a feature -> swap to empty
+                ? null
 
-            // Didn't have a feature -> add one
-            : this.gen.getFeatureForTile(
-              tile,
-              this.gen.getDistToPole(y, this.gen.size.y)
+                // Didn't have a feature -> add one
+                : this.gen.getFeatureForTile(
+                  tile,
+                  this.gen.getDistToPole(y, this.gen.size.y)
+                )
             )
+
+            // No feature swap -> use existing feature
+            : regTile.feature.value
         }
 
-        this.gen.gameTiles[Tile.getKey(x, y)] = tile
+        this.gen.gameTiles[tile.key] = tile
       }
     }
 
     return this
   }
 
-  // todo:
-  // for orphan terrain, add bool "ignoreLakes = true", so lake/land is not modified
-  // for oasis, if reg has one, give it to a random game tile in the group of 9
-  // for atolls, if reg has one:
-  // - 50% chance of center game tile as flat island
-  // - 50% chance of tetris-shape hill island tiles
-  // - keep existing feature-chance for other game tiles
-  // for sea, if has 3-dist manhattan area of all same terrain
-  // - add tetris-shape hill island
-  // for lake, if has 3-dist manhattan area of all same terrain
-  // - add tetris-shape flat island
   postProcess (): GameLevel {
-    for (let y = 0; y < this.gen.size.y; y++) {
-      for (let x = 0; x < this.gen.size.x; x++) {
-        const key = Tile.getKey(x, y)
-        const tile = this.gen.gameTiles[key]
-        if (!tile) throw new Error(`gameTile[${key}] does not exist`)
+    this.postProcessPass1()
+      .spreadSalt()
+      .setSaltFreshEffects()
+      .setSeaBetweenCoastAndOcean()
+      .addRivers()
 
-        // Precompute neighbors once per tile for (distance 1 neighbors)
-        const n1 = this.gen.getGameNeighbors({ x, y }, 'manhattan')
-        removeOrphanArea(tile, n1)
-        removeOrphanTerrain(tile, n1)
+    return this
+  }
 
-        // Island generation in uniform water patches (distance 3 neighbors)
-        if (tile.terrain === this.gen.seaTerrain || tile.terrain === this.gen.lakeTerrain) {
-          // Only check 10% of the time
-          if (Math.random() < 0.1) {
-            const n3 = this.gen.getGameNeighbors({ x, y }, 'manhattan', 3)
-            if (n3.length && n3.every(n => n.terrain === tile.terrain)) {
-              if (tile.terrain === this.gen.seaTerrain) {
-                // Prefer hill islands in seas
-                makeIsland(this.gen, x, y, 'game', 0.75)
-              } else {
-                // Prefer flat islands in lakes
-                makeIsland(this.gen, x, y, 'game', 0.25)
-              }
-            }
-          }
+  private postProcessPass1 (): GameLevel {
+    this.gen.forEachGameTile((tile) => {
+      const neighbors = this.gen.getGameNeighbors(tile, 'manhattan')
+
+      removeOrphanArea(tile, neighbors)
+      removeOrphanTerrain(tile, neighbors)
+
+      // If it's a mountain, make 50% of flat neighbors into hills
+      // If it's a snow mountain, make 75% of flat neighbors into hills
+      if (tile.elevation.id === 'mountain') {
+        neighbors.filter(n => n.elevation.id === 'flat').forEach(
+          n => Math.random() < 0.5 ? n.elevation = this.gen.hill : null
+        )
+      }
+      if (tile.elevation.id === 'snowMountain') {
+        neighbors.filter(n => n.elevation.id === 'flat').forEach(
+          n => Math.random() < 0.75 ? n.elevation = this.gen.hill : null
+        )
+      }
+
+      // If on center of regTile
+      if (tile.x % 3 === 1 && tile.y % 3 === 1) {
+        const regTile = this.gen.getRegFromGameCoords(tile.x, tile.y)
+
+        // Add Starts
+        if (regTile.isStart) {
+          getRandom(neighbors).isStart = regTile.isStart
         }
 
-        // Handle oasis/atoll transfer at centers of 3x3 game blocks per reg tile
-        if (x % 3 === 1 && y % 3 === 1) {
-          const reg = this.gen.getRegFromGameCoords(x, y)
-          const f = reg.feature.value as any
-          if (f && f.class === 'featureType') {
-            if (f.id === 'oasis') {
-              const group = this.gen.getGameTilesFromRegCoords(reg.x, reg.y)
-              const rnd = getRandom(group)
-              rnd.feature.value = f
-            } else if (f.id === 'atoll') {
-              if (Math.random() < 0.5) {
-                // Center flat island
-                tile.domain = this.gen.land
-                tile.terrain = this.gen.getLandTerrainFromClimate(tile.climate)
-                tile.elevation = this.gen.flat
-                tile.isFresh = false
-                tile.isSalt = false
-              } else {
-                // Tetris-shaped island, prefer hills
-                makeIsland(this.gen, x, y, 'game', 0.75)
-              }
-            }
+        // Region is an oasis: add to a random game tile in the 3x3 group
+        if (regTile.feature.value?.key === 'featureType:oasis') {
+          getRandom(neighbors).feature.value = regTile.feature.value
+          return
+        }
+
+        // Region is an atoll: add to a random game tile in the 3x3 group
+        if (regTile.feature.value?.key === 'featureType:atoll') {
+          if (Math.random() < 0.5) {
+            // Center flat island
+            tile.domain = this.gen.land
+            tile.terrain = this.gen.getLandTerrainFromClimate(tile.climate)
+            tile.elevation = this.gen.flat
+          } else {
+            // Tetris-shaped island, prefer hills
+            makeIsland(this.gen, tile, 'game', 0.75)
+          }
+          return
+        }
+      }
+
+      // If on sea/lake, 1/10 chance to check for island generation
+      if ((tile.terrain === this.gen.seaTerrain || tile.terrain === this.gen.lakeTerrain) && Math.random() < 0.1) {
+        // Has a 3-size plus-shape area of sea/lake
+        const area = this.gen.getGameNeighbors(tile, 'manhattan', 3)
+        if (area.every(t => t.terrain === tile.terrain)) {
+          if (tile.terrain === this.gen.seaTerrain) {
+            // Prefer hill islands in seas
+            makeIsland(this.gen, tile, 'game', 0.75)
+            return
+          } else {
+            // Prefer flat islands in lakes
+            makeIsland(this.gen, tile, 'game', 0.25)
+            return
           }
         }
       }
-    }
+    })
 
-    // 1) Spread salt: mark all water connected to the polar borders as salt water (oceanic)
-    //    X wraps, Y is clamped, so only top/bottom rows are true outer oceans.
-    //    Clear previous salt/fresh flags on water first, then flood from edges.
-    for (let y = 0; y < this.gen.size.y; y++) {
-      for (let x = 0; x < this.gen.size.x; x++) {
-        const t = this.gen.gameTiles[Tile.getKey(x, y)]!
-        if (t.domain === this.gen.water) {
-          t.isSalt = false
-          // do not decide terrain yet; we'll recalc below
-        }
-      }
-    }
+    return this
+  }
 
-    // Seed from top and bottom rows
-    const lastY = this.gen.size.y - 1
+  private spreadSalt (): GameLevel {
+    // Spread salt from all edge tiles (some may be land, most will be ocean)
     for (let x = 0; x < this.gen.size.x; x++) {
-      const top = this.gen.gameTiles[Tile.getKey(x, 0)]!
-      const bot = this.gen.gameTiles[Tile.getKey(x, lastY)]!
-      if (top.domain === this.gen.water) spreadSalt(this.gen, 'game', top)
-      if (bot.domain === this.gen.water) spreadSalt(this.gen, 'game', bot)
-    }
+      for (let y = 0; y < this.gen.size.y; y++) {
+        if (x === 0 || y === 0 || x === this.gen.size.x - 1 || y === this.gen.size.y - 1) {
+          const start = this.gen.gameTiles[Tile.getKey(0, 0)]!
+          if (start.domain !== this.gen.water) continue
 
-    // 2) Baseline water terrains
-    //    - Non-salt water becomes Lake
-    //    - Salt water becomes Ocean (will convert to Coast/Sea in next steps)
-    for (let y = 0; y < this.gen.size.y; y++) {
-      for (let x = 0; x < this.gen.size.x; x++) {
-        const t = this.gen.gameTiles[Tile.getKey(x, y)]!
-        if (t.domain !== this.gen.water) continue
-        if (t.isSalt) {
-          t.terrain = this.gen.oceanTerrain
-          t.isFresh = false
-        } else {
-          t.terrain = this.gen.lakeTerrain
-          t.isFresh = true
+          // Already salt, skip
+          if (start.isSalt) continue
+
+          spreadSalt(this.gen, 'game', start)
         }
       }
     }
+    return this
+  }
 
-    // 3) All salt water next to land -> Coast
-    for (let y = 0; y < this.gen.size.y; y++) {
-      for (let x = 0; x < this.gen.size.x; x++) {
-        const t = this.gen.gameTiles[Tile.getKey(x, y)]!
-        if (t.domain !== this.gen.water || !t.isSalt) continue
-        const n = this.gen.getGameNeighbors({ x, y })
-        if (n.some(nn => nn.domain === this.gen.land)) {
-          t.terrain = this.gen.coastTerrain
+  private setSaltFreshEffects (): GameLevel {
+    // Normalize Water #1
+    //    - Non-salt water becomes Lake (not connected to any Ocean)
+    //    - Salt water next to land becomes Coast
+    this.gen.forEachGameTile((tile) => {
+      if (tile.domain.id !== 'water' && tile.feature.value?.id !== 'oasis') return
+
+      // Include quick water elevation sanity check
+      if (tile.elevation.id !== this.gen.flat.id) tile.elevation = this.gen.flat
+
+      const neighbors = this.gen.getGameNeighbors(tile)
+
+      if (tile.isSalt) {
+        // Fix any weirdness with salt/fresh: salt wins
+        if (tile.isFresh) tile.isFresh = false
+
+        if (neighbors.some(n => n.domain === this.gen.land)) {
+          tile.terrain = this.gen.coastTerrain
         }
+      } else {
+        // tile is water/oasis
+
+        // Fresh water becomes lake
+        if (tile.domain.id === 'water') {
+          tile.terrain = this.gen.lakeTerrain
+        }
+        tile.isFresh = true
+
+        // Mark all neighbors as fresh, since they're next to fresh water
+        neighbors.forEach(n => n.isFresh = true)
       }
+    })
+
+    return this
+  }
+
+  private setSeaBetweenCoastAndOcean (): GameLevel {
+    this.gen.forEachGameTile((tile) => {
+      if (tile.terrain.id !== this.gen.oceanTerrain.id) return
+
+      const neighbors = this.gen.getGameNeighbors(tile)
+      if (neighbors.some(n => n.terrain.id === this.gen.coastTerrain.id)) {
+        tile.terrain = this.gen.seaTerrain
+      }
+    })
+
+    return this
+  }
+
+  private addRivers (): GameLevel {
+    // Collect candidate land tiles per continent
+    const candidatesPerContinent: Record<TypeKey, GenTile[]> = {}
+    for (const t of Object.values(this.gen.gameTiles)) {
+      // Quick checks: Land, same continent, not a mountain, 3 grids from salt
+      if (t.domain.key !== this.gen.land.key) continue
+      if (t.elevation.id === 'mountain') continue
+      if (t.elevation.id === 'snowMountain') continue
+      if (this.gen.getGameNeighbors(t, 'chebyshev', 3).some(nn => nn.isSalt)) continue
+
+      if (!candidatesPerContinent[t.area.key]) candidatesPerContinent[t.area.key] = []
+
+      candidatesPerContinent[t.area.key].push(t)
     }
 
-    // 4) All Ocean next to Coast -> Sea
-    for (let y = 0; y < this.gen.size.y; y++) {
-      for (let x = 0; x < this.gen.size.x; x++) {
-        const t = this.gen.gameTiles[Tile.getKey(x, y)]!
-        if (t.domain !== this.gen.water) continue
-        if (t.terrain !== this.gen.oceanTerrain) continue
-        const n = this.gen.getGameNeighbors({ x, y })
-        if (n.some(nn => nn.terrain === this.gen.coastTerrain)) {
-          t.terrain = this.gen.seaTerrain
-        }
-      }
-    }
+    const rivers = {} as Record<GameKey, River>
 
-    // 5) River generation: 3 rivers per continent
     for (const continent of Object.values(this.gen.continents)) {
-      // Collect candidate land tiles on this continent
-      const candidates: GenTile[] = []
-      for (const t of Object.values(this.gen.gameTiles)) {
-        if (t.domain === this.gen.land && t.area?.key === continent.type.key) {
-          candidates.push(t)
+      const candidates = shuffle(candidatesPerContinent[continent.type.key])
+      let riverCount = 0
+      while (riverCount < this.gen.size.y / 12 && candidates.length > 0) {
+        const candidate = candidates.pop()!
+
+        // Check it's still valid (far enough from other rivers)
+        if (this.gen.getGameNeighbors(candidate, 'chebyshev', 3).every(nn => !nn.riverKey)) {
+          const river = makeRiver(this.gen.size, candidate, this.gen.gameTiles, rivers)
+          riverCount++
+          rivers[river.key] = river
         }
-      }
-      // Try to start 3 rivers; if too few candidates, start as many as possible
-      for (let i = 0; i < 3 && candidates.length > 0; i++) {
-        const start = takeRandom(candidates)
-        // Skip tiles that are adjacent to salt water to avoid trivial rivers
-        const neighs = this.gen.getGameNeighbors(start)
-        if (neighs.some(nn => nn.domain === this.gen.water && nn.isSalt)) {
-          i--
-          continue
-        }
-        river(this.gen, start, 'game')
       }
     }
+
     return this
   }
 }

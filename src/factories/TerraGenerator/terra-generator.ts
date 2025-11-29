@@ -1,4 +1,4 @@
-import { Tile } from '@/objects/gameObjects'
+import { River, Tile } from '@/objects/gameObjects'
 import { TypeKey } from '@/types/common'
 import { TypeClass, TypeObject } from '@/types/typeObjects'
 import { WorldSize } from '@/factories/worldFactory'
@@ -27,6 +27,7 @@ export class TerraGenerator {
   stratTiles: Record<string, GenTile> = {}
   regTiles: Record<string, GenTile> = {}
   gameTiles: Record<string, GenTile> = {}
+  rivers: Record<string, River> = {}
 
   objStore = useObjectsStore()
   land: TypeObject
@@ -350,6 +351,18 @@ export class TerraGenerator {
       ? tiles[Tile.getKey(realCoords.x, realCoords.y)]
       : undefined
     return t || null
+  }
+
+  forEachGameTile (cb: (tile: GenTile) => void) {
+    Object.values(this.gameTiles).forEach(cb)
+  }
+
+  forEachRegTile (cb: (tile: GenTile) => void) {
+    Object.values(this.regTiles).forEach(cb)
+  }
+
+  forEachStratTile (cb: (tile: GenTile) => void) {
+    Object.values(this.stratTiles).forEach(cb)
   }
 }
 
