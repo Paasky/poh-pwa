@@ -2,13 +2,7 @@
 import { computed, PropType } from "vue";
 import UiTooltip from "@/components/Ui/UiTooltip.vue";
 
-export type Variant =
-  | "solid"
-  | "border"
-  | "pill"
-  | "ghost"
-  | "selected"
-  | "danger";
+export type Variant = "solid" | "border" | "pill" | "ghost" | "selected" | "danger";
 
 const props = defineProps({
   disabled: { type: Boolean, default: false },
@@ -20,9 +14,7 @@ const disabled = computed(() => props.disabled);
 
 const baseClasses =
   "inline-flex items-center h-6 justify-center px-1 py-0.5 rounded-md text-slate-100 border-yellow-600 select-none whitespace-nowrap transition-all duration-0 hover:duration-300 cursor-pointer disabled:bg-neutral-700 disabled:border-neutral-600 disabled:cursor-not-allowed" +
-  (props.variant === "selected"
-    ? " disabled:text-neutral-200"
-    : " disabled:text-neutral-500");
+  (props.variant === "selected" ? " disabled:text-neutral-200" : " disabled:text-neutral-500");
 
 const hoverClasses = "hover:bg-yellow-600 hover:text-slate-900";
 
@@ -40,10 +32,7 @@ const variantClasses = computed(() => {
       return "border shadow-lg bg-yellow-700 " + hoverClasses;
     case "solid":
     default:
-      return (
-        "border border-yellow-900 bg-yellow-900 shadow-lg text-slate-100 " +
-        hoverClasses
-      );
+      return "border border-yellow-900 bg-yellow-900 shadow-lg text-slate-100 " + hoverClasses;
   }
 });
 
@@ -56,24 +45,12 @@ function onClick(ev: MouseEvent) {
 </script>
 
 <template>
-  <UiTooltip
-    v-if="props.tooltip"
-    :text="props.tooltip"
-  >
-    <button
-      :disabled="disabled"
-      :class="[baseClasses, variantClasses]"
-      @click.stop="onClick"
-    >
+  <UiTooltip v-if="props.tooltip" :text="props.tooltip">
+    <button :disabled="disabled" :class="[baseClasses, variantClasses]" @click.stop="onClick">
       <slot />
     </button>
   </UiTooltip>
-  <button
-    v-else
-    :disabled="disabled"
-    :class="[baseClasses, variantClasses]"
-    @click="onClick"
-  >
+  <button v-else :disabled="disabled" :class="[baseClasses, variantClasses]" @click="onClick">
     <slot />
   </button>
 </template>

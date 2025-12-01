@@ -41,11 +41,7 @@ export class StratLevel {
         // It's Land
         if (type === "continentType") {
           // All continents already generated?
-          if (
-            Object.values(this.gen.continents).length >=
-            this.gen.size.continents
-          )
-            continue;
+          if (Object.values(this.gen.continents).length >= this.gen.size.continents) continue;
 
           const continent = takeRandom(continents);
 
@@ -62,15 +58,10 @@ export class StratLevel {
               reg: [] as GenTile[],
               game: [] as GenTile[],
             },
-          } as any as ContinentData;
+          } as ContinentData;
 
           // Add a 3x3 grid of land tiles around the continent center
-          const neighborCoords = getNeighborCoords(
-            this.gen.stratSize,
-            { x, y },
-            "chebyshev",
-            1,
-          );
+          const neighborCoords = getNeighborCoords(this.gen.stratSize, { x, y }, "chebyshev", 1);
           for (const coords of [{ x, y }, ...neighborCoords]) {
             const gridKey = Tile.getKey(coords.x, coords.y);
 
@@ -116,18 +107,13 @@ export class StratLevel {
               this.gen.size.majorsPerContinent &&
             (startCoords.length > 0 || backupStartCoords.length > 0)
           ) {
-            const coords = takeRandom(
-              startCoords.length > 0 ? startCoords : backupStartCoords,
-            );
+            const coords = takeRandom(startCoords.length > 0 ? startCoords : backupStartCoords);
 
-            const startTile =
-              this.gen.stratTiles[Tile.getKey(coords.x, coords.y)];
+            const startTile = this.gen.stratTiles[Tile.getKey(coords.x, coords.y)];
             if (!startTile?.canBeStart()) continue;
 
             startTile.isStart = "major";
-            this.gen.continents[continent.key].majorStarts.strat.push(
-              startTile,
-            );
+            this.gen.continents[continent.key].majorStarts.strat.push(startTile);
           }
 
           continue;
@@ -140,10 +126,7 @@ export class StratLevel {
 
         // Get the ocean type
         const ocean = this.gen.oceans.find((o) => o.key === type);
-        if (!ocean)
-          throw new Error(
-            `[terraGenerator] Invalid ocean in x/y types: ${type}`,
-          );
+        if (!ocean) throw new Error(`[terraGenerator] Invalid ocean in x/y types: ${type}`);
 
         const climate = this.gen.getClimateFromStratY(y);
 
@@ -235,11 +218,7 @@ export class StratLevel {
       const preferredOcean =
         neighbors.find((n) => n.terrain === this.gen.seaTerrain) ||
         neighbors.find((n) =>
-          [
-            "oceanType:atlantic",
-            "oceanType:indian",
-            "oceanType:pacific",
-          ].includes(n.area.id),
+          ["oceanType:atlantic", "oceanType:indian", "oceanType:pacific"].includes(n.area.id),
         ) ||
         rand;
 
@@ -299,14 +278,8 @@ export class StratLevel {
           // Check if it can become a Lake
           if (!tile.canBeWater()) continue;
 
-          const neighbors = this.gen.getStratNeighbors(
-            { x, y },
-            "manhattan",
-            2,
-          );
-          const allAreSameDomain = neighbors.every(
-            (n) => n.domain === tile.domain,
-          );
+          const neighbors = this.gen.getStratNeighbors({ x, y }, "manhattan", 2);
+          const allAreSameDomain = neighbors.every((n) => n.domain === tile.domain);
 
           // Lakes can grow next to each other
           if (allAreSameDomain) potentialLakes.push(tile);
@@ -314,14 +287,8 @@ export class StratLevel {
           // Check if Water can become an Island
           if (!tile.canBeLand()) continue;
 
-          const neighbors = this.gen.getStratNeighbors(
-            { x, y },
-            "chebyshev",
-            2,
-          );
-          const allAreSameDomain = neighbors.every(
-            (n) => n.domain === tile.domain,
-          );
+          const neighbors = this.gen.getStratNeighbors({ x, y }, "chebyshev", 2);
+          const allAreSameDomain = neighbors.every((n) => n.domain === tile.domain);
 
           // 50% chance to become an ocean island (and prevent another island near-by)
           if (allAreSameDomain && Math.random() < 0.5) {

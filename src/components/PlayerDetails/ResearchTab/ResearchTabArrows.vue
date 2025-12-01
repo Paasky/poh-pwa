@@ -16,9 +16,7 @@ const props = defineProps<{
 }>();
 
 // Internalized styling and geometry that aren't used by parent
-const cornerSizeRem = computed(
-  () => Math.min(props.xSize, props.ySize) * (2 / props.ySize),
-);
+const cornerSizeRem = computed(() => Math.min(props.xSize, props.ySize) * (2 / props.ySize));
 const strokeOpacity = 1;
 const strokeWidth = 0.15;
 
@@ -90,10 +88,7 @@ const connections = computed(() => {
         orient="auto"
         markerUnits="strokeWidth"
       >
-        <path
-          d="M0,0 L6,3 L0,6 Z"
-          :fill="strokeColorRgb"
-        />
+        <path d="M0,0 L6,3 L0,6 Z" :fill="strokeColorRgb" />
       </marker>
     </defs>
     <g
@@ -104,12 +99,7 @@ const connections = computed(() => {
       stroke-linecap="round"
       stroke-linejoin="round"
     >
-      <path
-        v-for="(d, i) in connections"
-        :key="i"
-        :d="d"
-        marker-end="url(#tech-arrowhead)"
-      />
+      <path v-for="(d, i) in connections" :key="i" :d="d" marker-end="url(#tech-arrowhead)" />
     </g>
   </svg>
 </template>

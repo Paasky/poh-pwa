@@ -29,9 +29,7 @@ const containerHeightRem = computed(() => (maxY + 1.6) * ySize);
 
 function eraY(era: TypeObject): number {
   // Find all techs in this era and return the lowest y among them
-  const ys = techs
-    .filter((t) => t.category === (era.key as CatKey))
-    .map((t) => t.y ?? 0);
+  const ys = techs.filter((t) => t.category === (era.key as CatKey)).map((t) => t.y ?? 0);
 
   return ys.length ? Math.min(...ys) : 0;
 }
@@ -61,10 +59,7 @@ function eraY(era: TypeObject): number {
       class="absolute"
       :class="i > 0 ? 'border-t border-yellow-800/75' : ''"
       :style="{
-        top:
-          i > 0
-            ? `${(eraY(era) - 1.125) * ySize}rem`
-            : `${(eraY(era) - 1) * ySize}rem`,
+        top: i > 0 ? `${(eraY(era) - 1.125) * ySize}rem` : `${(eraY(era) - 1) * ySize}rem`,
         left: '-1rem',
         width: `${containerWidthRem + 2.8}rem`,
       }"
@@ -78,8 +73,7 @@ function eraY(era: TypeObject): number {
       class="absolute border-4 select-none"
       :class="{
         'cursor-pointer':
-          !research.researched.value.includes(tech) &&
-          research.current.value !== tech,
+          !research.researched.value.includes(tech) && research.current.value !== tech,
       }"
       :bg-color="
         research.current.value === tech
@@ -100,30 +94,23 @@ function eraY(era: TypeObject): number {
       :disabled="research.researched.value.includes(tech)"
       @click="
         () => {
-          research.researched.value.includes(tech)
-            ? null
-            : research.addToQueue(tech); // todo: shift-click adds to queue
+          research.researched.value.includes(tech) ? null : research.addToQueue(tech); // todo: shift-click adds to queue
         }
       "
     >
       <div class="border-b border-white/20 pb-1 mb-2">
-        <UiObjPill
-          :obj-or-key="tech"
-          :hide-icon="true"
-        />
-        <span
-          v-if="research.queue.value.includes(tech)"
-          class="font-bold text-yellow-400"
-        >({{ research.queue.value.indexOf(tech) + 1 }})</span>
+        <UiObjPill :obj-or-key="tech" :hide-icon="true" />
+        <span v-if="research.queue.value.includes(tech)" class="font-bold text-yellow-400"
+          >({{ research.queue.value.indexOf(tech) + 1 }})</span
+        >
         <span class="float-right">
-          <UiButton
-            v-if="research.current.value?.key === tech.key"
-            @click="research.complete(tech)"
-          >Complete</UiButton>
+          <UiButton v-if="research.current.value?.key === tech.key" @click="research.complete(tech)"
+            >Complete</UiButton
+          >
           <UiIcon :icon="tech.icon" />
-          <span
-            v-if="research.current.value === tech || research.getProgress(tech)"
-          >{{ research.getProgress(tech) }}/</span>{{ tech.scienceCost }}
+          <span v-if="research.current.value === tech || research.getProgress(tech)"
+            >{{ research.getProgress(tech) }}/</span
+          >{{ tech.scienceCost }}
         </span>
       </div>
       <div
@@ -131,9 +118,7 @@ function eraY(era: TypeObject): number {
         :style="{ height: `${ySize}rem` }"
       >
         <UiObjPillList
-          :obj-keys="
-            tech.allows.filter((t) => !t.startsWith('technologyType:'))
-          "
+          :obj-keys="tech.allows.filter((t) => !t.startsWith('technologyType:'))"
           :no-margin="true"
           :short-name="tech.allows.length > 6"
         />

@@ -15,9 +15,7 @@ import { Culture } from "@/objects/game/Culture";
 const events = useEventStore();
 const objects = useObjectsStore();
 
-const player = computed(
-  (): Player | undefined => events.current?.player as Player | undefined,
-);
+const player = computed((): Player | undefined => events.current?.player as Player | undefined);
 
 const target = computed(
   (): GameObject | PohObject | undefined =>
@@ -32,9 +30,7 @@ const targetType = computed((): TypeObject | undefined => {
 });
 
 const isMe = computed(() => player.value?.key === objects.currentPlayer.key);
-const culture = computed(
-  (): Culture | undefined => player.value?.culture.value,
-);
+const culture = computed((): Culture | undefined => player.value?.culture.value);
 
 // Track a single audio instance so we can stop it on navigation/close
 const audioRef = ref<HTMLAudioElement | null>(null);
@@ -109,44 +105,26 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <UiModal
-    v-if="events.current"
-    :open="true"
-    size="md"
-    @close="onClose()"
-  >
+  <UiModal v-if="events.current" :open="true" size="md" @close="onClose()">
     <div class="px-4 pb-4 items-center flex flex-col">
       <h2
         class="text-2xl select-none text-yellow-800 text-center mt-2 mb-4"
         :class="targetType ? 'hover:text-yellow-600 cursor-pointer' : ''"
         @click="targetType ? useEncyclopediaStore().open(targetType.key) : null"
       >
-        {{
-          (isMe ? "You have " : player ? `${player.name} has ` : "") +
-            events.current.title
-        }}
+        {{ (isMe ? "You have " : player ? `${player.name} has ` : "") + events.current.title }}
       </h2>
-      <div
-        v-if="targetType"
-        class="grid gap-4 w-[32rem]"
-      >
+      <div v-if="targetType" class="grid gap-4 w-[32rem]">
         <div class="flex gap-4 justify-center items-start">
           <img
             v-if="targetType.image"
             :src="targetType.image"
             alt="Target image"
             class="rounded-xl w-[32rem] h-[32rem] float-left"
-          >
+          />
 
-          <div
-            v-if="player && !isMe"
-            class="max-w-32 bg-gray-100/10 p-2 rounded-xl"
-          >
-            <img
-              :src="player.leader.value.image"
-              alt="Leader image"
-              class="rounded-xl"
-            >
+          <div v-if="player && !isMe" class="max-w-32 bg-gray-100/10 p-2 rounded-xl">
+            <img :src="player.leader.value.image" alt="Leader image" class="rounded-xl" />
             <h3
               class="text-xl select-none text-yellow-800 hover:text-yellow-600 cursor-pointer text-center"
               @click="useEncyclopediaStore().open(player.leader.value.key)"
@@ -156,38 +134,20 @@ onUnmounted(() => {
           </div>
         </div>
 
-        <div
-          v-if="targetType.quote"
-          class="bg-gray-100/10 rounded-xl p-4"
-        >
-          <div
-            v-if="targetType.quote.greeting"
-            class="italic mb-2"
-          >
+        <div v-if="targetType.quote" class="bg-gray-100/10 rounded-xl p-4">
+          <div v-if="targetType.quote.greeting" class="italic mb-2">
             {{ targetType.quote.greeting }}
           </div>
-          <div
-            v-if="targetType.quote.text"
-            class="italic mb-2"
-          >
+          <div v-if="targetType.quote.text" class="italic mb-2">
             {{ targetType.quote.text }}
           </div>
-          <div
-            v-if="targetType.intro"
-            class="italic mb-2"
-          >
+          <div v-if="targetType.intro" class="italic mb-2">
             {{ targetType.intro }}
           </div>
-          <div
-            v-if="targetType.p1"
-            class="italic mb-2"
-          >
+          <div v-if="targetType.p1" class="italic mb-2">
             {{ targetType.p1 }}
           </div>
-          <div
-            v-if="targetType.p2"
-            class="italic mb-2"
-          >
+          <div v-if="targetType.p2" class="italic mb-2">
             {{ targetType.p2 }}
           </div>
           <div
@@ -196,21 +156,13 @@ onUnmounted(() => {
             title="Play quote"
             @click="targetType.quote.url ? playQuote() : null"
           >
-            <span v-if="targetType.quote.source">{{
-              targetType.quote.source
-            }}</span>
-            <UiIcon
-              v-if="targetType.quote.url"
-              :icon="icons.play"
-            />
+            <span v-if="targetType.quote.source">{{ targetType.quote.source }}</span>
+            <UiIcon v-if="targetType.quote.url" :icon="icons.play" />
           </div>
         </div>
       </div>
     </div>
-    <div
-      v-if="events.current.description"
-      class="mt-4"
-    >
+    <div v-if="events.current.description" class="mt-4">
       {{ events.current.description }}
     </div>
   </UiModal>

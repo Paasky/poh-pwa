@@ -18,10 +18,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div
-    ref="containerEl"
-    v-bind="attrs"
-  />
+  <div ref="containerEl" v-bind="attrs" />
 </template>
 
 <style scoped></style>

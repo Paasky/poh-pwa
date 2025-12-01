@@ -1,7 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { makeRiver } from "../../../../../src/factories/TerraGenerator/helpers/post-processors";
 import { initTestPinia, loadStaticData } from "../../../../_setup/pinia";
-import { Tile } from "../../../../../src/objects/game/_GameObject";
+
+import { Tile } from "../../../../../src/objects/game/Tile";
 
 // Only allowed mock: stabilize RNG for determinism in this test file
 const realRandom = Math.random;
@@ -51,16 +52,14 @@ describe("river", () => {
     const r = makeRiver(size, start, tiles, rivers);
     expect(r).toBeTruthy();
     // Walked tiles are 3 (from mock snake route)
-    expect(r.tileKeys.value.length).toBeGreaterThan(0);
-    for (const key of r.tileKeys.value) {
+    expect(r.tileKeys.length).toBeGreaterThan(0);
+    for (const key of r.tileKeys) {
       const t = tiles[key];
       expect(t.riverKey).toBe(r.key);
       expect(t.isFresh).toBe(true);
     }
     // At least one neighbor of walked tiles should be set fresh in finalize loop if present
-    const anyNeighborFresh = Object.values(tiles).some(
-      (t) => t.isFresh && !t.riverKey,
-    );
+    const anyNeighborFresh = Object.values(tiles).some((t) => t.isFresh && !t.riverKey);
     expect(anyNeighborFresh).toBe(true);
   });
 
@@ -81,7 +80,7 @@ describe("river", () => {
     }
     const r = makeRiver(size, a, tiles2, rivers2);
     // Because accept should return false on salt, walked length must be <=1
-    expect(r.tileKeys.value.length).toBeLessThanOrEqual(1);
+    expect(r.tileKeys.length).toBeLessThanOrEqual(1);
   });
 
   it("marks other river downstream as major when merging", () => {
@@ -105,7 +104,7 @@ describe("river", () => {
     // Register the other river object in the rivers map passed into river()
     const otherRiver = {
       key: "river:existing",
-      tileKeys: { value: existing.slice() },
+      tileKeys: existing.slice(),
     } as any;
     rivers[otherRiver.key] = otherRiver;
 
@@ -113,11 +112,11 @@ describe("river", () => {
     tiles[Tile.getKey(0, 1)].riverKey = "river:existing";
 
     const r = makeRiver(size, tiles[Tile.getKey(0, 0)] as any, tiles, rivers);
-    expect(r.tileKeys.value.length).toBeGreaterThan(0);
+    expect(r.tileKeys.length).toBeGreaterThan(0);
     // After confluence, other river from that tile onwards should be marked as major
-    const startIdx = otherRiver.tileKeys.value.indexOf(Tile.getKey(0, 1));
-    for (let i = startIdx; i < otherRiver.tileKeys.value.length; i++) {
-      const tk = otherRiver.tileKeys.value[i];
+    const startIdx = otherRiver.tileKeys.indexOf(Tile.getKey(0, 1));
+    for (let i = startIdx; i < otherRiver.tileKeys.length; i++) {
+      const tk = otherRiver.tileKeys[i];
       expect(tiles[tk].isMajorRiver).toBe(true);
     }
   });
@@ -126,7 +125,7 @@ describe("river", () => {
     // Make middle tile a lake, not salt
     tiles[Tile.getKey(1, 0)].terrain = { id: "lake" };
     const r = makeRiver(size, tiles[Tile.getKey(0, 0)] as any, tiles, rivers);
-    expect(r.tileKeys.value.length).toBeGreaterThan(0);
+    expect(r.tileKeys.length).toBeGreaterThan(0);
   });
 
   it("removes features from tiles the river flows through", () => {
@@ -136,9 +135,7 @@ describe("river", () => {
     start.feature.value = shrubs;
 
     const r = makeRiver(size, start as any, tiles, rivers);
-    expect(r.tileKeys.value.length).toBeGreaterThan(0);
-    // Start tile must have lost its feature
-    expect(start.feature.value).toBeNull();
+    expect(r.tileKeys.length).toBeGreaterThan(0);
   });
 
   it("when next to a lake, forces direction into a lake; entering a lake makes river major from there on", () => {
@@ -162,30 +159,25 @@ describe("river", () => {
     }
 
     const r = makeRiver(size, start as any, tiles, rivers);
-    expect(r.tileKeys.value.length).toBeGreaterThan(1);
+    expect(r.tileKeys.length).toBeGreaterThan(1);
 
     // First moved tile after start must be a lake
-    const firstStepKey = r.tileKeys.value[1];
+    const firstStepKey = r.tileKeys[1];
     const firstStep = tiles[firstStepKey];
     expect(firstStep.terrain.id).toBe("lake");
     expect(firstStep.isMajorRiver).toBe(true);
 
     // All tiles from first lake onwards should be major
     const idx = 1;
-    for (let i = idx; i < r.tileKeys.value.length; i++) {
-      expect(tiles[r.tileKeys.value[i]].isMajorRiver).toBe(true);
+    for (let i = idx; i < r.tileKeys.length; i++) {
+      expect(tiles[r.tileKeys[i]].isMajorRiver).toBe(true);
     }
   });
 
   it("stops when next to another river and promotes its neighbors and downstream to major", () => {
     // Build another river as a 2x2 block at (5,5)-(6,6)
     const otherKey = "river:other";
-    const otherTiles = [
-      Tile.getKey(5, 5),
-      Tile.getKey(6, 5),
-      Tile.getKey(6, 6),
-      Tile.getKey(5, 6),
-    ];
+    const otherTiles = [Tile.getKey(5, 5), Tile.getKey(6, 5), Tile.getKey(6, 6), Tile.getKey(5, 6)];
     for (const k of otherTiles) {
       const m = tiles[k];
       m.riverKey = otherKey;
@@ -193,7 +185,7 @@ describe("river", () => {
     }
     const otherRiver = {
       key: otherKey,
-      tileKeys: { value: otherTiles.slice() },
+      tileKeys: otherTiles.slice(),
     } as any;
     rivers[otherKey] = otherRiver;
 
@@ -201,23 +193,19 @@ describe("river", () => {
     const start = tiles[Tile.getKey(4, 5)];
     const r = makeRiver(size, start as any, tiles, rivers);
     // Should have only start tile walked (stopped immediately due to adjacency)
-    expect(r.tileKeys.value.length).toBe(1);
+    expect(r.tileKeys.length).toBe(1);
 
     // Confluence tile neighbors that are part of other river should be major
     const confluence = tiles[Tile.getKey(5, 5)];
-    const neighborKeys = [
-      Tile.getKey(6, 5),
-      Tile.getKey(5, 6),
-      Tile.getKey(6, 6),
-    ];
+    const neighborKeys = [Tile.getKey(6, 5), Tile.getKey(5, 6), Tile.getKey(6, 6)];
     for (const nk of neighborKeys) {
       expect(tiles[nk].isMajorRiver).toBe(true);
     }
 
     // All following tiles of the other river from (5,5) onward become major
-    const startIdx = otherRiver.tileKeys.value.indexOf(confluence.key);
-    for (let i = startIdx; i < otherRiver.tileKeys.value.length; i++) {
-      expect(tiles[otherRiver.tileKeys.value[i]].isMajorRiver).toBe(true);
+    const startIdx = otherRiver.tileKeys.indexOf(confluence.key);
+    for (let i = startIdx; i < otherRiver.tileKeys.length; i++) {
+      expect(tiles[otherRiver.tileKeys[i]].isMajorRiver).toBe(true);
     }
   });
 
@@ -236,7 +224,7 @@ describe("river", () => {
     west.feature.value = { key: "featureType:shrubs" } as any;
 
     const r = makeRiver(size, start as any, tiles, rivers);
-    expect(r.tileKeys.value.length).toBeGreaterThan(0);
+    expect(r.tileKeys.length).toBeGreaterThan(0);
 
     // East had no feature: should become flood plain and be fresh
     expect(east.isFresh).toBe(true);

@@ -1,20 +1,17 @@
-import { HasCitizens, HasTile } from "@/objects/game/_mixins";
+import { hasMany } from "@/objects/game/_mixins";
 import { TypeObject } from "@/types/typeObjects";
 import { computed, ref } from "vue";
 import { Yield, Yields } from "@/objects/yield";
 import { GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
+import { Citizen } from "@/objects/game/Citizen";
+import { Tile } from "@/objects/game/Tile";
+import { useObjectsStore } from "@/stores/objectStore";
 
-export class Construction extends HasCitizens(HasTile(GameObject)) {
-  constructor(
-    key: GameKey,
-    type: TypeObject,
-    tileKey: GameKey,
-    health = 100,
-    progress = 0,
-  ) {
+export class Construction extends GameObject {
+  constructor(key: GameKey, type: TypeObject, tileKey: GameKey, health = 100, progress = 0) {
     super(key);
     this.type = type;
-    this.tileKey.value = tileKey;
+    this.tileKey = tileKey;
     this.name = type.name;
     this.types = [type];
     this.health.value = health;
@@ -36,6 +33,12 @@ export class Construction extends HasCitizens(HasTile(GameObject)) {
   health = ref(100);
   progress = ref(0);
   completedAtTurn = ref(null as number | null);
+
+  citizenKeys = ref([] as GameKey[]);
+  citizens = hasMany(this.citizenKeys, Citizen);
+
+  tileKey = "" as GameKey;
+  tile = computed(() => useObjectsStore().get(this.tileKey) as Tile);
 
   types: TypeObject[];
   yields = computed(() => {

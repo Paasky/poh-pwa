@@ -3,11 +3,7 @@ import { useObjectsStore } from "@/stores/objectStore";
 import { GenTile } from "@/factories/TerraGenerator/gen-tile";
 import { Tetris } from "@/factories/TerraGenerator/helpers/tetris";
 import { generateKey } from "@/objects/game/_GameObject";
-import {
-  Coords,
-  getNeighborCoords,
-  getTile,
-} from "@/factories/TerraGenerator/helpers/neighbors";
+import { Coords, getNeighborCoords, getTile } from "@/factories/TerraGenerator/helpers/neighbors";
 import { TerraGenerator } from "@/factories/TerraGenerator/terra-generator";
 import { AcceptResult, Snake } from "@/factories/TerraGenerator/helpers/snake";
 import { River } from "@/objects/game/River";
@@ -18,9 +14,7 @@ export const removeOrphanArea = (tile: GenTile, neighbors: GenTile[]): void => {
   // If any neighbor has the same area, or all are a different domain (I'm a lake/island)
   // -> skip
   const hasSameArea = neighbors.some((n) => n.area.key === tile.area.key);
-  const allDiffDomain = neighbors.every(
-    (n) => n.domain.key !== tile.domain.key,
-  );
+  const allDiffDomain = neighbors.every((n) => n.domain.key !== tile.domain.key);
   if (hasSameArea || allDiffDomain) return;
 
   const ref = getRandom(neighbors);
@@ -40,9 +34,7 @@ export const removeOrphanTerrain = (
 ): void => {
   if (neighbors.length === 0) return;
 
-  const allDiffTerrain = neighbors.every(
-    (n) => n.terrain.key !== tile.terrain.key,
-  );
+  const allDiffTerrain = neighbors.every((n) => n.terrain.key !== tile.terrain.key);
   if (!allDiffTerrain) return;
 
   const ref = getRandom(neighbors);
@@ -52,10 +44,8 @@ export const removeOrphanTerrain = (
     if (ignoreLakes) {
       const isLakeHere = tile.terrain.id === "lake";
       const isLakeThere = ref.terrain.id === "lake";
-      const becomesLandFromLake =
-        isLakeHere && ref.domain.key === "domainType:land";
-      const becomesLakeFromLand =
-        isLakeThere && tile.domain.key === "domainType:land";
+      const becomesLandFromLake = isLakeHere && ref.domain.key === "domainType:land";
+      const becomesLakeFromLand = isLakeThere && tile.domain.key === "domainType:land";
       if (becomesLandFromLake || becomesLakeFromLand) return;
     }
     tile.area = ref.area;
@@ -102,9 +92,7 @@ export const mountainRange = (
   size: { x: number; y: number },
 ): GenTile[] => {
   const mountain = useObjectsStore().getTypeObject("elevationType:mountain");
-  const snowMountain = useObjectsStore().getTypeObject(
-    "elevationType:snowMountain",
-  );
+  const snowMountain = useObjectsStore().getTypeObject("elevationType:snowMountain");
 
   let waterCount = 0;
   return new Snake(size, tiles, (tile) => {
@@ -115,9 +103,7 @@ export const mountainRange = (
     }
 
     tile.elevation =
-      tile.elevation === mountain ||
-      tile.elevation === snowMountain ||
-      Math.random() > 0.9
+      tile.elevation === mountain || tile.elevation === snowMountain || Math.random() > 0.9
         ? snowMountain
         : mountain;
 
@@ -227,9 +213,7 @@ export const makeRiver = (
       river.tileKeys.push(tile.key);
       if (majorMode) tile.isMajorRiver = true;
 
-      const neighbors = getNeighborCoords(size, tile).map(
-        (c) => getTile(size, c, tiles)!,
-      );
+      const neighbors = getNeighborCoords(size, tile).map((c) => getTile(size, c, tiles)!);
 
       // First pass: update neighbors
       for (const neighbor of neighbors) {
@@ -268,10 +252,7 @@ export const makeRiver = (
     },
     (tile): AcceptResult => {
       // Block mountain tiles
-      if (
-        tile.elevation.id === "mountain" ||
-        tile.elevation.id === "snowMountain"
-      ) {
+      if (tile.elevation.id === "mountain" || tile.elevation.id === "snowMountain") {
         return "blocked";
       }
 

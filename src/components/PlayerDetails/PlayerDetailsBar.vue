@@ -41,9 +41,7 @@ const tabs = tabsConfig.map((tabConfig) => {
   };
 
   if (tabConfig.name === "Economy") {
-    data.text = computed(
-      (): string => player.storage.amount("yieldType:gold") + "",
-    );
+    data.text = computed((): string => player.storage.amount("yieldType:gold") + "");
 
     return data as TabData;
   }
@@ -52,9 +50,7 @@ const tabs = tabsConfig.map((tabConfig) => {
     data.isHidden = computed(() => culture.status.value !== "settled");
     data.text = computed((): string =>
       player.research.current.value
-        ? player.research.getProgress(
-            player.research.current.value as TypeObject,
-          ) +
+        ? player.research.getProgress(player.research.current.value as TypeObject) +
           "/" +
           player.research.current.value?.scienceCost +
           ` (${player.research.turnsLeft.value})`
@@ -107,11 +103,7 @@ const tabs = tabsConfig.map((tabConfig) => {
   if (tabConfig.name === "Religion") {
     data.text = computed((): string => {
       if (religion?.canEvolve.value) return "Evolve";
-      if (
-        religion?.selectableMyths ||
-        religion?.selectableGods ||
-        religion?.selectableDogmas
-      )
+      if (religion?.selectableMyths || religion?.selectableGods || religion?.selectableDogmas)
         return "Select";
 
       return player.storage.amount("yieldType:faith") + "";
@@ -130,12 +122,9 @@ const tabs = tabsConfig.map((tabConfig) => {
   }
 
   if (tabConfig.name === "Diplomacy") {
-    data.text = computed(
-      (): string => player.storage.amount("yieldType:influence") + "",
-    );
+    data.text = computed((): string => player.storage.amount("yieldType:influence") + "");
     data.tooltip = computed(
-      (): string =>
-        `Diplomacy: ${player.storage.amount("yieldType:influence")} influence`,
+      (): string => `Diplomacy: ${player.storage.amount("yieldType:influence")} influence`,
     );
 
     return data as TabData;
@@ -143,17 +132,13 @@ const tabs = tabsConfig.map((tabConfig) => {
 
   if (tabConfig.name === "Cities") {
     data.text = computed((): string => player.cities.value.length + "");
-    data.tooltip = computed(
-      (): string => `Cities: ${player.cities.value.length}`,
-    );
+    data.tooltip = computed((): string => `Cities: ${player.cities.value.length}`);
 
     return data as TabData;
   }
 
   if (tabConfig.name === "Military") {
-    data.text = computed(
-      (): string => player.storage.amount("yieldType:designPoints") + "",
-    );
+    data.text = computed((): string => player.storage.amount("yieldType:designPoints") + "");
     data.tooltip = computed((): string => {
       const points = player.storage.amount("yieldType:designPoints");
       if (points < 2) {
@@ -169,8 +154,7 @@ const tabs = tabsConfig.map((tabConfig) => {
   if (tabConfig.name === "Trade") {
     data.text = computed((): string => player.tradeRouteKeys.value.length + "");
     data.tooltip = computed(
-      (): string =>
-        `Trade: ${player.tradeRouteKeys.value.length} active Trade Routes`,
+      (): string => `Trade: ${player.tradeRouteKeys.value.length} active Trade Routes`,
     );
 
     return data as TabData;
@@ -187,15 +171,9 @@ const tabs = tabsConfig.map((tabConfig) => {
 </script>
 
 <template>
-  <UiElement
-    position="top-left"
-    class="z-50 text-base"
-  >
+  <UiElement position="top-left" class="z-50 text-base">
     <div class="flex items-center gap-1 pb-0.5 pr-1">
-      <template
-        v-for="tab of tabs"
-        :key="tab.type.key"
-      >
+      <template v-for="tab of tabs" :key="tab.type.key">
         <UiButton
           v-if="!tab.reqSettled || culture.status.value === 'settled'"
           :key="tab.type.key"
@@ -203,10 +181,7 @@ const tabs = tabsConfig.map((tabConfig) => {
           :tooltip="tab.tooltip?.value"
           @click="modal.open(tab.name)"
         >
-          <UiIcon
-            :icon="tab.type.icon"
-            class="pr-1"
-          />
+          <UiIcon :icon="tab.type.icon" class="pr-1" />
           <UiValue :value="tab.text.value" />
         </UiButton>
       </template>

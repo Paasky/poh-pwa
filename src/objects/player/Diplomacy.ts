@@ -1,9 +1,13 @@
-import { HasPlayer } from "@/objects/game/_mixins";
+import { computed } from "vue";
 import { GameKey } from "@/objects/game/_GameObject";
+import { useObjectsStore } from "@/stores/objectStore";
+import { Player } from "@/objects/game/Player";
 
-export class Diplomacy extends HasPlayer(Object) {
+export class Diplomacy {
   constructor(playerKey: GameKey) {
-    super();
-    this.playerKey.value = playerKey;
+    this.playerKey = playerKey;
   }
+
+  playerKey: GameKey;
+  player = computed(() => useObjectsStore().get(this.playerKey) as Player);
 }

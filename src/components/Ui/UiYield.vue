@@ -25,17 +25,12 @@ const noLumpPlusTypes = ["yieldType:productionCost", "yieldType:scienceCost"];
 
 const amount = computed(() => {
   if (props.data.method === "set") return "Set to " + props.data.amount;
-  const output =
-    props.data.method === "percent"
-      ? props.data.amount + "%"
-      : props.data.amount;
+  const output = props.data.method === "percent" ? props.data.amount + "%" : props.data.amount;
 
-  if (props.data.method === "set") return output;
   if (props.data.amount <= 0) return output;
   if (noPlusTypes.includes(props.data.type)) return output;
   if (props.data.method === "lump" && props.noLumpPlus) return output;
-  if (props.data.method === "lump" && noLumpPlusTypes.includes(props.data.type))
-    return output;
+  if (props.data.method === "lump" && noLumpPlusTypes.includes(props.data.type)) return output;
 
   return "+" + output;
 });
@@ -44,8 +39,7 @@ const colorClass = computed<string>(() => {
   if (props.positive) return "text-green-400";
   if (props.negative) return "text-red-400";
 
-  if (props.data.method === "lump" && noEffectTypes.includes(props.data.type))
-    return "";
+  if (props.data.method === "lump" && noEffectTypes.includes(props.data.type)) return "";
   if (props.data.method === "set") return "text-green-400";
 
   if (flipEffectTypes.includes(props.data.type)) {
@@ -61,31 +55,19 @@ const colorClass = computed<string>(() => {
 
 <template>
   <span class="select-none">
-    <UiObjPill
-      :obj-or-key="data.type"
-      :hide-name="hideName"
-    >
-      <span
-        :class="colorClass"
-        class="mr-1"
-      >{{ amount }}</span>
+    <UiObjPill :obj-or-key="data.type" :hide-name="hideName">
+      <span :class="colorClass" class="mr-1">{{ amount }}</span>
     </UiObjPill>
     <template v-if="data.for.length">
       for
-      <template
-        v-for="(type, i) in data.for"
-        :key="JSON.stringify(type)"
-      >
+      <template v-for="(type, i) in data.for" :key="JSON.stringify(type)">
         <span v-if="i !== 0">, </span>
         <UiObjPill :obj-or-key="type" />
       </template>
     </template>
     <template v-if="data.vs.length">
       vs
-      <template
-        v-for="(type, i) in data.vs"
-        :key="JSON.stringify(type)"
-      >
+      <template v-for="(type, i) in data.vs" :key="JSON.stringify(type)">
         <span v-if="i !== 0">, </span>
         <UiObjPill :obj-or-key="type" />
       </template>

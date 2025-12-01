@@ -39,14 +39,7 @@ export class Requires {
 
     // At least one of the given objects must match each "require all"-keys
     for (const require of this._requireAll) {
-      if (
-        !types.some(
-          (t) =>
-            t.key === require ||
-            t.category === require ||
-            t.concept === require,
-        )
-      )
+      if (!types.some((t) => t.key === require || t.category === require || t.concept === require))
         return false;
     }
 

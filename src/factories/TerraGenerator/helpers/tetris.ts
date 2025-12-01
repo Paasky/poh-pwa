@@ -57,8 +57,7 @@ export class Tetris {
         return out;
       };
 
-      const base =
-        shapes3Center[Math.floor(Math.random() * shapes3Center.length)];
+      const base = shapes3Center[Math.floor(Math.random() * shapes3Center.length)];
       const rot = Math.floor(Math.random() * 4);
       return rotN(base, rot);
     }
@@ -88,8 +87,7 @@ export class Tetris {
       ],
     ];
 
-    const base =
-      shapes2TopLeft[Math.floor(Math.random() * shapes2TopLeft.length)];
+    const base = shapes2TopLeft[Math.floor(Math.random() * shapes2TopLeft.length)];
     const rotate = Math.random() < 0.5;
     const mirrorX = Math.random() < 0.5;
     const mirrorY = Math.random() < 0.5;

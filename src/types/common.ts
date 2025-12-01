@@ -1,12 +1,6 @@
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import getIcon from "@/types/icons";
-import {
-  CategoryClass,
-  CategoryObject,
-  TypeClass,
-  TypeObject,
-} from "@/types/typeObjects";
-import { useObjectsStore } from "@/stores/objectStore";
+import { CategoryClass, CategoryObject, TypeClass, TypeObject } from "@/types/typeObjects";
 import { GameClass, GameKey, GameObject } from "@/objects/game/_GameObject";
 
 export type ObjType = "TypeObject" | "CategoryObject" | "GameObject";
@@ -45,9 +39,7 @@ export function initPohObject(objType: ObjType, data: any): PohObject {
   };
 }
 
-export function isCategoryObject(
-  o: GameObject | PohObject,
-): o is CategoryObject {
+export function isCategoryObject(o: GameObject | PohObject): o is CategoryObject {
   return o.objType === "CategoryObject";
 }
 
@@ -97,14 +89,4 @@ export const yearsPerTurnConfig = [
 
 export function roundToTenth(v: number): number {
   return Math.round(v * 10) / 10;
-}
-
-export function upgradeTree(type: TypeObject, tree: TypeObject[]): void {
-  for (const key of type.upgradesFrom) {
-    const from = useObjectsStore().getTypeObject(key);
-    if (tree.includes(from)) continue;
-
-    tree.push(from);
-    upgradeTree(from, tree);
-  }
 }

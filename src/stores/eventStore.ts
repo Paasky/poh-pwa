@@ -8,8 +8,7 @@ export const useEventStore = defineStore("events", {
     eventSettings: {} as Record<EventType, EventSetting>,
   }),
   getters: {
-    unreadEvents: (state): GameEvent[] =>
-      (state.turnEvents as GameEvent[]).filter((e) => !e.read),
+    unreadEvents: (state): GameEvent[] => (state.turnEvents as GameEvent[]).filter((e) => !e.read),
   },
   actions: {
     open(event: GameEvent) {

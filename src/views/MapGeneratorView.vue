@@ -28,13 +28,8 @@ onMounted(async () => {
 <template>
   <div class="w-screen bg-gray-900 text-slate-100">
     <div class="w-full p-4 space-y-6">
-      <h1 class="text-3xl font-semibold">
-        Map Generator
-      </h1>
-      <div
-        v-if="!mapGenStore.gen"
-        class="text-center text-lg opacity-50 animate-pulse"
-      >
+      <h1 class="text-3xl font-semibold">Map Generator</h1>
+      <div v-if="!mapGenStore.gen" class="text-center text-lg opacity-50 animate-pulse">
         Loading...
       </div>
       <div v-else>
@@ -43,29 +38,21 @@ onMounted(async () => {
         <Filters />
 
         <!-- LEVEL TOGGLES -->
-        <div
-          class="mx-auto w-full max-w-full min-w-[72rem] mt-2 flex items-center gap-2"
-        >
+        <div class="mx-auto w-full max-w-full min-w-[72rem] mt-2 flex items-center gap-2">
           <UiButton
-            :variant="
-              mapGenStore.selectedLevel === 'strat' ? 'selected' : 'ghost'
-            "
+            :variant="mapGenStore.selectedLevel === 'strat' ? 'selected' : 'ghost'"
             @click="mapGenStore.selectedLevel = 'strat'"
           >
             Strategic
           </UiButton>
           <UiButton
-            :variant="
-              mapGenStore.selectedLevel === 'reg' ? 'selected' : 'ghost'
-            "
+            :variant="mapGenStore.selectedLevel === 'reg' ? 'selected' : 'ghost'"
             @click="mapGenStore.selectedLevel = 'reg'"
           >
             Region
           </UiButton>
           <UiButton
-            :variant="
-              mapGenStore.selectedLevel === 'game' ? 'selected' : 'ghost'
-            "
+            :variant="mapGenStore.selectedLevel === 'game' ? 'selected' : 'ghost'"
             @click="mapGenStore.selectedLevel = 'game'"
           >
             Game
@@ -73,22 +60,13 @@ onMounted(async () => {
         </div>
 
         <!-- STRATEGIC LEVEL -->
-        <LevelSection
-          v-if="mapGenStore.selectedLevel === 'strat'"
-          variant="strat"
-        />
+        <LevelSection v-if="mapGenStore.selectedLevel === 'strat'" variant="strat" />
 
         <!-- REGION LEVEL -->
-        <LevelSection
-          v-if="mapGenStore.selectedLevel === 'reg'"
-          variant="reg"
-        />
+        <LevelSection v-if="mapGenStore.selectedLevel === 'reg'" variant="reg" />
 
         <!-- GAME LEVEL -->
-        <LevelSection
-          v-if="mapGenStore.selectedLevel === 'game'"
-          variant="game"
-        />
+        <LevelSection v-if="mapGenStore.selectedLevel === 'game'" variant="game" />
       </div>
     </div>
   </div>

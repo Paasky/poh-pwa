@@ -49,12 +49,36 @@ export default [
   },
   {
     rules: {
+      // Prefer Prettier for formatting — disable formatting-style rules that clash
+      // Core formatting rules
+      indent: "off",
+      quotes: "off",
+      semi: "off",
+      "comma-dangle": "off",
+      "space-before-function-paren": "off",
+
+      // Vue formatting rules that often conflict with Prettier
+      "vue/html-indent": "off",
+      "vue/max-attributes-per-line": "off",
+      "vue/singleline-html-element-content-newline": "off",
+      "vue/multiline-html-element-content-newline": "off",
+      "vue/html-self-closing": "off",
+      "vue/first-attribute-linebreak": "off",
+      "vue/html-closing-bracket-newline": "off",
+      "vue/html-closing-bracket-spacing": "off",
+      "vue/attributes-order": "off",
+      "vue/attribute-hyphenation": "off",
+
+      // Pragmatic Vue defaults for this project
+      "vue/multi-word-component-names": "off",
+      "vue/no-v-html": "off",
+
+      // TS/JS hygiene
       "no-unused-vars": "off", // handled by TS
-      "@typescript-eslint/no-unused-vars": [
-        "warn",
-        { argsIgnorePattern: "^_" },
-      ],
+      "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
       "no-undef": "off",
+      "no-console": "warn",
+      "no-debugger": "warn",
     },
   },
 ];

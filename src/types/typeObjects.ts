@@ -100,6 +100,7 @@ export interface TypeObject extends PohObject {
   isPositive?: boolean;
   names?: Record<TypeKey, string>;
   inheritYieldTypes?: TypeKey[];
+  preferredClimates?: TypeKey[];
 
   allows: TypeKey[];
   requires: Requires;

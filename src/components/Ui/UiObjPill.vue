@@ -50,21 +50,9 @@ const displayName = computed(() => {
 </script>
 
 <template>
-  <UiButton
-    variant="pill"
-    :tooltip="tooltip"
-    @click="useEncyclopediaStore().open(obj.key)"
-  >
+  <UiButton variant="pill" :tooltip="tooltip" @click="useEncyclopediaStore().open(obj.key)">
     <slot />
-    <UiIcon
-      v-if="!hideIcon"
-      :icon="obj.icon"
-    />
-    <span
-      v-if="!hideName"
-      class="ml-1 truncate max-w-16 lg:max-w-none"
-    >{{
-      displayName
-    }}</span>
+    <UiIcon v-if="!hideIcon" :icon="obj.icon" />
+    <span v-if="!hideName" class="ml-1 truncate max-w-16 lg:max-w-none">{{ displayName }}</span>
   </UiButton>
 </template>

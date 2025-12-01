@@ -35,11 +35,7 @@ const tiles = computed(() => {
       features: store.toggles.showFeatures,
     }"
   >
-    <div
-      v-for="(row, y) of tiles"
-      :key="y"
-      class="map-gen-row"
-    >
+    <div v-for="(row, y) of tiles" :key="y" class="map-gen-row">
       <div
         v-for="(tile, x) of row"
         :key="x"
@@ -56,47 +52,26 @@ const tiles = computed(() => {
           ].filter(Boolean)
         "
       >
-        <div
-          class="area"
-          :class="[
-            tile.area.key.replace(':', '-'),
-            tile.area.key.substring(0, 1),
-          ]"
-        >
+        <div class="area" :class="[tile.area.key.replace(':', '-'), tile.area.key.substring(0, 1)]">
           {{
             tile.area.key.startsWith("continentType:")
               ? tile.area.key.split(":")[1].substring(0, 2).toUpperCase()
               : tile.area.key.split(":")[1].substring(0, 2)
           }}
         </div>
-        <div
-          v-if="tile.elevation.id !== 'flat'"
-          class="e-i"
-        >
+        <div v-if="tile.elevation.id !== 'flat'" class="e-i">
           <UiIcon :icon="tile.elevation.icon" />
         </div>
-        <div
-          v-if="tile.feature.value"
-          class="f-i"
-        >
+        <div v-if="tile.feature.value" class="f-i">
           <UiIcon :icon="tile.feature.value.icon" />
         </div>
-        <div
-          v-if="tile.isFresh || tile.isSalt"
-          class="fr-sa"
-        >
+        <div v-if="tile.isFresh || tile.isSalt" class="fr-sa">
           {{ tile.isFresh ? "F" : "s" }}
         </div>
-        <div
-          v-if="tile.isStart"
-          class="start"
-        >
+        <div v-if="tile.isStart" class="start">
           {{ tile.isStart === "major" ? "x" : "o" }}
         </div>
-        <div
-          v-if="tile.riverKey"
-          class="river"
-        >
+        <div v-if="tile.riverKey" class="river">
           {{ tile.isMajorRiver ? "R" : "r" }}
         </div>
       </div>

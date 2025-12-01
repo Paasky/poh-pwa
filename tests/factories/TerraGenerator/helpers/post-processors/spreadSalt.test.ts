@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { spreadSalt } from "../../../../../src/factories/TerraGenerator/helpers/post-processors";
-import { Tile } from "../../../../../src/objects/game/_GameObject";
 import { initTestPinia, loadStaticData } from "../../../../_setup/pinia";
+
+import { Tile } from "../../../../../src/objects/game/Tile";
 
 // Build a tiny graph of water tiles so crawlTiles will visit them
 const mkWorld = () => {
@@ -24,8 +25,7 @@ const mkWorld = () => {
   const gen = {
     getGameNeighbors: (coords: { x: number; y: number }) =>
       N[Tile.getKey(coords.x, coords.y)] || [],
-    getRegNeighbors: (coords: { x: number; y: number }) =>
-      N[Tile.getKey(coords.x, coords.y)] || [],
+    getRegNeighbors: (coords: { x: number; y: number }) => N[Tile.getKey(coords.x, coords.y)] || [],
     getStratNeighbors: (coords: { x: number; y: number }) =>
       N[Tile.getKey(coords.x, coords.y)] || [],
   };
@@ -110,8 +110,7 @@ describe("spreadSalt", () => {
     const start = tiles[Tile.getKey(0, 0)];
     spreadSalt(gen as any, "game", start as any);
     // All water in the spiral path should be salted
-    for (const [x, y] of path)
-      expect(tiles[Tile.getKey(x, y)].isSalt).toBe(true);
+    for (const [x, y] of path) expect(tiles[Tile.getKey(x, y)].isSalt).toBe(true);
   });
 
   it("does not salt isolated water surrounded by land (3-ring 5x5)", () => {

@@ -22,7 +22,8 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{
-  (e: "update:modelValue", value: unknown): void;
+  // eslint-disable-next-line
+  (e: "update:modelValue", value: any): void;
 }>();
 
 const valueStr = computed({
@@ -32,14 +33,8 @@ const valueStr = computed({
 </script>
 
 <template>
-  <label
-    class="block"
-    :class="props.class"
-  >
-    <span
-      v-if="label"
-      class="text-sm text-slate-300"
-    >{{ label }}</span>
+  <label class="block" :class="props.class">
+    <span v-if="label" class="text-sm text-slate-300">{{ label }}</span>
     <select
       v-model="valueStr"
       :disabled="disabled"

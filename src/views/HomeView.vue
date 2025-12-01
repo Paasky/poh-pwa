@@ -6,14 +6,9 @@
   <main class="min-h-screen flex items-center justify-center text-slate-100">
     <div class="text-center p-6">
       <div class="flex justify-center mb-4">
-        <font-awesome-icon
-          :icon="['fas', 'book-open']"
-          class="text-5xl text-sky-400"
-        />
+        <font-awesome-icon :icon="['fas', 'book-open']" class="text-5xl text-sky-400" />
       </div>
-      <h1 class="text-4xl sm:text-6xl tracking-tight">
-        Pages of History
-      </h1>
+      <h1 class="text-4xl sm:text-6xl tracking-tight">Pages of History</h1>
 
       <div class="mt-8">
         <RouterLink

@@ -1,9 +1,6 @@
 import { getRandom } from "@/helpers/arrayTools";
 import { GenTile } from "@/factories/TerraGenerator/gen-tile";
-import {
-  Coords,
-  getRealCoords,
-} from "@/factories/TerraGenerator/helpers/neighbors";
+import { Coords, getRealCoords } from "@/factories/TerraGenerator/helpers/neighbors";
 
 export type Compass = "n" | "ne" | "e" | "se" | "s" | "sw" | "w" | "nw";
 
@@ -90,16 +87,12 @@ export class Snake<T extends GenTile> {
     this.onVisit = onVisit;
 
     this.initialDir =
-      opts?.initialDir ??
-      (getRandom(Object.keys(preferredPossibleTurns)) as Compass);
+      opts?.initialDir ?? (getRandom(Object.keys(preferredPossibleTurns)) as Compass);
     if (opts?.legs) this.legs = opts.legs;
     if (opts?.tilesPerLeg) this.tilesPerLeg = opts.tilesPerLeg;
-    if (opts?.possible45degTurns)
-      this.preferredPossibleTurns = opts.possible45degTurns;
-    if (opts?.allPossibleDirections)
-      this.allPossibleTurns = opts.allPossibleDirections;
-    if (opts?.impossibleTurns)
-      this.impossibleTurnsPerInitDir = opts.impossibleTurns;
+    if (opts?.possible45degTurns) this.preferredPossibleTurns = opts.possible45degTurns;
+    if (opts?.allPossibleDirections) this.allPossibleTurns = opts.allPossibleDirections;
+    if (opts?.impossibleTurns) this.impossibleTurnsPerInitDir = opts.impossibleTurns;
   }
 
   walk(start: T): T[] {

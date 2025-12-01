@@ -11,7 +11,5 @@ export function initTestPinia() {
 }
 
 export function loadStaticData() {
-  useObjectsStore().initStatic(
-    require("../../public/staticData.json") as StaticData,
-  );
+  useObjectsStore().initStatic(require("../../public/staticData.json") as StaticData);
 }

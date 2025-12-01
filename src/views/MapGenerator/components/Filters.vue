@@ -13,9 +13,7 @@ function toggle(key: keyof typeof store.toggles) {
 </script>
 
 <template>
-  <div
-    class="mx-auto w-full max-w-full min-w-[72rem] mt-2 flex flex-wrap items-center gap-2"
-  >
+  <div class="mx-auto w-full max-w-full min-w-[72rem] mt-2 flex flex-wrap items-center gap-2">
     <UiButton
       :variant="store.toggles.showTerrain ? 'selected' : 'ghost'"
       @click="toggle('showTerrain')"

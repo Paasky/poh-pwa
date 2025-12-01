@@ -24,15 +24,8 @@ export class RegLevel {
         // If the parent stratTile is not a start, allow for variety from neighbors
         if (!stratTile.isStart) {
           // Choose a random stratLevel neighbor
-          const neighbors = getNeighborCoords(
-            this.gen.regSize,
-            { x, y },
-            "manhattan",
-            1,
-          );
-          stratTile = getRandom(
-            neighbors.map((n) => this.gen.getStratFromRegCoords(n.x, n.y)),
-          );
+          const neighbors = getNeighborCoords(this.gen.regSize, { x, y }, "manhattan", 1);
+          stratTile = getRandom(neighbors.map((n) => this.gen.getStratFromRegCoords(n.x, n.y)));
         }
 
         // Allow a 25% chance for elevation swap for extra variety
@@ -82,13 +75,10 @@ export class RegLevel {
     this.gen.forEachRegTile((tile) => {
       // Check 50% on Sea, 1% on Ocean (there's a lot of Ocean)
       if (tile.terrain === this.gen.seaTerrain && Math.random() > 0.5) return;
-      if (tile.terrain === this.gen.oceanTerrain && Math.random() > 0.01)
-        return;
+      if (tile.terrain === this.gen.oceanTerrain && Math.random() > 0.01) return;
 
       const neighbors = this.gen.getRegNeighbors(tile, "manhattan", 3);
-      const allAreSameTerrain = neighbors.every(
-        (n) => n.terrain === tile.terrain,
-      );
+      const allAreSameTerrain = neighbors.every((n) => n.terrain === tile.terrain);
       if (allAreSameTerrain) {
         makeIsland(this.gen, tile, "reg", 0.75);
       }
@@ -125,25 +115,16 @@ export class RegLevel {
       }
 
       // Add 3 mountain ranges per continent
-      const landTiles = Object.values(
-        landTilesPerContinent[continent.type.key],
-      );
+      const landTiles = Object.values(landTilesPerContinent[continent.type.key]);
       for (let i = 0; i < 3; i++) {
         const rangeStart = takeRandom(landTiles);
-        const mountainTiles = mountainRange(
-          rangeStart,
-          this.gen.regTiles,
-          this.gen.regSize,
-        );
+        const mountainTiles = mountainRange(rangeStart, this.gen.regTiles, this.gen.regSize);
 
         // Flat Mountain neighbors have a 50% chance of becoming hill
         for (const tile of mountainTiles) {
           for (const neighbor of this.gen.getRegNeighbors(tile, "manhattan")) {
             // Skip non-lake water
-            if (
-              neighbor.domain === this.gen.water &&
-              neighbor.terrain !== this.gen.lakeTerrain
-            )
+            if (neighbor.domain === this.gen.water && neighbor.terrain !== this.gen.lakeTerrain)
               continue;
 
             if (neighbor.elevation === this.gen.flat && Math.random() < 0.5)

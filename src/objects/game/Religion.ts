@@ -1,12 +1,14 @@
-import { HasCitizens, HasPlayers } from "@/objects/game/_mixins";
+import { hasMany } from "@/objects/game/_mixins";
 import { TypeObject } from "@/types/typeObjects";
 import { computed, ref } from "vue";
 import { GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
 import { useObjectsStore } from "@/stores/objectStore";
+import { Citizen } from "@/objects/game/Citizen";
+import { Player } from "@/objects/game/Player";
 
 export type ReligionStatus = "myths" | "gods" | "dogmas";
 
-export class Religion extends HasCitizens(HasPlayers(GameObject)) {
+export class Religion extends GameObject {
   constructor(
     key: GameKey,
     name: string,
@@ -42,14 +44,20 @@ export class Religion extends HasCitizens(HasPlayers(GameObject)) {
   ];
 
   name: string;
-  cityKey: GameKey;
   foundedTurn: number;
   status = ref<ReligionStatus>("myths");
   myths = ref<TypeObject[]>([]);
   gods = ref<TypeObject[]>([]);
   dogmas = ref<TypeObject[]>([]);
 
+  citizenKeys = ref([] as GameKey[]);
+  citizens = hasMany(this.citizenKeys, Citizen);
+
+  cityKey: GameKey;
   city = computed(() => useObjectsStore().get(this.cityKey) as GameObject);
+
+  playerKeys = ref([] as GameKey[]);
+  players = hasMany(this.playerKeys, Player);
 
   selectableMyths = computed((): TypeObject[] => {
     if (this.status.value !== "myths") return [];

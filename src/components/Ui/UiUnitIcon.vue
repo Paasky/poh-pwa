@@ -8,11 +8,7 @@ defineProps<{ design: UnitDesign }>();
 
 <template>
   <div class="inline-block relative ml-4">
-    <font-awesome-icon
-      :icon="design.platform.icon.icon"
-      style="color: #fff"
-      class="fa-fw"
-    />
+    <font-awesome-icon :icon="design.platform.icon.icon" style="color: #fff" class="fa-fw" />
     <font-awesome-icon
       :icon="design.equipment.icon.icon"
       style="background-color: rgba(0, 0, 0, 0.5); border-radius: 33%"

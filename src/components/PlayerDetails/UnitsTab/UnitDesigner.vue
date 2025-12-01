@@ -40,9 +40,7 @@ const possibleDesigns = computed(() => {
 
       // Design cannot exist
       if (
-        designs.value.filter(
-          (d) => d.platform === platform && d.equipment === equipment,
-        ).length > 0
+        designs.value.filter((d) => d.platform === platform && d.equipment === equipment).length > 0
       )
         continue;
 
@@ -51,10 +49,8 @@ const possibleDesigns = computed(() => {
         equipment,
         upgradesFrom: designs.value.filter(
           (d) =>
-            (d.platform === platform ||
-              d.platform.upgradesTo.includes(platform.key)) &&
-            (d.equipment === equipment ||
-              d.equipment.upgradesTo.includes(equipment.key)),
+            (d.platform === platform || d.platform.upgradesTo.includes(platform.key)) &&
+            (d.equipment === equipment || d.equipment.upgradesTo.includes(equipment.key)),
         ),
       });
     }
@@ -70,15 +66,13 @@ const equipmentOptions = computed(() => {
   if (!newDesign.value.platform) return [] as TypeObject[];
   const opts: TypeObject[] = [];
   for (const possibleDesign of possibleDesigns.value) {
-    if (newDesign.value.platform === possibleDesign.platform)
-      opts.push(possibleDesign.equipment);
+    if (newDesign.value.platform === possibleDesign.platform) opts.push(possibleDesign.equipment);
   }
   return opts;
 });
 
 const upgradeOptions = computed(() => {
-  if (!newDesign.value.platform || !newDesign.value.equipment)
-    return [] as UnitDesign[];
+  if (!newDesign.value.platform || !newDesign.value.equipment) return [] as UnitDesign[];
   const opts: UnitDesign[] = [];
   for (const possibleDesign of possibleDesigns.value) {
     if (
@@ -126,64 +120,41 @@ watch(
   <div>
     <!-- Info to user -->
     <div>
-      You have {{ player.storage.amount("yieldType:designPoints") }} Design
-      Point(s)
-      <UiButton
-        class="mb-4"
-        @click="player.storage.add('yieldType:designPoints', 1)"
-      >
+      You have {{ player.storage.amount("yieldType:designPoints") }} Design Point(s)
+      <UiButton class="mb-4" @click="player.storage.add('yieldType:designPoints', 1)">
         +1 DP
       </UiButton>
     </div>
-    <div
-      v-if="player.storage.amount('yieldType:designPoints') < 2"
-      class="text-slate-400"
-    >
+    <div v-if="player.storage.amount('yieldType:designPoints') < 2" class="text-slate-400">
       You need at least 2 Design Points to design a unit
     </div>
-    <div
-      v-else-if="possibleDesigns.length === 0"
-      class="text-slate-400"
-    >
+    <div v-else-if="possibleDesigns.length === 0" class="text-slate-400">
       No possible new designs
     </div>
 
     <!-- Designer shown -->
-    <div
-      v-else
-      class="bg-neutral-400/10 p-4 rounded-xl"
-    >
-      <h2 class="text-2xl mb-4 flex-grow">
-        New Unit Design
-      </h2>
+    <div v-else class="bg-neutral-400/10 p-4 rounded-xl">
+      <h2 class="text-2xl mb-4 flex-grow">New Unit Design</h2>
 
       <!-- Row 1: Selections -->
       <div class="grid grid-cols-3 gap-8">
         <!-- Step 1: Platform -->
         <div>
-          <h3 class="text-xl mb-2">
-            1. Platform
-          </h3>
+          <h3 class="text-xl mb-2">1. Platform</h3>
           <div class="flex flex-wrap gap-2">
             <UiButton
               v-for="p in player.knownTypes.value.filter(
                 (t) =>
                   t.class === 'platformType' &&
-                  possibleDesigns.filter((d) => d.platform.key === t.key)
-                    .length > 0,
+                  possibleDesigns.filter((d) => d.platform.key === t.key).length > 0,
               )"
               :key="p.key"
               :variant="
-                newDesign.platform && newDesign.platform.key === p.key
-                  ? 'selected'
-                  : 'solid'
+                newDesign.platform && newDesign.platform.key === p.key ? 'selected' : 'solid'
               "
               @click="newDesign.platform = p"
             >
-              <UiIcon
-                :icon="p.icon"
-                class="mr-1"
-              />
+              <UiIcon :icon="p.icon" class="mr-1" />
               {{ p.name }}
             </UiButton>
           </div>
@@ -191,64 +162,39 @@ watch(
 
         <!-- Step 2: Equipment -->
         <div>
-          <h3 class="text-xl mb-2">
-            2. Equipment
-          </h3>
+          <h3 class="text-xl mb-2">2. Equipment</h3>
           <div v-if="newDesign.platform">
-            <div
-              v-if="equipmentOptions.length === 0"
-              class="text-slate-400"
-            >
+            <div v-if="equipmentOptions.length === 0" class="text-slate-400">
               No compatible equipment
             </div>
-            <div
-              v-else
-              class="flex flex-wrap gap-2"
-            >
+            <div v-else class="flex flex-wrap gap-2">
               <UiButton
                 v-for="e in equipmentOptions"
                 :key="e.key"
                 type="button"
                 :variant="
-                  newDesign.equipment && newDesign.equipment.key === e.key
-                    ? 'selected'
-                    : 'solid'
+                  newDesign.equipment && newDesign.equipment.key === e.key ? 'selected' : 'solid'
                 "
                 @click="newDesign.equipment = e"
               >
-                <UiIcon
-                  :icon="e.icon"
-                  class="mr-1"
-                />
+                <UiIcon :icon="e.icon" class="mr-1" />
                 {{ e.name }}
               </UiButton>
             </div>
           </div>
-          <div
-            v-else
-            class="text-slate-400"
-          >
-            Select a platform
-          </div>
+          <div v-else class="text-slate-400">Select a platform</div>
         </div>
 
         <!-- Step 3: Name & Elite -->
         <div>
-          <h3 class="text-xl mb-2">
-            3. Name
-          </h3>
-          <div
-            v-if="equipmentOptions.length === 0"
-            class="text-slate-400"
-          >
-            Select equipment
-          </div>
+          <h3 class="text-xl mb-2">3. Name</h3>
+          <div v-if="equipmentOptions.length === 0" class="text-slate-400">Select equipment</div>
           <div v-else>
             <input
               v-model="newDesign.name"
               name="name"
               class="px-2 rounded-md bg-neutral-400/10 w-full"
-            >
+            />
             <div class="mt-2">
               <UiButton
                 type="button"
@@ -270,24 +216,16 @@ watch(
       >
         <!-- Col 1: Yields -->
         <div>
-          <h3 class="text-xl mb-2">
-            Yields
-          </h3>
+          <h3 class="text-xl mb-2">Yields</h3>
           <UiYieldList
-            :yields="
-              newDesign.platform!.yields.merge(
-                newDesign.equipment!.yields as Yields,
-              )
-            "
+            :yields="newDesign.platform!.yields.merge(newDesign.equipment!.yields as Yields)"
             :as-total="true"
           />
         </div>
 
         <!-- Col 2: Requires & Specials -->
         <div>
-          <h3 class="text-xl mb-2">
-            Requires
-          </h3>
+          <h3 class="text-xl mb-2">Requires</h3>
           <UiObjPillList
             :obj-keys="
               [
@@ -296,30 +234,20 @@ watch(
               ].filter((r) => !r.startsWith('technologyType:'))
             "
           />
-          <h3 class="text-xl mb-2">
-            Special
-          </h3>
+          <h3 class="text-xl mb-2">Special</h3>
           <UiObjPillList
-            :obj-keys="[
-              ...newDesign.platform.specials,
-              ...newDesign.equipment.specials,
-            ]"
+            :obj-keys="[...newDesign.platform.specials, ...newDesign.equipment.specials]"
           />
         </div>
 
         <!-- Col 3: Actions -->
         <div>
-          <h3 class="text-xl mb-2">
-            Actions
-          </h3>
+          <h3 class="text-xl mb-2">Actions</h3>
         </div>
       </div>
 
       <!-- Row 3: Create -->
-      <div
-        v-if="newDesign.platform && newDesign.equipment"
-        class="col-span-3 text-right"
-      >
+      <div v-if="newDesign.platform && newDesign.equipment" class="col-span-3 text-right">
         <!-- Upgrade -->
         <UiButton
           v-for="upgradeFrom in upgradeOptions"

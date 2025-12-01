@@ -32,8 +32,7 @@ export function getNeighborCoords(
 
   // TODO(hex): implement real hex adjacency using axial/offset coordinates
   // For now, fall back to chebyshev behavior for 'hex' to avoid breakage
-  const effectiveMethod: "chebyshev" | "manhattan" =
-    method === "hex" ? "chebyshev" : method;
+  const effectiveMethod: "chebyshev" | "manhattan" = method === "hex" ? "chebyshev" : method;
 
   for (let dy = -distance; dy <= distance; dy++) {
     const ny = tile.y + dy;
@@ -43,11 +42,7 @@ export function getNeighborCoords(
 
     for (let dx = -distance; dx <= distance; dx++) {
       // Skip if not in manhattan distance
-      if (
-        effectiveMethod === "manhattan" &&
-        Math.abs(dx) + Math.abs(dy) > distance
-      )
-        continue;
+      if (effectiveMethod === "manhattan" && Math.abs(dx) + Math.abs(dy) > distance) continue;
 
       // Include x-wrapping for new X
       const nx = (((tile.x + dx) % size.x) + size.x) % size.x;
@@ -91,8 +86,6 @@ export function getTile(
   tiles: Record<string, GenTile>,
 ): GenTile | null {
   const realCoords = getRealCoords(size, coords);
-  const t = realCoords
-    ? tiles[Tile.getKey(realCoords.x, realCoords.y)]
-    : undefined;
+  const t = realCoords ? tiles[Tile.getKey(realCoords.x, realCoords.y)] : undefined;
   return t || null;
 }

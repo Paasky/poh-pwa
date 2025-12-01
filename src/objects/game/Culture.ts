@@ -1,4 +1,4 @@
-import { HasCitizens, HasPlayer } from "@/objects/game/_mixins";
+import { hasMany } from "@/objects/game/_mixins";
 import { TypeObject } from "@/types/typeObjects";
 import { computed, Ref, ref, UnwrapRef } from "vue";
 import { CatKey, TypeKey } from "@/types/common";
@@ -6,34 +6,38 @@ import { EventManager } from "@/managers/EventManager";
 import { Yields } from "@/objects/yield";
 import { GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
 import { useObjectsStore } from "@/stores/objectStore";
+import { Citizen } from "@/objects/game/Citizen";
+import { Player } from "@/objects/game/Player";
 
-export type CultureStatus =
-  | "notSettled"
-  | "canSettle"
-  | "mustSettle"
-  | "settled";
+export type CultureStatus = "notSettled" | "canSettle" | "mustSettle" | "settled";
 
-export class Culture extends HasCitizens(HasPlayer(GameObject)) {
+export class Culture extends GameObject {
   constructor(key: GameKey, type: TypeObject, playerKey: GameKey) {
     super(key);
     this.type = ref(type);
-    this.playerKey.value = playerKey;
+    this.playerKey = playerKey;
   }
 
   static attrsConf: GameObjAttr[] = [
     { attrName: "type", isTypeObj: true },
     {
       attrName: "playerKey",
+      attrNotRef: true,
       related: { theirKeyAttr: "cultureKey", isOne: true },
     },
   ];
 
   type: Ref<UnwrapRef<TypeObject>, UnwrapRef<TypeObject> | TypeObject>;
+
+  citizenKeys = ref([] as GameKey[]);
+  citizens = hasMany(this.citizenKeys, Citizen);
+
+  playerKey: GameKey;
+  player = computed(() => useObjectsStore().get(this.playerKey) as Player);
+
   leader = computed(() =>
     useObjectsStore().getTypeObject(
-      this.type.value.allows.find(
-        (a) => a.indexOf("LeaderType:") >= 0,
-      ) as TypeKey,
+      this.type.value.allows.find((a) => a.indexOf("LeaderType:") >= 0) as TypeKey,
     ),
   );
   status = ref<CultureStatus>("notSettled");
@@ -46,12 +50,8 @@ export class Culture extends HasCitizens(HasPlayer(GameObject)) {
     if (this.status.value === "settled") return [];
 
     const selectable: TypeObject[] = [];
-    for (const catData of useObjectsStore().getClassTypesPerCategory(
-      "heritageType",
-    )) {
-      const catIsSelected = catData.types.some((h) =>
-        this.heritages.value.includes(h),
-      );
+    for (const catData of useObjectsStore().getClassTypesPerCategory("heritageType")) {
+      const catIsSelected = catData.types.some((h) => this.heritages.value.includes(h));
 
       for (const heritage of catData.types) {
         // Already selected
@@ -62,8 +62,7 @@ export class Culture extends HasCitizens(HasPlayer(GameObject)) {
 
         // Not enough points
         if (
-          (this.heritageCategoryPoints.value[heritage.category!] ?? 0) <
-          heritage.heritagePointCost!
+          (this.heritageCategoryPoints.value[heritage.category!] ?? 0) < heritage.heritagePointCost!
         )
           continue;
 
@@ -80,30 +79,19 @@ export class Culture extends HasCitizens(HasPlayer(GameObject)) {
     if (this.status.value !== "settled") return [];
 
     // Nothing to select?
-    if (
-      this.mustSelectTraits.value.positive +
-        this.mustSelectTraits.value.negative <=
-      0
-    )
-      return [];
+    if (this.mustSelectTraits.value.positive + this.mustSelectTraits.value.negative <= 0) return [];
 
     const selectable: TypeObject[] = [];
-    for (const catData of useObjectsStore().getClassTypesPerCategory(
-      "traitType",
-    )) {
-      const catIsSelected = catData.types.some((t) =>
-        this.traits.value.includes(t),
-      );
+    for (const catData of useObjectsStore().getClassTypesPerCategory("traitType")) {
+      const catIsSelected = catData.types.some((t) => this.traits.value.includes(t));
 
       for (const trait of catData.types) {
         // Category already selected
         if (catIsSelected) continue;
 
         // No more positive/negative slots left to select
-        if (trait.isPositive! && this.mustSelectTraits.value.positive <= 0)
-          continue;
-        if (!trait.isPositive! && this.mustSelectTraits.value.negative <= 0)
-          continue;
+        if (trait.isPositive! && this.mustSelectTraits.value.positive <= 0) continue;
+        if (!trait.isPositive! && this.mustSelectTraits.value.negative <= 0) continue;
 
         selectable.push(trait);
       }
@@ -112,8 +100,7 @@ export class Culture extends HasCitizens(HasPlayer(GameObject)) {
   });
 
   region = computed((): TypeObject => {
-    const key = this.type.value.requires!.filter(["regionType"])
-      .allTypes[0] as TypeKey;
+    const key = this.type.value.requires!.filter(["regionType"]).allTypes[0] as TypeKey;
     return useObjectsStore().getTypeObject(key);
   });
 
@@ -161,9 +148,7 @@ export class Culture extends HasCitizens(HasPlayer(GameObject)) {
     // If gains a tech, complete it immediately
     for (const gainKey of heritage.gains) {
       if (gainKey.startsWith("technologyType:")) {
-        this.player.value.research.complete(
-          useObjectsStore().getTypeObject(gainKey),
-        );
+        this.player.value.research.complete(useObjectsStore().getTypeObject(gainKey));
       }
     }
   }
@@ -185,20 +170,9 @@ export class Culture extends HasCitizens(HasPlayer(GameObject)) {
     if (this.status.value === "settled") return;
     this.status.value = "settled";
     this.mustSelectTraits.value = { positive: 2, negative: 2 };
-    new EventManager().create(
-      "settled",
-      `settled down`,
-      this.player.value,
-      this,
-    );
+    new EventManager().create("settled", `settled down`, this.player.value, this);
   }
 
-  types = computed(() => [
-    this.concept,
-    ...this.heritages.value,
-    ...this.traits.value,
-  ]);
-  yields = computed(
-    () => new Yields(this.types.value.flatMap((t) => t.yields.all())),
-  );
+  types = computed(() => [this.concept, ...this.heritages.value, ...this.traits.value]);
+  yields = computed(() => new Yields(this.types.value.flatMap((t) => t.yields.all())));
 }

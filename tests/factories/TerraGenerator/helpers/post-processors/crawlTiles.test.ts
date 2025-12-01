@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { crawlTiles } from "../../../../../src/factories/TerraGenerator/helpers/post-processors";
-import { Tile } from "../../../../../src/objects/game/_GameObject";
+import { Tile } from "../../../../../src/objects/game/Tile";
 import { initTestPinia, loadStaticData } from "../../../../_setup/pinia";
 
 // Minimal tile object factory
@@ -51,9 +51,7 @@ describe("crawlTiles", () => {
     const seen = new Set<string>();
     const res = crawlTiles(gen as any, "game", a as any, seen, () => true);
     // All reachable unique tiles visited
-    expect(res.map((x) => x.key).sort()).toEqual(
-      [a, b, c, d].map((x) => x.key).sort(),
-    );
+    expect(res.map((x) => x.key).sort()).toEqual([a, b, c, d].map((x) => x.key).sort());
   });
 
   it("respects isValid predicate (stops traversal into invalid neighbors)", () => {
@@ -66,17 +64,9 @@ describe("crawlTiles", () => {
     gen.setN(c, [b]);
 
     const seen = new Set<string>();
-    const res = crawlTiles(
-      gen as any,
-      "reg",
-      a as any,
-      seen,
-      (tile) => tile !== c,
-    );
+    const res = crawlTiles(gen as any, "reg", a as any, seen, (tile) => tile !== c);
     // c is invalid, so it should not be included and not traversed past
-    expect(res.map((x) => x.key).sort()).toEqual(
-      [a, b].map((x) => x.key).sort(),
-    );
+    expect(res.map((x) => x.key).sort()).toEqual([a, b].map((x) => x.key).sort());
   });
 
   it("crawls a 3x3 U-shape while skipping blocked tiles (1,0) and (1,1)", () => {

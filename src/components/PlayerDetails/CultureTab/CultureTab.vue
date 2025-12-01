@@ -28,7 +28,7 @@ const region = culture.region.value;
         :src="player.leader.value.image!"
         class="w-[20rem] h-[20rem] mb-2 mr-2 rounded-xl"
         :alt="player.leader.value.name"
-      >
+      />
       <div>
         <h3
           class="text-xl select-none text-yellow-800 hover:text-yellow-600 cursor-pointer"
@@ -50,20 +50,12 @@ const region = culture.region.value;
     </div>
 
     <!-- Trait selection -->
-    <div
-      v-if="culture.status.value === 'settled'"
-      class="mb-4"
-    >
-      <UiHeader
-        title="Traits"
-        type="conceptType:trait"
-      />
+    <div v-if="culture.status.value === 'settled'" class="mb-4">
+      <UiHeader title="Traits" type="conceptType:trait" />
       <div class="p-4">
         <UiButton
           v-if="
-            culture.mustSelectTraits.value.positive +
-              culture.mustSelectTraits.value.negative ===
-              0
+            culture.mustSelectTraits.value.positive + culture.mustSelectTraits.value.negative === 0
           "
           @click="culture.evolve()"
         >
@@ -72,28 +64,28 @@ const region = culture.region.value;
 
         <div class="text-sm grid gap-2 mt-4 mb-4">
           <p
-            v-if="
-              culture.mustSelectTraits.value.positive +
-                culture.mustSelectTraits.value.negative
-            "
+            v-if="culture.mustSelectTraits.value.positive + culture.mustSelectTraits.value.negative"
           >
             You must select
-            <b v-if="culture.mustSelectTraits.value.positive">{{ culture.mustSelectTraits.value.positive }} positive</b>
+            <b v-if="culture.mustSelectTraits.value.positive"
+              >{{ culture.mustSelectTraits.value.positive }} positive</b
+            >
             <span
               v-if="
-                culture.mustSelectTraits.value.positive &&
-                  culture.mustSelectTraits.value.negative
+                culture.mustSelectTraits.value.positive && culture.mustSelectTraits.value.negative
               "
             >
               and
             </span>
-            <b v-if="culture.mustSelectTraits.value.negative">{{ culture.mustSelectTraits.value.negative }} negative</b>
+            <b v-if="culture.mustSelectTraits.value.negative"
+              >{{ culture.mustSelectTraits.value.negative }} negative</b
+            >
             <UiObjPill
               obj-or-key="conceptType:trait"
               :name="
                 culture.mustSelectTraits.value.positive +
                   culture.mustSelectTraits.value.negative ===
-                  1
+                1
                   ? 'Trait'
                   : 'Traits'
               "
@@ -104,10 +96,7 @@ const region = culture.region.value;
           </p>
           <p v-else>
             You have selected all of your
-            <UiObjPill
-              obj-or-key="conceptType:trait"
-              name="Traits"
-            />
+            <UiObjPill obj-or-key="conceptType:trait" name="Traits" />
             . They can only be modified during a
             <UiObjPill obj-or-key="conceptType:revolution" />
             .
@@ -115,12 +104,7 @@ const region = culture.region.value;
         </div>
         <UiCardGrid
           gap="gap-x-6 gap-y-4"
-          :cols="[
-            '2xl:grid-cols-4',
-            'lg:grid-cols-3',
-            'sm:grid-cols-2',
-            'grid-cols-1',
-          ]"
+          :cols="['2xl:grid-cols-4', 'lg:grid-cols-3', 'sm:grid-cols-2', 'grid-cols-1']"
         >
           <UiCardGroup
             v-for="catData in objects.getClassTypesPerCategory('traitType')"
@@ -130,10 +114,7 @@ const region = culture.region.value;
               {{ catData.category.name }}
             </h3>
             <div class="flex gap-2 text-center">
-              <template
-                v-for="(trait, i) of catData.types"
-                :key="trait.key"
-              >
+              <template v-for="(trait, i) of catData.types" :key="trait.key">
                 <UiCard
                   :title="trait.name"
                   :disabled="!culture.selectableTraits.value.includes(trait)"
@@ -147,25 +128,16 @@ const region = culture.region.value;
                   <UiButton
                     v-if="
                       culture.mustSelectTraits.value.positive +
-                        culture.mustSelectTraits.value.negative
+                      culture.mustSelectTraits.value.negative
                     "
                     class="w-full my-1"
                     :disabled="!culture.selectableTraits.value.includes(trait)"
                     @click.stop="culture.selectTrait(trait)"
                   >
-                    {{
-                      culture.traits.value.includes(trait)
-                        ? "Selected"
-                        : "Select"
-                    }}
+                    {{ culture.traits.value.includes(trait) ? "Selected" : "Select" }}
                   </UiButton>
                 </UiCard>
-                <h4
-                  v-if="i === 0"
-                  class="content-center text-sm italic"
-                >
-                  or
-                </h4>
+                <h4 v-if="i === 0" class="content-center text-sm italic">or</h4>
               </template>
             </div>
           </UiCardGroup>
@@ -175,10 +147,7 @@ const region = culture.region.value;
 
     <!-- Heritage selection -->
     <div>
-      <UiHeader
-        title="Heritage"
-        type="conceptType:heritage"
-      />
+      <UiHeader title="Heritage" type="conceptType:heritage" />
       <div class="p-4">
         <UiButton
           v-if="['canSettle', 'mustSettle'].includes(culture.status.value)"
@@ -188,58 +157,36 @@ const region = culture.region.value;
         </UiButton>
 
         <!-- Not yet settled -->
-        <div
-          v-if="culture.status.value !== 'settled'"
-          class="text-sm grid gap-2 mb-4"
-        >
-          <p
-            v-if="
-              culture.status.value === 'notSettled' ||
-                culture.status.value === 'canSettle'
-            "
-          >
-            Explore your surroundings to discover and learn from the nature
-            around you. These skills will stay as your Cultural
+        <div v-if="culture.status.value !== 'settled'" class="text-sm grid gap-2 mb-4">
+          <p v-if="culture.status.value === 'notSettled' || culture.status.value === 'canSettle'">
+            Explore your surroundings to discover and learn from the nature around you. These skills
+            will stay as your Cultural
             <UiObjPill obj-or-key="conceptType:heritage" />
             for the rest of the game.
           </p>
           <p v-if="culture.status.value === 'notSettled'">
-            You must select at least <b>two Heritages</b> to settle your first
-            city.
+            You must select at least <b>two Heritages</b> to settle your first city.
           </p>
           <h2
-            v-if="
-              culture.status.value === 'canSettle' ||
-                culture.status.value === 'mustSettle'
-            "
+            v-if="culture.status.value === 'canSettle' || culture.status.value === 'mustSettle'"
             class="text-lg my-2"
           >
             <b>You are ready to settle your first city!</b>
           </h2>
-          <p
-            v-if="
-              culture.status.value === 'canSettle' ||
-                culture.status.value === 'mustSettle'
-            "
-          >
+          <p v-if="culture.status.value === 'canSettle' || culture.status.value === 'mustSettle'">
             Use your <b>Tribe</b> to create your first
             <UiObjPill obj-or-key="conceptType:city" />
             and turn the first page of your people's history.
           </p>
           <p v-if="culture.status.value === 'canSettle'">
-            Settling down will lock your current Heritage for the rest of the
-            game.
+            Settling down will lock your current Heritage for the rest of the game.
           </p>
           <p v-if="culture.status.value === 'mustSettle'">
-            Your Heritage is full, so exploration will not grant you any more
-            points.
+            Your Heritage is full, so exploration will not grant you any more points.
           </p>
         </div>
         <UiCardGrid
-          v-if="
-            culture.status.value === 'notSettled' ||
-              culture.status.value === 'canSettle'
-          "
+          v-if="culture.status.value === 'notSettled' || culture.status.value === 'canSettle'"
         >
           <UiCardGroup
             v-for="catData in objects.getClassTypesPerCategory('heritageType')"
@@ -247,35 +194,23 @@ const region = culture.region.value;
           >
             <div>
               {{ catData.category.name }} ({{
-                culture.heritageCategoryPoints.value[catData.category.key!] ??
-                  0
+                culture.heritageCategoryPoints.value[catData.category.key!] ?? 0
               }})
               <h4
-                v-if="
-                  culture.status.value === 'notSettled' ||
-                    culture.status.value === 'canSettle'
-                "
+                v-if="culture.status.value === 'notSettled' || culture.status.value === 'canSettle'"
                 class="inline pl-1 text-xs"
               >
                 Get points from:
 
-                <UiButton
-                  @click="culture.addHeritagePoints(catData.category.key, 10)"
-                >
+                <UiButton @click="culture.addHeritagePoints(catData.category.key, 10)">
                   +10 p
                 </UiButton>
               </h4>
               <div
-                v-if="
-                  culture.status.value === 'notSettled' ||
-                    culture.status.value === 'canSettle'
-                "
+                v-if="culture.status.value === 'notSettled' || culture.status.value === 'canSettle'"
                 class="text-xs"
               >
-                <UiRequires
-                  :requires="catData.types[0].requires"
-                  :no-margin="true"
-                />
+                <UiRequires :requires="catData.types[0].requires" :no-margin="true" />
               </div>
             </div>
             <UiCard
@@ -284,20 +219,16 @@ const region = culture.region.value;
               :title="`${type.name} (${type.heritagePointCost!})`"
               :disabled="
                 !culture.selectableHeritages.value.includes(type) ||
-                  culture.heritages.value.includes(type)
+                culture.heritages.value.includes(type)
               "
               :selected="culture.heritages.value.includes(type)"
               :can-open="true"
               :is-open="
                 culture.selectableHeritages.value.includes(type) ||
-                  culture.heritages.value.includes(type)
+                culture.heritages.value.includes(type)
               "
-              :button-text="
-                culture.heritages.value.includes(type) ? 'Selected' : 'Select'
-              "
-              :button-variant="
-                culture.heritages.value.includes(type) ? 'selected' : 'solid'
-              "
+              :button-text="culture.heritages.value.includes(type) ? 'Selected' : 'Select'"
+              :button-variant="culture.heritages.value.includes(type) ? 'selected' : 'solid'"
               class="my-1"
               @button-click="
                 culture.selectableHeritages.value.includes(type)
@@ -306,9 +237,7 @@ const region = culture.region.value;
               "
             >
               <div class="text-xs">
-                <UiYieldList
-                  :yields="type.yields.not(['yieldType:heritagePointCost'])"
-                />
+                <UiYieldList :yields="type.yields.not(['yieldType:heritagePointCost'])" />
                 <UiObjPillList :obj-keys="type.gains" />
               </div>
             </UiCard>
@@ -317,21 +246,15 @@ const region = culture.region.value;
 
         <!-- Settled -->
         <UiCardGrid v-else>
-          <template
-            v-for="catData in objects.getClassTypesPerCategory('heritageType')"
-          >
+          <template v-for="catData in objects.getClassTypesPerCategory('heritageType')">
             <UiCard
-              v-for="type of catData.types.filter((h) =>
-                culture.heritages.value.includes(h),
-              )"
+              v-for="type of catData.types.filter((h) => culture.heritages.value.includes(h))"
               :key="type.key"
               :title="type.name"
               class="my-1"
             >
               <div class="text-xs">
-                <UiYieldList
-                  :yields="type.yields.not(['yieldType:heritagePointCost'])"
-                />
+                <UiYieldList :yields="type.yields.not(['yieldType:heritagePointCost'])" />
                 <UiObjPillList :obj-keys="type.gains" />
               </div>
             </UiCard>

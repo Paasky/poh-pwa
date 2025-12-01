@@ -26,14 +26,10 @@ const government = objects.currentPlayer.government;
           class="mb-2 h-40"
           :disabled="
             !government.selectablePolicies.value.includes(policy) &&
-              !government.policies.value.includes(policy)
+            !government.policies.value.includes(policy)
           "
           :selected="government.policies.value.includes(policy)"
-          :button-text="
-            !government.selectablePolicies.value.includes(policy)
-              ? 'Select'
-              : ''
-          "
+          :button-text="!government.selectablePolicies.value.includes(policy) ? 'Select' : ''"
           :title="policy.name"
         >
           <div class="h-full flex flex-col">
@@ -41,10 +37,7 @@ const government = objects.currentPlayer.government;
               <div>
                 <UiYieldList :yields="policy.yields" />
               </div>
-              <div
-                v-if="!policy.requires.isEmpty"
-                class="pt-1 border-t border-green-900/25"
-              >
+              <div v-if="!policy.requires.isEmpty" class="pt-1 border-t border-green-900/25">
                 <UiRequires :requires="policy.requires" />
               </div>
               <div

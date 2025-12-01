@@ -1,34 +1,31 @@
-import { HasPlayer } from "@/objects/game/_mixins";
 import { computed, ref } from "vue";
 import { TypeObject } from "@/types/typeObjects";
 import { TypeKey } from "@/types/common";
 import { GameKey } from "@/objects/game/_GameObject";
 import { useObjectsStore } from "@/stores/objectStore";
+import { Player } from "@/objects/game/Player";
 
-export class Research extends HasPlayer(Object) {
+export class Research {
   constructor(playerKey: GameKey) {
-    super();
-    this.playerKey.value = playerKey;
+    this.playerKey = playerKey;
   }
 
+  playerKey: GameKey;
+  player = computed(() => useObjectsStore().get(this.playerKey) as Player);
+
   researched = ref<TypeObject[]>([]);
-  researching = ref<Record<TypeKey, { progress: number; target: TypeObject }>>(
-    {},
-  );
+  researching = ref<Record<TypeKey, { progress: number; target: TypeObject }>>({});
   current = ref<TypeObject | null>(null);
   queue = ref<TypeObject[]>([]);
   era = computed((): TypeObject | null => {
     if (!this.researched.value.length) return null;
 
-    const highestYTech = this.researched.value.reduce<TypeObject | null>(
-      (highest, current) => {
-        if (!highest) return current as TypeObject;
-        const curY = current.y!;
-        const hiY = highest.y!;
-        return curY > hiY ? (current as TypeObject) : (highest as TypeObject);
-      },
-      null,
-    ) as TypeObject;
+    const highestYTech = this.researched.value.reduce<TypeObject | null>((highest, current) => {
+      if (!highest) return current as TypeObject;
+      const curY = current.y!;
+      const hiY = highest.y!;
+      return curY > hiY ? (current as TypeObject) : (highest as TypeObject);
+    }, null) as TypeObject;
 
     return this.getEra(highestYTech);
   });
@@ -66,8 +63,7 @@ export class Research extends HasPlayer(Object) {
     this.queue.value = this.queue.value.filter((t) => t !== tech);
 
     // Not researching anything anymore, and there is something in the queue: start next in the queue
-    if (!this.current.value && this.queue.value.length)
-      this.current.value = this.queue.value[0];
+    if (!this.current.value && this.queue.value.length) this.current.value = this.queue.value[0];
   }
 
   getEra(tech: TypeObject): TypeObject {
@@ -103,8 +99,7 @@ export class Research extends HasPlayer(Object) {
       anyKeys.forEach((orReqKey) => {
         if (cheapest === false) return;
         const required = useObjectsStore().getTypeObject(orReqKey as TypeKey);
-        if (required.class !== "technologyType" || acc.includes(required))
-          return;
+        if (required.class !== "technologyType" || acc.includes(required)) return;
         if (this.researched.value.includes(required)) {
           cheapest = false;
           return;
@@ -127,14 +122,12 @@ export class Research extends HasPlayer(Object) {
   turnsLeft = computed((): number => {
     if (!this.current.value) return 0;
 
-    const sciencePerTurn =
-      this.player.value.yields.value.getLumpAmount("yieldType:science");
+    const sciencePerTurn = this.player.value.yields.value.getLumpAmount("yieldType:science");
 
     if (sciencePerTurn <= 0) return Infinity;
 
     const costLeft =
-      this.current.value.scienceCost! -
-      this.getProgress(this.current.value as TypeObject);
+      this.current.value.scienceCost! - this.getProgress(this.current.value as TypeObject);
 
     return Math.ceil(costLeft / sciencePerTurn);
   });

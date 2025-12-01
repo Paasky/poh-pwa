@@ -115,67 +115,35 @@ export const createWorld = (size: WorldSize): GameData => {
   );
   objects.push(warbandDesign, hunterDesign, workerDesign, tribeDesign);
 
-  const gen = new TerraGenerator(size)
-    .generateStratLevel()
-    .generateRegLevel()
-    .generateGameLevel();
+  const gen = new TerraGenerator(size).generateStratLevel().generateRegLevel().generateGameLevel();
   objects.push(...Object.values(gen.gameTiles), ...Object.values(gen.rivers));
 
-  console.log(gen.continents);
   for (const continentData of Object.values(gen.continents)) {
     const continentStartCultures = cultureTypes.filter(
-      (c) =>
-        !c.upgradesFrom.length &&
-        c.category!.includes(`:${continentData.type.id}`),
+      (c) => !c.upgradesFrom.length && c.category!.includes(`:${continentData.type.id}`),
     );
-    console.log(continentData, continentStartCultures);
 
     for (const tile of continentData.majorStarts.game) {
-      const player = new Player(
-        generateKey("player"),
-        "Player",
-        !bundle.world.currentPlayer,
-      );
-      console.log(tile, player);
+      const player = new Player(generateKey("player"), "Player", !bundle.world.currentPlayer);
       objects.push(player);
       if (player.isCurrent) {
-        console.log(`Set current player to ${player.key}`);
         bundle.world.currentPlayer = player.key;
       }
 
       const cultureType = takeRandom(continentStartCultures);
-      const culture = new Culture(
-        generateKey("culture"),
-        cultureType,
-        player.key,
-      );
+      const culture = new Culture(generateKey("culture"), cultureType, player.key);
 
       objects.push(culture);
       player.cultureKey = culture.key;
 
-      player.designKeys.value.push(
-        warbandDesign.key,
-        hunterDesign.key,
-        workerDesign.key,
-      );
+      player.designKeys.value.push(warbandDesign.key, hunterDesign.key, workerDesign.key);
 
-      const hunter = new Unit(
-        generateKey("unit"),
-        hunterDesign.key,
-        player.key,
-        tile.key,
-      );
-      const tribe = new Unit(
-        generateKey("unit"),
-        tribeDesign.key,
-        player.key,
-        tile.key,
-      );
+      const hunter = new Unit(generateKey("unit"), hunterDesign.key, player.key, tile.key);
+      const tribe = new Unit(generateKey("unit"), tribeDesign.key, player.key, tile.key);
       objects.push(hunter, tribe);
       player.unitKeys.value.push(hunter.key, tribe.key);
     }
   }
-  console.log(bundle);
   if (!bundle.world.currentPlayer) {
     throw new Error("No current player set");
   }

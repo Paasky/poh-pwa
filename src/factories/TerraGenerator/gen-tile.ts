@@ -17,8 +17,6 @@ export class GenTile extends Tile {
   }
 
   canChangeDomain() {
-    return this.domain.key === "domainType:land"
-      ? this.canBeWater()
-      : this.canBeLand();
+    return this.domain.key === "domainType:land" ? this.canBeWater() : this.canBeLand();
   }
 }

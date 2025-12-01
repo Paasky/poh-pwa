@@ -11,9 +11,7 @@ export class Deal extends GameObject {
   }
 
   fromPlayerKey = "" as GameKey;
-  fromPlayer = computed(
-    () => useObjectsStore().get(this.fromPlayerKey) as Player,
-  );
+  fromPlayer = computed(() => useObjectsStore().get(this.fromPlayerKey) as Player);
 
   toPlayerKey = "" as GameKey;
   toPlayer = computed(() => useObjectsStore().get(this.toPlayerKey) as Player);

@@ -59,13 +59,9 @@ export class TerraGenerator {
     flipClimate: boolean = true,
   ) {
     if (size.y % 9 !== 0)
-      throw new Error(
-        `World size must be a multiple of 9, got [x${size.x}, y${size.y}]`,
-      );
+      throw new Error(`World size must be a multiple of 9, got [x${size.x}, y${size.y}]`);
     if (size.y * 2 !== size.x)
-      throw new Error(
-        `World size must be a 2:1 rectangle, got [x${size.x}, y${size.y}]`,
-      );
+      throw new Error(`World size must be a 2:1 rectangle, got [x${size.x}, y${size.y}]`);
     this.size = size;
     this.stratSize = { x: size.x / 9, y: size.y / 9 };
     this.regSize = { x: size.x / 3, y: size.y / 3 };
@@ -127,19 +123,13 @@ export class TerraGenerator {
     if (lo < 0) lo = 0;
 
     const options =
-      lo === hi
-        ? this.climateBands[lo]
-        : [...this.climateBands[lo], ...this.climateBands[hi]];
+      lo === hi ? this.climateBands[lo] : [...this.climateBands[lo], ...this.climateBands[hi]];
 
     const climateKey = getRandom(options);
-    const climate = this.objStore
-      .getClassTypes("climateType")
-      .find((c) => c.key === climateKey);
+    const climate = this.objStore.getClassTypes("climateType").find((c) => c.key === climateKey);
 
     if (!climate)
-      throw new Error(
-        `[terraGenerator] Invalid climate in climateBands: ${climateKey}`,
-      );
+      throw new Error(`[terraGenerator] Invalid climate in climateBands: ${climateKey}`);
     return climate;
   }
 
@@ -187,9 +177,7 @@ export class TerraGenerator {
 
     if (tile.climate.key === "climateType:frozen") {
       if (tile.terrain === this.oceanTerrain) {
-        return rand < 0.2
-          ? this.objStore.getTypeObject("featureType:ice")
-          : null;
+        return rand < 0.2 ? this.objStore.getTypeObject("featureType:ice") : null;
       }
     }
 
@@ -202,21 +190,14 @@ export class TerraGenerator {
           : null;
       }
 
-      if (
-        tile.terrain === this.coastTerrain ||
-        tile.terrain === this.lakeTerrain
-      ) {
-        return rand < 0.2
-          ? this.objStore.getTypeObject("featureType:kelp")
-          : null;
+      if (tile.terrain === this.coastTerrain || tile.terrain === this.lakeTerrain) {
+        return rand < 0.2 ? this.objStore.getTypeObject("featureType:kelp") : null;
       }
     }
 
     if (tile.climate.key === "climateType:temperate") {
       if (tile.domain === this.land) {
-        return rand < 0.5
-          ? this.objStore.getTypeObject("featureType:forest")
-          : null;
+        return rand < 0.5 ? this.objStore.getTypeObject("featureType:forest") : null;
       }
     }
 
@@ -240,41 +221,25 @@ export class TerraGenerator {
       }
 
       if (tile.terrain === this.oceanTerrain) {
-        return rand < 0.1
-          ? this.objStore.getTypeObject("featureType:atoll")
-          : null;
+        return rand < 0.1 ? this.objStore.getTypeObject("featureType:atoll") : null;
       }
 
-      if (
-        tile.terrain === this.coastTerrain ||
-        tile.terrain === this.lakeTerrain
-      ) {
-        return rand < 0.25
-          ? this.objStore.getTypeObject("featureType:lagoon")
-          : null;
+      if (tile.terrain === this.coastTerrain || tile.terrain === this.lakeTerrain) {
+        return rand < 0.25 ? this.objStore.getTypeObject("featureType:lagoon") : null;
       }
     }
 
     if (tile.climate.key === "climateType:equatorial") {
       if (tile.domain === this.land) {
-        return rand < 0.75
-          ? this.objStore.getTypeObject("featureType:jungle")
-          : null;
+        return rand < 0.75 ? this.objStore.getTypeObject("featureType:jungle") : null;
       }
 
       if (tile.terrain === this.oceanTerrain) {
-        return rand < 0.1
-          ? this.objStore.getTypeObject("featureType:atoll")
-          : null;
+        return rand < 0.1 ? this.objStore.getTypeObject("featureType:atoll") : null;
       }
 
-      if (
-        tile.terrain === this.coastTerrain ||
-        tile.terrain === this.lakeTerrain
-      ) {
-        return rand < 0.25
-          ? this.objStore.getTypeObject("featureType:lagoon")
-          : null;
+      if (tile.terrain === this.coastTerrain || tile.terrain === this.lakeTerrain) {
+        return rand < 0.25 ? this.objStore.getTypeObject("featureType:lagoon") : null;
       }
     }
 
@@ -296,24 +261,21 @@ export class TerraGenerator {
   getStratFromGameCoords(x: number, y: number): GenTile {
     const key = Tile.getKey(Math.floor(x / 9), Math.floor(y / 9));
     const tile = this.regTiles[key];
-    if (!tile)
-      throw new Error(`game[${x}, ${y}] -> regTile[${key}] does not exist`);
+    if (!tile) throw new Error(`game[${x}, ${y}] -> regTile[${key}] does not exist`);
     return tile;
   }
 
   getStratFromRegCoords(x: number, y: number): GenTile {
     const key = Tile.getKey(Math.floor(x / 3), Math.floor(y / 3));
     const tile = this.stratTiles[key];
-    if (!tile)
-      throw new Error(`reg[${x}, ${y}] -> stratTile[${key}] does not exist`);
+    if (!tile) throw new Error(`reg[${x}, ${y}] -> stratTile[${key}] does not exist`);
     return tile;
   }
 
   getRegFromGameCoords(x: number, y: number): GenTile {
     const key = Tile.getKey(Math.floor(x / 3), Math.floor(y / 3));
     const tile = this.regTiles[key];
-    if (!tile)
-      throw new Error(`game[${x}, ${y}] -> regTile[${key}] does not exist`);
+    if (!tile) throw new Error(`game[${x}, ${y}] -> regTile[${key}] does not exist`);
     return tile;
   }
 
@@ -344,39 +306,21 @@ export class TerraGenerator {
     return center ? [center, ...neighbors] : neighbors;
   }
 
-  getGameNeighbors(
-    coords: Coords,
-    method: NeighborMethod = "chebyshev",
-    dist = 1,
-  ): GenTile[] {
+  getGameNeighbors(coords: Coords, method: NeighborMethod = "chebyshev", dist = 1): GenTile[] {
     return getNeighbors(this.size, coords, this.gameTiles, method, dist);
   }
 
-  getRegNeighbors(
-    coords: Coords,
-    method: NeighborMethod = "chebyshev",
-    dist = 1,
-  ): GenTile[] {
+  getRegNeighbors(coords: Coords, method: NeighborMethod = "chebyshev", dist = 1): GenTile[] {
     return getNeighbors(this.regSize, coords, this.regTiles, method, dist);
   }
 
-  getStratNeighbors(
-    coords: Coords,
-    method: NeighborMethod = "chebyshev",
-    dist = 1,
-  ): GenTile[] {
+  getStratNeighbors(coords: Coords, method: NeighborMethod = "chebyshev", dist = 1): GenTile[] {
     return getNeighbors(this.stratSize, coords, this.stratTiles, method, dist);
   }
 
-  getTile(
-    size: Coords,
-    coords: Coords,
-    tiles: Record<string, GenTile>,
-  ): GenTile | null {
+  getTile(size: Coords, coords: Coords, tiles: Record<string, GenTile>): GenTile | null {
     const realCoords = getRealCoords(size, coords);
-    const t = realCoords
-      ? tiles[Tile.getKey(realCoords.x, realCoords.y)]
-      : undefined;
+    const t = realCoords ? tiles[Tile.getKey(realCoords.x, realCoords.y)] : undefined;
     return t || null;
   }
 

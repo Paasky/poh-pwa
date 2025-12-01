@@ -10,11 +10,7 @@ import { Tile } from "@/objects/game/Tile";
  * @param center
  * @param dist
  */
-export function getHexNeighborCoords(
-  size: Coords,
-  center: Coords,
-  dist = 1,
-): Coords[] {
+export function getHexNeighborCoords(size: Coords, center: Coords, dist = 1): Coords[] {
   if (dist < 0) return [];
 
   const result: Coords[] = [];

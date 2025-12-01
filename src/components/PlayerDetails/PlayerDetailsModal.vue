@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import {
-  tabsConfig,
-  usePlayerDetailsStore,
-} from "@/components/PlayerDetails/playerDetailsStore";
+import { tabsConfig, usePlayerDetailsStore } from "@/components/PlayerDetails/playerDetailsStore";
 import UiIcon from "@/components/Ui/UiIcon.vue";
 import { useObjectsStore } from "@/stores/objectStore";
 import UiModal from "@/components/Ui/UiModal.vue";
@@ -23,15 +20,10 @@ const activeTab = computed(() => playerDetails.activeTab);
 </script>
 
 <template>
-  <UiModal
-    :open="playerDetails.isOpen"
-    @close="playerDetails.close()"
-  >
+  <UiModal :open="playerDetails.isOpen" @close="playerDetails.close()">
     <!-- Tabs -->
     <template #header-left>
-      <div
-        class="flex flex-wrap items-center gap-1 border-b border-slate-700 bg-emerald-950"
-      >
+      <div class="flex flex-wrap items-center gap-1 border-b border-slate-700 bg-emerald-950">
         <button
           v-for="tabConfig in tabsConfig"
           :key="tabConfig.name"
@@ -44,10 +36,7 @@ const activeTab = computed(() => playerDetails.activeTab);
           type="button"
           @click="playerDetails.switchTab(tabConfig.name)"
         >
-          <UiIcon
-            :icon="objects.getTypeObject(tabConfig.type).icon"
-            class="fa-fw"
-          />
+          <UiIcon :icon="objects.getTypeObject(tabConfig.type).icon" class="fa-fw" />
           <span>{{ tabConfig.name }}</span>
         </button>
       </div>

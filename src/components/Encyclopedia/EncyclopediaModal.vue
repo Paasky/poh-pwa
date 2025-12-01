@@ -43,11 +43,7 @@ function clearQuery() {
 </script>
 
 <template>
-  <UiModal
-    :open="encyclopedia.isOpen"
-    title="Encyclopedia"
-    @close="encyclopedia.close()"
-  >
+  <UiModal :open="encyclopedia.isOpen" title="Encyclopedia" @close="encyclopedia.close()">
     <!-- Search in Headers -->
     <template #header-right>
       <!-- Search box and results dropdown -->
@@ -55,17 +51,14 @@ function clearQuery() {
         <div
           class="flex items-center gap-2 bg-slate-800/60 border border-slate-700 rounded px-2 py-1"
         >
-          <font-awesome-icon
-            :icon="['fas', 'magnifying-glass']"
-            class="fa-fw text-slate-400"
-          />
+          <font-awesome-icon :icon="['fas', 'magnifying-glass']" class="fa-fw text-slate-400" />
           <input
             ref="inputEl"
             v-model="query"
             type="search"
             placeholder="Search encyclopedia..."
             class="bg-transparent outline-none placeholder:text-slate-400 text-slate-100 w-64"
-          >
+          />
           <button
             v-show="query.length > 0"
             type="button"
@@ -74,10 +67,7 @@ function clearQuery() {
             title="Clear"
             @click="clearQuery"
           >
-            <font-awesome-icon
-              :icon="['fas', 'xmark']"
-              class="fa-fw"
-            />
+            <font-awesome-icon :icon="['fas', 'xmark']" class="fa-fw" />
           </button>
         </div>
 
@@ -102,12 +92,7 @@ function clearQuery() {
               <UiIcon :icon="t.icon" />
               <span class="truncate">{{ t.name }}</span>
             </button>
-            <div
-              v-if="results.length === 0"
-              class="px-3 py-2 text-slate-400"
-            >
-              No matches
-            </div>
+            <div v-if="results.length === 0" class="px-3 py-2 text-slate-400">No matches</div>
           </div>
         </div>
       </div>
@@ -115,13 +100,9 @@ function clearQuery() {
 
     <div class="w-full h-full flex">
       <!-- Left menu -->
-      <aside
-        ref="leftMenuEl"
-        class="w-72 shrink-0 flex-none h-full overflow-y-auto bg-slate-950"
-      >
-        sports: image in ancient greek pottery style sanitation: image in 19th
-        century painting style guided ordnance: image in 1980s vhs style goals
-        tournaments: image in medieval style
+      <aside ref="leftMenuEl" class="w-72 shrink-0 flex-none h-full overflow-y-auto bg-slate-950">
+        sports: image in ancient greek pottery style sanitation: image in 19th century painting
+        style guided ordnance: image in 1980s vhs style goals tournaments: image in medieval style
         <MenuSection
           v-for="section of encyclopedia.sections"
           :id="'enc-' + section.elemId"

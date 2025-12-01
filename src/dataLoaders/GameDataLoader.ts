@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { isRef } from "vue";
 import { GameClass, GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
 import { GameData } from "@/types/api";
 import { Agenda } from "@/objects/game/Agenda";
@@ -40,15 +41,13 @@ const classConf = {
 } as Record<GameClass, Ctor>;
 
 export class GameDataLoader {
-  load(gameData: GameData): Record<GameKey, GameObject> {
+  initFromRaw(gameData: GameData): Record<GameKey, GameObject> {
     const objs = {} as Record<GameKey, GameObject>;
 
     // Init each object
     for (const rawObjData of gameData.objects) {
       if (!rawObjData.key) {
-        throw new Error(
-          `Invalid game obj data: key is missing from ${JSON.stringify(rawObjData)}`,
-        );
+        throw new Error(`Invalid game obj data: key is missing from ${JSON.stringify(rawObjData)}`);
       }
 
       if (!rawObjData.key.includes(":")) {
@@ -60,9 +59,7 @@ export class GameDataLoader {
       const objClass = rawObjData.key.split(":")[0] as GameClass;
       const config = classConf[objClass];
       if (!config) {
-        throw new Error(
-          `Invalid game obj class: undefined in config for class '${objClass}'`,
-        );
+        throw new Error(`Invalid game obj class: undefined in config for class '${objClass}'`);
       }
 
       // Sanity checks pass, init the object
@@ -118,10 +115,7 @@ export class GameDataLoader {
     return value;
   }
 
-  private _buildBackRelations(
-    obj: GameObject,
-    objects: Record<string, GameObject>,
-  ): void {
+  private _buildBackRelations(obj: GameObject, objects: Record<string, GameObject>): void {
     const ctor = obj.constructor as unknown as { attrsConf: GameObjAttr[] };
     for (const attrConf of ctor.attrsConf) {
       try {
@@ -131,9 +125,7 @@ export class GameDataLoader {
 
         // Most data is actually a ref(data) so extract the .value
         const directValue = (obj as any)[attrConf.attrName];
-        const relatedKey = attrConf.attrNotRef
-          ? directValue
-          : directValue.value;
+        const relatedKey = attrConf.attrNotRef ? directValue : directValue.value;
 
         if (relatedKey === undefined || relatedKey === null) {
           if (!attrConf.isOptional) {
@@ -144,30 +136,51 @@ export class GameDataLoader {
           }
           continue;
         }
-        if (typeof relatedKey !== "string") {
-          // noinspection ExceptionCaughtLocallyJS
-          throw new Error(
-            `Invalid related key type: ${typeof relatedKey} for ${JSON.stringify(attrConf)} in ${JSON.stringify(obj)}`,
-          );
-        }
-
-        const relatedObj = objects[relatedKey];
-        if (!relatedObj) {
-          // noinspection ExceptionCaughtLocallyJS
-          throw new Error(
-            `Related object ${relatedKey} not found for ${JSON.stringify(attrConf)} in ${JSON.stringify(obj)}`,
-          );
-        }
-
-        if (attrConf.related.isOne) {
-          (relatedObj as any)[attrConf.related.theirKeyAttr] = obj.key;
+        if (attrConf.related.isManyToMany) {
+          for (const relatedSingleKey of relatedKey) {
+            this._setToRelatedObj(obj, relatedSingleKey as GameKey, attrConf, objects);
+          }
         } else {
-          (relatedObj as any)[attrConf.related.theirKeyAttr].push(obj.key);
+          this._setToRelatedObj(obj, relatedKey as GameKey, attrConf, objects);
         }
       } catch (e) {
         const msg = `obj: ${obj.key}, conf: ${JSON.stringify(attrConf)}, msg: ${(e as any).message}`;
         throw new Error(msg);
       }
+    }
+  }
+
+  private _setToRelatedObj(
+    obj: GameObject,
+    relatedKey: GameKey | object,
+    attrConf: GameObjAttr,
+    objects: Record<GameKey, GameObject>,
+  ): void {
+    // The key of the related must be a string
+    // noinspection SuspiciousTypeOfGuard
+    if (typeof relatedKey !== "string") {
+      throw new Error(
+        `Invalid related key type: "${typeof relatedKey}" for ${JSON.stringify(attrConf)} in ${JSON.stringify(obj)}`,
+      );
+    }
+
+    const relatedObj = objects[relatedKey];
+    if (!relatedObj) {
+      throw new Error(
+        `Related object ${relatedKey} not found for ${JSON.stringify(attrConf)} in ${JSON.stringify(obj)}`,
+      );
+    }
+
+    // Load the related obj.attr
+    const relatedAttr = (relatedObj as any)[attrConf.related!.theirKeyAttr];
+    if (attrConf.related!.isOne) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      isRef(relatedAttr)
+        ? (relatedAttr.value = obj.key)
+        : ((relatedObj as any)[attrConf.related!.theirKeyAttr] = obj.key);
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      isRef(relatedAttr) ? (relatedAttr as any).value.push(obj.key) : relatedAttr.push(obj.key);
     }
   }
 }

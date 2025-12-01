@@ -1,15 +1,8 @@
 import { markRaw, shallowRef } from "vue";
 
 import { defineStore } from "pinia";
-import {
-  CatKey,
-  isCategoryObject,
-  isTypeObject,
-  ObjKey,
-  TypeKey,
-  World,
-} from "@/types/common";
-import { GameData, StaticData } from "@/types/api";
+import { CatKey, isCategoryObject, isTypeObject, ObjKey, TypeKey, World } from "@/types/common";
+import { StaticData } from "@/types/api";
 import {
   CategoryObject,
   initCategoryObject,
@@ -20,7 +13,6 @@ import {
 import { GameClass, GameKey, GameObject } from "@/objects/game/_GameObject";
 import { withCallerContext } from "@/utils/stack";
 import { Player } from "@/objects/game/Player";
-import { GameDataLoader } from "@/dataLoaders/GameDataLoader";
 
 export const useObjectsStore = defineStore("objects", {
   state: () => ({
@@ -34,9 +26,7 @@ export const useObjectsStore = defineStore("objects", {
       currentPlayer: "" as GameKey,
     } as World,
 
-    _staticObjects: {} as Readonly<
-      Record<CatKey | TypeKey, CategoryObject | TypeObject>
-    >,
+    _staticObjects: {} as Readonly<Record<CatKey | TypeKey, CategoryObject | TypeObject>>,
     _categoryTypesIndex: shallowRef(new Map<CatKey, Set<TypeKey>>()),
     _classTypesIndex: shallowRef(new Map<TypeClass, Set<TypeKey>>()),
     _classCatsIndex: shallowRef(new Map<TypeClass, Set<CatKey>>()),
@@ -53,12 +43,8 @@ export const useObjectsStore = defineStore("objects", {
       (state) =>
       (key: ObjKey): CategoryObject | GameObject | TypeObject => {
         const obj =
-          state._staticObjects[key as CatKey | TypeKey] ??
-          state._gameObjects[key as GameKey];
-        if (!obj)
-          throwWithContext(
-            `[objStore] Tried to get(${key}), key does not exist in store`,
-          );
+          state._staticObjects[key as CatKey | TypeKey] ?? state._gameObjects[key as GameKey];
+        if (!obj) throwWithContext(`[objStore] Tried to get(${key}), key does not exist in store`);
         return obj;
       },
 
@@ -93,9 +79,7 @@ export const useObjectsStore = defineStore("objects", {
             `[objStore] Tried to getTypeObject(${key}), key does not exist in store`,
           );
         if (!isTypeObject(obj))
-          throwWithContext(
-            `[objStore] Not a TypeObject: ${key} : ${JSON.stringify(obj)}`,
-          );
+          throwWithContext(`[objStore] Not a TypeObject: ${key} : ${JSON.stringify(obj)}`);
         return obj as TypeObject;
       },
 
@@ -124,9 +108,7 @@ export const useObjectsStore = defineStore("objects", {
       (catKey: CatKey): TypeObject[] => {
         const set = state._categoryTypesIndex.get(catKey);
         if (!set) return [];
-        return Array.from(set).map(
-          (key) => state._staticObjects[key] as TypeObject,
-        );
+        return Array.from(set).map((key) => state._staticObjects[key] as TypeObject);
       },
 
     getClassTypes:
@@ -134,9 +116,7 @@ export const useObjectsStore = defineStore("objects", {
       (typeClass: TypeClass): TypeObject[] => {
         const set = state._classTypesIndex.get(typeClass);
         if (!set) return [];
-        return Array.from(set).map(
-          (key) => state._staticObjects[key] as TypeObject,
-        );
+        return Array.from(set).map((key) => state._staticObjects[key] as TypeObject);
       },
 
     getClassTypesPerCategory:
@@ -170,9 +150,7 @@ export const useObjectsStore = defineStore("objects", {
       (typeClass: TypeClass): CategoryObject[] => {
         const set = state._classCatsIndex.get(typeClass);
         if (!set) return [];
-        return Array.from(set).map(
-          (key) => state._staticObjects[key] as CategoryObject,
-        );
+        return Array.from(set).map((key) => state._staticObjects[key] as CategoryObject);
       },
 
     // GameObjects-array getters
@@ -187,34 +165,6 @@ export const useObjectsStore = defineStore("objects", {
   },
 
   actions: {
-    init(staticData: StaticData, gameData: GameData) {
-      if (this.ready) throwWithContext("Objects Store already initialized");
-
-      this.initStatic(staticData);
-      this.initGame(gameData);
-
-      console.log("Objects Store initialized");
-    },
-
-    initGame(gameData: GameData) {
-      if (this.ready) throwWithContext("Objects Store already initialized");
-
-      this.resetGame();
-
-      this.world = gameData.world;
-      const objects = new GameDataLoader().load(gameData);
-
-      // Directly set by the key to prevent reactivity issues mid-load
-      for (const [k, v] of Object.entries(objects)) {
-        this._gameObjects[k as GameKey] = v;
-      }
-      this._cacheGameObjects();
-
-      if (Object.keys(this._staticObjects).length > 0) {
-        this.ready = true;
-      }
-    },
-
     initStatic(staticData: StaticData) {
       if (Object.keys(this._staticObjects).length > 0) {
         throwWithContext("Objects Store static objects already initialized");
@@ -225,9 +175,7 @@ export const useObjectsStore = defineStore("objects", {
         staticObjects[data.key] = Object.freeze(markRaw(initTypeObject(data)));
       }
       for (const data of staticData.categories) {
-        staticObjects[data.key] = Object.freeze(
-          markRaw(initCategoryObject(data)),
-        );
+        staticObjects[data.key] = Object.freeze(markRaw(initCategoryObject(data)));
       }
       this._staticObjects = Object.freeze(markRaw(staticObjects));
 
@@ -272,8 +220,7 @@ export const useObjectsStore = defineStore("objects", {
 
     set(obj: GameObject) {
       if (!obj.key) throwWithContext("GameObject must have a key");
-      if (this._gameObjects[obj.key])
-        throwWithContext(`GameObject ${obj.key} already exists`);
+      if (this._gameObjects[obj.key]) throwWithContext(`GameObject ${obj.key} already exists`);
       this._gameObjects[obj.key] = obj;
 
       this._cacheGameObjects([obj]);
@@ -318,13 +265,10 @@ export const useObjectsStore = defineStore("objects", {
     },
 
     delete(gameKey: GameKey) {
-      if (!this._gameObjects[gameKey])
-        throwWithContext(`GameObject ${gameKey} does not exist`);
+      if (!this._gameObjects[gameKey]) throwWithContext(`GameObject ${gameKey} does not exist`);
 
       // Delete it from indexes and objects
-      this._classGameObjectsIndex
-        .get(this.getGameObject(gameKey).class)
-        ?.delete(gameKey);
+      this._classGameObjectsIndex.get(this.getGameObject(gameKey).class)?.delete(gameKey);
       delete this._gameObjects[gameKey];
     },
   },

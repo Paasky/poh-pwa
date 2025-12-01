@@ -45,19 +45,10 @@ const bgColor2 = computed(
         :class="isOpen ? 'border-b border-green-900/25' : ''"
       >
         <span v-if="canOpen">
-          <UiIcon
-            v-if="isOpen"
-            :icon="icons.down"
-          />
-          <UiIcon
-            v-else
-            :icon="icons.up"
-          />
+          <UiIcon v-if="isOpen" :icon="icons.down" />
+          <UiIcon v-else :icon="icons.up" />
         </span>
-        <h3
-          v-if="title"
-          class="flex-grow"
-        >
+        <h3 v-if="title" class="flex-grow">
           {{ title }}
         </h3>
         <div v-if="buttonText">
@@ -71,10 +62,7 @@ const bgColor2 = computed(
         </div>
       </div>
     </div>
-    <div
-      v-if="isOpen"
-      class="flex-1 min-h-0"
-    >
+    <div v-if="isOpen" class="flex-1 min-h-0">
       <slot />
     </div>
   </div>

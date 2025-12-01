@@ -3,7 +3,7 @@
  * Runs the full pre-commit quality gate in a controlled, cross-platform way.
  * Steps:
  * 1) Prettier format check
- * 2) ESLint (warnings treated as errors via script)
+ * 2) ESLint (errors only; warnings are allowed)
  * 3) TypeScript type-check
  * 4) Vitest unit tests (non-watch)
  * 5) Vite development build with warnings treated as errors
@@ -35,8 +35,9 @@ for (const step of steps) {
       "   Quick fix: run 'pnpm fix' to auto-apply Prettier + ESLint fixes where possible.",
     );
     console.error(
-      "   Then re-run: 'pnpm precommit:all' to verify all checks pass.\n",
+      "   Note: After running 'pnpm fix', remember to stage changes with 'git add -A'.",
     );
+    console.error("   Then re-run: 'pnpm precommit:all' to verify all checks pass.\n");
     process.exit(status ?? 1);
   }
 }

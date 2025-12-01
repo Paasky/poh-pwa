@@ -4,8 +4,7 @@ function getOriginSafe(): string | null {
   try {
     // In browser/Vite
 
-    if (typeof location !== "undefined" && location && location.origin)
-      return location.origin;
+    if (typeof location !== "undefined" && location && location.origin) return location.origin;
   } catch {
     // ignore
   }
@@ -26,16 +25,8 @@ function normalizeFrame(raw: string, origin: string | null): string {
   return out;
 }
 
-function getAppFrames(opts?: {
-  exclude?: string[];
-  limit?: number;
-  err?: Error;
-}): string[] {
-  const exclude = new Set([
-    "/src/utils/stack.ts",
-    "@/utils/stack.ts",
-    ...(opts?.exclude ?? []),
-  ]);
+function getAppFrames(opts?: { exclude?: string[]; limit?: number; err?: Error }): string[] {
+  const exclude = new Set(["/src/utils/stack.ts", "@/utils/stack.ts", ...(opts?.exclude ?? [])]);
   const err = opts?.err ?? new Error();
   const stack = err.stack ?? "";
   const origin = getOriginSafe();
@@ -64,10 +55,7 @@ function getAppFrames(opts?: {
   return frames;
 }
 
-export function withCallerContext(
-  message: string,
-  extraExclude?: string[],
-): Error {
+export function withCallerContext(message: string, extraExclude?: string[]): Error {
   // Capture a single error and derive two frames from it:
   // 0 -> where withCallerContext was called (throw site)
   // 1 -> the immediate caller before the throw site
@@ -76,8 +64,7 @@ export function withCallerContext(
   const thrownAt = frames[0] ?? "(throw site unknown)";
   // Exclude the throw site to get the previous src-function
   const calledFromRaw =
-    getAppFrames({ exclude: [...(extraExclude ?? []), thrownAt], err })[0] ??
-    "(caller unknown)";
+    getAppFrames({ exclude: [...(extraExclude ?? []), thrownAt], err })[0] ?? "(caller unknown)";
   return new Error(
     `${message} — thrown at ${thrownAt} — called from ${formatCalledFrom(calledFromRaw)}`,
   );

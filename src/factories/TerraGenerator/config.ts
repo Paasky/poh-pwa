@@ -48,10 +48,7 @@ export const yTypes = {
 } as Record<number, TypeKey>;
 
 // Wrap yTypes in a function allowing Y flip
-export function getYTypes(
-  stratHeight: number,
-  flipY: boolean,
-): Record<number, TypeKey> {
+export function getYTypes(stratHeight: number, flipY: boolean): Record<number, TypeKey> {
   if (!flipY) return yTypes;
   const out: Record<number, TypeKey> = {};
   const max = stratHeight - 1;
@@ -73,10 +70,7 @@ export const xTypes = {
 } as Record<number, TypeKey>;
 
 // Wrap xTypes in a function allowing X flip
-export function getXTypes(
-  stratWidth: number,
-  flipX: boolean,
-): Record<number, TypeKey> {
+export function getXTypes(stratWidth: number, flipX: boolean): Record<number, TypeKey> {
   if (!flipX) return xTypes;
   const out: Record<number, TypeKey> = {};
   const max = stratWidth - 1;

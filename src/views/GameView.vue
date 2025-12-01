@@ -116,10 +116,7 @@ function onBeforeUnload(e: BeforeUnloadEvent) {
 </script>
 
 <template>
-  <Transition
-    name="fade"
-    mode="out-in"
-  >
+  <Transition name="fade" mode="out-in">
     <!-- Loader Screen -->
     <div
       v-if="!app.ready"
@@ -127,13 +124,8 @@ function onBeforeUnload(e: BeforeUnloadEvent) {
       class="relative w-screen h-screen bg-gray-800 text-slate-100 flex items-center justify-center"
     >
       <div class="text-center">
-        <img
-          src="/book.gif"
-          alt="Book"
-        >
-        <p class="mt-4 text-slate-300">
-          Loading the Pages of History…
-        </p>
+        <img src="/book.gif" alt="Book" />
+        <p class="mt-4 text-slate-300">Loading the Pages of History…</p>
       </div>
     </div>
 
@@ -154,27 +146,16 @@ function onBeforeUnload(e: BeforeUnloadEvent) {
       <PlayerDetailsBar />
 
       <!-- Top-right -->
-      <UiElement
-        position="top-right"
-        variant="ghost"
-        class="z-50 text-xl"
-      >
+      <UiElement position="top-right" variant="ghost" class="z-50 text-xl">
         <div class="flex gap-1">
-          <UiButton
-            tooltip="Encyclopedia"
-            @click="encyclopedia.open()"
-          >
+          <UiButton tooltip="Encyclopedia" @click="encyclopedia.open()">
             <UiIcon :icon="icons.question" />
           </UiButton>
           <UiButton
             :tooltip="isFullscreen ? 'Exit full screen' : 'Full screen'"
             @click="toggleFullscreen"
           >
-            <UiIcon
-              :icon="
-                isFullscreen ? icons.fullscreenExit : icons.fullscreenEnter
-              "
-            />
+            <UiIcon :icon="isFullscreen ? icons.fullscreenExit : icons.fullscreenEnter" />
           </UiButton>
           <UiButton tooltip="Menu">
             <UiIcon :icon="icons.menu" />
@@ -183,9 +164,7 @@ function onBeforeUnload(e: BeforeUnloadEvent) {
       </UiElement>
 
       <!-- Left-center -->
-      <UiElement position="left-center">
-        Ongoing
-      </UiElement>
+      <UiElement position="left-center"> Ongoing </UiElement>
 
       <!-- Right-center -->
       <UiElement position="right-center">
@@ -193,26 +172,19 @@ function onBeforeUnload(e: BeforeUnloadEvent) {
       </UiElement>
 
       <!-- Bottom-left -->
-      <UiElement position="bottom-left">
-        Map
-      </UiElement>
+      <UiElement position="bottom-left"> Map </UiElement>
 
       <!-- Bottom-center -->
       <UiElement position="bottom-center">
         <div class="max-h-48 overflow-y-auto">
-          <p
-            v-for="type in useObjectsStore().currentPlayer.knownTypes.value"
-            :key="type.id"
-          >
+          <p v-for="type in useObjectsStore().currentPlayer.knownTypes.value" :key="type.id">
             {{ type.class }} - {{ type.name }}
           </p>
         </div>
       </UiElement>
 
       <!-- Bottom-right -->
-      <UiElement position="bottom-right">
-        Next
-      </UiElement>
+      <UiElement position="bottom-right"> Next </UiElement>
 
       <!-- Modals  -->
       <PlayerDetailsModal />

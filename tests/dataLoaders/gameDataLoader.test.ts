@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { GameDataLoader } from "../../src/dataLoaders/GameDataLoader";
 import { initTestPinia, loadStaticData } from "../_setup/pinia";
-import { Tile } from "../../src/objects/game/_GameObject";
+import { Tile } from "../../src/objects/game/Tile";
+import { GameData } from "../../src/types/api";
 
 describe("gameDataLoader", () => {
   beforeEach(() => initTestPinia() && loadStaticData());
@@ -10,24 +11,24 @@ describe("gameDataLoader", () => {
     const loader = new GameDataLoader();
 
     const missingKey = {};
-    expect(() => loader.load({ objects: [missingKey] })).toThrow(
+    expect(() => loader.initFromRaw({ objects: [missingKey] } as GameData)).toThrow(
       `Invalid game obj data: key is missing from ${JSON.stringify(missingKey)}`,
     );
 
     const invalidKey = { key: "test" };
-    expect(() => loader.load({ objects: [invalidKey] })).toThrow(
+    expect(() => loader.initFromRaw({ objects: [invalidKey] } as GameData)).toThrow(
       `Invalid game obj data: key 'test' must be format '{class}:{id}'`,
     );
 
     const invalidClass = { key: "test:1" };
-    expect(() => loader.load({ objects: [invalidClass] })).toThrow(
+    expect(() => loader.initFromRaw({ objects: [invalidClass] } as GameData)).toThrow(
       `Invalid game obj class: undefined in config for class 'test'`,
     );
 
     const withoutName = {
       key: "player:1",
     };
-    expect(() => loader.load({ objects: [withoutName] })).toThrow(
+    expect(() => loader.initFromRaw({ objects: [withoutName] } as GameData)).toThrow(
       `Required attribute 'name' missing from ${JSON.stringify(withoutName)}`,
     );
 
@@ -36,8 +37,8 @@ describe("gameDataLoader", () => {
       type: "majorCultureType:test",
       playerKey: "player:1",
     };
-    expect(() => loader.load({ objects: [invalidTypeKey] })).toThrow(
-      `[objStore] Tried to get(majorCultureType:test), key does not exist in store`,
+    expect(() => loader.initFromRaw({ objects: [invalidTypeKey] } as GameData)).toThrow(
+      `[objStore] Tried to getTypeObject(majorCultureType:test), key does not exist in store`,
     );
 
     const playerData = {
@@ -50,9 +51,9 @@ describe("gameDataLoader", () => {
       playerKey: "player:2",
     };
     expect(() =>
-      loader.load({ objects: [playerData, invalidRelationKey] }),
+      loader.initFromRaw({ objects: [playerData, invalidRelationKey] } as GameData),
     ).toThrow(
-      `obj: culture:1, conf: {"attrName":"playerKey","related":{"theirKeyAttr":"cultureKey","isOne":true}}, msg: [objStore] Tried to get(player:2), key does not exist in store`,
+      `obj: culture:1, conf: {"attrName":"playerKey","attrNotRef":true,"related":{"theirKeyAttr":"cultureKey","isOne":true}}, msg: Related object player:2 not found for {"attrName":"playerKey","attrNotRef":true,"related":{"theirKeyAttr":"cultureKey","isOne":true}} in {"key":"culture:1","type":"majorCultureType:viking","playerKey":"player:2"}`,
     );
   });
 
@@ -93,6 +94,7 @@ describe("gameDataLoader", () => {
       gods: ["godType:godOfTrade"],
       dogmas: ["dogmaType:clergy"],
       cityKey: "city:1",
+      foundedTurn: 1,
     };
     const tileData = {
       key: tileKey,
@@ -106,7 +108,10 @@ describe("gameDataLoader", () => {
     };
     const tradeRouteData = {
       key: "tradeRoute:1",
-      playerKey: "player:1",
+      unitKey: "unit:1",
+      tileKeys: [tileKey],
+      city1Key: "city:1",
+      city2Key: "city:1",
     };
     const unitData = {
       key: "unit:1",
@@ -123,7 +128,7 @@ describe("gameDataLoader", () => {
       playerKey: "player:1",
     };
 
-    const gameObjects = loader.load({
+    const gameObjects = loader.initFromRaw({
       objects: [
         citizenData,
         cityData,
@@ -135,33 +140,34 @@ describe("gameDataLoader", () => {
         unitData,
         unitDesignData,
       ],
-    });
+    } as GameData);
 
     // output = input + defaults
-    expect(gameObjects.map((o) => o.toJSON())).toEqual([
-      citizenData,
-      {
+    expect(JSON.parse(JSON.stringify(gameObjects))).toEqual({
+      "citizen:1": citizenData,
+      "city:1": {
         ...cityData,
         canAttack: false,
         health: 100,
         isCapital: false,
         origPlayerKey: "player:1",
       },
-      cultureData,
-      { ...playerData, isCurrent: false },
-      religionData,
-      tileData,
-      tradeRouteData,
-      {
+      "culture:1": cultureData,
+      "player:1": { ...playerData, isCurrent: false },
+      "religion:1": { ...religionData, status: "myths" },
+      "tile:x12,y23": tileData,
+      "tradeRoute:1": tradeRouteData,
+      "unit:1": {
         ...unitData,
         canAttack: false,
         health: 100,
         moves: 0,
         name: "",
+        status: "regular",
         origPlayerKey: "player:1",
       },
-      { ...unitDesignData, isActive: true, isElite: false },
-    ]);
+      "unitDesign:1": { ...unitDesignData, isActive: true, isElite: false },
+    });
   });
 
   it("Build game objects and returns correct JSON, with optional", () => {
@@ -173,10 +179,8 @@ describe("gameDataLoader", () => {
       isCurrent: true,
     };
 
-    const gameObjects = loader.load({ objects: [playerData] });
+    const gameObjects = loader.initFromRaw({ objects: [playerData] } as GameData);
 
-    expect(gameObjects).toHaveLength(1);
-
-    expect(gameObjects[0].toJSON()).toEqual(playerData);
+    expect(JSON.parse(JSON.stringify(gameObjects))).toEqual({ "player:1": playerData });
   });
 });

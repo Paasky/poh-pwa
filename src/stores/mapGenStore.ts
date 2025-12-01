@@ -105,12 +105,8 @@ function mapConfig() {
 
       const staticData = 7 * 1024 * 1024;
 
-      const minMB = Math.round(
-        (watchers * 256 + refs * 64 + staticData) / (1024 * 1024),
-      );
-      const maxMB = Math.round(
-        (watchers * 1024 + refs * 512 + staticData) / (1024 * 1024),
-      );
+      const minMB = Math.round((watchers * 256 + refs * 64 + staticData) / (1024 * 1024));
+      const maxMB = Math.round((watchers * 1024 + refs * 512 + staticData) / (1024 * 1024));
 
       return {
         minMB,
@@ -179,9 +175,10 @@ export const useMapGenStore = defineStore("mapGen", () => {
     const minY = Math.min(...ys);
     const maxY = Math.max(...ys);
     const opts: SizeOption[] = [];
-    const presetByY = Object.fromEntries(
-      worldSizes.map((ws) => [ws.y, ws]),
-    ) as Record<number, WorldSize>;
+    const presetByY = Object.fromEntries(worldSizes.map((ws) => [ws.y, ws])) as Record<
+      number,
+      WorldSize
+    >;
     for (let y = minY; y <= maxY; y += 9) {
       const x = y * 2;
       const preset = presetByY[y];
@@ -253,9 +250,7 @@ export const useMapGenStore = defineStore("mapGen", () => {
   const areaColors = reactive<Record<string, string>>({});
 
   const terrainTypes = computed(() =>
-    [...objStore.getClassTypes("terrainType")].sort((a, b) =>
-      a.name.localeCompare(b.name),
-    ),
+    [...objStore.getClassTypes("terrainType")].sort((a, b) => a.name.localeCompare(b.name)),
   );
   const elevationTypes = computed(() =>
     [...objStore.getClassTypes("elevationType")]
@@ -263,9 +258,7 @@ export const useMapGenStore = defineStore("mapGen", () => {
       .sort((a, b) => a.name.localeCompare(b.name)),
   );
   const featureTypes = computed(() =>
-    [...objStore.getClassTypes("featureType")].sort((a, b) =>
-      a.name.localeCompare(b.name),
-    ),
+    [...objStore.getClassTypes("featureType")].sort((a, b) => a.name.localeCompare(b.name)),
   );
 
   // Actions
@@ -278,9 +271,7 @@ export const useMapGenStore = defineStore("mapGen", () => {
 
   function updateSize(v: { x: number; y: number }) {
     const next: WorldSize = { ...worldValues.value, x: v.x, y: v.y };
-    const nearest = [...worldSizes].sort(
-      (a, b) => Math.abs(a.y - v.y) - Math.abs(b.y - v.y),
-    )[0];
+    const nearest = [...worldSizes].sort((a, b) => Math.abs(a.y - v.y) - Math.abs(b.y - v.y))[0];
     if (nearest) {
       next.continents = nearest.continents;
       next.majorsPerContinent = nearest.majorsPerContinent;
@@ -300,18 +291,10 @@ export const useMapGenStore = defineStore("mapGen", () => {
   function generate() {
     objStore.resetGame();
 
-    const ax =
-      alignment.value.mirrorX === null
-        ? Math.random() < 0.5
-        : alignment.value.mirrorX;
-    const ay =
-      alignment.value.mirrorY === null
-        ? Math.random() < 0.5
-        : alignment.value.mirrorY;
+    const ax = alignment.value.mirrorX === null ? Math.random() < 0.5 : alignment.value.mirrorX;
+    const ay = alignment.value.mirrorY === null ? Math.random() < 0.5 : alignment.value.mirrorY;
     const ac =
-      alignment.value.mirrorClimate === null
-        ? Math.random() < 0.5
-        : alignment.value.mirrorClimate;
+      alignment.value.mirrorClimate === null ? Math.random() < 0.5 : alignment.value.mirrorClimate;
     gen.value = markRaw(
       new TerraGenerator(worldValues.value, ax, ay, ac)
         .generateStratLevel()

@@ -1,12 +1,19 @@
-import { HasPlayer } from "@/objects/game/_mixins";
 import { computed, ref } from "vue";
 import { TypeObject } from "@/types/typeObjects";
 import { UnitStatus } from "@/objects/game/Unit";
 import { Yields } from "@/objects/yield";
 import { CatKey, roundToTenth, TypeKey } from "@/types/common";
 import { GameKey } from "@/objects/game/_GameObject";
+import { useObjectsStore } from "@/stores/objectStore";
+import { Player } from "@/objects/game/Player";
 
-export class Government extends HasPlayer(Object) {
+export class Government {
+  constructor(playerKey: GameKey) {
+    this.playerKey = playerKey;
+  }
+  playerKey: GameKey;
+  player = computed(() => useObjectsStore().get(this.playerKey) as Player);
+
   corruption = ref(0);
   discontent = ref(0);
 
@@ -16,78 +23,50 @@ export class Government extends HasPlayer(Object) {
   );
 
   hasElections = computed(() =>
-    this.policies.value.some((p) =>
-      p.specials.includes("specialType:elections"),
-    ),
+    this.policies.value.some((p) => p.specials.includes("specialType:elections")),
   );
   nextElection = ref(0);
 
   canBuyBuildings = computed(
-    () =>
-      !this.policies.value.some((p) =>
-        p.specials.includes("specialType:cannotBuyBuildings"),
-      ),
+    () => !this.policies.value.some((p) => p.specials.includes("specialType:cannotBuyBuildings")),
   );
   canControlConstruction = computed(
     () =>
-      !this.policies.value.some((p) =>
-        p.specials.includes("specialType:forceAutomaticBuildQueue"),
-      ),
+      !this.policies.value.some((p) => p.specials.includes("specialType:forceAutomaticBuildQueue")),
   );
   canControlTraining = computed(
-    () =>
-      !this.policies.value.some((p) =>
-        p.specials.includes("specialType:cannotBuildUnits"),
-      ),
+    () => !this.policies.value.some((p) => p.specials.includes("specialType:cannotBuildUnits")),
   );
   canDeclineTrade = computed(
-    () =>
-      !this.policies.value.some((p) =>
-        p.specials.includes("specialType:cannotDeclineTrade"),
-      ),
+    () => !this.policies.value.some((p) => p.specials.includes("specialType:cannotDeclineTrade")),
   );
   canLevyUnits = computed(() =>
     this.policies.value.some((p) => p.specials.includes("specialType:canLevy")),
   );
   canTradeNonAllies = computed(
-    () =>
-      !this.policies.value.some((p) =>
-        p.specials.includes("specialType:cannotTradeNonAllies"),
-      ),
+    () => !this.policies.value.some((p) => p.specials.includes("specialType:cannotTradeNonAllies")),
   );
   hasStateReligion = computed(() =>
-    this.policies.value.some((p) =>
-      p.specials.includes("specialType:forcedStateReligion"),
-    ),
+    this.policies.value.some((p) => p.specials.includes("specialType:forcedStateReligion")),
   );
   unitStartStatus = computed(
     (): UnitStatus =>
-      this.policies.value.some((p) =>
-        p.specials.includes("specialType:canMobilize"),
-      )
+      this.policies.value.some((p) => p.specials.includes("specialType:canMobilize"))
         ? "reserve"
         : "regular",
   );
 
-  yields = computed(
-    () => new Yields(this.policies.value.flatMap((p) => p.yields.all())),
-  );
+  yields = computed(() => new Yields(this.policies.value.flatMap((p) => p.yields.all())));
 
   setPolicies(policies: TypeObject[]) {
     if (this.hasElections.value)
-      throw new Error(
-        `Player ${this.player.value.name} cannot change policy with elections`,
-      );
+      throw new Error(`Player ${this.player.value.name} cannot change policy with elections`);
     const errors = [] as string[];
     policies.forEach((p) => {
       if (!this.selectablePolicies.value.includes(p))
-        errors.push(
-          `Player ${this.player.value.name} cannot select policy ${p.name}`,
-        );
+        errors.push(`Player ${this.player.value.name} cannot select policy ${p.name}`);
       if (this.policies.value.includes(p))
-        errors.push(
-          `Player ${this.player.value.name} already has policy ${p.name}`,
-        );
+        errors.push(`Player ${this.player.value.name} already has policy ${p.name}`);
     });
     if (errors.length) throw new Error(errors.join("\n"));
 
@@ -99,18 +78,14 @@ export class Government extends HasPlayer(Object) {
 
     // Set Policies & add discontent (100%/policy)
     this.policies.value = newPolicies;
-    this.discontent.value = roundToTenth(
-      this.discontent.value + policies.length * 100,
-    );
+    this.discontent.value = roundToTenth(this.discontent.value + policies.length * 100);
   }
 
   runElections() {
     if (!this.hasElections.value)
       throw new Error(`Player ${this.player.value.name} cannot run elections`);
     if (this.nextElection.value > 0)
-      throw new Error(
-        `Player ${this.player.value.name} cannot run elections yet`,
-      );
+      throw new Error(`Player ${this.player.value.name} cannot run elections yet`);
 
     // Find the top policy per category (top = most citizens with policy)
     const countedPolicies = {} as Record<
@@ -122,9 +97,7 @@ export class Government extends HasPlayer(Object) {
       if (!countedPolicies[cat]) countedPolicies[cat] = {};
       countedPolicies[cat][p.key] = {
         policy: p as TypeObject,
-        citizens: this.player.value.citizens.value.filter(
-          (c) => c.policy.value === p,
-        ).length,
+        citizens: this.player.value.citizens.value.filter((c) => c.policy.value === p).length,
       };
     });
     const topPolicies = {} as Record<CatKey, TypeObject>;
@@ -136,17 +109,10 @@ export class Government extends HasPlayer(Object) {
     }
 
     // Filter out top policies that are already selected and set those
-    this.setPolicies(
-      Object.values(topPolicies).filter(
-        (p) => !this.policies.value.includes(p),
-      ),
-    );
+    this.setPolicies(Object.values(topPolicies).filter((p) => !this.policies.value.includes(p)));
 
     // Remove up to 100% discontent
-    this.discontent.value = Math.max(
-      0,
-      roundToTenth(this.discontent.value - 100),
-    );
+    this.discontent.value = Math.max(0, roundToTenth(this.discontent.value - 100));
 
     // Set next elections in 25 turns
     this.nextElection.value = 25;
@@ -159,8 +125,7 @@ export class Government extends HasPlayer(Object) {
     const slow = this.hasElections.value ? 1 : 2;
     const quick = this.hasElections.value ? 3 : 4;
     this.corruption.value = roundToTenth(
-      this.corruption.value +
-        (this.corruption.value < slow * 100 ? slow : quick),
+      this.corruption.value + (this.corruption.value < slow * 100 ? slow : quick),
     );
 
     if (this.hasElections.value) {
@@ -176,15 +141,7 @@ export class Government extends HasPlayer(Object) {
       }
     } else {
       // No elections -> Discontent disappears slowly (2%/t)
-      this.discontent.value = Math.max(
-        0,
-        roundToTenth(this.discontent.value - 2),
-      );
+      this.discontent.value = Math.max(0, roundToTenth(this.discontent.value - 2));
     }
-  }
-
-  constructor(playerKey: GameKey) {
-    super();
-    this.playerKey.value = playerKey;
   }
 }

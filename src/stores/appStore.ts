@@ -4,6 +4,7 @@ import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStor
 import { GameData, StaticData } from "@/types/api";
 import { EngineService } from "@/components/Engine/engine";
 import { createWorld, worldSizes } from "@/factories/worldFactory";
+import { GameDataLoader } from "@/dataLoaders/GameDataLoader";
 
 async function fetchJSON<T>(url: string): Promise<T> {
   const res = await fetch(url, { cache: "no-store" });
@@ -28,22 +29,21 @@ export const useAppStore = defineStore("app", {
 
       // Load game or create a new world
       if (gameDataUrl) {
-        objects.initGame(await fetchJSON<GameData>(gameDataUrl));
+        const gameData = (await fetchJSON<GameData>(gameDataUrl)) as GameData;
+        const gameObjects = new GameDataLoader().initFromRaw(gameData);
+        objects.world = gameData.world;
+        objects.bulkSet(Object.values(gameObjects));
       } else {
         const gameData = createWorld(worldSizes[2]);
         objects.world = gameData.world;
         objects.bulkSet(gameData.objects);
       }
+      objects.ready = true;
 
       // Initialize the game engine
       await EngineService.init(objects.world);
 
       this.ready = true;
-      console.log(
-        "App initialized",
-        "static:" + Object.keys(objects._staticObjects).length,
-        "game:" + Object.keys(objects._gameObjects).length,
-      );
     },
   },
 });

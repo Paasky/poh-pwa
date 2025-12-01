@@ -1,11 +1,12 @@
-import { HasTiles } from "@/objects/game/_mixins";
+import { computed, ref } from "vue";
+import { hasMany } from "@/objects/game/_mixins";
 import { GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
-import { computed } from "vue";
 import { City } from "@/objects/game/City";
 import { useObjectsStore } from "@/stores/objectStore";
 import { Unit } from "@/objects/game/Unit";
+import { Tile } from "@/objects/game/Tile";
 
-export class TradeRoute extends HasTiles(GameObject) {
+export class TradeRoute extends GameObject {
   constructor(
     key: GameKey,
     city1Key: GameKey,
@@ -22,15 +23,6 @@ export class TradeRoute extends HasTiles(GameObject) {
 
   static attrsConf: GameObjAttr[] = [
     {
-      attrName: "unitKey",
-      attrNotRef: true,
-      related: { theirKeyAttr: "tradeRouteKey", isOne: true },
-    },
-    {
-      attrName: "tileKeys",
-      related: { theirKeyAttr: "tradeRouteKeys" },
-    },
-    {
       attrName: "city1Key",
       attrNotRef: true,
       related: { theirKeyAttr: "tradeRouteKeys" },
@@ -40,6 +32,15 @@ export class TradeRoute extends HasTiles(GameObject) {
       attrNotRef: true,
       related: { theirKeyAttr: "tradeRouteKeys" },
     },
+    {
+      attrName: "tileKeys",
+      related: { theirKeyAttr: "tradeRouteKeys", isManyToMany: true },
+    },
+    {
+      attrName: "unitKey",
+      attrNotRef: true,
+      related: { theirKeyAttr: "tradeRouteKey", isOne: true },
+    },
   ];
 
   city1Key = "" as GameKey;
@@ -48,20 +49,23 @@ export class TradeRoute extends HasTiles(GameObject) {
   city2Key = "" as GameKey;
   city2 = computed(() => useObjectsStore().get(this.city2Key) as City);
 
+  tileKeys = ref([] as GameKey[]);
+  tiles = hasMany(this.tileKeys, Tile);
+
   unitKey = "" as GameKey;
   unit = computed(() => useObjectsStore().get(this.unitKey) as Unit);
 
   delete(unitIsDead = false) {
-    this.city1.value.tradeRouteKeys.value =
-      this.city1.value.tradeRouteKeys.value.filter((k) => k !== this.key);
+    this.city1.value.tradeRouteKeys.value = this.city1.value.tradeRouteKeys.value.filter(
+      (k) => k !== this.key,
+    );
 
-    this.city2.value.tradeRouteKeys.value =
-      this.city2.value.tradeRouteKeys.value.filter((k) => k !== this.key);
+    this.city2.value.tradeRouteKeys.value = this.city2.value.tradeRouteKeys.value.filter(
+      (k) => k !== this.key,
+    );
 
     for (const tile of this.tiles.value) {
-      tile.tradeRouteKeys.value = tile.tradeRouteKeys.value.filter(
-        (k) => k !== this.key,
-      );
+      tile.tradeRouteKeys.value = tile.tradeRouteKeys.value.filter((k) => k !== this.key);
     }
 
     if (!unitIsDead) this.unit.value.tradeRouteKey.value = null;

@@ -51,16 +51,12 @@ export abstract class Queue {
 
     // If progress + amount < cost, just add progress and return 0
     if (queueItem.progress.value + amount < queueItem.cost) {
-      queueItem.progress.value = roundToTenth(
-        queueItem.progress.value + amount,
-      );
+      queueItem.progress.value = roundToTenth(queueItem.progress.value + amount);
       return 0;
     }
 
     // Otherwise, set progress to cost and return overflow
-    const overflow = roundToTenth(
-      queueItem.progress.value + amount - queueItem.cost,
-    );
+    const overflow = roundToTenth(queueItem.progress.value + amount - queueItem.cost);
     queueItem.progress.value = queueItem.cost;
     return overflow;
   }
@@ -71,11 +67,7 @@ export abstract class Queue {
 
   reorder(index: number, newIndex: number) {
     // todo throw if invalid indexes given
-    this._queue.value.splice(
-      newIndex,
-      0,
-      this._queue.value.splice(index, 1)[0],
-    );
+    this._queue.value.splice(newIndex, 0, this._queue.value.splice(index, 1)[0]);
   }
 
   /**
@@ -93,14 +85,8 @@ export abstract class Queue {
 
     // Nothing to construct: Convert my prod to primary/secondary yields and return null
     if (!queueItem) {
-      cityYields.add(
-        this.primaryYieldKey,
-        roundToTenth(myProduction.amount / 2),
-      );
-      cityYields.add(
-        this.secondaryYieldKey,
-        roundToTenth(myProduction.amount / 2),
-      );
+      cityYields.add(this.primaryYieldKey, roundToTenth(myProduction.amount / 2));
+      cityYields.add(this.secondaryYieldKey, roundToTenth(myProduction.amount / 2));
       return null;
     }
 
@@ -156,12 +142,10 @@ export class ConstructionQueue extends Queue {
 
     // IDE mixes up ref contents
     const queueItem = this._queue.value[0] as unknown as ConstructionQueueItem;
-    const typeClass = (queueItem.item as unknown as Construction).type
-      .class! as TypeClass;
+    const typeClass = (queueItem.item as unknown as Construction).type.class! as TypeClass;
 
     // National or World Wonder -> null
-    if (typeClass === "nationalWonderType" || typeClass === "worldWonderType")
-      return null;
+    if (typeClass === "nationalWonderType" || typeClass === "worldWonderType") return null;
 
     // Buildings -> remaining productionCost in Gold * 2
     return {
@@ -190,8 +174,8 @@ export class TrainingQueue extends Queue {
 
     // IDE mixes up ref contents
     const queueItem = this._queue.value[0] as unknown as TrainingQueueItem;
-    const equipmentCategory = (queueItem.item as unknown as UnitDesign)
-      .equipment.category! as CatKey;
+    const equipmentCategory = (queueItem.item as unknown as UnitDesign).equipment
+      .category! as CatKey;
 
     // Missionary -> remaining productionCost * 2 in Faith
     if (equipmentCategory === "equipmentCategory:missionary") {

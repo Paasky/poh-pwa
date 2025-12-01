@@ -2,7 +2,7 @@ import { Player } from "@/objects/game/Player";
 import { computed, ref, watch } from "vue";
 import { TypeObject } from "@/types/typeObjects";
 import { UnitDesign } from "@/objects/game/UnitDesign";
-import { upgradeTree } from "@/types/common";
+import { useObjectsStore } from "@/stores/objectStore";
 
 export class UnitDesignPrototype {
   player: Player | null;
@@ -10,8 +10,7 @@ export class UnitDesignPrototype {
   platform = ref<TypeObject | null>(null);
   knownPlatforms = computed(
     (): TypeObject[] =>
-      this.player?.knownTypes.value.filter((t) => t.class === "platformType") ??
-      [],
+      this.player?.knownTypes.value.filter((t) => t.class === "platformType") ?? [],
   );
   availablePlatforms = computed((): TypeObject[] =>
     this.knownPlatforms.value.filter((p) =>
@@ -22,15 +21,11 @@ export class UnitDesignPrototype {
   equipment = ref<TypeObject | null>(null);
   knownEquipments = computed(
     (): TypeObject[] =>
-      this.player?.knownTypes.value.filter(
-        (t) => t.class === "equipmentType",
-      ) ?? [],
+      this.player?.knownTypes.value.filter((t) => t.class === "equipmentType") ?? [],
   );
   availableEquipments = computed((): TypeObject[] => {
     if (!this.platform.value) return [];
-    return this.knownEquipments.value.filter(
-      (e) => this.platform.value!.key in e.names!,
-    );
+    return this.knownEquipments.value.filter((e) => this.platform.value!.key in e.names!);
   });
 
   isElite = ref(false);
@@ -39,8 +34,7 @@ export class UnitDesignPrototype {
 
   upgradeFrom = ref<UnitDesign | null>(null);
   upgradeFromDesigns = computed((): UnitDesign[] => {
-    if (!this.player || !this.platform.value || !this.equipment.value)
-      return [];
+    if (!this.player || !this.platform.value || !this.equipment.value) return [];
 
     const tree: TypeObject[] = [];
     upgradeTree(this.equipment.value as TypeObject, tree);
@@ -51,9 +45,7 @@ export class UnitDesignPrototype {
     );
   });
 
-  pointCost = computed(
-    () => 2 + (this.isElite.value ? 2 : 0) - (this.upgradeFrom.value ? 1 : 0),
-  );
+  pointCost = computed(() => 2 + (this.isElite.value ? 2 : 0) - (this.upgradeFrom.value ? 1 : 0));
 
   constructor(
     player: Player | null = null,
@@ -73,9 +65,7 @@ export class UnitDesignPrototype {
         }
         if (
           this.platform.value &&
-          !this.availablePlatforms.value.includes(
-            this.platform.value as TypeObject,
-          )
+          !this.availablePlatforms.value.includes(this.platform.value as TypeObject)
         ) {
           this.platform.value = null;
         }
@@ -91,9 +81,7 @@ export class UnitDesignPrototype {
         }
         if (
           this.equipment.value &&
-          !this.availableEquipments.value.includes(
-            this.equipment.value as TypeObject,
-          )
+          !this.availableEquipments.value.includes(this.equipment.value as TypeObject)
         ) {
           this.equipment.value = null;
         }
@@ -106,8 +94,7 @@ export class UnitDesignPrototype {
         return;
       }
 
-      this.name.value =
-        this.equipment.value.names![this.platform.value.key] ?? "";
+      this.name.value = this.equipment.value.names![this.platform.value.key] ?? "";
     });
 
     watch(
@@ -115,13 +102,21 @@ export class UnitDesignPrototype {
       () => {
         if (
           this.upgradeFrom.value &&
-          !this.upgradeFromDesigns.value.includes(
-            this.upgradeFrom.value as unknown as UnitDesign,
-          )
+          !this.upgradeFromDesigns.value.includes(this.upgradeFrom.value as unknown as UnitDesign)
         ) {
           this.upgradeFrom.value = null;
         }
       },
     );
+  }
+}
+
+export function upgradeTree(type: TypeObject, tree: TypeObject[]): void {
+  for (const key of type.upgradesFrom) {
+    const from = useObjectsStore().getTypeObject(key);
+    if (tree.includes(from)) continue;
+
+    tree.push(from);
+    upgradeTree(from, tree);
   }
 }

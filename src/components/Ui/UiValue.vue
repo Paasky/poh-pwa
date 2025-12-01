@@ -18,8 +18,7 @@ const displayText = computed<string>(() => {
 });
 
 const colorClass = computed<string>(() => {
-  if (props.isPositive !== null)
-    return props.isPositive ? "text-green-400" : "text-red-400";
+  if (props.isPositive !== null) return props.isPositive ? "text-green-400" : "text-red-400";
   if (typeof props.value === "string" || !props.value) return "";
   return props.value > 0 ? "text-green-400" : "text-red-400";
 });

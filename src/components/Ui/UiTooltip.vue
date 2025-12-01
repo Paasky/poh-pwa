@@ -46,8 +46,7 @@ function getFullscreenElement(): Element | null {
 }
 
 function updateTeleportTarget() {
-  teleportTarget.value = (getFullscreenElement() ||
-    document.body) as HTMLElement;
+  teleportTarget.value = (getFullscreenElement() || document.body) as HTMLElement;
 }
 
 function onFsChange() {
@@ -57,10 +56,7 @@ function onFsChange() {
 onMounted(() => {
   updateTeleportTarget();
   document.addEventListener("fullscreenchange", onFsChange as EventListener);
-  document.addEventListener(
-    "webkitfullscreenchange",
-    onFsChange as EventListener,
-  );
+  document.addEventListener("webkitfullscreenchange", onFsChange as EventListener);
   document.addEventListener("mozfullscreenchange", onFsChange as EventListener);
   document.addEventListener("MSFullscreenChange", onFsChange as EventListener);
 });
@@ -82,19 +78,11 @@ watch(open, async (val) => {
     if (triggerRef.value && tooltipRef.value) {
       cleanup?.();
       cleanup = autoUpdate(triggerRef.value, tooltipRef.value, async () => {
-        const { x, y } = await computePosition(
-          triggerRef.value!,
-          tooltipRef.value!,
-          {
-            placement: props.placement,
-            middleware: [
-              offsetMiddleware(props.offset),
-              flip(),
-              shift({ padding: 8 }),
-            ],
-            strategy: "fixed",
-          },
-        );
+        const { x, y } = await computePosition(triggerRef.value!, tooltipRef.value!, {
+          placement: props.placement,
+          middleware: [offsetMiddleware(props.offset), flip(), shift({ padding: 8 })],
+          strategy: "fixed",
+        });
         Object.assign(tooltipRef.value!.style, {
           left: `${x}px`,
           top: `${y}px`,
@@ -111,18 +99,9 @@ onBeforeUnmount(() => {
   cleanup?.();
   cleanup = null;
   document.removeEventListener("fullscreenchange", onFsChange as EventListener);
-  document.removeEventListener(
-    "webkitfullscreenchange",
-    onFsChange as EventListener,
-  );
-  document.removeEventListener(
-    "mozfullscreenchange",
-    onFsChange as EventListener,
-  );
-  document.removeEventListener(
-    "MSFullscreenChange",
-    onFsChange as EventListener,
-  );
+  document.removeEventListener("webkitfullscreenchange", onFsChange as EventListener);
+  document.removeEventListener("mozfullscreenchange", onFsChange as EventListener);
+  document.removeEventListener("MSFullscreenChange", onFsChange as EventListener);
 });
 </script>
 

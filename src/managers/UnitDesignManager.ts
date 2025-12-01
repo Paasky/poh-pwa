@@ -9,9 +9,7 @@ export class UnitDesignManager {
   create(prototype: UnitDesignPrototype, isFree: boolean = false): UnitDesign {
     const player = prototype.player ? (prototype.player as Player) : undefined;
     if (player && !isFree) {
-      if (
-        !player.storage.has("yieldType:designPoints", prototype.pointCost.value)
-      ) {
+      if (!player.storage.has("yieldType:designPoints", prototype.pointCost.value)) {
         throw new Error("Not enough design points to create a unit design");
       }
     }
@@ -30,10 +28,7 @@ export class UnitDesignManager {
     if (player) {
       player.designKeys.value.push(design.key);
       if (!isFree) {
-        player.storage.take(
-          "yieldType:designPoints",
-          prototype.pointCost.value,
-        );
+        player.storage.take("yieldType:designPoints", prototype.pointCost.value);
       }
     }
 

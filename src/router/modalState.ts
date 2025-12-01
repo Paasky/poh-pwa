@@ -98,10 +98,7 @@ export function initModalStateSync(router: Router) {
     const nextQuery = buildQueryFromState(to);
 
     // Only push if something actually changed
-    const same = shallowEqualQuery(
-      to.query as Record<string, string>,
-      nextQuery,
-    );
+    const same = shallowEqualQuery(to.query as Record<string, string>, nextQuery);
     if (same) return;
 
     pushingFromStores = true;
@@ -114,10 +111,7 @@ export function initModalStateSync(router: Router) {
   watch([pdOpen, activeTab], pushFromState);
 }
 
-function shallowEqualQuery(
-  a: Record<string, string>,
-  b: Record<string, string>,
-): boolean {
+function shallowEqualQuery(a: Record<string, string>, b: Record<string, string>): boolean {
   const ka = Object.keys(a);
   const kb = Object.keys(b);
   if (ka.length !== kb.length) return false;

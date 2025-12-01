@@ -14,10 +14,7 @@ const designs = computed(() => player.designs.value);
 
 <template>
   <div>
-    <UiHeader
-      title="Unit Designs"
-      class="mb-4"
-    />
+    <UiHeader title="Unit Designs" class="mb-4" />
     <UnitDesigner class="mb-4 mx-auto max-w-4xl" />
     <table class="mb-4">
       <thead>
@@ -30,10 +27,7 @@ const designs = computed(() => player.designs.value);
       </thead>
 
       <tbody>
-        <tr
-          v-for="design of designs"
-          :key="design.key"
-        >
+        <tr v-for="design of designs" :key="design.key">
           <td>
             <UiUnitIcon :design="design" />
             {{ design.name }}
@@ -45,25 +39,15 @@ const designs = computed(() => player.designs.value);
             <UiObjPill :obj-or-key="design.equipment" />
           </td>
           <td>
-            <UiButton v-if="design.isActive">
-              Deactivate
-            </UiButton>
-            <UiButton v-else>
-              Reactivate
-            </UiButton>
+            <UiButton v-if="design.isActive"> Deactivate </UiButton>
+            <UiButton v-else> Reactivate </UiButton>
           </td>
         </tr>
       </tbody>
     </table>
-    <UiHeader
-      title="Units"
-      class="mb-4"
-    />
+    <UiHeader title="Units" class="mb-4" />
     <div>
-      <div
-        v-for="unit of player.units.value"
-        :key="unit.key"
-      >
+      <div v-for="unit of player.units.value" :key="unit.key">
         {{ unit }}
       </div>
     </div>

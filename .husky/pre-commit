@@ -1,6 +1,3 @@
-#!/usr/bin/env sh
-. "$(dirname "$0")/_/husky.sh"
-
 printf "\n🔍 Running pre-commit quality gate...\n\n"
 
 # Run full repository checks and fail on first error/warning

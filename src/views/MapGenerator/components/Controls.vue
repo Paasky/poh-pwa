@@ -29,9 +29,7 @@ function onSizeChange(v: { x: number; y: number }) {
 </script>
 
 <template>
-  <div
-    class="mx-auto w-full max-w-full min-w-[72rem] flex flex-wrap items-start gap-3"
-  >
+  <div class="mx-auto w-full max-w-full min-w-[72rem] flex flex-wrap items-start gap-3">
     <div class="min-w-[14rem]">
       <UiDropdown
         :options="store.sizeOptions"
@@ -49,19 +47,21 @@ function onSizeChange(v: { x: number; y: number }) {
       label="Continents"
       :model-value="store.worldValues.continents"
       :options="store.continentsOptions"
-      @update:model-value="(v: number) => updateWorld('continents', v)"
+      @update:model-value="
+        (v: number) => updateWorld('continents', v as 4 | 5 | 6 | 7 | 8 | 9 | 10)
+      "
     />
     <UiDropdown
       label="Majors / Continent"
       :model-value="store.worldValues.majorsPerContinent"
       :options="store.majorsOptions"
-      @update:model-value="(v: number) => updateWorld('majorsPerContinent', v)"
+      @update:model-value="(v: number) => updateWorld('majorsPerContinent', v as 1 | 2 | 3 | 4)"
     />
     <UiDropdown
       label="Minors / Player"
       :model-value="store.worldValues.minorsPerPlayer"
       :options="store.minorsOptions"
-      @update:model-value="(v: number) => updateWorld('minorsPerPlayer', v)"
+      @update:model-value="(v: number) => updateWorld('minorsPerPlayer', v as 0 | 1 | 2)"
     />
     <UiDropdown
       label="Alignment"
@@ -70,9 +70,7 @@ function onSizeChange(v: { x: number; y: number }) {
       @update:model-value="(v) => updateAlignment(v)"
     />
 
-    <UiButton @click.prevent="store.generate()">
-      Generate
-    </UiButton>
+    <UiButton @click.prevent="store.generate()"> Generate </UiButton>
   </div>
 </template>
 

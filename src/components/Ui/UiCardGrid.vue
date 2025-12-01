@@ -19,10 +19,7 @@ withDefaults(
 </script>
 
 <template>
-  <div
-    class="grid grid-cols items-stretch"
-    :class="[gap, ...cols]"
-  >
+  <div class="grid grid-cols items-stretch" :class="[gap, ...cols]">
     <slot />
   </div>
 </template>

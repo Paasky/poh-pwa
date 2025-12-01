@@ -67,17 +67,10 @@ const pyramids = [
       class="mb-6"
       :class="i > 0 ? 'border-t border-yellow-800/75' : ''"
     >
-      <UiHeader
-        class="mb-4"
-        :title="pyramid.title"
-        :type="pyramid.concept"
-      />
+      <UiHeader class="mb-4" :title="pyramid.title" :type="pyramid.concept" />
 
       <div class="flex flex-wrap justify-center gap-x-12 gap-y-2">
-        <template
-          v-for="catData of pyramid.typesPerCategory"
-          :key="JSON.stringify(catData)"
-        >
+        <template v-for="catData of pyramid.typesPerCategory" :key="JSON.stringify(catData)">
           <div class="inline-block">
             <UiCardGroup>
               <h3 class="text-center opacity-75">
@@ -87,10 +80,7 @@ const pyramids = [
                 class="gap-1 items-center"
                 :class="catData.category.id === 'creation' ? 'flex' : 'grid'"
               >
-                <template
-                  v-for="(type, iii) of catData.types"
-                  :key="type.key"
-                >
+                <template v-for="(type, iii) of catData.types" :key="type.key">
                   <div
                     v-if="iii !== 0"
                     class="text-xs text-center opacity-50 mb-0.5"
@@ -99,23 +89,15 @@ const pyramids = [
                     or
                   </div>
                   <UiCard
-                    :button-text="
-                      pyramid.selectable.includes(type) ? 'Select' : ''
-                    "
+                    :button-text="pyramid.selectable.includes(type) ? 'Select' : ''"
                     :selected="pyramid.selected.includes(type)"
                     :disabled="!pyramid.selectable.includes(type)"
                     class="text-xs w-48"
                   >
                     <div class="border-b border-white/20 pb-1 mb-2">
-                      <UiObjPill
-                        :obj-or-key="type"
-                        :hide-icon="true"
-                      />
+                      <UiObjPill :obj-or-key="type" :hide-icon="true" />
                     </div>
-                    <UiYieldList
-                      :yields="type.yields"
-                      :hide-name="true"
-                    />
+                    <UiYieldList :yields="type.yields" :hide-name="true" />
                     <UiObjPillList :obj-keys="type.gains" />
                     <UiObjPillList :obj-keys="type.specials" />
                   </UiCard>
@@ -123,10 +105,7 @@ const pyramids = [
               </div>
             </UiCardGroup>
           </div>
-          <div
-            v-if="pyramid.layout.includes(i)"
-            class="basis-full w-full"
-          />
+          <div v-if="pyramid.layout.includes(i)" class="basis-full w-full" />
         </template>
       </div>
     </div>

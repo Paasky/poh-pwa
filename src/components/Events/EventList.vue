@@ -25,14 +25,9 @@ const events = useEventStore();
       class="text-slate-600 hover:text-slate-400 ml-1 float-right"
       aria-label="Clear"
       title="Clear"
-      @click.stop="
-        () => events.turnEvents.splice(events.turnEvents.indexOf(event), 1)
-      "
+      @click.stop="() => events.turnEvents.splice(events.turnEvents.indexOf(event), 1)"
     >
-      <font-awesome-icon
-        :icon="['fas', 'xmark']"
-        class="fa-fw"
-      />
+      <font-awesome-icon :icon="['fas', 'xmark']" class="fa-fw" />
     </button>
   </div>
 </template>

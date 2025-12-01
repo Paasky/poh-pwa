@@ -15,18 +15,14 @@ export class TypeStorage {
   }
 
   add(key: TypeKey, amount: number): TypeStorage {
-    this._items.value[key] = roundToTenth(
-      (this._items.value[key] ?? 0) + amount,
-    );
+    this._items.value[key] = roundToTenth((this._items.value[key] ?? 0) + amount);
 
     return this;
   }
 
   take(key: TypeKey, amount: number): TypeStorage {
     if (!this.has(key, amount))
-      throw new Error(
-        `Not enough ${key} in storage: ${this._items.value[key] ?? 0} < ${amount}`,
-      );
+      throw new Error(`Not enough ${key} in storage: ${this._items.value[key] ?? 0} < ${amount}`);
     this._items.value[key] = roundToTenth(this._items.value[key] - amount);
 
     return this;

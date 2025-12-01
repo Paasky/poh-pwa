@@ -26,9 +26,7 @@ export default defineConfig({
 
             // Resolve to a path under /public securely
             const pathname = new URL(url, "http://local").pathname;
-            const relativePath = isExplicitPublic
-              ? pathname.replace(/^\/public/, "")
-              : pathname;
+            const relativePath = isExplicitPublic ? pathname.replace(/^\/public/, "") : pathname;
             const target = path.join(publicDir, relativePath);
             const resolved = path.resolve(target);
             if (!resolved.startsWith(publicDir + path.sep)) {

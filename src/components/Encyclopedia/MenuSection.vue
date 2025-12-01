@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import {
-  Section,
-  useEncyclopediaStore,
-} from "@/components/Encyclopedia/encyclopediaStore";
+import { Section, useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
 import UiIcon from "@/components/Ui/UiIcon.vue";
 
 defineProps<{ section: Section }>();
@@ -23,10 +20,7 @@ const encyclopedia = useEncyclopediaStore();
         <span v-else>+</span>
       </span>
     </div>
-    <div
-      v-if="encyclopedia.isElemOpen(section.elemId)"
-      class="pl-4"
-    >
+    <div v-if="encyclopedia.isElemOpen(section.elemId)" class="pl-4">
       <template v-if="section.sections">
         <MenuSection
           v-for="subSection in section.sections"

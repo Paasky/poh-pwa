@@ -40,8 +40,7 @@ export const useEncyclopediaStore = defineStore("encyclopedia", {
       for (const type of objects.getAllTypes()) {
         // Find the 1st-level section this type belongs to
         const sectionName =
-          sectionMap.find((s) => s.concepts.includes(type.concept))?.name ??
-          "Other";
+          sectionMap.find((s) => s.concepts.includes(type.concept))?.name ?? "Other";
         const sectionElemId = "enc-section-" + sectionName;
 
         // Build/Get a 2nd-level Concept-section
@@ -84,11 +83,7 @@ export const useEncyclopediaStore = defineStore("encyclopedia", {
           categorySection.types[type.key] = type;
 
           // To open this type, also open the top-level, 2nd-level concept and 3rd-level category sections
-          elemMap["enc-type-" + type.key] = [
-            sectionElemId,
-            conceptElemId,
-            catElemId,
-          ];
+          elemMap["enc-type-" + type.key] = [sectionElemId, conceptElemId, catElemId];
         } else {
           // No category, so this is a 3rd-level type
           conceptSection.types[type.key] = type;
@@ -102,7 +97,6 @@ export const useEncyclopediaStore = defineStore("encyclopedia", {
       this.elemMap = Object.freeze(markRaw(elemMap));
 
       this.ready = true;
-      console.log("Encyclopedia initialized");
     },
     isElemOpen(elemId: string): boolean {
       return this.openElems[elemId] === true;
@@ -135,26 +129,18 @@ export const useEncyclopediaStore = defineStore("encyclopedia", {
 
     _openMenu(elemId: string, block: ScrollLogicalPosition = "center") {
       this.openElems[elemId] = true;
-      this.elemMap[elemId]?.forEach(
-        (parentElemId) => (this.openElems[parentElemId] = true),
-      );
+      this.elemMap[elemId]?.forEach((parentElemId) => (this.openElems[parentElemId] = true));
 
-      console.log("scroll", elemId);
       // noinspection JSIgnoredPromiseFromCall
       nextTick(() =>
-        document
-          .getElementById(elemId)
-          ?.scrollIntoView({ behavior: "smooth", block }),
+        document.getElementById(elemId)?.scrollIntoView({ behavior: "smooth", block }),
       );
     },
 
     _scrollRightToTop() {
-      console.log("scroll right", "enc-right");
       // noinspection JSIgnoredPromiseFromCall
       nextTick(() =>
-        document
-          .getElementById("enc-right")
-          ?.scrollTo({ top: 0, behavior: "smooth" }),
+        document.getElementById("enc-right")?.scrollTo({ top: 0, behavior: "smooth" }),
       );
     },
   },

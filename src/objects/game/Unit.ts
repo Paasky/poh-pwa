@@ -1,9 +1,4 @@
-import {
-  CanHaveCity,
-  canHaveOne,
-  HasPlayer,
-  HasTile,
-} from "@/objects/game/_mixins";
+import { canHaveOne, hasOne } from "@/objects/game/_mixins";
 import { TypeObject } from "@/types/typeObjects";
 import { computed, ref } from "vue";
 import { Yields } from "@/objects/yield";
@@ -14,6 +9,8 @@ import { useObjectsStore } from "@/stores/objectStore";
 import { UnitDesign } from "@/objects/game/UnitDesign";
 import { Player } from "@/objects/game/Player";
 import { TradeRoute } from "@/objects/game/TradeRoute";
+import { City } from "@/objects/game/City";
+import { Tile } from "@/objects/game/Tile";
 
 // mercenary: +10% strength, +50% upkeep, 1/city/t;
 // regular: no effects
@@ -31,7 +28,7 @@ export type UnitStatus =
   | "mobilizing2"
   | "mobilized";
 
-export class Unit extends CanHaveCity(HasPlayer(HasTile(GameObject))) {
+export class Unit extends GameObject {
   constructor(
     key: GameKey,
     designKey: GameKey,
@@ -93,13 +90,20 @@ export class Unit extends CanHaveCity(HasPlayer(HasTile(GameObject))) {
   moves = ref(0);
   status = ref("regular" as UnitStatus);
 
+  cityKey = ref(null as GameKey | null);
+  city = canHaveOne(this.cityKey, City);
+
   designKey: GameKey;
   design = computed(() => useObjectsStore().get(this.designKey) as UnitDesign);
 
+  playerKey = ref<GameKey>("" as GameKey);
+  player = computed(() => useObjectsStore().get(this.playerKey.value) as Player);
+
   origPlayerKey: GameKey;
-  origPlayer = computed(
-    () => useObjectsStore().get(this.origPlayerKey) as Player,
-  );
+  origPlayer = computed(() => useObjectsStore().get(this.origPlayerKey) as Player);
+
+  tileKey = ref("" as GameKey);
+  tile = hasOne(this.tileKey, Tile);
 
   tradeRouteKey = ref<GameKey | null>(null);
   tradeRoute = canHaveOne(this.tradeRouteKey, TradeRoute);
@@ -115,18 +119,12 @@ export class Unit extends CanHaveCity(HasPlayer(HasTile(GameObject))) {
 
   // yields.only runs a filter, so reduce compute-ref-chaining by storing the result here
   private _playerYields = computed(() =>
-    this.player.value.yields.value.only(
-      this.concept.inheritYieldTypes!,
-      this.types.value,
-    ),
+    this.player.value.yields.value.only(this.concept.inheritYieldTypes!, this.types.value),
   );
 
   // yields.only runs a filter, so reduce compute-ref-chaining by storing the result here
   private _tileYields = computed(() =>
-    this.tile.value.yields.value.only(
-      this.concept.inheritYieldTypes!,
-      this.types.value,
-    ),
+    this.tile.value.yields.value.only(this.concept.inheritYieldTypes!, this.types.value),
   );
 
   yields = computed(
@@ -140,28 +138,21 @@ export class Unit extends CanHaveCity(HasPlayer(HasTile(GameObject))) {
 
   delete() {
     if (this.city.value)
-      this.city.value.unitKeys.value = this.city.value.unitKeys.value.filter(
-        (u) => u !== this.key,
-      );
+      this.city.value.unitKeys.value = this.city.value.unitKeys.value.filter((u) => u !== this.key);
     this.design.value.unitKeys.value = this.design.value.unitKeys.value.filter(
       (k) => k !== this.key,
     );
     this.player.value.unitKeys.value = this.player.value.unitKeys.value.filter(
       (k) => k !== this.key,
     );
-    this.tile.value.unitKeys.value = this.tile.value.unitKeys.value.filter(
-      (k) => k !== this.key,
-    );
+    this.tile.value.unitKeys.value = this.tile.value.unitKeys.value.filter((k) => k !== this.key);
     if (this.tradeRoute.value) {
       this.tradeRoute.value.delete(true);
     }
   }
 
   modifyHealth(amount: number) {
-    this.health.value = Math.max(
-      0,
-      Math.min(100, roundToTenth(this.health.value + amount)),
-    );
+    this.health.value = Math.max(0, Math.min(100, roundToTenth(this.health.value + amount)));
 
     if (this.health.value <= 0) {
       new EventManager().create(
@@ -175,10 +166,7 @@ export class Unit extends CanHaveCity(HasPlayer(HasTile(GameObject))) {
       return;
     }
 
-    if (
-      this.health.value >= 100 &&
-      this.action.value?.key === "actionType:heal"
-    ) {
+    if (this.health.value >= 100 && this.action.value?.key === "actionType:heal") {
       new EventManager().create(
         "unitHealed",
         `${this.name.value} is fully healed`,

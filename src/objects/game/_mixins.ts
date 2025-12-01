@@ -1,22 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-empty-object-type, @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
 // noinspection JSUnusedLocalSymbols
 
-import { computed, Ref, ref } from "vue";
+import { computed, Ref } from "vue";
 import { useObjectsStore } from "@/stores/objectStore";
-import { Citizen } from "@/objects/game/Citizen";
 import { GameKey } from "@/objects/game/_GameObject";
-import { City } from "@/objects/game/City";
-import { Culture } from "@/objects/game/Culture";
-import { Player } from "@/objects/game/Player";
-import { Religion } from "@/objects/game/Religion";
-import { Tile } from "@/objects/game/Tile";
-import { Unit } from "@/objects/game/Unit";
-import { TradeRoute } from "@/objects/game/TradeRoute";
 
-export function hasMany<T>(
-  keysRef: Ref<GameKey[]>,
-  ctor: new (...args: any[]) => T,
-) {
+export function hasMany<T>(keysRef: Ref<GameKey[]>, ctor: new (...args: any[]) => T) {
   const out: T[] = [];
 
   return computed<T[]>(() => {
@@ -40,26 +29,18 @@ export function hasMany<T>(
   });
 }
 
-export function hasOne<T>(
-  keyRef: Ref<GameKey | null>,
-  ctor: new (...args: any[]) => T,
-) {
+export function hasOne<T>(keyRef: Ref<GameKey | null>, ctor: new (...args: any[]) => T) {
   return computed<T>(() => {
     const key = keyRef.value;
     if (!key) {
-      throw new Error(
-        `${ctor.name} HasOne: Empty relation value for ${ctor.name}`,
-      );
+      throw new Error(`${ctor.name} HasOne: Empty relation value for ${ctor.name}`);
     }
 
     return useObjectsStore().get(key) as T;
   });
 }
 
-export function canHaveOne<T>(
-  keyRef: Ref<GameKey | null>,
-  ctor: new (...args: any[]) => T,
-) {
+export function canHaveOne<T>(keyRef: Ref<GameKey | null>, ctor: new (...args: any[]) => T) {
   return computed<T | null>(() => {
     const key = keyRef.value;
     if (!key) {
@@ -68,98 +49,4 @@ export function canHaveOne<T>(
 
     return useObjectsStore().get(key) as T;
   });
-}
-
-export function HasCitizens<TBase extends new (...args: any[]) => {}>(
-  Base: TBase,
-) {
-  return class extends Base {
-    citizenKeys = ref([] as GameKey[]);
-    citizens = hasMany(this.citizenKeys, Citizen);
-  };
-}
-
-export function HasCity<T extends new (...args: any[]) => {}>(Base: T) {
-  return class extends Base {
-    cityKey = ref("" as GameKey);
-    city = hasOne(this.cityKey, City);
-  };
-}
-
-export function CanHaveCity<T extends new (...args: any[]) => {}>(Base: T) {
-  return class extends Base {
-    cityKey = ref(null as GameKey | null);
-    city = canHaveOne(this.cityKey, City);
-  };
-}
-
-export function HasCulture<T extends new (...args: any[]) => {}>(Base: T) {
-  return class extends Base {
-    cultureKey = ref("" as GameKey);
-    culture = hasOne(this.cultureKey, Culture);
-  };
-}
-
-export function CanHavePlayer<T extends new (...args: any[]) => {}>(Base: T) {
-  return class extends Base {
-    playerKey = ref(null as GameKey | null);
-    player = canHaveOne(this.playerKey, Player);
-  };
-}
-
-export function HasPlayer<T extends new (...args: any[]) => {}>(Base: T) {
-  return class extends Base {
-    playerKey = ref<GameKey>("" as GameKey);
-    player = hasOne(this.playerKey, Player);
-  };
-}
-
-export function HasPlayers<TBase extends new (...args: any[]) => {}>(
-  Base: TBase,
-) {
-  return class extends Base {
-    playerKeys = ref([] as GameKey[]);
-    players = hasMany(this.playerKeys, Player);
-  };
-}
-
-export function CanHaveReligion<T extends new (...args: any[]) => {}>(Base: T) {
-  return class extends Base {
-    religionKey = ref(null as GameKey | null);
-    religion = canHaveOne(this.religionKey, Religion);
-  };
-}
-
-export function HasTile<T extends new (...args: any[]) => {}>(Base: T) {
-  return class extends Base {
-    tileKey = ref("" as GameKey);
-    tile = hasOne(this.tileKey, Tile);
-  };
-}
-
-export function HasTiles<TBase extends new (...args: any[]) => {}>(
-  Base: TBase,
-) {
-  return class extends Base {
-    tileKeys = ref([] as GameKey[]);
-    tiles = hasMany(this.tileKeys, Tile);
-  };
-}
-
-export function HasTradeRoutes<TBase extends new (...args: any[]) => {}>(
-  Base: TBase,
-) {
-  return class extends Base {
-    tradeRouteKeys = ref([] as GameKey[]);
-    tradeRoutes = hasMany(this.tradeRouteKeys, TradeRoute);
-  };
-}
-
-export function HasUnits<TBase extends new (...args: any[]) => {}>(
-  Base: TBase,
-) {
-  return class extends Base {
-    unitKeys = ref([] as GameKey[]);
-    units = hasMany(this.unitKeys, Unit);
-  };
 }

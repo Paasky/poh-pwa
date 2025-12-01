@@ -27,14 +27,10 @@ function onClick() {
   <div
     class="text-3xl text-center pt-6 select-none text-yellow-800"
     :style="{
-      background:
-        'linear-gradient(0deg,rgba(133, 77, 14, 0) 67%, rgba(133, 77, 14, 0.5) 100%)',
+      background: 'linear-gradient(0deg,rgba(133, 77, 14, 0) 67%, rgba(133, 77, 14, 0.5) 100%)',
     }"
   >
-    <h2
-      :class="keyStr ? 'inline-block hover:text-yellow-600 cursor-pointer' : ''"
-      @click="onClick"
-    >
+    <h2 :class="keyStr ? 'inline-block hover:text-yellow-600 cursor-pointer' : ''" @click="onClick">
       {{ title }}
     </h2>
   </div>

@@ -56,10 +56,7 @@ const variantClasses = computed(() => {
 </script>
 
 <template>
-  <div
-    class="absolute select-none text-slate-100"
-    :class="[positionClasses, variantClasses]"
-  >
+  <div class="absolute select-none text-slate-100" :class="[positionClasses, variantClasses]">
     <slot />
   </div>
 </template>

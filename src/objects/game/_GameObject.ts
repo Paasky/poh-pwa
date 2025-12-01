@@ -29,6 +29,7 @@ export type GameObjAttr = {
   isOptional?: boolean;
   related?: {
     theirKeyAttr: string;
+    isManyToMany?: boolean;
     isOne?: boolean;
   };
 };
@@ -63,8 +64,7 @@ export class GameObject {
       // Quick data integrity check
       if (
         !attr.attrNotRef &&
-        (!directValue ||
-          !(typeof directValue === "object" && "value" in directValue))
+        (!directValue || !(typeof directValue === "object" && "value" in directValue))
       ) {
         throw new Error(`Expected ${attr.attrName} to be a ref`);
       }

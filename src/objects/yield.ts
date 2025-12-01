@@ -131,9 +131,7 @@ export class Yields {
       const targetKey = target as "any" | "for" | "vs";
       const separatedTarget = separated[targetKey];
 
-      for (const [yieldTypeStr, amountPerType] of Object.entries(
-        separatedTarget.set,
-      )) {
+      for (const [yieldTypeStr, amountPerType] of Object.entries(separatedTarget.set)) {
         const yieldTypeKey = yieldTypeStr as TypeKey;
 
         // Dealing with any -> the amount is a number
@@ -144,9 +142,7 @@ export class Yields {
 
         // Dealing with for/vs. -> add amount per TypeKey
         const targetValues = (values[targetKey][yieldTypeKey] ??= {});
-        for (const [forKey, amount] of Object.entries(
-          amountPerType as Record<TypeKey, number>,
-        )) {
+        for (const [forKey, amount] of Object.entries(amountPerType as Record<TypeKey, number>)) {
           targetValues[forKey as TypeKey] = amount;
         }
       }
@@ -159,8 +155,7 @@ export class Yields {
       // amount already in values.any[yieldTypeKey] from "set", don't overwrite it
       if (yieldTypeKey in values.any) continue;
 
-      const multiplier =
-        1 + (separated.any.percent[yieldTypeKey as TypeKey] ?? 0) / 100;
+      const multiplier = 1 + (separated.any.percent[yieldTypeKey as TypeKey] ?? 0) / 100;
 
       values.any[yieldTypeKey as TypeKey] = this._round(amount * multiplier);
     }
@@ -171,9 +166,7 @@ export class Yields {
       const targetSeparated = separated[targetKey];
       const targetValues = values[targetKey];
 
-      for (const [yieldTypeStr, amountPerType] of Object.entries(
-        targetSeparated.lump,
-      )) {
+      for (const [yieldTypeStr, amountPerType] of Object.entries(targetSeparated.lump)) {
         const yieldTypeKey = yieldTypeStr as TypeKey;
 
         for (const [typeStr, amount] of Object.entries(amountPerType)) {
@@ -186,9 +179,7 @@ export class Yields {
           const multiplier = 1 + (sepPercent[typeKey] ?? 0) / 100;
 
           if (!(yieldTypeKey in targetValues)) targetValues[yieldTypeKey] = {};
-          targetValues[yieldTypeKey][typeKey] = this._round(
-            amount * multiplier,
-          );
+          targetValues[yieldTypeKey][typeKey] = this._round(amount * multiplier);
         }
       }
     }
@@ -225,17 +216,11 @@ export class Yields {
     return new Yields(yields);
   }
 
-  only(
-    yieldTypes: TypeKey[] = [],
-    forObjs: TypeObject[] = [],
-    vsObjs: TypeObject[] = [],
-  ): Yields {
+  only(yieldTypes: TypeKey[] = [], forObjs: TypeObject[] = [], vsObjs: TypeObject[] = []): Yields {
     return new Yields(
       this._all.filter((y) => {
-        if (yieldTypes.length > 0 && !this._yieldInTypes(y, yieldTypes))
-          return false;
-        if (forObjs.length > 0 && !this._yieldIsForObjs(y, forObjs))
-          return false;
+        if (yieldTypes.length > 0 && !this._yieldInTypes(y, yieldTypes)) return false;
+        if (forObjs.length > 0 && !this._yieldIsForObjs(y, forObjs)) return false;
         if (vsObjs.length > 0 && !this._yieldIsVsObjs(y, vsObjs)) return false;
 
         return true;
@@ -243,17 +228,11 @@ export class Yields {
     );
   }
 
-  not(
-    yieldTypes: TypeKey[] = [],
-    forObjs: TypeObject[] = [],
-    vsObjs: TypeObject[] = [],
-  ): Yields {
+  not(yieldTypes: TypeKey[] = [], forObjs: TypeObject[] = [], vsObjs: TypeObject[] = []): Yields {
     return new Yields(
       this._all.filter((y) => {
-        if (yieldTypes.length > 0 && this._yieldInTypes(y, yieldTypes))
-          return false;
-        if (forObjs.length > 0 && this._yieldIsForObjs(y, forObjs))
-          return false;
+        if (yieldTypes.length > 0 && this._yieldInTypes(y, yieldTypes)) return false;
+        if (forObjs.length > 0 && this._yieldIsForObjs(y, forObjs)) return false;
         if (vsObjs.length > 0 && this._yieldIsVsObjs(y, vsObjs)) return false;
 
         return true;
@@ -286,15 +265,11 @@ export class Yields {
   }
 
   getLumpAmount(type: TypeKey): number {
-    return this._round(
-      this._lump[type]?.reduce((a, y) => a + y.amount, 0) ?? 0,
-    );
+    return this._round(this._lump[type]?.reduce((a, y) => a + y.amount, 0) ?? 0);
   }
 
   getPercentAmount(type: TypeKey): number {
-    return this._round(
-      this._percent[type]?.reduce((a, y) => a + y.amount, 0) ?? 0,
-    );
+    return this._round(this._percent[type]?.reduce((a, y) => a + y.amount, 0) ?? 0);
   }
 
   getSetAmount(type: TypeKey): number {
@@ -310,9 +285,7 @@ export class Yields {
     const storage = new TypeStorage();
 
     Object.values(this._lump).forEach((yields) =>
-      yields.forEach((y) =>
-        y.method === "lump" ? storage.add(y.type, y.amount) : null,
-      ),
+      yields.forEach((y) => (y.method === "lump" ? storage.add(y.type, y.amount) : null)),
     );
 
     return storage;

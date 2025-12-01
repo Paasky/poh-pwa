@@ -20,27 +20,13 @@ const objsOrAny = computed(() =>
 </script>
 
 <template>
-  <p
-    v-for="objOrAny in objsOrAny"
-    :key="JSON.stringify(objOrAny)"
-    :class="noMargin ? '' : 'mb-2'"
-  >
+  <p v-for="objOrAny in objsOrAny" :key="JSON.stringify(objOrAny)" :class="noMargin ? '' : 'mb-2'">
     <template v-if="Array.isArray(objOrAny)">
-      <template
-        v-for="(obj, i) in objOrAny"
-        :key="JSON.stringify(obj)"
-      >
+      <template v-for="(obj, i) in objOrAny" :key="JSON.stringify(obj)">
         <span v-if="i !== 0"> or </span>
-        <UiObjPill
-          :obj-or-key="obj"
-          :short-name="shortName"
-        />
+        <UiObjPill :obj-or-key="obj" :short-name="shortName" />
       </template>
     </template>
-    <UiObjPill
-      v-else
-      :obj-or-key="objOrAny"
-      :short-name="shortName"
-    />
+    <UiObjPill v-else :obj-or-key="objOrAny" :short-name="shortName" />
   </p>
 </template>
