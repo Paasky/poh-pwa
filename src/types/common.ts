@@ -2,7 +2,7 @@ import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 import getIcon from '@/types/icons'
 import { CategoryClass, CategoryObject, TypeClass, TypeObject } from '@/types/typeObjects'
 import { useObjectsStore } from '@/stores/objectStore'
-import { GameClass, GameKey, GameObject } from '@/objects/gameObjects'
+import { GameClass, GameKey, GameObject } from '@/objects/game/gameObjects'
 
 export type ObjType = 'TypeObject' | 'CategoryObject' | 'GameObject'
 export type CatKey = `${CategoryClass}:${string}`

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { makeIsland } from '../../../../../src/factories/TerraGenerator/helpers/post-processors'
 import { getTile } from '../../../../../src/factories/TerraGenerator/helpers/neighbors'
-import { Tile } from '../../../../../src/objects/gameObjects'
+import { Tile } from '../../../../../src/objects/game/gameObjects'
 
 vi.mock('@/factories/TerraGenerator/helpers/tetris', () => ({
   // Include -1,0,+1 to test wrap-around behavior too

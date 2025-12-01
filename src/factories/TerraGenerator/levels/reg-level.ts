@@ -1,6 +1,6 @@
 import { TerraGenerator } from '@/factories/TerraGenerator/terra-generator'
 import { getRandom, takeRandom } from '@/helpers/arrayTools'
-import { Tile } from '@/objects/gameObjects'
+import { Tile } from '@/objects/game/gameObjects'
 import { makeIsland, mountainRange, removeOrphanArea } from '@/factories/TerraGenerator/helpers/post-processors'
 import { GenTile } from '@/factories/TerraGenerator/gen-tile'
 import { getNeighborCoords } from '@/factories/TerraGenerator/helpers/neighbors'

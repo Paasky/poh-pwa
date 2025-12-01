@@ -1,6 +1,6 @@
 import { ObjKey } from '@/types/common'
 import { TypeObject } from '@/types/typeObjects'
-import { Culture, CultureStatus, GameKey, generateKey } from '@/objects/gameObjects'
+import { Culture, CultureStatus, GameKey, generateKey } from '@/objects/game/gameObjects'
 
 export const createCulture = (
   playerKey: GameKey,

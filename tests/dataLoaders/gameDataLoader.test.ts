@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { GameDataLoader } from '../../src/dataLoaders/gameDataLoader'
 import { initTestPinia, loadStaticData } from '../_setup/pinia'
-import { Tile } from '../../src/objects/gameObjects'
+import { Tile } from '../../src/objects/game/gameObjects'
 
 describe('gameDataLoader', () => {
   beforeEach(() => initTestPinia() && loadStaticData())

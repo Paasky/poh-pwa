@@ -1,6 +1,6 @@
 import { getRandom } from '@/helpers/arrayTools'
 import { GenTile } from '@/factories/TerraGenerator/gen-tile'
-import { Tile } from '@/objects/gameObjects'
+import { Tile } from '@/objects/game/gameObjects'
 import { Coords, getRealCoords } from '@/factories/TerraGenerator/helpers/neighbors'
 
 export type Compass = 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw'

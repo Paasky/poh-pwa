@@ -1,5 +1,5 @@
 import { Manager } from '@/managers/_manager'
-import { Citizen, City, generateKey, Player, Tile, Unit, UnitDesign } from '@/objects/gameObjects'
+import { Citizen, City, generateKey, Player, Tile, Unit, UnitDesign } from '@/objects/game/gameObjects'
 import { CitizenManager } from '@/managers/citizenManager'
 import { UnitManager } from '@/managers/unitManager'
 

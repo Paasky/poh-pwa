@@ -1,6 +1,6 @@
 import { computed, Ref, ref } from 'vue'
 import { useObjectsStore } from '@/stores/objectStore'
-import { Citizen, City, Culture, GameKey, Player, Religion, Tile, Unit } from '@/objects/gameObjects'
+import { Citizen, City, Culture, GameKey, Player, Religion, Tile, Unit } from '@/objects/game/gameObjects'
 
 const objStore = () => useObjectsStore()
 

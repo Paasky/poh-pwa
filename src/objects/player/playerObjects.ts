@@ -1,6 +1,6 @@
 import { computed, ref, watch } from 'vue'
-import { HasPlayer } from '@/objects/gameMixins'
-import { GameKey, Player, UnitDesign, UnitStatus } from '@/objects/gameObjects'
+import { HasPlayer } from '@/objects/game/gameMixins'
+import { GameKey, Player, UnitDesign, UnitStatus } from '@/objects/game/gameObjects'
 import { TypeObject } from '@/types/typeObjects'
 import { CatKey, roundToTenth, TypeKey, upgradeTree } from '@/types/common'
 import { useObjectsStore } from '@/stores/objectStore'

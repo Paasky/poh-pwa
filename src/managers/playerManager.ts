@@ -1,4 +1,4 @@
-import { Culture, Player, Religion, UnitDesign } from '@/objects/gameObjects'
+import { Culture, Player, Religion, UnitDesign } from '@/objects/game/gameObjects'
 import { createPlayer, PlayerBundle } from '@/factories/playerFactory'
 import { Manager } from '@/managers/_manager'
 import { TypeObject } from '@/types/typeObjects'

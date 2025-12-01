@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { spreadSalt } from '../../../../../src/factories/TerraGenerator/helpers/post-processors'
-import { Tile } from '../../../../../src/objects/gameObjects'
+import { Tile } from '../../../../../src/objects/game/gameObjects'
 import { initTestPinia, loadStaticData } from '../../../../_setup/pinia'
 
 // Build a tiny graph of water tiles so crawlTiles will visit them

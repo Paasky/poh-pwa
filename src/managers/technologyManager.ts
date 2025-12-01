@@ -1,4 +1,4 @@
-import { Player, Research } from '@/objects/gameObjects'
+import { Player, Research } from '@/objects/game/gameObjects'
 import { TypeObject } from '@/types/typeObjects'
 import { Manager } from '@/managers/_manager'
 import { EventManager } from '@/managers/eventManager'

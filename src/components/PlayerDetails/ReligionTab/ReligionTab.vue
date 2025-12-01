@@ -7,7 +7,7 @@ import UiObjPillList from '@/components/Ui/UiObjPillList.vue'
 import UiHeader from '@/components/Ui/UiHeader.vue'
 import UiObjPill from '@/components/Ui/UiObjPill.vue'
 import { useObjectsStore } from '@/stores/objectStore'
-import { Religion } from '@/objects/gameObjects'
+import { Religion } from '@/objects/game/gameObjects'
 
 const objects = useObjectsStore()
 const player = objects.getCurrentPlayer()

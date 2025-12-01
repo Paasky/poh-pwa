@@ -1,7 +1,7 @@
 import { TerraGenerator } from '@/factories/TerraGenerator/terra-generator'
 import { getRandom, shuffle } from '@/helpers/arrayTools'
 import { GenTile } from '@/factories/TerraGenerator/gen-tile'
-import { GameKey, River, Tile } from '@/objects/gameObjects'
+import { GameKey, River, Tile } from '@/objects/game/gameObjects'
 import {
   makeIsland,
   makeRiver,

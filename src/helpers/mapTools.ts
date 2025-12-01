@@ -1,6 +1,6 @@
 import { Coords } from '@/factories/TerraGenerator/helpers/neighbors'
 import type { World } from '@/types/common'
-import type { Tile } from '@/objects/gameObjects'
+import type { Tile } from '@/objects/game/gameObjects'
 
 /**
  * Returns all hex neighbor coordinates within a given distance of a center coordinate.

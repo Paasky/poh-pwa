@@ -1,4 +1,4 @@
-import { GameObject, Player } from '@/objects/gameObjects'
+import { GameObject, Player } from '@/objects/game/gameObjects'
 
 export type EventType =
   'settled'

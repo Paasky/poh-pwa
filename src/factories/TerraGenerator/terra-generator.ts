@@ -1,4 +1,4 @@
-import { River, Tile } from '@/objects/gameObjects'
+import { River, Tile } from '@/objects/game/gameObjects'
 import { TypeKey } from '@/types/common'
 import { TypeClass, TypeObject } from '@/types/typeObjects'
 import { WorldSize } from '@/factories/worldFactory'

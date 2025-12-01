@@ -1,5 +1,5 @@
 import { Manager } from '@/managers/_manager'
-import { City, Player, Religion } from '@/objects/gameObjects'
+import { City, Player, Religion } from '@/objects/game/gameObjects'
 import { TypeObject } from '@/types/typeObjects'
 import { Yields } from '@/types/common'
 

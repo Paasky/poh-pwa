@@ -16,7 +16,7 @@ import {
   TradeRoute,
   Unit,
   UnitDesign
-} from '@/objects/gameObjects'
+} from '@/objects/game/gameObjects'
 import { GameData } from '@/types/api'
 import { useObjectsStore } from '@/stores/objectStore'
 

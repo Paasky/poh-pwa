@@ -5,7 +5,7 @@ import UiIcon from '@/components/Ui/UiIcon.vue'
 import { useObjectsStore } from '@/stores/objectStore'
 import UiButton from '@/components/Ui/UiButton.vue'
 import { TabName, tabsConfig, usePlayerDetailsStore } from '@/components/PlayerDetails/playerDetailsStore'
-import { Culture, Player, Religion } from '@/objects/gameObjects'
+import { Culture, Player, Religion } from '@/objects/game/gameObjects'
 import { TypeObject } from '@/types/typeObjects'
 import { computed, ComputedRef } from 'vue'
 

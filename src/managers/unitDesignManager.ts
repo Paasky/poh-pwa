@@ -1,6 +1,6 @@
 import { Manager } from '@/managers/_manager'
-import { generateKey, Player, UnitDesign } from '@/objects/gameObjects'
-import { UnitDesignPrototype } from '@/objects/player'
+import { generateKey, Player, UnitDesign } from '@/objects/game/gameObjects'
+import { UnitDesignPrototype } from '@/objects/player/playerObjects'
 import { TypeObject } from '@/types/typeObjects'
 
 export class UnitDesignManager extends Manager {

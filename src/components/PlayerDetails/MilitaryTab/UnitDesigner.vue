@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { GameObject, UnitDesign } from '@/objects/gameObjects'
+import { GameObject, UnitDesign } from '@/objects/game/gameObjects'
 import { useObjectsStore } from '@/stores/objectStore'
 import { TypeObject } from '@/types/typeObjects'
 import UiButton from '@/components/Ui/UiButton.vue'

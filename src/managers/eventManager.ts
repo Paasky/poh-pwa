@@ -1,7 +1,7 @@
 import { Manager } from '@/managers/_manager'
 import { EventType, GameEvent } from '@/types/events'
 import { useEventStore } from '@/stores/eventStore'
-import { GameObject, Player } from '@/objects/gameObjects'
+import { GameObject, Player } from '@/objects/game/gameObjects'
 
 export class EventManager extends Manager {
   protected _events = useEventStore()

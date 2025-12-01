@@ -1,6 +1,6 @@
 import { TypeClass } from '@/types/typeObjects'
 import { Yield, Yields } from '@/objects/yield'
-import { Construction, UnitDesign } from '@/objects/gameObjects'
+import { Construction, UnitDesign } from '@/objects/game/gameObjects'
 import { CatKey, roundToTenth, TypeKey } from '@/types/common'
 import { computed, ref } from 'vue'
 import { TypeStorage } from '@/objects/storage'

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Citizen, Culture, Religion } from '@/objects/gameObjects'
+import { Citizen, Culture, Religion } from '@/objects/game/gameObjects'
 import { useObjectsStore } from '@/stores/objectStore'
 
 const props = defineProps<{ citizen: Citizen }>()

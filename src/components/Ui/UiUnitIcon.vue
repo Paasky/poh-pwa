@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { UnitDesign } from '@/objects/gameObjects'
+import { UnitDesign } from '@/objects/game/gameObjects'
 
 // Props: a full PohType object
 defineProps<{ design: UnitDesign }>()

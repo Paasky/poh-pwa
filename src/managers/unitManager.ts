@@ -1,4 +1,4 @@
-import { City, generateKey, Player, Tile, Unit, UnitDesign, UnitStatus } from '@/objects/gameObjects'
+import { City, generateKey, Player, Tile, Unit, UnitDesign, UnitStatus } from '@/objects/game/gameObjects'
 import { Manager } from '@/managers/_manager'
 
 export class UnitManager extends Manager {

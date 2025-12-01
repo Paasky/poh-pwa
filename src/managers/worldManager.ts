@@ -4,7 +4,7 @@ import { PlayerManager } from '@/managers/playerManager'
 import { createWorld, WorldSize } from '@/factories/worldFactory'
 import { Manager } from '@/managers/_manager'
 import { CultureManager } from '@/managers/cultureManager'
-import { UnitDesignPrototype } from '@/objects/player'
+import { UnitDesignPrototype } from '@/objects/player/playerObjects'
 import { UnitDesignManager } from '@/managers/unitDesignManager'
 
 export class WorldManager extends Manager {

@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import { CatKey, isCategoryObject, isTypeObject, ObjKey, TypeKey, World } from '@/types/common'
 import { GameData, StaticData } from '@/types/api'
 import { CategoryObject, initCategoryObject, initTypeObject, TypeClass, TypeObject } from '@/types/typeObjects'
-import { GameClass, GameKey, GameObject, Player } from '@/objects/gameObjects'
+import { GameClass, GameKey, GameObject, Player } from '@/objects/game/gameObjects'
 import { GameDataLoader } from '@/dataLoaders/gameDataLoader'
 import { withCallerContext } from '@/utils/stack'
 

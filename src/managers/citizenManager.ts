@@ -1,5 +1,5 @@
 import { Manager } from '@/managers/_manager'
-import { Citizen, City, generateKey, Tile } from '@/objects/gameObjects'
+import { Citizen, City, generateKey, Tile } from '@/objects/game/gameObjects'
 
 export class CitizenManager extends Manager {
   create (city: City, tile?: Tile): Citizen {

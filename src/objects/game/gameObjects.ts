@@ -14,14 +14,14 @@ import {
   HasTile,
   HasTiles,
   HasUnits
-} from '@/objects/gameMixins'
+} from '@/objects/game/gameMixins'
 import { TypeObject } from '@/types/typeObjects'
 import { Yield, Yields } from '@/objects/yield'
 import { CatKey, ObjType, roundToTenth, TypeKey } from '@/types/common'
 import { ConstructionQueue, TrainingQueue } from '@/objects/queues'
 import { TypeStorage } from '@/objects/storage'
 import { EventManager } from '@/managers/eventManager'
-import { Government, Research } from './player'
+import { Government, Research } from '../player/playerObjects'
 
 const objStore = () => useObjectsStore()
 
