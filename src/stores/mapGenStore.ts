@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
-import { computed, markRaw, reactive, ref, shallowRef } from 'vue'
-import { pauseTracking, resetTracking } from '@vue/reactivity'
+import { computed, markRaw, reactive, ref, shallowRef, pauseTracking, resetTracking } from 'vue'
 import type { WorldSize } from '@/factories/worldFactory'
 import { worldSizes } from '@/factories/worldFactory'
 import { WorldManager } from '@/managers/worldManager'

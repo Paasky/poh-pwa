@@ -2,3 +2,10 @@
 /dist
 /node_modules
 /public/media/
+/.vite
+/coverage
+/.pnpm-store
+/.DS_Store
+/*.log
+pnpm-debug.log*
+vite.config.timestamp-*.

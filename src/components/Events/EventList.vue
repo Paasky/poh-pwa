@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { useObjectsStore } from '@/stores/objectStore'
 import { useEventStore } from '@/stores/eventStore'
-import { capitalize } from '@vue/shared'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+function capitalize (s: string) {
+  return s.charAt(0).toUpperCase() + s.slice(1)
+}
 
 const objects = useObjectsStore()
 const events = useEventStore()

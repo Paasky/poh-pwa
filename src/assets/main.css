@@ -1,11 +1,18 @@
+@source "./index.html";
+@source "./src/**/*.{vue,js,ts,jsx,tsx}";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* App-level styles */
-:root {
-    color-scheme: light dark;
+/* Tailwind v4 theme tokens */
+@theme {
+  --color-brand: #0f172a;
+  --font-heading: "Poiret One", ui-sans-serif, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
+
+/* App-level styles */
+:root { color-scheme: light dark; }
 
 
 @layer base {
@@ -22,7 +29,7 @@
     }
 
     h1, h2, h3, h4, h5, h6 {
-        @apply font-heading font-normal;
+        font-family: var(--font-heading);
         font-weight: bold;
         text-shadow: #000 0 0 5px;
     }
