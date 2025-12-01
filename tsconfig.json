@@ -23,15 +23,29 @@
       "@/*": ["src/*"]
     },
 
-    "types": [
-      "vite/client"
-    ]
+    "types": ["vite/client"]
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue"
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "coverage",
+    ".vite",
+    // tests (often looser patterns / globals)
+    "tests",
+    "**/__tests__/**",
+    "**/*.spec.*",
+    "**/*.test.*",
+    // config and build scripts
+    "scripts/**",
+    "*.config.*",
+    "**/*.config.*",
+    "vite.config.*",
+    "tailwind.config.*",
+    "postcss.config.*",
+    "vitest.config.*",
+    "jest.config.*",
+    "eslint.config.js"
   ],
   "references": []
 }

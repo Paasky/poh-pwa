@@ -1,24 +1,24 @@
-import { Tile } from '@/objects/game/gameObjects'
+import { Tile } from "@/objects/game/gameObjects";
 
 export class GenTile extends Tile {
-  isContinentCenter = false
-  isStart: 'major' | 'minor' | null = null
+  isContinentCenter = false;
+  isStart: "major" | "minor" | null = null;
 
-  canBeLand () {
-    return !this.isSalt
+  canBeLand() {
+    return !this.isSalt;
   }
 
-  canBeStart () {
-    return !this.isStart && this.domain.key === 'domainType:land'
+  canBeStart() {
+    return !this.isStart && this.domain.key === "domainType:land";
   }
 
-  canBeWater () {
-    return !this.isStart && !this.isContinentCenter
+  canBeWater() {
+    return !this.isStart && !this.isContinentCenter;
   }
 
-  canChangeDomain () {
-    return this.domain.key === 'domainType:land'
+  canChangeDomain() {
+    return this.domain.key === "domainType:land"
       ? this.canBeWater()
-      : this.canBeLand()
+      : this.canBeLand();
   }
 }

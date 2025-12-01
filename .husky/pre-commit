@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+. "$(dirname "$0")/_/husky.sh"
+
+printf "\n🔍 Running pre-commit quality gate...\n\n"
+
+# Run full repository checks and fail on first error/warning
+pnpm precommit:all
+status=$?
+
+if [ $status -ne 0 ]; then
+  echo "\n❌ Pre-commit checks failed. Please review the errors and warnings above."
+  echo "   Quick fix: run 'pnpm fix' to auto-apply Prettier + ESLint fixes where possible."
+  echo "   Then re-run: 'pnpm precommit:all' to verify all checks pass."
+  exit $status
+fi
+
+echo "\n✅ All pre-commit checks passed."

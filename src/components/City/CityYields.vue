@@ -1,17 +1,13 @@
 <script setup lang="ts">
-import { City } from '@/objects/game/gameObjects'
+import { City } from "@/objects/game/gameObjects";
 
 defineProps<{
-  city: City
-}>()
+  city: City;
+}>();
 </script>
 
 <template>
-  <div>
-    Yields
-  </div>
+  <div>Yields</div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

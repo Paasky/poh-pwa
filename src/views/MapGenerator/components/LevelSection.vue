@@ -1,73 +1,103 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import UiIcon from '@/components/Ui/UiIcon.vue'
-import { useMapGenStore } from '@/stores/mapGenStore'
-import { TypeObject } from '@/types/typeObjects'
+import { computed } from "vue";
+import UiIcon from "@/components/Ui/UiIcon.vue";
+import { useMapGenStore } from "@/stores/mapGenStore";
+import { TypeObject } from "@/types/typeObjects";
 
-const props = defineProps<{ variant: 'strat' | 'reg' | 'game' }>()
+const props = defineProps<{ variant: "strat" | "reg" | "game" }>();
 
-const store = useMapGenStore()
+const store = useMapGenStore();
 
 const tiles = computed(() => {
   switch (props.variant) {
-    case 'strat':
-      return store.renderTiles.strat
-    case 'reg':
-      return store.renderTiles.reg
-    case 'game':
-      return store.renderTiles.game
+    case "strat":
+      return store.renderTiles.strat;
+    case "reg":
+      return store.renderTiles.reg;
+    case "game":
+      return store.renderTiles.game;
     default:
-      return store.renderTiles.strat
+      return store.renderTiles.strat;
   }
-})
-
+});
 </script>
 
 <template>
-  <section class="select-none map-gen-preview" :class="{
-    'terrain': store.toggles.showTerrain,
-    'areas': store.toggles.showAreas,
-    'starts': store.toggles.showMajorStarts,
-    'rivers': store.toggles.showRivers,
-    'fresh-salt': store.toggles.showFreshSalt,
-    'elevation': store.toggles.showElevation,
-    'features': store.toggles.showFeatures,
-  }">
-    <div v-for="(row, y) of tiles" :key="y" class="map-gen-row">
-      <div v-for="(tile, x) of row"
-           :key="x"
-           :class="[
-            tile.domain.key.replace(':','-'),
-            tile.climate.key.replace(':','-'),
-            tile.terrain.key.replace(':','-'),
-            tile.elevation.key.replace(':','-'),
+  <section
+    class="select-none map-gen-preview"
+    :class="{
+      terrain: store.toggles.showTerrain,
+      areas: store.toggles.showAreas,
+      starts: store.toggles.showMajorStarts,
+      rivers: store.toggles.showRivers,
+      'fresh-salt': store.toggles.showFreshSalt,
+      elevation: store.toggles.showElevation,
+      features: store.toggles.showFeatures,
+    }"
+  >
+    <div
+      v-for="(row, y) of tiles"
+      :key="y"
+      class="map-gen-row"
+    >
+      <div
+        v-for="(tile, x) of row"
+        :key="x"
+        :class="
+          [
+            tile.domain.key.replace(':', '-'),
+            tile.climate.key.replace(':', '-'),
+            tile.terrain.key.replace(':', '-'),
+            tile.elevation.key.replace(':', '-'),
             (tile.feature as any as TypeObject)?.key,
             (tile.resource as any as TypeObject)?.key,
             tile.naturalWonder?.key,
-            tile.isSalt ? 'salt' : (tile.isFresh ? 'fresh' : null),
-           ].filter(Boolean)"
+            tile.isSalt ? 'salt' : tile.isFresh ? 'fresh' : null,
+          ].filter(Boolean)
+        "
       >
-        <div class="area" :class="[tile.area.key.replace(':','-'), tile.area.key.substring(0, 1)]">
+        <div
+          class="area"
+          :class="[
+            tile.area.key.replace(':', '-'),
+            tile.area.key.substring(0, 1),
+          ]"
+        >
           {{
-            tile.area.key.startsWith('continentType:')
-                ? tile.area.key.split(':')[1].substring(0, 2).toUpperCase()
-                : tile.area.key.split(':')[1].substring(0, 2)
+            tile.area.key.startsWith("continentType:")
+              ? tile.area.key.split(":")[1].substring(0, 2).toUpperCase()
+              : tile.area.key.split(":")[1].substring(0, 2)
           }}
         </div>
-        <div v-if="tile.elevation.id !== 'flat'" class="e-i">
-          <UiIcon :icon="tile.elevation.icon"/>
+        <div
+          v-if="tile.elevation.id !== 'flat'"
+          class="e-i"
+        >
+          <UiIcon :icon="tile.elevation.icon" />
         </div>
-        <div v-if="tile.feature.value" class="f-i">
-          <UiIcon :icon="tile.feature.value.icon"/>
+        <div
+          v-if="tile.feature.value"
+          class="f-i"
+        >
+          <UiIcon :icon="tile.feature.value.icon" />
         </div>
-        <div v-if="tile.isFresh || tile.isSalt" class="fr-sa">
-          {{ tile.isFresh ? 'F' : 's' }}
+        <div
+          v-if="tile.isFresh || tile.isSalt"
+          class="fr-sa"
+        >
+          {{ tile.isFresh ? "F" : "s" }}
         </div>
-        <div v-if="tile.isStart" class="start">
-          {{ tile.isStart === 'major' ? 'x' : 'o' }}
+        <div
+          v-if="tile.isStart"
+          class="start"
+        >
+          {{ tile.isStart === "major" ? "x" : "o" }}
         </div>
-        <div v-if="tile.riverKey" class="river">
-          {{ tile.isMajorRiver ? 'R' : 'r' }}
+        <div
+          v-if="tile.riverKey"
+          class="river"
+        >
+          {{ tile.isMajorRiver ? "R" : "r" }}
         </div>
       </div>
     </div>
@@ -152,7 +182,6 @@ const tiles = computed(() => {
   color: #33f;
 }
 
-
 /****************************************
   * Terrain
   */
@@ -174,7 +203,7 @@ const tiles = computed(() => {
 }
 
 .map-gen-preview.terrain .terrainType-coast {
-  background: #1E5F8AFF;
+  background: #1e5f8aff;
 }
 
 .map-gen-preview.terrain .terrainType-lake {
@@ -206,9 +235,8 @@ const tiles = computed(() => {
 }
 
 .map-gen-preview.terrain .terrainType-snow {
-  background: #A0A1A8FF;
+  background: #a0a1a8ff;
 }
-
 
 /****************************************
   * Continents
@@ -253,7 +281,6 @@ const tiles = computed(() => {
 .map-gen-preview.areas .continentType-oceania {
   background: hsla(100, 70%, 45%, 1);
 }
-
 
 /****************************************
   * Oceans

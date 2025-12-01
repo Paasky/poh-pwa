@@ -1,58 +1,61 @@
-import { roundToTenth, TypeKey } from '@/types/common'
-import { ref } from 'vue'
+import { roundToTenth, TypeKey } from "@/types/common";
+import { ref } from "vue";
 
 export class TypeStorage {
-  private _items = ref({} as Record<TypeKey, number>)
+  private _items = ref({} as Record<TypeKey, number>);
 
-  has (key: TypeKey, amount?: number): boolean {
-    if (!(key in this._items.value)) return false
+  has(key: TypeKey, amount?: number): boolean {
+    if (!(key in this._items.value)) return false;
 
-    return amount === undefined ? true : this._items.value[key] >= amount
+    return amount === undefined ? true : this._items.value[key] >= amount;
   }
 
-  amount (key: TypeKey): number {
-    return this._items.value[key] ?? 0
+  amount(key: TypeKey): number {
+    return this._items.value[key] ?? 0;
   }
 
-  add (key: TypeKey, amount: number): TypeStorage {
-    this._items.value[key] = roundToTenth((this._items.value[key] ?? 0) + amount)
+  add(key: TypeKey, amount: number): TypeStorage {
+    this._items.value[key] = roundToTenth(
+      (this._items.value[key] ?? 0) + amount,
+    );
 
-    return this
+    return this;
   }
 
-  take (key: TypeKey, amount: number): TypeStorage {
-    if (!this.has(key, amount)) throw new Error(
-      `Not enough ${key} in storage: ${this._items.value[key] ?? 0} < ${amount}`
-    )
-    this._items.value[key] = roundToTenth(this._items.value[key] - amount)
+  take(key: TypeKey, amount: number): TypeStorage {
+    if (!this.has(key, amount))
+      throw new Error(
+        `Not enough ${key} in storage: ${this._items.value[key] ?? 0} < ${amount}`,
+      );
+    this._items.value[key] = roundToTenth(this._items.value[key] - amount);
 
-    return this
+    return this;
   }
 
-  takeAll (key: TypeKey): number {
-    const amount = this._items.value[key] ?? 0
-    this._items.value[key] = 0
+  takeAll(key: TypeKey): number {
+    const amount = this._items.value[key] ?? 0;
+    this._items.value[key] = 0;
 
-    return amount
+    return amount;
   }
 
-  takeUpTo (key: TypeKey, amount: number): number {
-    const available = this.amount(key)
-    const taken = Math.min(available, amount)
-    this._items.value[key] = roundToTenth(available - taken)
+  takeUpTo(key: TypeKey, amount: number): number {
+    const available = this.amount(key);
+    const taken = Math.min(available, amount);
+    this._items.value[key] = roundToTenth(available - taken);
 
-    return taken
+    return taken;
   }
 
-  load (yields: Record<TypeKey, number>): TypeStorage {
+  load(yields: Record<TypeKey, number>): TypeStorage {
     for (const [key, amount] of Object.entries(yields)) {
-      if (amount > 0) this._items.value[key as TypeKey] = roundToTenth(amount)
+      if (amount > 0) this._items.value[key as TypeKey] = roundToTenth(amount);
     }
 
-    return this
+    return this;
   }
 
-  toJson (): Record<TypeKey, number> {
-    return this._items.value
+  toJson(): Record<TypeKey, number> {
+    return this._items.value;
   }
 }

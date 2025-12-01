@@ -1,177 +1,224 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
-import UiElement from '@/components/Ui/UiElement.vue'
-import UiButton from '@/components/Ui/UiButton.vue'
-import PlayerDetailsBar from '@/components/PlayerDetails/PlayerDetailsBar.vue'
-import { useEncyclopediaStore } from '@/components/Encyclopedia/encyclopediaStore'
-import { useAppStore } from '@/stores/appStore'
-import UiIcon from '@/components/Ui/UiIcon.vue'
-import { icons } from '@/types/icons'
-import EncyclopediaModal from '@/components/Encyclopedia/EncyclopediaModal.vue'
-import { useRouter } from 'vue-router'
-import { initModalStateSync } from '@/router/modalState'
-import PlayerDetailsModal from '@/components/PlayerDetails/PlayerDetailsModal.vue'
-import EventModal from '@/components/Events/EventModal.vue'
-import { useObjectsStore } from '@/stores/objectStore'
-import Engine from '@/components/Engine/Engine.vue'
-import EventList from '@/components/Events/EventList.vue'
+import { onMounted, onUnmounted, ref } from "vue";
+import UiElement from "@/components/Ui/UiElement.vue";
+import UiButton from "@/components/Ui/UiButton.vue";
+import PlayerDetailsBar from "@/components/PlayerDetails/PlayerDetailsBar.vue";
+import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
+import { useAppStore } from "@/stores/appStore";
+import UiIcon from "@/components/Ui/UiIcon.vue";
+import { icons } from "@/types/icons";
+import EncyclopediaModal from "@/components/Encyclopedia/EncyclopediaModal.vue";
+import { useRouter } from "vue-router";
+import { initModalStateSync } from "@/router/modalState";
+import PlayerDetailsModal from "@/components/PlayerDetails/PlayerDetailsModal.vue";
+import EventModal from "@/components/Events/EventModal.vue";
+import { useObjectsStore } from "@/stores/objectStore";
+import Engine from "@/components/Engine/Engine.vue";
+import EventList from "@/components/Events/EventList.vue";
 
-const encyclopedia = useEncyclopediaStore()
-const app = useAppStore()
-const router = useRouter()
+const encyclopedia = useEncyclopediaStore();
+const app = useAppStore();
+const router = useRouter();
 
 // Fullscreen handling
-const gameRootEl = ref<HTMLElement | null>(null)
-const isFullscreen = ref(false)
+const gameRootEl = ref<HTMLElement | null>(null);
+const isFullscreen = ref(false);
 
-function updateFullscreenState () {
-  const d: any = document as any
-  isFullscreen.value = !!(document.fullscreenElement || d.webkitFullscreenElement || d.mozFullScreenElement || d.msFullscreenElement)
+function updateFullscreenState() {
+  // eslint-disable-next-line
+  const d: any = document;
+  isFullscreen.value = !!(
+    document.fullscreenElement ||
+    d.webkitFullscreenElement ||
+    d.mozFullScreenElement ||
+    d.msFullscreenElement
+  );
 }
 
-async function enterFullscreen () {
-  const el: any = gameRootEl.value || document.documentElement
+async function enterFullscreen() {
+  // eslint-disable-next-line
+  const el: any = gameRootEl.value || document.documentElement;
   try {
     if (el.requestFullscreen) {
       // navigationUI: 'hide' is supported in some browsers (like Chrome on desktop)
-      await el.requestFullscreen({ navigationUI: 'hide' } as any)
+      await el.requestFullscreen({ navigationUI: "hide" });
     } else if (el.webkitRequestFullscreen) {
-      el.webkitRequestFullscreen()
+      el.webkitRequestFullscreen();
     } else if (el.mozRequestFullScreen) {
-      el.mozRequestFullScreen()
+      el.mozRequestFullScreen();
     } else if (el.msRequestFullscreen) {
-      el.msRequestFullscreen()
+      el.msRequestFullscreen();
     }
-  } catch (_) {
+  } catch {
     // ignore
   }
 }
 
-async function exitFullscreen () {
-  const d: any = document as any
+async function exitFullscreen() {
+  // eslint-disable-next-line
+  const d: any = document;
   try {
     if (document.exitFullscreen) {
-      await document.exitFullscreen()
+      await document.exitFullscreen();
     } else if (d.webkitExitFullscreen) {
-      d.webkitExitFullscreen()
+      d.webkitExitFullscreen();
     } else if (d.mozCancelFullScreen) {
-      d.mozCancelFullScreen()
+      d.mozCancelFullScreen();
     } else if (d.msExitFullscreen) {
-      d.msExitFullscreen()
+      d.msExitFullscreen();
     }
-  } catch (_) {
+  } catch {
     // ignore
   }
 }
 
-function toggleFullscreen (set: boolean | null = null) {
+function toggleFullscreen(set: boolean | null = null) {
   if (set === true) {
-    return void enterFullscreen()
+    return void enterFullscreen();
   }
   if (set === false) {
-    return void exitFullscreen()
+    return void exitFullscreen();
   }
 
-  return isFullscreen.value
-      ? void exitFullscreen()
-      : void enterFullscreen()
+  return isFullscreen.value ? void exitFullscreen() : void enterFullscreen();
 }
 
 onMounted(async () => {
   // Warn/prevent accidental unloads (refresh/close tab) while in the game view
-  window.addEventListener('beforeunload', onBeforeUnload)
+  window.addEventListener("beforeunload", onBeforeUnload);
 
-  // Track fullscreen state & go fullscreen on mount
-  document.addEventListener('fullscreenchange', updateFullscreenState)
-  document.addEventListener('webkitfullscreenchange', updateFullscreenState as any)
-  document.addEventListener('mozfullscreenchange', updateFullscreenState as any)
-  document.addEventListener('MSFullscreenChange', updateFullscreenState as any)
-  updateFullscreenState()
-  toggleFullscreen(true)
+  // Track fullscreen state and go fullscreen on mount
+  document.addEventListener("fullscreenchange", updateFullscreenState);
+  document.addEventListener("webkitfullscreenchange", updateFullscreenState);
+  document.addEventListener("mozfullscreenchange", updateFullscreenState);
+  document.addEventListener("MSFullscreenChange", updateFullscreenState);
+  updateFullscreenState();
+  toggleFullscreen(true);
 
   // Bootstrap the app data once (types + gameData) before showing the game UI
-  await app.init()
+  await app.init();
 
   // Initialize URL/history syncing for modals and tabs/types after data is ready
-  initModalStateSync(router)
-})
+  initModalStateSync(router);
+});
 
 onUnmounted(() => {
-  window.removeEventListener('beforeunload', onBeforeUnload)
-  document.removeEventListener('fullscreenchange', updateFullscreenState)
-  document.removeEventListener('webkitfullscreenchange', updateFullscreenState as any)
-  document.removeEventListener('mozfullscreenchange', updateFullscreenState as any)
-  document.removeEventListener('MSFullscreenChange', updateFullscreenState as any)
-})
+  window.removeEventListener("beforeunload", onBeforeUnload);
+  document.removeEventListener("fullscreenchange", updateFullscreenState);
+  document.removeEventListener("webkitfullscreenchange", updateFullscreenState);
+  document.removeEventListener("mozfullscreenchange", updateFullscreenState);
+  document.removeEventListener("MSFullscreenChange", updateFullscreenState);
+});
 
-function onBeforeUnload (e: BeforeUnloadEvent) {
-  e.preventDefault()
+function onBeforeUnload(e: BeforeUnloadEvent) {
+  e.preventDefault();
 }
-
 </script>
 
 <template>
-  <Transition name="fade" mode="out-in">
+  <Transition
+    name="fade"
+    mode="out-in"
+  >
     <!-- Loader Screen -->
-    <div v-if="!app.ready" key="loader"
-         class="relative w-screen h-screen bg-gray-800 text-slate-100 flex items-center justify-center">
+    <div
+      v-if="!app.ready"
+      key="loader"
+      class="relative w-screen h-screen bg-gray-800 text-slate-100 flex items-center justify-center"
+    >
       <div class="text-center">
-        <img src="/book.gif" alt="Book">
-        <p class="mt-4 text-slate-300">Loading the Pages of History…</p>
+        <img
+          src="/book.gif"
+          alt="Book"
+        >
+        <p class="mt-4 text-slate-300">
+          Loading the Pages of History…
+        </p>
       </div>
     </div>
 
     <!-- Game Screen -->
-    <div v-else id="game" key="game" ref="gameRootEl" class="absolute w-screen h-screen bg-gray-100 text-sm">
+    <div
+      v-else
+      id="game"
+      key="game"
+      ref="gameRootEl"
+      class="absolute w-screen h-screen bg-gray-100 text-sm"
+    >
       <!-- Game engine -->
-      <Engine class="absolute top-0 left-0 w-full h-full bg-black/50"/>
+      <Engine class="absolute top-0 left-0 w-full h-full bg-black/50" />
 
       <!-- todo: Game hover tooltip -->
 
       <!-- Top-left -->
-      <PlayerDetailsBar/>
+      <PlayerDetailsBar />
 
       <!-- Top-right -->
-      <UiElement position="top-right" variant="ghost" class="z-50 text-xl">
+      <UiElement
+        position="top-right"
+        variant="ghost"
+        class="z-50 text-xl"
+      >
         <div class="flex gap-1">
-          <UiButton tooltip="Encyclopedia" @click="encyclopedia.open()">
-            <UiIcon :icon="icons.question"/>
+          <UiButton
+            tooltip="Encyclopedia"
+            @click="encyclopedia.open()"
+          >
+            <UiIcon :icon="icons.question" />
           </UiButton>
-          <UiButton :tooltip="isFullscreen ? 'Exit full screen' : 'Full screen'" @click="toggleFullscreen">
-            <UiIcon :icon="isFullscreen ? icons.fullscreenExit : icons.fullscreenEnter"/>
+          <UiButton
+            :tooltip="isFullscreen ? 'Exit full screen' : 'Full screen'"
+            @click="toggleFullscreen"
+          >
+            <UiIcon
+              :icon="
+                isFullscreen ? icons.fullscreenExit : icons.fullscreenEnter
+              "
+            />
           </UiButton>
           <UiButton tooltip="Menu">
-            <UiIcon :icon="icons.menu"/>
+            <UiIcon :icon="icons.menu" />
           </UiButton>
         </div>
       </UiElement>
 
       <!-- Left-center -->
-      <UiElement position="left-center">Ongoing</UiElement>
+      <UiElement position="left-center">
+        Ongoing
+      </UiElement>
 
       <!-- Right-center -->
       <UiElement position="right-center">
-        <EventList/>
+        <EventList />
       </UiElement>
 
       <!-- Bottom-left -->
-      <UiElement position="bottom-left">Map</UiElement>
+      <UiElement position="bottom-left">
+        Map
+      </UiElement>
 
       <!-- Bottom-center -->
       <UiElement position="bottom-center">
         <div class="max-h-48 overflow-y-auto">
-          <p v-for="type in useObjectsStore().getCurrentPlayer().knownTypes">{{ type.class }} - {{ type.name }}</p>
+          <p
+            v-for="type in useObjectsStore().getCurrentPlayer().knownTypes
+              .value"
+            :key="type.id"
+          >
+            {{ type.class }} - {{ type.name }}
+          </p>
         </div>
       </UiElement>
 
       <!-- Bottom-right -->
-      <UiElement position="bottom-right">Next</UiElement>
+      <UiElement position="bottom-right">
+        Next
+      </UiElement>
 
       <!-- Modals  -->
-      <PlayerDetailsModal/>
-      <EventModal/>
-      <EncyclopediaModal/>
-
+      <PlayerDetailsModal />
+      <EventModal />
+      <EncyclopediaModal />
     </div>
   </Transition>
 </template>

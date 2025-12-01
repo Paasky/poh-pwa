@@ -1,19 +1,14 @@
 <script setup lang="ts">
-import { Citizen, Culture, Religion } from '@/objects/game/gameObjects'
-import { useObjectsStore } from '@/stores/objectStore'
+import { Citizen } from "@/objects/game/gameObjects";
 
-const props = defineProps<{ citizen: Citizen }>()
-
-const objects = useObjectsStore()
-const culture = objects.getGameObject(props.citizen.culture) as Culture
-const religion = props.citizen.religion ? objects.getGameObject(props.citizen.religion) as Religion : null
-
+defineProps<{ citizen: Citizen }>();
 </script>
 
 <template>
-
+  <div class="text-xs text-slate-300">
+    <!-- Minimal placeholder to satisfy valid template root rule; real UI pending -->
+    <span>{{ citizen.tileKey }}</span>
+  </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

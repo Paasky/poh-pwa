@@ -1,38 +1,48 @@
-import { TerraGenerator } from '@/factories/TerraGenerator/terra-generator'
-import { getRandom, takeRandom } from '@/helpers/arrayTools'
-import { Tile } from '@/objects/game/gameObjects'
-import { makeIsland, mountainRange, removeOrphanArea } from '@/factories/TerraGenerator/helpers/post-processors'
-import { GenTile } from '@/factories/TerraGenerator/gen-tile'
-import { getNeighborCoords } from '@/factories/TerraGenerator/helpers/neighbors'
+import { TerraGenerator } from "@/factories/TerraGenerator/terra-generator";
+import { getRandom, takeRandom } from "@/helpers/arrayTools";
+import { Tile } from "@/objects/game/gameObjects";
+import {
+  makeIsland,
+  mountainRange,
+  removeOrphanArea,
+} from "@/factories/TerraGenerator/helpers/post-processors";
+import { GenTile } from "@/factories/TerraGenerator/gen-tile";
+import { getNeighborCoords } from "@/factories/TerraGenerator/helpers/neighbors";
 
 export class RegLevel {
-  gen: TerraGenerator
+  gen: TerraGenerator;
 
-  constructor (gen: TerraGenerator) {
-    this.gen = gen
+  constructor(gen: TerraGenerator) {
+    this.gen = gen;
   }
 
-  fillFromStrat (): RegLevel {
-    this.gen.forEachRegTile((tile) => {
-
-    })
+  fillFromStrat(): RegLevel {
+    this.gen.forEachRegTile((tile) => {});
     for (let y = 0; y < this.gen.regSize.y; y++) {
       for (let x = 0; x < this.gen.regSize.x; x++) {
-        let stratTile = this.gen.getStratFromRegCoords(x, y)
+        let stratTile = this.gen.getStratFromRegCoords(x, y);
 
         // If the parent stratTile is not a start, allow for variety from neighbors
         if (!stratTile.isStart) {
           // Choose a random stratLevel neighbor
-          const neighbors = getNeighborCoords(this.gen.regSize, { x, y }, 'manhattan', 1)
-          stratTile = getRandom(neighbors.map(
-            n => this.gen.getStratFromRegCoords(n.x, n.y)
-          ))
+          const neighbors = getNeighborCoords(
+            this.gen.regSize,
+            { x, y },
+            "manhattan",
+            1,
+          );
+          stratTile = getRandom(
+            neighbors.map((n) => this.gen.getStratFromRegCoords(n.x, n.y)),
+          );
         }
 
         // Allow a 25% chance for elevation swap for extra variety
-        const elevation = stratTile.domain === this.gen.land && Math.random() < 0.25
-          ? (stratTile.elevation === this.gen.flat ? this.gen.hill : this.gen.flat)
-          : stratTile.elevation
+        const elevation =
+          stratTile.domain === this.gen.land && Math.random() < 0.25
+            ? stratTile.elevation === this.gen.flat
+              ? this.gen.hill
+              : this.gen.flat
+            : stratTile.elevation;
 
         const tile = new GenTile(
           GenTile.getKey(x, y),
@@ -43,60 +53,63 @@ export class RegLevel {
           stratTile.climate,
           stratTile.terrain,
           elevation,
-        )
+        );
 
         // Set terrain based on distance from pole (allow for polar ice)
-        const distToPole = this.gen.getDistToPole(y, this.gen.regSize.y)
-        tile.feature.value = this.gen.getFeatureForTile(tile, distToPole) as any
-        this.gen.regTiles[Tile.getKey(x, y)] = tile
+        const distToPole = this.gen.getDistToPole(y, this.gen.regSize.y);
+        tile.feature.value = this.gen.getFeatureForTile(
+          tile,
+          distToPole,
+        ) as any;
+        this.gen.regTiles[Tile.getKey(x, y)] = tile;
       }
     }
 
-    return this
+    return this;
   }
 
-  postProcess (): RegLevel {
-    this.removeOrphans()
-      .addIslands()
-      .processContinents()
+  postProcess(): RegLevel {
+    this.removeOrphans().addIslands().processContinents();
 
-    return this
+    return this;
   }
 
-  private removeOrphans (): RegLevel {
-    this.gen.forEachRegTile((tile) => removeOrphanArea(
-      tile,
-      this.gen.getRegNeighbors(tile, 'manhattan')
-    ))
+  private removeOrphans(): RegLevel {
+    this.gen.forEachRegTile((tile) =>
+      removeOrphanArea(tile, this.gen.getRegNeighbors(tile, "manhattan")),
+    );
 
-    return this
+    return this;
   }
 
-  private addIslands (): RegLevel {
+  private addIslands(): RegLevel {
     this.gen.forEachRegTile((tile) => {
       // Check 50% on Sea, 1% on Ocean (there's a lot of Ocean)
-      if (tile.terrain === this.gen.seaTerrain && Math.random() > 0.5) return
-      if (tile.terrain === this.gen.oceanTerrain && Math.random() > 0.01) return
+      if (tile.terrain === this.gen.seaTerrain && Math.random() > 0.5) return;
+      if (tile.terrain === this.gen.oceanTerrain && Math.random() > 0.01)
+        return;
 
-      const neighbors = this.gen.getRegNeighbors(tile, 'manhattan', 3)
-      const allAreSameTerrain = neighbors.every(n => n.terrain === tile.terrain)
+      const neighbors = this.gen.getRegNeighbors(tile, "manhattan", 3);
+      const allAreSameTerrain = neighbors.every(
+        (n) => n.terrain === tile.terrain,
+      );
       if (allAreSameTerrain) {
-        makeIsland(this.gen, tile, 'reg', 0.75)
+        makeIsland(this.gen, tile, "reg", 0.75);
       }
-    })
+    });
 
-    return this
+    return this;
   }
 
-  private processContinents (): RegLevel {
+  private processContinents(): RegLevel {
     // Group land tiles per continent
-    const landTilesPerContinent: Record<string, Record<string, GenTile>> = {}
+    const landTilesPerContinent: Record<string, Record<string, GenTile>> = {};
     for (const tile of Object.values(this.gen.regTiles)) {
       if (tile.domain === this.gen.land) {
         if (!landTilesPerContinent[tile.area.key]) {
-          landTilesPerContinent[tile.area.key] = {}
+          landTilesPerContinent[tile.area.key] = {};
         }
-        landTilesPerContinent[tile.area.key][tile.key] = tile
+        landTilesPerContinent[tile.area.key][tile.key] = tile;
       }
     }
 
@@ -104,37 +117,46 @@ export class RegLevel {
       // Add starts per continent
       for (const stratStartTile of continent.majorStarts.strat) {
         const startTile = getRandom(
-          this.gen.getRegTilesFromStratCoords(stratStartTile.x, stratStartTile.y).filter(t => t.domain === this.gen.land)
-        )
-        startTile.isStart = 'major'
-        continent.majorStarts.reg.push(startTile)
+          this.gen
+            .getRegTilesFromStratCoords(stratStartTile.x, stratStartTile.y)
+            .filter((t) => t.domain === this.gen.land),
+        );
+        startTile.isStart = "major";
+        continent.majorStarts.reg.push(startTile);
 
         // Reserved as a start -> remove from landTilesPerContinent
-        delete landTilesPerContinent[startTile.area.key][startTile.key]
+        delete landTilesPerContinent[startTile.area.key][startTile.key];
       }
 
       // Add 3 mountain ranges per continent
-      const landTiles = Object.values(landTilesPerContinent[continent.type.key])
+      const landTiles = Object.values(
+        landTilesPerContinent[continent.type.key],
+      );
       for (let i = 0; i < 3; i++) {
-        const rangeStart = takeRandom(landTiles)
+        const rangeStart = takeRandom(landTiles);
         const mountainTiles = mountainRange(
           rangeStart,
           this.gen.regTiles,
           this.gen.regSize,
-        )
+        );
 
         // Flat Mountain neighbors have a 50% chance of becoming hill
         for (const tile of mountainTiles) {
-          for (const neighbor of this.gen.getRegNeighbors(tile, 'manhattan')) {
+          for (const neighbor of this.gen.getRegNeighbors(tile, "manhattan")) {
             // Skip non-lake water
-            if (neighbor.domain === this.gen.water && neighbor.terrain !== this.gen.lakeTerrain) continue
+            if (
+              neighbor.domain === this.gen.water &&
+              neighbor.terrain !== this.gen.lakeTerrain
+            )
+              continue;
 
-            if (neighbor.elevation === this.gen.flat && Math.random() < 0.5) neighbor.elevation = this.gen.hill
+            if (neighbor.elevation === this.gen.flat && Math.random() < 0.5)
+              neighbor.elevation = this.gen.hill;
           }
         }
       }
     }
 
-    return this
+    return this;
   }
 }

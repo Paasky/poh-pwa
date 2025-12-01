@@ -1,32 +1,36 @@
-import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
+import {
+  createRouter,
+  createWebHistory,
+  type RouteRecordRaw,
+} from "vue-router";
 
-import HomeView from '@/views/HomeView.vue'
-import GameView from '@/views/GameView.vue'
-import MapGeneratorView from '@/views/MapGeneratorView.vue'
+import HomeView from "@/views/HomeView.vue";
+import GameView from "@/views/GameView.vue";
+import MapGeneratorView from "@/views/MapGeneratorView.vue";
 
 const routes: Readonly<RouteRecordRaw[]> = [
-  { path: '/', name: 'home', component: HomeView },
-  { path: '/game', name: 'game', component: GameView },
-  { path: '/generator', name: 'generator', component: MapGeneratorView }
-]
+  { path: "/", name: "home", component: HomeView },
+  { path: "/game", name: "game", component: GameView },
+  { path: "/generator", name: "generator", component: MapGeneratorView },
+];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
-  scrollBehavior () {
-    return { top: 0 }
-  }
-})
+  scrollBehavior() {
+    return { top: 0 };
+  },
+});
 
 // Prevent leaving the Game route within the SPA (allow in-route query changes like encyclopedia)
 router.beforeEach((to, from) => {
   // If we're currently on the game route and trying to go anywhere else, block it
   // Allow staying on the same named route (e.g., query-only changes)
   // noinspection RedundantIfStatementJS
-  if (from.name === 'game' && to.name !== 'game') {
-    return false // cancel navigation
+  if (from.name === "game" && to.name !== "game") {
+    return false; // cancel navigation
   }
-  return true
-})
+  return true;
+});
 
-export default router
+export default router;

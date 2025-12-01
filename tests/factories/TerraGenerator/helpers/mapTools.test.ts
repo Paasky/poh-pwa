@@ -1,11 +1,11 @@
 // Placeholder minimal suite to keep file valid; original tests will be refactored later
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect } from "vitest";
 
-describe('mapTools placeholder', () => {
-  it('runs', () => {
-    expect(true).toBe(true)
-  })
-})
+describe("mapTools placeholder", () => {
+  it("runs", () => {
+    expect(true).toBe(true);
+  });
+});
 
 /* these will be refactored later do not touch
 describe('mapTools.getNeighbors', () => {

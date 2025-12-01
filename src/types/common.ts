@@ -1,66 +1,77 @@
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
-import getIcon from '@/types/icons'
-import { CategoryClass, CategoryObject, TypeClass, TypeObject } from '@/types/typeObjects'
-import { useObjectsStore } from '@/stores/objectStore'
-import { GameClass, GameKey, GameObject } from '@/objects/game/gameObjects'
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import getIcon from "@/types/icons";
+import {
+  CategoryClass,
+  CategoryObject,
+  TypeClass,
+  TypeObject,
+} from "@/types/typeObjects";
+import { useObjectsStore } from "@/stores/objectStore";
+import { GameClass, GameKey, GameObject } from "@/objects/game/gameObjects";
 
-export type ObjType = 'TypeObject' | 'CategoryObject' | 'GameObject'
-export type CatKey = `${CategoryClass}:${string}`
-export type TypeKey = `${TypeClass}:${string}`
-export type ObjKey = CatKey | TypeKey | GameKey
+export type ObjType = "TypeObject" | "CategoryObject" | "GameObject";
+export type CatKey = `${CategoryClass}:${string}`;
+export type TypeKey = `${TypeClass}:${string}`;
+export type ObjKey = CatKey | TypeKey | GameKey;
 
 export interface PohObject {
-  objType: ObjType
-  class: CategoryClass | TypeClass | GameClass
-  id: string
-  key: ObjKey
-  name: string
-  concept: `conceptType:${string}`
-  icon: ObjectIcon
+  objType: ObjType;
+  class: CategoryClass | TypeClass | GameClass;
+  id: string;
+  key: ObjKey;
+  name: string;
+  concept: `conceptType:${string}`;
+  icon: ObjectIcon;
 }
 
-export function classAndId (key: string): { class: CategoryClass | TypeClass | GameClass, id: string } {
-  const [c, i] = key.split(':')
-  return { class: c as CategoryClass | TypeClass | GameClass, id: i }
+export function classAndId(key: string): {
+  class: CategoryClass | TypeClass | GameClass;
+  id: string;
+} {
+  const [c, i] = key.split(":");
+  return { class: c as CategoryClass | TypeClass | GameClass, id: i };
 }
 
-export function initPohObject (objType: ObjType, data: any): PohObject {
+// eslint-disable-next-line
+export function initPohObject(objType: ObjType, data: any): PohObject {
   return {
     ...data,
     objType,
     ...classAndId(data.key),
     key: data.key,
-    name: data.name ?? '',
+    name: data.name ?? "",
     concept: data.concept,
     icon: getIcon(data.key, data.concept, data.category),
-  }
+  };
 }
 
-export function isCategoryObject (o: GameObject | PohObject): o is CategoryObject {
-  return o.objType === 'CategoryObject'
+export function isCategoryObject(
+  o: GameObject | PohObject,
+): o is CategoryObject {
+  return o.objType === "CategoryObject";
 }
 
-export function isTypeObject (o: GameObject | PohObject): o is TypeObject {
-  return o.objType === 'TypeObject'
+export function isTypeObject(o: GameObject | PohObject): o is TypeObject {
+  return o.objType === "TypeObject";
 }
 
-export function isGameObject (o: GameObject | PohObject): o is GameObject {
-  return o.objType === 'GameObject'
+export function isGameObject(o: GameObject | PohObject): o is GameObject {
+  return o.objType === "GameObject";
 }
 
 export type World = {
-  id: string,
-  sizeX: number,
-  sizeY: number,
-  turn: number,
-  year: number,
-  currentPlayer: GameKey
-}
+  id: string;
+  sizeX: number;
+  sizeY: number;
+  turn: number;
+  year: number;
+  currentPlayer: GameKey;
+};
 
 export type ObjectIcon = {
-  icon: IconDefinition,
-  color: string
-}
+  icon: IconDefinition;
+  color: string;
+};
 
 export const yearsPerTurnConfig = [
   { start: -10000, end: -7000, yearsPerTurn: 60 },
@@ -82,18 +93,18 @@ export const yearsPerTurnConfig = [
   { start: 2000, end: 2015, yearsPerTurn: 0.333 },
   { start: 2015, end: 2030, yearsPerTurn: 0.333 },
   { start: 2030, end: 99999999, yearsPerTurn: 0.333 },
-]
+];
 
-export function roundToTenth (v: number): number {
-  return Math.round(v * 10) / 10
+export function roundToTenth(v: number): number {
+  return Math.round(v * 10) / 10;
 }
 
-export function upgradeTree (type: TypeObject, tree: TypeObject[]): void {
+export function upgradeTree(type: TypeObject, tree: TypeObject[]): void {
   for (const key of type.upgradesFrom) {
-    const from = useObjectsStore().getTypeObject(key)
-    if (tree.includes(from)) continue
+    const from = useObjectsStore().getTypeObject(key);
+    if (tree.includes(from)) continue;
 
-    tree.push(from)
-    upgradeTree(from, tree)
+    tree.push(from);
+    upgradeTree(from, tree);
   }
 }

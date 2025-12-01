@@ -1,61 +1,68 @@
-import { getRandom } from '@/helpers/arrayTools'
-import { useObjectsStore } from '@/stores/objectStore'
-import { GenTile } from '@/factories/TerraGenerator/gen-tile'
-import { Tetris } from '@/factories/TerraGenerator/helpers/tetris'
-import { generateKey, River, Tile } from '@/objects/game/gameObjects'
-import { Coords, getNeighborCoords, getTile } from '@/factories/TerraGenerator/helpers/neighbors'
-import { TerraGenerator } from '@/factories/TerraGenerator/terra-generator'
-import { AcceptResult, Snake } from '@/factories/TerraGenerator/helpers/snake'
+import { getRandom } from "@/helpers/arrayTools";
+import { useObjectsStore } from "@/stores/objectStore";
+import { GenTile } from "@/factories/TerraGenerator/gen-tile";
+import { Tetris } from "@/factories/TerraGenerator/helpers/tetris";
+import { generateKey, River, Tile } from "@/objects/game/gameObjects";
+import {
+  Coords,
+  getNeighborCoords,
+  getTile,
+} from "@/factories/TerraGenerator/helpers/neighbors";
+import { TerraGenerator } from "@/factories/TerraGenerator/terra-generator";
+import { AcceptResult, Snake } from "@/factories/TerraGenerator/helpers/snake";
 
-export const removeOrphanArea = (
-  tile: GenTile,
-  neighbors: GenTile[]
-): void => {
-  if (neighbors.length === 0) return
+export const removeOrphanArea = (tile: GenTile, neighbors: GenTile[]): void => {
+  if (neighbors.length === 0) return;
 
   // If any neighbor has the same area, or all are a different domain (I'm a lake/island)
   // -> skip
-  const hasSameArea = neighbors.some(n => n.area.key === tile.area.key)
-  const allDiffDomain = neighbors.every(n => n.domain.key !== tile.domain.key)
-  if (hasSameArea || allDiffDomain) return
+  const hasSameArea = neighbors.some((n) => n.area.key === tile.area.key);
+  const allDiffDomain = neighbors.every(
+    (n) => n.domain.key !== tile.domain.key,
+  );
+  if (hasSameArea || allDiffDomain) return;
 
-  const ref = getRandom(neighbors)
+  const ref = getRandom(neighbors);
   // If the domain changes, also change climate and terrain
   if (tile.domain !== ref.domain && tile.canChangeDomain()) {
-    tile.domain = ref.domain
-    tile.climate = ref.climate
-    tile.terrain = ref.terrain
+    tile.domain = ref.domain;
+    tile.climate = ref.climate;
+    tile.terrain = ref.terrain;
   }
-  tile.area = ref.area
-}
+  tile.area = ref.area;
+};
 
 export const removeOrphanTerrain = (
   tile: GenTile,
   neighbors: GenTile[],
   ignoreLakes = true,
 ): void => {
-  if (neighbors.length === 0) return
+  if (neighbors.length === 0) return;
 
-  const allDiffTerrain = neighbors.every(n => n.terrain.key !== tile.terrain.key)
-  if (!allDiffTerrain) return
+  const allDiffTerrain = neighbors.every(
+    (n) => n.terrain.key !== tile.terrain.key,
+  );
+  if (!allDiffTerrain) return;
 
-  const ref = getRandom(neighbors)
+  const ref = getRandom(neighbors);
   // If the domain changes, also change the area
   if (ref.domain !== tile.domain) {
     // If we should not flip lakes/land, skip when one side is lake and the other is land
     if (ignoreLakes) {
-      const isLakeHere = tile.terrain.id === 'lake'
-      const isLakeThere = ref.terrain.id === 'lake'
-      const becomesLandFromLake = isLakeHere && ref.domain.key === 'domainType:land'
-      const becomesLakeFromLand = isLakeThere && tile.domain.key === 'domainType:land'
-      if (becomesLandFromLake || becomesLakeFromLand) return
+      const isLakeHere = tile.terrain.id === "lake";
+      const isLakeThere = ref.terrain.id === "lake";
+      const becomesLandFromLake =
+        isLakeHere && ref.domain.key === "domainType:land";
+      const becomesLakeFromLand =
+        isLakeThere && tile.domain.key === "domainType:land";
+      if (becomesLandFromLake || becomesLakeFromLand) return;
     }
-    tile.area = ref.area
+    tile.area = ref.area;
   }
-  tile.domain = ref.domain
-  tile.climate = ref.climate
-  tile.terrain = ref.terrain
-}
+  tile.domain = ref.domain;
+  tile.climate = ref.climate;
+  tile.terrain = ref.terrain;
+};
 
 /**
  * Create a small tetris-like island around (cx, cy).
@@ -66,55 +73,56 @@ export const removeOrphanTerrain = (
 export const makeIsland = (
   gen: TerraGenerator,
   coords: Coords,
-  level: 'reg' | 'game',
+  level: "reg" | "game",
   hillChance: number = 0.5,
 ): void => {
-  const offsets = Tetris.randomOffsets()
-  const size = level === 'reg' ? gen.regSize : gen.size
-  const tiles = level === 'reg' ? gen.regTiles : gen.gameTiles
-  const elevType = Math.random() < hillChance ? gen.hill : gen.flat
+  const offsets = Tetris.randomOffsets();
+  const size = level === "reg" ? gen.regSize : gen.size;
+  const tiles = level === "reg" ? gen.regTiles : gen.gameTiles;
+  const elevType = Math.random() < hillChance ? gen.hill : gen.flat;
 
-  const center = getTile(size, coords, tiles)
+  const center = getTile(size, coords, tiles);
   for (const o of offsets) {
-    const t = getTile(size, { x: coords.x + o.dx, y: coords.y + o.dy }, tiles)
-    if (!t) continue
-    if (!t.canChangeDomain()) continue
-    const climate = (center || t).climate
-    t.domain = gen.land
-    t.terrain = gen.getLandTerrainFromClimate(climate)
-    t.elevation = elevType
-    t.isFresh = false
-    t.isSalt = false
+    const t = getTile(size, { x: coords.x + o.dx, y: coords.y + o.dy }, tiles);
+    if (!t) continue;
+    if (!t.canChangeDomain()) continue;
+    const climate = (center || t).climate;
+    t.domain = gen.land;
+    t.terrain = gen.getLandTerrainFromClimate(climate);
+    t.elevation = elevType;
+    t.isFresh = false;
+    t.isSalt = false;
   }
-}
+};
 
 export const mountainRange = (
   start: GenTile,
   tiles: Record<string, GenTile>,
-  size: { x: number, y: number }
+  size: { x: number; y: number },
 ): GenTile[] => {
-  const mountain = useObjectsStore().getTypeObject('elevationType:mountain')
-  const snowMountain = useObjectsStore().getTypeObject('elevationType:snowMountain')
+  const mountain = useObjectsStore().getTypeObject("elevationType:mountain");
+  const snowMountain = useObjectsStore().getTypeObject(
+    "elevationType:snowMountain",
+  );
 
-  let waterCount = 0
-  return new Snake(
-    size,
-    tiles,
-    (tile) => {
-      // If we've hit too many non-lake water tiles, stop early
-      if (tile.domain.id === 'water' && tile.terrain.id !== 'lake') {
-        waterCount++
-        return waterCount < 3
-      }
-
-      tile.elevation = tile.elevation === mountain || tile.elevation === snowMountain || Math.random() > 0.9
-        ? snowMountain
-        : mountain
-
-      return true
+  let waterCount = 0;
+  return new Snake(size, tiles, (tile) => {
+    // If we've hit too many non-lake water tiles, stop early
+    if (tile.domain.id === "water" && tile.terrain.id !== "lake") {
+      waterCount++;
+      return waterCount < 3;
     }
-  ).walk(start)
-}
+
+    tile.elevation =
+      tile.elevation === mountain ||
+      tile.elevation === snowMountain ||
+      Math.random() > 0.9
+        ? snowMountain
+        : mountain;
+
+    return true;
+  }).walk(start);
+};
 
 /**
  * Generic tile crawler.
@@ -124,48 +132,48 @@ export const mountainRange = (
  */
 export const crawlTiles = (
   gen: any,
-  level: 'strat' | 'reg' | 'game',
+  level: "strat" | "reg" | "game",
   start: GenTile | Tile,
   seenTiles: Set<string>,
   isValid: (tile: GenTile | Tile) => boolean,
 ): (GenTile | Tile)[] => {
   // Non-recursive DFS to minimize call stack depth
-  const result: (GenTile | Tile)[] = []
-  const stack: (GenTile | Tile)[] = []
+  const result: (GenTile | Tile)[] = [];
+  const stack: (GenTile | Tile)[] = [];
 
   // Only proceed if the starting tile is valid
-  if (!start || !isValid(start)) return result
+  if (!start || !isValid(start)) return result;
 
-  stack.push(start)
+  stack.push(start);
   while (stack.length) {
-    const current = stack.pop() as GenTile | Tile
-    if (!current) continue
+    const current = stack.pop() as GenTile | Tile;
+    if (!current) continue;
 
-    if (seenTiles.has(current.key)) continue
-    seenTiles.add(current.key)
-    result.push(current)
+    if (seenTiles.has(current.key)) continue;
+    seenTiles.add(current.key);
+    result.push(current);
 
     // Use TerraGenerator neighbor helpers (no duplicated neighbor math)
-    let neighborTiles: GenTile[] = []
-    const cx = (current as GenTile).x
-    const cy = (current as GenTile).y
-    if (level === 'game') {
-      neighborTiles = gen.getGameNeighbors({ x: cx, y: cy }, 'chebyshev', 1)
-    } else if (level === 'reg') {
-      neighborTiles = gen.getRegNeighbors({ x: cx, y: cy }, 'chebyshev', 1)
+    let neighborTiles: GenTile[] = [];
+    const cx = (current as GenTile).x;
+    const cy = (current as GenTile).y;
+    if (level === "game") {
+      neighborTiles = gen.getGameNeighbors({ x: cx, y: cy }, "chebyshev", 1);
+    } else if (level === "reg") {
+      neighborTiles = gen.getRegNeighbors({ x: cx, y: cy }, "chebyshev", 1);
     } else {
-      neighborTiles = gen.getStratNeighbors({ x: cx, y: cy }, 'chebyshev', 1)
+      neighborTiles = gen.getStratNeighbors({ x: cx, y: cy }, "chebyshev", 1);
     }
 
     for (const neighbor of neighborTiles) {
-      if (seenTiles.has(neighbor.key)) continue
-      if (!isValid(neighbor)) continue // stop crawling that direction
-      stack.push(neighbor)
+      if (seenTiles.has(neighbor.key)) continue;
+      if (!isValid(neighbor)) continue; // stop crawling that direction
+      stack.push(neighbor);
     }
   }
 
-  return result
-}
+  return result;
+};
 
 /**
  * Spread salt water marking from a starting tile across contiguous water tiles.
@@ -174,16 +182,16 @@ export const crawlTiles = (
  */
 export const spreadSalt = (
   gen: any,
-  level: 'strat' | 'reg' | 'game',
+  level: "strat" | "reg" | "game",
   start: Tile,
 ): void => {
-  const seen = new Set<string>()
-  const waterCheck = (t: Tile) => t.domain.id === 'water'
-  const visited = crawlTiles(gen, level, start, seen, waterCheck)
+  const seen = new Set<string>();
+  const waterCheck = (t: Tile) => t.domain.id === "water";
+  const visited = crawlTiles(gen, level, start, seen, waterCheck);
   for (const t of visited) {
-    t.isSalt = true
+    t.isSalt = true;
   }
-}
+};
 
 /**
  * Generate a river path starting at `start` and meandering until it reaches
@@ -200,43 +208,43 @@ export const makeRiver = (
   tiles: Record<string, GenTile>,
   rivers: Record<string, River>,
 ): River => {
-  const floodPlain = useObjectsStore().getTypeObject('featureType:floodPlain')
-  const river = new River(generateKey('river'))
-  rivers[river.key] = river
-  console.log(`[terraGenerator] river ${river.key}: starting at ${start.key}`)
+  const floodPlain = useObjectsStore().getTypeObject("featureType:floodPlain");
+  const river = new River(generateKey("river"));
+  rivers[river.key] = river;
 
   // Keep track of the current/end-state
-  let majorMode = false
-  let metRiverTile: GenTile | null = null
+  let majorMode = false;
+  let metRiverTile: GenTile | null = null;
 
   new Snake(
     size,
     tiles,
     (tile): boolean => {
       // Convert tile to River
-      tile.isFresh = true
-      tile.riverKey = river.key
-      river.tileKeys.value.push(tile.key)
-      if (majorMode) tile.isMajorRiver = true
+      tile.isFresh = true;
+      tile.riverKey = river.key;
+      river.tileKeys.value.push(tile.key);
+      if (majorMode) tile.isMajorRiver = true;
 
-      const neighbors = getNeighborCoords(size, tile)
-        .map(c => getTile(size, c, tiles)!)
+      const neighbors = getNeighborCoords(size, tile).map(
+        (c) => getTile(size, c, tiles)!,
+      );
 
       // First pass: update neighbors
       for (const neighbor of neighbors) {
         // Spread Fresh water to all land neighbors
-        if (neighbor.domain.id === 'land') {
-          neighbor.isFresh = true
+        if (neighbor.domain.id === "land") {
+          neighbor.isFresh = true;
         }
 
         // Spread Flood Plains to empty desert neighbors
-        if (neighbor.terrain.id === 'desert' && !neighbor.feature.value) {
-          neighbor.feature.value = floodPlain
+        if (neighbor.terrain.id === "desert" && !neighbor.feature.value) {
+          neighbor.feature.value = floodPlain;
         }
 
         // If we're next to a lake, turn on major mode
-        if (neighbor.terrain.id === 'lake') {
-          majorMode = true
+        if (neighbor.terrain.id === "lake") {
+          majorMode = true;
         }
       }
 
@@ -244,53 +252,57 @@ export const makeRiver = (
       for (const neighbor of neighbors) {
         // If we're at the coast, stop
         if (neighbor.isSalt) {
-          return false
+          return false;
         }
 
         // If we're next to another river, stop and mark the confluence tile for downstream promotion
         if (neighbor.riverKey && neighbor.riverKey !== river.key) {
-          metRiverTile = neighbor
-          return false
+          metRiverTile = neighbor;
+          return false;
         }
       }
 
       // Otherwise keep going
-      return true
+      return true;
     },
     (tile): AcceptResult => {
       // Block mountain tiles
-      if (tile.elevation.id === 'mountain' || tile.elevation.id === 'snowMountain') {
-        return 'blocked'
+      if (
+        tile.elevation.id === "mountain" ||
+        tile.elevation.id === "snowMountain"
+      ) {
+        return "blocked";
       }
 
       // Block if the tile has my river neighbors
-      if (getNeighborCoords(size, tile)
-        .map(c => getTile(size, c, tiles)!)
-        .some(n => n.riverKey === river.key && n.key !== tile.key)
+      if (
+        getNeighborCoords(size, tile)
+          .map((c) => getTile(size, c, tiles)!)
+          .some((n) => n.riverKey === river.key && n.key !== tile.key)
       ) {
-        return 'blocked'
+        return "blocked";
       }
 
       // Otherwise trust onVisit to stop on bad neighbors
-      return true
+      return true;
     },
     {
-      legs: [9999]
-    }
-  ).walk(start)
+      legs: [9999],
+    },
+  ).walk(start);
 
   // If we merged into another river, mark downstream as major
   if (metRiverTile) {
-    const otherRiver = rivers[(metRiverTile as GenTile).riverKey!] as River
-    const otherRiverTileKeys = otherRiver.tileKeys.value
-    const metAtIdx = otherRiverTileKeys.indexOf((metRiverTile as GenTile).key)
+    const otherRiver = rivers[(metRiverTile as GenTile).riverKey!] as River;
+    const otherRiverTileKeys = otherRiver.tileKeys.value;
+    const metAtIdx = otherRiverTileKeys.indexOf((metRiverTile as GenTile).key);
     if (metAtIdx !== -1) {
       for (let i = metAtIdx; i < otherRiverTileKeys.length; i++) {
-        const tileKey = otherRiverTileKeys[i]
-        tiles[tileKey].isMajorRiver = true
+        const tileKey = otherRiverTileKeys[i];
+        tiles[tileKey].isMajorRiver = true;
       }
     }
   }
 
-  return river
-}
+  return river;
+};

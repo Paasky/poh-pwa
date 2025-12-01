@@ -1,5 +1,5 @@
-import { useObjectsStore } from '@/stores/objectStore'
+import { useObjectsStore } from "@/stores/objectStore";
 
 export class Manager {
-  protected _objects = useObjectsStore()
+  protected _objects = useObjectsStore();
 }

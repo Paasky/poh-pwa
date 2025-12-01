@@ -1,47 +1,47 @@
-import { defineStore } from 'pinia'
-import { useObjectsStore } from '@/stores/objectStore'
-import { useEncyclopediaStore } from '@/components/Encyclopedia/encyclopediaStore'
-import { GameData, StaticData } from '@/types/api'
-import { EngineService } from '@/components/Engine/engine'
-import { WorldManager } from '@/managers/worldManager'
-import { worldSizes } from '@/factories/worldFactory'
+import { defineStore } from "pinia";
+import { useObjectsStore } from "@/stores/objectStore";
+import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
+import { GameData, StaticData } from "@/types/api";
+import { EngineService } from "@/components/Engine/engine";
+import { WorldManager } from "@/managers/worldManager";
+import { worldSizes } from "@/factories/worldFactory";
 
-async function fetchJSON<T> (url: string): Promise<T> {
-  const res = await fetch(url, { cache: 'no-store' })
-  if (!res.ok) throw new Error(`${url} HTTP ${res.status}`)
-  return await res.json() as Promise<T>
+async function fetchJSON<T>(url: string): Promise<T> {
+  const res = await fetch(url, { cache: "no-store" });
+  if (!res.ok) throw new Error(`${url} HTTP ${res.status}`);
+  return (await res.json()) as Promise<T>;
 }
 
-export const useAppStore = defineStore('app', {
+export const useAppStore = defineStore("app", {
   state: () => ({
     ready: false,
   }),
   actions: {
-    async init (gameDataUrl?: string) {
-      if (this.ready) return // Happens on hot-reload
+    async init(gameDataUrl?: string) {
+      if (this.ready) return; // Happens on hot-reload
 
-      const objects = useObjectsStore()
+      const objects = useObjectsStore();
       objects.init(
-        await fetchJSON<StaticData>('/staticData.json'),
-        gameDataUrl ? await fetchJSON<GameData>(gameDataUrl) : undefined
-      )
+        await fetchJSON<StaticData>("/staticData.json"),
+        gameDataUrl ? await fetchJSON<GameData>(gameDataUrl) : undefined,
+      );
 
       // Build encyclopedia menu once after types are ready
-      const encyclopedia = useEncyclopediaStore()
-      encyclopedia.init()
+      const encyclopedia = useEncyclopediaStore();
+      encyclopedia.init();
 
       // Create a new world
-      if (!gameDataUrl) new WorldManager().create(worldSizes[0])
+      if (!gameDataUrl) new WorldManager().create(worldSizes[0]);
 
       // Initialize the game engine
-      await EngineService.init(objects.world)
+      await EngineService.init(objects.world);
 
-      this.ready = true
+      this.ready = true;
       console.log(
-        'App initialized',
-        'static:' + Object.keys(objects._staticObjects).length,
-        'game:' + Object.keys(objects._gameObjects).length,
-      )
-    }
-  }
-})
+        "App initialized",
+        "static:" + Object.keys(objects._staticObjects).length,
+        "game:" + Object.keys(objects._gameObjects).length,
+      );
+    },
+  },
+});
