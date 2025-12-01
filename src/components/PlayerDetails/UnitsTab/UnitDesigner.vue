@@ -1,31 +1,29 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
-import { GameObject, UnitDesign } from "@/objects/game/gameObjects";
 import { useObjectsStore } from "@/stores/objectStore";
 import { TypeObject } from "@/types/typeObjects";
 import UiButton from "@/components/Ui/UiButton.vue";
 import UiIcon from "@/components/Ui/UiIcon.vue";
-import { UnitDesignManager } from "@/managers/unitDesignManager";
 import UiUnitIcon from "@/components/Ui/UiUnitIcon.vue";
 import UiYieldList from "@/components/Ui/UiYieldList.vue";
 import UiObjPillList from "@/components/Ui/UiObjPillList.vue";
+import { UnitDesign } from "@/objects/game/UnitDesign";
+import { Yields } from "@/objects/yield";
+import { UnitDesignManager } from "@/managers/UnitDesignManager";
+import { UnitDesignPrototype } from "@/components/PlayerDetails/UnitsTab/UnitDesignPrototype";
 
 const manager = new UnitDesignManager();
 const objects = useObjectsStore();
 
 // Make player reactive so UI updates when store changes
-const player = computed(() => objects.getCurrentPlayer());
+const player = objects.currentPlayer;
 
-const designs = computed(() =>
-  player.value.unitDesigns.map(
-    (design) => objects.getGameObject(design) as UnitDesign,
-  ),
-);
+const designs = computed(() => player.designs.value);
 const knownEquipment = computed(() =>
-  player.value.knownTypes.filter((t) => t.class === "equipmentType"),
+  player.knownTypes.value.filter((t) => t.class === "equipmentType"),
 );
 const knownPlatforms = computed(() =>
-  player.value.knownTypes.filter((t) => t.class === "platformType"),
+  player.knownTypes.value.filter((t) => t.class === "platformType"),
 );
 
 const possibleDesigns = computed(() => {
@@ -66,13 +64,7 @@ const possibleDesigns = computed(() => {
 });
 
 // Form values
-const newDesign = ref({
-  platform: null as TypeObject | null,
-  equipment: null as TypeObject | null,
-  name: "" as string,
-  elite: false as boolean,
-  upgradesFrom: [] as GameObject[],
-});
+const newDesign = ref(new UnitDesignPrototype(player));
 
 const equipmentOptions = computed(() => {
   if (!newDesign.value.platform) return [] as TypeObject[];
@@ -111,7 +103,7 @@ watch(
     // Drop invalid equipment if it is no longer available
     if (
       newDesign.value.equipment &&
-      !equipmentOptions.value.includes(newDesign.value.equipment)
+      !equipmentOptions.value.includes(newDesign.value.equipment as TypeObject)
     ) {
       newDesign.value.equipment = null;
     }
@@ -123,7 +115,7 @@ watch(
 
     newDesign.value.name =
       newDesign.value.platform && newDesign.value.equipment
-        ? newDesign.value.equipment.names[newDesign.value.platform.key]
+        ? newDesign.value.equipment.names![newDesign.value.platform.key]
         : "";
   },
   { deep: true },
@@ -134,17 +126,17 @@ watch(
   <div>
     <!-- Info to user -->
     <div>
-      You have {{ player.yieldStorage.amount("yieldType:designPoints") }} Design
+      You have {{ player.storage.amount("yieldType:designPoints") }} Design
       Point(s)
       <UiButton
         class="mb-4"
-        @click="player.yieldStorage.add('yieldType:designPoints', 1)"
+        @click="player.storage.add('yieldType:designPoints', 1)"
       >
         +1 DP
       </UiButton>
     </div>
     <div
-      v-if="player.yieldStorage.amount('yieldType:designPoints') < 2"
+      v-if="player.storage.amount('yieldType:designPoints') < 2"
       class="text-slate-400"
     >
       You need at least 2 Design Points to design a unit
@@ -174,7 +166,7 @@ watch(
           </h3>
           <div class="flex flex-wrap gap-2">
             <UiButton
-              v-for="p in player.knownTypes.filter(
+              v-for="p in player.knownTypes.value.filter(
                 (t) =>
                   t.class === 'platformType' &&
                   possibleDesigns.filter((d) => d.platform.key === t.key)
@@ -260,10 +252,11 @@ watch(
             <div class="mt-2">
               <UiButton
                 type="button"
-                :variant="newDesign.elite ? 'selected' : 'solid'"
-                @click="newDesign.elite = !newDesign.elite"
+                :variant="newDesign.isElite ? 'selected' : 'solid'"
+                @click="newDesign.isElite = !newDesign.isElite"
               >
-                Elite Unit (+10% strength): {{ newDesign.elite ? "Yes" : "No" }}
+                Elite Unit (+10% strength):
+                {{ newDesign.isElite ? "Yes" : "No" }}
               </UiButton>
             </div>
           </div>
@@ -282,7 +275,9 @@ watch(
           </h3>
           <UiYieldList
             :yields="
-              newDesign.platform!.yields.merge(newDesign.equipment!.yields)
+              newDesign.platform!.yields.merge(
+                newDesign.equipment!.yields as Yields,
+              )
             "
             :as-total="true"
           />
@@ -328,15 +323,9 @@ watch(
         <!-- Upgrade -->
         <UiButton
           v-for="upgradeFrom in upgradeOptions"
+          :key="upgradeFrom.key"
           class="text-lg"
-          @click="
-            manager.create(
-              newDesign.platform,
-              newDesign.equipment,
-              newDesign.name,
-              player,
-            )
-          "
+          @click="manager.create(newDesign as unknown as UnitDesignPrototype)"
         >
           <div>
             Upgrade
@@ -353,7 +342,7 @@ watch(
               "
             />
             {{ newDesign.name }}
-            (-{{ newDesign.elite ? 2 : 1 }} Design Points)
+            (-{{ newDesign.isElite ? 2 : 1 }} Design Points)
           </div>
         </UiButton>
 
@@ -363,12 +352,7 @@ watch(
           :disabled="!newDesign.platform || !newDesign.equipment"
           @click="
             newDesign.platform && newDesign.equipment
-              ? manager.create(
-                newDesign.platform,
-                newDesign.equipment,
-                newDesign.name,
-                player,
-              )
+              ? manager.create(newDesign as unknown as UnitDesignPrototype)
               : null
           "
         >
@@ -384,7 +368,7 @@ watch(
               "
             />
             {{ newDesign.name }}
-            (-{{ newDesign.elite ? 3 : 2 }} Design Points)
+            (-{{ newDesign.isElite ? 3 : 2 }} Design Points)
           </div>
         </UiButton>
       </div>

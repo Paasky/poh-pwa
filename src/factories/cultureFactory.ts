@@ -5,7 +5,7 @@ import {
   CultureStatus,
   GameKey,
   generateKey,
-} from "@/objects/game/gameObjects";
+} from "@/objects/game/_GameObject";
 
 export const createCulture = (
   playerKey: GameKey,

@@ -9,14 +9,12 @@ import { useObjectsStore } from "@/stores/objectStore";
 import { TypeObject } from "@/types/typeObjects";
 import { CatKey } from "@/types/common";
 import ResearchTabArrows from "@/components/PlayerDetails/ResearchTab/ResearchTabArrows.vue";
-import { TechnologyManager } from "@/managers/technologyManager";
 import UiButton from "@/components/Ui/UiButton.vue";
 
 const objects = useObjectsStore();
 const techs = objects.getClassTypes("technologyType");
-const player = objects.getCurrentPlayer();
+const player = objects.currentPlayer;
 const research = player.research;
-const manager = new TechnologyManager();
 const maxY = Math.max(...techs.map((t) => t.y!));
 const maxX = Math.max(...techs.map((t) => t.x!));
 
@@ -80,14 +78,15 @@ function eraY(era: TypeObject): number {
       class="absolute border-4 select-none"
       :class="{
         'cursor-pointer':
-          !research.researched.includes(tech) && research.current !== tech,
+          !research.researched.value.includes(tech) &&
+          research.current.value !== tech,
       }"
       :bg-color="
-        research.current === tech
+        research.current.value === tech
           ? 'bg-blue-800 animate-pulse'
-          : research.researched.includes(tech)
+          : research.researched.value.includes(tech)
             ? 'bg-green-950'
-            : player.knownTypes.includes(tech)
+            : player.knownTypes.value.includes(tech)
               ? 'bg-blue-950'
               : 'bg-neutral-800'
       "
@@ -97,13 +96,13 @@ function eraY(era: TypeObject): number {
         width: `${cardWidthRem}rem`,
         height: `${cardHeightRem}rem`,
       }"
-      :selected="research.queue.indexOf(tech) >= 0"
-      :disabled="research.researched.includes(tech)"
+      :selected="research.queue.value.indexOf(tech) >= 0"
+      :disabled="research.researched.value.includes(tech)"
       @click="
         () => {
-          research.researched.includes(tech)
+          research.researched.value.includes(tech)
             ? null
-            : manager.start(research, tech);
+            : research.addToQueue(tech); // todo: shift-click adds to queue
         }
       "
     >
@@ -113,20 +112,18 @@ function eraY(era: TypeObject): number {
           :hide-icon="true"
         />
         <span
-          v-if="research.queue.includes(tech)"
+          v-if="research.queue.value.includes(tech)"
           class="font-bold text-yellow-400"
-        >({{ research.queue.indexOf(tech) + 1 }})</span>
+        >({{ research.queue.value.indexOf(tech) + 1 }})</span>
         <span class="float-right">
           <UiButton
-            v-if="research.current?.key === tech.key"
-            @click="manager.complete(player, tech)"
+            v-if="research.current.value?.key === tech.key"
+            @click="research.complete(tech)"
           >Complete</UiButton>
           <UiIcon :icon="tech.icon" />
           <span
-            v-if="
-              research.current === tech || manager.getProgress(research, tech)
-            "
-          >{{ manager.getProgress(research, tech) }}/</span>{{ tech.scienceCost }}
+            v-if="research.current.value === tech || research.getProgress(tech)"
+          >{{ research.getProgress(tech) }}/</span>{{ tech.scienceCost }}
         </span>
       </div>
       <div

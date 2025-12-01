@@ -2,7 +2,7 @@
 import { computed } from "vue";
 import UiObjPill from "@/components/Ui/UiObjPill.vue";
 import { useObjectsStore } from "@/stores/objectStore";
-import { ObjKey } from "@/types/common";
+import { ObjKey, PohObject } from "@/types/common";
 
 const props = defineProps<{
   objKeys: ObjKey[] | ObjKey[][];
@@ -13,8 +13,8 @@ defineEmits<{ (e: "click", ev: MouseEvent): void }>();
 const objsOrAny = computed(() =>
   props.objKeys.map((key) =>
     Array.isArray(key)
-      ? key.map((anyKey) => useObjectsStore().get(anyKey))
-      : useObjectsStore().get(key),
+      ? key.map((anyKey) => useObjectsStore().get(anyKey) as PohObject)
+      : (useObjectsStore().get(key) as PohObject),
   ),
 );
 </script>

@@ -3,8 +3,7 @@ import { useObjectsStore } from "@/stores/objectStore";
 import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
 import { GameData, StaticData } from "@/types/api";
 import { EngineService } from "@/components/Engine/engine";
-import { WorldManager } from "@/managers/worldManager";
-import { worldSizes } from "@/factories/worldFactory";
+import { createWorld, worldSizes } from "@/factories/worldFactory";
 
 async function fetchJSON<T>(url: string): Promise<T> {
   const res = await fetch(url, { cache: "no-store" });
@@ -21,17 +20,20 @@ export const useAppStore = defineStore("app", {
       if (this.ready) return; // Happens on hot-reload
 
       const objects = useObjectsStore();
-      objects.init(
-        await fetchJSON<StaticData>("/staticData.json"),
-        gameDataUrl ? await fetchJSON<GameData>(gameDataUrl) : undefined,
-      );
+      objects.initStatic(await fetchJSON<StaticData>("/staticData.json"));
 
       // Build encyclopedia menu once after types are ready
       const encyclopedia = useEncyclopediaStore();
       encyclopedia.init();
 
-      // Create a new world
-      if (!gameDataUrl) new WorldManager().create(worldSizes[0]);
+      // Load game or create a new world
+      if (gameDataUrl) {
+        objects.initGame(await fetchJSON<GameData>(gameDataUrl));
+      } else {
+        const gameData = createWorld(worldSizes[2]);
+        objects.world = gameData.world;
+        objects.bulkSet(gameData.objects);
+      }
 
       // Initialize the game engine
       await EngineService.init(objects.world);

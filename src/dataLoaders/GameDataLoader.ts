@@ -1,25 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  Agenda,
-  Citizen,
-  City,
-  Construction,
-  Culture,
-  Deal,
-  GameClass,
-  GameKey,
-  GameObjAttr,
-  GameObject,
-  Player,
-  Religion,
-  River,
-  Tile,
-  TradeRoute,
-  Unit,
-  UnitDesign
-} from "@/objects/game/gameObjects";
+import { GameClass, GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
 import { GameData } from "@/types/api";
+import { Agenda } from "@/objects/game/Agenda";
+import { Citizen } from "@/objects/game/Citizen";
+import { City } from "@/objects/game/City";
+import { Construction } from "@/objects/game/Construction";
+import { Culture } from "@/objects/game/Culture";
+import { Deal } from "@/objects/game/Deal";
+import { Player } from "@/objects/game/Player";
+import { River } from "@/objects/game/River";
+import { Religion } from "@/objects/game/Religion";
+import { Tile } from "@/objects/game/Tile";
+import { TradeRoute } from "@/objects/game/TradeRoute";
+import { Unit } from "@/objects/game/Unit";
+import { UnitDesign } from "@/objects/game/UnitDesign";
 import { useObjectsStore } from "@/stores/objectStore";
+import { TypeKey } from "@/types/common";
 
 // Constructor type that also exposes the static attrsConf declared on each GameObject subclass
 type Ctor<T = GameObject> = {
@@ -44,10 +40,8 @@ const classConf = {
 } as Record<GameClass, Ctor>;
 
 export class GameDataLoader {
-  private _objStore = useObjectsStore();
-
-  load(gameData: GameData): GameObject[] {
-    const objs = [] as GameObject[];
+  load(gameData: GameData): Record<GameKey, GameObject> {
+    const objs = {} as Record<GameKey, GameObject>;
 
     // Init each object
     for (const rawObjData of gameData.objects) {
@@ -72,14 +66,13 @@ export class GameDataLoader {
       }
 
       // Sanity checks pass, init the object
-      objs.push(this._initObj(rawObjData, config));
+      const gameObj = this._initObj(rawObjData, config);
+      objs[gameObj.key] = gameObj;
     }
 
-    this._objStore.bulkSet(objs);
-
     // Build backward-relations
-    for (const obj of objs) {
-      this._buildBackRelations(obj);
+    for (const obj of Object.values(objs)) {
+      this._buildBackRelations(obj, objs);
     }
 
     return objs;
@@ -113,19 +106,22 @@ export class GameDataLoader {
 
     // Convert TypeKey to TypeObject
     if (config.isTypeObj) {
-      return this._objStore.get(value);
+      return useObjectsStore().getTypeObject(value);
     }
 
     // Convert TypeKeys to TypeObjects
     if (config.isTypeObjArray) {
-      return value.map((d: GameKey) => this._objStore.get(d));
+      return value.map((d: TypeKey) => useObjectsStore().getTypeObject(d));
     }
 
     // Normal attribute
     return value;
   }
 
-  private _buildBackRelations(obj: GameObject): void {
+  private _buildBackRelations(
+    obj: GameObject,
+    objects: Record<string, GameObject>,
+  ): void {
     const ctor = obj.constructor as unknown as { attrsConf: GameObjAttr[] };
     for (const attrConf of ctor.attrsConf) {
       try {
@@ -135,19 +131,33 @@ export class GameDataLoader {
 
         // Most data is actually a ref(data) so extract the .value
         const directValue = (obj as any)[attrConf.attrName];
-        const value = attrConf.attrNotRef ? directValue : directValue.value;
+        const relatedKey = attrConf.attrNotRef
+          ? directValue
+          : directValue.value;
 
-        if (value === undefined || value === null) {
+        if (relatedKey === undefined || relatedKey === null) {
           if (!attrConf.isOptional) {
             // noinspection ExceptionCaughtLocallyJS
             throw new Error(
-              `Required attribute ${JSON.stringify(attrConf)} missing from ${JSON.stringify(obj)}`,
+              `Required attribute for ${JSON.stringify(attrConf)} missing in ${JSON.stringify(obj)}`,
             );
           }
           continue;
         }
+        if (typeof relatedKey !== "string") {
+          // noinspection ExceptionCaughtLocallyJS
+          throw new Error(
+            `Invalid related key type: ${typeof relatedKey} for ${JSON.stringify(attrConf)} in ${JSON.stringify(obj)}`,
+          );
+        }
 
-        const relatedObj = this._objStore.get(value);
+        const relatedObj = objects[relatedKey];
+        if (!relatedObj) {
+          // noinspection ExceptionCaughtLocallyJS
+          throw new Error(
+            `Related object ${relatedKey} not found for ${JSON.stringify(attrConf)} in ${JSON.stringify(obj)}`,
+          );
+        }
 
         if (attrConf.related.isOne) {
           (relatedObj as any)[attrConf.related.theirKeyAttr] = obj.key;

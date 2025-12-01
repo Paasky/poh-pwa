@@ -7,7 +7,7 @@ import {
   TypeObject,
 } from "@/types/typeObjects";
 import { useObjectsStore } from "@/stores/objectStore";
-import { GameClass, GameKey, GameObject } from "@/objects/game/gameObjects";
+import { GameClass, GameKey, GameObject } from "@/objects/game/_GameObject";
 
 export type ObjType = "TypeObject" | "CategoryObject" | "GameObject";
 export type CatKey = `${CategoryClass}:${string}`;

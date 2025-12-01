@@ -1,5 +1,5 @@
 import { TypeObject } from "@/types/typeObjects";
-import { generateKey, Player, UnitDesign } from "@/objects/game/gameObjects";
+import { generateKey, Player, UnitDesign } from "@/objects/game/_GameObject";
 
 export const createUnitDesign = (
   equipment: TypeObject,

@@ -10,7 +10,7 @@ import { useObjectsStore } from "@/stores/objectStore";
 import { TypeKey } from "@/types/common";
 
 const objects = useObjectsStore();
-const player = objects.getCurrentPlayer();
+const player = objects.currentPlayer;
 const religion = computed(() => player.religion.value);
 const layout = {
   mythType: [
@@ -37,24 +37,24 @@ const pyramids = [
     concept: "conceptType:myth" as TypeKey,
     layout: layout.mythType,
     typesPerCategory: objects.getClassTypesPerCategory("mythType"),
-    selected: religion.value?.myths ?? [],
-    selectable: religion.value?.selectableMyths ?? [],
+    selected: religion.value?.myths.value ?? [],
+    selectable: religion.value?.selectableMyths.value ?? [],
   },
   {
     title: "Gods",
     concept: "conceptType:god" as TypeKey,
     layout: layout.godType,
     typesPerCategory: objects.getClassTypesPerCategory("godType"),
-    selected: religion.value?.gods ?? [],
-    selectable: religion.value?.selectableGods ?? [],
+    selected: religion.value?.gods.value ?? [],
+    selectable: religion.value?.selectableGods.value ?? [],
   },
   {
     title: "Dogmas",
     concept: "conceptType:dogma" as TypeKey,
     layout: layout.dogmaType,
     typesPerCategory: objects.getClassTypesPerCategory("dogmaType"),
-    selected: religion.value?.dogmas ?? [],
-    selectable: religion.value?.selectableDogmas ?? [],
+    selected: religion.value?.dogmas.value ?? [],
+    selectable: religion.value?.selectableDogmas.value ?? [],
   },
 ];
 </script>

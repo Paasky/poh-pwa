@@ -14,10 +14,11 @@ const props = defineProps<{
   shortName?: boolean;
 }>();
 defineEmits<{ (e: "click", ev: MouseEvent): void }>();
-const obj = computed(() =>
-  typeof props.objOrKey === "object"
-    ? props.objOrKey
-    : useObjectsStore().get(props.objOrKey),
+const obj = computed(
+  (): PohObject =>
+    typeof props.objOrKey === "object"
+      ? props.objOrKey
+      : (useObjectsStore().get(props.objOrKey) as PohObject),
 );
 const tooltip = computed(() => {
   const conceptName = useObjectsStore().getTypeObject(obj.value.concept).name;

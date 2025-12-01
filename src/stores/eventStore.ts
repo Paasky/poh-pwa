@@ -15,7 +15,8 @@ export const useEventStore = defineStore("events", {
     open(event: GameEvent) {
       if (this.current?.id === event.id) return;
 
-      this.current = event;
+      // eslint-disable-next-line
+      this.current = event as any;
     },
 
     closeCurrent() {

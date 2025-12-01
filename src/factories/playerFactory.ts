@@ -1,6 +1,6 @@
 import { TypeObject } from "@/types/typeObjects";
 import { createCulture } from "@/factories/cultureFactory";
-import { Culture, generateKey, Player } from "@/objects/game/gameObjects";
+import { Culture, generateKey, Player } from "@/objects/game/_GameObject";
 
 export type PlayerBundle = {
   player: Player;

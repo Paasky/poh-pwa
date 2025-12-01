@@ -201,8 +201,7 @@ function onBeforeUnload(e: BeforeUnloadEvent) {
       <UiElement position="bottom-center">
         <div class="max-h-48 overflow-y-auto">
           <p
-            v-for="type in useObjectsStore().getCurrentPlayer().knownTypes
-              .value"
+            v-for="type in useObjectsStore().currentPlayer.knownTypes.value"
             :key="type.id"
           >
             {{ type.class }} - {{ type.name }}

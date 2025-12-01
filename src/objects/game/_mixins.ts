@@ -3,18 +3,15 @@
 
 import { computed, Ref, ref } from "vue";
 import { useObjectsStore } from "@/stores/objectStore";
-import {
-  Citizen,
-  City,
-  Culture,
-  GameKey,
-  Player,
-  Religion,
-  Tile,
-  Unit,
-} from "@/objects/game/gameObjects";
-
-const objStore = () => useObjectsStore();
+import { Citizen } from "@/objects/game/Citizen";
+import { GameKey } from "@/objects/game/_GameObject";
+import { City } from "@/objects/game/City";
+import { Culture } from "@/objects/game/Culture";
+import { Player } from "@/objects/game/Player";
+import { Religion } from "@/objects/game/Religion";
+import { Tile } from "@/objects/game/Tile";
+import { Unit } from "@/objects/game/Unit";
+import { TradeRoute } from "@/objects/game/TradeRoute";
 
 export function hasMany<T>(
   keysRef: Ref<GameKey[]>,
@@ -32,7 +29,7 @@ export function hasMany<T>(
       const key = keys[i];
       // Always read – creates a dependency on the store entry for this key
       try {
-        const obj = objStore().get(key) as T;
+        const obj = useObjectsStore().get(key) as T;
         if (out[i] !== obj) out[i] = obj;
       } catch (e) {
         throw new Error(`${ctor.name} HasMany: ${e}`);
@@ -55,7 +52,7 @@ export function hasOne<T>(
       );
     }
 
-    return objStore().get(key) as T;
+    return useObjectsStore().get(key) as T;
   });
 }
 
@@ -69,7 +66,7 @@ export function canHaveOne<T>(
       return null;
     }
 
-    return objStore().get(key) as T;
+    return useObjectsStore().get(key) as T;
   });
 }
 
@@ -146,6 +143,15 @@ export function HasTiles<TBase extends new (...args: any[]) => {}>(
   return class extends Base {
     tileKeys = ref([] as GameKey[]);
     tiles = hasMany(this.tileKeys, Tile);
+  };
+}
+
+export function HasTradeRoutes<TBase extends new (...args: any[]) => {}>(
+  Base: TBase,
+) {
+  return class extends Base {
+    tradeRouteKeys = ref([] as GameKey[]);
+    tradeRoutes = hasMany(this.tradeRouteKeys, TradeRoute);
   };
 }
 

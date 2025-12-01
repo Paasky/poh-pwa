@@ -5,17 +5,24 @@ import { useObjectsStore } from "@/stores/objectStore";
 import { isTypeObject, PohObject } from "@/types/common";
 import { TypeObject } from "@/types/typeObjects";
 import UiModal from "@/components/Ui/UiModal.vue";
-import { Culture, Player } from "@/objects/game/gameObjects";
 import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
 import { icons } from "@/types/icons";
 import UiIcon from "@/components/Ui/UiIcon.vue";
+import { Player } from "@/objects/game/Player";
+import { GameObject } from "@/objects/game/_GameObject";
+import { Culture } from "@/objects/game/Culture";
 
 const events = useEventStore();
 const objects = useObjectsStore();
 
-const player = computed((): Player | undefined => events.current?.player);
+const player = computed(
+  (): Player | undefined => events.current?.player as Player | undefined,
+);
 
-const target = computed((): PohObject | undefined => events.current?.target);
+const target = computed(
+  (): GameObject | PohObject | undefined =>
+    events.current?.target as GameObject | PohObject | undefined,
+);
 const targetType = computed((): TypeObject | undefined => {
   if (!target.value) return undefined;
   if (isTypeObject(target.value)) return target.value;
@@ -24,9 +31,7 @@ const targetType = computed((): TypeObject | undefined => {
   return undefined;
 });
 
-const isMe = computed(
-  () => events.current?.player === objects.getCurrentPlayer().key,
-);
+const isMe = computed(() => player.value?.key === objects.currentPlayer.key);
 const culture = computed(
   (): Culture | undefined => player.value?.culture.value,
 );

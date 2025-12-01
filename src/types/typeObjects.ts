@@ -1,7 +1,7 @@
 // Type object definitions (encyclopedia/types dataset)
 import { CatKey, initPohObject, PohObject, TypeKey } from "./common";
 import { Yield, Yields } from "@/objects/yield";
-import { Requires } from "@/objects/requires";
+import { Requires } from "@/objects/Requires";
 
 export type TypeClass =
   | "actionType"
@@ -111,11 +111,13 @@ export interface TypeObject extends PohObject {
   relatesTo: TypeKey[];
 }
 
-export function initCategoryObject(data: unknown): CategoryObject {
+// eslint-disable-next-line
+export function initCategoryObject(data: any): CategoryObject {
   return initPohObject("CategoryObject", data) as CategoryObject;
 }
 
-export function initTypeObject(data: unknown): TypeObject {
+// eslint-disable-next-line
+export function initTypeObject(data: any): TypeObject {
   const obj = initPohObject("TypeObject", {
     allows: [],
     gains: [],

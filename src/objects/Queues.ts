@@ -1,9 +1,10 @@
 import { TypeClass } from "@/types/typeObjects";
 import { Yield, Yields } from "@/objects/yield";
-import { Construction, UnitDesign } from "@/objects/game/gameObjects";
 import { CatKey, roundToTenth, TypeKey } from "@/types/common";
 import { computed, ref } from "vue";
 import { TypeStorage } from "@/objects/storage";
+import { Construction } from "@/objects/game/Construction";
+import { UnitDesign } from "@/objects/game/UnitDesign";
 
 export abstract class QueueItem {
   item: Construction | UnitDesign;
@@ -145,14 +146,18 @@ export class ConstructionQueue extends Queue {
   }
 
   add(item: Construction) {
-    this._queue.value.push(new ConstructionQueueItem(item));
+    // IDE mixes up ref contents
+    // eslint-disable-next-line
+    this._queue.value.push(new ConstructionQueueItem(item) as any);
   }
 
   purchaseCost = computed((): Yield | null => {
     if (this._queue.value.length === 0) return null;
 
-    const queueItem = this._queue.value[0];
-    const typeClass = (queueItem.item as Construction).type.class! as TypeClass;
+    // IDE mixes up ref contents
+    const queueItem = this._queue.value[0] as unknown as ConstructionQueueItem;
+    const typeClass = (queueItem.item as unknown as Construction).type
+      .class! as TypeClass;
 
     // National or World Wonder -> null
     if (typeClass === "nationalWonderType" || typeClass === "worldWonderType")
@@ -175,15 +180,18 @@ export class TrainingQueue extends Queue {
   }
 
   add(design: UnitDesign) {
-    this._queue.value.push(new TrainingQueueItem(design));
+    // IDE mixes up ref contents
+    // eslint-disable-next-line
+    this._queue.value.push(new TrainingQueueItem(design) as any);
   }
 
   purchaseCost = computed((): Yield | null => {
     if (this._queue.value.length === 0) return null;
 
-    const queueItem = this._queue.value[0];
-    const equipmentCategory = (queueItem.item as UnitDesign).equipment
-      .category! as CatKey;
+    // IDE mixes up ref contents
+    const queueItem = this._queue.value[0] as unknown as TrainingQueueItem;
+    const equipmentCategory = (queueItem.item as unknown as UnitDesign)
+      .equipment.category! as CatKey;
 
     // Missionary -> remaining productionCost * 2 in Faith
     if (equipmentCategory === "equipmentCategory:missionary") {

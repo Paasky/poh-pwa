@@ -64,12 +64,6 @@ function onSizeChange(v: { x: number; y: number }) {
       @update:model-value="(v: number) => updateWorld('minorsPerPlayer', v)"
     />
     <UiDropdown
-      label="Sea Level"
-      :model-value="store.worldValues.seaLevel"
-      :options="store.seaLevelOptions"
-      @update:model-value="(v: number) => updateWorld('seaLevel', v)"
-    />
-    <UiDropdown
       label="Alignment"
       :model-value="store.alignment"
       :options="store.alignmentOptions"

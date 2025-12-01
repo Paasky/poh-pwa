@@ -2,19 +2,14 @@
 import { useObjectsStore } from "@/stores/objectStore";
 import UiHeader from "@/components/Ui/UiHeader.vue";
 import { computed } from "vue";
-import { UnitDesign } from "@/objects/game/gameObjects";
 import UiObjPill from "@/components/Ui/UiObjPill.vue";
 import UiButton from "@/components/Ui/UiButton.vue";
-import UnitDesigner from "@/components/PlayerDetails/MilitaryTab/UnitDesigner.vue";
+import UnitDesigner from "@/components/PlayerDetails/UnitsTab/UnitDesigner.vue";
 import UiUnitIcon from "@/components/Ui/UiUnitIcon.vue";
 
 const objects = useObjectsStore();
-const player = objects.getCurrentPlayer();
-const designs = computed(() =>
-  player.unitDesigns.map(
-    (design) => objects.getGameObject(design) as UnitDesign,
-  ),
-);
+const player = objects.currentPlayer;
+const designs = computed(() => player.designs.value);
 </script>
 
 <template>
@@ -35,7 +30,10 @@ const designs = computed(() =>
       </thead>
 
       <tbody>
-        <tr v-for="design of designs">
+        <tr
+          v-for="design of designs"
+          :key="design.key"
+        >
           <td>
             <UiUnitIcon :design="design" />
             {{ design.name }}
@@ -62,7 +60,10 @@ const designs = computed(() =>
       class="mb-4"
     />
     <div>
-      <div v-for="unit of player.units">
+      <div
+        v-for="unit of player.units.value"
+        :key="unit.key"
+      >
         {{ unit }}
       </div>
     </div>

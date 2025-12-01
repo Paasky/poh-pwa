@@ -2,7 +2,7 @@ import { getRandom } from "@/helpers/arrayTools";
 import { useObjectsStore } from "@/stores/objectStore";
 import { GenTile } from "@/factories/TerraGenerator/gen-tile";
 import { Tetris } from "@/factories/TerraGenerator/helpers/tetris";
-import { generateKey, River, Tile } from "@/objects/game/gameObjects";
+import { generateKey } from "@/objects/game/_GameObject";
 import {
   Coords,
   getNeighborCoords,
@@ -10,6 +10,7 @@ import {
 } from "@/factories/TerraGenerator/helpers/neighbors";
 import { TerraGenerator } from "@/factories/TerraGenerator/terra-generator";
 import { AcceptResult, Snake } from "@/factories/TerraGenerator/helpers/snake";
+import { River } from "@/objects/game/River";
 
 export const removeOrphanArea = (tile: GenTile, neighbors: GenTile[]): void => {
   if (neighbors.length === 0) return;
@@ -131,22 +132,22 @@ export const mountainRange = (
  * - Only traverses into neighbors for which isValid(tile) returns true.
  */
 export const crawlTiles = (
-  gen: any,
+  gen: TerraGenerator,
   level: "strat" | "reg" | "game",
-  start: GenTile | Tile,
+  start: GenTile,
   seenTiles: Set<string>,
-  isValid: (tile: GenTile | Tile) => boolean,
-): (GenTile | Tile)[] => {
+  isValid: (tile: GenTile) => boolean,
+): GenTile[] => {
   // Non-recursive DFS to minimize call stack depth
-  const result: (GenTile | Tile)[] = [];
-  const stack: (GenTile | Tile)[] = [];
+  const result: GenTile[] = [];
+  const stack: GenTile[] = [];
 
   // Only proceed if the starting tile is valid
   if (!start || !isValid(start)) return result;
 
   stack.push(start);
   while (stack.length) {
-    const current = stack.pop() as GenTile | Tile;
+    const current = stack.pop() as GenTile;
     if (!current) continue;
 
     if (seenTiles.has(current.key)) continue;
@@ -181,12 +182,12 @@ export const crawlTiles = (
  * - On every visited water tile, sets tile.isSalt = true.
  */
 export const spreadSalt = (
-  gen: any,
+  gen: TerraGenerator,
   level: "strat" | "reg" | "game",
-  start: Tile,
+  start: GenTile,
 ): void => {
   const seen = new Set<string>();
-  const waterCheck = (t: Tile) => t.domain.id === "water";
+  const waterCheck = (t: GenTile) => t.domain.id === "water";
   const visited = crawlTiles(gen, level, start, seen, waterCheck);
   for (const t of visited) {
     t.isSalt = true;
@@ -209,7 +210,7 @@ export const makeRiver = (
   rivers: Record<string, River>,
 ): River => {
   const floodPlain = useObjectsStore().getTypeObject("featureType:floodPlain");
-  const river = new River(generateKey("river"));
+  const river = new River(generateKey("river"), "River", []);
   rivers[river.key] = river;
 
   // Keep track of the current/end-state
@@ -223,7 +224,7 @@ export const makeRiver = (
       // Convert tile to River
       tile.isFresh = true;
       tile.riverKey = river.key;
-      river.tileKeys.value.push(tile.key);
+      river.tileKeys.push(tile.key);
       if (majorMode) tile.isMajorRiver = true;
 
       const neighbors = getNeighborCoords(size, tile).map(
@@ -294,7 +295,7 @@ export const makeRiver = (
   // If we merged into another river, mark downstream as major
   if (metRiverTile) {
     const otherRiver = rivers[(metRiverTile as GenTile).riverKey!] as River;
-    const otherRiverTileKeys = otherRiver.tileKeys.value;
+    const otherRiverTileKeys = otherRiver.tileKeys;
     const metAtIdx = otherRiverTileKeys.indexOf((metRiverTile as GenTile).key);
     if (metAtIdx !== -1) {
       for (let i = metAtIdx; i < otherRiverTileKeys.length; i++) {

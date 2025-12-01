@@ -1,4 +1,6 @@
-import { GameObject, Player } from "@/objects/game/gameObjects";
+import { GameObject } from "@/objects/game/_GameObject";
+import { Player } from "@/objects/game/Player";
+import { PohObject } from "@/types/common";
 
 export type EventType =
   | "settled"
@@ -13,7 +15,7 @@ export type GameEvent = {
   id: string;
   type: EventType;
   player?: Player;
-  target: GameObject;
+  target: PohObject | GameObject;
   title: string;
   description?: string;
   read: boolean;

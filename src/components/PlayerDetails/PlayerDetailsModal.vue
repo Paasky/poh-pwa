@@ -13,7 +13,7 @@ import CultureTab from "@/components/PlayerDetails/CultureTab/CultureTab.vue";
 import ReligionTab from "@/components/PlayerDetails/ReligionTab/ReligionTab.vue";
 import DiplomacyTab from "@/components/PlayerDetails/DiplomacyTab/DiplomacyTab.vue";
 import CitiesTab from "@/components/PlayerDetails/CitiesTab/CitiesTab.vue";
-import MilitaryTab from "@/components/PlayerDetails/MilitaryTab/MilitaryTab.vue";
+import UnitsTab from "@/components/PlayerDetails/UnitsTab/UnitsTab.vue";
 import TradeTab from "@/components/PlayerDetails/TradeTab/TradeTab.vue";
 import GovernmentTab from "@/components/PlayerDetails/GovernmentTab/GovernmentTab.vue";
 
@@ -61,7 +61,7 @@ const activeTab = computed(() => playerDetails.activeTab);
       <ReligionTab v-show="activeTab === 'Religion'" />
       <DiplomacyTab v-show="activeTab === 'Diplomacy'" />
       <CitiesTab v-show="activeTab === 'Cities'" />
-      <MilitaryTab v-show="activeTab === 'Military'" />
+      <UnitsTab v-show="activeTab === 'Military'" />
       <TradeTab v-show="activeTab === 'Trade'" />
       <GovernmentTab v-show="activeTab === 'Government'" />
     </div>

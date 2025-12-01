@@ -1,6 +1,5 @@
 import { getRandom } from "@/helpers/arrayTools";
 import { GenTile } from "@/factories/TerraGenerator/gen-tile";
-import { Tile } from "@/objects/game/gameObjects";
 import {
   Coords,
   getRealCoords,
@@ -194,6 +193,6 @@ export class Snake<T extends GenTile> {
       y: tile.y + directionCoordsChanges[dir].y,
     });
     if (!nextCoords) return null;
-    return this.tiles[Tile.getKey(nextCoords.x, nextCoords.y)];
+    return this.tiles[GenTile.getKey(nextCoords.x, nextCoords.y)];
   }
 }

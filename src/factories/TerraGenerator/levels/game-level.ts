@@ -1,7 +1,7 @@
 import { TerraGenerator } from "@/factories/TerraGenerator/terra-generator";
 import { getRandom, shuffle } from "@/helpers/arrayTools";
 import { GenTile } from "@/factories/TerraGenerator/gen-tile";
-import { GameKey, River, Tile } from "@/objects/game/gameObjects";
+import { GameKey } from "@/objects/game/_GameObject";
 import {
   makeIsland,
   makeRiver,
@@ -11,6 +11,7 @@ import {
 } from "@/factories/TerraGenerator/helpers/post-processors";
 import { getNeighborCoords } from "@/factories/TerraGenerator/helpers/neighbors";
 import { TypeKey } from "@/types/common";
+import { River } from "@/objects/game/River";
 
 export class GameLevel {
   gen: TerraGenerator;
@@ -126,7 +127,11 @@ export class GameLevel {
 
         // Add Starts
         if (regTile.isStart) {
-          getRandom(neighbors).isStart = regTile.isStart;
+          const startTile = getRandom(neighbors.filter((n) => n.canBeStart()));
+          startTile.isStart = regTile.isStart;
+          this.gen.continents[startTile.area.key].majorStarts.game.push(
+            startTile,
+          );
         }
 
         // Region is an oasis: add to a random game tile in the 3x3 group
@@ -185,7 +190,7 @@ export class GameLevel {
           x === this.gen.size.x - 1 ||
           y === this.gen.size.y - 1
         ) {
-          const start = this.gen.gameTiles[Tile.getKey(0, 0)]!;
+          const start = this.gen.gameTiles[GenTile.getKey(0, 0)]!;
           if (start.domain !== this.gen.water) continue;
 
           // Already salt, skip

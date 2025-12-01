@@ -1,4 +1,5 @@
-import { markRaw } from "vue";
+import { markRaw, shallowRef } from "vue";
+
 import { defineStore } from "pinia";
 import {
   CatKey,
@@ -16,14 +17,10 @@ import {
   TypeClass,
   TypeObject,
 } from "@/types/typeObjects";
-import {
-  GameClass,
-  GameKey,
-  GameObject,
-  Player,
-} from "@/objects/game/gameObjects";
-import { GameDataLoader } from "@/dataLoaders/gameDataLoader";
+import { GameClass, GameKey, GameObject } from "@/objects/game/_GameObject";
 import { withCallerContext } from "@/utils/stack";
+import { Player } from "@/objects/game/Player";
+import { GameDataLoader } from "@/dataLoaders/GameDataLoader";
 
 export const useObjectsStore = defineStore("objects", {
   state: () => ({
@@ -35,20 +32,20 @@ export const useObjectsStore = defineStore("objects", {
       turn: 0,
       year: 0,
       currentPlayer: "" as GameKey,
-      tiles: {},
     } as World,
 
     _staticObjects: {} as Readonly<
       Record<CatKey | TypeKey, CategoryObject | TypeObject>
     >,
-    _categoryTypesIndex: new Map<CatKey, Set<TypeKey>>(),
-    _classTypesIndex: new Map<TypeClass, Set<TypeKey>>(),
-    _classCatsIndex: new Map<TypeClass, Set<CatKey>>(),
+    _categoryTypesIndex: shallowRef(new Map<CatKey, Set<TypeKey>>()),
+    _classTypesIndex: shallowRef(new Map<TypeClass, Set<TypeKey>>()),
+    _classCatsIndex: shallowRef(new Map<TypeClass, Set<CatKey>>()),
 
-    _gameObjects: {} as Record<GameKey, GameObject>,
-    _classGameObjectsIndex: new Map<GameClass, Set<GameKey>>(),
+    _gameObjects: shallowRef<Record<GameKey, GameObject>>({}),
+    _classGameObjectsIndex: shallowRef(new Map<GameClass, Set<GameKey>>()),
 
     ready: false as boolean,
+    activeBulkLoad: null as string | null,
   }),
   getters: {
     // Generic getter
@@ -78,8 +75,14 @@ export const useObjectsStore = defineStore("objects", {
         return obj;
       },
 
-    getCurrentPlayer: (state) => (): Player =>
-      state._gameObjects[state.world.currentPlayer] as Player,
+    currentPlayer: (state): Player => {
+      const player = state._gameObjects[state.world.currentPlayer];
+      if (!player)
+        throwWithContext(
+          `[objStore] Tried to ge current player (${state.world.currentPlayer}), key does not exist in store`,
+        );
+      return player as Player;
+    },
 
     getTypeObject:
       (state) =>
@@ -196,9 +199,15 @@ export const useObjectsStore = defineStore("objects", {
     initGame(gameData: GameData) {
       if (this.ready) throwWithContext("Objects Store already initialized");
 
-      this.world = gameData.world;
+      this.resetGame();
 
-      new GameDataLoader().load(gameData);
+      this.world = gameData.world;
+      const objects = new GameDataLoader().load(gameData);
+
+      // Directly set by the key to prevent reactivity issues mid-load
+      for (const [k, v] of Object.entries(objects)) {
+        this._gameObjects[k as GameKey] = v;
+      }
       this._cacheGameObjects();
 
       if (Object.keys(this._staticObjects).length > 0) {
@@ -207,8 +216,9 @@ export const useObjectsStore = defineStore("objects", {
     },
 
     initStatic(staticData: StaticData) {
-      if (this.ready) throwWithContext("Objects Store already initialized");
-      if (Object.keys(this._staticObjects).length > 0) return;
+      if (Object.keys(this._staticObjects).length > 0) {
+        throwWithContext("Objects Store static objects already initialized");
+      }
 
       const staticObjects = {} as Record<string, CategoryObject | TypeObject>;
       for (const data of staticData.types) {
@@ -256,6 +266,7 @@ export const useObjectsStore = defineStore("objects", {
 
     resetGame() {
       this._gameObjects = {};
+      this._classGameObjectsIndex.clear();
       this.ready = false;
     },
 
@@ -288,12 +299,11 @@ export const useObjectsStore = defineStore("objects", {
       }
       if (errors.length) throwWithContext(errors.join("\n"));
 
-      const hasExisting = Object.keys(this._gameObjects).length > 0;
-      this._gameObjects = hasExisting
-        ? { ...this._gameObjects, ...incoming }
-        : incoming;
-
-      this._cacheGameObjects(objs);
+      // Directly set by the key to prevent reactivity issues mid-load
+      for (const [k, v] of Object.entries(incoming)) {
+        this._gameObjects[k as GameKey] = v;
+      }
+      this._cacheGameObjects(Object.values(incoming));
     },
 
     _cacheGameObjects(gameObjects?: GameObject[]) {
@@ -302,7 +312,7 @@ export const useObjectsStore = defineStore("objects", {
         if (classGameObjects) {
           classGameObjects.add(obj.key);
         } else {
-          this._classGameObjectsIndex.get(obj.class)?.delete(obj.key);
+          this._classGameObjectsIndex.set(obj.class, new Set([obj.key]));
         }
       }
     },

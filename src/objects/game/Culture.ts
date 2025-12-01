@@ -1,0 +1,204 @@
+import { HasCitizens, HasPlayer } from "@/objects/game/_mixins";
+import { TypeObject } from "@/types/typeObjects";
+import { computed, Ref, ref, UnwrapRef } from "vue";
+import { CatKey, TypeKey } from "@/types/common";
+import { EventManager } from "@/managers/EventManager";
+import { Yields } from "@/objects/yield";
+import { GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
+import { useObjectsStore } from "@/stores/objectStore";
+
+export type CultureStatus =
+  | "notSettled"
+  | "canSettle"
+  | "mustSettle"
+  | "settled";
+
+export class Culture extends HasCitizens(HasPlayer(GameObject)) {
+  constructor(key: GameKey, type: TypeObject, playerKey: GameKey) {
+    super(key);
+    this.type = ref(type);
+    this.playerKey.value = playerKey;
+  }
+
+  static attrsConf: GameObjAttr[] = [
+    { attrName: "type", isTypeObj: true },
+    {
+      attrName: "playerKey",
+      related: { theirKeyAttr: "cultureKey", isOne: true },
+    },
+  ];
+
+  type: Ref<UnwrapRef<TypeObject>, UnwrapRef<TypeObject> | TypeObject>;
+  leader = computed(() =>
+    useObjectsStore().getTypeObject(
+      this.type.value.allows.find(
+        (a) => a.indexOf("LeaderType:") >= 0,
+      ) as TypeKey,
+    ),
+  );
+  status = ref<CultureStatus>("notSettled");
+
+  heritages = ref([] as TypeObject[]);
+  heritageCategoryPoints = ref({} as Record<CatKey, number>);
+
+  selectableHeritages = computed((): TypeObject[] => {
+    if (this.status.value === "mustSettle") return [];
+    if (this.status.value === "settled") return [];
+
+    const selectable: TypeObject[] = [];
+    for (const catData of useObjectsStore().getClassTypesPerCategory(
+      "heritageType",
+    )) {
+      const catIsSelected = catData.types.some((h) =>
+        this.heritages.value.includes(h),
+      );
+
+      for (const heritage of catData.types) {
+        // Already selected
+        if (this.heritages.value.includes(heritage)) continue;
+
+        // If it's stage II -> must have stage I heritage selected
+        if (heritage.heritagePointCost! > 10 && !catIsSelected) continue;
+
+        // Not enough points
+        if (
+          (this.heritageCategoryPoints.value[heritage.category!] ?? 0) <
+          heritage.heritagePointCost!
+        )
+          continue;
+
+        selectable.push(heritage);
+      }
+    }
+    return selectable;
+  });
+
+  traits = ref([] as TypeObject[]);
+  mustSelectTraits = ref({ positive: 0, negative: 0 });
+
+  selectableTraits = computed((): TypeObject[] => {
+    if (this.status.value !== "settled") return [];
+
+    // Nothing to select?
+    if (
+      this.mustSelectTraits.value.positive +
+        this.mustSelectTraits.value.negative <=
+      0
+    )
+      return [];
+
+    const selectable: TypeObject[] = [];
+    for (const catData of useObjectsStore().getClassTypesPerCategory(
+      "traitType",
+    )) {
+      const catIsSelected = catData.types.some((t) =>
+        this.traits.value.includes(t),
+      );
+
+      for (const trait of catData.types) {
+        // Category already selected
+        if (catIsSelected) continue;
+
+        // No more positive/negative slots left to select
+        if (trait.isPositive! && this.mustSelectTraits.value.positive <= 0)
+          continue;
+        if (!trait.isPositive! && this.mustSelectTraits.value.negative <= 0)
+          continue;
+
+        selectable.push(trait);
+      }
+    }
+    return selectable;
+  });
+
+  region = computed((): TypeObject => {
+    const key = this.type.value.requires!.filter(["regionType"])
+      .allTypes[0] as TypeKey;
+    return useObjectsStore().getTypeObject(key);
+  });
+
+  addHeritagePoints(catKey: CatKey, points: number) {
+    this.heritageCategoryPoints.value[catKey] =
+      (this.heritageCategoryPoints.value[catKey] ?? 0) + points;
+  }
+
+  evolve() {
+    const nextTypeKey = this.type.value.upgradesTo[0];
+    if (!nextTypeKey) throw new Error(`${this.key} cannot evolve further`);
+
+    this.type.value = useObjectsStore().getTypeObject(nextTypeKey);
+
+    // If all traits have not been selected yet (4 = two categories to select: one must be pos, one neg)
+    if (this.selectableTraits.value.length >= 4) {
+      this.mustSelectTraits.value.positive++;
+      this.mustSelectTraits.value.negative++;
+    }
+
+    new EventManager().create(
+      "cultureEvolved",
+      `evolved to the ${this.type.value.name} culture`,
+      this.player.value,
+      this,
+    );
+  }
+
+  selectHeritage(heritage: TypeObject) {
+    if (this.heritages.value.includes(heritage)) return;
+    if (!this.selectableHeritages.value.includes(heritage))
+      throw new Error(`${this.key}: ${heritage.name} not selectable`);
+
+    // Add the heritage
+    this.heritages.value.push(heritage);
+
+    // Check if culture status needs to change
+    if (this.heritages.value.length === 2) {
+      this.status.value = "canSettle";
+    }
+    if (this.heritages.value.length > 2) {
+      this.status.value = "mustSettle";
+    }
+
+    // If gains a tech, complete it immediately
+    for (const gainKey of heritage.gains) {
+      if (gainKey.startsWith("technologyType:")) {
+        this.player.value.research.complete(
+          useObjectsStore().getTypeObject(gainKey),
+        );
+      }
+    }
+  }
+
+  selectTrait(trait: TypeObject) {
+    if (this.traits.value.includes(trait)) return;
+    if (!this.selectableTraits.value.includes(trait))
+      throw new Error(`${this.key}: ${trait.name} not selectable`);
+
+    this.traits.value.push(trait);
+    if (trait.isPositive!) {
+      this.mustSelectTraits.value.positive--;
+    } else {
+      this.mustSelectTraits.value.negative--;
+    }
+  }
+
+  settle() {
+    if (this.status.value === "settled") return;
+    this.status.value = "settled";
+    this.mustSelectTraits.value = { positive: 2, negative: 2 };
+    new EventManager().create(
+      "settled",
+      `settled down`,
+      this.player.value,
+      this,
+    );
+  }
+
+  types = computed(() => [
+    this.concept,
+    ...this.heritages.value,
+    ...this.traits.value,
+  ]);
+  yields = computed(
+    () => new Yields(this.types.value.flatMap((t) => t.yields.all())),
+  );
+}

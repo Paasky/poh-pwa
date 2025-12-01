@@ -1,6 +1,6 @@
 import { TerraGenerator } from "@/factories/TerraGenerator/terra-generator";
 import { getRandom, takeRandom } from "@/helpers/arrayTools";
-import { Tile } from "@/objects/game/gameObjects";
+import { Tile } from "@/objects/game/Tile";
 import {
   makeIsland,
   mountainRange,
@@ -17,7 +17,6 @@ export class RegLevel {
   }
 
   fillFromStrat(): RegLevel {
-    this.gen.forEachRegTile((tile) => {});
     for (let y = 0; y < this.gen.regSize.y; y++) {
       for (let x = 0; x < this.gen.regSize.x; x++) {
         let stratTile = this.gen.getStratFromRegCoords(x, y);
@@ -57,10 +56,7 @@ export class RegLevel {
 
         // Set terrain based on distance from pole (allow for polar ice)
         const distToPole = this.gen.getDistToPole(y, this.gen.regSize.y);
-        tile.feature.value = this.gen.getFeatureForTile(
-          tile,
-          distToPole,
-        ) as any;
+        tile.feature.value = this.gen.getFeatureForTile(tile, distToPole);
         this.gen.regTiles[Tile.getKey(x, y)] = tile;
       }
     }
@@ -119,7 +115,7 @@ export class RegLevel {
         const startTile = getRandom(
           this.gen
             .getRegTilesFromStratCoords(stratStartTile.x, stratStartTile.y)
-            .filter((t) => t.domain === this.gen.land),
+            .filter((t) => t.canBeStart()),
         );
         startTile.isStart = "major";
         continent.majorStarts.reg.push(startTile);

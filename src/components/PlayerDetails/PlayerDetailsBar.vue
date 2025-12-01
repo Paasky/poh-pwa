@@ -9,7 +9,6 @@ import {
   tabsConfig,
   usePlayerDetailsStore,
 } from "@/components/PlayerDetails/playerDetailsStore";
-import { Culture, Player, Religion } from "@/objects/game/gameObjects";
 import { TypeObject } from "@/types/typeObjects";
 import { computed, ComputedRef } from "vue";
 
@@ -23,45 +22,47 @@ type TabData = {
 };
 
 const objects = useObjectsStore();
-const player = objects.getGameObject(objects.world.currentPlayer) as Player;
-const culture = objects.getGameObject(player.culture) as Culture;
-const religion = player.religion
-  ? (objects.getGameObject(player.religion) as Religion)
-  : null;
+const player = objects.currentPlayer;
+const culture = player.culture.value;
+const religion = player.religion?.value;
 const modal = usePlayerDetailsStore();
 
 const tabs = tabsConfig.map((tabConfig) => {
   const data = {
     name: tabConfig.name,
     type: objects.getTypeObject(tabConfig.type),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     text: undefined as any,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     tooltip: undefined as any,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     isHidden: undefined as any,
     reqSettled: tabConfig.reqSettled,
   };
 
   if (tabConfig.name === "Economy") {
     data.text = computed(
-      (): string => player.yieldStorage.amount("yieldType:gold") + "",
+      (): string => player.storage.amount("yieldType:gold") + "",
     );
 
     return data as TabData;
   }
 
   if (tabConfig.name === "Research") {
-    data.isHidden = computed(() => culture.status !== "settled");
+    data.isHidden = computed(() => culture.status.value !== "settled");
     data.text = computed((): string =>
-      player.research.current
-        ? (player.research.researching[player.research.current.key]?.progress ??
-            0) +
+      player.research.current.value
+        ? player.research.getProgress(
+            player.research.current.value as TypeObject,
+          ) +
           "/" +
-          player.research.current.scienceCost +
-          ` (${player.research.turnsLeft})`
+          player.research.current.value?.scienceCost +
+          ` (${player.research.turnsLeft.value})`
         : "Select",
     );
     data.tooltip = computed(() =>
-      player.research.current
-        ? `Research: ${player.research.current.name} (ready in ${player.research.turnsLeft} turns)`
+      player.research.current.value
+        ? `Research: ${player.research.current.value.name} (ready in ${player.research.turnsLeft} turns)`
         : "Research: Select next Technology",
     );
 
@@ -70,34 +71,34 @@ const tabs = tabsConfig.map((tabConfig) => {
 
   if (tabConfig.name === "Culture") {
     data.text = computed((): string => {
-      if (culture.selectableHeritages.length) return "Select";
-      if (culture.selectableTraits.length) return "Select";
+      if (culture.selectableHeritages.value.length) return "Select";
+      if (culture.selectableTraits.value.length) return "Select";
 
-      if (culture.status === "notSettled") return "Explore";
-      if (culture.status === "canSettle") return "Can Settle";
-      if (culture.status === "mustSettle") return "Must Settle";
+      if (culture.status.value === "notSettled") return "Explore";
+      if (culture.status.value === "canSettle") return "Can Settle";
+      if (culture.status.value === "mustSettle") return "Must Settle";
 
-      return player.yieldStorage.amount("yieldType:culture") + "";
+      return player.storage.amount("yieldType:culture") + "";
     });
     data.tooltip = computed((): string => {
-      if (culture.selectableHeritages.length) {
+      if (culture.selectableHeritages.value.length) {
         return "Culture: Can select a Heritage";
       }
-      if (culture.status === "notSettled") {
+      if (culture.status.value === "notSettled") {
         return "Culture: Explore your surroundings to gain Heritage Points";
       }
-      if (culture.status === "canSettle") {
+      if (culture.status.value === "canSettle") {
         return "Culture: Can use your Tribe to settle your first City";
       }
-      if (culture.status === "mustSettle") {
+      if (culture.status.value === "mustSettle") {
         return "Culture: Use your Tribe to settle your first City";
       }
 
-      if (culture.selectableTraits.length) {
+      if (culture.selectableTraits.value.length) {
         return "Culture: Select Traits for your Culture";
       }
 
-      return culture.name;
+      return culture.type.value.name;
     });
 
     return data as TabData;
@@ -105,7 +106,7 @@ const tabs = tabsConfig.map((tabConfig) => {
 
   if (tabConfig.name === "Religion") {
     data.text = computed((): string => {
-      if (religion?.canEvolve) return "Evolve";
+      if (religion?.canEvolve.value) return "Evolve";
       if (
         religion?.selectableMyths ||
         religion?.selectableGods ||
@@ -113,14 +114,14 @@ const tabs = tabsConfig.map((tabConfig) => {
       )
         return "Select";
 
-      return player.yieldStorage.amount("yieldType:faith") + "";
+      return player.storage.amount("yieldType:faith") + "";
     });
     data.tooltip = computed((): string => {
       if (!religion) return "Religion: No State Religion";
-      if (religion.canEvolve) return "Religion: Can be evolved";
-      if (religion.selectableMyths) return "Religion: Cn select a Myth";
-      if (religion.selectableGods) return "Religion: Cn select a God";
-      if (religion.selectableDogmas) return "Religion: Cn select a Dogma";
+      if (religion.canEvolve.value) return "Religion: Can be evolved";
+      if (religion.selectableMyths.value) return "Religion: Cn select a Myth";
+      if (religion.selectableGods.value) return "Religion: Cn select a God";
+      if (religion.selectableDogmas.value) return "Religion: Cn select a Dogma";
 
       return religion.name;
     });
@@ -130,29 +131,31 @@ const tabs = tabsConfig.map((tabConfig) => {
 
   if (tabConfig.name === "Diplomacy") {
     data.text = computed(
-      (): string => player.yieldStorage.amount("yieldType:influence") + "",
+      (): string => player.storage.amount("yieldType:influence") + "",
     );
     data.tooltip = computed(
       (): string =>
-        `Diplomacy: ${player.yieldStorage.amount("yieldType:influence")} influence`,
+        `Diplomacy: ${player.storage.amount("yieldType:influence")} influence`,
     );
 
     return data as TabData;
   }
 
   if (tabConfig.name === "Cities") {
-    data.text = computed((): string => player.cities.length + "");
-    data.tooltip = computed((): string => `Cities: ${player.cities.length}`);
+    data.text = computed((): string => player.cities.value.length + "");
+    data.tooltip = computed(
+      (): string => `Cities: ${player.cities.value.length}`,
+    );
 
     return data as TabData;
   }
 
   if (tabConfig.name === "Military") {
     data.text = computed(
-      (): string => player.yieldStorage.amount("yieldType:designPoints") + "",
+      (): string => player.storage.amount("yieldType:designPoints") + "",
     );
     data.tooltip = computed((): string => {
-      const points = player.yieldStorage.amount("yieldType:designPoints");
+      const points = player.storage.amount("yieldType:designPoints");
       if (points < 2) {
         return `Military: ${points} Design Points (need 2 for new Unit Design)`;
       }
@@ -164,9 +167,10 @@ const tabs = tabsConfig.map((tabConfig) => {
   }
 
   if (tabConfig.name === "Trade") {
-    data.text = computed((): string => player.tradeRoutes.length + "");
+    data.text = computed((): string => player.tradeRouteKeys.value.length + "");
     data.tooltip = computed(
-      (): string => `Trade: ${player.tradeRoutes.length} active Trade Routes`,
+      (): string =>
+        `Trade: ${player.tradeRouteKeys.value.length} active Trade Routes`,
     );
 
     return data as TabData;
@@ -193,7 +197,7 @@ const tabs = tabsConfig.map((tabConfig) => {
         :key="tab.type.key"
       >
         <UiButton
-          v-if="!tab.reqSettled || culture.status === 'settled'"
+          v-if="!tab.reqSettled || culture.status.value === 'settled'"
           :key="tab.type.key"
           variant="pill"
           :tooltip="tab.tooltip?.value"

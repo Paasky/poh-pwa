@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { crawlTiles } from "../../../../../src/factories/TerraGenerator/helpers/post-processors";
-import { Tile } from "../../../../../src/objects/game/gameObjects";
+import { Tile } from "../../../../../src/objects/game/_GameObject";
 import { initTestPinia, loadStaticData } from "../../../../_setup/pinia";
 
 // Minimal tile object factory

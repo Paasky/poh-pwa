@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Citizen } from "@/objects/game/gameObjects";
+import { Citizen } from "@/objects/game/Citizen";
 
 defineProps<{ citizen: Citizen }>();
 </script>

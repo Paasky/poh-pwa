@@ -1,4 +1,3 @@
-import { River, Tile } from "@/objects/game/gameObjects";
 import { TypeKey } from "@/types/common";
 import { TypeClass, TypeObject } from "@/types/typeObjects";
 import { WorldSize } from "@/factories/worldFactory";
@@ -22,6 +21,8 @@ import {
   getYTypes,
   getYXTypes,
 } from "@/factories/TerraGenerator/config";
+import { Tile } from "@/objects/game/Tile";
+import { River } from "@/objects/game/River";
 
 export class TerraGenerator {
   size: WorldSize;

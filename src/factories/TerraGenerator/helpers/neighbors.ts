@@ -1,4 +1,4 @@
-import { Tile } from "@/objects/game/gameObjects";
+import { Tile } from "@/objects/game/Tile";
 import { GenTile } from "@/factories/TerraGenerator/gen-tile";
 
 export type Coords = { x: number; y: number };

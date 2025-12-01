@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { makeRiver } from "../../../../../src/factories/TerraGenerator/helpers/post-processors";
 import { initTestPinia, loadStaticData } from "../../../../_setup/pinia";
-import { Tile } from "../../../../../src/objects/game/gameObjects";
+import { Tile } from "../../../../../src/objects/game/_GameObject";
 
 // Only allowed mock: stabilize RNG for determinism in this test file
 const realRandom = Math.random;

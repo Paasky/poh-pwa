@@ -6,7 +6,7 @@ import { useObjectsStore } from "@/stores/objectStore";
 import UiRequires from "@/components/Ui/UiRequires.vue";
 
 const objects = useObjectsStore();
-const government = objects.getCurrentPlayer().government;
+const government = objects.currentPlayer.government;
 </script>
 
 <template>
@@ -25,12 +25,14 @@ const government = objects.getCurrentPlayer().government;
           :key="policy.key"
           class="mb-2 h-40"
           :disabled="
-            !government.selectablePolicies.includes(policy) &&
-              !government.policies.includes(policy)
+            !government.selectablePolicies.value.includes(policy) &&
+              !government.policies.value.includes(policy)
           "
-          :selected="government.policies.includes(policy)"
+          :selected="government.policies.value.includes(policy)"
           :button-text="
-            !government.selectablePolicies.includes(policy) ? 'Select' : ''
+            !government.selectablePolicies.value.includes(policy)
+              ? 'Select'
+              : ''
           "
           :title="policy.name"
         >

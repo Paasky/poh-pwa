@@ -1,7 +1,7 @@
 import { TerraGenerator } from "@/factories/TerraGenerator/terra-generator";
 import { TypeClass } from "@/types/typeObjects";
 import { TypeKey } from "@/types/common";
-import { Tile } from "@/objects/game/gameObjects";
+import { Tile } from "@/objects/game/Tile";
 import { getRandom, takeRandom } from "@/helpers/arrayTools";
 import { removeOrphanArea } from "@/factories/TerraGenerator/helpers/post-processors";
 import { GenTile } from "@/factories/TerraGenerator/gen-tile";
@@ -198,16 +198,8 @@ export class StratLevel {
         continue;
       }
 
-      // Check vs seaLevel
-      // 3: no mods
-      // 2: must pick from land neighbors 50% of the time
-      // 1: must pick from land neighbors 75% of the time
-      const landOnly =
-        this.gen.size.seaLevel === 3
-          ? false
-          : this.gen.size.seaLevel === 2
-            ? Math.random() < 0.25
-            : Math.random() < 0.5;
+      // Slightly increase chance of new land
+      const landOnly = Math.random() < 0.25;
 
       // Pick a random neighbor as the base for this new tile
       const randNeighbors = landOnly

@@ -1,9 +1,9 @@
-import { Manager } from "@/managers/_manager";
 import { EventType, GameEvent } from "@/types/events";
 import { useEventStore } from "@/stores/eventStore";
-import { GameObject, Player } from "@/objects/game/gameObjects";
+import { GameObject } from "@/objects/game/_GameObject";
+import { Player } from "@/objects/game/Player";
 
-export class EventManager extends Manager {
+export class EventManager {
   protected _events = useEventStore();
 
   create(
@@ -23,6 +23,8 @@ export class EventManager extends Manager {
       read: false,
     } as GameEvent;
 
+    // IDE mixes up ref contents
+    // eslint-disable-next-line
     this._events.turnEvents.push(event as any);
     const setting = this._events.eventSettings[type] ?? "full";
     if (setting === "full") {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import UiObjPill from "@/components/Ui/UiObjPill.vue";
-import { Yield } from "@/types/common";
+import { Yield } from "@/objects/yield";
 
 const props = defineProps<{
   data: Yield;

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import UiYield from "@/components/Ui/UiYield.vue";
-import { Yields } from "@/types/common";
+import { Yields } from "@/objects/yield";
 
 defineProps<{
   yields: Yields;
