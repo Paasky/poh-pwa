@@ -115,8 +115,25 @@ onUnmounted(() => {
   destroyFullscreen();
 });
 
+let userHasQuit = false;
 function onBeforeUnload(e: BeforeUnloadEvent) {
-  e.preventDefault();
+  if (!userHasQuit) {
+    e.preventDefault();
+  }
+}
+
+// Quit confirmation state
+const showQuitConfirm = ref(false);
+
+function onQuitRequested() {
+  showQuitConfirm.value = true;
+}
+
+function confirmQuit() {
+  showQuitConfirm.value = false;
+  userHasQuit = true;
+  // Set browser to home to fully destroy all stores
+  document.location = "/";
 }
 </script>
 
@@ -184,6 +201,15 @@ function onBeforeUnload(e: BeforeUnloadEvent) {
           @click="toggleFullscreen()"
         />
         <UiButton icon="fa-bars" color="tertiary" rounded="0" class="rounded-b-lg" tooltip="Menu" />
+        <v-menu activator="parent" transition="slide-y-transition" location="bottom end">
+          <v-list density="comfortable">
+            <v-list-item value="save" title="Save" />
+            <v-list-item value="load" title="Load" />
+            <v-list-item value="options" title="Options" />
+            <v-divider class="my-1" />
+            <v-list-item value="quit" title="Quit" @click="onQuitRequested" />
+          </v-list>
+        </v-menu>
       </div>
 
       <!-- Left-center -->
@@ -197,6 +223,20 @@ function onBeforeUnload(e: BeforeUnloadEvent) {
       <!-- Bottom-right -->
 
       <!-- Modals -->
+      <!-- Quit confirmation dialog -->
+      <v-dialog v-model="showQuitConfirm" max-width="480" persistent>
+        <v-card rounded="lg">
+          <v-card-title class="text-h6">Confirm Quit</v-card-title>
+          <v-card-text>
+            Are you sure you want to Quit?<br />
+            Unsaved progress may be lost.
+          </v-card-text>
+          <v-card-actions class="justify-end ga-2">
+            <v-btn variant="text" @click="showQuitConfirm = false">Cancel</v-btn>
+            <v-btn color="red" variant="flat" @click="confirmQuit">Quit</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-sheet>
   </Transition>
 </template>

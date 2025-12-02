@@ -72,12 +72,13 @@ const vuetify = createVuetify({
         dark: true,
         colors: {
           // Palette
-          primary: "#613f00",
+          primary: "#805C0FFF",
           secondary: "#093300",
           tertiary: "#0e3a68",
           disabled: "#6b7280",
           background: "#0f172a",
           surface: "#1e293b",
+          error: "#880909",
           // Additional semantic/icon accents
           gold: "#f59e0b",
           lightBlue: "#60a5fa",
@@ -87,7 +88,7 @@ const vuetify = createVuetify({
           orange: "#f97316",
           gray: "#9ca3af",
           white: "#ffffff",
-          red: "#ef4444",
+          red: "#881111",
           green: "#22c55e",
         },
       },
