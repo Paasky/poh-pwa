@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ObjKey } from "@/types/common";
-import UiObjPillList from "@/components/Ui/UiObjPillList.vue";
+import UiObjPillList from "@/components/UiLegacy/UiObjPillList.vue";
 import { Requires } from "@/objects/Requires";
 
 defineProps<{

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 defineOptions({ name: "MapGenControls" });
 import { computed, type WritableComputedRef } from "vue";
-import UiDropdown from "@/components/Ui/UiDropdown.vue";
-import UiButton from "@/components/Ui/UiButton.vue";
+import UiDropdown from "@/components/UiLegacy/UiDropdown.vue";
+import UiButton from "@/components/UiLegacy/UiButton.vue";
 import type { WorldSize } from "@/factories/worldFactory";
 import { useMapGenStore } from "@/stores/mapGenStore";
 

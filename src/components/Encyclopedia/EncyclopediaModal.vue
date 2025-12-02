@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import UiModal from "@/components/Ui/UiModal.vue";
-import UiIcon from "@/components/Ui/UiIcon.vue";
+import UiModal from "@/components/UiLegacy/UiModal.vue";
+import UiIcon from "@/components/UiLegacy/UiIcon.vue";
 import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
 import { useObjectsStore } from "@/stores/objectStore";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";

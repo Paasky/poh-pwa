@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import UiButton, { Variant } from "@/components/Ui/UiButton.vue";
-import UiIcon from "@/components/Ui/UiIcon.vue";
+import UiButton, { Variant } from "@/components/UiLegacy/UiButton.vue";
+import UiIcon from "@/components/UiLegacy/UiIcon.vue";
 import { icons } from "@/types/icons";
 
 // Define props with default values

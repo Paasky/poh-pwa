@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import UiElement from "@/components/Ui/UiElement.vue";
-import UiValue from "@/components/Ui/UiValue.vue";
-import UiIcon from "@/components/Ui/UiIcon.vue";
+import UiElement from "@/components/UiLegacy/UiElement.vue";
+import UiValue from "@/components/UiLegacy/UiValue.vue";
+import UiIcon from "@/components/UiLegacy/UiIcon.vue";
 import { useObjectsStore } from "@/stores/objectStore";
-import UiButton from "@/components/Ui/UiButton.vue";
+import UiButton from "@/components/UiLegacy/UiButton.vue";
 import {
   TabName,
   tabsConfig,

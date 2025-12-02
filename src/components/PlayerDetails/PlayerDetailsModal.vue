@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { tabsConfig, usePlayerDetailsStore } from "@/components/PlayerDetails/playerDetailsStore";
-import UiIcon from "@/components/Ui/UiIcon.vue";
+import UiIcon from "@/components/UiLegacy/UiIcon.vue";
 import { useObjectsStore } from "@/stores/objectStore";
-import UiModal from "@/components/Ui/UiModal.vue";
+import UiModal from "@/components/UiLegacy/UiModal.vue";
 import EconomyTab from "@/components/PlayerDetails/EconomyTab/EconomyTab.vue";
 import ResearchTab from "@/components/PlayerDetails/ResearchTab/ResearchTab.vue";
 import CultureTab from "@/components/PlayerDetails/CultureTab/CultureTab.vue";

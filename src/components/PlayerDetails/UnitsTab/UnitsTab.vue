@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { useObjectsStore } from "@/stores/objectStore";
-import UiHeader from "@/components/Ui/UiHeader.vue";
+import UiHeader from "@/components/UiLegacy/UiHeader.vue";
 import { computed } from "vue";
-import UiObjPill from "@/components/Ui/UiObjPill.vue";
-import UiButton from "@/components/Ui/UiButton.vue";
+import UiObjPill from "@/components/UiLegacy/UiObjPill.vue";
+import UiButton from "@/components/UiLegacy/UiButton.vue";
 import UnitDesigner from "@/components/PlayerDetails/UnitsTab/UnitDesigner.vue";
-import UiUnitIcon from "@/components/Ui/UiUnitIcon.vue";
+import UiUnitIcon from "@/components/UiLegacy/UiUnitIcon.vue";
 
 const objects = useObjectsStore();
 const player = objects.currentPlayer;

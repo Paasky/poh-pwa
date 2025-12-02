@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import UiCardGroup from "@/components/Ui/UiCardGroup.vue";
-import UiCard from "@/components/Ui/UiCard.vue";
-import UiYieldList from "@/components/Ui/UiYieldList.vue";
-import UiObjPillList from "@/components/Ui/UiObjPillList.vue";
-import UiHeader from "@/components/Ui/UiHeader.vue";
-import UiObjPill from "@/components/Ui/UiObjPill.vue";
+import UiCardGroup from "@/components/UiLegacy/UiCardGroup.vue";
+import UiCard from "@/components/UiLegacy/UiCard.vue";
+import UiYieldList from "@/components/UiLegacy/UiYieldList.vue";
+import UiObjPillList from "@/components/UiLegacy/UiObjPillList.vue";
+import UiHeader from "@/components/UiLegacy/UiHeader.vue";
+import UiObjPill from "@/components/UiLegacy/UiObjPill.vue";
 import { useObjectsStore } from "@/stores/objectStore";
 import { TypeKey } from "@/types/common";
 

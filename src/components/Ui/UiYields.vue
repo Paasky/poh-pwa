@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { Yield } from "@/objects/yield";
+import { Yields } from "@/objects/yield";
 
 defineProps<{
-  yield: Yield;
+  yields: Yields;
 }>();
 </script>
 

@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import UiObjPillList from "@/components/Ui/UiObjPillList.vue";
-import UiYieldList from "@/components/Ui/UiYieldList.vue";
-import UiObjPill from "@/components/Ui/UiObjPill.vue";
-import UiCard from "@/components/Ui/UiCard.vue";
-import UiCardGrid from "@/components/Ui/UiCardGrid.vue";
-import UiCardGroup from "@/components/Ui/UiCardGroup.vue";
-import UiButton from "@/components/Ui/UiButton.vue";
+import UiObjPillList from "@/components/UiLegacy/UiObjPillList.vue";
+import UiYieldList from "@/components/UiLegacy/UiYieldList.vue";
+import UiObjPill from "@/components/UiLegacy/UiObjPill.vue";
+import UiCard from "@/components/UiLegacy/UiCard.vue";
+import UiCardGrid from "@/components/UiLegacy/UiCardGrid.vue";
+import UiCardGroup from "@/components/UiLegacy/UiCardGroup.vue";
+import UiButton from "@/components/UiLegacy/UiButton.vue";
 import { useObjectsStore } from "@/stores/objectStore";
-import UiHeader from "@/components/Ui/UiHeader.vue";
+import UiHeader from "@/components/UiLegacy/UiHeader.vue";
 import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
-import UiRequires from "@/components/Ui/UiRequires.vue";
+import UiRequires from "@/components/UiLegacy/UiRequires.vue";
 
 const objects = useObjectsStore();
 const player = objects.currentPlayer;

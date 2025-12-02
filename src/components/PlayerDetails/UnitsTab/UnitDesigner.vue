@@ -2,11 +2,11 @@
 import { computed, ref, watch } from "vue";
 import { useObjectsStore } from "@/stores/objectStore";
 import { TypeObject } from "@/types/typeObjects";
-import UiButton from "@/components/Ui/UiButton.vue";
-import UiIcon from "@/components/Ui/UiIcon.vue";
-import UiUnitIcon from "@/components/Ui/UiUnitIcon.vue";
-import UiYieldList from "@/components/Ui/UiYieldList.vue";
-import UiObjPillList from "@/components/Ui/UiObjPillList.vue";
+import UiButton from "@/components/UiLegacy/UiButton.vue";
+import UiIcon from "@/components/UiLegacy/UiIcon.vue";
+import UiUnitIcon from "@/components/UiLegacy/UiUnitIcon.vue";
+import UiYieldList from "@/components/UiLegacy/UiYieldList.vue";
+import UiObjPillList from "@/components/UiLegacy/UiObjPillList.vue";
 import { UnitDesign } from "@/objects/game/UnitDesign";
 import { Yields } from "@/objects/yield";
 import { UnitDesignManager } from "@/managers/UnitDesignManager";

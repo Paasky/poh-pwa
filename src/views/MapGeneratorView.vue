@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import { useObjectsStore } from "@/stores/objectStore";
-import UiButton from "@/components/Ui/UiButton.vue";
+import UiButton from "@/components/UiLegacy/UiButton.vue";
 import Controls from "@/views/MapGenerator/components/Controls.vue";
 import Filters from "@/views/MapGenerator/components/Filters.vue";
 import LevelSection from "@/views/MapGenerator/components/LevelSection.vue";

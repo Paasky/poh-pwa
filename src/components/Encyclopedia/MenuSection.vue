@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Section, useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
-import UiIcon from "@/components/Ui/UiIcon.vue";
+import UiIcon from "@/components/UiLegacy/UiIcon.vue";
 
 defineProps<{ section: Section }>();
 const encyclopedia = useEncyclopediaStore();

@@ -1,99 +1,107 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from "vue";
-import UiElement from "@/components/Ui/UiElement.vue";
-import UiButton from "@/components/Ui/UiButton.vue";
-import PlayerDetailsBar from "@/components/PlayerDetails/PlayerDetailsBar.vue";
-import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
 import { useAppStore } from "@/stores/appStore";
-import UiIcon from "@/components/Ui/UiIcon.vue";
-import { icons } from "@/types/icons";
-import EncyclopediaModal from "@/components/Encyclopedia/EncyclopediaModal.vue";
 import { useRouter } from "vue-router";
 import { initModalStateSync } from "@/router/modalState";
-import PlayerDetailsModal from "@/components/PlayerDetails/PlayerDetailsModal.vue";
-import EventModal from "@/components/Events/EventModal.vue";
-import { useObjectsStore } from "@/stores/objectStore";
-import Engine from "@/components/Engine/Engine.vue";
-import EventList from "@/components/Events/EventList.vue";
+import { destroyFullscreen, initFullscreen, toggleFullscreen } from "@/helpers/fullscreen";
+import GameEngine from "@/components/Engine/Engine.vue";
+import UiButton from "@/components/Ui/UiButton.vue";
 
-const encyclopedia = useEncyclopediaStore();
 const app = useAppStore();
 const router = useRouter();
-
-// Fullscreen handling
 const gameRootEl = ref<HTMLElement | null>(null);
-const isFullscreen = ref(false);
 
-function updateFullscreenState() {
-  // eslint-disable-next-line
-  const d: any = document;
-  isFullscreen.value = !!(
-    document.fullscreenElement ||
-    d.webkitFullscreenElement ||
-    d.mozFullScreenElement ||
-    d.msFullscreenElement
-  );
-}
+// Top-left primary buttons data
+type DetailItem = {
+  id: string;
+  iconClass: string; // FontAwesome class
+  iconColor: string; // theme color key (matches vuetify theme colors)
+  text: string;
+  effect: { text: string; color?: string };
+  tooltip: string;
+};
 
-async function enterFullscreen() {
-  // eslint-disable-next-line
-  const el: any = gameRootEl.value || document.documentElement;
-  try {
-    if (el.requestFullscreen) {
-      // navigationUI: 'hide' is supported in some browsers (like Chrome on desktop)
-      await el.requestFullscreen({ navigationUI: "hide" });
-    } else if (el.webkitRequestFullscreen) {
-      el.webkitRequestFullscreen();
-    } else if (el.mozRequestFullScreen) {
-      el.mozRequestFullScreen();
-    } else if (el.msRequestFullscreen) {
-      el.msRequestFullscreen();
-    }
-  } catch {
-    // ignore
-  }
-}
-
-async function exitFullscreen() {
-  // eslint-disable-next-line
-  const d: any = document;
-  try {
-    if (document.exitFullscreen) {
-      await document.exitFullscreen();
-    } else if (d.webkitExitFullscreen) {
-      d.webkitExitFullscreen();
-    } else if (d.mozCancelFullScreen) {
-      d.mozCancelFullScreen();
-    } else if (d.msExitFullscreen) {
-      d.msExitFullscreen();
-    }
-  } catch {
-    // ignore
-  }
-}
-
-function toggleFullscreen(set: boolean | null = null) {
-  if (set === true) {
-    return void enterFullscreen();
-  }
-  if (set === false) {
-    return void exitFullscreen();
-  }
-
-  return isFullscreen.value ? void exitFullscreen() : void enterFullscreen();
-}
+const detailData: DetailItem[] = [
+  {
+    id: "economy",
+    iconClass: "fa-coins",
+    iconColor: "gold",
+    text: "12",
+    effect: { text: "-3", color: "red" },
+    tooltip: "Economy",
+  },
+  {
+    id: "research",
+    iconClass: "fa-flask",
+    iconColor: "lightBlue",
+    text: "234 (5)",
+    effect: { text: "+123" },
+    tooltip: "Research: Rifling 234/789 (5 turns)",
+  },
+  {
+    id: "culture",
+    iconClass: "fa-masks-theater",
+    iconColor: "lightPurple",
+    text: "234 (5)",
+    effect: { text: "+123" },
+    tooltip: "Culture: 234/789 to next Golden Age  (5 turns)",
+  },
+  {
+    id: "religion",
+    iconClass: "fa-hands-praying",
+    iconColor: "darkPurple",
+    text: "234 (5)",
+    effect: { text: "+123" },
+    tooltip: "Religion: 234/789 to next God  (5 turns)",
+  },
+  {
+    id: "diplomacy",
+    iconClass: "fa-scroll",
+    iconColor: "lightGray",
+    text: "3",
+    effect: { text: "5/8", color: "green" },
+    tooltip: "Diplomacy: 3 Agendas, 5/8 units in use",
+  },
+  {
+    id: "trade",
+    iconClass: "fa-route",
+    iconColor: "orange",
+    text: "12",
+    effect: { text: "(8)", color: "green" },
+    tooltip: "Trade: 12 active routes, 8 available",
+  },
+  {
+    id: "units",
+    iconClass: "fa-shield",
+    iconColor: "gray",
+    text: "4",
+    effect: { text: "(6)", color: "green" },
+    tooltip: "Units: 4 Available Designs, 6 design points",
+  },
+  {
+    id: "cities",
+    iconClass: "fa-city",
+    iconColor: "white",
+    text: "6",
+    effect: { text: "8%" },
+    tooltip: "Cities: 8% discontent",
+  },
+  {
+    id: "government",
+    iconClass: "fa-landmark",
+    iconColor: "white",
+    text: "Stable",
+    effect: { text: "12%" },
+    tooltip: "Government: No revolt risk, 12% Corruption",
+  },
+];
 
 onMounted(async () => {
   // Warn/prevent accidental unloads (refresh/close tab) while in the game view
   window.addEventListener("beforeunload", onBeforeUnload);
 
   // Track fullscreen state and go fullscreen on mount
-  document.addEventListener("fullscreenchange", updateFullscreenState);
-  document.addEventListener("webkitfullscreenchange", updateFullscreenState);
-  document.addEventListener("mozfullscreenchange", updateFullscreenState);
-  document.addEventListener("MSFullscreenChange", updateFullscreenState);
-  updateFullscreenState();
-  toggleFullscreen(true);
+  initFullscreen();
 
   // Bootstrap the app data once (types + gameData) before showing the game UI
   await app.init();
@@ -104,10 +112,7 @@ onMounted(async () => {
 
 onUnmounted(() => {
   window.removeEventListener("beforeunload", onBeforeUnload);
-  document.removeEventListener("fullscreenchange", updateFullscreenState);
-  document.removeEventListener("webkitfullscreenchange", updateFullscreenState);
-  document.removeEventListener("mozfullscreenchange", updateFullscreenState);
-  document.removeEventListener("MSFullscreenChange", updateFullscreenState);
+  destroyFullscreen();
 });
 
 function onBeforeUnload(e: BeforeUnloadEvent) {
@@ -118,79 +123,81 @@ function onBeforeUnload(e: BeforeUnloadEvent) {
 <template>
   <Transition name="fade" mode="out-in">
     <!-- Loader Screen -->
-    <div
+    <v-sheet
       v-if="!app.ready"
       key="loader"
-      class="relative w-screen h-screen bg-gray-800 text-slate-100 flex items-center justify-center"
+      color="background"
+      class="d-flex align-center justify-center text-center"
+      height="100vh"
+      width="100vw"
     >
-      <div class="text-center">
-        <img src="/book.gif" alt="Book" />
-        <p class="mt-4 text-slate-300">Loading the Pages of History…</p>
+      <div>
+        <v-img src="/book.gif" alt="Book" contain />
+        <h1 class="opacity-50">Loading the Pages of History…</h1>
       </div>
-    </div>
+    </v-sheet>
 
     <!-- Game Screen -->
-    <div
+    <v-sheet
       v-else
       id="game"
       key="game"
       ref="gameRootEl"
-      class="absolute w-screen h-screen bg-gray-100 text-sm"
+      class="position-absolute w-100 h-100 overflow-hidden text-body-2"
     >
       <!-- Game engine -->
-      <Engine class="absolute top-0 left-0 w-full h-full bg-black/50" />
-
-      <!-- todo: Game hover tooltip -->
+      <GameEngine class="absolute top-0 left-0 w-100 h-100 bg-black/50" />
 
       <!-- Top-left -->
-      <PlayerDetailsBar />
+      <div class="position-absolute top-0 left-0 d-flex flex-wrap ga-1" style="z-index: 10">
+        <UiButton
+          v-for="item in detailData"
+          :key="item.id"
+          :icon="item.iconClass"
+          :icon-color="item.iconColor"
+          :text="item.text"
+          :effect-text="item.effect.text"
+          :effect-class="item.effect.color"
+          :tooltip="item.tooltip"
+          color="secondary"
+          rounded="0"
+          size="small"
+          class="rounded-b-lg"
+        />
+      </div>
 
       <!-- Top-right -->
-      <UiElement position="top-right" variant="ghost" class="z-50 text-xl">
-        <div class="flex gap-1">
-          <UiButton tooltip="Encyclopedia" @click="encyclopedia.open()">
-            <UiIcon :icon="icons.question" />
-          </UiButton>
-          <UiButton
-            :tooltip="isFullscreen ? 'Exit full screen' : 'Full screen'"
-            @click="toggleFullscreen"
-          >
-            <UiIcon :icon="isFullscreen ? icons.fullscreenExit : icons.fullscreenEnter" />
-          </UiButton>
-          <UiButton tooltip="Menu">
-            <UiIcon :icon="icons.menu" />
-          </UiButton>
-        </div>
-      </UiElement>
+      <div class="position-absolute top-0 right-0 d-flex ga-2" style="z-index: 10">
+        <UiButton
+          icon="fa-question"
+          color="tertiary"
+          rounded="0"
+          class="rounded-b-lg"
+          tooltip="Encyclopedia"
+        />
+        <UiButton
+          icon="fa-up-right-and-down-left-from-center"
+          color="tertiary"
+          rounded="0"
+          class="rounded-b-lg"
+          tooltip="Toggle Fullscreen"
+          @click="toggleFullscreen()"
+        />
+        <UiButton icon="fa-bars" color="tertiary" rounded="0" class="rounded-b-lg" tooltip="Menu" />
+      </div>
 
       <!-- Left-center -->
-      <UiElement position="left-center"> Ongoing </UiElement>
 
       <!-- Right-center -->
-      <UiElement position="right-center">
-        <EventList />
-      </UiElement>
 
       <!-- Bottom-left -->
-      <UiElement position="bottom-left"> Map </UiElement>
 
       <!-- Bottom-center -->
-      <UiElement position="bottom-center">
-        <div class="max-h-48 overflow-y-auto">
-          <p v-for="type in useObjectsStore().currentPlayer.knownTypes.value" :key="type.id">
-            {{ type.class }} - {{ type.name }}
-          </p>
-        </div>
-      </UiElement>
 
       <!-- Bottom-right -->
-      <UiElement position="bottom-right"> Next </UiElement>
 
-      <!-- Modals  -->
-      <PlayerDetailsModal />
-      <EventModal />
-      <EncyclopediaModal />
-    </div>
+      <!-- Modals -->
+    </v-sheet>
   </Transition>
 </template>
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from "vue";
-import UiButton from "@/components/Ui/UiButton.vue";
-import UiIcon from "@/components/Ui/UiIcon.vue";
+import UiButton from "@/components/UiLegacy/UiButton.vue";
+import UiIcon from "@/components/UiLegacy/UiIcon.vue";
 import { icons } from "@/types/icons";
 
 const props = withDefaults(

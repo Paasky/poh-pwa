@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import UiIcon from "@/components/Ui/UiIcon.vue";
+import UiIcon from "@/components/UiLegacy/UiIcon.vue";
 import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
 import { useObjectsStore } from "@/stores/objectStore";
-import UiButton from "@/components/Ui/UiButton.vue";
+import UiButton from "@/components/UiLegacy/UiButton.vue";
 import { ObjKey, PohObject } from "@/types/common";
 
 const props = defineProps<{

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import UiCard from "@/components/Ui/UiCard.vue";
-import UiYieldList from "@/components/Ui/UiYieldList.vue";
-import UiObjPillList from "@/components/Ui/UiObjPillList.vue";
+import UiCard from "@/components/UiLegacy/UiCard.vue";
+import UiYieldList from "@/components/UiLegacy/UiYieldList.vue";
+import UiObjPillList from "@/components/UiLegacy/UiObjPillList.vue";
 import { useObjectsStore } from "@/stores/objectStore";
-import UiRequires from "@/components/Ui/UiRequires.vue";
+import UiRequires from "@/components/UiLegacy/UiRequires.vue";
 
 const objects = useObjectsStore();
 const government = objects.currentPlayer.government;

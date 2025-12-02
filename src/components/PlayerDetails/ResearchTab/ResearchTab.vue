@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import UiCard from "@/components/Ui/UiCard.vue";
-import UiObjPill from "@/components/Ui/UiObjPill.vue";
-import UiIcon from "@/components/Ui/UiIcon.vue";
-import UiObjPillList from "@/components/Ui/UiObjPillList.vue";
-import UiHeader from "@/components/Ui/UiHeader.vue";
+import UiCard from "@/components/UiLegacy/UiCard.vue";
+import UiObjPill from "@/components/UiLegacy/UiObjPill.vue";
+import UiIcon from "@/components/UiLegacy/UiIcon.vue";
+import UiObjPillList from "@/components/UiLegacy/UiObjPillList.vue";
+import UiHeader from "@/components/UiLegacy/UiHeader.vue";
 import { useObjectsStore } from "@/stores/objectStore";
 import { TypeObject } from "@/types/typeObjects";
 import { CatKey } from "@/types/common";
 import ResearchTabArrows from "@/components/PlayerDetails/ResearchTab/ResearchTabArrows.vue";
-import UiButton from "@/components/Ui/UiButton.vue";
+import UiButton from "@/components/UiLegacy/UiButton.vue";
 
 const objects = useObjectsStore();
 const techs = objects.getClassTypes("technologyType");

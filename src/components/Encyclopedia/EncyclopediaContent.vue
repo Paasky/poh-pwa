@@ -2,13 +2,13 @@
 import { computed, onBeforeUnmount, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { icons } from "@/types/icons";
-import UiObjPillList from "@/components/Ui/UiObjPillList.vue";
-import UiIcon from "@/components/Ui/UiIcon.vue";
-import UiYieldList from "@/components/Ui/UiYieldList.vue";
-import UiButton from "@/components/Ui/UiButton.vue";
+import UiObjPillList from "@/components/UiLegacy/UiObjPillList.vue";
+import UiIcon from "@/components/UiLegacy/UiIcon.vue";
+import UiYieldList from "@/components/UiLegacy/UiYieldList.vue";
+import UiButton from "@/components/UiLegacy/UiButton.vue";
 import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
 import { useObjectsStore } from "@/stores/objectStore";
-import UiRequires from "@/components/Ui/UiRequires.vue";
+import UiRequires from "@/components/UiLegacy/UiRequires.vue";
 
 const objects = useObjectsStore();
 const encyclopedia = useEncyclopediaStore();
