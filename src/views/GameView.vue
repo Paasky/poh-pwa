@@ -12,6 +12,9 @@ const app = useAppStore();
 const router = useRouter();
 const gameRootEl = ref<HTMLElement | null>(null);
 
+// Encyclopedia dialog open state (v-model)
+const encyOpen = ref(false);
+
 // Top-left primary buttons data
 type DetailItem = {
   id: string;
@@ -192,6 +195,7 @@ function confirmQuit() {
           rounded="0"
           class="rounded-b-lg"
           tooltip="Encyclopedia"
+          @click="encyOpen = true"
         />
         <UiButton
           icon="fa-up-right-and-down-left-from-center"
@@ -201,8 +205,15 @@ function confirmQuit() {
           tooltip="Toggle Fullscreen"
           @click="toggleFullscreen()"
         />
-        <UiButton icon="fa-bars" color="tertiary" rounded="0" class="rounded-b-lg" tooltip="Menu" />
-        <v-menu activator="parent" transition="slide-y-transition" location="bottom end">
+        <UiButton
+          id="menu-btn"
+          icon="fa-bars"
+          color="tertiary"
+          rounded="0"
+          class="rounded-b-lg"
+          tooltip="Menu"
+        />
+        <v-menu activator="#menu-btn" transition="slide-y-transition">
           <v-list density="comfortable">
             <v-list-item value="save" title="Save" />
             <v-list-item value="load" title="Load" />
@@ -225,7 +236,7 @@ function confirmQuit() {
 
       <!-- Modals -->
       <!-- Encyclopedia -->
-      <EncyclopediaDialog />
+      <EncyclopediaDialog v-model="encyOpen" />
 
       <!-- Quit confirmation dialog -->
       <v-dialog v-model="showQuitConfirm" max-width="1440" persistent>

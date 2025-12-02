@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { reactive, ref } from "vue";
+import { reactive } from "vue";
+import { useObjectsStore } from "@/stores/objectStore";
+import { CategoryObject, TypeObject } from "@/types/typeObjects";
 
-// todo convert to v-model
-const isOpen = ref(true);
+// v-model support for open state
+const props = defineProps<{ modelValue: boolean }>();
+const emit = defineEmits<{ (e: "update:modelValue", value: boolean): void }>();
 
-// todo add an outside accessor open(itemKey:string)
+// outside accessor open(itemKey:string) exposed below
 
 const state = reactive({
   current: null as null | MenuItem,
@@ -14,36 +17,75 @@ const state = reactive({
 });
 
 // Temporary hierarchical data
-type MenuItem = {
+export type MenuItem = {
   key: string;
   title: string;
-  children?: MenuItem[];
+  image?: string;
+  quote?: {
+    text: string;
+    source?: string;
+    url?: string;
+  };
+  children?: Record<string, MenuItem>;
 };
-const menuData: MenuItem[] = [
-  {
-    key: "level:1",
-    title: "Top Level 1",
-    children: [
-      { key: "level:1.1", title: "Mid Level 1.1" },
-      { key: "level:1.2", title: "Mid Level 1.2" },
-    ],
-  },
-  {
-    key: "level:2",
-    title: "Top Level 2",
-    children: [
-      {
-        key: "level:2.1",
-        title: "Mid Level 2.1",
-        children: [
-          { key: "level:2.1.1", title: "Low level 2.1.1" },
-          { key: "level:2.1.2", title: "Low level 2.1.2" },
-        ],
-      },
-      { key: "level:2.2", title: "Mid Level 2.2" },
-    ],
-  },
-];
+
+const menuObjData: Record<string, MenuItem> = {};
+for (const type of useObjectsStore().getAllTypes()) {
+  // Build the type item first, then the tree it belongs to
+  const typeItem = {
+    key: type.key,
+    title: type.name,
+    image: type.image,
+    quote:
+      type.quote || type.p1
+        ? {
+            text: type.quote?.text ?? type.p1 + " " + type.p2,
+            source: type.quote?.source,
+            url: type.quote?.url,
+          }
+        : undefined,
+  } as MenuItem;
+
+  if (!menuObjData[type.concept]) {
+    try {
+      const concept = useObjectsStore().getTypeObject(type.concept);
+      menuObjData[type.concept] = {
+        key: type.concept,
+        title: concept.name,
+        children: {},
+      };
+    } catch {
+      menuObjData[type.concept] = {
+        key: type.concept,
+        title: type.concept,
+        children: {},
+      };
+    }
+  }
+  const conceptItem = menuObjData[type.concept]!;
+
+  if (type.category) {
+    if (!conceptItem.children![type.category]) {
+      try {
+        const category = useObjectsStore().get(type.category) as TypeObject | CategoryObject;
+        menuObjData[type.category] = {
+          key: type.category,
+          title: category.name,
+          children: {},
+        };
+      } catch {
+        menuObjData[type.category] = {
+          key: type.category,
+          title: type.category,
+          children: {},
+        };
+      }
+      menuObjData[type.category].children![type.key] = typeItem;
+    }
+  } else {
+    conceptItem.children![type.key] = typeItem;
+  }
+}
 
 function toggle(itemKey: string) {
   if (state.openSections.includes(itemKey)) {
@@ -67,7 +109,7 @@ function toggle(itemKey: string) {
 }
 
 function open(itemKey: string) {
-  isOpen.value = true;
+  emit("update:modelValue", true);
   const item = findKeyInData(itemKey);
   if (item) {
     state.current = item;
@@ -77,16 +119,16 @@ function open(itemKey: string) {
   }
 }
 
-function findKeyInData(itemKey: string, data?: MenuItem[]): MenuItem | null {
+function findKeyInData(itemKey: string, data?: Record<string, MenuItem>): MenuItem | null {
   // Look in current level
-  for (const menuItem of data ?? menuData) {
+  for (const menuItem of Object.values(data ?? menuObjData)) {
     if (menuItem.key === itemKey) {
       return menuItem;
     }
   }
 
   // Crawl children
-  for (const menuItem of data ?? menuData) {
+  for (const menuItem of Object.values(data ?? menuObjData)) {
     if (menuItem.children?.length) {
       const foundItem = findKeyInData(itemKey, menuItem.children);
       if (foundItem) return foundItem;
@@ -96,10 +138,15 @@ function findKeyInData(itemKey: string, data?: MenuItem[]): MenuItem | null {
   // Not found
   return null;
 }
+defineExpose({ open });
 </script>
 
 <template>
-  <v-dialog :model-value="isOpen" max-width="1400">
+  <v-dialog
+    :model-value="props.modelValue"
+    @update:model-value="(v: boolean) => emit('update:modelValue', v)"
+    max-width="1400"
+  >
     <v-card rounded="lg" color="surface">
       <div style="min-height: 60vh; max-height: 80vh">
         <v-toolbar density="comfortable" class="px-3">
@@ -116,7 +163,7 @@ function findKeyInData(itemKey: string, data?: MenuItem[]): MenuItem | null {
             class="mr-2"
             style="width: 512px"
           />
-          <v-btn icon variant="text" :title="'Close'">
+          <v-btn icon variant="text" :title="'Close'" @click="emit('update:modelValue', false)">
             <v-icon icon="fa-xmark" />
           </v-btn>
         </v-toolbar>
@@ -124,7 +171,7 @@ function findKeyInData(itemKey: string, data?: MenuItem[]): MenuItem | null {
           <!-- Left menu -->
           <div class="border-e" style="width: 512px; overflow: auto">
             <div
-              v-for="item of menuData"
+              v-for="item of Object.values(menuObjData)"
               :key="item.key"
               class="px-2 py-1 cursor-pointer"
               style="padding-left: 12px"
@@ -195,7 +242,7 @@ function findKeyInData(itemKey: string, data?: MenuItem[]): MenuItem | null {
             </div>
 
             <div v-else class="pa-4 d-flex flex-column ga-4">
-              <div class="text-h6">{{ state.current }}</div>
+              <div class="text-h6">{{ state.current.title }}</div>
               <div class="d-flex ga-4">
                 <!-- Article content -->
                 <div class="flex-grow-1">
