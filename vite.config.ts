@@ -97,6 +97,9 @@ export default defineConfig({
     }),
   ],
   build: {
+    // Increase the chunk size warning limit to 10 MB (default is 500 kB)
+    // The value is in kB, so 10 MB = 10 * 1024 = 10240
+    chunkSizeWarningLimit: 10240,
     rollupOptions: {
       onwarn(warning, defaultHandler) {
         // In CI or pre-commit, fail the build on any Rollup warning
