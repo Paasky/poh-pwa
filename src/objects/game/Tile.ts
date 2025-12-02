@@ -1,16 +1,16 @@
-import { canHaveOne, hasMany } from "@/objects/game/_mixins";
+import { canHaveOne, hasMany } from "@/objects/game/_relations";
 import { TypeObject } from "@/types/typeObjects";
 import { Yields } from "@/objects/yield";
 import { computed, ref } from "vue";
 import { GameKey, GameObjAttr, GameObject, getKey } from "@/objects/game/_GameObject";
 import { useObjectsStore } from "@/stores/objectStore";
-import { River } from "@/objects/game/River";
-import { Construction } from "@/objects/game/Construction";
-import { Citizen } from "@/objects/game/Citizen";
-import { City } from "@/objects/game/City";
-import { Player } from "@/objects/game/Player";
-import { TradeRoute } from "@/objects/game/TradeRoute";
-import { Unit } from "@/objects/game/Unit";
+import type { River } from "@/objects/game/River";
+import type { Construction } from "@/objects/game/Construction";
+import type { Citizen } from "@/objects/game/Citizen";
+import type { City } from "@/objects/game/City";
+import type { Player } from "@/objects/game/Player";
+import type { TradeRoute } from "@/objects/game/TradeRoute";
+import type { Unit } from "@/objects/game/Unit";
 
 export class Tile extends GameObject {
   constructor(
@@ -72,6 +72,9 @@ export class Tile extends GameObject {
     },
   ];
 
+  /*
+   * Attributes
+   */
   x: number;
   y: number;
   domain: TypeObject;
@@ -87,31 +90,37 @@ export class Tile extends GameObject {
   isMajorRiver = false;
   isSalt = false;
 
+  private _dynamicTypes: TypeObject[] = [];
+  private _staticTypes: TypeObject[];
+  private _staticYields: Yields;
+
+  /*
+   * Relations
+   */
   citizenKeys = ref([] as GameKey[]);
-  citizens = hasMany(this.citizenKeys, Citizen);
+  citizens = hasMany<Citizen>(this.citizenKeys, `${this.key}.citizens`);
 
   cityKey = ref(null as GameKey | null);
-  city = canHaveOne(this.cityKey, City);
+  city = canHaveOne<City>(this.cityKey, `${this.key}.city`);
 
   constructionKey = ref<GameKey | null>(null);
-  construction = canHaveOne(this.constructionKey, Construction);
+  construction = canHaveOne<Construction>(this.constructionKey, `${this.key}.construction`);
 
-  playerKey = ref(null as GameKey | null);
-  player = canHaveOne(this.playerKey, Player);
+  playerKey = ref<GameKey | null>(null);
+  player = canHaveOne<Player>(this.playerKey, `${this.key}.player`);
 
   riverKey: GameKey | null = null;
   river = computed(() => (this.riverKey ? (useObjectsStore().get(this.riverKey) as River) : null));
 
   tradeRouteKeys = ref([] as GameKey[]);
-  tradeRoutes = hasMany(this.tradeRouteKeys, TradeRoute);
+  tradeRoutes = hasMany<TradeRoute>(this.tradeRouteKeys, `${this.key}.tradeRoutes`);
 
   unitKeys = ref([] as GameKey[]);
-  units = hasMany(this.unitKeys, Unit);
+  units = hasMany<Unit[]>(this.unitKeys, `${this.key}.units`);
 
-  private _staticTypes: TypeObject[];
-  private _dynamicTypes: TypeObject[] = [];
-  private _staticYields: Yields;
-
+  /*
+   * Computed
+   */
   types = computed(() => {
     this._dynamicTypes.length = 0;
 
@@ -130,6 +139,12 @@ export class Tile extends GameObject {
       ]),
   );
 
+  /*
+   * Actions
+   */
+  // todo add here
+
+  // Used all over to always generate standard tile ID
   static getKey(x: number, y: number): GameKey {
     return getKey("tile", `x${x},y${y}`);
   }

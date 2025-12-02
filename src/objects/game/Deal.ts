@@ -1,20 +1,16 @@
 import { GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
-import { computed } from "vue";
-import { Player } from "@/objects/game/Player";
-import { useObjectsStore } from "@/stores/objectStore";
+import { ComputedRef } from "vue";
+import type { Player } from "@/objects/game/Player";
+import { hasOne } from "@/objects/game/_relations";
 
 export class Deal extends GameObject {
   constructor(key: GameKey, fromPlayerKey: GameKey, toPlayerKey: GameKey) {
     super(key);
     this.fromPlayerKey = fromPlayerKey;
+    this.fromPlayer = hasOne<Player>(this.fromPlayerKey, `${this.key}.fromPlayer`);
     this.toPlayerKey = toPlayerKey;
+    this.toPlayer = hasOne<Player>(this.toPlayerKey, `${this.key}.toPlayer`);
   }
-
-  fromPlayerKey = "" as GameKey;
-  fromPlayer = computed(() => useObjectsStore().get(this.fromPlayerKey) as Player);
-
-  toPlayerKey = "" as GameKey;
-  toPlayer = computed(() => useObjectsStore().get(this.toPlayerKey) as Player);
 
   static attrsConf: GameObjAttr[] = [
     {
@@ -28,4 +24,28 @@ export class Deal extends GameObject {
       related: { theirKeyAttr: "dealKeys" },
     },
   ];
+
+  /*
+   * Attributes
+   */
+  // todo add here
+
+  /*
+   * Relations
+   */
+  fromPlayerKey = "" as GameKey;
+  fromPlayer: ComputedRef<Player>;
+
+  toPlayerKey = "" as GameKey;
+  toPlayer: ComputedRef<Player>;
+
+  /*
+   * Computed
+   */
+  // todo add here
+
+  /*
+   * Actions
+   */
+  // todo add here
 }

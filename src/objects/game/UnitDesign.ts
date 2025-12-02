@@ -1,11 +1,10 @@
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import { GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
 import { Yields } from "@/objects/yield";
 import { TypeObject } from "@/types/typeObjects";
-import { hasMany } from "@/objects/game/_mixins";
-import { Player } from "@/objects/game/Player";
-import { Unit } from "@/objects/game/Unit";
-import { useObjectsStore } from "@/stores/objectStore";
+import { canHaveOne, hasMany } from "@/objects/game/_relations";
+import type { Player } from "@/objects/game/Player";
+import type { Unit } from "@/objects/game/Unit";
 
 export class UnitDesign extends GameObject {
   constructor(
@@ -18,16 +17,17 @@ export class UnitDesign extends GameObject {
     isActive?: boolean,
   ) {
     super(key);
-    this.platform = platform;
+
+    this.isActive.value = isActive ?? true;
+    this.isElite = !!isElite;
     this.equipment = equipment;
     this.name = name;
-    this.isElite = !!isElite;
-    this.isActive.value = isActive ?? true;
-    if (playerKey) this.playerKey = playerKey;
-
+    this.platform = platform;
     this.types = [this.platform, this.equipment];
     this.yields = new Yields(this.types.flatMap((t) => t.yields.all()));
     this.productionCost = this.yields.applyMods().getLumpAmount("yieldType:productionCost");
+
+    if (playerKey) this.playerKey = playerKey;
   }
 
   static attrsConf: GameObjAttr[] = [
@@ -44,21 +44,34 @@ export class UnitDesign extends GameObject {
     { attrName: "isActive", isOptional: true },
   ];
 
-  platform: TypeObject;
+  /*
+   * Attributes
+   */
   equipment: TypeObject;
-  name: string;
   isActive = ref(true);
   isElite: boolean;
-
-  playerKey = null as null | GameKey;
-  player = computed(() =>
-    this.playerKey ? (useObjectsStore().get(this.playerKey) as Player) : null,
-  );
-
-  unitKeys = ref([] as GameKey[]);
-  units = hasMany(this.unitKeys, Unit);
-
+  name: string;
+  platform: TypeObject;
   productionCost: number;
   types: TypeObject[];
   yields: Yields;
+
+  /*
+   * Relations
+   */
+  playerKey: GameKey | null = null;
+  player = canHaveOne<Player>(this.playerKey, `${this.key}.player`);
+
+  unitKeys = ref([] as GameKey[]);
+  units = hasMany<Unit[]>(this.unitKeys, `${this.key}.units`);
+
+  /*
+   * Computed
+   */
+  // todo add here
+
+  /*
+   * Actions
+   */
+  // todo add here
 }

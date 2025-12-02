@@ -1,10 +1,11 @@
-import { hasMany } from "@/objects/game/_mixins";
+import { hasMany, hasOne } from "@/objects/game/_relations";
 import { TypeObject } from "@/types/typeObjects";
-import { computed, ref } from "vue";
+import { computed, ComputedRef, ref } from "vue";
 import { GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
 import { useObjectsStore } from "@/stores/objectStore";
-import { Citizen } from "@/objects/game/Citizen";
-import { Player } from "@/objects/game/Player";
+import type { Citizen } from "@/objects/game/Citizen";
+import type { Player } from "@/objects/game/Player";
+import type { City } from "@/objects/game/City";
 
 export type ReligionStatus = "myths" | "gods" | "dogmas";
 
@@ -20,13 +21,15 @@ export class Religion extends GameObject {
     dogmas: TypeObject[] = [],
   ) {
     super(key);
-    this.name = name;
-    this.cityKey = cityKey;
-    this.foundedTurn = foundedTurn;
-    if (status) this.status.value = status;
-    this.myths.value = myths;
-    this.gods.value = gods;
     this.dogmas.value = dogmas;
+    this.foundedTurn = foundedTurn;
+    this.gods.value = gods;
+    this.name = name;
+    this.myths.value = myths;
+    if (status) this.status.value = status;
+
+    this.cityKey = cityKey;
+    this.city = hasOne<City>(this.cityKey, `${this.key}.city`);
   }
 
   static attrsConf: GameObjAttr[] = [
@@ -43,39 +46,50 @@ export class Religion extends GameObject {
     { attrName: "dogmas", isOptional: true, isTypeObjArray: true },
   ];
 
-  name: string;
-  foundedTurn: number;
-  status = ref<ReligionStatus>("myths");
-  myths = ref<TypeObject[]>([]);
-  gods = ref<TypeObject[]>([]);
+  /*
+   * Attributes
+   */
   dogmas = ref<TypeObject[]>([]);
+  foundedTurn: number;
+  gods = ref<TypeObject[]>([]);
+  name: string;
+  myths = ref<TypeObject[]>([]);
+  status = ref<ReligionStatus>("myths");
 
+  /*
+   * Relations
+   */
   citizenKeys = ref([] as GameKey[]);
-  citizens = hasMany(this.citizenKeys, Citizen);
+  citizens = hasMany<Citizen>(this.citizenKeys, `${this.key}.citizens`);
 
   cityKey: GameKey;
-  city = computed(() => useObjectsStore().get(this.cityKey) as GameObject);
+  city: ComputedRef<City>;
 
   playerKeys = ref([] as GameKey[]);
-  players = hasMany(this.playerKeys, Player);
+  players = hasMany<Player>(this.playerKeys, `${this.key}.players`);
 
-  selectableMyths = computed((): TypeObject[] => {
-    if (this.status.value !== "myths") return [];
+  /*
+   * Computed
+   */
+  canEvolve = computed(() => false);
+
+  selectableDogmas = computed((): TypeObject[] => {
+    if (this.status.value !== "dogmas") return [];
 
     const selectable: TypeObject[] = [];
-    for (const myth of useObjectsStore().getClassTypes("mythType")) {
+    for (const dogma of useObjectsStore().getClassTypes("dogmaType")) {
       // Category already chosen
-      if (this.myths.value.some((m) => m.category === myth.category)) {
+      if (this.dogmas.value.some((m) => m.category === dogma.category)) {
         continue;
       }
 
       if (
-        myth.requires.isEmpty ||
+        dogma.requires.isEmpty ||
         // IDE mixes up ref contents
         // eslint-disable-next-line
-        myth.requires.isSatisfied(this.myths.value as any)
+        dogma.requires.isSatisfied(this.dogmas.value as any)
       ) {
-        selectable.push(myth);
+        selectable.push(dogma);
       }
     }
 
@@ -105,23 +119,23 @@ export class Religion extends GameObject {
     return selectable;
   });
 
-  selectableDogmas = computed((): TypeObject[] => {
-    if (this.status.value !== "dogmas") return [];
+  selectableMyths = computed((): TypeObject[] => {
+    if (this.status.value !== "myths") return [];
 
     const selectable: TypeObject[] = [];
-    for (const dogma of useObjectsStore().getClassTypes("dogmaType")) {
+    for (const myth of useObjectsStore().getClassTypes("mythType")) {
       // Category already chosen
-      if (this.dogmas.value.some((m) => m.category === dogma.category)) {
+      if (this.myths.value.some((m) => m.category === myth.category)) {
         continue;
       }
 
       if (
-        dogma.requires.isEmpty ||
+        myth.requires.isEmpty ||
         // IDE mixes up ref contents
         // eslint-disable-next-line
-        dogma.requires.isSatisfied(this.dogmas.value as any)
+        myth.requires.isSatisfied(this.myths.value as any)
       ) {
-        selectable.push(dogma);
+        selectable.push(myth);
       }
     }
 
@@ -135,5 +149,8 @@ export class Religion extends GameObject {
     ...this.dogmas.value,
   ]);
 
-  canEvolve = computed(() => false);
+  /*
+   * Actions
+   */
+  // todo add here
 }

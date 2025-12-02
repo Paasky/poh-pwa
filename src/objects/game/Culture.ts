@@ -1,21 +1,24 @@
-import { hasMany } from "@/objects/game/_mixins";
+import { hasMany, hasOne } from "@/objects/game/_relations";
 import { TypeObject } from "@/types/typeObjects";
-import { computed, Ref, ref, UnwrapRef } from "vue";
+import { computed, ComputedRef, Ref, ref, UnwrapRef } from "vue";
 import { CatKey, TypeKey } from "@/types/common";
 import { EventManager } from "@/managers/EventManager";
 import { Yields } from "@/objects/yield";
 import { GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
 import { useObjectsStore } from "@/stores/objectStore";
-import { Citizen } from "@/objects/game/Citizen";
-import { Player } from "@/objects/game/Player";
+import type { Citizen } from "@/objects/game/Citizen";
+import type { Player } from "@/objects/game/Player";
 
 export type CultureStatus = "notSettled" | "canSettle" | "mustSettle" | "settled";
 
 export class Culture extends GameObject {
   constructor(key: GameKey, type: TypeObject, playerKey: GameKey) {
     super(key);
+
     this.type = ref(type);
+
     this.playerKey = playerKey;
+    this.player = hasOne<Player>(this.playerKey, `${this.key}.player`);
   }
 
   static attrsConf: GameObjAttr[] = [
@@ -27,23 +30,38 @@ export class Culture extends GameObject {
     },
   ];
 
+  /*
+   * Attributes
+   */
+  heritages = ref([] as TypeObject[]);
+  heritageCategoryPoints = ref({} as Record<CatKey, number>);
+  mustSelectTraits = ref({ positive: 0, negative: 0 });
+  status = ref<CultureStatus>("notSettled");
+  traits = ref([] as TypeObject[]);
   type: Ref<UnwrapRef<TypeObject>, UnwrapRef<TypeObject> | TypeObject>;
 
+  /*
+   * Relations
+   */
   citizenKeys = ref([] as GameKey[]);
-  citizens = hasMany(this.citizenKeys, Citizen);
+  citizens = hasMany<Citizen>(this.citizenKeys, `${this.key}.citizens`);
 
   playerKey: GameKey;
-  player = computed(() => useObjectsStore().get(this.playerKey) as Player);
+  player: ComputedRef<Player>;
 
+  /*
+   * Computed
+   */
   leader = computed(() =>
     useObjectsStore().getTypeObject(
       this.type.value.allows.find((a) => a.indexOf("LeaderType:") >= 0) as TypeKey,
     ),
   );
-  status = ref<CultureStatus>("notSettled");
 
-  heritages = ref([] as TypeObject[]);
-  heritageCategoryPoints = ref({} as Record<CatKey, number>);
+  region = computed((): TypeObject => {
+    const key = this.type.value.requires!.filter(["regionType"]).allTypes[0] as TypeKey;
+    return useObjectsStore().getTypeObject(key);
+  });
 
   selectableHeritages = computed((): TypeObject[] => {
     if (this.status.value === "mustSettle") return [];
@@ -72,9 +90,6 @@ export class Culture extends GameObject {
     return selectable;
   });
 
-  traits = ref([] as TypeObject[]);
-  mustSelectTraits = ref({ positive: 0, negative: 0 });
-
   selectableTraits = computed((): TypeObject[] => {
     if (this.status.value !== "settled") return [];
 
@@ -99,11 +114,13 @@ export class Culture extends GameObject {
     return selectable;
   });
 
-  region = computed((): TypeObject => {
-    const key = this.type.value.requires!.filter(["regionType"]).allTypes[0] as TypeKey;
-    return useObjectsStore().getTypeObject(key);
-  });
+  types = computed(() => [this.concept, ...this.heritages.value, ...this.traits.value]);
 
+  yields = computed(() => new Yields(this.types.value.flatMap((t) => t.yields.all())));
+
+  /*
+   * Actions
+   */
   addHeritagePoints(catKey: CatKey, points: number) {
     this.heritageCategoryPoints.value[catKey] =
       (this.heritageCategoryPoints.value[catKey] ?? 0) + points;
@@ -172,7 +189,4 @@ export class Culture extends GameObject {
     this.mustSelectTraits.value = { positive: 2, negative: 2 };
     new EventManager().create("settled", `settled down`, this.player.value, this);
   }
-
-  types = computed(() => [this.concept, ...this.heritages.value, ...this.traits.value]);
-  yields = computed(() => new Yields(this.types.value.flatMap((t) => t.yields.all())));
 }

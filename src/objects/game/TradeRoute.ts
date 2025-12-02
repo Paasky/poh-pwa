@@ -1,10 +1,9 @@
-import { computed, ref } from "vue";
-import { hasMany } from "@/objects/game/_mixins";
+import { ComputedRef, ref } from "vue";
+import { hasMany, hasOne } from "@/objects/game/_relations";
 import { GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
-import { City } from "@/objects/game/City";
-import { useObjectsStore } from "@/stores/objectStore";
-import { Unit } from "@/objects/game/Unit";
-import { Tile } from "@/objects/game/Tile";
+import type { City } from "@/objects/game/City";
+import type { Unit } from "@/objects/game/Unit";
+import type { Tile } from "@/objects/game/Tile";
 
 export class TradeRoute extends GameObject {
   constructor(
@@ -15,10 +14,17 @@ export class TradeRoute extends GameObject {
     unitKey: GameKey,
   ) {
     super(key);
+
     this.city1Key = city1Key;
+    this.city1 = hasOne<City>(this.city1Key, `${this.key}.city1`);
+
     this.city2Key = city2Key;
+    this.city2 = hasOne<City>(this.city2Key, `${this.key}.city2`);
+
     this.tileKeys.value = tileKeys;
+
     this.unitKey = unitKey;
+    this.unit = hasOne<Unit>(this.unitKey, `${this.key}.unit`);
   }
 
   static attrsConf: GameObjAttr[] = [
@@ -43,18 +49,34 @@ export class TradeRoute extends GameObject {
     },
   ];
 
-  city1Key = "" as GameKey;
-  city1 = computed(() => useObjectsStore().get(this.city1Key) as City);
+  /*
+   * Attributes
+   */
+  // todo add here
 
-  city2Key = "" as GameKey;
-  city2 = computed(() => useObjectsStore().get(this.city2Key) as City);
+  /*
+   * Relations
+   */
+  city1Key: GameKey;
+  city1: ComputedRef<City>;
+
+  city2Key: GameKey;
+  city2: ComputedRef<City>;
 
   tileKeys = ref([] as GameKey[]);
-  tiles = hasMany(this.tileKeys, Tile);
+  tiles = hasMany<Tile>(this.tileKeys, `${this.key}.tiles`);
 
-  unitKey = "" as GameKey;
-  unit = computed(() => useObjectsStore().get(this.unitKey) as Unit);
+  unitKey: GameKey;
+  unit: ComputedRef<Unit>;
 
+  /*
+   * Computed
+   */
+  // todo add here
+
+  /*
+   * Actions
+   */
   delete(unitIsDead = false) {
     this.city1.value.tradeRouteKeys.value = this.city1.value.tradeRouteKeys.value.filter(
       (k) => k !== this.key,

@@ -1,16 +1,16 @@
-import { canHaveOne, hasOne } from "@/objects/game/_mixins";
+import { canHaveOne, hasOne } from "@/objects/game/_relations";
 import { TypeObject } from "@/types/typeObjects";
-import { computed, ref } from "vue";
+import { computed, ComputedRef, Ref, ref } from "vue";
 import { Yields } from "@/objects/yield";
 import { roundToTenth } from "@/types/common";
 import { EventManager } from "@/managers/EventManager";
 import { GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
 import { useObjectsStore } from "@/stores/objectStore";
-import { UnitDesign } from "@/objects/game/UnitDesign";
-import { Player } from "@/objects/game/Player";
-import { TradeRoute } from "@/objects/game/TradeRoute";
-import { City } from "@/objects/game/City";
-import { Tile } from "@/objects/game/Tile";
+import type { UnitDesign } from "@/objects/game/UnitDesign";
+import type { City } from "@/objects/game/City";
+import type { Player } from "@/objects/game/Player";
+import type { TradeRoute } from "@/objects/game/TradeRoute";
+import type { Tile } from "@/objects/game/Tile";
 
 // mercenary: +10% strength, +50% upkeep, 1/city/t;
 // regular: no effects
@@ -44,17 +44,26 @@ export class Unit extends GameObject {
     origPlayerKey?: GameKey,
   ) {
     super(key);
-    this.designKey = designKey;
-    this.playerKey.value = playerKey;
-    this.origPlayerKey = origPlayerKey ?? playerKey;
-    this.tileKey.value = tileKey;
-    if (cityKey) this.cityKey.value = cityKey;
-    if (name) this.name.value = name;
     if (action) this.action.value = action;
     this.canAttack.value = canAttack;
     this.health.value = health;
     this.moves.value = moves;
+    if (name) this.name.value = name;
     this.status.value = status;
+
+    if (cityKey) this.cityKey.value = cityKey;
+
+    this.designKey = designKey;
+
+    // noinspection DuplicatedCode
+    this.origPlayerKey = origPlayerKey ?? playerKey;
+    this.origPlayer = hasOne<Player>(this.origPlayerKey, `${this.key}.origPlayer`);
+
+    this.playerKey = ref(playerKey);
+    this.player = hasOne<Player>(this.playerKey, `${this.key}.player`);
+
+    this.tileKey = ref(tileKey);
+    this.tile = hasOne<Tile>(this.tileKey, `${this.key}.tile`);
   }
 
   static attrsConf: GameObjAttr[] = [
@@ -83,59 +92,70 @@ export class Unit extends GameObject {
     },
   ];
 
-  name = ref("");
+  /*
+   * Attributes
+   */
   action = ref<TypeObject | null>(null);
   canAttack = ref(false);
   health = ref(100);
   moves = ref(0);
+  name = ref("");
   status = ref("regular" as UnitStatus);
 
+  /*
+   * Relations
+   */
   cityKey = ref(null as GameKey | null);
-  city = canHaveOne(this.cityKey, City);
+  city = canHaveOne<City>(this.cityKey, `${this.key}.city`);
 
   designKey: GameKey;
   design = computed(() => useObjectsStore().get(this.designKey) as UnitDesign);
 
-  playerKey = ref<GameKey>("" as GameKey);
-  player = computed(() => useObjectsStore().get(this.playerKey.value) as Player);
+  playerKey: Ref<GameKey>;
+  player: ComputedRef<Player>;
 
   origPlayerKey: GameKey;
-  origPlayer = computed(() => useObjectsStore().get(this.origPlayerKey) as Player);
+  origPlayer: ComputedRef<Player>;
 
-  tileKey = ref("" as GameKey);
-  tile = hasOne(this.tileKey, Tile);
+  tileKey: Ref<GameKey>;
+  tile: ComputedRef<Tile>;
 
   tradeRouteKey = ref<GameKey | null>(null);
-  tradeRoute = canHaveOne(this.tradeRouteKey, TradeRoute);
+  tradeRoute = canHaveOne<TradeRoute>(this.tradeRouteKey, `${this.key}.tradeRoute`);
 
+  /*
+   * Computed
+   */
   myTypes = computed((): TypeObject[] => [
     this.concept,
     this.design.value.platform,
     this.design.value.equipment,
   ]);
-  types = computed((): TypeObject[] => {
-    return this.myTypes.value.concat(this.tile.value.types.value);
-  });
 
-  // yields.only runs a filter, so reduce compute-ref-chaining by storing the result here
-  private _playerYields = computed(() =>
+  playerYields = computed(() =>
     this.player.value.yields.value.only(this.concept.inheritYieldTypes!, this.types.value),
   );
 
-  // yields.only runs a filter, so reduce compute-ref-chaining by storing the result here
-  private _tileYields = computed(() =>
+  tileYields = computed(() =>
     this.tile.value.yields.value.only(this.concept.inheritYieldTypes!, this.types.value),
   );
+
+  types = computed((): TypeObject[] => {
+    return this.myTypes.value.concat(this.tile.value.types.value);
+  });
 
   yields = computed(
     () =>
       new Yields([
         ...this.design.value.yields.all(),
-        ...this._playerYields.value.all(),
-        ...this._tileYields.value.all(),
+        ...this.playerYields.value.all(),
+        ...this.tileYields.value.all(),
       ]),
   );
 
+  /*
+   * Actions
+   */
   delete() {
     if (this.city.value)
       this.city.value.unitKeys.value = this.city.value.unitKeys.value.filter((u) => u !== this.key);

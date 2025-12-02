@@ -131,7 +131,7 @@ export class GameDataLoader {
           if (!attrConf.isOptional) {
             // noinspection ExceptionCaughtLocallyJS
             throw new Error(
-              `Required attribute for ${JSON.stringify(attrConf)} missing in ${JSON.stringify(obj)}`,
+              `Required attribute for ${JSON.stringify(attrConf)} missing in raw data: ${JSON.stringify(obj)}`,
             );
           }
           continue;
@@ -144,7 +144,7 @@ export class GameDataLoader {
           this._setToRelatedObj(obj, relatedKey as GameKey, attrConf, objects);
         }
       } catch (e) {
-        const msg = `obj: ${obj.key}, conf: ${JSON.stringify(attrConf)}, msg: ${(e as any).message}`;
+        const msg = `GameObject.key: '${obj.key}', Attribute: ${JSON.stringify(attrConf)}, Message: ${(e as any).message}`;
         throw new Error(msg);
       }
     }
@@ -160,14 +160,14 @@ export class GameDataLoader {
     // noinspection SuspiciousTypeOfGuard
     if (typeof relatedKey !== "string") {
       throw new Error(
-        `Invalid related key type: "${typeof relatedKey}" for ${JSON.stringify(attrConf)} in ${JSON.stringify(obj)}`,
+        `Invalid related key data type "${typeof relatedKey}". Raw data ${JSON.stringify(obj)}`,
       );
     }
 
     const relatedObj = objects[relatedKey];
     if (!relatedObj) {
       throw new Error(
-        `Related object ${relatedKey} not found for ${JSON.stringify(attrConf)} in ${JSON.stringify(obj)}`,
+        `Related object '${relatedKey}' does not exist. Raw data: ${JSON.stringify(obj)}`,
       );
     }
 

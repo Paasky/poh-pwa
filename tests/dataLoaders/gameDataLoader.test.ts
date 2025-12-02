@@ -3,6 +3,7 @@ import { GameDataLoader } from "../../src/dataLoaders/GameDataLoader";
 import { initTestPinia, loadStaticData } from "../_setup/pinia";
 import { Tile } from "../../src/objects/game/Tile";
 import { GameData } from "../../src/types/api";
+import { Culture } from "../../src/objects/game/Culture";
 
 describe("gameDataLoader", () => {
   beforeEach(() => initTestPinia() && loadStaticData());
@@ -53,7 +54,7 @@ describe("gameDataLoader", () => {
     expect(() =>
       loader.initFromRaw({ objects: [playerData, invalidRelationKey] } as GameData),
     ).toThrow(
-      `obj: culture:1, conf: {"attrName":"playerKey","attrNotRef":true,"related":{"theirKeyAttr":"cultureKey","isOne":true}}, msg: Related object player:2 not found for {"attrName":"playerKey","attrNotRef":true,"related":{"theirKeyAttr":"cultureKey","isOne":true}} in {"key":"culture:1","type":"majorCultureType:viking","playerKey":"player:2"}`,
+      `GameObject.key: 'culture:1', Attribute: ${JSON.stringify(Culture.attrsConf[1])}, Message: Related object 'player:2' does not exist. Raw data: ${JSON.stringify(invalidRelationKey)}`,
     );
   });
 
@@ -63,11 +64,15 @@ describe("gameDataLoader", () => {
     const tileCoords = { x: 12, y: 23 };
     const tileKey = Tile.getKey(tileCoords.x, tileCoords.y);
 
-    // todo Agenda
+    const agendaData = {
+      key: "agenda:1",
+      playerKey: "player:1",
+    };
     const citizenData = {
       key: "citizen:1",
       cityKey: "city:1",
       cultureKey: "culture:1",
+      playerKey: "player:1",
       tileKey: tileKey,
     };
     const cityData = {
@@ -76,13 +81,21 @@ describe("gameDataLoader", () => {
       tileKey: tileKey,
       name: "test city",
     };
-    // todo Construction
+    const constructionData = {
+      key: "construction:1",
+      tileKey: tileKey,
+      type: "buildingType:palisades",
+    };
     const cultureData = {
       key: "culture:1",
       type: "majorCultureType:viking",
       playerKey: "player:1",
     };
-    // todo Deal
+    const dealData = {
+      key: "deal:1",
+      fromPlayerKey: "player:1",
+      toPlayerKey: "player:1",
+    };
     const playerData = {
       key: "player:1",
       name: "test player",
@@ -130,9 +143,12 @@ describe("gameDataLoader", () => {
 
     const gameObjects = loader.initFromRaw({
       objects: [
+        agendaData,
         citizenData,
         cityData,
+        constructionData,
         cultureData,
+        dealData,
         playerData,
         religionData,
         tileData,
@@ -144,6 +160,7 @@ describe("gameDataLoader", () => {
 
     // output = input + defaults
     expect(JSON.parse(JSON.stringify(gameObjects))).toEqual({
+      "agenda:1": agendaData,
       "citizen:1": citizenData,
       "city:1": {
         ...cityData,
@@ -152,7 +169,9 @@ describe("gameDataLoader", () => {
         isCapital: false,
         origPlayerKey: "player:1",
       },
+      "construction:1": { ...constructionData, health: 100, progress: 0 },
       "culture:1": cultureData,
+      "deal:1": dealData,
       "player:1": { ...playerData, isCurrent: false },
       "religion:1": { ...religionData, status: "myths" },
       "tile:x12,y23": tileData,

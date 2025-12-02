@@ -105,8 +105,13 @@ export abstract class Queue {
         : null;
 
     // Add and apply modifiers
+    const forObjs =
+      queueItem.item.class === "construction"
+        ? [(queueItem.item as Construction).type]
+        : (queueItem.item as UnitDesign).types;
+
     const turnYields = cityYieldMods
-      .only(["yieldType:production"], queueItem.item.types)
+      .only(["yieldType:production"], forObjs)
       .add(...([myProduction, extraYield].filter(Boolean) as Yield[]))
       .applyMods();
 

@@ -6,6 +6,7 @@ export type GameClass =
   | "agenda"
   | "citizen"
   | "city"
+  | "construction"
   | "culture"
   | "deal"
   | "river"

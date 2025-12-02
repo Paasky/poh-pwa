@@ -1,46 +1,55 @@
-import { hasMany } from "@/objects/game/_mixins";
+import { hasMany, hasOne } from "@/objects/game/_relations";
 import { TypeObject } from "@/types/typeObjects";
-import { computed, ref } from "vue";
+import { computed, ComputedRef, ref } from "vue";
 import { Yield, Yields } from "@/objects/yield";
 import { GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
-import { Citizen } from "@/objects/game/Citizen";
-import { Tile } from "@/objects/game/Tile";
-import { useObjectsStore } from "@/stores/objectStore";
+import type { Citizen } from "@/objects/game/Citizen";
+import type { Tile } from "@/objects/game/Tile";
 
 export class Construction extends GameObject {
   constructor(key: GameKey, type: TypeObject, tileKey: GameKey, health = 100, progress = 0) {
     super(key);
-    this.type = type;
-    this.tileKey = tileKey;
-    this.name = type.name;
-    this.types = [type];
     this.health.value = health;
+    this.name = type.name;
     this.progress.value = progress;
+    this.type = type;
+
+    this.tileKey = tileKey;
+    this.tile = hasOne<Tile>(this.tileKey, `${this.key}.tile`);
   }
 
   static attrsConf: GameObjAttr[] = [
     { attrName: "type", attrNotRef: true, isTypeObj: true },
     {
       attrName: "tileKey",
+      attrNotRef: true,
       related: { theirKeyAttr: "constructionKey", isOne: true },
     },
     { attrName: "health", isOptional: true },
     { attrName: "progress", isOptional: true },
   ];
 
-  type: TypeObject; // buildingType/improvementType/nationalWonderType/worldWonderType
-  name: string;
-  health = ref(100);
-  progress = ref(0);
+  /*
+   * Attributes
+   */
   completedAtTurn = ref(null as number | null);
+  health = ref(100);
+  name: string;
+  progress = ref(0);
+  type: TypeObject; // buildingType/improvementType/nationalWonderType/worldWonderType
 
+  /*
+   * Relations
+   */
   citizenKeys = ref([] as GameKey[]);
-  citizens = hasMany(this.citizenKeys, Citizen);
+  citizens = hasMany<Citizen>(this.citizenKeys, `${this.key}.citizens`);
 
-  tileKey = "" as GameKey;
-  tile = computed(() => useObjectsStore().get(this.tileKey) as Tile);
+  tileKey: GameKey;
+  tile: ComputedRef<Tile>;
 
-  types: TypeObject[];
+  /*
+   * Computed
+   */
   yields = computed(() => {
     // Is a Wonder or full health -> no yield changes
     if (
@@ -67,4 +76,9 @@ export class Construction extends GameObject {
     }
     return new Yields(yields);
   });
+
+  /*
+   * Actions
+   */
+  // todo add here
 }
