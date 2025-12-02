@@ -261,6 +261,8 @@ export class GameLevel {
       }
     }
 
+    this.gen.rivers = rivers;
+
     return this;
   }
 }

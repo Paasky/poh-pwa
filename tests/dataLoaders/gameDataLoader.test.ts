@@ -3,7 +3,7 @@ import { GameDataLoader } from "../../src/dataLoaders/GameDataLoader";
 import { initTestPinia, loadStaticData } from "../_setup/pinia";
 import { Tile } from "../../src/objects/game/Tile";
 import { GameData } from "../../src/types/api";
-import { Culture } from "../../src/objects/game/Culture";
+import { Player } from "../../src/objects/game/Player";
 
 describe("gameDataLoader", () => {
   beforeEach(() => initTestPinia() && loadStaticData());
@@ -26,11 +26,11 @@ describe("gameDataLoader", () => {
       `Invalid game obj class: undefined in config for class 'test'`,
     );
 
-    const withoutName = {
+    const withoutCultureKey = {
       key: "player:1",
     };
-    expect(() => loader.initFromRaw({ objects: [withoutName] } as GameData)).toThrow(
-      `Required attribute 'name' missing from ${JSON.stringify(withoutName)}`,
+    expect(() => loader.initFromRaw({ objects: [withoutCultureKey] } as GameData)).toThrow(
+      `Required attribute 'cultureKey' missing from ${JSON.stringify(withoutCultureKey)}`,
     );
 
     const invalidTypeKey = {
@@ -44,17 +44,11 @@ describe("gameDataLoader", () => {
 
     const playerData = {
       key: "player:1",
+      cultureKey: "culture:1",
       name: "test player",
     };
-    const invalidRelationKey = {
-      key: "culture:1",
-      type: "majorCultureType:viking",
-      playerKey: "player:2",
-    };
-    expect(() =>
-      loader.initFromRaw({ objects: [playerData, invalidRelationKey] } as GameData),
-    ).toThrow(
-      `GameObject.key: 'culture:1', Attribute: ${JSON.stringify(Culture.attrsConf[1])}, Message: Related object 'player:2' does not exist. Raw data: ${JSON.stringify(invalidRelationKey)}`,
+    expect(() => loader.initFromRaw({ objects: [playerData] } as GameData)).toThrow(
+      `GameObject.key: 'player:1', Attribute: ${JSON.stringify(Player.attrsConf[0])}, Message: Related object 'culture:1' does not exist. Raw data: ${JSON.stringify({ ...playerData, isCurrent: false })}`,
     );
   });
 
@@ -98,6 +92,7 @@ describe("gameDataLoader", () => {
     };
     const playerData = {
       key: "player:1",
+      cultureKey: "culture:1",
       name: "test player",
     };
     const religionData = {
@@ -195,11 +190,21 @@ describe("gameDataLoader", () => {
     const playerData = {
       key: "player:1",
       name: "test player",
+      cultureKey: "culture:1",
       isCurrent: true,
     };
 
-    const gameObjects = loader.initFromRaw({ objects: [playerData] } as GameData);
+    const cultureData = {
+      key: "culture:1",
+      type: "majorCultureType:viking",
+      playerKey: "player:1",
+    };
 
-    expect(JSON.parse(JSON.stringify(gameObjects))).toEqual({ "player:1": playerData });
+    const gameObjects = loader.initFromRaw({ objects: [playerData, cultureData] } as GameData);
+
+    expect(JSON.parse(JSON.stringify(gameObjects))).toEqual({
+      "player:1": playerData,
+      "culture:1": cultureData,
+    });
   });
 });

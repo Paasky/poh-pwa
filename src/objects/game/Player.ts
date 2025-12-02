@@ -18,7 +18,13 @@ import type { TradeRoute } from "@/objects/game/TradeRoute";
 import type { Unit } from "@/objects/game/Unit";
 
 export class Player extends GameObject {
-  constructor(key: GameKey, name: string, isCurrent = false, religionKey?: GameKey) {
+  constructor(
+    key: GameKey,
+    cultureKey: GameKey,
+    name: string,
+    isCurrent = false,
+    religionKey?: GameKey,
+  ) {
     super(key);
 
     this.isCurrent = isCurrent;
@@ -27,15 +33,18 @@ export class Player extends GameObject {
     this.research = new Research(key);
 
     // Culture is special:
-    // - new game: set by WorldFactory.createWorld()
-    // - load game: set by GameDataLoader._buildBackRelations()
-    this.cultureKey = "" as GameKey;
+    this.cultureKey = cultureKey;
     this.culture = hasOne<Culture>(this.cultureKey, `${this.key}.culture`);
 
     if (religionKey) this.religionKey.value = religionKey;
   }
 
   static attrsConf: GameObjAttr[] = [
+    {
+      attrName: "cultureKey",
+      attrNotRef: true,
+      related: { theirKeyAttr: "playerKey", isOne: true },
+    },
     { attrName: "name", attrNotRef: true },
     { attrName: "isCurrent", attrNotRef: true, isOptional: true },
     {

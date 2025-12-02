@@ -8,6 +8,7 @@ import { Culture } from "@/objects/game/Culture";
 import { UnitDesign } from "@/objects/game/UnitDesign";
 import { Unit } from "@/objects/game/Unit";
 import { GameData } from "@/types/api";
+import { Tile } from "@/objects/game/Tile";
 
 export type WorldSize = {
   name: string;
@@ -78,6 +79,7 @@ export const createWorld = (size: WorldSize): GameData => {
   } as GameData;
 
   const objects = [] as object[];
+  const players = [] as Player[];
 
   // Init global data
   const cultureTypes = objStore.getClassTypes("majorCultureType");
@@ -118,20 +120,45 @@ export const createWorld = (size: WorldSize): GameData => {
   const gen = new TerraGenerator(size).generateStratLevel().generateRegLevel().generateGameLevel();
   objects.push(...Object.values(gen.gameTiles), ...Object.values(gen.rivers));
 
+  // Validate that all tiles & rivers exist
+  for (let y = 0; y < size.y; y++) {
+    for (let x = 0; x < size.x; x++) {
+      const tile = gen.gameTiles[Tile.getKey(x, y)];
+      if (!tile) {
+        throw new Error(`Tile (x${x},y${y}) not found in generated tiles`);
+      }
+      if (tile.riverKey) {
+        const river = gen.rivers[tile.riverKey];
+        if (!river) {
+          throw new Error(
+            `River ${tile.riverKey} not found in generated rivers: ${JSON.stringify(Object.keys(gen.rivers))}`,
+          );
+        }
+      }
+    }
+  }
+
   for (const continentData of Object.values(gen.continents)) {
     const continentStartCultures = cultureTypes.filter(
       (c) => !c.upgradesFrom.length && c.category!.includes(`:${continentData.type.id}`),
     );
 
     for (const tile of continentData.majorStarts.game) {
-      const player = new Player(generateKey("player"), "Player", !bundle.world.currentPlayer);
+      const cultureKey = generateKey("culture");
+      const player = new Player(
+        generateKey("player"),
+        cultureKey,
+        "Player " + (players.length + 1),
+        !bundle.world.currentPlayer,
+      );
       objects.push(player);
+      players.push(player);
       if (player.isCurrent) {
         bundle.world.currentPlayer = player.key;
       }
 
       const cultureType = takeRandom(continentStartCultures);
-      const culture = new Culture(generateKey("culture"), cultureType, player.key);
+      const culture = new Culture(cultureKey, cultureType, player.key);
 
       objects.push(culture);
       player.cultureKey = culture.key;
@@ -144,8 +171,21 @@ export const createWorld = (size: WorldSize): GameData => {
       player.unitKeys.value.push(hunter.key, tribe.key);
     }
   }
+
+  // Validate players
   if (!bundle.world.currentPlayer) {
     throw new Error("No current player set");
+  }
+  for (const player of players) {
+    if (!player.cultureKey) {
+      throw new Error(`Player ${player.key} has no culture`);
+    }
+    if (player.designKeys.value.length < 3) {
+      throw new Error(`Player ${player.key} has less than 3 designs`);
+    }
+    if (player.unitKeys.value.length < 2) {
+      throw new Error(`Player ${player.key} has less than 2 units`);
+    }
   }
 
   bundle.objects = objects;

@@ -52,11 +52,17 @@ export class Culture extends GameObject {
   /*
    * Computed
    */
-  leader = computed(() =>
-    useObjectsStore().getTypeObject(
-      this.type.value.allows.find((a) => a.indexOf("LeaderType:") >= 0) as TypeKey,
-    ),
-  );
+  leader = computed(() => {
+    const leaderKey = this.type.value.allows.find(
+      (a) => a.indexOf("majorLeaderType:") >= 0,
+    ) as TypeKey;
+    if (!leaderKey) {
+      throw new Error(
+        `${this.type.value.key}.allows has no majorLeaderType: ${JSON.stringify(this.type.value.allows)}`,
+      );
+    }
+    return useObjectsStore().getTypeObject(leaderKey);
+  });
 
   region = computed((): TypeObject => {
     const key = this.type.value.requires!.filter(["regionType"]).allTypes[0] as TypeKey;
