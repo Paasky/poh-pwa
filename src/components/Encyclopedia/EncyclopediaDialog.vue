@@ -1,0 +1,259 @@
+<script setup lang="ts">
+import { reactive, ref } from "vue";
+
+// todo convert to v-model
+const isOpen = ref(true);
+
+// todo add an outside accessor open(itemKey:string)
+
+const state = reactive({
+  current: null as null | MenuItem,
+  openSections: [] as string[],
+  search: "",
+  status: "",
+});
+
+// Temporary hierarchical data
+type MenuItem = {
+  key: string;
+  title: string;
+  children?: MenuItem[];
+};
+const menuData: MenuItem[] = [
+  {
+    key: "level:1",
+    title: "Top Level 1",
+    children: [
+      { key: "level:1.1", title: "Mid Level 1.1" },
+      { key: "level:1.2", title: "Mid Level 1.2" },
+    ],
+  },
+  {
+    key: "level:2",
+    title: "Top Level 2",
+    children: [
+      {
+        key: "level:2.1",
+        title: "Mid Level 2.1",
+        children: [
+          { key: "level:2.1.1", title: "Low level 2.1.1" },
+          { key: "level:2.1.2", title: "Low level 2.1.2" },
+        ],
+      },
+      { key: "level:2.2", title: "Mid Level 2.2" },
+    ],
+  },
+];
+
+function toggle(itemKey: string) {
+  if (state.openSections.includes(itemKey)) {
+    state.openSections = state.openSections.filter((s) => s !== itemKey);
+    return;
+  }
+
+  const item = findKeyInData(itemKey);
+  if (item) {
+    // Has kids -> it's a togglable section
+    if (item.children?.length) {
+      state.openSections.push(itemKey);
+    } else {
+      // No kids -> it's an entry
+      state.current = item;
+    }
+  } else {
+    state.current = null;
+    state.status = `${itemKey} not found`;
+  }
+}
+
+function open(itemKey: string) {
+  isOpen.value = true;
+  const item = findKeyInData(itemKey);
+  if (item) {
+    state.current = item;
+  } else {
+    state.current = null;
+    state.status = `${itemKey} not found`;
+  }
+}
+
+function findKeyInData(itemKey: string, data?: MenuItem[]): MenuItem | null {
+  // Look in current level
+  for (const menuItem of data ?? menuData) {
+    if (menuItem.key === itemKey) {
+      return menuItem;
+    }
+  }
+
+  // Crawl children
+  for (const menuItem of data ?? menuData) {
+    if (menuItem.children?.length) {
+      const foundItem = findKeyInData(itemKey, menuItem.children);
+      if (foundItem) return foundItem;
+    }
+  }
+
+  // Not found
+  return null;
+}
+</script>
+
+<template>
+  <v-dialog :model-value="isOpen" max-width="1400">
+    <v-card rounded="lg" color="surface">
+      <div style="min-height: 60vh; max-height: 80vh">
+        <v-toolbar density="comfortable" class="px-3">
+          <div class="text-subtitle-1">Encyclopedia</div>
+          <v-spacer />
+          <v-text-field
+            v-model="state.search"
+            placeholder="Search"
+            prepend-inner-icon="fa-magnifying-glass"
+            clearable
+            hide-details
+            density="compact"
+            variant="solo"
+            class="mr-2"
+            style="width: 512px"
+          />
+          <v-btn icon variant="text" :title="'Close'">
+            <v-icon icon="fa-xmark" />
+          </v-btn>
+        </v-toolbar>
+        <v-card-text class="pa-0 d-flex ga-4 ga-8-sm">
+          <!-- Left menu -->
+          <div class="border-e" style="width: 512px; overflow: auto">
+            <div
+              v-for="item of menuData"
+              :key="item.key"
+              class="px-2 py-1 cursor-pointer"
+              style="padding-left: 12px"
+              @click.stop="toggle(item.key)"
+            >
+              <div class="d-flex align-center">
+                <v-icon
+                  v-if="item.children?.length"
+                  :icon="state.openSections.includes(item.key) ? 'fa-xmark' : 'fa-bars'"
+                  size="x-small"
+                  class="mr-1 opacity-50"
+                />
+                <span class="text-truncate" :title="item.title">{{ item.title }}</span>
+              </div>
+              <div v-if="item.children?.length && state.openSections.includes(item.key)">
+                <div
+                  v-for="child of item.children"
+                  :key="child.key"
+                  class="px-2 py-1"
+                  style="padding-left: 12px"
+                  @click.stop="toggle(child.key)"
+                >
+                  <div class="d-flex align-center">
+                    <v-icon
+                      v-if="child.children?.length"
+                      :icon="state.openSections.includes(child.key) ? 'fa-xmark' : 'fa-bars'"
+                      size="x-small"
+                      class="mr-1 opacity-50"
+                    />
+                    <span class="text-truncate" :title="child.title">{{ child.title }}</span>
+                  </div>
+                  <div v-if="child.children?.length && state.openSections.includes(child.key)">
+                    <div
+                      v-for="grandChild of child.children"
+                      :key="grandChild.key"
+                      class="px-2 py-1"
+                      style="padding-left: 12px"
+                      @click.stop="toggle(grandChild.key)"
+                    >
+                      <div class="d-flex align-center">
+                        <v-icon
+                          v-if="grandChild.children?.length"
+                          :icon="
+                            state.openSections.includes(grandChild.key) ? 'fa-xmark' : 'fa-bars'
+                          "
+                          size="x-small"
+                          class="mr-1 opacity-50"
+                        />
+                        <span class="text-truncate" :title="grandChild.title">{{
+                          grandChild.title
+                        }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div @click="toggle('invalid')">Invalid</div>
+          </div>
+
+          <!-- Right content -->
+          <div class="flex-grow-1 d-flex flex-grow" style="overflow: auto">
+            <!-- Top bar on right side -->
+
+            <!-- Empty-state placeholder below toolbar -->
+            <div v-if="!state.current" class="flex-grow-1 d-flex align-center justify-center">
+              <div class="opacity-10 text-h3 mt-10">{{ state.status || "Pages of History" }}</div>
+            </div>
+
+            <div v-else class="pa-4 d-flex flex-column ga-4">
+              <div class="text-h6">{{ state.current }}</div>
+              <div class="d-flex ga-4">
+                <!-- Article content -->
+                <div class="flex-grow-1">
+                  <img
+                    src="https://cataas.com/cat?square=1"
+                    alt="preview"
+                    style="
+                      float: left;
+                      width: 50%;
+                      max-width: 512px;
+                      height: auto;
+                      object-fit: cover;
+                      margin-right: 12px;
+                      border-radius: 8px;
+                    "
+                  />
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vitae ante sed
+                    justo pretium pretium. Suspendisse potenti. Cras eget velit non ipsum efficitur
+                    dignissim. Proin ut augue ut tortor egestas sollicitudin. Donec non ante sit
+                    amet lorem ornare cursus. Sed vitae arcu id libero dignissim iaculis. Integer
+                    luctus, sem sed efficitur condimentum, nisl dolor consequat magna, vel feugiat
+                    velit lorem id ipsum.
+                  </p>
+                  <p>
+                    Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac
+                    turpis egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
+                    posuere cubilia curae; Donec eu lorem tortor. Nunc sit amet volutpat justo.
+                  </p>
+                </div>
+
+                <!-- Stats side -->
+                <v-sheet
+                  class="pa-3"
+                  rounded
+                  elevation="2"
+                  style="width: 512px; background-color: rgba(255, 255, 255, 0.1)"
+                >
+                  <div class="text-subtitle-1 mb-2">Stats</div>
+                  <div class="opacity-70 text-body-2">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi porta auctor
+                    luctus.
+                  </div>
+                </v-sheet>
+              </div>
+            </div>
+          </div>
+        </v-card-text>
+      </div>
+    </v-card>
+  </v-dialog>
+</template>
+
+<style scoped>
+.border-e {
+  border-inline-end: 1px solid rgba(255, 255, 255, 0.1);
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+</style>

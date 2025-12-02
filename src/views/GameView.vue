@@ -6,6 +6,7 @@ import { initModalStateSync } from "@/router/modalState";
 import { destroyFullscreen, initFullscreen, toggleFullscreen } from "@/helpers/fullscreen";
 import GameEngine from "@/components/Engine/Engine.vue";
 import UiButton from "@/components/Ui/UiButton.vue";
+import EncyclopediaDialog from "@/components/Encyclopedia/EncyclopediaDialog.vue";
 
 const app = useAppStore();
 const router = useRouter();
@@ -223,8 +224,11 @@ function confirmQuit() {
       <!-- Bottom-right -->
 
       <!-- Modals -->
+      <!-- Encyclopedia -->
+      <EncyclopediaDialog />
+
       <!-- Quit confirmation dialog -->
-      <v-dialog v-model="showQuitConfirm" max-width="480" persistent>
+      <v-dialog v-model="showQuitConfirm" max-width="1440" persistent>
         <v-card rounded="lg">
           <v-card-title class="text-h6">Confirm Quit</v-card-title>
           <v-card-text>
