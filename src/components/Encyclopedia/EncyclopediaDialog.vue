@@ -1,154 +1,69 @@
 <script setup lang="ts">
-import { computed, reactive } from "vue";
-import { useObjectsStore } from "@/stores/objectStore";
-import { CategoryObject, TypeObject } from "@/types/typeObjects";
+import { onBeforeUnmount } from "vue";
 import EncyclopediaMenuItem from "@/components/Encyclopedia/EncyclopediaMenuItem.vue";
+import UiYield from "@/components/Ui/UiYield.vue";
+import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
+import UiObjectChips from "@/components/Ui/UiObjectChips.vue";
+import UiObjectChip from "@/components/Ui/UiObjectChip.vue";
+import { useObjectsStore } from "@/stores/objectStore";
+import { useAudioStore } from "@/stores/audioStore";
+import { CategoryObject, TypeObject } from "@/types/typeObjects";
+import { TypeKey } from "@/types/common";
 
-const isOpen = defineModel<boolean>();
-defineExpose({ open });
-
-const state = reactive({
-  current: null as null | MenuItem,
-  openSections: [] as string[],
-  search: "",
-  status: "",
+const store = useEncyclopediaStore();
+const audio = useAudioStore();
+store.$subscribe((mutation) => {
+  const storeKey = (mutation.events as { key: string }).key;
+  if (storeKey === "current" || storeKey === "isOpen") audio.stopQuote();
 });
-
-export type MenuItem = {
-  key: string;
-  title: string;
-  type?: TypeObject;
-  children?: Record<string, MenuItem>;
-};
-
-const menuObjData = computed(() => {
-  const out: Record<string, MenuItem> = {};
-
-  for (const type of useObjectsStore().getAllTypes()) {
-    // Build the type item first, then the tree it belongs to
-    const typeItem = {
-      key: type.key,
-      title: type.name,
-      type,
-    } as MenuItem;
-
-    // Set Concept if doesn't exist already
-    if (!out[type.concept]) {
-      try {
-        const concept = useObjectsStore().getTypeObject(type.concept);
-        out[type.concept] = {
-          key: type.concept,
-          title: concept.name,
-          children: {},
-        };
-      } catch {
-        out[type.concept] = {
-          key: type.concept,
-          title: type.concept,
-          children: {},
-        };
-      }
-    }
-    const conceptItem = out[type.concept]!;
-
-    // If Type has a category, build a 3-level hierarchy
-    if (type.category) {
-      if (!conceptItem.children![type.category]) {
-        try {
-          const category = useObjectsStore().get(type.category) as TypeObject | CategoryObject;
-          conceptItem.children![type.category] = {
-            key: type.category,
-            title: category.name,
-            children: {},
-          };
-        } catch {
-          conceptItem.children![type.category] = {
-            key: type.category,
-            title: type.category,
-            children: {},
-          };
-        }
-        conceptItem.children![type.category].children![type.key] = typeItem;
-      }
-    } else {
-      // Type does not have a Category, stay at 2-level hierarchy
-      conceptItem.children![type.key] = typeItem;
-    }
-  }
-  return out;
-});
-
-function toggle(itemKey: string) {
-  if (state.openSections.includes(itemKey)) {
-    state.openSections = state.openSections.filter((s) => s !== itemKey);
-    return;
-  }
-
-  const item = findKeyInData(itemKey);
-  if (item) {
-    // Has kids -> it's a togglable section
-    if (Object.values(item.children ?? {}).length) {
-      state.openSections.push(itemKey);
-    } else {
-      // No kids -> it's an entry
-      state.current = item;
-    }
-  } else {
-    state.current = null;
-    state.status = `${itemKey} not found`;
-  }
-}
-
-function open(itemKey: string) {
-  isOpen.value = true;
-  const item = findKeyInData(itemKey);
-  if (item) {
-    state.current = item;
-  } else {
-    state.current = null;
-    state.status = `${itemKey} not found`;
-  }
-}
-
-function findKeyInData(itemKey: string, data?: Record<string, MenuItem>): MenuItem | null {
-  // Look in current level
-  for (const item of Object.values(data ?? menuObjData.value)) {
-    if (item.key === itemKey) {
-      return item;
-    }
-  }
-
-  // Crawl children
-  for (const item of Object.values(data ?? menuObjData.value)) {
-    if (Object.values(item.children ?? {}).length) {
-      const foundItem = findKeyInData(itemKey, item.children);
-      if (foundItem) return foundItem;
-    }
-  }
-
-  // Not found
-  return null;
-}
+onBeforeUnmount(() => audio.stopQuote());
 </script>
 
 <template>
-  <v-dialog v-model="isOpen" max-width="72rem" width="90vw" height="90vh">
+  <v-dialog
+    v-model="store.isOpen"
+    max-width="72rem"
+    width="90vw"
+    height="90vh"
+    :close-on-back="false"
+  >
     <v-card rounded="lg" color="surface" class="d-flex flex-column h-100">
       <!-- Toolbar: Title, Search & Close  -->
-      <v-toolbar density="comfortable" color="secondary" class="px-3" style="user-select: none">
-        <div class="text-subtitle-1">Encyclopedia</div>
-        <v-spacer />
-        <v-text-field
-          v-model="state.search"
-          placeholder="Search"
-          prepend-inner-icon="fa-magnifying-glass"
-          clearable
-          hide-details
-          density="compact"
-          variant="solo"
-          class="mr-2"
-        />
-        <v-btn icon variant="text" :title="'Close'" @click="isOpen = false">
+      <v-toolbar density="comfortable" color="secondary" style="user-select: none">
+        <div
+          class="flex-shrink-0 pl-4 mr-2"
+          style="width: 12rem; border-inline-end: 0.0625rem solid rgba(255, 255, 255, 0.1)"
+        >
+          Encyclopedia
+        </div>
+        <!-- Search history chips area (placeholder) -->
+        <div
+          class="flex-grow-1 align-center justify-end ga-2 px-2"
+          style="overflow-x: auto; white-space: nowrap"
+        >
+          <template v-for="term in store.searchHistory.slice().reverse()" :key="term">
+            <v-chip
+              closable
+              @click="store.search = term"
+              @click:close.stop="store.removeFromHistory(term)"
+              class="mr-1"
+            >
+              {{ term }}
+            </v-chip>
+          </template>
+        </div>
+        <div class="flex-shrink-0" style="width: 24rem">
+          <v-text-field
+            v-model="store.search"
+            placeholder="Search"
+            prepend-inner-icon="fa-magnifying-glass"
+            clearable
+            hide-details
+            density="compact"
+            variant="solo"
+          />
+        </div>
+        <v-btn icon variant="text" class="flex-shrink-0" :title="'Close'" @click="store.close()">
           <v-icon icon="fa-xmark" />
         </v-btn>
       </v-toolbar>
@@ -157,147 +72,219 @@ function findKeyInData(itemKey: string, data?: Record<string, MenuItem>): MenuIt
       <v-card-text class="pa-0 d-flex flex-grow-1 overflow-hidden">
         <!-- Left menu -->
         <div
-          class="border-e flex-shrink-0 pb-2"
-          style="width: 12rem; user-select: none; overflow-y: auto"
+          class="flex-shrink-0 pb-2"
+          style="
+            width: 12rem;
+            user-select: none;
+            overflow-y: auto;
+            border-inline-end: 0.0625rem solid rgba(255, 255, 255, 0.1);
+          "
         >
           <EncyclopediaMenuItem
-            v-for="item of Object.values(menuObjData)"
+            v-for="item of Object.values(store.data)"
             :key="item.key"
             :item="item"
-            :open-sections="state.openSections"
-            :toggle="toggle"
           />
         </div>
 
         <!-- Right content -->
-        <div class="flex-grow-1 overflow-y-auto pb-4">
+        <div id="enc-content" class="flex-grow-1 overflow-y-auto pb-4">
+          <!-- Breadcrumbs (Vuetify) -->
+          <v-breadcrumbs
+            v-if="!store.search && store.breadcrumbs.length"
+            density="compact"
+            :items="
+              store.breadcrumbs.map((key) => ({
+                title: (useObjectsStore().get(key as TypeKey) as TypeObject).name,
+                key,
+              }))
+            "
+            class="opacity-50"
+          >
+            <template #item="{ item }">
+              <v-breadcrumbs-item
+                style="cursor: pointer; user-select: none"
+                @click="store.open((item as unknown as TypeObject).key)"
+              >
+                {{ item.title }}
+              </v-breadcrumbs-item>
+            </template>
+            <template #divider>
+              <v-icon icon="fa-chevron-right" size="x-small" class="mb-1 opacity-50" />
+            </template>
+          </v-breadcrumbs>
+
+          <!-- Search results -->
+          <div v-if="store.search" class="px-4 py-4">
+            <!-- Require at least 3 characters -->
+            <template v-if="store.search.length < 3">
+              <v-list density="comfortable" rounded>
+                <v-list-item title="Type at least 3 characters to search" />
+              </v-list>
+            </template>
+            <template v-else>
+              <div class="d-flex align-center justify-space-between mb-2">
+                <div class="text-subtitle-1">
+                  {{ Math.min(25, store.searchResults!.length)
+                  }}{{ store.searchResults!.length > 25 ? "+" : "" }} result{{
+                    store.searchResults!.length === 1 ? "" : "s"
+                  }}
+                </div>
+                <v-btn size="small" variant="text" @click="store.search = ''">Clear</v-btn>
+              </div>
+              <v-list density="comfortable" rounded>
+                <template v-if="store.searchResults!.length">
+                  <v-list-item
+                    v-for="t in store.searchResults"
+                    :key="t.key"
+                    :title="t.name"
+                    :subtitle="useObjectsStore().getTypeObject(t.concept).name"
+                    @click="
+                      store.addSearchToHistory();
+                      store.open(t.key);
+                      store.search = '';
+                    "
+                  >
+                    <template #prepend>
+                      <v-avatar size="28" color="transparent" variant="text">
+                        <v-img v-if="t.image" :src="t.image" :alt="t.name" />
+                      </v-avatar>
+                    </template>
+                  </v-list-item>
+                </template>
+                <template v-else>
+                  <v-list-item title="No results" subtitle="Try a different search" />
+                </template>
+              </v-list>
+            </template>
+          </div>
+
           <!-- Nothing selected: Show why, or a loading hero -->
           <div
-            v-if="!state.current?.type"
+            v-else-if="!store.current?.type"
             class="d-flex align-center justify-center"
             style="height: 100%; user-select: none"
           >
-            <div class="opacity-10 text-h3 mb-16">{{ state.status || "Pages of History" }}</div>
+            <div class="opacity-10 text-h3 mb-16">{{ store.status || "Pages of History" }}</div>
           </div>
 
           <!-- Media & Stats -->
           <div v-else class="px-4 d-flex flex-column ga-4">
             <h1>
-              {{ state.current.title }} ({{
-                useObjectsStore().getTypeObject(state.current.type.concept).name
+              {{ store.current.title }} ({{
+                useObjectsStore().getTypeObject(store.current.type.concept).name
               }})
             </h1>
 
             <div class="d-flex ga-4">
               <!-- Media -->
               <v-sheet
-                v-if="state.current.type.image"
+                v-if="store.current.type.image"
                 width="28rem"
-                class="d-flex flex-column ga-4"
+                min-width="28rem"
+                class="d-flex d-flex-shrink-0 flex-column ga-4"
               >
                 <v-img
-                  :src="state.current.type.image"
-                  :alt="state.current.title + ' image'"
+                  :src="store.current.type.image"
+                  :alt="store.current.title + ' image'"
                   rounded
                 />
-                <v-card v-if="state.current.type.quote" class="pa-3" rounded variant="tonal">
+                <v-card
+                  v-if="store.current.type.quote"
+                  @click.stop="audio.playQuote(store.current.type.quote.url)"
+                  class="pa-3"
+                  rounded
+                  variant="tonal"
+                  style="cursor: pointer"
+                >
                   <div style="font-style: italic">
                     {{
-                      state.current.type.quote.text ||
-                      state.current.type.p1 + " " + state.current.type.p2
+                      store.current.type.quote.text ||
+                      store.current.type.p1 + " " + store.current.type.p2
                     }}
                   </div>
-                  <div class="pt-2" style="font-weight: 600; float: right">
-                    <span v-if="state.current.type.quote.source">
-                      - {{ state.current.type.quote.source }}
-                    </span>
-                    <v-icon :icon="'fa-play'" size="x-small" style="cursor: pointer" />
+                  <div class="pt-2 d-flex ga-2" style="font-weight: 600; float: right">
+                    <div v-if="store.current.type.quote.source">
+                      - {{ store.current.type.quote.source }}
+                    </div>
+                    <div>
+                      <v-icon :icon="'fa-play'" size="x-small" style="margin-bottom: 0.2rem" />
+                    </div>
                   </div>
                 </v-card>
               </v-sheet>
+              <!-- Description on left if no media, or below if media present -->
               <v-sheet
-                v-if="!state.current.type.image && state.current.type.description"
-                max-width="28rem"
+                v-if="!store.current.type.image && store.current.type.description"
+                width="28rem"
+                min-width="28rem"
+                class="d-flex-grow-1"
               >
-                {{ state.current.type.description }}
+                {{ store.current.type.description }}
               </v-sheet>
 
               <!-- Stats -->
               <v-card
                 variant="outlined"
-                class="px-2 pb-3 d-flex flex-column flex-grow-1 ga-2"
+                class="px-4 py-2 d-flex flex-column flex-grow-1 ga-2"
                 rounded
-                style="user-select: none"
+                style="user-select: none; border: 2px rgba(255, 255, 255, 0.1) solid"
               >
-                <h2 class="mb-2">Stats</h2>
-                <div v-if="state.current.type.category">
+                <div v-if="store.current.type.category">
                   <h3>Category</h3>
                   <div class="opacity-50">
                     {{
-                      (useObjectsStore().get(state.current.type.category) as CategoryObject).name
+                      (useObjectsStore().get(store.current.type.category) as CategoryObject).name
                     }}
                   </div>
                 </div>
-                <div v-if="!state.current.type.yields.isEmpty">
+
+                <div v-if="!store.current.type.yields.isEmpty" class="d-flex flex-column ga-1">
                   <h3>Yields</h3>
-                  <div
-                    v-for="y of state.current.type.yields.all()"
-                    :key="JSON.stringify(y)"
-                    class="opacity-50"
-                  >
-                    {{ y.amount }} {{ useObjectsStore().getTypeObject(y.type).name }}
+                  <div v-for="y of store.current.type.yields.all()" :key="JSON.stringify(y)">
+                    <UiYield :y="y" />
                   </div>
                 </div>
-                <div v-if="state.current.type.specials.length">
+
+                <div v-if="store.current.type.specials.length" class="d-flex flex-column ga-1">
                   <h3>Specials</h3>
-                  <div class="opacity-50"></div>
+                  <UiObjectChips :types="store.current.type.specials" />
                 </div>
-                <div v-if="state.current.type.allows.length">
+
+                <div v-if="store.current.type.gains.length" class="d-flex flex-column ga-1">
                   <h3>Gains</h3>
-                  <div v-for="gain of state.current.type.gains" :key="gain" class="opacity-50">
-                    {{ useObjectsStore().getTypeObject(gain).name }}
-                  </div>
+                  <UiObjectChips :types="store.current.type.gains" />
                 </div>
-                <div v-if="!state.current.type.requires.isEmpty">
+
+                <div v-if="!store.current.type.requires.isEmpty" class="d-flex flex-column ga-1">
                   <h3>Requires</h3>
+                  <UiObjectChips :types="store.current.type.requires.requireAll" />
                   <div
-                    v-for="req of state.current.type.requires.requireAll"
-                    :key="req"
-                    class="opacity-50"
-                  >
-                    {{ (useObjectsStore().get(req) as TypeObject).name }}
-                  </div>
-                  <div
-                    v-for="reqAny of state.current.type.requires.requireAny"
+                    v-for="reqAny of store.current.type.requires.requireAny"
                     :key="JSON.stringify(reqAny)"
-                    class="opacity-50"
                   >
                     <span v-for="(req, i) of reqAny" :key="req">
                       <span v-if="i > 0"> or </span>
-                      {{ (useObjectsStore().get(req) as TypeObject).name }}
+                      <UiObjectChip :type="req" />
                     </span>
                   </div>
                 </div>
-                <div v-if="state.current.type.allows.length">
+
+                <div v-if="store.current.type.allows.length" class="d-flex flex-column ga-1">
                   <h3>Allows</h3>
-                  <div v-for="allow of state.current.type.allows" :key="allow" class="opacity-50">
-                    {{ useObjectsStore().getTypeObject(allow).name }}
-                  </div>
+                  <UiObjectChips :types="store.current.type.allows" />
                 </div>
-                <div v-if="state.current.type.specials.length">
-                  <h3>Specials</h3>
-                  <div class="opacity-50"></div>
-                </div>
-                <div v-if="state.current.type.relatesTo.length">
+
+                <div v-if="store.current.type.relatesTo.length" class="d-flex flex-column ga-1">
                   <h3>Relates to</h3>
-                  <div class="opacity-50"></div>
+                  <UiObjectChips :types="store.current.type.relatesTo" />
                 </div>
               </v-card>
             </div>
 
             <!-- Text below (if media present) -->
-            <p v-if="state.current.type.image && state.current.type.description">
-              {{ state.current.type.description }}
+            <p v-if="store.current.type.image && store.current.type.description">
+              {{ store.current.type.description }}
             </p>
           </div>
         </div>
@@ -306,11 +293,4 @@ function findKeyInData(itemKey: string, data?: Record<string, MenuItem>): MenuIt
   </v-dialog>
 </template>
 
-<style scoped>
-.border-e {
-  border-inline-end: 0.0625rem solid rgba(255, 255, 255, 0.1);
-}
-.cursor-pointer {
-  cursor: pointer;
-}
-</style>
+<style scoped></style>

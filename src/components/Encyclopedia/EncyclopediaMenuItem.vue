@@ -1,32 +1,44 @@
 <script setup lang="ts">
-import type { MenuItem } from "@/components/Encyclopedia/EncyclopediaDialog.vue";
+import {
+  entryElemId,
+  MenuItem,
+  sectionElemId,
+  useEncyclopediaStore,
+} from "@/components/Encyclopedia/encyclopediaStore";
 
 defineProps<{
   item: MenuItem;
-  openSections: string[];
-  toggle: (itemKey: string) => void;
 }>();
+
+const store = useEncyclopediaStore();
 </script>
 
 <template>
-  <div class="pl-2 py-1" @click.stop="toggle(item.key)" style="cursor: pointer">
+  <div
+    :id="
+      Object.values(item.children ?? {}).length ? sectionElemId(item.key) : entryElemId(item.key)
+    "
+    class="pl-2 py-1"
+    @click.stop="
+      Object.values(item.children ?? {}).length ? store.toggle(item.key) : store.open(item.key)
+    "
+    style="cursor: pointer"
+  >
     <div class="d-flex align-center">
       <v-icon
         v-if="Object.values(item.children ?? {}).length"
-        :icon="openSections.includes(item.key) ? 'fa-minus' : 'fa-plus'"
+        :icon="store.openSections.includes(item.key) ? 'fa-minus' : 'fa-plus'"
         size="x-small"
         class="mr-2 opacity-30"
       />
       <span class="text-truncate" :title="item.title">{{ item.title }}</span>
     </div>
-    <div v-if="Object.values(item.children ?? {}).length && openSections.includes(item.key)">
+    <div v-if="Object.values(item.children ?? {}).length && store.openSections.includes(item.key)">
       <EncyclopediaMenuItem
         v-for="child in item.children"
         :key="child.key"
         class="ml-4"
         :item="child"
-        :open-sections="openSections"
-        :toggle="toggle"
       />
     </div>
   </div>

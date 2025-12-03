@@ -19,6 +19,10 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import {
   faBars,
   faBookOpen,
+  faChevronDown,
+  faChevronLeft,
+  faChevronRight,
+  faChevronUp,
   faCity,
   faCoins,
   faFlask,
@@ -64,6 +68,10 @@ library.add(
   faTimesCircle,
   faPlay,
   faPause,
+  faChevronLeft,
+  faChevronRight,
+  faChevronUp,
+  faChevronDown,
 );
 
 registerSW({ immediate: true });

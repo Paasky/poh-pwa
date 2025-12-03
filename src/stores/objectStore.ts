@@ -4,11 +4,11 @@ import { defineStore } from "pinia";
 import { CatKey, isCategoryObject, isTypeObject, ObjKey, TypeKey, World } from "@/types/common";
 import { StaticData } from "@/types/api";
 import {
-  CategoryObject,
+  type CategoryObject,
   initCategoryObject,
   initTypeObject,
-  TypeClass,
-  TypeObject,
+  type TypeClass,
+  type TypeObject,
 } from "@/types/typeObjects";
 import { GameClass, GameKey, GameObject } from "@/objects/game/_GameObject";
 import { withCallerContext } from "@/utils/stack";
