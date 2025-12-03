@@ -26,10 +26,15 @@ import {
   faLandmark,
   faMagnifyingGlass,
   faMasksTheater,
+  faMinus,
+  faPause,
+  faPlay,
+  faPlus,
   faQuestion,
   faRoute,
   faScroll,
   faShield,
+  faTimesCircle,
   faUpRightAndDownLeftFromCenter,
   faUser,
   faXmark,
@@ -54,6 +59,11 @@ library.add(
   faUser,
   faCity,
   faLandmark,
+  faPlus,
+  faMinus,
+  faTimesCircle,
+  faPlay,
+  faPause,
 );
 
 registerSW({ immediate: true });

@@ -239,7 +239,7 @@ function confirmQuit() {
       <EncyclopediaDialog v-model="encyOpen" />
 
       <!-- Quit confirmation dialog -->
-      <v-dialog v-model="showQuitConfirm" max-width="1440" persistent>
+      <v-dialog v-model="showQuitConfirm" max-width="90rem" persistent>
         <v-card rounded="lg">
           <v-card-title class="text-h6">Confirm Quit</v-card-title>
           <v-card-text>
