@@ -1,18 +1,21 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { tabsConfig, usePlayerDetailsStore } from "@/components/PlayerDetails/playerDetailsStore";
+import {
+  tabsConfig,
+  usePlayerDetailsStore,
+} from "@/components/LegacyPlayerDetails/playerDetailsStore";
 import UiIcon from "@/components/UiLegacy/UiIcon.vue";
 import { useObjectsStore } from "@/stores/objectStore";
 import UiModal from "@/components/UiLegacy/UiModal.vue";
-import EconomyTab from "@/components/PlayerDetails/EconomyTab/EconomyTab.vue";
-import ResearchTab from "@/components/PlayerDetails/ResearchTab/ResearchTab.vue";
-import CultureTab from "@/components/PlayerDetails/CultureTab/CultureTab.vue";
-import ReligionTab from "@/components/PlayerDetails/ReligionTab/ReligionTab.vue";
-import DiplomacyTab from "@/components/PlayerDetails/DiplomacyTab/DiplomacyTab.vue";
-import CitiesTab from "@/components/PlayerDetails/CitiesTab/CitiesTab.vue";
-import UnitsTab from "@/components/PlayerDetails/UnitsTab/UnitsTab.vue";
-import TradeTab from "@/components/PlayerDetails/TradeTab/TradeTab.vue";
-import GovernmentTab from "@/components/PlayerDetails/GovernmentTab/GovernmentTab.vue";
+import EconomyTab from "@/components/LegacyPlayerDetails/EconomyTab/EconomyTab.vue";
+import ResearchTab from "@/components/LegacyPlayerDetails/ResearchTab/ResearchTab.vue";
+import CultureTab from "@/components/LegacyPlayerDetails/CultureTab/CultureTab.vue";
+import ReligionTab from "@/components/LegacyPlayerDetails/ReligionTab/ReligionTab.vue";
+import DiplomacyTab from "@/components/LegacyPlayerDetails/DiplomacyTab/DiplomacyTab.vue";
+import CitiesTab from "@/components/LegacyPlayerDetails/CitiesTab/CitiesTab.vue";
+import UnitsTab from "@/components/LegacyPlayerDetails/UnitsTab/UnitsTab.vue";
+import TradeTab from "@/components/LegacyPlayerDetails/TradeTab/TradeTab.vue";
+import GovernmentTab from "@/components/LegacyPlayerDetails/GovernmentTab/GovernmentTab.vue";
 
 const playerDetails = usePlayerDetailsStore();
 const objects = useObjectsStore();
@@ -34,7 +37,7 @@ const activeTab = computed(() => playerDetails.activeTab);
               : 'text-slate-200 hover:bg-yellow-600 hover:text-slate-900'
           "
           type="button"
-          @click="playerDetails.switchTab(tabConfig.name)"
+          @click="playerDetails.open(tabConfig.name)"
         >
           <UiIcon :icon="objects.getTypeObject(tabConfig.type).icon" class="fa-fw" />
           <span>{{ tabConfig.name }}</span>

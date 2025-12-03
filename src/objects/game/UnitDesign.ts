@@ -1,6 +1,6 @@
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
-import { Yields } from "@/objects/yield";
+import { Yield, Yields } from "@/objects/yield";
 import { TypeObject } from "@/types/typeObjects";
 import { canHaveOne, hasMany } from "@/objects/game/_relations";
 import type { Player } from "@/objects/game/Player";
@@ -24,8 +24,13 @@ export class UnitDesign extends GameObject {
     this.name = name;
     this.platform = platform;
     this.types = [this.platform, this.equipment];
-    this.yields = new Yields(this.types.flatMap((t) => t.yields.all()));
-    this.productionCost = this.yields.applyMods().getLumpAmount("yieldType:productionCost");
+
+    const allYields = new Yields(this.types.flatMap((t) => t.yields.all()));
+    this.yields = allYields.not(["yieldType:productionCost"]).applyMods();
+    this.productionCost = allYields
+      .only(["yieldType:productionCost"])
+      .applyMods()
+      .getLumpAmount("yieldType:productionCost");
 
     if (playerKey) this.playerKey = playerKey;
   }
@@ -68,7 +73,15 @@ export class UnitDesign extends GameObject {
   /*
    * Computed
    */
-  // todo add here
+  prodCostYield = computed(
+    (): Yield => ({
+      type: "yieldType:productionCost",
+      amount: this.productionCost,
+      method: "lump",
+      for: [],
+      vs: [],
+    }),
+  );
 
   /*
    * Actions

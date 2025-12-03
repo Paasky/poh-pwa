@@ -19,6 +19,26 @@ h6 {
   font-weight: 400;
 }
 
+.pulse {
+  animation: pulse 1.2s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 .poh-tooltip {
   background-color: #212121;
 }

@@ -10,7 +10,7 @@ import UiObjPillList from "@/components/UiLegacy/UiObjPillList.vue";
 import { UnitDesign } from "@/objects/game/UnitDesign";
 import { Yields } from "@/objects/yield";
 import { UnitDesignManager } from "@/managers/UnitDesignManager";
-import { UnitDesignPrototype } from "@/components/PlayerDetails/UnitsTab/UnitDesignPrototype";
+import { UnitDesignPrototype } from "@/components/LegacyPlayerDetails/UnitsTab/UnitDesignPrototype";
 
 const manager = new UnitDesignManager();
 const objects = useObjectsStore();

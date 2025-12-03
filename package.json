@@ -36,6 +36,7 @@
     "@fortawesome/fontawesome-svg-core": "^7.1.0",
     "@fortawesome/free-solid-svg-icons": "^7.1.0",
     "@fortawesome/vue-fontawesome": "^3.1.2",
+    "@urbanzoo/remove-accents": "^1.0.2",
     "change-case": "^5.4.4",
     "pinia": "^3.0.4",
     "pluralize": "^8.0.0",

@@ -4,7 +4,7 @@ import UiHeader from "@/components/UiLegacy/UiHeader.vue";
 import { computed } from "vue";
 import UiObjPill from "@/components/UiLegacy/UiObjPill.vue";
 import UiButton from "@/components/UiLegacy/UiButton.vue";
-import UnitDesigner from "@/components/PlayerDetails/UnitsTab/UnitDesigner.vue";
+import UnitDesigner from "@/components/LegacyPlayerDetails/UnitsTab/UnitDesigner.vue";
 import UiUnitIcon from "@/components/UiLegacy/UiUnitIcon.vue";
 
 const objects = useObjectsStore();

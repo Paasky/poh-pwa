@@ -98,7 +98,7 @@ export interface TypeObject extends PohObject {
   productionCost?: number;
   scienceCost?: number;
   isPositive?: boolean;
-  names?: Record<TypeKey, string>;
+  names?: Record<string, string>; // uses platform.name as the key
   inheritYieldTypes?: TypeKey[];
   preferredClimates?: TypeKey[];
 

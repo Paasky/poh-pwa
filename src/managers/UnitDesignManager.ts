@@ -1,6 +1,6 @@
 import { TypeObject } from "@/types/typeObjects";
 import { useObjectsStore } from "@/stores/objectStore";
-import { UnitDesignPrototype } from "@/components/PlayerDetails/UnitsTab/UnitDesignPrototype";
+import { UnitDesignPrototype } from "@/components/LegacyPlayerDetails/UnitsTab/UnitDesignPrototype";
 import { UnitDesign } from "@/objects/game/UnitDesign";
 import { Player } from "@/objects/game/Player";
 import { generateKey } from "@/objects/game/_GameObject";

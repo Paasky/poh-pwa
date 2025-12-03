@@ -86,7 +86,7 @@ export class Player extends GameObject {
   designs = hasMany<UnitDesign>(this.designKeys, `${this.key}.designs`);
 
   knownTileKeys = ref([] as GameKey[]);
-  knownTiles = hasMany<Tile>(this.knownTileKeys, `${this.key}.knownTiles`);
+  visibleTileKeys = ref([] as GameKey[]);
 
   religionKey = ref(null as GameKey | null);
   religion = canHaveOne<Religion>(this.religionKey, `${this.key}.religion`);

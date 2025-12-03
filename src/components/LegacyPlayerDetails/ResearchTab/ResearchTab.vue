@@ -8,7 +8,7 @@ import UiHeader from "@/components/UiLegacy/UiHeader.vue";
 import { useObjectsStore } from "@/stores/objectStore";
 import { TypeObject } from "@/types/typeObjects";
 import { CatKey } from "@/types/common";
-import ResearchTabArrows from "@/components/PlayerDetails/ResearchTab/ResearchTabArrows.vue";
+import ResearchTabArrows from "@/components/LegacyPlayerDetails/ResearchTab/ResearchTabArrows.vue";
 import UiButton from "@/components/UiLegacy/UiButton.vue";
 
 const objects = useObjectsStore();

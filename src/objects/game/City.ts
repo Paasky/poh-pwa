@@ -100,8 +100,12 @@ export class City extends GameObject {
   trainableDesigns = computed(() => this.player.value.designs.value);
 
   yields = computed(
-    (): Yields => new Yields([...this.tileYields.value.all(), ...this.citizenYields.value.all()]),
+    (): Yields =>
+      new Yields([...this.tileYields.value.all(), ...this.citizenYields.value.all()]).applyMods(),
   );
+
+  // Total population derived from citizen count
+  pop = computed(() => 25 + Math.round(Math.pow(this.citizens.value.length, 3.5)));
 
   /*
    * Actions

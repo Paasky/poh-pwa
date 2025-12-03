@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onBeforeUnmount } from "vue";
 import EncyclopediaMenuItem from "@/components/Encyclopedia/EncyclopediaMenuItem.vue";
-import UiYield from "@/components/Ui/UiYield.vue";
 import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
 import UiObjectChips from "@/components/Ui/UiObjectChips.vue";
 import UiObjectChip from "@/components/Ui/UiObjectChip.vue";
@@ -9,6 +8,8 @@ import { useObjectsStore } from "@/stores/objectStore";
 import { useAudioStore } from "@/stores/audioStore";
 import { CategoryObject, TypeObject } from "@/types/typeObjects";
 import { TypeKey } from "@/types/common";
+import UiYields from "@/components/Ui/UiYields.vue";
+import { Yields } from "@/objects/yield";
 
 const store = useEncyclopediaStore();
 const audio = useAudioStore();
@@ -241,9 +242,7 @@ onBeforeUnmount(() => audio.stopQuote());
 
                 <div v-if="!store.current.type.yields.isEmpty" class="d-flex flex-column ga-1">
                   <h3>Yields</h3>
-                  <div v-for="y of store.current.type.yields.all()" :key="JSON.stringify(y)">
-                    <UiYield :y="y" />
-                  </div>
+                  <UiYields :yields="store.current.type.yields as Yields" />
                 </div>
 
                 <div v-if="store.current.type.specials.length" class="d-flex flex-column ga-1">

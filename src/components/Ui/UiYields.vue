@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { Yields } from "@/objects/yield";
+import UiYield, { yieldProps } from "@/components/Ui/UiYield.vue";
 
-defineProps<{
-  yields: Yields;
-}>();
+defineProps<{ yields: Yields } & yieldProps>();
 </script>
 
 <template>
-  <div>todo</div>
+  <div v-for="y of yields.all()" :key="JSON.stringify(y)">
+    <UiYield :y="y" :opts="opts" />
+  </div>
 </template>
 
 <style scoped></style>

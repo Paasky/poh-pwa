@@ -4,9 +4,13 @@ import { Yield } from "@/objects/yield";
 import { useObjectsStore } from "@/stores/objectStore";
 import UiObjectChips from "@/components/Ui/UiObjectChips.vue";
 
-const props = defineProps<{
-  y: Yield;
-}>();
+export type yieldProps = {
+  opts?: {
+    posLumpIsNeutral: boolean;
+  };
+};
+
+const props = defineProps<{ y: Yield } & yieldProps>();
 const type = computed(() => useObjectsStore().getTypeObject(props.y.type));
 
 function amount(y: Yield): string {
@@ -25,7 +29,7 @@ function amount(y: Yield): string {
   if (y.method === "percent") out += "%";
 
   // Positive amount
-  if (y.amount > 0) {
+  if (y.amount > 0 && !props.opts?.posLumpIsNeutral) {
     // Don't touch these types if positive lump
     if (
       y.method === "lump" &&
@@ -51,6 +55,9 @@ function amount(y: Yield): string {
 function color(y: Yield): string {
   // 0 is always neutral
   if (y.amount === 0) return "";
+
+  // Respect opts first
+  if (props.opts?.posLumpIsNeutral && y.amount > 0 && y.method === "lump") return "";
 
   const type = useObjectsStore().getTypeObject(y.type);
 
