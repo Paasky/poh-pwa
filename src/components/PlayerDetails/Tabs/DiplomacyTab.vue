@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { capitalCase } from "change-case";
 import UiTable, { TableColumn } from "@/components/Ui/UiTable.vue";
 import { useObjectsStore } from "@/stores/objectStore";
@@ -9,6 +9,7 @@ import UiObjectChip from "@/components/Ui/UiObjectChip.vue";
 import UiObjectChips from "@/components/Ui/UiObjectChips.vue";
 import UiYields from "@/components/Ui/UiYields.vue";
 import { TypeKey } from "@/types/common";
+import { TypeObject } from "@/types/typeObjects";
 
 const objStore = useObjectsStore();
 
@@ -51,6 +52,14 @@ const columns = [
   { title: "Cities", key: "cities", align: "end", value: (p: Player) => p.cityKeys.value.length },
   { title: "Units", key: "units", align: "end", value: (p: Player) => p.unitKeys.value.length },
 ] as TableColumn<Player>[];
+
+const typeTimeline = computed((): TypeObject[] => {
+  if (!current.value) return [];
+
+  const types = [] as TypeObject[];
+
+  return types;
+});
 </script>
 
 <template>
@@ -84,7 +93,16 @@ const columns = [
             <v-col class="d-flex flex-column ga-4">
               <h2>
                 Culture
-                <UiObjectChip :type="current.culture.type.value" size="default" color="secondary" />
+                <template v-for="(type, i) in typeTimeline" :key="type.key">
+                  <v-icon
+                    v-if="i > 0"
+                    icon="fa-arrow-right"
+                    color="grey"
+                    size="small"
+                    class="ml-1"
+                  />
+                  <UiObjectChip :type="type" size="default" color="secondary" />
+                </template>
               </h2>
               <v-row class="ga-2">
                 <v-col>

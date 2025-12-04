@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import UiIcon from "@/components/UiLegacy/UiIcon.vue";
 import { useMapGenStore } from "@/stores/mapGenStore";
 import { TypeObject } from "@/types/typeObjects";
 

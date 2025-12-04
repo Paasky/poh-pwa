@@ -68,7 +68,7 @@ function onBeforeUnload(e: BeforeUnloadEvent) {
     <div class="position-absolute top-0 right-0 d-flex ga-2" style="z-index: 10">
       <UiButton
         icon="fa-question"
-        color="tertiary"
+        color="secondary"
         rounded="0"
         class="rounded-b-lg"
         tooltip="Encyclopedia"
@@ -76,7 +76,7 @@ function onBeforeUnload(e: BeforeUnloadEvent) {
       />
       <UiButton
         icon="fa-up-right-and-down-left-from-center"
-        color="tertiary"
+        color="secondary"
         rounded="0"
         class="rounded-b-lg"
         tooltip="Toggle Fullscreen"
@@ -85,7 +85,7 @@ function onBeforeUnload(e: BeforeUnloadEvent) {
       <UiButton
         id="menu-btn"
         icon="fa-bars"
-        color="tertiary"
+        color="secondary"
         rounded="0"
         class="rounded-b-lg"
         tooltip="Menu"

@@ -125,22 +125,22 @@ const cityColumns = [
           <v-table density="compact">
             <thead>
               <tr>
-                <th class="text-left">Culture</th>
-                <th class="text-left">Religion</th>
-                <th class="text-left">Policy</th>
-                <th class="text-left">Work</th>
-                <th class="text-left">Yields</th>
+                <th class="text-left border-e border-b-0">Culture</th>
+                <th class="text-left border-e border-b-0">Religion</th>
+                <th class="text-left border-e border-b-0">Policy</th>
+                <th class="text-left border-e border-b-0">Work</th>
+                <th class="text-left border-e border-b-0">Yields</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="citizen in current.citizens" :key="citizen.key">
-                <td>{{ citizen.culture.value.type.value.name }}</td>
-                <td>{{ citizen.religion.value?.name ?? "-" }}</td>
-                <td>{{ citizen.policy.value?.name ?? "-" }}</td>
-                <td>
+                <td class="border-e border-b-0">{{ citizen.culture.value.type.value.name }}</td>
+                <td class="border-e border-b-0">{{ citizen.religion.value?.name ?? "-" }}</td>
+                <td class="border-e border-b-0">{{ citizen.policy.value?.name ?? "-" }}</td>
+                <td class="border-e border-b-0">
                   {{ citizen.work.value?.name ?? (citizen as any).tile.construction?.name ?? "-" }}
                 </td>
-                <td>
+                <td class="border-e border-b-0">
                   <UiYields :yields="citizen.yields.value" :opts="{ posLumpIsNeutral: true }" />
                 </td>
               </tr>

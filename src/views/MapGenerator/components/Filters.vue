@@ -1,6 +1,5 @@
 <script setup lang="ts">
 defineOptions({ name: "MapGenFilters" });
-import UiButton from "@/components/UiLegacy/UiButton.vue";
 import { useMapGenStore } from "@/stores/mapGenStore";
 // import { useObjectsStore } from "@/stores/objectStore";
 

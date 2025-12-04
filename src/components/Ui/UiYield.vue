@@ -114,11 +114,11 @@ function color(y: Yield): string {
         <div v-if="!opts?.hideName">{{ type.name }}</div>
       </template>
     </v-tooltip>
-    <div v-if="y.for.length" class="d-flex ga-1">
+    <div v-if="y.for.length" class="d-flex align-center ga-1">
       for
       <UiObjectChips :types="y.for" />
     </div>
-    <div v-if="y.vs.length" class="d-flex ga-1">
+    <div v-if="y.vs.length" class="d-flex align-center ga-1">
       vs
       <UiObjectChips :types="y.vs" />
     </div>

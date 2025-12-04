@@ -115,7 +115,7 @@ const vuetify = createVuetify({
         colors: {
           // Palette
           primary: "#805C0FFF",
-          secondary: "#093300",
+          secondary: "#082c00",
           tertiary: "#0e3a68",
           disabled: "#6b7280",
           background: "#0f172a",

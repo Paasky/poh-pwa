@@ -38,19 +38,25 @@ const rows = computed(() => {
     <v-table density="comfortable">
       <thead>
         <tr>
-          <th v-for="cat in categories" :key="cat.category.key">
+          <th v-for="cat in categories" :key="cat.category.key" class="border-e border-b-0">
             <h1 style="text-align: center">{{ cat.category.name }}</h1>
           </th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="row in rows" :key="row.key">
-          <td v-for="typeData in row.types" :key="typeData.type.key" style="height: 9rem">
+          <td
+            v-for="typeData in row.types"
+            :key="typeData.type.key"
+            class="border-e border-b-0"
+            style="height: 9rem"
+          >
             <v-card
               class="h-100 d-flex flex-column ga-2 my-2"
-              variant="outlined"
-              color="disabled"
+              :variant="typeData.canSelect ? 'outlined' : 'text'"
+              :color="typeData.canSelect ? 'primary' : 'disabled'"
               style="border-radius: 0.5rem"
+              :style="!typeData.canSelect && !typeData.isSelected ? 'opacity: 0.75' : ''"
             >
               <!-- two children on the same row, together full width, equally wide (no extra elements, no custom css) -->
               <div class="d-flex w-100 ga-2">
