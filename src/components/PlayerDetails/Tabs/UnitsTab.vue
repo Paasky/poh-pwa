@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { useObjectsStore } from "@/stores/objectStore";
 import UiObjectChip from "@/components/Ui/UiObjectChip.vue";
 import UiYields from "@/components/Ui/UiYields.vue";
@@ -64,10 +64,6 @@ const designHeaders = [
   },
 ] as TableColumn<UnitDesign>[];
 
-// Search
-const unitSearch = ref("");
-const designSearch = ref("");
-
 function searchUnit(unit: Unit, term: string): boolean {
   return includes(unit.name.value, term) || searchDesign(unit.design.value, term);
 }
@@ -78,38 +74,20 @@ function searchDesign(design: UnitDesign, term: string): boolean {
     includes(design.equipment.name, term)
   );
 }
-
-const filteredUnits = computed(() =>
-  unitSearch.value.trim()
-    ? units.value.filter((u) => searchUnit(u, unitSearch.value))
-    : units.value,
-);
-
-const filteredDesigns = computed(() =>
-  designSearch.value.trim()
-    ? designs.value.filter((d) => searchDesign(d, unitSearch.value))
-    : designs.value,
-);
+// Filtering handled by UiTable via the provided search predicate
 </script>
 
 <template>
   <v-container class="pa-4" max-width="100%">
     <v-row class="ga-8">
       <v-col>
-        <div class="d-flex align-center justify-space-between mb-2 w-100 ga-4">
-          <h4 class="text-h6">Units ({{ units.length }})</h4>
-          <v-text-field
-            v-model="unitSearch"
-            density="compact"
-            hide-details
-            clearable
-            variant="outlined"
-            label="Search units"
-            prepend-inner-icon="fa-magnifying-glass"
-            style="max-width: 16.25rem"
-          />
-        </div>
-        <UiTable :columns="unitHeaders" :items="filteredUnits" class="w-100">
+        <UiTable
+          title="Units"
+          :columns="unitHeaders"
+          :items="units"
+          :search="searchUnit"
+          class="w-100"
+        >
           <template #[`item.platform`]="{ item }">
             <UiObjectChip :type="(item as Unit).design.value.platform" />
           </template>
@@ -120,20 +98,13 @@ const filteredDesigns = computed(() =>
       </v-col>
 
       <v-col>
-        <div class="d-flex align-center justify-space-between mb-2 w-100 ga-4">
-          <h4 class="text-h6">Unit Designs ({{ designs.length }})</h4>
-          <v-text-field
-            v-model="designSearch"
-            density="compact"
-            hide-details
-            clearable
-            variant="outlined"
-            label="Search designs"
-            prepend-inner-icon="fa-magnifying-glass"
-            style="max-width: 16.25rem"
-          />
-        </div>
-        <UiTable :columns="designHeaders" :items="filteredDesigns" class="w-100">
+        <UiTable
+          title="Unit Designs"
+          :columns="designHeaders"
+          :items="designs"
+          :search="searchDesign"
+          class="w-100"
+        >
           <template #[`item.platform`]="{ item }">
             <UiObjectChip :type="(item as UnitDesign).platform" />
           </template>

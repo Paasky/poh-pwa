@@ -10,6 +10,7 @@ import type { Religion } from "@/objects/game/Religion";
 import type { Tile } from "@/objects/game/Tile";
 import type { TradeRoute } from "@/objects/game/TradeRoute";
 import type { Unit } from "@/objects/game/Unit";
+import { useObjectsStore } from "@/stores/objectStore";
 
 export class City extends GameObject {
   constructor(
@@ -68,7 +69,7 @@ export class City extends GameObject {
   citizens = hasMany<Citizen>(this.citizenKeys, `${this.key}.citizens`);
 
   holyCityForKeys = ref([] as GameKey[]);
-  holyCityFor = hasMany<Religion[]>(this.holyCityForKeys, `${this.key}.holyCityFor`);
+  holyCityFor = hasMany<Religion>(this.holyCityForKeys, `${this.key}.holyCityFor`);
 
   origPlayerKey: GameKey;
   origPlayer: ComputedRef<Player>;
@@ -83,7 +84,7 @@ export class City extends GameObject {
   tradeRoutes = hasMany<TradeRoute>(this.tradeRouteKeys, `${this.key}.tradeRoutes`);
 
   unitKeys = ref([] as GameKey[]);
-  units = hasMany<Unit[]>(this.unitKeys, `${this.key}.units`);
+  units = hasMany<Unit>(this.unitKeys, `${this.key}.units`);
 
   /*
    * Computed
@@ -93,10 +94,11 @@ export class City extends GameObject {
     return new Yields(this.citizens.value.flatMap((c) => c.yields.value.only(inherit).all()));
   });
 
+  constructableTypes = computed(() => useObjectsStore().getClassTypes("buildingType"));
+
   tileYields = computed(() =>
     this.tile.value.yields.value.only(this.concept.inheritYieldTypes!, [this.concept]),
   );
-
   trainableDesigns = computed(() => this.player.value.designs.value);
 
   yields = computed(

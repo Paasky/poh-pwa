@@ -40,8 +40,13 @@ export abstract class Queue {
     this.secondaryYieldKey = secondaryYieldKey;
   }
 
-  get queue() {
-    return this._queue.value.slice();
+  get queue(): QueueItem[] {
+    // Vue Template Engine can erase .value, so defend against it
+    return "value" in this._queue
+      ? // eslint-disable-next-line
+        (this._queue.value as any).slice()
+      : // eslint-disable-next-line
+        (this._queue as any).slice();
   }
 
   // Returns overflow, if any

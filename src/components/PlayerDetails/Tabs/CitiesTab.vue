@@ -5,50 +5,21 @@ import UiTable, { TableColumn } from "@/components/Ui/UiTable.vue";
 import UiYields from "@/components/Ui/UiYields.vue";
 import { City } from "@/objects/game/City";
 import { usePlayerDetailsStoreNew } from "@/components/PlayerDetails/playerDetailsStore";
+import { includes } from "@/helpers/textTools";
 
 const objStore = useObjectsStore();
 const detailsStore = usePlayerDetailsStoreNew();
 
 const cities = computed<City[]>(() => objStore.currentPlayer.cities.value as City[]);
 
-// Search for Cities table (only by Name for now)
-const citySearch = ref("");
-
-// Helpers to safely read names without using `any`
-function getNameSafe(o: unknown): string {
-  if (o && typeof o === "object" && "name" in (o as Record<string, unknown>)) {
-    const v = (o as { name?: unknown }).name;
-    return typeof v === "string" ? v : "";
-  }
-  return "";
+// Search predicate consumed by UiTable
+function searchCity(c: City, term: string): boolean {
+  return (
+    includes(c.name.value, term) ||
+    includes(c.constructionQueue.queue[0]?.item.name ?? "", term) ||
+    includes(c.trainingQueue.queue[0]?.item.name ?? "", term)
+  );
 }
-
-function getFirstQueueItemName(queue: unknown): string {
-  // Expect shape: { queue: Array<{ item: { name: string } }> }
-  if (!queue || typeof queue !== "object" || !("queue" in (queue as Record<string, unknown>))) {
-    return "";
-  }
-  const qArr = (queue as { queue?: unknown }).queue;
-  if (!Array.isArray(qArr) || qArr.length === 0) return "";
-  const first = qArr[0];
-  if (!first || typeof first !== "object" || !("item" in (first as Record<string, unknown>))) {
-    return "";
-  }
-  const itemVal = (first as { item?: unknown }).item;
-  return getNameSafe(itemVal);
-}
-
-// Simple local filtering extended to include queue item names
-const filteredCities = computed(() => {
-  const q = citySearch.value.trim().toLowerCase();
-  if (!q) return cities.value;
-  return cities.value.filter((c) => {
-    const name = (c.name.value || "").toLowerCase();
-    const constructing = getFirstQueueItemName(c.constructionQueue).toLowerCase();
-    const training = getFirstQueueItemName(c.trainingQueue).toLowerCase();
-    return name.includes(q) || constructing.includes(q) || training.includes(q);
-  });
-});
 
 // Selected city (row click)
 const current = ref<City | null>(null);
@@ -58,12 +29,6 @@ function onRowClick(_e: unknown, payload: { item: unknown }) {
 
 const cityColumns = [
   { title: "Name", key: "name", value: (c: City) => c.name.value },
-  {
-    title: "Units",
-    key: "unitsCount",
-    align: "end",
-    value: (c: City) => c.units.value.length,
-  },
   { title: "Health", key: "health", align: "end", value: (c: City) => c.health.value },
   { title: "Yields", key: "yields" },
   { title: "Constructing", key: "constructing" },
@@ -74,24 +39,121 @@ const cityColumns = [
 
 <template>
   <v-container class="pa-4" max-width="100%">
-    <v-row class="ga-8">
-      <v-col>
-        <div class="d-flex align-center justify-space-between mb-2 w-100 ga-4">
-          <h4 class="text-h6">Cities ({{ cities.length }})</h4>
-          <v-text-field
-            v-model="citySearch"
-            density="compact"
-            hide-details
-            clearable
-            variant="outlined"
-            label="Search cities"
-            prepend-inner-icon="fa-magnifying-glass"
-            style="max-width: 16.25rem"
-          />
+    <v-row class="ga-4">
+      <v-col v-if="current" class="border-b pb-4">
+        <!-- Header: pin + editable name styled as <h4> + pencil inline -->
+        <div class="d-flex ga-2 mb-4">
+          <div class="d-flex align-center ga-4 d-flex-grow-0">
+            <v-tooltip
+              text="Show on Map"
+              location="bottom"
+              content-class="text-grey bg-grey-darken-4"
+            >
+              <template #activator="{ props }">
+                <v-icon v-bind="props" icon="fa-location-dot" color="white" size="small" />
+              </template>
+            </v-tooltip>
+
+            <!-- Title as h4, input inside, pencil icon follows text -->
+            <h2>
+              {{ current.name }}
+            </h2>
+
+            <v-tooltip
+              text="Change name"
+              location="bottom"
+              content-class="text-grey bg-grey-darken-4"
+            >
+              <template #activator="{ props }">
+                <v-icon v-bind="props" icon="fa-pen" color="white" size="x-small" class="ml-1" />
+              </template>
+            </v-tooltip>
+
+            <div class="mt-1 opacity-50" style="white-space: nowrap">Pop. {{ current.pop }}</div>
+          </div>
+
+          <div class="d-flex ga-2 align-center justify-end d-flex-grow-1" style="width: 100%">
+            <UiYields :yields="current.yields" />
+          </div>
         </div>
+
+        <!-- Row 1: Construction & Training queue dropdowns -->
+        <v-row class="ga-2">
+          <v-col aria-colspan="2"><h3>Construction</h3></v-col>
+          <v-col aria-colspan="1"><h5>Next in Queue</h5></v-col>
+          <v-col aria-colspan="2"><h3>Training</h3></v-col>
+          <v-col aria-colspan="1"><h5>Next in Queue</h5></v-col>
+        </v-row>
+        <v-row class="ga-2">
+          <v-col aria-colspan="2">
+            <v-select
+              placeholder="Converting to Gold and Happiness"
+              :items="current.constructableTypes"
+              item-title="name"
+              return-object
+              :model-value="(current.constructionQueue.queue[0]?.item as any) ?? null"
+              density="compact"
+              hide-details
+            />
+          </v-col>
+          <v-col aria-colspan="1">
+            <div v-for="qItem of current.constructionQueue.queue.slice(1)" :key="qItem.item.key">
+              {{ qItem.item.name }}
+            </div>
+          </v-col>
+          <v-col aria-colspan="2">
+            <v-select
+              placeholder="Converting to Food and Order"
+              :items="current.trainableDesigns"
+              item-title="name"
+              return-object
+              :model-value="(current.trainingQueue.queue[0]?.item as any) ?? null"
+              density="compact"
+              hide-details
+            />
+          </v-col>
+          <v-col aria-colspan="1">
+            <div v-for="qItem of current.trainingQueue.queue.slice(1)" :key="qItem.item.key">
+              {{ qItem.item.name }}
+            </div>
+          </v-col>
+        </v-row>
+
+        <!-- Row 2: Citizens table -->
+        <div>
+          <div class="text-subtitle-2 mb-2">Citizens</div>
+          <v-table density="compact">
+            <thead>
+              <tr>
+                <th class="text-left">Culture</th>
+                <th class="text-left">Religion</th>
+                <th class="text-left">Policy</th>
+                <th class="text-left">Work</th>
+                <th class="text-left">Yields</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="citizen in current.citizens" :key="citizen.key">
+                <td>{{ citizen.culture.value.type.value.name }}</td>
+                <td>{{ citizen.religion.value?.name ?? "-" }}</td>
+                <td>{{ citizen.policy.value?.name ?? "-" }}</td>
+                <td>
+                  {{ citizen.work.value?.name ?? (citizen as any).tile.construction?.name ?? "-" }}
+                </td>
+                <td>
+                  <UiYields :yields="citizen.yields.value" :opts="{ posLumpIsNeutral: true }" />
+                </td>
+              </tr>
+            </tbody>
+          </v-table>
+        </div>
+      </v-col>
+      <v-col>
         <UiTable
+          title="Cities"
           :columns="cityColumns"
-          :items="filteredCities"
+          :items="cities"
+          :search="searchCity"
           @click:row="onRowClick"
           :hover="true"
           class="w-100"
@@ -109,10 +171,10 @@ const cityColumns = [
                 </template>
               </v-tooltip>
               <!-- Name -->
-              {{ (item as City).name.value }}
+              {{ (item as City).name }}
               <!-- Capital star after name -->
               <v-tooltip
-                v-if="(item as City).isCapital.value"
+                v-if="(item as City).isCapital"
                 text="Capital City"
                 location="bottom"
                 content-class="text-grey bg-grey-darken-4"
@@ -121,14 +183,6 @@ const cityColumns = [
                   <v-icon v-bind="props" icon="fa-star" color="gold" size="small" />
                 </template>
               </v-tooltip>
-            </span>
-          </template>
-          <template #[`item.unitsCount`]="{ item }">
-            <span
-              class="d-inline-block"
-              @click.stop="(item as City).units.value.length > 0 && detailsStore.open('units')"
-            >
-              {{ (item as City).units.value.length }}
             </span>
           </template>
           <template #[`item.health`]="{ item }">
@@ -142,7 +196,7 @@ const cityColumns = [
               ]"
               class="d-inline-block text-right"
             >
-              {{ (item as City).health.value }}
+              {{ (item as City).health }}
             </span>
           </template>
           <template #[`item.yields`]="{ item }">
@@ -193,9 +247,9 @@ const cityColumns = [
               </v-tooltip>
 
               <!-- Holy city for religions -->
-              <template v-for="r in (item as City).holyCityFor.value" :key="(r as any).key">
+              <template v-for="religion in (item as City).holyCityFor.value" :key="religion.key">
                 <v-tooltip
-                  :text="(r as any).name"
+                  :text="religion.name"
                   location="bottom"
                   content-class="text-grey bg-grey-darken-4"
                 >
@@ -221,8 +275,8 @@ const cityColumns = [
                 <template #activator="{ props }">
                   <v-icon
                     v-bind="props"
-                    icon="fa-hand-fist"
-                    color="red"
+                    icon="fa-theater-masks"
+                    color="disabled"
                     size="small"
                     @click.stop="detailsStore.open('diplomacy')"
                   />
@@ -249,11 +303,6 @@ const cityColumns = [
             </div>
           </template>
         </UiTable>
-      </v-col>
-
-      <v-col>
-        <h4 class="text-h6 mb-2 w-100">{{ current?.name ?? "Select City" }}</h4>
-        <div class="w-100">details go here</div>
       </v-col>
     </v-row>
   </v-container>
