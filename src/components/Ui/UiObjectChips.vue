@@ -5,12 +5,20 @@ import UiObjectChip from "@/components/Ui/UiObjectChip.vue";
 
 defineProps<{
   types: (string | ObjKey | PohObject | GameObject)[];
+  // when true, render chips on a single row and make them fill the available space equally
+  singleRow?: boolean;
 }>();
 </script>
 
 <template>
-  <div class="d-flex flex-wrap ga-1">
-    <UiObjectChip v-for="type of types" :key="JSON.stringify(type)" :type="type" v-bind="$attrs" />
+  <div :class="['d-flex', singleRow ? 'w-100 flex-nowrap ga-1' : 'flex-wrap ga-1']">
+    <UiObjectChip
+      v-for="type of types"
+      :key="JSON.stringify(type)"
+      :type="type"
+      :style="singleRow ? 'flex: 1 1 0' : undefined"
+      v-bind="$attrs"
+    />
   </div>
 </template>
 
