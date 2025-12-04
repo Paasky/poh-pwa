@@ -16,6 +16,7 @@ import "@fontsource/poiret-one/400.css";
 // Font Awesome setup
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { getYieldTypeFaIcons } from "@/types/icons";
 import {
   faArrowUp,
   faBars,
@@ -93,6 +94,9 @@ library.add(
   faStepBackward,
   faStepForward,
 );
+
+// Ensure all yieldType icons from our central icons.ts are registered
+library.add(...getYieldTypeFaIcons());
 
 registerSW({ immediate: true });
 

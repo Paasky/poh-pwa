@@ -7,8 +7,10 @@ import {
   faBolt,
   faBomb,
   faBook,
+  faBookOpen,
   faBuilding,
   faBullseye,
+  faArrowUp,
   faCaretDown,
   faCaretUp,
   faCarrot,
@@ -45,13 +47,19 @@ import {
   faIndustry,
   faLandmark,
   faLocationArrow,
+  faLocationDot,
+  faMagnifyingGlass,
   faMasksTheater,
+  faMinus,
   faMoon,
   faMound,
   faMountain,
   faMountainSun,
+  faPause,
+  faPen,
   faParachuteBox,
   faPaw,
+  faPlus,
   faPepperHot,
   faPerson,
   faPersonRifle,
@@ -64,6 +72,7 @@ import {
   faPlay,
   faQuestion,
   faRadiation,
+  faRoute,
   faRightLeft,
   faRoad,
   faSatellite,
@@ -73,24 +82,33 @@ import {
   faShip,
   faShirt,
   faShop,
+  faChevronLeft,
+  faChevronRight,
+  faChevronUp,
+  faChevronDown,
+  faStar,
+  faStepBackward,
+  faStepForward,
   faSkull,
   faSnowflake,
   faSquare,
-  faStar,
   faSun,
   faTree,
   faTruck,
   faUpDownLeftRight,
+  faUpRightAndDownLeftFromCenter,
   faUser,
   faUsers,
   faUserSecret,
   faUserShield,
+  faTimesCircle,
   faWater,
   faWheatAwn,
   faWind,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { ObjectIcon } from "@/types/common";
+import type { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
 const colors = {
   default: "#f1f5f9", // slate-100
@@ -113,12 +131,40 @@ export const icons = {
   city: { icon: faHouse, color: colors.default },
   close: { icon: faXmark, color: colors.danger },
   concept: { icon: faBook, color: colors.default },
+  bookOpen: { icon: faBookOpen, color: colors.default },
   down: { icon: faCaretDown, color: colors.default },
+  chevronDown: { icon: faChevronDown, color: colors.default },
+  chevronUp: { icon: faChevronUp, color: colors.default },
+  chevronLeft: { icon: faChevronLeft, color: colors.default },
+  chevronRight: { icon: faChevronRight, color: colors.default },
+  arrowUp: { icon: faArrowUp, color: colors.default },
   fullscreenEnter: { icon: faExpand, color: colors.default },
   fullscreenExit: { icon: faCompress, color: colors.default },
+  fullscreenAlt: { icon: faUpRightAndDownLeftFromCenter, color: colors.default },
   menu: { icon: faBars, color: colors.default },
+  minus: { icon: faMinus, color: colors.default },
+  plus: { icon: faPlus, color: colors.default },
   play: { icon: faPlay, color: colors.default },
+  pause: { icon: faPause, color: colors.default },
   question: { icon: faQuestion, color: colors.default },
+  edit: { icon: faPen, color: colors.default },
+  search: { icon: faMagnifyingGlass, color: colors.default },
+  locate: { icon: faLocationDot, color: colors.default },
+  cityAlt: { icon: faCity, color: colors.default },
+  handsPraying: { icon: faHandsPraying, color: colors.faith },
+  masksTheater: { icon: faMasksTheater, color: colors.culture },
+  users: { icon: faUsers, color: colors.default },
+  stepBackward: { icon: faStepBackward, color: colors.default },
+  stepForward: { icon: faStepForward, color: colors.default },
+  timesCircle: { icon: faTimesCircle, color: colors.danger },
+  route: { icon: faRoute, color: colors.default },
+  scroll: { icon: faScroll, color: colors.default },
+  shield: { icon: faShield, color: colors.default },
+  star: { icon: faStar, color: colors.default },
+  bullseye: { icon: faBullseye, color: colors.default },
+  handFist: { icon: faHandFist, color: colors.default },
+  landmark: { icon: faLandmark, color: colors.default },
+  coins: { icon: faCoins, color: colors.gold },
   tech: { icon: faFlask, color: colors.default },
   unit: { icon: faUserShield, color: colors.default },
   up: { icon: faCaretUp, color: colors.default },
@@ -516,3 +562,14 @@ function getIcon(
 }
 
 export default getIcon;
+
+// Helper: expose the set of Font Awesome icons used by yieldType mappings
+export function getYieldTypeFaIcons(): IconDefinition[] {
+  const set = new Set<IconDefinition>();
+  for (const [key, val] of Object.entries(keys)) {
+    if (key.startsWith("yieldType:")) {
+      set.add(val.icon as IconDefinition);
+    }
+  }
+  return Array.from(set.values());
+}

@@ -3,15 +3,18 @@ import { computed } from "vue";
 import { Yield } from "@/objects/yield";
 import { useObjectsStore } from "@/stores/objectStore";
 import UiObjectChips from "@/components/Ui/UiObjectChips.vue";
+import getIcon from "@/types/icons";
 
 export type yieldProps = {
   opts?: {
-    posLumpIsNeutral: boolean;
+    posLumpIsNeutral?: boolean;
+    hideName?: boolean;
   };
 };
 
 const props = defineProps<{ y: Yield } & yieldProps>();
 const type = computed(() => useObjectsStore().getTypeObject(props.y.type));
+const icon = computed(() => getIcon(type.value.key));
 
 function amount(y: Yield): string {
   // 0 is always neutral
@@ -52,6 +55,7 @@ function amount(y: Yield): string {
 
   return out;
 }
+
 function color(y: Yield): string {
   // 0 is always neutral
   if (y.amount === 0) return "";
@@ -96,9 +100,20 @@ function color(y: Yield): string {
 </script>
 
 <template>
-  <div class="d-flex ga-1">
+  <div class="d-flex align-center ga-1" style="user-select: none">
     <div :style="{ color: color(y) }">{{ amount(y) }}</div>
-    <div>{{ type.name }}</div>
+    <v-tooltip :text="type.name" content-class="text-grey bg-grey-darken-4" location="bottom">
+      <template #activator="{ props: tip }">
+        <v-icon
+          v-bind="tip"
+          :icon="icon.icon.iconName"
+          :color="icon.color"
+          size="x-small"
+          class="mx-1"
+        />
+        <div v-if="!opts?.hideName">{{ type.name }}</div>
+      </template>
+    </v-tooltip>
     <div v-if="y.for.length" class="d-flex ga-1">
       for
       <UiObjectChips :types="y.for" />
