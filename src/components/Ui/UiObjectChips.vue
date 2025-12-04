@@ -10,7 +10,7 @@ defineProps<{
 
 <template>
   <div class="d-flex flex-wrap ga-1">
-    <UiObjectChip v-for="type of types" :key="JSON.stringify(type)" :type="type" />
+    <UiObjectChip v-for="type of types" :key="JSON.stringify(type)" :type="type" v-bind="$attrs" />
   </div>
 </template>
 

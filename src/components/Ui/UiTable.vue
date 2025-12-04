@@ -46,11 +46,12 @@ const normalizedHeaders = computed(() =>
 const attrs = useAttrs();
 
 // local search term for the built-in search box
+// Note: Vuetify clearable text field can emit null on clear; we guard against it.
 const searchTerm = ref("");
 
 // When a search predicate is provided, filter locally; otherwise, return items unchanged
 const filteredItems = computed(() => {
-  const term = searchTerm.value.trim();
+  const term = (searchTerm.value ?? "").toString().trim();
   if (!term || typeof props.search !== "function") return props.items;
   // filter using the provided predicate
   return props.items.filter((item) => props.search!(item, term));
@@ -63,7 +64,7 @@ const filteredItems = computed(() => {
       <h4 v-if="title" class="text-h6">
         {{ title }}
         <span v-if="showCount">
-          ({{ searchTerm.trim() ? `${filteredItems.length}/${items.length}` : items.length }})
+          ({{ ((searchTerm ?? '').toString().trim()) ? `${filteredItems.length}/${items.length}` : items.length }})
         </span>
       </h4>
       <v-text-field
@@ -72,6 +73,7 @@ const filteredItems = computed(() => {
         density="compact"
         hide-details
         clearable
+        @click:clear="searchTerm = ''"
         variant="outlined"
         label="Search"
         prepend-inner-icon="fa-magnifying-glass"

@@ -108,14 +108,27 @@ export const playerDetailConfig = [
 export const usePlayerDetailsStoreNew = defineStore("playerDetailsNew", {
   state: () => ({
     isOpen: false as boolean,
-    tab: null as null | TabId,
+    tab: undefined as undefined | TabId,
+    // Wired by router/index.ts
+    pushTabState: undefined as undefined | ((v: string | undefined) => void),
   }),
   actions: {
-    open(tab?: TabId | null) {
-      this.isOpen = true;
-      if (tab) this.tab = tab;
+    // Public API
+    open(tab?: TabId) {
+      // Sync to URL via router wiring
+      this.pushTabState!(tab ?? "");
     },
     close() {
+      this.pushTabState!(undefined);
+    },
+
+    // Internal URL -> UI handlers (wired by router)
+    _openFromUiState(tab: string) {
+      this.isOpen = true;
+      this.tab = tab as TabId;
+    },
+    _clearFromUiState() {
+      this.tab = undefined;
       this.isOpen = false;
     },
   },

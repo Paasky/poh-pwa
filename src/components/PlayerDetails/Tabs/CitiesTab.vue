@@ -55,9 +55,9 @@ const cityColumns = [
             </v-tooltip>
 
             <!-- Title as h4, input inside, pencil icon follows text -->
-            <h2>
+            <h1>
               {{ current.name }}
-            </h2>
+            </h1>
 
             <v-tooltip
               text="Change name"
@@ -79,10 +79,10 @@ const cityColumns = [
 
         <!-- Row 1: Construction & Training queue dropdowns -->
         <v-row class="ga-2">
-          <v-col aria-colspan="2"><h3>Construction</h3></v-col>
-          <v-col aria-colspan="1"><h5>Next in Queue</h5></v-col>
-          <v-col aria-colspan="2"><h3>Training</h3></v-col>
-          <v-col aria-colspan="1"><h5>Next in Queue</h5></v-col>
+          <v-col aria-colspan="2"><h2>Construction</h2></v-col>
+          <v-col aria-colspan="1"><h4>Next in Queue</h4></v-col>
+          <v-col aria-colspan="2"><h2>Training</h2></v-col>
+          <v-col aria-colspan="1"><h4>Next in Queue</h4></v-col>
         </v-row>
         <v-row class="ga-2">
           <v-col aria-colspan="2">

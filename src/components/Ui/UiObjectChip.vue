@@ -8,6 +8,8 @@ import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStor
 
 const props = defineProps<{
   type: string | ObjKey | PohObject | GameObject;
+  // optional visual size; defaults match previous behavior
+  size?: string;
 }>();
 
 const t = computed((): TypeObject => {
@@ -102,12 +104,12 @@ const tooltip = computed(() => {
         @click.stop="
           isCategory ? useEncyclopediaStore().toggle(t.key) : useEncyclopediaStore().open(t.key)
         "
-        v-bind="{ ...$attrs, ...tip }"
         variant="elevated"
         :color="bg"
         rounded="xl"
-        size="x-small"
+        :size="props.size ?? 'x-small'"
         :style="`border: 1px solid ${border}`"
+        v-bind="{ ...$attrs, ...tip }"
         >{{ t.name }}</v-btn
       >
     </template>

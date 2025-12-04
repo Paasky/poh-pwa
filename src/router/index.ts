@@ -6,6 +6,7 @@ import GameView from "@/views/GameView.vue";
 import MapGeneratorView from "@/views/MapGeneratorView.vue";
 import { useAppStore } from "@/stores/appStore";
 import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
+import { usePlayerDetailsStoreNew } from "@/components/PlayerDetails/playerDetailsStore";
 
 const routes: Readonly<RouteRecordRaw[]> = [
   { path: "/", name: "home", component: HomeView },
@@ -33,6 +34,7 @@ const injectIt = () => {
       appStore._router.currentRoute.query == router.currentRoute.value.query
     ) {
       const encStore = useEncyclopediaStore();
+      const pdStore = usePlayerDetailsStoreNew();
 
       // Connect the stores from above to prevent circular dependencies
       // Register URL -> UI sync functions
@@ -41,8 +43,14 @@ const injectIt = () => {
         onUpdate: encStore._openFromUiState,
         onClear: encStore._closeFromUiState,
       };
+      appStore.uiStateListeners["pd"] = {
+        id: "pd",
+        onUpdate: pdStore._openFromUiState,
+        onClear: pdStore._clearFromUiState,
+      };
       // Register UI -> URL sync functions
       encStore.pushUiState = (key: string | undefined) => appStore.pushUiState("enc", key);
+      pdStore.pushTabState = (tab: string | undefined) => appStore.pushUiState("pd", tab);
 
       // Success! Stop trying to inject
       clearInterval(injector);
