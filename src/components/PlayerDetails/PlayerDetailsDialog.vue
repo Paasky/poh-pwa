@@ -56,7 +56,7 @@ const tabModel = computed<null | TabId>({
           <v-window-item value="economy" class="w-100 h-100 overflow-x-hidden overflow-y-auto"
             ><EconomyTab />
           </v-window-item>
-          <v-window-item value="research" class="w-100 h-100 overflow-x-hidden overflow-y-auto"
+          <v-window-item value="research" class="w-100 h-100 overflow-auto"
             ><ResearchTab />
           </v-window-item>
           <v-window-item value="culture" class="w-100 h-100 overflow-x-hidden overflow-y-auto"

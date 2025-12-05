@@ -74,7 +74,8 @@ const connections = computed(() => {
 
 <template>
   <svg
-      class="absolute left-0 top-0 w-full h-full pointer-events-none"
+      class="position-absolute left-0 top-0 w-100 h-100"
+      style="pointer-events: none;"
       :viewBox="`0 0 ${containerWidthRem} ${containerHeightRem}`"
       preserveAspectRatio="none"
   >
