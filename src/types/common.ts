@@ -1,9 +1,9 @@
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import getIcon from "@/types/icons";
-import { CategoryClass, CategoryObject, TypeClass, TypeObject } from "@/types/typeObjects";
-import { GameClass, GameKey, GameObject } from "@/objects/game/_GameObject";
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
+import getIcon from '@/types/icons'
+import { CategoryClass, CategoryObject, TypeClass, TypeObject } from '@/types/typeObjects'
+import { GameClass, GameKey, GameObject } from '@/objects/game/_GameObject'
 
-export type ObjType = "TypeObject" | "CategoryObject" | "GameObject";
+export type ObjType = 'TypeObject' | 'CategoryObject' | 'GameObject';
 export type CatKey = `${CategoryClass}:${string}`;
 export type TypeKey = `${TypeClass}:${string}`;
 export type ObjKey = CatKey | TypeKey | GameKey;
@@ -18,37 +18,37 @@ export interface PohObject {
   icon: ObjectIcon;
 }
 
-export function classAndId(key: string): {
+export function classAndId (key: string): {
   class: CategoryClass | TypeClass | GameClass;
   id: string;
 } {
-  const [c, i] = key.split(":");
-  return { class: c as CategoryClass | TypeClass | GameClass, id: i };
+  const [c, i] = key.split(':')
+  return { class: c as CategoryClass | TypeClass | GameClass, id: i }
 }
 
 // eslint-disable-next-line
-export function initPohObject(objType: ObjType, data: any): PohObject {
+export function initPohObject (objType: ObjType, data: any): PohObject {
   return {
     ...data,
     objType,
     ...classAndId(data.key),
     key: data.key,
-    name: data.name ?? "",
+    name: data.name ?? '',
     concept: data.concept,
     icon: getIcon(data.key, data.concept, data.category),
-  };
+  }
 }
 
-export function isCategoryObject(o: GameObject | PohObject): o is CategoryObject {
-  return o.objType === "CategoryObject";
+export function isCategoryObject (o: GameObject | PohObject): o is CategoryObject {
+  return o.objType === 'CategoryObject'
 }
 
-export function isTypeObject(o: GameObject | PohObject): o is TypeObject {
-  return o.objType === "TypeObject";
+export function isTypeObject (o: GameObject | PohObject): o is TypeObject {
+  return o.objType === 'TypeObject'
 }
 
-export function isGameObject(o: GameObject | PohObject): o is GameObject {
-  return o.objType === "GameObject";
+export function isGameObject (o: GameObject | PohObject): o is GameObject {
+  return o.objType === 'GameObject'
 }
 
 export type World = {
@@ -85,8 +85,61 @@ export const yearsPerTurnConfig = [
   { start: 2000, end: 2015, yearsPerTurn: 0.333 },
   { start: 2015, end: 2030, yearsPerTurn: 0.333 },
   { start: 2030, end: 99999999, yearsPerTurn: 0.333 },
-];
+]
 
-export function roundToTenth(v: number): number {
-  return Math.round(v * 10) / 10;
+export function getYearFromTurn (turn: number): number {
+  // Start from the first configured era
+  if (turn <= 0) return yearsPerTurnConfig[0].start
+
+  let remainingTurns = turn
+
+  for (const era of yearsPerTurnConfig) {
+    const yearsInEra = era.end - era.start
+    const turnsInEra = yearsInEra / era.yearsPerTurn
+
+    if (remainingTurns >= turnsInEra) {
+      // Consume this whole era's turns and continue to the next
+      remainingTurns -= turnsInEra
+      continue
+    }
+
+    // We are within this era
+    return era.start + remainingTurns * era.yearsPerTurn
+  }
+
+  // Fallback: if for some reason we exceeded the configuration,
+  // continue using the last era's yearsPerTurn indefinitely
+  const last = yearsPerTurnConfig[yearsPerTurnConfig.length - 1]
+  return last.start + remainingTurns * last.yearsPerTurn
+}
+
+export function formatYear (year: number): string {
+  const fullYear = Math.round(year)
+  if (fullYear < 0) return `${-fullYear} BCE`
+  // Switch to just the year at year 1000
+  if (fullYear < 1000) return `${-fullYear} CE`
+
+  // Switch to seasons at the year 1950 (starts to have half/third years)
+  if (fullYear < 1950) return `${-fullYear}`
+
+  // Round to season based on fractional part of the year
+  //  .875 to .125 = Winter
+  //  .125 to .375 = Spring
+  //  .375 to .625 = Summer
+  //  .625 to .875 = Autumn
+  // Compute a positive fractional part in [0, 1)
+  const fracRaw = year - Math.floor(year)
+  const frac = ((fracRaw % 1) + 1) % 1
+
+  let season: string
+  if (frac >= 0.875 || frac < 0.125) season = 'Winter'
+  else if (frac < 0.375) season = 'Spring'
+  else if (frac < 0.625) season = 'Summer'
+  else season = 'Autumn'
+
+  return `${season} ${fullYear}`
+}
+
+export function roundToTenth (v: number): number {
+  return Math.round(v * 10) / 10
 }

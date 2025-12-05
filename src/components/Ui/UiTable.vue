@@ -1,8 +1,8 @@
 <script setup lang="ts">
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { computed, ref, useAttrs } from "vue";
+import { computed, ref, useAttrs } from 'vue'
 
-export type TableAlign = "start" | "center" | "end";
+export type TableAlign = 'start' | 'center' | 'end';
 export type TableColumn<T> = {
   title: string;
   key: string; // VDataTable column key
@@ -11,55 +11,55 @@ export type TableColumn<T> = {
 };
 
 const props = withDefaults(
-  defineProps<{
-    items: unknown[];
-    columns: TableColumn<any>[];
-    itemKey?: string;
-    hover?: boolean; // optional explicit hover control
-    // New optional title for the table header
-    title?: string;
-    titleClass?: string;
-    // Show the (filtered/total) count next to the title
-    showCount?: boolean;
-    // Optional custom search predicate to filter items with the search box
-    search?: (item: any, term: string) => boolean;
-  }>(),
-  {
-    itemKey: "key",
-    title: undefined,
-    titleClass: "text-h2",
-    hover: false,
-    showCount: true,
-    search: undefined,
-  },
-);
+    defineProps<{
+      items: unknown[];
+      columns: TableColumn<any>[];
+      itemKey?: string;
+      hover?: boolean; // optional explicit hover control
+      // New optional title for the table header
+      title?: string;
+      titleClass?: string;
+      // Show the (filtered/total) count next to the title
+      showCount?: boolean;
+      // Optional custom search predicate to filter items with the search box
+      search?: (item: any, term: string) => boolean;
+    }>(),
+    {
+      itemKey: 'key',
+      title: undefined,
+      titleClass: 'text-h1',
+      hover: false,
+      showCount: true,
+      search: undefined,
+    },
+)
 
 // Normalize headers to always provide a value extractor, so simple cells render automatically
 const normalizedHeaders = computed(() =>
-  props.columns.map((h) => ({
-    ...h,
-    value:
-      h.value ||
-      ((item: unknown) => {
-        // basic fallback: property lookup by key
-        return (item as Record<string, unknown>)[h.key];
-      }),
-  })),
-);
+    props.columns.map((h) => ({
+      ...h,
+      value:
+          h.value ||
+          ((item: unknown) => {
+            // basic fallback: property lookup by key
+            return (item as Record<string, unknown>)[h.key]
+          }),
+    })),
+)
 
-const attrs = useAttrs();
+const attrs = useAttrs()
 
 // local search term for the built-in search box
 // Note: Vuetify clearable text field can emit null on clear; we guard against it.
-const searchTerm = ref("");
+const searchTerm = ref('')
 
 // When a search predicate is provided, filter locally; otherwise, return items unchanged
 const filteredItems = computed(() => {
-  const term = (searchTerm.value ?? "").toString().trim();
-  if (!term || typeof props.search !== "function") return props.items;
+  const term = (searchTerm.value ?? '').toString().trim()
+  if (!term || typeof props.search !== 'function') return props.items
   // filter using the provided predicate
-  return props.items.filter((item) => props.search!(item, term));
-});
+  return props.items.filter((item) => props.search!(item, term))
+})
 </script>
 
 <template>
@@ -69,39 +69,39 @@ const filteredItems = computed(() => {
         {{ title }}
         <span v-if="showCount">
           ({{
-            (searchTerm ?? "").toString().trim()
-              ? `${filteredItems.length}/${items.length}`
-              : items.length
+            (searchTerm ?? '').toString().trim()
+                ? `${filteredItems.length}/${items.length}`
+                : items.length
           }})
         </span>
       </div>
       <v-text-field
-        v-if="typeof search === 'function'"
-        v-model="searchTerm"
-        density="compact"
-        hide-details
-        clearable
-        @click:clear="searchTerm = ''"
-        variant="outlined"
-        label="Search"
-        prepend-inner-icon="fa-magnifying-glass"
-        style="max-width: 16.25rem"
+          v-if="typeof search === 'function'"
+          v-model="searchTerm"
+          density="compact"
+          hide-details
+          clearable
+          @click:clear="searchTerm = ''"
+          variant="outlined"
+          label="Search"
+          prepend-inner-icon="fa-magnifying-glass"
+          style="max-width: 16.25rem"
       />
     </div>
     <v-data-table
-      :headers="normalizedHeaders"
-      :items="filteredItems"
-      :item-key="itemKey"
-      density="compact"
-      hide-default-footer
-      :hover="hover"
-      v-bind="attrs"
-      class="w-100"
+        :headers="normalizedHeaders"
+        :items="filteredItems"
+        :item-key="itemKey"
+        density="compact"
+        hide-default-footer
+        :hover="hover"
+        v-bind="attrs"
+        class="w-100"
     >
       <template v-for="col in columns" #[`header.${col.key}`]="slotProps" :key="`h-${col.key}`">
         <slot :name="`header.${col.key}`" v-bind="slotProps">
           <h6
-            :class="[
+              :class="[
               'text-h6',
               col.align === 'end' ? 'text-right' : col.align === 'center' ? 'text-center' : '',
             ]"
