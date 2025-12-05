@@ -18,15 +18,19 @@ const props = withDefaults(
     hover?: boolean; // optional explicit hover control
     // New optional title for the table header
     title?: string;
+    titleClass?: string;
     // Show the (filtered/total) count next to the title
     showCount?: boolean;
     // Optional custom search predicate to filter items with the search box
     search?: (item: any, term: string) => boolean;
   }>(),
   {
-    itemKey: 'key',
+    itemKey: "key",
+    title: undefined,
+    titleClass: "text-h2",
     hover: false,
     showCount: true,
+    search: undefined,
   },
 );
 
@@ -61,12 +65,16 @@ const filteredItems = computed(() => {
 <template>
   <div>
     <div class="d-flex align-center justify-space-between mb-2 w-100 ga-4">
-      <h4 v-if="title" class="text-h6">
+      <div v-if="title" :class="titleClass">
         {{ title }}
         <span v-if="showCount">
-          ({{ ((searchTerm ?? '').toString().trim()) ? `${filteredItems.length}/${items.length}` : items.length }})
+          ({{
+            (searchTerm ?? "").toString().trim()
+              ? `${filteredItems.length}/${items.length}`
+              : items.length
+          }})
         </span>
-      </h4>
+      </div>
       <v-text-field
         v-if="typeof search === 'function'"
         v-model="searchTerm"

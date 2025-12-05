@@ -1,5 +1,5 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="pa-4">Culture content</div>
+  <h1>Culture</h1>
 </template>

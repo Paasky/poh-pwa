@@ -2,7 +2,6 @@ import { createApp } from "vue";
 import { createPinia } from "pinia";
 import App from "./App.vue";
 import router from "./router";
-import "./assets/main.css";
 
 // Vuetify
 import "vuetify/styles";
@@ -56,6 +55,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 // PWA service worker registration (auto updates)
 import { registerSW } from "virtual:pwa-register";
+
+// App styles (import AFTER vuetify/styles so our overrides take precedence)
+import "./assets/main.css";
 
 library.add(
   faBars,

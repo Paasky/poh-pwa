@@ -8,7 +8,7 @@ import getIcon from "@/types/icons";
 export type yieldProps = {
   opts?: {
     posLumpIsNeutral?: boolean;
-    hideName?: boolean;
+    showName?: boolean;
   };
 };
 
@@ -111,7 +111,7 @@ function color(y: Yield): string {
           size="x-small"
           class="mx-1"
         />
-        <div v-if="!opts?.hideName">{{ type.name }}</div>
+        <div v-if="opts?.showName">{{ type.name }}</div>
       </template>
     </v-tooltip>
     <div v-if="y.for.length" class="d-flex align-center ga-1">
