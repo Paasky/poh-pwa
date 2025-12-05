@@ -96,6 +96,9 @@ h6, .text-h6 {
     text-transform: none !important;
 }
 
+.selectable:hover {
+    background-color: var(--v-theme-primary);
+}
 
 /* Animations */
 

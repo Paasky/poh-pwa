@@ -1,58 +1,39 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useObjectsStore } from '@/stores/objectStore'
-import { TypeObject } from '@/types/typeObjects'
-import UiObjectCard from '@/components/Ui/UiObjectCard.vue'
+import { computed } from "vue";
+import UiGrid from "@/components/Ui/UiGrid.vue";
+import UiObjectCards from "@/components/Ui/UiObjectCards.vue";
+import { CatData, useObjectsStore } from "@/stores/objectStore";
+import { TypeObject } from "@/types/typeObjects";
+import UiCols from "@/components/Ui/UiCols.vue";
 
-const objStore = useObjectsStore()
-const categories = objStore.getClassTypesPerCategory('policyType')
+const objStore = useObjectsStore();
+const items = computed(() => objStore.getClassTypesPerCategory("policyType"));
 
-type TypeData = {
-  type: TypeObject;
-  isSelected: boolean;
-  canSelect: boolean;
-};
-
-// Build exactly 5 rows; each cell is the type at index [row] for that category
-const rows = computed(() => {
-  const rows: { key: string; types: TypeData[] }[] = []
-  for (let i = 0; i < 5; i++) {
-    rows.push({
-      key: `row-${i}`,
-      types: categories.map((cat, ii) => ({
-        type: cat.types[i],
-        isSelected: (i + ii) % 5 === 0,
-        canSelect: (i + ii) % 3 === 0,
-      })),
-    })
-  }
-  return rows
-})
+const government = objStore.currentPlayer.government;
 </script>
 
 <template>
-  <div class="px-4" style="width: 84rem; height: 100%">
-    <v-table density="comfortable">
-      <thead>
-      <tr>
-        <th v-for="cat in categories" :key="cat.category.key" class="border-e border-b-0">
-          <h1 style="text-align: center">{{ cat.category.name }}</h1>
-        </th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="row in rows" :key="row.key">
-        <td
-            v-for="typeData in row.types"
-            :key="typeData.type.key"
-            class="border-e border-b-0"
-            style="height: 9rem"
-        >
-          <UiObjectCard :type="typeData.type" :isSelected="typeData.isSelected" :canSelect="typeData.canSelect"/>
-        </td>
-      </tr>
-      </tbody>
-    </v-table>
+  <div class="pa-2">
+    <UiCols :cols="{ left: 9, right: 3 }">
+      <template #left>
+        <UiGrid :items="items" :col-count="5" class="w-100">
+          <template #cell="{ item: catData }">
+            <UiObjectCards
+              :title="(catData as CatData).category.name"
+              title-class="text-h5"
+              :types="(catData as CatData).types"
+              :selectable="government.selectablePolicies.value"
+              :selected="government.policies.value as TypeObject[]"
+              :select-pos="'right'"
+              :with-spacer="true"
+              :show-or-between="true"
+              card-style="height: 9.5rem;"
+            />
+          </template>
+        </UiGrid>
+      </template>
+      <template #right> </template>
+    </UiCols>
   </div>
 </template>
 

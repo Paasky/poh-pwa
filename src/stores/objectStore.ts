@@ -121,16 +121,8 @@ export const useObjectsStore = defineStore("objects", {
 
     getClassTypesPerCategory:
       (state) =>
-      (
-        typeClass: TypeClass,
-      ): {
-        category: CategoryObject;
-        types: TypeObject[];
-      }[] => {
-        const output = [] as {
-          category: CategoryObject;
-          types: TypeObject[];
-        }[];
+      (typeClass: TypeClass): CatData[] => {
+        const output = [] as CatData[];
         const catsSet = state._classCatsIndex.get(typeClass);
         if (!catsSet) return output;
 
@@ -277,3 +269,8 @@ export const useObjectsStore = defineStore("objects", {
 function throwWithContext(message: string) {
   throw withCallerContext(message, ["/src/stores/objectStore.ts"]);
 }
+
+export type CatData = {
+  category: CategoryObject;
+  types: TypeObject[];
+};
