@@ -1,18 +1,13 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { TypeObject } from '@/types/typeObjects'
-import { useObjectsStore } from '@/stores/objectStore'
-import { CatKey } from '@/types/common'
-import ResearchTabArrows from './ResearchTabArrows.vue'
-import UiHeader from '@/components/Ui/UiHeader.vue'
-import UiObjectCard from '@/components/Ui/UiObjectCard.vue'
+import { computed } from "vue";
+import { TypeObject } from "@/types/typeObjects";
+import { CatKey } from "@/types/common";
+import ResearchTabArrows from "./ResearchTabArrows.vue";
+import UiHeader from "@/components/Ui/UiHeader.vue";
+import UiObjectCard from "@/components/Ui/UiObjectCard.vue";
+import { useResearchTabStore } from "@/components/PlayerDetails/Tabs/researchTabStore";
 
-const objStore = useObjectsStore();
-const techs = objStore.getClassTypes("technologyType");
-const player = objStore.currentPlayer;
-const research = player.research;
-const maxY = Math.max(...techs.map((t) => t.y!));
-const maxX = Math.max(...techs.map((t) => t.x!));
+const store = useResearchTabStore();
 
 // Base size controls (rem units)
 const xSize = 5.5;
@@ -20,12 +15,12 @@ const ySize = 7;
 
 const cardWidthRem = xSize * (20 / xSize);
 const cardHeightRem = ySize * (10 / ySize);
-const containerWidthRem = computed(() => maxX * xSize + cardWidthRem);
-const containerHeightRem = computed(() => (maxY + 1.6) * ySize);
+const containerWidthRem = computed(() => store.maxX * xSize + cardWidthRem);
+const containerHeightRem = computed(() => (store.maxY + 1.6) * ySize);
 
 function eraY(era: TypeObject): number {
   // Find all techs in this era and return the lowest y among them
-  const ys = techs.filter((t) => t.category === (era.key as CatKey)).map((t) => t.y ?? 0);
+  const ys = store.techs.filter((t) => t.category === (era.key as CatKey)).map((t) => t.y ?? 0);
 
   return ys.length ? Math.min(...ys) : 0;
 }
@@ -53,7 +48,7 @@ function eraY(era: TypeObject): number {
 
     <!-- Era headers from legacy, migrated to Vuetify UiHeader -->
     <UiHeader
-      v-for="(era, i) in objStore.getClassTypes('eraType')"
+      v-for="(era, i) in store.eras"
       :key="era.key"
       class="position-absolute"
       :style="{
@@ -68,7 +63,7 @@ function eraY(era: TypeObject): number {
 
     <!-- Technology cards using UiObjectCard -->
     <div
-      v-for="tech in techs"
+      v-for="tech in store.techs"
       :key="tech.key"
       class="position-absolute"
       :style="{
@@ -77,22 +72,29 @@ function eraY(era: TypeObject): number {
         width: `${cardWidthRem}rem`,
         height: `${cardHeightRem}rem`,
         cursor:
-          !research.researched.value.includes(tech) && research.current.value !== tech
+          !store.research.researched.value.includes(tech) && store.research.current.value !== tech
             ? 'pointer'
             : 'default',
       }"
-      @click="(e: MouseEvent) => {
-        if (!research.researched.value.includes(tech) && research.current.value !== tech) {
-          // Reset queue unless Shift is held while clicking
-          research.addToQueue(tech, !e.shiftKey);
+      @click="
+        (e: MouseEvent) => {
+          if (
+            !store.research.researched.value.includes(tech) &&
+            store.research.current.value !== tech
+          ) {
+            // Reset queue unless Shift is held while clicking
+            store.research.addToQueue(tech, !e.shiftKey);
+          }
         }
-      }"
+      "
     >
       <UiObjectCard
         class="h-100"
         :type="tech"
-        :canSelect="!research.researched.value.includes(tech)"
-        :isSelected="research.queue.value.includes(tech) || research.current.value === tech"
+        :canSelect="!store.research.researched.value.includes(tech)"
+        :isSelected="
+          store.research.queue.value.includes(tech) || store.research.current.value === tech
+        "
       />
     </div>
   </div>

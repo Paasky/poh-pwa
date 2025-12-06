@@ -1,102 +1,95 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { useObjectsStore } from '@/stores/objectStore'
-import UiTable, { TableColumn } from '@/components/Ui/UiTable.vue'
-import UiYields from '@/components/Ui/UiYields.vue'
-import { City } from '@/objects/game/City'
-import { usePlayerDetailsStoreNew } from '@/components/PlayerDetails/playerDetailsStore'
-import { includes } from '@/helpers/textTools'
-import UiCols from '@/components/Ui/UiCols.vue'
+import { computed, ref } from "vue";
+import UiTable, { TableColumn } from "@/components/Ui/UiTable.vue";
+import UiYields from "@/components/Ui/UiYields.vue";
+import { City } from "@/objects/game/City";
+import { usePlayerDetailsStoreNew } from "@/components/PlayerDetails/playerDetailsStore";
+import { includes } from "@/helpers/textTools";
+import UiCols from "@/components/Ui/UiCols.vue";
+import { useCitiesTabStore } from "@/components/PlayerDetails/Tabs/citiesTabStore";
 
-const objStore = useObjectsStore()
-const detailsStore = usePlayerDetailsStoreNew()
+const detailsStore = usePlayerDetailsStoreNew();
+const store = useCitiesTabStore();
 
-const cities = computed<City[]>(() => objStore.currentPlayer.cities.value as City[])
+const cities = computed<City[]>(() => store.cities);
 
 // Search predicate consumed by UiTable
-function searchCity (c: City, term: string): boolean {
+function searchCity(c: City, term: string): boolean {
   return (
-      includes(c.name.value, term) ||
-      includes(c.constructionQueue.queue[0]?.item.name ?? '', term) ||
-      includes(c.trainingQueue.queue[0]?.item.name ?? '', term)
-  )
+    includes(c.name.value, term) ||
+    includes(c.constructionQueue.queue[0]?.item.name ?? "", term) ||
+    includes(c.trainingQueue.queue[0]?.item.name ?? "", term)
+  );
 }
 
 // Selected city (row click)
-const current = ref<City | null>(null)
+const current = ref<City | null>(null);
 
-function onRowClick (_e: unknown, payload: { item: unknown }) {
-  current.value = payload.item as City
+function onRowClick(_e: unknown, payload: { item: unknown }) {
+  current.value = payload.item as City;
 }
 
-const cityColumns = [
-  { title: 'Name', key: 'name', value: (c: City) => c.name.value },
-  { title: 'Health', key: 'health', align: 'end', value: (c: City) => c.health.value },
-  { title: 'Yields', key: 'yields' },
-  { title: 'Constructing', key: 'constructing' },
-  { title: 'Training', key: 'training' },
-  { title: 'Details', key: 'details' },
-] as TableColumn<City>[]
+const cityColumns = store.columns as unknown as TableColumn<City>[];
 </script>
 
 <template>
   <UiCols>
     <template #left>
       <UiTable
-          title="Cities"
-          :columns="cityColumns"
-          :items="cities"
-          :search="searchCity"
-          @click:row="onRowClick"
-          :hover="true"
+        title="Cities"
+        :columns="cityColumns"
+        :items="cities"
+        :search="searchCity"
+        @click:row="onRowClick"
+        :hover="true"
       >
         <template #[`item.name`]="{ item }">
           <span class="d-inline-flex align-center ga-2">
             <!-- Location pin before name -->
             <v-tooltip
-                text="Show on Map"
-                location="bottom"
-                content-class="text-grey bg-grey-darken-4"
+              text="Show on Map"
+              location="bottom"
+              content-class="text-grey bg-grey-darken-4"
             >
               <template #activator="{ props }">
-                <v-icon v-bind="props" icon="fa-location-dot" color="white" size="small"/>
+                <v-icon v-bind="props" icon="fa-location-dot" color="white" size="small" />
               </template>
             </v-tooltip>
             <!-- Name -->
             {{ (item as City).name }}
             <!-- Capital star after name -->
             <v-tooltip
-                v-if="(item as City).isCapital"
-                text="Capital City"
-                location="bottom"
-                content-class="text-grey bg-grey-darken-4"
+              v-if="(item as City).isCapital"
+              text="Capital City"
+              location="bottom"
+              content-class="text-grey bg-grey-darken-4"
             >
               <template #activator="{ props }">
-                <v-icon v-bind="props" icon="fa-star" color="gold" size="small"/>
+                <v-icon v-bind="props" icon="fa-star" color="gold" size="small" />
               </template>
             </v-tooltip>
           </span>
         </template>
         <template #[`item.health`]="{ item }">
           <span
-              :class="[
+            :class="[
               (item as City).health.value < 75
                 ? 'text-red'
                 : (item as City).health.value < 100
                   ? 'text-orange font-weight-bold'
                   : '',
             ]"
-              class="d-inline-block text-right"
+            class="d-inline-block text-right"
           >
             {{ (item as City).health }}
           </span>
         </template>
         <template #[`item.yields`]="{ item }">
-          <UiYields :yields="(item as City).yields.value" :opts="{ posLumpIsNeutral: true }"/>
+          <UiYields :yields="(item as City).yields.value" :opts="{ posLumpIsNeutral: true }" />
         </template>
         <template #[`item.constructing`]="{ item }">
           <span>
-            {{ ((item as City).constructionQueue.queue[0]?.item as any)?.name ?? '-' }}
+            {{ ((item as City).constructionQueue.queue[0]?.item as any)?.name ?? "-" }}
             <template v-if="(item as City).constructionQueue.queue.length > 0">
               —
               {{ (item as City).constructionQueue.queue[0].progress }}/{{
@@ -110,7 +103,7 @@ const cityColumns = [
         </template>
         <template #[`item.training`]="{ item }">
           <span>
-            {{ ((item as City).trainingQueue.queue[0]?.item as any)?.name ?? '-' }}
+            {{ ((item as City).trainingQueue.queue[0]?.item as any)?.name ?? "-" }}
             <template v-if="(item as City).trainingQueue.queue.length > 0">
               —
               {{ (item as City).trainingQueue.queue[0].progress }}/{{
@@ -126,13 +119,13 @@ const cityColumns = [
           <div class="d-flex align-center ga-4">
             <!-- Citizens count -->
             <v-tooltip
-                :text="`${(item as City).citizens.value.length} Citizens (pop. ${(item as City).pop.value})`"
-                location="bottom"
-                content-class="text-grey bg-grey-darken-4"
+              :text="`${(item as City).citizens.value.length} Citizens (pop. ${(item as City).pop.value})`"
+              location="bottom"
+              content-class="text-grey bg-grey-darken-4"
             >
               <template #activator="{ props }">
                 <span class="d-inline-flex align-center ga-1" v-bind="props">
-                  <v-icon icon="fa-users" color="white" size="small"/>
+                  <v-icon icon="fa-users" color="white" size="small" />
                   {{ (item as City).citizens.value.length }}
                 </span>
               </template>
@@ -141,17 +134,17 @@ const cityColumns = [
             <!-- Holy city for religions -->
             <template v-for="religion in (item as City).holyCityFor.value" :key="religion.key">
               <v-tooltip
-                  :text="religion.name"
-                  location="bottom"
-                  content-class="text-grey bg-grey-darken-4"
+                :text="religion.name"
+                location="bottom"
+                content-class="text-grey bg-grey-darken-4"
               >
                 <template #activator="{ props }">
                   <v-icon
-                      v-bind="props"
-                      icon="fa-star"
-                      color="lightPurple"
-                      size="small"
-                      @click.stop="detailsStore.open('religion')"
+                    v-bind="props"
+                    icon="fa-star"
+                    color="lightPurple"
+                    size="small"
+                    @click.stop="detailsStore.open('religion')"
                   />
                 </template>
               </v-tooltip>
@@ -159,31 +152,31 @@ const cityColumns = [
 
             <!-- Original founder different than current owner -->
             <v-tooltip
-                v-if="(item as City).origPlayerKey !== (item as City).playerKey.value"
-                :text="`Founded by ${(item as City).origPlayer.value.name}`"
-                location="bottom"
-                content-class="text-grey bg-grey-darken-4"
+              v-if="(item as City).origPlayerKey !== (item as City).playerKey.value"
+              :text="`Founded by ${(item as City).origPlayer.value.name}`"
+              location="bottom"
+              content-class="text-grey bg-grey-darken-4"
             >
               <template #activator="{ props }">
                 <v-icon
-                    v-bind="props"
-                    icon="fa-theater-masks"
-                    color="disabled"
-                    size="small"
-                    @click.stop="detailsStore.open('diplomacy')"
+                  v-bind="props"
+                  icon="fa-theater-masks"
+                  color="disabled"
+                  size="small"
+                  @click.stop="detailsStore.open('diplomacy')"
                 />
               </template>
             </v-tooltip>
 
             <!-- Can attack -->
             <v-tooltip
-                v-if="(item as City).canAttack.value"
-                text="Can attack"
-                location="bottom"
-                content-class="text-grey bg-grey-darken-4"
+              v-if="(item as City).canAttack.value"
+              text="Can attack"
+              location="bottom"
+              content-class="text-grey bg-grey-darken-4"
             >
               <template #activator="{ props }">
-                <v-icon v-bind="props" icon="fa-bullseye" color="red" size="small" class="pulse"/>
+                <v-icon v-bind="props" icon="fa-bullseye" color="red" size="small" class="pulse" />
               </template>
             </v-tooltip>
           </div>
@@ -195,12 +188,12 @@ const cityColumns = [
         <div class="d-flex justify-space-between align-center ga-2 mb-4" style="width: 100%">
           <div class="flex-shrink-0 d-flex align-center ga-4">
             <v-tooltip
-                text="Show on Map"
-                location="bottom"
-                content-class="text-grey bg-grey-darken-4"
+              text="Show on Map"
+              location="bottom"
+              content-class="text-grey bg-grey-darken-4"
             >
               <template #activator="{ props }">
-                <v-icon v-bind="props" icon="fa-location-dot" color="white" size="small"/>
+                <v-icon v-bind="props" icon="fa-location-dot" color="white" size="small" />
               </template>
             </v-tooltip>
 
@@ -209,12 +202,12 @@ const cityColumns = [
             </h1>
 
             <v-tooltip
-                text="Change name"
-                location="bottom"
-                content-class="text-grey bg-grey-darken-4"
+              text="Change name"
+              location="bottom"
+              content-class="text-grey bg-grey-darken-4"
             >
               <template #activator="{ props }">
-                <v-icon v-bind="props" icon="fa-pen" color="white" size="x-small" class="ml-1"/>
+                <v-icon v-bind="props" icon="fa-pen" color="white" size="x-small" class="ml-1" />
               </template>
             </v-tooltip>
 
@@ -222,11 +215,11 @@ const cityColumns = [
           </div>
 
           <v-card
-              class="flex-shrink-0 d-flex ga-2 align-center px-2 py-1"
-              variant="elevated"
-              color="secondary"
+            class="flex-shrink-0 d-flex ga-2 align-center px-2 py-1"
+            variant="elevated"
+            color="secondary"
           >
-            <UiYields :yields="current.yields" :opts="{ posLumpIsNeutral: true }"/>
+            <UiYields :yields="current.yields" :opts="{ posLumpIsNeutral: true }" />
           </v-card>
         </div>
 
@@ -240,13 +233,13 @@ const cityColumns = [
         <v-row class="ga-2">
           <v-col aria-colspan="2">
             <v-select
-                placeholder="Converting to Gold and Happiness"
-                :items="current.constructableTypes"
-                item-title="name"
-                return-object
-                :model-value="(current.constructionQueue.queue[0]?.item as any) ?? null"
-                density="compact"
-                hide-details
+              placeholder="Converting to Gold and Happiness"
+              :items="current.constructableTypes"
+              item-title="name"
+              return-object
+              :model-value="(current.constructionQueue.queue[0]?.item as any) ?? null"
+              density="compact"
+              hide-details
             />
           </v-col>
           <v-col aria-colspan="1">
@@ -256,13 +249,13 @@ const cityColumns = [
           </v-col>
           <v-col aria-colspan="2">
             <v-select
-                placeholder="Converting to Food and Order"
-                :items="current.trainableDesigns"
-                item-title="name"
-                return-object
-                :model-value="(current.trainingQueue.queue[0]?.item as any) ?? null"
-                density="compact"
-                hide-details
+              placeholder="Converting to Food and Order"
+              :items="current.trainableDesigns"
+              item-title="name"
+              return-object
+              :model-value="(current.trainingQueue.queue[0]?.item as any) ?? null"
+              density="compact"
+              hide-details
             />
           </v-col>
           <v-col aria-colspan="1">
@@ -277,26 +270,26 @@ const cityColumns = [
           <div class="text-subtitle-2 mb-2">Citizens</div>
           <v-table density="compact">
             <thead>
-            <tr>
-              <th class="text-left border-e border-b-0">Culture</th>
-              <th class="text-left border-e border-b-0">Religion</th>
-              <th class="text-left border-e border-b-0">Policy</th>
-              <th class="text-left border-e border-b-0">Work</th>
-              <th class="text-left border-e border-b-0">Yields</th>
-            </tr>
+              <tr>
+                <th class="text-left border-e border-b-0">Culture</th>
+                <th class="text-left border-e border-b-0">Religion</th>
+                <th class="text-left border-e border-b-0">Policy</th>
+                <th class="text-left border-e border-b-0">Work</th>
+                <th class="text-left border-e border-b-0">Yields</th>
+              </tr>
             </thead>
             <tbody>
-            <tr v-for="citizen in current.citizens" :key="citizen.key">
-              <td class="border-e border-b-0">{{ citizen.culture.value.type.value.name }}</td>
-              <td class="border-e border-b-0">{{ citizen.religion.value?.name ?? '-' }}</td>
-              <td class="border-e border-b-0">{{ citizen.policy.value?.name ?? '-' }}</td>
-              <td class="border-e border-b-0">
-                {{ citizen.work.value?.name ?? (citizen as any).tile.construction?.name ?? '-' }}
-              </td>
-              <td class="border-e border-b-0">
-                <UiYields :yields="citizen.yields.value" :opts="{ posLumpIsNeutral: true }"/>
-              </td>
-            </tr>
+              <tr v-for="citizen in current.citizens" :key="citizen.key">
+                <td class="border-e border-b-0">{{ citizen.culture.value.type.value.name }}</td>
+                <td class="border-e border-b-0">{{ citizen.religion.value?.name ?? "-" }}</td>
+                <td class="border-e border-b-0">{{ citizen.policy.value?.name ?? "-" }}</td>
+                <td class="border-e border-b-0">
+                  {{ citizen.work.value?.name ?? (citizen as any).tile.construction?.name ?? "-" }}
+                </td>
+                <td class="border-e border-b-0">
+                  <UiYields :yields="citizen.yields.value" :opts="{ posLumpIsNeutral: true }" />
+                </td>
+              </tr>
             </tbody>
           </v-table>
         </div>

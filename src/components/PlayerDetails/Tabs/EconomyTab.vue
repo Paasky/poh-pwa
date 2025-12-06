@@ -1,21 +1,14 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { useObjectsStore } from "@/stores/objectStore";
 import type { City } from "@/objects/game/City";
 import type { Citizen } from "@/objects/game/Citizen";
-// no need for GameKey in this scaffold
+import { useEconomyTabStore } from "@/components/PlayerDetails/Tabs/economyTabStore";
 
-const objStore = useObjectsStore();
-
-// One row per current player's city
-const cities = computed<City[]>(() => objStore.currentPlayer.cities.value as City[]);
-
-// Simple single-column header
-const headers = [{ title: "Source", key: "source" }];
+const store = useEconomyTabStore();
 
 // Adapt items for the table to avoid custom slots that eslint flags
 const rows = computed(() =>
-  cities.value.map((c) => ({ key: c.key as unknown as string, source: c.name.value, _city: c })),
+  store.cities.map((c) => ({ key: c.key as unknown as string, source: c.name.value, _city: c })),
 );
 
 // Track expanded rows
@@ -33,9 +26,9 @@ function citizensOf(city: City): Citizen[] {
 </script>
 
 <template>
-  <div class="pa-4 d-flex flex-column" style="width: 100%; height: 100%;">
+  <div class="pa-4 d-flex flex-column" style="width: 100%; height: 100%">
     <v-data-table
-      :headers="headers"
+      :headers="store.headers"
       :items="rows"
       :item-value="'key'"
       hide-default-footer
@@ -48,10 +41,16 @@ function citizensOf(city: City): Citizen[] {
       <!-- Expanded content: one row per citizen under the city -->
       <template #expanded-row="{ item }">
         <tr>
-          <td :colspan="headers.length" class="pa-0">
+          <td :colspan="store.headers.length" class="pa-0">
             <v-data-table
-              :headers="headers"
-              :items="citizensOf((item as any).raw._city as City).map((cz) => ({ key: cz.key as unknown as string, source: `Citizen (${cz.key})`, _citizen: cz }))"
+              :headers="store.headers"
+              :items="
+                citizensOf((item as any).raw._city as City).map((cz) => ({
+                  key: cz.key as unknown as string,
+                  source: `Citizen (${cz.key})`,
+                  _citizen: cz,
+                }))
+              "
               item-key="key"
               hide-default-footer
               density="compact"

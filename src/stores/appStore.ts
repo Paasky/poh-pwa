@@ -6,6 +6,15 @@ import { EngineService } from "@/components/Engine/engine";
 import { createWorld, worldSizes } from "@/factories/worldFactory";
 import { GameDataLoader } from "@/dataLoaders/GameDataLoader";
 import type { Router } from "vue-router";
+import { useGovernmentTabStore } from "@/components/PlayerDetails/Tabs/governmentTabStore";
+import { useCultureTabStore } from "@/components/PlayerDetails/Tabs/cultureTabStore";
+import { useResearchTabStore } from "@/components/PlayerDetails/Tabs/researchTabStore";
+import { useReligionTabStore } from "@/components/PlayerDetails/Tabs/religionTabStore";
+import { useDiplomacyTabStore } from "@/components/PlayerDetails/Tabs/diplomacyTabStore";
+import { useEconomyTabStore } from "@/components/PlayerDetails/Tabs/economyTabStore";
+import { useUnitsTabStore } from "@/components/PlayerDetails/Tabs/unitsTabStore";
+import { useCitiesTabStore } from "@/components/PlayerDetails/Tabs/citiesTabStore";
+import { useTradeTabStore } from "@/components/PlayerDetails/Tabs/tradeTabStore";
 
 async function fetchJSON<T>(url: string): Promise<T> {
   const res = await fetch(url, { cache: "no-store" });
@@ -44,10 +53,21 @@ export const useAppStore = defineStore("app", {
       }
       objects.ready = true;
 
-      // 5) Initialize the game engine
+      // 5) Initialize all tab stores (static, derived from currentPlayer/objects) before engine init
+      useGovernmentTabStore().init();
+      useCultureTabStore().init();
+      useResearchTabStore().init();
+      useReligionTabStore().init();
+      useDiplomacyTabStore().init();
+      useEconomyTabStore().init();
+      useUnitsTabStore().init();
+      useCitiesTabStore().init();
+      useTradeTabStore().init();
+
+      // 6) Initialize the game engine
       await EngineService.init(objects.world);
 
-      // 6) Loading is complete, tell the UI it can render
+      // 7) Loading is complete, tell the UI it can render
       this.loaded = true;
     },
 

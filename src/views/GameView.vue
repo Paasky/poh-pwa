@@ -38,6 +38,8 @@ const showQuitConfirm = ref(false);
 function confirmQuit() {
   //showQuitConfirm.value = false;
   userHasQuit = true;
+  destroyFullscreen();
+
   // Set browser to home to fully destroy all stores
   document.location = "/";
 }
