@@ -1,7 +1,14 @@
 import { markRaw, shallowRef } from "vue";
 
 import { defineStore } from "pinia";
-import { CatKey, isCategoryObject, isTypeObject, ObjKey, TypeKey, World } from "@/types/common";
+import {
+  CatKey,
+  isCategoryObject,
+  isTypeObject,
+  ObjKey,
+  TypeKey,
+  WorldState,
+} from "@/types/common";
 import { StaticData } from "@/types/api";
 import {
   type CategoryObject,
@@ -24,7 +31,7 @@ export const useObjectsStore = defineStore("objects", {
       turn: 0,
       year: 0,
       currentPlayer: "" as GameKey,
-    } as World,
+    } as WorldState,
 
     _staticObjects: {} as Readonly<Record<CatKey | TypeKey, CategoryObject | TypeObject>>,
     _categoryTypesIndex: shallowRef(new Map<CatKey, Set<TypeKey>>()),

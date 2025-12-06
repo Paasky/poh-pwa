@@ -1,10 +1,13 @@
 import { Coords } from "@/factories/TerraGenerator/helpers/neighbors";
-import type { World } from "@/types/common";
+import type { WorldState } from "@/types/common";
 import { Tile } from "@/objects/game/Tile";
 
 /**
  * Returns all hex neighbor coordinates within a given distance of a center coordinate.
- * NOTE! Hexes are flat-top, pointed horizontally
+ *
+ * Project standard:
+ * - POINTY-TOP hexes using odd-r (row-offset) layout
+ * - Wrap on X (east/west), clamp on Y (no polar wrap)
  *
  * @param size
  * @param center
@@ -25,7 +28,7 @@ export function getHexNeighborCoords(size: Coords, center: Coords, dist = 1): Co
   const keyOf = (x: number, y: number) => `${x},${y}`;
   const visited = new Set<string>();
 
-  // Neighbor offsets for odd-r (flat-top) layout per Red Blob Games
+  // Neighbor offsets for odd-r (pointy-top) layout per Red Blob Games
   const neighborCoords = (coords: Coords): Coords[] => {
     const isOdd = (coords.y & 1) === 1;
     return isOdd
@@ -86,12 +89,12 @@ export function getHexNeighborCoords(size: Coords, center: Coords, dist = 1): Co
 }
 
 /**
- * Returns a record of neighbor tiles at exact hex distance `dist` from the given center tile.
- * - Uses odd-r horizontal hex layout (flat-top), wrapping on X and clamping on Y.
+ * Returns a record of neighbor tiles at the exact hex distance ` dist ` from the given center tile.
+ * - Uses odd-r horizontal hex layout (pointy-top), wrapping on X and clamping on Y.
  * - Keys are the tile keys; values are the Tile objects from world.tiles.
  */
 export function getNeighbors(
-  world: World & {
+  world: WorldState & {
     tiles: Record<string, Tile>;
   },
   center: Tile,

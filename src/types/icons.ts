@@ -1,7 +1,9 @@
+import type { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import {
   faAppleWhole,
   faArrowsRotate,
   faArrowsToDot,
+  faArrowUp,
   faBars,
   faBinoculars,
   faBolt,
@@ -10,10 +12,13 @@ import {
   faBookOpen,
   faBuilding,
   faBullseye,
-  faArrowUp,
   faCaretDown,
   faCaretUp,
   faCarrot,
+  faChevronDown,
+  faChevronLeft,
+  faChevronRight,
+  faChevronUp,
   faCircleDot,
   faCity,
   faClover,
@@ -55,11 +60,10 @@ import {
   faMound,
   faMountain,
   faMountainSun,
-  faPause,
-  faPen,
   faParachuteBox,
+  faPause,
   faPaw,
-  faPlus,
+  faPen,
   faPepperHot,
   faPerson,
   faPersonRifle,
@@ -70,11 +74,12 @@ import {
   faPlaneUp,
   faPlantWilt,
   faPlay,
+  faPlus,
   faQuestion,
   faRadiation,
-  faRoute,
   faRightLeft,
   faRoad,
+  faRoute,
   faSatellite,
   faScroll,
   faSeedling,
@@ -82,17 +87,14 @@ import {
   faShip,
   faShirt,
   faShop,
-  faChevronLeft,
-  faChevronRight,
-  faChevronUp,
-  faChevronDown,
-  faStar,
-  faStepBackward,
-  faStepForward,
   faSkull,
   faSnowflake,
   faSquare,
+  faStar,
+  faStepBackward,
+  faStepForward,
   faSun,
+  faTimesCircle,
   faTree,
   faTruck,
   faUpDownLeftRight,
@@ -101,14 +103,12 @@ import {
   faUsers,
   faUserSecret,
   faUserShield,
-  faTimesCircle,
   faWater,
   faWheatAwn,
   faWind,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { ObjectIcon } from "@/types/common";
-import type { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
 const colors = {
   default: "#f1f5f9", // slate-100
@@ -393,7 +393,7 @@ const categoryKeys: Record<string, ObjectIcon> = {
   "traitCategory:strength": { icon: faDumbbell, color: colors.default },
   "traitCategory:trade": { icon: faRightLeft, color: colors.trade },
 
-  // World wonders
+  // WorldState wonders
   "worldWonderCategory:culture": {
     icon: faMasksTheater,
     color: colors.culture,

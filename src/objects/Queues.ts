@@ -154,7 +154,7 @@ export class ConstructionQueue extends Queue {
     const queueItem = this._queue.value[0] as unknown as ConstructionQueueItem;
     const typeClass = (queueItem.item as unknown as Construction).type.class! as TypeClass;
 
-    // National or World Wonder -> null
+    // National or WorldState Wonder -> null
     if (typeClass === "nationalWonderType" || typeClass === "worldWonderType") return null;
 
     // Buildings -> remaining productionCost in Gold * 2

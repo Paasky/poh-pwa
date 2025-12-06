@@ -1,7 +1,7 @@
 <script setup lang="ts">
 defineOptions({ name: "GameEngine", inheritAttrs: false });
 import { onMounted, onUnmounted, ref, useAttrs } from "vue";
-import { EngineService } from "@/components/Engine/engine";
+import { EngineService } from "@/components/Engine/EngineService";
 
 const containerEl = ref<HTMLElement | null>(null);
 const attrs = useAttrs();
