@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { World } from "@/types/common";
+import { WorldState } from "@/types/common";
 
 export interface StaticData {
   categories: any[];
@@ -8,5 +8,5 @@ export interface StaticData {
 
 export interface GameData {
   objects: any[];
-  world: World;
+  world: WorldState;
 }

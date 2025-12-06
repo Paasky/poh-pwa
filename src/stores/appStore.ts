@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { useObjectsStore } from "@/stores/objectStore";
 import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
 import { GameData, StaticData } from "@/types/api";
-import { EngineService } from "@/components/Engine/engine";
+import { EngineService } from "@/components/Engine/EngineService";
 import { createWorld, worldSizes } from "@/factories/worldFactory";
 import { GameDataLoader } from "@/dataLoaders/GameDataLoader";
 import type { Router } from "vue-router";

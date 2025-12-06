@@ -1,5 +1,5 @@
 // Placeholder minimal suite to keep file valid; original tests will be refactored later
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 
 describe("mapTools placeholder", () => {
   it("runs", () => {
@@ -99,7 +99,7 @@ const buildMockWorld = (sizeX: number, sizeY: number) => {
     turn: 0,
     year: 0,
     currentPlayer: '' as ObjKey,
-  } as World
+  } as WorldState
 
   const tiles = {}
   for (let y = 0; y < sizeY; y++) {
@@ -132,7 +132,7 @@ const sort = (arr: string[]) => arr.sort((a, b) => (a < b ? -1 : a > b ? 1 : 0))
 
 // Build a Set of index keys for the exact ring at distance `dist` from (sx, sy)
 // Rules mirror the map: wrap on X, clamp on Y (no vertical wrap), odd-r horizontal hex layout
-const expectedRingIdxSet = (world: World, sx: number, sy: number, dist: number): Set<string> => {
+const expectedRingIdxSet = (world: WorldState, sx: number, sy: number, dist: number): Set<string> => {
   const sizeX = world.sizeX
   const sizeY = world.sizeY
 

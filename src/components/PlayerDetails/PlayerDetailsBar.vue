@@ -10,7 +10,7 @@ const store = usePlayerDetailsStoreNew();
 
 <template>
   <!-- Top-left -->
-  <div class="position-absolute top-0 left-0 d-flex flex-wrap ga-1" style="z-index: 10">
+  <div class="d-flex flex-wrap ga-1">
     <UiButton
       v-for="item in playerDetailConfig"
       :key="item.id"

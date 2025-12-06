@@ -23,11 +23,13 @@ export class Player extends GameObject {
     cultureKey: GameKey,
     name: string,
     isCurrent = false,
+    isMinor = false,
     religionKey?: GameKey,
   ) {
     super(key);
 
     this.isCurrent = isCurrent;
+    this.isMinor = isMinor;
     this.government = new Government(key);
     this.name = name;
     this.research = new Research(key);
@@ -47,6 +49,7 @@ export class Player extends GameObject {
     },
     { attrName: "name", attrNotRef: true },
     { attrName: "isCurrent", attrNotRef: true, isOptional: true },
+    { attrName: "isMinor", attrNotRef: true, isOptional: true },
     {
       attrName: "religionKey",
       isOptional: true,
@@ -59,6 +62,7 @@ export class Player extends GameObject {
    */
   government: Government;
   isCurrent = false;
+  isMinor = false;
   knownTypes = computed(() => [] as TypeObject[]);
   name: string;
   research: Research;

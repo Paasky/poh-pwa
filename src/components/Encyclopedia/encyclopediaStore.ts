@@ -300,7 +300,7 @@ const sectionMap = [
     concepts: ["conceptType:era", "conceptType:technology"] as TypeKey[],
   },
   {
-    name: "World",
+    name: "WorldState",
     icon: icons.world,
     concepts: [
       "conceptType:domain",
