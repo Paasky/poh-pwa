@@ -2,8 +2,8 @@
 Tile grid mesh (prototype)
 
 Purpose
-- Replace the placeholder checkerboard with a visible hex map built from the loaded Tile[].
-- Super-simple visuals: blue for water, green for land, using Babylon instanced meshes.
+- Render a visible hex map built from the loaded Tile[] using flat terrain colors.
+- Use Babylon instanced meshes with a master per terrain color (simple, scalable enough for MVP).
 
 Data source
 - Engine is initialized after all game data is loaded (see appStore). We directly read
@@ -11,12 +11,9 @@ Data source
 - No defensive checks necessary — all required objects exist by this point.
 
 Notes / future work
-- Switch to a single SPS or thin instances for better scalability (this prototype uses
-  InstancedMesh for simplicity and clarity).
-- Material system: replace flat colors with TerrainMaterial when ready; add vertex colors
-  or texture lookups by terrain/biome.
-- Heights: when elevation is introduced, raise/offset Y per tile, optionally blended via
-  ElevationBlender.
+- Switch to thin instances with per-instance color buffer for large worlds.
+- Material system: replace flat colors with TerrainMaterial when ready.
+- Heights: when elevation is introduced, raise/offset Y per tile.
 - Fog of war: modulate material by FogOfWar alpha mask.
 - Partial updates: expose update(changedTiles?: GameKey[]) to move towards incremental sync.
 
@@ -30,15 +27,18 @@ Hex orientation & layout
 
 import { useObjectsStore } from "@/stores/objectStore";
 import { Tile } from "@/objects/game/Tile";
-import type { WorldState } from "@/types/common";
+import type { TypeKey, WorldState } from "@/types/common";
+import { Mesh, Scene, TransformNode, Vector3 } from "@babylonjs/core";
+import { getBaseTile } from "@/assets/meshes/tiles";
+import { allTerrainMaterials } from "@/assets/materials/terrains";
 import {
-  Color3,
-  MeshBuilder,
-  Scene,
-  StandardMaterial,
-  TransformNode,
-  Vector3,
-} from "@babylonjs/core";
+  getWorldDepth,
+  getWorldMinX,
+  getWorldMinZ,
+  getWorldWidth,
+  hexDepth,
+  hexWidth,
+} from "@/components/Engine/math";
 
 export type TileGridOptions = {
   hexRadius?: number; // world units, distance from center to vertex
@@ -52,86 +52,94 @@ export type TileGridBuild = {
   periodX: number;
 };
 
-export function buildTileGrid(scene: Scene, world: WorldState, opts: TileGridOptions = {}): TileGridBuild {
-  const s = opts.hexRadius ?? 1;
-  const h = opts.tileHeight ?? 0.05;
-  const replicateX = Math.max(1, Math.floor(opts.replicateX ?? 1));
+export function buildTileGrid(scene: Scene, world: WorldState): TileGridBuild {
+  // Config
+  const root = new TransformNode("tileGridRoot", scene);
+
+  // Create instances
+  const baseTile = getBaseTile(scene);
+  baseTile.parent = root;
+
+  const terrainMeshes: Record<TypeKey, Mesh> = {};
+  for (const [terrainKey, terrainMaterial] of Object.entries(allTerrainMaterials(scene))) {
+    // todo: use createInstance or clone here?
+    const mesh = baseTile.clone(`mesh-${terrainKey}`, root); // todo is root needed if baseTile is already i's child?
+    mesh.material = terrainMaterial;
+    mesh.isVisible = false; // todo is this needed if baseTile is already isVisible = false
+    terrainMeshes[terrainKey as TypeKey] = mesh;
+  }
 
   const objStore = useObjectsStore();
   const tiles = objStore.getClassGameObjects("tile") as Tile[];
 
-  // Root to hold instances (lets us center the grid around world origin)
-  const root = new TransformNode("tileGridRoot", scene);
-
-  // Base hex geometry
-  const baseLand = MeshBuilder.CreateCylinder(
-    "hexLandBase",
-    { height: h, diameter: 2 * s, tessellation: 6 },
-    scene,
-  );
-  // Babylon's 6-sided cylinder defaults to flat-top orientation in XZ.
-  // Rotate 30° around Y so the hex becomes POINTY-TOP to match our odd-r layout.
-  baseLand.rotation.y = Math.PI / 6;
-  baseLand.isVisible = false; // master hidden; instances render
-
-  const baseWater = baseLand.clone("hexWaterBase", null)!;
-  baseWater.rotation.y = baseLand.rotation.y;
-  baseWater.isVisible = false;
-
-  // Simple flat-color materials
-  const landMat = new StandardMaterial("landMat", scene);
-  landMat.diffuseColor = new Color3(0.12, 0.5, 0.2); // greenish
-  landMat.specularColor = Color3.Black();
-  baseLand.material = landMat;
-
-  const waterMat = new StandardMaterial("waterMat", scene);
-  waterMat.diffuseColor = new Color3(0.1, 0.3, 0.8); // blueish
-  waterMat.specularColor = Color3.Black();
-  baseWater.material = waterMat;
-
-  // Layout math: pointy-top hexes, odd-r (rows staggered)
-  const dx = Math.sqrt(3) * s; // horizontal spacing between centers
-  const dz = 1.5 * s; // vertical spacing per row
-
   // Horizontal repeat period (distance between equivalent tiles across the wrap seam)
-  const periodX = dx * world.sizeX;
+  const periodX = hexWidth * world.sizeX;
 
   // Compute offsets to roughly center the grid around world origin
-  const hasOddRows = world.sizeY > 1;
-  const maxX = dx * (world.sizeX - 1) + (hasOddRows ? 0.5 * dx : 0);
-  const maxZ = dz * (world.sizeY - 1);
-  const offsetX = -maxX / 2;
-  const offsetZ = -maxZ / 2;
+  const worldWidth = getWorldWidth(world.sizeX);
+  const worldDepth = getWorldDepth(world.sizeY);
+  const offsetX = getWorldMinX(worldWidth);
+  const offsetZ = getWorldMinZ(worldDepth);
 
   // Determine horizontal replication indices (symmetrical around the center when odd)
-  const halfRep = Math.floor((replicateX - 1) / 2);
-  const repIndices: number[] = [];
-  for (let k = -halfRep; k <= halfRep; k++) repIndices.push(k);
-  // If replicateX is even, we still place copies to the right (non-symmetric), fine for prototyping
-  if (replicateX % 2 === 0) {
-    for (let k = halfRep + 1; k < replicateX; k++) repIndices.push(k);
-  }
+  const repIndices: number[] = [-1, 0, 1];
 
-  for (const t of tiles) {
-    // Choose master based on domain
-    const isWater = t.domain.key === "domainType:water";
-    const master = isWater ? baseWater : baseLand;
+  for (const tile of tiles) {
+    const terrainMesh = terrainMeshes[tile.terrain.key];
 
     // Odd-r row offset on X for pointy-top
-    const baseWx = offsetX + dx * (t.x + 0.5 * (t.y & 1));
-    const wz = offsetZ + dz * t.y;
+    const baseWx = offsetX + hexWidth * (tile.x + 0.5 * (tile.y & 1));
+    const wz = offsetZ + hexDepth * tile.y;
+
+    // --- Elevation & water level ---
+    // Minimal vertical placement: water below ground, hills/mountains above.
+    const isWaterTerrain =
+      (tile.terrain.key as string) === "terrainType:ocean" ||
+      (tile.terrain.key as string) === "terrainType:sea" ||
+      (tile.terrain.key as string) === "terrainType:coast" ||
+      (tile.terrain.key as string) === "terrainType:lake" ||
+      (tile.terrain.key as string) === "terrainType:majorRiver";
+
+    // Choose offsets based on hex radius for visibility (independent of mesh thickness)
+    let yOffset = 0;
+
+    if (isWaterTerrain) {
+      // Water sits below ground plane; deeper for ocean/sea than coast/lake
+      switch (tile.terrain.key) {
+        case "terrainType:ocean":
+          yOffset = -0.6;
+          break;
+        case "terrainType:sea":
+          yOffset = -0.4;
+          break;
+        default:
+          yOffset = -0.2;
+      }
+    } else {
+      switch (tile.elevation.key) {
+        case "elevationType:hill":
+          yOffset = 0.2; // rolling hills
+          break;
+        case "elevationType:mountain":
+          yOffset = 0.6; // mountains
+          break;
+        case "elevationType:snowMountain":
+          yOffset = 1; // snowy peaks
+          break;
+        case "elevationType:flat":
+        default:
+          yOffset = 0; // ground level
+      }
+    }
 
     for (const rIdx of repIndices) {
       const wx = baseWx + rIdx * periodX;
-      const inst = master.createInstance(`${isWater ? "w" : "l"}-${t.x}-${t.y}-r${rIdx}`);
-      inst.parent = root;
-      inst.position = new Vector3(wx, 0, wz);
+      // todo use createInstance or clone here?
+      const inst = terrainMesh.createInstance(tile.key);
+      inst.parent = root; // todo is root needed if terrainMesh is already a child of root?
+      inst.position = new Vector3(wx, yOffset, wz);
     }
   }
-
-  // Keep masters out of the way (hidden already), parent them for lifecycle management
-  baseLand.parent = root;
-  baseWater.parent = root;
 
   return { root, periodX };
 }

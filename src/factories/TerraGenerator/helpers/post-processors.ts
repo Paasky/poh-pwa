@@ -211,7 +211,12 @@ export const makeRiver = (
       tile.isFresh = true;
       tile.riverKey = river.key;
       river.tileKeys.push(tile.key);
-      if (majorMode) tile.isMajorRiver = true;
+      if (majorMode) {
+        tile.isMajorRiver = true;
+        if (tile.domain.id === "land") {
+          tile.terrain = useObjectsStore().getTypeObject("terrainType:majorRiver");
+        }
+      }
 
       const neighbors = getNeighborCoords(size, tile).map((c) => getTile(size, c, tiles)!);
 
@@ -282,6 +287,9 @@ export const makeRiver = (
       for (let i = metAtIdx; i < otherRiverTileKeys.length; i++) {
         const tileKey = otherRiverTileKeys[i];
         tiles[tileKey].isMajorRiver = true;
+        if (tiles[tileKey].domain.id === "land") {
+          tiles[tileKey].terrain = useObjectsStore().getTypeObject("terrainType:majorRiver");
+        }
       }
     }
   }
