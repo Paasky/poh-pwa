@@ -1,17 +1,26 @@
 import type { WorldState } from "@/types/common";
-import type { TransformNode } from "@babylonjs/core";
 import {
   ArcRotateCamera,
   ArcRotateCameraPointersInput,
+  Camera,
   Color4,
   Engine as BabylonEngine,
   HemisphericLight,
   PointerEventTypes,
   Scene,
+  TransformNode,
   Vector3,
 } from "@babylonjs/core";
+import { CreateScreenshotUsingRenderTarget } from "@babylonjs/core/Misc/screenshotTools";
 import { buildTileGrid } from "@/components/Engine/meshes/tile";
-import { getWorldMaxX, getWorldMinX, getWorldWidth } from "@/components/Engine/math";
+import {
+  clamp,
+  getWorldDepth,
+  getWorldMaxX,
+  getWorldMinX,
+  getWorldMinZ,
+  getWorldWidth,
+} from "@/components/Engine/math";
 
 export class EngineService {
   // Camera settings
@@ -30,13 +39,19 @@ export class EngineService {
   engine: BabylonEngine;
   scene: Scene;
   canvas: HTMLCanvasElement;
+  minimapCanvas: HTMLCanvasElement;
+
   camera: ArcRotateCamera;
+  minimapCamera: ArcRotateCamera;
   light: HemisphericLight;
   tileRoot: TransformNode;
 
-  constructor(world: WorldState, canvas: HTMLCanvasElement) {
+  // No animation state needed for simple, instant flyTo
+
+  constructor(world: WorldState, canvas: HTMLCanvasElement, minimapCanvas: HTMLCanvasElement) {
     this.world = world;
     this.canvas = canvas;
+    this.minimapCanvas = minimapCanvas;
 
     // Create Engine and Scene
     this.engine = new BabylonEngine(this.canvas, true, {
@@ -46,12 +61,18 @@ export class EngineService {
     this.scene = new Scene(this.engine);
     this.scene.clearColor = new Color4(0.63, 0.63, 0.63, 1); // Same-ish as snow
 
-    // Create Camera and Light
-    this.camera = this.initCamera(this.scene, this.canvas);
-    this.light = this.initLight(this.scene);
+    // Create Cameras and Light
+    this.camera = this.initCamera();
+    this.minimapCamera = this.initMinimap();
+    this.light = this.initLight();
 
     // Init Tiles
-    this.tileRoot = buildTileGrid(this.scene, this.world).root;
+    this.tileRoot = buildTileGrid(this.world, this.scene).root;
+
+    // Once the scene is ready, capture a one-time minimap image into the minimap canvas
+    this.scene.executeWhenReady(() => {
+      this.captureMinimapOnce();
+    });
 
     // Render loop
     this.engine.runRenderLoop(() => {
@@ -63,7 +84,59 @@ export class EngineService {
     window.addEventListener("resize", this.onResize);
   }
 
-  private initCamera(scene: Scene, canvas: HTMLCanvasElement): ArcRotateCamera {
+  captureMinimapOnce(): EngineService {
+    // Render a 512x256 screenshot using the orthographic minimap camera and draw it to the canvas
+    const width = 512;
+    const height = 256;
+
+    CreateScreenshotUsingRenderTarget(
+      this.engine,
+      this.minimapCamera,
+      { width, height },
+      (data) => {
+        const ctx = this.minimapCanvas.getContext("2d");
+        if (!ctx) return;
+        const img = new Image();
+        img.onload = () => {
+          ctx.clearRect(0, 0, width, height);
+          ctx.drawImage(img, 0, 0, width, height);
+        };
+        img.src = data as string;
+      },
+    );
+
+    return this;
+  }
+
+  detach(): void {
+    window.removeEventListener("resize", this.onResize);
+    this.engine.stopRenderLoop();
+    this.scene.dispose();
+    this.engine.dispose();
+  }
+
+  // Public: move instantly to a percentage of world width/depth (0..1 each)
+  flyTo(xPercent: number, yPercent: number): EngineService {
+    // Clamp percents
+    const widthPercent = clamp(xPercent, 0, 1);
+    const depthPercent = clamp(yPercent, 0, 1);
+
+    // Map to world coordinates
+    const worldWidth = getWorldWidth(this.world.sizeX);
+    const worldDepth = getWorldDepth(this.world.sizeY);
+    const target = new Vector3(
+      getWorldMaxX(worldWidth) - widthPercent * worldWidth,
+      0,
+      getWorldMinZ(worldDepth) + depthPercent * worldDepth,
+    );
+
+    // Apply instantly
+    this.camera.target.copyFrom(target);
+
+    return this;
+  }
+
+  private initCamera(): ArcRotateCamera {
     if (!this.world) throw new Error("EngineService.init() must be called before attach()");
 
     // Create Camera at the World center with max zoom in
@@ -73,7 +146,7 @@ export class EngineService {
       this.maxTilt, // Full Tilt
       this.maxZoomIn, // Zoomed in
       new Vector3(0, 0, 0),
-      scene,
+      this.scene,
     );
 
     // Controls (clear all, then add back the ones we want)
@@ -86,17 +159,19 @@ export class EngineService {
 
     // b) Rotation Control from the mouse right and middle buttons
     const rot = new ArcRotateCameraPointersInput();
-    rot.buttons = [1, 2]; // 1=right, 2=middle
-    rot.panningSensibility = 0;
-    camera.inputs.add(rot);
-    camera.attachControl(canvas, true);
+    camera.attachControl(this.canvas, true);
     camera.useAutoRotationBehavior = false;
+    if (this.manualTilt) {
+      rot.buttons = [1, 2]; // 1=right, 2=middle
+      rot.panningSensibility = 0;
+      camera.inputs.add(rot);
+    }
 
     // c) Panning Control from the mouse left button
     let dragging = false;
     let lastX = 0;
     let lastY = 0;
-    scene.onPointerObservable.add((pi) => {
+    this.scene.onPointerObservable.add((pi) => {
       const ev = pi.event;
       if (pi.type === PointerEventTypes.POINTERDOWN) {
         if (ev.button === 0) {
@@ -156,7 +231,9 @@ export class EngineService {
       const t = camera.target;
 
       // Clamp Z (North-South) normally
-      t.z = Math.min(Math.max(t.z, -this.world!.sizeY / 1.385), this.world!.sizeY / 1.425);
+      const minZ = -this.world!.sizeY / 1.385;
+      const maxZ = this.world!.sizeY / 1.425;
+      t.z = Math.min(Math.max(t.z, minZ), maxZ);
 
       // Wrap X (West-East)
       if (t.x > worldMaxX) t.x -= worldWidth;
@@ -173,15 +250,39 @@ export class EngineService {
     return camera;
   }
 
-  private initLight(scene: Scene): HemisphericLight {
-    return new HemisphericLight("light", new Vector3(0, 1, 0), scene);
+  private initLight(): HemisphericLight {
+    return new HemisphericLight("light", new Vector3(0, 1, 0), this.scene);
   }
 
-  detach(): void {
-    window.removeEventListener("resize", this.onResize);
-    this.engine.stopRenderLoop();
-    this.scene.dispose();
-    this.engine.dispose();
+  private initMinimap(): ArcRotateCamera {
+    // Top-down orthographic camera centered on the world
+    const camera = new ArcRotateCamera(
+      "minimapCamera",
+      Math.PI / 2, // look North
+      0.0001, // nearly top-down
+      10,
+      new Vector3(0, 0, 0),
+      this.scene,
+    );
+    camera.mode = Camera.ORTHOGRAPHIC_CAMERA;
+
+    // Lock rotation/tilt
+    camera.lowerAlphaLimit = Math.PI / 2;
+    camera.upperAlphaLimit = Math.PI / 2;
+    camera.lowerBetaLimit = 0;
+    camera.upperBetaLimit = 0;
+    camera.panningSensibility = 0;
+
+    // Cover the full world extents with a small margin
+    const halfWidth = getWorldWidth(this.world.sizeX) / 2;
+    const halfDepth = getWorldDepth(this.world.sizeY) / 2;
+    camera.orthoLeft = -halfWidth;
+    camera.orthoRight = halfWidth;
+    camera.orthoBottom = -halfDepth;
+    camera.orthoTop = halfDepth;
+
+    // Do not attach controls; this camera is only for minimap capture
+    return camera;
   }
 
   private onResize = () => {

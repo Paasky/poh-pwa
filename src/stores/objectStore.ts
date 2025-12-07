@@ -220,7 +220,7 @@ export const useObjectsStore = defineStore("objects", {
     set(obj: GameObject) {
       if (!obj.key) throwWithContext("GameObject must have a key");
       if (this._gameObjects[obj.key]) throwWithContext(`GameObject ${obj.key} already exists`);
-      this._gameObjects[obj.key] = obj;
+      this._gameObjects[obj.key] = markRaw(obj);
 
       this._cacheGameObjects([obj]);
     },
@@ -247,7 +247,7 @@ export const useObjectsStore = defineStore("objects", {
 
       // Directly set by the key to prevent reactivity issues mid-load
       for (const [k, v] of Object.entries(incoming)) {
-        this._gameObjects[k as GameKey] = v;
+        this._gameObjects[k as GameKey] = markRaw(v);
       }
       this._cacheGameObjects(Object.values(incoming));
     },

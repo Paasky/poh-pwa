@@ -69,7 +69,10 @@ export const useAppStore = defineStore("app", {
       // 6) Initialize the game engine (throw if critical DOM is missing)
       const engineCanvas = document.getElementById("engine-canvas") as HTMLCanvasElement | null;
       if (!engineCanvas) throw new Error("Engine canvas `#engine-canvas` not found");
-      this.engineService = markRaw(new EngineService(objects.world, engineCanvas));
+      const minimapCanvas = document.getElementById("minimap-canvas") as HTMLCanvasElement | null;
+      if (!minimapCanvas) throw new Error("Minimap canvas `#minimap-canvas` not found");
+
+      this.engineService = markRaw(new EngineService(objects.world, engineCanvas, minimapCanvas));
 
       // 7) Loading is complete, tell the UI it can render
       this.loaded = true;

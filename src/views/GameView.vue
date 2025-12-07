@@ -35,9 +35,9 @@ onUnmounted(() => {
   destroyFullscreen();
 });
 
-// todo set to false to enable "Are you sure you want to quit?" browser prompt
 // Quit confirmation state & stop accidental nav-ing away
-let userHasQuit = true;
+// Set to false to enable the "Are you sure you want to quit?" browser prompt
+let userHasQuit = false;
 
 function confirmQuit() {
   userHasQuit = true;
@@ -49,7 +49,9 @@ function confirmQuit() {
 
 function onBeforeUnload(e: BeforeUnloadEvent) {
   if (!userHasQuit) {
+    // Some browsers require setting returnValue to trigger the confirmation dialog
     e.preventDefault();
+    e.returnValue = "";
   }
 }
 </script>
@@ -71,41 +73,54 @@ function onBeforeUnload(e: BeforeUnloadEvent) {
 
   <!-- Game Screen -->
   <v-sheet
-    v-if="app.loaded"
     id="game"
     key="game"
     ref="gameRootEl"
     class="absolute top-0 left-0 w-100 h-100 overflow-hidden"
   >
     <!-- Top-left -->
-    <PlayerDetailsBar class="position-absolute top-0 left-0" style="z-index: 9" />
+    <PlayerDetailsBar v-if="app.loaded" class="position-absolute top-0 left-0" style="z-index: 9" />
 
     <!-- Top-right -->
-    <GameMenu class="position-absolute top-0 right-0" style="z-index: 10" @quit="confirmQuit" />
+    <GameMenu
+      v-if="app.loaded"
+      class="position-absolute top-0 right-0"
+      style="z-index: 10"
+      @quit="confirmQuit"
+    />
 
     <!-- Left-center (vertically centered on the axis) -->
     <OngoingList
+      v-if="app.loaded"
       class="position-absolute left-0"
       style="top: 50%; transform: translateY(-50%); z-index: 8"
     />
 
     <!-- Right-center (vertically centered on the axis) -->
     <EventsList
+      v-if="app.loaded"
       class="position-absolute right-0"
       style="top: 50%; transform: translateY(-50%); z-index: 8"
     />
 
     <!-- Bottom-left -->
-    <Minimap class="position-absolute bottom-0 left-0" style="z-index: 10" />
+    <v-sheet
+      color="secondary"
+      class="position-absolute bottom-0 left-0 rounded-tr-lg pt-1 pr-1"
+      style="z-index: 10"
+    >
+      <Minimap />
+    </v-sheet>
 
     <!-- Bottom-center (horizontally centered on the axis) -->
     <TileDetails
+      v-if="app.loaded"
       class="position-absolute bottom-0"
       style="left: 50%; transform: translateX(-50%); z-index: 9"
     />
 
     <!-- Bottom-right -->
-    <NextAction class="position-absolute bottom-0 right-0" style="z-index: 10" />
+    <NextAction v-if="app.loaded" class="position-absolute bottom-0 right-0" style="z-index: 10" />
 
     <!-- Modals -->
     <PlayerDetailsDialog v-if="app.ready" />

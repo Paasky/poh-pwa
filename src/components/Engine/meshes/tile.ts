@@ -46,7 +46,7 @@ export type TileGridBuild = {
   periodX: number;
 };
 
-export function buildTileGrid(scene: Scene, world: WorldState): TileGridBuild {
+export function buildTileGrid(world: WorldState, scene: Scene): TileGridBuild {
   // Config
   const root = new TransformNode("tileGridRoot", scene);
 
@@ -113,10 +113,10 @@ export function buildTileGrid(scene: Scene, world: WorldState): TileGridBuild {
     } else {
       switch (tile.elevation.key) {
         case "elevationType:hill":
-          yOffset = 0.2; // rolling hills
+          yOffset = 0.4; // rolling hills
           break;
         case "elevationType:mountain":
-          yOffset = 0.6; // mountains
+          yOffset = 0.8; // mountains
           break;
         case "elevationType:snowMountain":
           yOffset = 1; // snowy peaks
