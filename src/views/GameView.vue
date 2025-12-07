@@ -2,7 +2,6 @@
 import { onMounted, onUnmounted, ref } from "vue";
 import { useAppStore } from "@/stores/appStore";
 import { destroyFullscreen, initFullscreen } from "@/helpers/fullscreen";
-import GameEngine from "@/components/Engine/Engine.vue";
 import PlayerDetailsBar from "@/components/PlayerDetails/PlayerDetailsBar.vue";
 import EncyclopediaDialog from "@/components/Encyclopedia/EncyclopediaDialog.vue";
 import PlayerDetailsDialog from "@/components/PlayerDetails/PlayerDetailsDialog.vue";
@@ -37,7 +36,7 @@ onUnmounted(() => {
 
 // todo set to false to enable "Are you sure you want to quit?" browser prompt
 // Quit confirmation state & stop accidental nav-ing away
-let userHasQuit = false;
+let userHasQuit = true;
 
 function confirmQuit() {
   userHasQuit = true;
@@ -55,17 +54,28 @@ function onBeforeUnload(e: BeforeUnloadEvent) {
 </script>
 
 <template>
+  <!-- Game engine -->
+  <canvas
+    id="engine-canvas"
+    style="
+      display: block;
+      position: absolute;
+      z-index: 0;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+    "
+  />
+
   <!-- Game Screen -->
   <v-sheet
     v-if="app.loaded"
     id="game"
     key="game"
     ref="gameRootEl"
-    class="position-absolute w-100 h-100 overflow-hidden text-body-2"
+    class="absolute top-0 left-0 w-100 h-100 overflow-hidden"
   >
-    <!-- Game engine -->
-    <GameEngine class="absolute top-0 left-0 w-100 h-100 bg-black/50" />
-
     <!-- Top-left -->
     <PlayerDetailsBar class="position-absolute top-0 left-0" style="z-index: 9" />
 

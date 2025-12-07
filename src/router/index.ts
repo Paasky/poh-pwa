@@ -28,10 +28,13 @@ const injectIt = () => {
     const appStore = useAppStore();
     appStore.setRouter(router);
 
-    // Validate that the router is injected properly (it will lose the .value that my router has)
+    // Validate that the router is injected properly (IDE thinks it's lost .value - it is still there)
     if (
-      appStore._router?.currentRoute?.fullPath == router.currentRoute.value.fullPath &&
-      appStore._router.currentRoute.query == router.currentRoute.value.query
+      // eslint-disable-next-line
+      (appStore._router?.currentRoute as any)?.value?.fullPath ==
+        router.currentRoute.value.fullPath &&
+      // eslint-disable-next-line
+      (appStore._router?.currentRoute as any)?.value?.query == router.currentRoute.value.query
     ) {
       const encStore = useEncyclopediaStore();
       const pdStore = usePlayerDetailsStoreNew();
@@ -64,12 +67,16 @@ const injectIt = () => {
       return;
     }
     // eslint-disable-next-line
-    console.warn("Failed, appStore._router.currentRoute: ", appStore._router?.currentRoute);
+    console.warn(
+      "Failed, appStore._router.currentRoute vs actual router.currentRoute: ",
+      appStore._router?.currentRoute,
+      router.currentRoute.value,
+    );
   } catch (e) {
     // eslint-disable-next-line
     console.warn("Failed to inject router into appStore: " + e);
   }
 };
-const injector = setInterval(injectIt, 100);
+const injector = setInterval(injectIt, 1000);
 
 export default router;
