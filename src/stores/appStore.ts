@@ -49,7 +49,7 @@ export const useAppStore = defineStore("app", {
         objects.world = gameData.world;
         objects.bulkSet(Object.values(gameObjects));
       } else {
-        const gameData = createWorld(worldSizes[2]);
+        const gameData = createWorld(worldSizes[4]);
         objects.world = gameData.world;
         objects.bulkSet(gameData.objects);
       }

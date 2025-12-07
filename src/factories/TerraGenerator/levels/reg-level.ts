@@ -7,7 +7,7 @@ import {
   removeOrphanArea,
 } from "@/factories/TerraGenerator/helpers/post-processors";
 import { GenTile } from "@/factories/TerraGenerator/gen-tile";
-import { getNeighborCoords } from "@/factories/TerraGenerator/helpers/neighbors";
+import { getNeighborCoords } from "@/helpers/mapTools";
 
 export class RegLevel {
   gen: TerraGenerator;

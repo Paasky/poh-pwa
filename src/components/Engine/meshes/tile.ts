@@ -102,13 +102,13 @@ export function buildTileGrid(world: WorldState, scene: Scene): TileGridBuild {
       // Water sits below ground plane; deeper for ocean/sea than coast/lake
       switch (tile.terrain.key) {
         case "terrainType:ocean":
-          yOffset = -0.6;
+          yOffset = -0.8;
           break;
         case "terrainType:sea":
-          yOffset = -0.4;
+          yOffset = -0.6;
           break;
         default:
-          yOffset = -0.2;
+          yOffset = -0.4;
       }
     } else {
       switch (tile.elevation.key) {

@@ -3,7 +3,7 @@ import { useObjectsStore } from "@/stores/objectStore";
 import { GenTile } from "@/factories/TerraGenerator/gen-tile";
 import { Tetris } from "@/factories/TerraGenerator/helpers/tetris";
 import { generateKey } from "@/objects/game/_GameObject";
-import { Coords, getNeighborCoords, getTile } from "@/factories/TerraGenerator/helpers/neighbors";
+import { Coords, getHexNeighborCoords, getTile } from "@/helpers/mapTools";
 import { TerraGenerator } from "@/factories/TerraGenerator/terra-generator";
 import { AcceptResult, Snake } from "@/factories/TerraGenerator/helpers/snake";
 import { River } from "@/objects/game/River";
@@ -95,20 +95,26 @@ export const mountainRange = (
   const snowMountain = useObjectsStore().getTypeObject("elevationType:snowMountain");
 
   let waterCount = 0;
-  return new Snake(size, tiles, (tile) => {
-    // If we've hit too many non-lake water tiles, stop early
-    if (tile.domain.id === "water" && tile.terrain.id !== "lake") {
-      waterCount++;
-      return waterCount < 3;
-    }
+  return new Snake(
+    size,
+    tiles,
+    (tile) => {
+      // If we've hit too many non-lake water tiles, stop early
+      if (tile.domain.id === "water" && tile.terrain.id !== "lake") {
+        waterCount++;
+        return waterCount < 3;
+      }
 
-    tile.elevation =
-      tile.elevation === mountain || tile.elevation === snowMountain || Math.random() > 0.9
-        ? snowMountain
-        : mountain;
+      tile.elevation =
+        tile.elevation === mountain || tile.elevation === snowMountain || Math.random() > 0.9
+          ? snowMountain
+          : mountain;
 
-    return true;
-  }).walk(start);
+      return true;
+    },
+    undefined,
+    { method: "chebyshev" },
+  ).walk(start);
 };
 
 /**
@@ -145,7 +151,7 @@ export const crawlTiles = (
     const cx = (current as GenTile).x;
     const cy = (current as GenTile).y;
     if (level === "game") {
-      neighborTiles = gen.getGameNeighbors({ x: cx, y: cy }, "chebyshev", 1);
+      neighborTiles = gen.getGameNeighbors({ x: cx, y: cy }, 1);
     } else if (level === "reg") {
       neighborTiles = gen.getRegNeighbors({ x: cx, y: cy }, "chebyshev", 1);
     } else {
@@ -167,14 +173,10 @@ export const crawlTiles = (
  * - Crawls in 8 directions but only through water; land tiles are not traversed.
  * - On every visited water tile, sets tile.isSalt = true.
  */
-export const spreadSalt = (
-  gen: TerraGenerator,
-  level: "strat" | "reg" | "game",
-  start: GenTile,
-): void => {
+export const spreadSalt = (gen: TerraGenerator, start: GenTile): void => {
   const seen = new Set<string>();
   const waterCheck = (t: GenTile) => t.domain.id === "water";
-  const visited = crawlTiles(gen, level, start, seen, waterCheck);
+  const visited = crawlTiles(gen, "game", start, seen, waterCheck);
   for (const t of visited) {
     t.isSalt = true;
   }
@@ -218,7 +220,7 @@ export const makeRiver = (
         }
       }
 
-      const neighbors = getNeighborCoords(size, tile).map((c) => getTile(size, c, tiles)!);
+      const neighbors = getHexNeighborCoords(size, tile).map((c) => getTile(size, c, tiles)!);
 
       // First pass: update neighbors
       for (const neighbor of neighbors) {
@@ -263,7 +265,7 @@ export const makeRiver = (
 
       // Block if the tile has my river neighbors
       if (
-        getNeighborCoords(size, tile)
+        getHexNeighborCoords(size, tile)
           .map((c) => getTile(size, c, tiles)!)
           .some((n) => n.riverKey === river.key && n.key !== tile.key)
       ) {

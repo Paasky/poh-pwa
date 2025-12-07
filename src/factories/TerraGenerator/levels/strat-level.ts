@@ -6,7 +6,7 @@ import { getRandom, takeRandom } from "@/helpers/arrayTools";
 import { removeOrphanArea } from "@/factories/TerraGenerator/helpers/post-processors";
 import { GenTile } from "@/factories/TerraGenerator/gen-tile";
 import { ContinentData } from "@/factories/TerraGenerator/config";
-import { getNeighborCoords } from "@/factories/TerraGenerator/helpers/neighbors";
+import { getNeighborCoords } from "@/helpers/mapTools";
 
 export class StratLevel {
   gen: TerraGenerator;

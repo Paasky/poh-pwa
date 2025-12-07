@@ -7,12 +7,7 @@ import { StratLevel } from "./levels/strat-level";
 import { RegLevel } from "./levels/reg-level";
 import { GameLevel } from "./levels/game-level";
 import { GenTile } from "@/factories/TerraGenerator/gen-tile";
-import {
-  Coords,
-  getNeighbors,
-  getRealCoords,
-  NeighborMethod,
-} from "@/factories/TerraGenerator/helpers/neighbors";
+import { Coords, getNeighbors, getRealCoords, NeighborMethod } from "@/helpers/mapTools";
 import {
   climateTerrain,
   ContinentData,
@@ -293,7 +288,7 @@ export class TerraGenerator {
     const cx = x * 9 + 4;
     const cy = y * 9 + 4;
     const center = this.gameTiles[Tile.getKey(cx, cy)];
-    const neighbors = this.getGameNeighbors({ x: cx, y: cy }, "chebyshev", 4);
+    const neighbors = this.getGameNeighbors({ x: cx, y: cy }, 4);
     return center ? [center, ...neighbors] : neighbors;
   }
 
@@ -306,8 +301,8 @@ export class TerraGenerator {
     return center ? [center, ...neighbors] : neighbors;
   }
 
-  getGameNeighbors(coords: Coords, method: NeighborMethod = "chebyshev", dist = 1): GenTile[] {
-    return getNeighbors(this.size, coords, this.gameTiles, method, dist);
+  getGameNeighbors(coords: Coords, dist = 1): GenTile[] {
+    return getNeighbors(this.size, coords, this.gameTiles, "hex", dist);
   }
 
   getRegNeighbors(coords: Coords, method: NeighborMethod = "chebyshev", dist = 1): GenTile[] {

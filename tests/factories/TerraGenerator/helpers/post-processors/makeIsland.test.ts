@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { makeIsland } from "../../../../../src/factories/TerraGenerator/helpers/post-processors";
-import { getTile } from "../../../../../src/factories/TerraGenerator/helpers/neighbors";
+import { getTile } from "../../../../../src/helpers/mapTools";
 import { Tile } from "../../../../../src/objects/game/Tile";
 
 vi.mock("@/factories/TerraGenerator/helpers/tetris", () => ({

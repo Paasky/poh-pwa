@@ -1,10 +1,10 @@
 import { Tile } from "@/objects/game/Tile";
 import { Player } from "@/objects/game/Player";
 import { useObjectsStore } from "@/stores/objectStore";
-import { type Coords } from "@/factories/TerraGenerator/helpers/neighbors";
+import { type Coords } from "@/helpers/mapTools";
 import type { GameKey } from "@/objects/game/_GameObject";
 import type { WorldState } from "@/types/common";
-import { computed, markRaw } from "vue";
+import { markRaw } from "vue";
 
 /*
 World (engine/game model)

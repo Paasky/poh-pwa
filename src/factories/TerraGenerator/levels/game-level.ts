@@ -9,7 +9,7 @@ import {
   removeOrphanTerrain,
   spreadSalt,
 } from "@/factories/TerraGenerator/helpers/post-processors";
-import { getNeighborCoords } from "@/factories/TerraGenerator/helpers/neighbors";
+import { getNeighborCoords } from "@/helpers/mapTools";
 import { TypeKey } from "@/types/common";
 import { River } from "@/objects/game/River";
 
@@ -24,7 +24,7 @@ export class GameLevel {
     for (let y = 0; y < this.gen.size.y; y++) {
       for (let x = 0; x < this.gen.size.x; x++) {
         // Choose a random regLevel neighbor
-        const neighborCoords = getNeighborCoords(this.gen.size, { x, y }, "manhattan", 1);
+        const neighborCoords = getNeighborCoords(this.gen.size, { x, y }, "hex", 1);
         const regNeighbors = neighborCoords.map((c) => this.gen.getRegFromGameCoords(c.x, c.y));
         const regTile = getRandom(regNeighbors);
 
@@ -88,7 +88,7 @@ export class GameLevel {
 
   private postProcessPass1(): GameLevel {
     this.gen.forEachGameTile((tile) => {
-      const neighbors = this.gen.getGameNeighbors(tile, "manhattan");
+      const neighbors = this.gen.getGameNeighbors(tile);
 
       removeOrphanArea(tile, neighbors);
       removeOrphanTerrain(tile, neighbors);
@@ -144,7 +144,7 @@ export class GameLevel {
         Math.random() < 0.1
       ) {
         // Has a 3-size plus-shape area of sea/lake
-        const area = this.gen.getGameNeighbors(tile, "manhattan", 3);
+        const area = this.gen.getGameNeighbors(tile, 3);
         if (area.every((t) => t.terrain === tile.terrain)) {
           if (tile.terrain === this.gen.seaTerrain) {
             // Prefer hill islands in seas
@@ -173,7 +173,7 @@ export class GameLevel {
           // Already salt, skip
           if (start.isSalt) continue;
 
-          spreadSalt(this.gen, "game", start);
+          spreadSalt(this.gen, start);
         }
       }
     }
@@ -237,7 +237,7 @@ export class GameLevel {
       if (t.domain.key !== this.gen.land.key) continue;
       if (t.elevation.id === "mountain") continue;
       if (t.elevation.id === "snowMountain") continue;
-      if (this.gen.getGameNeighbors(t, "chebyshev", 3).some((nn) => nn.isSalt)) continue;
+      if (this.gen.getGameNeighbors(t, 3).some((nn) => nn.isSalt)) continue;
 
       if (!candidatesPerContinent[t.area.key]) candidatesPerContinent[t.area.key] = [];
 
@@ -253,7 +253,7 @@ export class GameLevel {
         const candidate = candidates.pop()!;
 
         // Check it's still valid (far enough from other rivers)
-        if (this.gen.getGameNeighbors(candidate, "chebyshev", 3).every((nn) => !nn.riverKey)) {
+        if (this.gen.getGameNeighbors(candidate, 3).every((nn) => !nn.riverKey)) {
           const river = makeRiver(this.gen.size, candidate, this.gen.gameTiles, rivers);
           riverCount++;
           rivers[river.key] = river;

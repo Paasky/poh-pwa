@@ -1,6 +1,6 @@
 import { MeshBuilder, Scene } from "@babylonjs/core";
 
-const height = 0.05;
+const height = 2;
 
 // Base hex geometry (pointy-top)
 export const getBaseTile = (scene: Scene) => {
