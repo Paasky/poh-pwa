@@ -2,16 +2,17 @@ import { Color3, Scene, StandardMaterial } from "@babylonjs/core";
 import { TypeKey } from "@/types/common";
 
 const colors = {
-  coast: Color3.FromHexString("#1e5f8a"), // todo use central color helper
-  desert: Color3.FromHexString("#b3a500"), // todo use central color helper
-  grass: Color3.FromHexString("#3f6212"), // todo use central color helper
-  lake: Color3.FromHexString("#164e63"), // todo use central color helper
-  majorRiver: Color3.FromHexString("#204b4c"), // todo use central color helper
-  ocean: Color3.FromHexString("#172554"), // todo use central color helper
-  plains: Color3.FromHexString("#a58111"), // todo use central color helper
-  sea: Color3.FromHexString("#1e3a8a"), // todo use central color helper
-  snow: Color3.FromHexString("#a0a0a0"), // todo use central color helper
-  tundra: Color3.FromHexString("#3e5234"), // todo use central color helper
+  // Terrain color palette; keep in sync with LevelSection.vue CSS colors
+  coast: Color3.FromHexString("#1e5f8a"),
+  desert: Color3.FromHexString("#b3a500"),
+  grass: Color3.FromHexString("#3f6212"),
+  lake: Color3.FromHexString("#164e63"),
+  majorRiver: Color3.FromHexString("#204b4c"),
+  ocean: Color3.FromHexString("#172554"),
+  plains: Color3.FromHexString("#a58111"),
+  sea: Color3.FromHexString("#1e3a8a"),
+  snow: Color3.FromHexString("#a0a0a0"),
+  tundra: Color3.FromHexString("#3e5234"),
 } as Record<string, Color3>;
 
 export const allTerrainMaterials = (scene: Scene): Record<TypeKey, StandardMaterial> => {

@@ -40,12 +40,6 @@ import {
   hexWidth,
 } from "@/components/Engine/math";
 
-export type TileGridOptions = {
-  hexRadius?: number; // world units, distance from center to vertex
-  tileHeight?: number; // mesh height (thickness)
-  replicateX?: number; // how many horizontal repetitions for wrap illusion (odd number recommended, default 1)
-};
-
 export type TileGridBuild = {
   root: TransformNode;
   // Horizontal repeat period in world units (distance after which the map repeats on X)
@@ -62,10 +56,11 @@ export function buildTileGrid(scene: Scene, world: WorldState): TileGridBuild {
 
   const terrainMeshes: Record<TypeKey, Mesh> = {};
   for (const [terrainKey, terrainMaterial] of Object.entries(allTerrainMaterials(scene))) {
-    // todo: use createInstance or clone here?
-    const mesh = baseTile.clone(`mesh-${terrainKey}`, root); // todo is root needed if baseTile is already i's child?
+    // Clone a hidden master per terrain so each can have its own material.
+    const mesh = baseTile.clone(`mesh-${terrainKey}`, root);
     mesh.material = terrainMaterial;
-    mesh.isVisible = false; // todo is this needed if baseTile is already isVisible = false
+    // Clones do not inherit visibility; explicitly keep masters hidden.
+    mesh.isVisible = false;
     terrainMeshes[terrainKey as TypeKey] = mesh;
   }
 
@@ -134,9 +129,9 @@ export function buildTileGrid(scene: Scene, world: WorldState): TileGridBuild {
 
     for (const rIdx of repIndices) {
       const wx = baseWx + rIdx * periodX;
-      // todo use createInstance or clone here?
       const inst = terrainMesh.createInstance(tile.key);
-      inst.parent = root; // todo is root needed if terrainMesh is already a child of root?
+      // Instances are independent nodes; parent them to the common root for lifecycle.
+      inst.parent = root;
       inst.position = new Vector3(wx, yOffset, wz);
     }
   }
