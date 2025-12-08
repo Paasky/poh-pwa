@@ -88,6 +88,7 @@ export function buildTileGrid(world: WorldState, scene: Scene): TileGridBuild {
 
     // --- Elevation & water level ---
     // Minimal vertical placement: water below ground, hills/mountains above.
+    // todo move to mapTools
     const isWaterTerrain =
       (tile.terrain.key as string) === "terrainType:ocean" ||
       (tile.terrain.key as string) === "terrainType:sea" ||
@@ -100,6 +101,7 @@ export function buildTileGrid(world: WorldState, scene: Scene): TileGridBuild {
 
     if (isWaterTerrain) {
       // Water sits below ground plane; deeper for ocean/sea than coast/lake
+      // todo move to mapTools as constants (oceanHeight=-0.8 etc)
       switch (tile.terrain.key) {
         case "terrainType:ocean":
           yOffset = -0.8;
@@ -113,6 +115,7 @@ export function buildTileGrid(world: WorldState, scene: Scene): TileGridBuild {
     } else {
       switch (tile.elevation.key) {
         case "elevationType:hill":
+          // todo move to mapTools as constants (hillHeight=0.4 etc)
           yOffset = 0.4; // rolling hills
           break;
         case "elevationType:mountain":

@@ -12,7 +12,7 @@ import {
   Vector3,
 } from "@babylonjs/core";
 import { CreateScreenshotUsingRenderTarget } from "@babylonjs/core/Misc/screenshotTools";
-import { buildTileGrid } from "@/components/Engine/meshes/tile";
+import { TerrainMeshBuilder } from "@/components/Engine/terrain/TerrainMeshBuilder";
 import {
   clamp,
   getWorldDepth,
@@ -45,6 +45,7 @@ export class EngineService {
   minimapCamera: ArcRotateCamera;
   light: HemisphericLight;
   tileRoot: TransformNode;
+  terrainBuilder: TerrainMeshBuilder;
 
   // No animation state needed for simple, instant flyTo
 
@@ -66,12 +67,17 @@ export class EngineService {
     this.minimapCamera = this.initMinimap();
     this.light = this.initLight();
 
-    // Init Tiles
-    this.tileRoot = buildTileGrid(this.world, this.scene).root;
+    // Build merged terrain mesh (new pipeline)
+    this.terrainBuilder = new TerrainMeshBuilder(this.scene, this.world, {
+      hexRadius: 1,
+      smoothing: 0.6,
+      jitter: 0.04,
+    });
+    this.tileRoot = this.terrainBuilder.build();
 
     // Once the scene is ready, capture a one-time minimap image into the minimap canvas
     this.scene.executeWhenReady(() => {
-      this.captureMinimapOnce();
+      this.captureMinimap();
     });
 
     // Render loop
@@ -84,7 +90,7 @@ export class EngineService {
     window.addEventListener("resize", this.onResize);
   }
 
-  captureMinimapOnce(): EngineService {
+  captureMinimap(): EngineService {
     // Render a 512x256 screenshot using the orthographic minimap camera and draw it to the canvas
     const width = 512;
     const height = 256;
@@ -111,6 +117,7 @@ export class EngineService {
   detach(): void {
     window.removeEventListener("resize", this.onResize);
     this.engine.stopRenderLoop();
+    this.terrainBuilder.dispose();
     this.scene.dispose();
     this.engine.dispose();
   }

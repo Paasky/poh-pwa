@@ -1,22 +1,160 @@
 /*
-TODO: ElevationBlender (neighbor height smoothing)
+ElevationBlender (neighbor height smoothing)
 
 Purpose
 - Provide simple algorithms to smooth/lerp heights between neighboring hex tiles for a more natural look.
-- Decouple height logic from mesh building so it can be unit-tested.
+- Decouple height logic from the mesh building so it can be unit-tested.
 
-Planned Public API (no implementation yet)
-- constructor(world: WorldLike, options?: { smoothing: number })
-- sampleBaseHeight(x: number, y: number): number
-  - Returns the base height for a tile (from world/tile elevation data).
-- computeBlendedHeight(x: number, y: number): number
-  - Computes a height that blends this tile with its neighbors using the smoothing factor.
-- precomputeAll(): void
-  - Optionally precompute blended heights/caches for quicker mesh updates.
-- getHeightMap(): Float32Array | number[] | null
-  - Returns a packed height map if precomputed.
-- dispose(): void
-
-Notes
-- Neighborhood definition uses project standard: POINTY-TOP with odd-r (row-offset).
+Implementation notes
+- Neighborhood definition uses the project standard: POINTY-TOP with odd-r (row-offset).
+- Wrap east/west (X), clamp north/south (Y) consistently with mapTools.
 */
+
+import { useObjectsStore } from "@/stores/objectStore";
+import type { WorldState } from "@/types/common";
+import { Tile } from "@/objects/game/Tile";
+import { getHexNeighborCoords } from "@/helpers/mapTools";
+
+export type ElevationBlenderOptions = {
+  smoothing?: number; // [0..1] how much to blend with neighbors (0 = none, 1 = full avg)
+  jitter?: number; // amplitude of noise added to heights (in world units)
+  seed?: number; // optional seed for deterministic jitter
+};
+
+export class ElevationBlender {
+  private readonly world: WorldState;
+  private opts: Required<ElevationBlenderOptions>;
+  private readonly tilesByKey: Record<string, Tile>;
+  private heightMap: Float32Array | null = null;
+
+  constructor(world: WorldState, options?: ElevationBlenderOptions) {
+    this.world = world;
+    this.opts = {
+      smoothing: options?.smoothing ?? 0.6,
+      jitter: options?.jitter ?? 0.04,
+      seed: options?.seed ?? 1337,
+    } as Required<ElevationBlenderOptions>;
+
+    // todo new objStore getter: tilesByKey
+    const objStore = useObjectsStore();
+    const tiles = objStore.getClassGameObjects("tile") as Tile[];
+    this.tilesByKey = {} as Record<string, Tile>;
+    for (const t of tiles) this.tilesByKey[t.key] = t;
+  }
+
+  // Returns base height for a tile from terrain/elevation data (no neighbor blending)
+  sampleBaseHeight(x: number, y: number): number {
+    const t = this.getTile(x, y);
+    if (!t) return 0;
+
+    // todo move to mapTools
+    const k = t.terrain.key as string;
+    const isWater =
+      k === "terrainType:ocean" ||
+      k === "terrainType:sea" ||
+      k === "terrainType:coast" ||
+      k === "terrainType:lake" ||
+      k === "terrainType:majorRiver";
+
+    // todo move to mapTools as constants (oceanHeight=-0.8 etc)
+    if (isWater) {
+      switch (k) {
+        case "terrainType:ocean":
+          return -0.8;
+        case "terrainType:sea":
+          return -0.6;
+        case "terrainType:coast":
+        case "terrainType:lake":
+        case "terrainType:majorRiver":
+          return -0.4;
+        default:
+          return -0.4;
+      }
+    }
+
+    // todo move to mapTools as constants (hillHeight=0.4 etc)
+    const e = t.elevation.key as string;
+    switch (e) {
+      case "elevationType:hill":
+        return 0.4;
+      case "elevationType:mountain":
+        return 0.8;
+      case "elevationType:snowMountain":
+        return 1.0;
+      case "elevationType:flat":
+      default:
+        return 0;
+    }
+  }
+
+  // Blends a tile height with neighbors using simple averaging controlled by smoothing
+  computeBlendedHeight(x: number, y: number): number {
+    const base = this.sampleBaseHeight(x, y);
+
+    if (this.opts.smoothing <= 0) return base + this.jitter(x, y);
+
+    const neighbors = getHexNeighborCoords(
+      { x: this.world.sizeX, y: this.world.sizeY },
+      { x, y },
+      1,
+    );
+    if (!neighbors.length) return base + this.jitter(x, y);
+
+    let sum = 0;
+    for (const nb of neighbors) sum += this.sampleBaseHeight(nb.x, nb.y);
+    const avg = sum / neighbors.length;
+
+    const h = this.lerp(base, avg, this.opts.smoothing) + this.jitter(x, y);
+    return h;
+  }
+
+  precomputeAll(): void {
+    const { sizeX, sizeY } = this.world;
+    this.heightMap = new Float32Array(sizeX * sizeY);
+    for (let y = 0; y < sizeY; y++) {
+      for (let x = 0; x < sizeX; x++) {
+        this.heightMap[y * sizeX + x] = this.computeBlendedHeight(x, y);
+      }
+    }
+  }
+
+  getHeightMap(): Float32Array | null {
+    return this.heightMap;
+  }
+
+  dispose(): void {
+    this.heightMap = null;
+  }
+
+  // --- helpers ---
+  // todo use mapTools.getRealCoords
+  private getTile(x: number, y: number): Tile | null {
+    if (y < 0 || y >= this.world.sizeY) return null;
+    // wrap x
+    let wx = x % this.world.sizeX;
+    if (wx < 0) wx += this.world.sizeX;
+    const key = Tile.getKey(wx, y);
+    return this.tilesByKey[key] ?? null;
+  }
+
+  // todo move to math
+  private lerp(a: number, b: number, t: number): number {
+    return a + (b - a) * t;
+  }
+
+  // todo move to math
+  private jitter(x: number, y: number): number {
+    // Simple deterministic hash -> [-1, 1]
+    const n = this.hash2D(x, y, this.opts.seed);
+    return (n * 2 - 1) * this.opts.jitter;
+  }
+
+  private hash2D(x: number, y: number, seed: number): number {
+    // integer hashing, returns [0,1)
+    // todo "ESLint: This number literal will lose precision at runtime. (no-loss-of-precision)"
+    let h = (x * 374761393 + y * 668265263 + seed * 1442695040888963407) >>> 0;
+    h = (h ^ (h >> 13)) >>> 0;
+    h = Math.imul(h, 1274126177) >>> 0;
+    return (h & 0xffffffff) / 0x100000000; // [0,1)
+  }
+}
