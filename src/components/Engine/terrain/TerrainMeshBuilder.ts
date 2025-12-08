@@ -74,10 +74,10 @@ export class TerrainMeshBuilder {
     // Heights: for corner-based blending we use base heights directly
     // (no pre-smoothed map) to avoid cross-tile feedback.
 
-    // Buffers: land only (water is a single world plane for now)
-    const positionsLand: number[] = [];
-    const indicesLand: number[] = [];
-    const colorsLand: number[] = [];
+    // Single buffers for all tiles (land + water) — KISS
+    const positions: number[] = [];
+    const indices: number[] = [];
+    const colors: number[] = [];
 
     // World placement offsets
     const worldWidth = getWorldWidth(this.world.sizeX);
@@ -103,8 +103,8 @@ export class TerrainMeshBuilder {
     const rocksColor = terrainColorMap["terrainType:rocks"];
 
     const vertex = (x: number, y: number, z: number, c: Color4) => {
-      positionsLand.push(x, y, z);
-      colorsLand.push(c.r, c.g, c.b, c.a);
+      positions.push(x, y, z);
+      colors.push(c.r, c.g, c.b, c.a);
     };
 
     // Iterate tiles row-major
@@ -117,9 +117,6 @@ export class TerrainMeshBuilder {
         // todo move to math
         const cx = offsetX + hexWidth * (x + 0.5 * (y & 1));
         const cz = offsetZ + hexDepth * y;
-
-        // Skip generating per-tile water geometry; a single world water plane is used now
-        if (isWater(tile)) continue;
 
         const hCenter = this.blender.sampleBaseHeight(x, y);
         const cCenter3 = colorOf(tile);
@@ -153,57 +150,79 @@ export class TerrainMeshBuilder {
 
           const hA = this.blender.sampleBaseHeight(nA.x, nA.y);
           const hB = this.blender.sampleBaseHeight(nB.x, nB.y);
-          const hRim = (hCenter + hA + hB) / 3;
+          let hRim = (hCenter + hA + hB) / 3;
 
           const tA = this.tilesByKey[Tile.getKey(nA.x, nA.y)] ?? tile;
           const tB = this.tilesByKey[Tile.getKey(nB.x, nB.y)] ?? tile;
 
-          // Determine corner color
+          // Determine corner color (land-water rule: land colors dominate on land mesh)
           let cRim3: Color3;
-          const hasSalt = isSaltWater(tA) || isSaltWater(tB);
-          const hasFresh = isFreshWater(tA) || isFreshWater(tB);
-          if (hasSalt || hasFresh) {
-            // Mix land (center) with water neighbors: pick beach/fertile/rocks based on elevation diff
-            let waterH = 0;
-            let wCount = 0;
-            if (isWater(tA)) {
-              waterH += this.blender.sampleBaseHeight(nA.x, nA.y);
-              wCount++;
-            }
-            if (isWater(tB)) {
-              waterH += this.blender.sampleBaseHeight(nB.x, nB.y);
-              wCount++;
-            }
-            const avgWaterH = wCount ? waterH / wCount : hCenter;
-            const elevDiff = Math.abs(hCenter - avgWaterH);
-            if (hasSalt && !hasFresh) {
-              cRim3 = elevDiff < 0.5 ? beachColor : rocksColor;
-            } else if (hasFresh && !hasSalt) {
-              cRim3 = elevDiff < 0.5 ? riverBankColor : rocksColor;
+          if (!isWater(tile)) {
+            // LAND TILE: handle coasts specially to avoid blue blending
+            const hasSalt = isSaltWater(tA) || isSaltWater(tB);
+            const hasFresh = isFreshWater(tA) || isFreshWater(tB);
+            if (hasSalt || hasFresh) {
+              // Mix land with water neighbors: choose beach/grass vs rocks by elevation diff
+              let waterH = 0;
+              let wCount = 0;
+              if (isWater(tA)) {
+                waterH += this.blender.sampleBaseHeight(nA.x, nA.y);
+                wCount++;
+              }
+              if (isWater(tB)) {
+                waterH += this.blender.sampleBaseHeight(nB.x, nB.y);
+                wCount++;
+              }
+              const avgWaterH = wCount ? waterH / wCount : hCenter;
+              const elevDiff = Math.abs(hCenter - avgWaterH);
+              if (hasSalt && !hasFresh) {
+                cRim3 = elevDiff < 0.5 ? beachColor : rocksColor;
+              } else if (hasFresh && !hasSalt) {
+                cRim3 = elevDiff < 0.5 ? riverBankColor : rocksColor;
+              } else {
+                cRim3 = elevDiff < 0.5 ? beachColor : rocksColor;
+              }
             } else {
-              // In the rare case both exist, prefer salt beach heuristic
-              cRim3 = elevDiff < 0.5 ? beachColor : rocksColor;
+              // Pure land corner: average of the three land colors
+              const cA = colorOf(tA);
+              const cB = colorOf(tB);
+              cRim3 = new Color3(
+                (cCenter3.r + cA.r + cB.r) / 3,
+                (cCenter3.g + cA.g + cB.g) / 3,
+                (cCenter3.b + cA.b + cB.b) / 3,
+              );
             }
           } else {
-            // Pure land corner: average of three tile colors
-            const cA = colorOf(tA);
-            const cB = colorOf(tB);
-            cRim3 = new Color3(
-              (cCenter3.r + cA.r + cB.r) / 3,
-              (cCenter3.g + cA.g + cB.g) / 3,
-              (cCenter3.b + cA.b + cB.b) / 3,
-            );
+            // WATER TILE: blend water colors at corners (average self + water neighbors only).
+            // Do not let land colors bleed into water.
+            // Also clamp rim height so water never rises above sea level (slightly below 0)
+            hRim = Math.min(hRim, -0.02);
+
+            const waterColors: Color3[] = [cCenter3];
+            if (isWater(tA)) waterColors.push(colorOf(tA));
+            if (isWater(tB)) waterColors.push(colorOf(tB));
+
+            if (waterColors.length > 1) {
+              let r = 0,
+                g = 0,
+                b = 0;
+              for (const wc of waterColors) {
+                r += wc.r;
+                g += wc.g;
+                b += wc.b;
+              }
+              cRim3 = new Color3(r / waterColors.length, g / waterColors.length, b / waterColors.length);
+            } else {
+              cRim3 = cCenter3;
+            }
           }
 
           const cRim = new Color4(cRim3.r, cRim3.g, cRim3.b, 1);
           ring.push({ x: rx, z: rz, h: hRim, color: cRim });
         }
 
-        // Skip generating per-tile water geometry; a single world water plane is used now
-        if (isWater(tile)) continue;
-
-        // Emit vertices: center + 6 rim into land buffers
-        const baseIndex = positionsLand.length / 3;
+        // Emit vertices: center + 6 rim into the single buffer
+        const baseIndex = positions.length / 3;
         vertex(cx, hCenter, cz, cCenter);
         for (const rv of ring) vertex(rv.x, rv.h, rv.z, rv.color);
 
@@ -212,25 +231,26 @@ export class TerrainMeshBuilder {
           const i0 = baseIndex; // center
           const i1 = baseIndex + 1 + i;
           const i2 = baseIndex + 1 + ((i + 1) % 6);
-          indicesLand.push(i0, i1, i2);
+          indices.push(i0, i1, i2);
         }
       }
     }
 
-    // Build land mesh
-    const land = new Mesh("terrain.land", this.scene);
-    const vdLand = new VertexData();
-    vdLand.positions = positionsLand;
-    vdLand.indices = indicesLand;
-    vdLand.colors = colorsLand;
-    const normalsLand: number[] = [];
-    VertexData.ComputeNormals(positionsLand, indicesLand, normalsLand);
-    vdLand.normals = normalsLand;
-    vdLand.applyToMesh(land, true);
-    const matLand = new StandardMaterial("terrainMat.land", this.scene);
-    matLand.specularColor = Color3.Black();
-    land.material = matLand;
-    land.parent = this.root;
+    // Build a single mesh for all tiles
+    const tiles = new Mesh("terrain.tiles", this.scene);
+    const vd = new VertexData();
+    vd.positions = positions;
+    vd.indices = indices;
+    vd.colors = colors;
+    const normals: number[] = [];
+    if (positions.length && indices.length) VertexData.ComputeNormals(positions, indices, normals);
+    vd.normals = normals;
+    vd.applyToMesh(tiles, true);
+    const matTiles = new StandardMaterial("terrainMat.tiles", this.scene);
+    // Keep tiles matte; specular comes from water plane only
+    matTiles.specularColor = Color3.Black();
+    tiles.material = matTiles;
+    tiles.parent = this.root;
 
     // Simple world-sized water plane to denote global sea level
     const waterPlane = MeshBuilder.CreateGround(
@@ -241,13 +261,16 @@ export class TerrainMeshBuilder {
     // Place below ground level (y=0)
     waterPlane.position.y = -0.2;
     const matWater = new StandardMaterial("terrainMat.water.plane", this.scene);
-    matWater.diffuseColor = terrainColorMap["terrainType:sea"];
-    matWater.specularColor = Color3.Black();
+    matWater.diffuseColor = terrainColorMap["terrainType:ocean"];
+    // Make plane reflective to the sun, semi-transparent for global sea level hint
+    matWater.specularColor = new Color3(0.8, 0.85, 0.95);
+    matWater.specularPower = 128;
+    matWater.alpha = 0.5; // 50% opacity
     waterPlane.material = matWater;
     waterPlane.parent = this.root;
 
-    // Keep reference to land mesh as primary
-    this.mesh = land;
+    // Keep reference to tiles mesh as primary
+    this.mesh = tiles;
     return this.root;
   }
 
