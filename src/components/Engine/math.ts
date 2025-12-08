@@ -18,7 +18,7 @@ export function clamp(val: number, min: number, max: number): number {
 // Hex Trigonometry
 
 // x,z position of a hex corner, relative to the center
-export const getHexCornerPosition = (
+export const getHexPointPosition = (
   centerX: number,
   centerZ: number,
   angle: number,
@@ -39,3 +39,8 @@ export const tileCenter = (size: Coords, tile: Tile): { x: number; z: number } =
     z: offsetZ + hexDepth * tile.y,
   };
 };
+
+export const avg = (vals: number[]): number => (vals.length ? sum(vals) / vals.length : 0);
+export const sum = (vals: number[]): number => vals.reduce((acc, val) => acc + val, 0);
+export const degToRad = (deg: number) => deg * (Math.PI / 180);
+export const radToDeg = (rad: number) => rad * (180 / Math.PI);

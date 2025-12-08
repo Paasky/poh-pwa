@@ -272,8 +272,8 @@ export class StratLevel {
         const isLand = tile.domain === this.gen.land;
 
         if (isLand) {
-          // 25% chance to become a hill
-          if (Math.random() < 0.25) tile.elevation = this.gen.hill;
+          // 5% chance to become a hill
+          if (Math.random() < 0) tile.elevation = this.gen.hill;
 
           // Check if it can become a Lake
           if (!tile.canBeWater()) continue;

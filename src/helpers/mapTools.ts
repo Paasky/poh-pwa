@@ -28,6 +28,23 @@ export function getHexNeighborDirections(y: number): Record<CompassHexEdge, Coor
       };
 }
 
+export function getHexNeighbor(
+  size: Coords,
+  tile: Tile,
+  tiles: Record<GameKey, Tile>,
+  direction: CompassHexEdge,
+): Tile | null {
+  const dirCoords = getHexNeighborDirections(tile.y)[direction];
+  return getTile(
+    size,
+    {
+      x: tile.x + dirCoords.x,
+      y: tile.y + dirCoords.y,
+    },
+    tiles,
+  );
+}
+
 // Returns the two neighbor direction deltas (relative to the center tile)
 // for the two tiles that meet at the given corner/edge of a POINTY-TOP hex
 // in an odd-r (row-offset) layout.
@@ -68,9 +85,9 @@ export function getHexCornerNeighbors(
   size: Coords,
   tile: Tile,
   tiles: Record<GameKey, Tile>,
-  edge: CompassHexCorner,
+  corner: CompassHexCorner,
 ): Tile[] {
-  const dirs = getHexCornerNeighborDirections(tile.y, edge);
+  const dirs = getHexCornerNeighborDirections(tile.y, corner);
   const out = [] as Tile[];
   for (const dir of dirs) {
     // Returns null if that direction is out-of-bounds; wraps X if needed
