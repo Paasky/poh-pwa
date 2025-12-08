@@ -29,7 +29,6 @@ import { terrainColorMap } from "@/assets/materials/terrains";
 import { ElevationBlender } from "@/components/Engine/terrain/ElevationBlender";
 
 export type TerrainBuildOptions = {
-  hexRadius?: number; // default 1
   smoothing?: number; // 0..1 (passed to ElevationBlender)
   jitter?: number; // noise amplitude for heights
 };
@@ -47,7 +46,6 @@ export class TerrainMeshBuilder {
     this.scene = scene;
     this.world = world;
     this.opts = {
-      hexRadius: options?.hexRadius ?? 1,
       smoothing: options?.smoothing ?? 0.6,
       jitter: options?.jitter ?? 0.04,
     } as Required<TerrainBuildOptions>;
@@ -67,7 +65,6 @@ export class TerrainMeshBuilder {
     if (this.root) this.dispose();
     this.root = new TransformNode("terrainRoot", this.scene);
 
-    const s = this.opts.hexRadius;
     const angleDeg: number[] = [30, 90, 150, 210, 270, 330]; // pointy-top hex rim angles
     const angleRad = angleDeg.map((a) => (a * Math.PI) / 180);
 
@@ -86,21 +83,7 @@ export class TerrainMeshBuilder {
     const offsetZ = getWorldMinZ(worldDepth);
 
     const colorOf = (t: Tile): Color3 => terrainColorMap[t.terrain.key] ?? Color3.Purple();
-
-    // todo move to mapTools
-    const isSaltWater = (t: Tile): boolean => {
-      const k = t.terrain.key as string;
-      return k === "terrainType:ocean" || k === "terrainType:sea" || k === "terrainType:coast";
-    };
-    const isFreshWater = (t: Tile): boolean => {
-      const k = t.terrain.key as string;
-      return k === "terrainType:lake" || k === "terrainType:majorRiver";
-    };
-    const isWater = (t: Tile): boolean => isSaltWater(t) || isFreshWater(t);
-
-    const beachColor = terrainColorMap["terrainType:desert"];
-    const riverBankColor = terrainColorMap["terrainType:grass"];
-    const rocksColor = terrainColorMap["terrainType:rocks"];
+    const snowColor = terrainColorMap["terrainType:snow"];
 
     const vertex = (x: number, y: number, z: number, c: Color4) => {
       positions.push(x, y, z);
@@ -130,92 +113,39 @@ export class TerrainMeshBuilder {
         const edges: CompassHexEdge[] = ["se", "s", "sw", "nw", "n", "ne"];
         for (let i = 0; i < 6; i++) {
           const a = angleRad[i];
-          const rx = cx + Math.cos(a) * s;
-          const rz = cz + Math.sin(a) * s;
+          const rx = cx + Math.cos(a);
+          const rz = cz + Math.sin(a);
 
           // Get the two neighbor deltas for this corner
           const [dA, dB] = getHexEdgeNeighborDirections(y, edges[i]);
 
-          // Resolve neighbor coords with wrap/clamp rules
-          const resolve = (dx: number, dy: number): { x: number; y: number } => {
-            let nx = x + dx;
+          // Resolve neighbor coords with wrap on X, clamp on Y.
+          // If neighbor would cross a pole, treat it as a synthetic FLAT+SNOW tile.
+          type NInfo = { x: number; y: number; exists: boolean };
+          const resolve = (dx: number, dy: number): NInfo => {
             const ny = y + dy;
-            if (ny < 0 || ny >= this.world.sizeY) return { x, y };
+            if (ny < 0 || ny >= this.world.sizeY) return { x, y, exists: false };
+            let nx = x + dx;
             nx = ((nx % this.world.sizeX) + this.world.sizeX) % this.world.sizeX;
-            return { x: nx, y: ny };
+            return { x: nx, y: ny, exists: true };
           };
 
           const nA = resolve(dA.x, dA.y);
           const nB = resolve(dB.x, dB.y);
 
-          const hA = this.blender.sampleBaseHeight(nA.x, nA.y);
-          const hB = this.blender.sampleBaseHeight(nB.x, nB.y);
-          let hRim = (hCenter + hA + hB) / 3;
+          const hA = nA.exists ? this.blender.sampleBaseHeight(nA.x, nA.y) : 0;
+          const hB = nB.exists ? this.blender.sampleBaseHeight(nB.x, nB.y) : 0;
+          const hRim = (hCenter + hA + hB) / 3;
 
-          const tA = this.tilesByKey[Tile.getKey(nA.x, nA.y)] ?? tile;
-          const tB = this.tilesByKey[Tile.getKey(nB.x, nB.y)] ?? tile;
-
-          // Determine corner color (land-water rule: land colors dominate on land mesh)
-          let cRim3: Color3;
-          if (!isWater(tile)) {
-            // LAND TILE: handle coasts specially to avoid blue blending
-            const hasSalt = isSaltWater(tA) || isSaltWater(tB);
-            const hasFresh = isFreshWater(tA) || isFreshWater(tB);
-            if (hasSalt || hasFresh) {
-              // Mix land with water neighbors: choose beach/grass vs rocks by elevation diff
-              let waterH = 0;
-              let wCount = 0;
-              if (isWater(tA)) {
-                waterH += this.blender.sampleBaseHeight(nA.x, nA.y);
-                wCount++;
-              }
-              if (isWater(tB)) {
-                waterH += this.blender.sampleBaseHeight(nB.x, nB.y);
-                wCount++;
-              }
-              const avgWaterH = wCount ? waterH / wCount : hCenter;
-              const elevDiff = Math.abs(hCenter - avgWaterH);
-              if (hasSalt && !hasFresh) {
-                cRim3 = elevDiff < 0.5 ? beachColor : rocksColor;
-              } else if (hasFresh && !hasSalt) {
-                cRim3 = elevDiff < 0.5 ? riverBankColor : rocksColor;
-              } else {
-                cRim3 = elevDiff < 0.5 ? beachColor : rocksColor;
-              }
-            } else {
-              // Pure land corner: average of the three land colors
-              const cA = colorOf(tA);
-              const cB = colorOf(tB);
-              cRim3 = new Color3(
-                (cCenter3.r + cA.r + cB.r) / 3,
-                (cCenter3.g + cA.g + cB.g) / 3,
-                (cCenter3.b + cA.b + cB.b) / 3,
-              );
-            }
-          } else {
-            // WATER TILE: blend water colors at corners (average self + water neighbors only).
-            // Do not let land colors bleed into water.
-            // Also clamp rim height so water never rises above sea level (slightly below 0)
-            hRim = Math.min(hRim, -0.02);
-
-            const waterColors: Color3[] = [cCenter3];
-            if (isWater(tA)) waterColors.push(colorOf(tA));
-            if (isWater(tB)) waterColors.push(colorOf(tB));
-
-            if (waterColors.length > 1) {
-              let r = 0,
-                g = 0,
-                b = 0;
-              for (const wc of waterColors) {
-                r += wc.r;
-                g += wc.g;
-                b += wc.b;
-              }
-              cRim3 = new Color3(r / waterColors.length, g / waterColors.length, b / waterColors.length);
-            } else {
-              cRim3 = cCenter3;
-            }
-          }
+          const tA = nA.exists ? this.tilesByKey[Tile.getKey(nA.x, nA.y)] : null;
+          const tB = nB.exists ? this.tilesByKey[Tile.getKey(nB.x, nB.y)] : null;
+          const cA = tA ? colorOf(tA) : snowColor;
+          const cB = tB ? colorOf(tB) : snowColor;
+          const cRim3 = new Color3(
+            (cCenter3.r + cA.r + cB.r) / 3,
+            (cCenter3.g + cA.g + cB.g) / 3,
+            (cCenter3.b + cA.b + cB.b) / 3,
+          );
 
           const cRim = new Color4(cRim3.r, cRim3.g, cRim3.b, 1);
           ring.push({ x: rx, z: rz, h: hRim, color: cRim });
@@ -236,14 +166,91 @@ export class TerrainMeshBuilder {
       }
     }
 
-    // Build a single mesh for all tiles
+    // --- Weld duplicate vertices so shading is continuous across hex seams ---
+    type Welded = { positions: number[]; colors: number[]; indices: number[] };
+    const weldByXZ = (
+      pos: number[],
+      col: number[],
+      idx: number[],
+      eps = 1e-4,
+    ): Welded => {
+      const vCount = Math.floor(pos.length / 3);
+      const keyOf = (x: number, z: number): string => `${Math.round(x / eps)},${Math.round(z / eps)}`;
+
+      // First pass: group by quantized X/Z, accumulate sums
+      type Acc = { sx: number; sy: number; sz: number; sr: number; sg: number; sb: number; sa: number; n: number };
+      const groups = new Map<string, Acc>();
+      const vKeys: string[] = new Array(vCount);
+
+      for (let i = 0; i < vCount; i++) {
+        const x = pos[3 * i + 0];
+        const y = pos[3 * i + 1];
+        const z = pos[3 * i + 2];
+        const r = col[4 * i + 0] ?? 0;
+        const g = col[4 * i + 1] ?? 0;
+        const b = col[4 * i + 2] ?? 0;
+        const a = col[4 * i + 3] ?? 1;
+        const k = keyOf(x, z);
+        vKeys[i] = k;
+        const acc = groups.get(k);
+        if (acc) {
+          acc.sx += x;
+          acc.sy += y;
+          acc.sz += z;
+          acc.sr += r;
+          acc.sg += g;
+          acc.sb += b;
+          acc.sa += a;
+          acc.n += 1;
+        } else {
+          groups.set(k, { sx: x, sy: y, sz: z, sr: r, sg: g, sb: b, sa: a, n: 1 });
+        }
+      }
+
+      // Second pass: assign compact indices and compute averages
+      const keyToNew = new Map<string, number>();
+      const nVerts = groups.size;
+      const posOut = new Array<number>(nVerts * 3);
+      const colOut = new Array<number>(nVerts * 4);
+      let cursor = 0;
+      for (const [k, acc] of groups) {
+        const inv = 1 / acc.n;
+        posOut[3 * cursor + 0] = acc.sx * inv;
+        posOut[3 * cursor + 1] = acc.sy * inv;
+        posOut[3 * cursor + 2] = acc.sz * inv;
+        colOut[4 * cursor + 0] = acc.sr * inv;
+        colOut[4 * cursor + 1] = acc.sg * inv;
+        colOut[4 * cursor + 2] = acc.sb * inv;
+        colOut[4 * cursor + 3] = acc.sa * inv;
+        keyToNew.set(k, cursor);
+        cursor++;
+      }
+
+      // Remap indices and drop degenerate triangles if any
+      const idxOut: number[] = [];
+      for (let t = 0; t < idx.length; t += 3) {
+        const i0 = keyToNew.get(vKeys[idx[t + 0]]) as number;
+        const i1 = keyToNew.get(vKeys[idx[t + 1]]) as number;
+        const i2 = keyToNew.get(vKeys[idx[t + 2]]) as number;
+        // Skip degenerate triangles
+        if (i0 === i1 || i1 === i2 || i2 === i0) continue;
+        idxOut.push(i0, i1, i2);
+      }
+
+      return { positions: posOut, colors: colOut, indices: idxOut };
+    };
+
+    const welded = weldByXZ(positions, colors, indices, 1e-4);
+
+    // Build a single mesh for all tiles from welded buffers
     const tiles = new Mesh("terrain.tiles", this.scene);
     const vd = new VertexData();
-    vd.positions = positions;
-    vd.indices = indices;
-    vd.colors = colors;
+    vd.positions = welded.positions;
+    vd.indices = welded.indices;
+    vd.colors = welded.colors;
     const normals: number[] = [];
-    if (positions.length && indices.length) VertexData.ComputeNormals(positions, indices, normals);
+    if (welded.positions.length && welded.indices.length)
+      VertexData.ComputeNormals(welded.positions, welded.indices, normals);
     vd.normals = normals;
     vd.applyToMesh(tiles, true);
     const matTiles = new StandardMaterial("terrainMat.tiles", this.scene);
@@ -259,7 +266,7 @@ export class TerrainMeshBuilder {
       this.scene,
     );
     // Place below ground level (y=0)
-    waterPlane.position.y = -0.2;
+    waterPlane.position.y = -10.2;
     const matWater = new StandardMaterial("terrainMat.water.plane", this.scene);
     matWater.diffuseColor = terrainColorMap["terrainType:ocean"];
     // Make plane reflective to the sun, semi-transparent for global sea level hint

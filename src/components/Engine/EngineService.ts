@@ -76,7 +76,6 @@ export class EngineService {
 
     // Build merged terrain mesh (new pipeline)
     this.terrainBuilder = new TerrainMeshBuilder(this.scene, this.world, {
-      hexRadius: 1,
       smoothing: 0.6,
       jitter: 0.04,
     });
@@ -308,7 +307,7 @@ export class EngineService {
       // Compute view direction from camera to target
       const viewDir = t.subtract(this.camera.position).normalize();
       // Put sun behind the camera, with a guaranteed downward component to bring it lower
-      let sx = -viewDir.x - 3;
+      let sx = -viewDir.x - 4;
       let sy = -Math.abs(viewDir.y) - 0.5; // push downward to ~2-3pm feel
       let sz = -viewDir.z;
       const len = Math.hypot(sx, sy, sz) || 1;

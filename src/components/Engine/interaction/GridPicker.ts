@@ -17,7 +17,7 @@ Hex orientation & layout
 - Row offset on X: x += 0.5 * dx for odd rows (y & 1)
 
 Public API (minimal)
-- constructor(scene: Scene, canvas: HTMLCanvasElement, world: { sizeX: number; sizeY: number }, opts?: { hexRadius?: number; origin?: { x: number; z: number } })
+- constructor(scene: Scene, canvas: HTMLCanvasElement, world: { sizeX: number; sizeY: number }, opts?: { origin?: { x: number; z: number } })
 - build(): this
 - attach(): this
 - detach(): this
@@ -33,7 +33,6 @@ import { Tile } from "@/objects/game/Tile";
 type Listener = (tileKey: GameKey | null) => void;
 
 export type GridPickerOptions = {
-  hexRadius?: number; // distance from center to a vertex (world units)
   origin?: { x: number; z: number }; // world position of tile (0,0)
 };
 
@@ -64,19 +63,17 @@ export class GridPicker {
     this.canvas = canvas;
     this.world = world;
     this.options = {
-      hexRadius: opts.hexRadius ?? 1,
       origin: opts.origin ?? { x: 0, z: 0 },
     };
   }
 
   build(): this {
-    const s = this.options.hexRadius;
     // Base pointy-top hex: a short cylinder with 6 tessellation
     const base = MeshBuilder.CreateCylinder(
       "hexBase",
       {
         height: 0.01,
-        diameter: 2 * s,
+        diameter: 2,
         tessellation: 6,
         updatable: false,
       },
@@ -92,8 +89,8 @@ export class GridPicker {
     base.parent = root;
 
     // Prepare transforms for each tile using pointy-top, odd-r layout (rows offset)
-    const dx = Math.sqrt(3) * s; // horizontal center spacing
-    const dz = 1.5 * s; // vertical spacing between rows
+    const dx = Math.sqrt(3); // horizontal center spacing
+    const dz = 1.5; // vertical spacing between rows
     const origin = this.options.origin;
 
     const tmp = Vector3.Zero();
