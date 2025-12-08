@@ -42,7 +42,7 @@ export class TerrainMeshBuilder {
     this.scene = scene;
     this.world = world;
     const defaultDetail: TerrainDetailOptions = {
-      rings: 3,
+      rings: 1, // todo up to 2 once verified it works with 1
       edgeMode: "twoTileLinear",
       cornerMode: "threeTileAverage",
       flattenStraightEdges: false,

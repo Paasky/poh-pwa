@@ -28,13 +28,7 @@ export class RegLevel {
           stratTile = getRandom(neighbors.map((n) => this.gen.getStratFromRegCoords(n.x, n.y)));
         }
 
-        // Allow a 25% chance for elevation swap for extra variety
-        const elevation =
-          stratTile.domain === this.gen.land && Math.random() < 0.25
-            ? stratTile.elevation === this.gen.flat
-              ? this.gen.hill
-              : this.gen.flat
-            : stratTile.elevation;
+        const elevation = stratTile.domain.id === "land" ? stratTile.elevation : this.gen.flat;
 
         const tile = new GenTile(
           GenTile.getKey(x, y),

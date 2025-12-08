@@ -7,6 +7,70 @@ export type CompassSquare = "n" | "ne" | "e" | "se" | "s" | "sw" | "w" | "nw";
 export type Coords = { x: number; y: number };
 export type NeighborMethod = "chebyshev" | "manhattan" | "hex";
 
+export type PointData = {
+  x: number; // offset from tile center
+  z: number; // offset from tile center
+  corner?: CompassHexCorner; // e.g., "n", "ne", "sw"
+  edge?: CompassHexEdge; // e.g., "e", "se", "nw"
+};
+
+/**
+ * Returns hex points for a given ring index.
+ * Points are ordered clockwise starting from 30° (se) corner.
+ * Ring radius is scaled by ringIndex / totalRings.
+ */
+export function pointsInRing(ringNumFromCenter: number, totalRings: number): PointData[] {
+  const scaledRadius = ringNumFromCenter / totalRings;
+  const cornerAnglesDeg = [30, 90, 150, 210, 270, 330];
+
+  // Note: +Z grows south in our world space, so the N/S labels must be flipped
+  // relative to mathematical angles. The correct edge order for our angles is:
+  //   30°→se, 90°→s, 150°→sw, 210°→nw, 270°→n, 330°→ne
+  const cornerLabels = ["se", "s", "sw", "nw", "n", "ne"] as CompassHexCorner[];
+
+  // When adding points on an edge (nthRing 2+), these correlate with the base angles
+  const edgeLabels = ["se", "sw", "w", "nw", "ne", "e"] as CompassHexEdge[];
+
+  const points: { x: number; z: number; corner?: CompassHexCorner; edge?: CompassHexEdge }[] = [];
+
+  for (let edgeIndex = 0; edgeIndex < 6; edgeIndex++) {
+    const startAngleDeg = cornerAnglesDeg[edgeIndex];
+    const endAngleDeg = cornerAnglesDeg[(edgeIndex + 1) % 6];
+
+    const startAngleRad = (startAngleDeg * Math.PI) / 180;
+    const endAngleRad = (endAngleDeg * Math.PI) / 180;
+
+    // First point = corner
+    points.push({
+      x: Math.cos(startAngleRad) * scaledRadius,
+      z: Math.sin(startAngleRad) * scaledRadius,
+      corner: cornerLabels[edgeIndex],
+    });
+
+    // When past the 1st ring, insert 1 intermediate point per nth ring over 1, along the same edge
+    // (e.g., 2nd ring: edge = 2 corners + 1 mid-point, 3rd ring: 2 corners + 2 mid-points, etc.)
+    for (let stepIndex = 1; stepIndex < ringNumFromCenter; stepIndex++) {
+      const fractionAlongEdge = stepIndex / ringNumFromCenter;
+
+      const startX = Math.cos(startAngleRad) * scaledRadius;
+      const startZ = Math.sin(startAngleRad) * scaledRadius;
+      const endX = Math.cos(endAngleRad) * scaledRadius;
+      const endZ = Math.sin(endAngleRad) * scaledRadius;
+
+      const interpolatedX = startX * (1 - fractionAlongEdge) + endX * fractionAlongEdge;
+      const interpolatedZ = startZ * (1 - fractionAlongEdge) + endZ * fractionAlongEdge;
+
+      points.push({
+        x: interpolatedX,
+        z: interpolatedZ,
+        edge: edgeLabels[edgeIndex],
+      });
+    }
+  }
+
+  return points;
+}
+
 export function getHexNeighborDirections(y: number): Record<CompassHexEdge, Coords> {
   const isOdd = (y & 1) === 1;
   return isOdd
@@ -26,6 +90,23 @@ export function getHexNeighborDirections(y: number): Record<CompassHexEdge, Coor
         sw: { x: -1, y: 1 },
         se: { x: 0, y: 1 },
       };
+}
+
+export function getHexNeighbor(
+  size: Coords,
+  tile: Tile,
+  tiles: Record<GameKey, Tile>,
+  direction: CompassHexEdge,
+): Tile | null {
+  const dirCoords = getHexNeighborDirections(tile.y)[direction];
+  return getTile(
+    size,
+    {
+      x: tile.x + dirCoords.x,
+      y: tile.y + dirCoords.y,
+    },
+    tiles,
+  );
 }
 
 // Returns the two neighbor direction deltas (relative to the center tile)
@@ -68,9 +149,9 @@ export function getHexCornerNeighbors(
   size: Coords,
   tile: Tile,
   tiles: Record<GameKey, Tile>,
-  edge: CompassHexCorner,
+  corner: CompassHexCorner,
 ): Tile[] {
-  const dirs = getHexCornerNeighborDirections(tile.y, edge);
+  const dirs = getHexCornerNeighborDirections(tile.y, corner);
   const out = [] as Tile[];
   for (const dir of dirs) {
     // Returns null if that direction is out-of-bounds; wraps X if needed
