@@ -222,9 +222,6 @@ export class TerrainMeshBuilder {
     vdLand.applyToMesh(land, true);
     const matLand = new StandardMaterial("terrainMat.land", this.scene);
     matLand.specularColor = Color3.Black();
-    // Use per-vertex colors for land surface
-    // Babylon StandardMaterial supports vertex colors via this flag
-    matLand.useVertexColor = true;
     land.material = matLand;
     land.parent = this.root;
 

@@ -1,6 +1,7 @@
 import { Tile } from "@/objects/game/Tile";
 
 export type CompassHex = "ne" | "e" | "se" | "sw" | "w" | "nw";
+export type CompassHexEdge = "n" | "se" | "sw" | "s" | "nw" | "ne";
 export type CompassSquare = "n" | "ne" | "e" | "se" | "s" | "sw" | "w" | "nw";
 export type Coords = { x: number; y: number };
 export type NeighborMethod = "chebyshev" | "manhattan" | "hex";
@@ -24,6 +25,10 @@ export function getHexNeighborDirections(y: number): Record<CompassHex, Coords> 
         sw: { x: -1, y: 1 },
         se: { x: 0, y: 1 },
       };
+}
+
+export function getHexEdgeNeighborDirections(edge: CompassHexEdge): Coords[] {
+  // todo return the two directions to get to the edge neighbors
 }
 
 /**
