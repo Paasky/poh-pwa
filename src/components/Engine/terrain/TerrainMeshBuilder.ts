@@ -14,19 +14,13 @@ Notes
 import { useObjectsStore } from "@/stores/objectStore";
 import type { WorldState } from "@/types/common";
 import { Tile } from "@/objects/game/Tile";
-import {
-  getWorldDepth,
-  getWorldMinX,
-  getWorldMinZ,
-  getWorldWidth,
-  hexDepth,
-  hexWidth,
-} from "@/components/Engine/math";
-import { CompassHexEdge, getHexEdgeNeighborDirections } from "@/helpers/mapTools";
-import { Color3, Color4, Mesh, MeshBuilder, Scene, StandardMaterial, TransformNode, } from "@babylonjs/core";
+import { getWorldDepth, getWorldWidth } from "@/components/Engine/math";
+import { Color3, Mesh, MeshBuilder, Scene, StandardMaterial, TransformNode } from "@babylonjs/core";
 import { VertexData } from "@babylonjs/core/Meshes/mesh.vertexData";
 import { terrainColorMap } from "@/assets/materials/terrains";
 import { ElevationBlender } from "@/components/Engine/terrain/ElevationBlender";
+import { buildTerrainTileBuffers } from "@/components/Engine/terrain/buildTerrainTileBuffers";
+import { weldMeshByXZ } from "@/components/Engine/terrain/weldMeshByXZ";
 
 export type TerrainBuildOptions = {
   smoothing?: number; // 0..1 (passed to ElevationBlender)
@@ -65,184 +59,24 @@ export class TerrainMeshBuilder {
     if (this.root) this.dispose();
     this.root = new TransformNode("terrainRoot", this.scene);
 
-    const angleDeg: number[] = [30, 90, 150, 210, 270, 330]; // pointy-top hex rim angles
-    const angleRad = angleDeg.map((a) => (a * Math.PI) / 180);
+    // Build raw buffers and weld them using extracted utilities
+    // buildTerrainTileBuffers:
+    //   - Iterates all hex tiles and emits pre-weld vertex positions, per-vertex colors,
+    //     and triangle indices for the top faces only. Pure data step (no Babylon types).
+    const { positions, colors, indices } = buildTerrainTileBuffers(
+      this.world,
+      this.tilesByKey,
+      this.blender,
+    );
 
-    // Heights: for corner-based blending we use base heights directly
-    // (no pre-smoothed map) to avoid cross-tile feedback.
-
-    // Single buffers for all tiles (land + water) — KISS
-    const positions: number[] = [];
-    const indices: number[] = [];
-    const colors: number[] = [];
-
-    // World placement offsets
-    const worldWidth = getWorldWidth(this.world.sizeX);
-    const worldDepth = getWorldDepth(this.world.sizeY);
-    const offsetX = getWorldMinX(worldWidth);
-    const offsetZ = getWorldMinZ(worldDepth);
-
-    const colorOf = (t: Tile): Color3 => terrainColorMap[t.terrain.key] ?? Color3.Purple();
-    const snowColor = terrainColorMap["terrainType:snow"];
-
-    const vertex = (x: number, y: number, z: number, c: Color4) => {
-      positions.push(x, y, z);
-      colors.push(c.r, c.g, c.b, c.a);
-    };
-
-    // Iterate tiles row-major
-    for (let y = 0; y < this.world.sizeY; y++) {
-      for (let x = 0; x < this.world.sizeX; x++) {
-        const tile = this.tilesByKey[Tile.getKey(x, y)];
-        if (!tile) continue;
-
-        // Center position of this tile (odd-r layout)
-        // todo move to math
-        const cx = offsetX + hexWidth * (x + 0.5 * (y & 1));
-        const cz = offsetZ + hexDepth * y;
-
-        const hCenter = this.blender.sampleBaseHeight(x, y);
-        const cCenter3 = colorOf(tile);
-        const cCenter = new Color4(cCenter3.r, cCenter3.g, cCenter3.b, 1);
-
-        const ring: { x: number; z: number; h: number; color: Color4 }[] = [];
-        // Corner order matching angleRad: 30°, 90°, 150°, 210°, 270°, 330°
-        // Note: +Z grows south in our world space, so the N/S labels must be flipped
-        // relative to mathematical angles. The correct edge order for our angles is:
-        //   30°→se, 90°→s, 150°→sw, 210°→nw, 270°→n, 330°→ne
-        const edges: CompassHexEdge[] = ["se", "s", "sw", "nw", "n", "ne"];
-        for (let i = 0; i < 6; i++) {
-          const a = angleRad[i];
-          const rx = cx + Math.cos(a);
-          const rz = cz + Math.sin(a);
-
-          // Get the two neighbor deltas for this corner
-          const [dA, dB] = getHexEdgeNeighborDirections(y, edges[i]);
-
-          // Resolve neighbor coords with wrap on X, clamp on Y.
-          // If neighbor would cross a pole, treat it as a synthetic FLAT+SNOW tile.
-          type NInfo = { x: number; y: number; exists: boolean };
-          const resolve = (dx: number, dy: number): NInfo => {
-            const ny = y + dy;
-            if (ny < 0 || ny >= this.world.sizeY) return { x, y, exists: false };
-            let nx = x + dx;
-            nx = ((nx % this.world.sizeX) + this.world.sizeX) % this.world.sizeX;
-            return { x: nx, y: ny, exists: true };
-          };
-
-          const nA = resolve(dA.x, dA.y);
-          const nB = resolve(dB.x, dB.y);
-
-          const hA = nA.exists ? this.blender.sampleBaseHeight(nA.x, nA.y) : 0;
-          const hB = nB.exists ? this.blender.sampleBaseHeight(nB.x, nB.y) : 0;
-          const hRim = (hCenter + hA + hB) / 3;
-
-          const tA = nA.exists ? this.tilesByKey[Tile.getKey(nA.x, nA.y)] : null;
-          const tB = nB.exists ? this.tilesByKey[Tile.getKey(nB.x, nB.y)] : null;
-          const cA = tA ? colorOf(tA) : snowColor;
-          const cB = tB ? colorOf(tB) : snowColor;
-          const cRim3 = new Color3(
-            (cCenter3.r + cA.r + cB.r) / 3,
-            (cCenter3.g + cA.g + cB.g) / 3,
-            (cCenter3.b + cA.b + cB.b) / 3,
-          );
-
-          const cRim = new Color4(cRim3.r, cRim3.g, cRim3.b, 1);
-          ring.push({ x: rx, z: rz, h: hRim, color: cRim });
-        }
-
-        // Emit vertices: center + 6 rim into the single buffer
-        const baseIndex = positions.length / 3;
-        vertex(cx, hCenter, cz, cCenter);
-        for (const rv of ring) vertex(rv.x, rv.h, rv.z, rv.color);
-
-        // Triangulate fan (center, i, i+1)
-        for (let i = 0; i < 6; i++) {
-          const i0 = baseIndex; // center
-          const i1 = baseIndex + 1 + i;
-          const i2 = baseIndex + 1 + ((i + 1) % 6);
-          indices.push(i0, i1, i2);
-        }
-      }
-    }
-
-    // --- Weld duplicate vertices so shading is continuous across hex seams ---
-    type Welded = { positions: number[]; colors: number[]; indices: number[] };
-    const weldByXZ = (
-      pos: number[],
-      col: number[],
-      idx: number[],
-      eps = 1e-4,
-    ): Welded => {
-      const vCount = Math.floor(pos.length / 3);
-      const keyOf = (x: number, z: number): string => `${Math.round(x / eps)},${Math.round(z / eps)}`;
-
-      // First pass: group by quantized X/Z, accumulate sums
-      type Acc = { sx: number; sy: number; sz: number; sr: number; sg: number; sb: number; sa: number; n: number };
-      const groups = new Map<string, Acc>();
-      const vKeys: string[] = new Array(vCount);
-
-      for (let i = 0; i < vCount; i++) {
-        const x = pos[3 * i + 0];
-        const y = pos[3 * i + 1];
-        const z = pos[3 * i + 2];
-        const r = col[4 * i + 0] ?? 0;
-        const g = col[4 * i + 1] ?? 0;
-        const b = col[4 * i + 2] ?? 0;
-        const a = col[4 * i + 3] ?? 1;
-        const k = keyOf(x, z);
-        vKeys[i] = k;
-        const acc = groups.get(k);
-        if (acc) {
-          acc.sx += x;
-          acc.sy += y;
-          acc.sz += z;
-          acc.sr += r;
-          acc.sg += g;
-          acc.sb += b;
-          acc.sa += a;
-          acc.n += 1;
-        } else {
-          groups.set(k, { sx: x, sy: y, sz: z, sr: r, sg: g, sb: b, sa: a, n: 1 });
-        }
-      }
-
-      // Second pass: assign compact indices and compute averages
-      const keyToNew = new Map<string, number>();
-      const nVerts = groups.size;
-      const posOut = new Array<number>(nVerts * 3);
-      const colOut = new Array<number>(nVerts * 4);
-      let cursor = 0;
-      for (const [k, acc] of groups) {
-        const inv = 1 / acc.n;
-        posOut[3 * cursor + 0] = acc.sx * inv;
-        posOut[3 * cursor + 1] = acc.sy * inv;
-        posOut[3 * cursor + 2] = acc.sz * inv;
-        colOut[4 * cursor + 0] = acc.sr * inv;
-        colOut[4 * cursor + 1] = acc.sg * inv;
-        colOut[4 * cursor + 2] = acc.sb * inv;
-        colOut[4 * cursor + 3] = acc.sa * inv;
-        keyToNew.set(k, cursor);
-        cursor++;
-      }
-
-      // Remap indices and drop degenerate triangles if any
-      const idxOut: number[] = [];
-      for (let t = 0; t < idx.length; t += 3) {
-        const i0 = keyToNew.get(vKeys[idx[t + 0]]) as number;
-        const i1 = keyToNew.get(vKeys[idx[t + 1]]) as number;
-        const i2 = keyToNew.get(vKeys[idx[t + 2]]) as number;
-        // Skip degenerate triangles
-        if (i0 === i1 || i1 === i2 || i2 === i0) continue;
-        idxOut.push(i0, i1, i2);
-      }
-
-      return { positions: posOut, colors: colOut, indices: idxOut };
-    };
-
-    const welded = weldByXZ(positions, colors, indices, 1e-4);
+    // weldMeshByXZ:
+    //   - Quantizes X/Z to merge duplicate seam vertices across tiles, averaging
+    //     positions and colors, and dropping degenerate triangles. Still pure data.
+    const welded = weldMeshByXZ(positions, colors, indices, 1e-4);
 
     // Build a single mesh for all tiles from welded buffers
+    //   - Compute normals once on the welded geometry for smooth shading
+    //   - Apply a matte material (tiles shouldn't have specular highlights)
     const tiles = new Mesh("terrain.tiles", this.scene);
     const vd = new VertexData();
     vd.positions = welded.positions;
@@ -260,6 +94,8 @@ export class TerrainMeshBuilder {
     tiles.parent = this.root;
 
     // Simple world-sized water plane to denote global sea level
+    const worldWidth = getWorldWidth(this.world.sizeX);
+    const worldDepth = getWorldDepth(this.world.sizeY);
     const waterPlane = MeshBuilder.CreateGround(
       "terrain.water.plane",
       { width: worldWidth, height: worldDepth, subdivisions: 1 },
