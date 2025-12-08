@@ -19,12 +19,14 @@ import { Color3, Mesh, MeshBuilder, Scene, StandardMaterial, TransformNode } fro
 import { VertexData } from "@babylonjs/core/Meshes/mesh.vertexData";
 import { terrainColorMap } from "@/assets/materials/terrains";
 import { ElevationBlender } from "@/components/Engine/terrain/ElevationBlender";
+import type { TerrainDetailOptions } from "@/components/Engine/terrain/buildTerrainTileBuffers";
 import { buildTerrainTileBuffers } from "@/components/Engine/terrain/buildTerrainTileBuffers";
 import { weldMeshByXZ } from "@/components/Engine/terrain/weldMeshByXZ";
 
 export type TerrainBuildOptions = {
   smoothing?: number; // 0..1 (passed to ElevationBlender)
   jitter?: number; // noise amplitude for heights
+  detail?: TerrainDetailOptions; // geometry/detail policy (K-rings, edge/corner modes, etc.)
 };
 
 export class TerrainMeshBuilder {
@@ -39,12 +41,21 @@ export class TerrainMeshBuilder {
   constructor(scene: Scene, world: WorldState, options?: TerrainBuildOptions) {
     this.scene = scene;
     this.world = world;
+    const defaultDetail: TerrainDetailOptions = {
+      rings: 3,
+      edgeMode: "twoTileLinear",
+      cornerMode: "threeTileAverage",
+      flattenStraightEdges: false,
+    };
     this.opts = {
       smoothing: options?.smoothing ?? 0.6,
       jitter: options?.jitter ?? 0.04,
+      detail: { ...defaultDetail, ...(options?.detail ?? {}) },
     } as Required<TerrainBuildOptions>;
 
     // todo new objStore getter: tilesByKey
+    // Pinia getters are cached/computed — expose a tilesByKey getter on the store
+    // to avoid rebuilding this map here every time. Find other usages of objStore.getClassGameObjects("tile") and refactor those too
     const objStore = useObjectsStore();
     const tiles = objStore.getClassGameObjects("tile") as Tile[];
     for (const t of tiles) this.tilesByKey[t.key] = t;
@@ -67,6 +78,7 @@ export class TerrainMeshBuilder {
       this.world,
       this.tilesByKey,
       this.blender,
+      this.opts.detail,
     );
 
     // weldMeshByXZ:

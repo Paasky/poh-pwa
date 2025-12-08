@@ -13,6 +13,21 @@ import { Color3, Color4 } from "@babylonjs/core";
 import { terrainColorMap } from "@/assets/materials/terrains";
 import { ElevationBlender } from "@/components/Engine/terrain/ElevationBlender";
 
+// Public detail options for terrain tessellation and height/color policies
+export type TerrainDetailOptions = {
+  // Number of concentric hex rings from center to rim (K). K=1 equals current 7-point hex.
+  rings?: number; // default 3
+  // Height policy along shared edges (outer rim and interior ring edges)
+  // twoTileLinear: sample is a function of only the two tiles sharing the edge
+  edgeMode?: "twoTileLinear";
+  // Corner policy (vertices influenced by three tiles)
+  cornerMode?: "threeTileAverage" | "twoTileDominant";
+  // Optional rule to reduce end bumps on straight banks (e.g., long straight rivers)
+  flattenStraightEdges?: boolean;
+  // Future: treat very steep differences as creases (no smoothing across)
+  cliffThreshold?: number;
+};
+
 export type TerrainTileBuffers = {
   positions: number[];
   colors: number[];
@@ -20,10 +35,30 @@ export type TerrainTileBuffers = {
 };
 
 // Builds the raw vertex/color/index buffers for all terrain tiles (pre-welding)
+// TODO (detail/tessellation):
+// - Replace single-ring emission with K-ring tessellation (K = detail?.rings ?? 3)
+//   Geometry plan per hex:
+//     - Generate K rings; each side has K segments → K+1 vertices per side per ring.
+//     - Positions are built by subdividing between the 6 corner directions (angles below).
+//     - Triangulation: connect ring r-1 to r with 6 triangle strips → Ntris = 6*K*K.
+// - Height policy:
+//     - Edge vertices should depend only on the two tiles that share the edge (edgeMode "twoTileLinear").
+//     - Corner vertices use three-tile policy (cornerMode), default to average of the three.
+//     - Optional flattenStraightEdges: detect straight banks and clamp corner heights near ends to the edge profile.
+// - Color policy:
+//     - Match height policy: two-tile blend for edge samples; three-tile average for corners.
+// - Neighbor helpers:
+//     - Prefer using getHexNeighborDirections(y) from mapTools for across-edge neighbors.
+//     - If we need specialized helpers (e.g., getAcrossNeighbor), consider adding to mapTools.ts.
+//
+// For now, we keep legacy behavior (K=1 fan) to avoid breaking visuals while the API lands.
+ 
 export function buildTerrainTileBuffers(
   world: WorldState,
   tilesByKey: Record<string, Tile>,
   blender: ElevationBlender,
+  // Future geometry/policy controls (currently unused until K-rings are implemented)
+  detail?: TerrainDetailOptions,
 ): TerrainTileBuffers {
   const angleDeg: number[] = [30, 90, 150, 210, 270, 330]; // pointy-top hex rim angles
   const angleRad = angleDeg.map((a) => (a * Math.PI) / 180);
