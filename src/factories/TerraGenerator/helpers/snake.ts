@@ -1,7 +1,7 @@
 import { getRandom } from "@/helpers/arrayTools";
 import { GenTile } from "@/factories/TerraGenerator/gen-tile";
 import {
-  CompassHex,
+  CompassHexEdge,
   CompassSquare,
   Coords,
   getHexNeighborDirections,
@@ -11,7 +11,7 @@ import {
 export type AcceptResult = boolean | "blocked";
 
 // By default, prefer turning 60deg left or right
-export const preferredPossibleTurnsHex: Record<CompassHex, CompassHex[]> = {
+export const preferredPossibleTurnsHex: Record<CompassHexEdge, CompassHexEdge[]> = {
   ne: ["nw", "e"],
   e: ["ne", "se"],
   se: ["e", "sw"],
@@ -32,7 +32,7 @@ export const preferredPossibleTurnsSquare: Record<CompassSquare, CompassSquare[]
 };
 
 // By default, allow 90deg, 120deg turns or keep going straight
-export const allPossibleTurnsHex: Record<CompassHex, CompassHex[]> = {
+export const allPossibleTurnsHex: Record<CompassHexEdge, CompassHexEdge[]> = {
   ne: ["w", "nw", "ne", "e", "se"],
   e: ["nw", "ne", "e", "se", "sw"],
   se: ["ne", "e", "se", "sw", "w"],
@@ -53,7 +53,7 @@ export const allPossibleTurnsSquare: Record<CompassSquare, CompassSquare[]> = {
 };
 
 // By default, deny turning back against the initial direction
-export const impossibleTurnsPerInitDirHex: Record<CompassHex, CompassHex[]> = {
+export const impossibleTurnsPerInitDirHex: Record<CompassHexEdge, CompassHexEdge[]> = {
   ne: ["se"],
   e: ["w"],
   se: ["nw"],
@@ -228,11 +228,11 @@ export class Snake<T extends GenTile> {
   private getNextTile(
     tile: T,
     method: "hex" | "chebyshev",
-    dir: CompassHex | CompassSquare,
+    dir: CompassHexEdge | CompassSquare,
   ): T | null {
     const dirCoords =
       method === "hex"
-        ? getHexNeighborDirections(tile.y)[dir as CompassHex]
+        ? getHexNeighborDirections(tile.y)[dir as CompassHexEdge]
         : directionCoordsChangesSquare[dir];
     const nextCoords = getRealCoords(this.size, {
       x: tile.x + dirCoords.x,

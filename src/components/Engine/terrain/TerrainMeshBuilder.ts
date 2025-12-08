@@ -17,7 +17,7 @@ import { Tile } from "@/objects/game/Tile";
 import { getWorldDepth, getWorldWidth } from "@/components/Engine/math";
 import { Color3, Mesh, MeshBuilder, Scene, StandardMaterial, TransformNode } from "@babylonjs/core";
 import { VertexData } from "@babylonjs/core/Meshes/mesh.vertexData";
-import { terrainColorMap } from "@/assets/materials/terrains";
+import { asColor3, terrainColorMap } from "@/assets/materials/terrains";
 import { ElevationBlender } from "@/components/Engine/terrain/ElevationBlender";
 import type { TerrainDetailOptions } from "@/components/Engine/terrain/buildTerrainTileBuffers";
 import { buildTerrainTileBuffers } from "@/components/Engine/terrain/buildTerrainTileBuffers";
@@ -77,7 +77,6 @@ export class TerrainMeshBuilder {
     const { positions, colors, indices } = buildTerrainTileBuffers(
       this.world,
       this.tilesByKey,
-      this.blender,
       this.opts.detail,
     );
 
@@ -116,7 +115,7 @@ export class TerrainMeshBuilder {
     // Place below ground level (y=0)
     waterPlane.position.y = -10.2;
     const matWater = new StandardMaterial("terrainMat.water.plane", this.scene);
-    matWater.diffuseColor = terrainColorMap["terrainType:ocean"];
+    matWater.diffuseColor = asColor3(terrainColorMap["terrainType:ocean"]);
     // Make plane reflective to the sun, semi-transparent for global sea level hint
     matWater.specularColor = new Color3(0.8, 0.85, 0.95);
     matWater.specularPower = 128;

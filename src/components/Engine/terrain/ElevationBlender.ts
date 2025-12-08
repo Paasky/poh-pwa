@@ -13,7 +13,6 @@ Implementation notes
 import { useObjectsStore } from "@/stores/objectStore";
 import type { WorldState } from "@/types/common";
 import { Tile } from "@/objects/game/Tile";
-import { getHexNeighborCoords } from "@/helpers/mapTools";
 
 export type ElevationBlenderOptions = {
   smoothing?: number; // [0..1] how much to blend with neighbors (0 = none, 1 = full avg)
@@ -40,90 +39,6 @@ export class ElevationBlender {
     const tiles = objStore.getClassGameObjects("tile") as Tile[];
     this.tilesByKey = {} as Record<string, Tile>;
     for (const t of tiles) this.tilesByKey[t.key] = t;
-  }
-
-  // Returns base height for a tile from terrain/elevation data (no neighbor blending)
-  sampleBaseHeight(x: number, y: number): number {
-    const t = this.getTile(x, y);
-    if (!t) return 0;
-
-    // todo move to mapTools
-    const k = t.terrain.key as string;
-    const isWater =
-      k === "terrainType:ocean" ||
-      k === "terrainType:sea" ||
-      k === "terrainType:coast" ||
-      k === "terrainType:lake" ||
-      k === "terrainType:majorRiver";
-
-    // todo move to mapTools as constants (oceanHeight=-0.8 etc)
-    if (isWater) {
-      switch (k) {
-        case "terrainType:ocean":
-          return -0.8;
-        case "terrainType:sea":
-          return -0.6;
-        case "terrainType:coast":
-        case "terrainType:lake":
-        case "terrainType:majorRiver":
-          return -0.4;
-        default:
-          return -0.4;
-      }
-    }
-
-    // todo move to mapTools as constants (hillHeight=0.4 etc)
-    const e = t.elevation.key as string;
-    switch (e) {
-      case "elevationType:hill":
-        return 0.4;
-      case "elevationType:mountain":
-        return 0.8;
-      case "elevationType:snowMountain":
-        return 1.0;
-      case "elevationType:flat":
-      default:
-        return 0;
-    }
-  }
-
-  // Blends a tile height with neighbors using simple averaging controlled by smoothing
-  computeBlendedHeight(x: number, y: number): number {
-    const base = this.sampleBaseHeight(x, y);
-
-    if (this.opts.smoothing <= 0) return base + this.jitter(x, y);
-
-    const neighbors = getHexNeighborCoords(
-      { x: this.world.sizeX, y: this.world.sizeY },
-      { x, y },
-      1,
-    );
-    if (!neighbors.length) return base + this.jitter(x, y);
-
-    let sum = 0;
-    for (const nb of neighbors) sum += this.sampleBaseHeight(nb.x, nb.y);
-    const avg = sum / neighbors.length;
-
-    const h = this.lerp(base, avg, this.opts.smoothing) + this.jitter(x, y);
-    return h;
-  }
-
-  precomputeAll(): void {
-    const { sizeX, sizeY } = this.world;
-    this.heightMap = new Float32Array(sizeX * sizeY);
-    for (let y = 0; y < sizeY; y++) {
-      for (let x = 0; x < sizeX; x++) {
-        this.heightMap[y * sizeX + x] = this.computeBlendedHeight(x, y);
-      }
-    }
-  }
-
-  getHeightMap(): Float32Array | null {
-    return this.heightMap;
-  }
-
-  dispose(): void {
-    this.heightMap = null;
   }
 
   // --- helpers ---

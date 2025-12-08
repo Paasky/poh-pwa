@@ -1,17 +1,9 @@
 import type { WorldState } from "@/types/common";
 import { Tile } from "@/objects/game/Tile";
-import {
-  getWorldDepth,
-  getWorldMinX,
-  getWorldMinZ,
-  getWorldWidth,
-  hexDepth,
-  hexWidth,
-} from "@/components/Engine/math";
-import { CompassHexEdge, getHexEdgeNeighborDirections } from "@/helpers/mapTools";
-import { Color3, Color4 } from "@babylonjs/core";
-import { terrainColorMap } from "@/assets/materials/terrains";
-import { ElevationBlender } from "@/components/Engine/terrain/ElevationBlender";
+import { getHexCornerPosition, tileCenter } from "@/components/Engine/math";
+import { CompassHexCorner, Coords, getHexCornerNeighbors, tileHeight } from "@/helpers/mapTools";
+import { Color4 } from "@babylonjs/core";
+import { colorOf, terrainColorMap } from "@/assets/materials/terrains";
 
 // Public detail options for terrain tessellation and height/color policies
 export type TerrainDetailOptions = {
@@ -52,99 +44,95 @@ export type TerrainTileBuffers = {
 //     - If we need specialized helpers (e.g., getAcrossNeighbor), consider adding to mapTools.ts.
 //
 // For now, we keep legacy behavior (K=1 fan) to avoid breaking visuals while the API lands.
- 
+
 export function buildTerrainTileBuffers(
   world: WorldState,
   tilesByKey: Record<string, Tile>,
-  blender: ElevationBlender,
-  // Future geometry/policy controls (currently unused until K-rings are implemented)
+  // todo: Future geometry/policy controls (currently unused until K-rings are implemented)
   detail?: TerrainDetailOptions,
 ): TerrainTileBuffers {
-  const angleDeg: number[] = [30, 90, 150, 210, 270, 330]; // pointy-top hex rim angles
-  const angleRad = angleDeg.map((a) => (a * Math.PI) / 180);
+  // Corner order matching angleRad: 30°, 90°, 150°, 210°, 270°, 330°
+  // Note: +Z grows south in our world space, so the N/S labels must be flipped
+  // relative to mathematical angles. The correct edge order for our angles is:
+  //   30°→se, 90°→s, 150°→sw, 210°→nw, 270°→n, 330°→ne
+  const corners = {
+    se: cornerAngleAndRad(30),
+    s: cornerAngleAndRad(90),
+    sw: cornerAngleAndRad(150),
+    nw: cornerAngleAndRad(210),
+    n: cornerAngleAndRad(270),
+    ne: cornerAngleAndRad(330),
+  } as Record<CompassHexCorner, { angle: number; rad: number }>;
 
   const positions: number[] = [];
   const indices: number[] = [];
   const colors: number[] = [];
-
-  // World placement offsets
-  const worldWidth = getWorldWidth(world.sizeX);
-  const worldDepth = getWorldDepth(world.sizeY);
-  const offsetX = getWorldMinX(worldWidth);
-  const offsetZ = getWorldMinZ(worldDepth);
-
-  const colorOf = (t: Tile): Color3 => terrainColorMap[t.terrain.key] ?? Color3.Purple();
-  const snowColor = terrainColorMap["terrainType:snow"];
 
   const vertex = (x: number, y: number, z: number, c: Color4) => {
     positions.push(x, y, z);
     colors.push(c.r, c.g, c.b, c.a);
   };
 
+  const grassColor = terrainColorMap["terrainType:grass"];
+  const rocksColor = terrainColorMap["terrainType:rocks"];
+  const sandColor = terrainColorMap["terrainType:desert"];
+  const snowColor = terrainColorMap["terrainType:snow"];
+
   // Iterate tiles row-major
+  const size = { x: world.sizeX, y: world.sizeY } as Coords;
   for (let y = 0; y < world.sizeY; y++) {
     for (let x = 0; x < world.sizeX; x++) {
       const tile = tilesByKey[Tile.getKey(x, y)];
-      if (!tile) continue;
+      // Critical error: means we got invalid data input
+      if (!tile) throw new Error(`Tile ${x},${y} not found in tilesByKey`);
 
-      // Center position of this tile (odd-r layout)
-      const cx = offsetX + hexWidth * (x + 0.5 * (y & 1));
-      const cz = offsetZ + hexDepth * y;
-
-      const hCenter = blender.sampleBaseHeight(x, y);
-      const cCenter3 = colorOf(tile);
-      const cCenter = new Color4(cCenter3.r, cCenter3.g, cCenter3.b, 1);
+      // Center point of this tile (immutable)
+      const center = {
+        ...tileCenter(size, tile),
+        height: tileHeight(tile),
+        color: colorOf(tile, true),
+      };
+      // todo: would it make more sense to add center vertex and index here?
 
       const ring: { x: number; z: number; h: number; color: Color4 }[] = [];
-      // Corner order matching angleRad: 30°, 90°, 150°, 210°, 270°, 330°
-      // Note: +Z grows south in our world space, so the N/S labels must be flipped
-      // relative to mathematical angles. The correct edge order for our angles is:
-      //   30°→se, 90°→s, 150°→sw, 210°→nw, 270°→n, 330°→ne
-      const edges: CompassHexEdge[] = ["se", "s", "sw", "nw", "n", "ne"];
-      for (let i = 0; i < 6; i++) {
-        const a = angleRad[i];
-        const rx = cx + Math.cos(a);
-        const rz = cz + Math.sin(a);
+      for (const [corner, cornerData] of Object.entries(corners) as [
+        CompassHexCorner,
+        { angle: number; rad: number },
+      ][]) {
+        const cornerPos = getHexCornerPosition(center.x, center.z, cornerData.rad);
 
-        // Get the two neighbor deltas for this corner
-        const [dA, dB] = getHexEdgeNeighborDirections(y, edges[i]);
+        // Get the 0-2 neighbors for this corner
+        const neighbors = getHexCornerNeighbors(size, tile, tilesByKey, corner);
 
-        // Resolve neighbor coords with wrap on X, clamp on Y.
-        // If neighbor would cross a pole, treat it as a synthetic FLAT+SNOW tile.
-        type NInfo = { x: number; y: number; exists: boolean };
-        const resolve = (dx: number, dy: number): NInfo => {
-          const ny = y + dy;
-          if (ny < 0 || ny >= world.sizeY) return { x, y, exists: false };
-          let nx = x + dx;
-          nx = ((nx % world.sizeX) + world.sizeX) % world.sizeX;
-          return { x: nx, y: ny, exists: true };
-        };
+        // if a neighbor doesn't exist (OOB), use flat snow (N/S pole)
+        const neighborHeights = [
+          neighbors[0] ? tileHeight(neighbors[0]) : 0,
+          neighbors[1] ? tileHeight(neighbors[1]) : 0,
+        ];
+        const neighborColors = [
+          neighbors[0] ? colorOf(neighbors[0]) : snowColor,
+          neighbors[1] ? colorOf(neighbors[1]) : snowColor,
+        ];
 
-        const nA = resolve(dA.x, dA.y);
-        const nB = resolve(dB.x, dB.y);
+        ring.push({
+          x: cornerPos.x,
+          z: cornerPos.z,
+          h: (center.height + neighborHeights[0] + neighborHeights[1]) / 3,
+          color: new Color4(
+            (center.color.r + neighborColors[0].r + neighborColors[1].r) / 3,
+            (center.color.g + neighborColors[0].g + neighborColors[1].g) / 3,
+            (center.color.b + neighborColors[0].b + neighborColors[1].b) / 3,
+            1,
+          ),
+        });
 
-        const hA = nA.exists ? blender.sampleBaseHeight(nA.x, nA.y) : 0;
-        const hB = nB.exists ? blender.sampleBaseHeight(nB.x, nB.y) : 0;
-        const hRim = (hCenter + hA + hB) / 3;
-
-        const tA = nA.exists ? tilesByKey[Tile.getKey(nA.x, nA.y)] : null;
-        const tB = nB.exists ? tilesByKey[Tile.getKey(nB.x, nB.y)] : null;
-        const cA = tA ? colorOf(tA) : snowColor;
-        const cB = tB ? colorOf(tB) : snowColor;
-        const cRim3 = new Color3(
-          (cCenter3.r + cA.r + cB.r) / 3,
-          (cCenter3.g + cA.g + cB.g) / 3,
-          (cCenter3.b + cA.b + cB.b) / 3,
-        );
-
-        const cRim = new Color4(cRim3.r, cRim3.g, cRim3.b, 1);
-        ring.push({ x: rx, z: rz, h: hRim, color: cRim });
+        // todo: would it make more sense to add point vertex and index here?
       }
 
       // Emit vertices: center + 6 rim into the single buffer
       const baseIndex = positions.length / 3;
-      vertex(cx, hCenter, cz, cCenter);
-      for (const rv of ring) vertex(rv.x, rv.h, rv.z, rv.color);
+      vertex(center.x, center.height, center.z, center.color);
+      for (const point of ring) vertex(point.x, point.h, point.z, point.color);
 
       // Triangulate fan (center, i, i+1)
       for (let i = 0; i < 6; i++) {
@@ -158,3 +146,5 @@ export function buildTerrainTileBuffers(
 
   return { positions, colors, indices };
 }
+
+const cornerAngleAndRad = (angle: number) => ({ angle, rad: (angle * Math.PI) / 180 });
