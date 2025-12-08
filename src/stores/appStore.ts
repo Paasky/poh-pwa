@@ -16,6 +16,7 @@ import { useEconomyTabStore } from "@/components/PlayerDetails/Tabs/economyTabSt
 import { useUnitsTabStore } from "@/components/PlayerDetails/Tabs/unitsTabStore";
 import { useCitiesTabStore } from "@/components/PlayerDetails/Tabs/citiesTabStore";
 import { useTradeTabStore } from "@/components/PlayerDetails/Tabs/tradeTabStore";
+import { useSettingsStore } from "@/stores/settingsStore";
 
 async function fetchJSON<T>(url: string): Promise<T> {
   const res = await fetch(url, { cache: "no-store" });
@@ -72,7 +73,13 @@ export const useAppStore = defineStore("app", {
       const minimapCanvas = document.getElementById("minimap-canvas") as HTMLCanvasElement | null;
       if (!minimapCanvas) throw new Error("Minimap canvas `#minimap-canvas` not found");
 
-      this.engineService = markRaw(new EngineService(objects.world, engineCanvas, minimapCanvas));
+      // Initialize settings and pass engine options
+      const settings = useSettingsStore();
+      settings.init();
+
+      this.engineService = markRaw(
+        new EngineService(objects.world, engineCanvas, minimapCanvas, settings.engine),
+      );
 
       // 7) Loading is complete, tell the UI it can render
       this.loaded = true;

@@ -11,6 +11,7 @@ import {
   TransformNode,
   Vector3,
 } from "@babylonjs/core";
+import { DefaultRenderingPipeline } from "@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/defaultRenderingPipeline";
 import { CreateScreenshotUsingRenderTarget } from "@babylonjs/core/Misc/screenshotTools";
 import { buildTileGrid } from "@/components/Engine/meshes/tile";
 import {
@@ -22,13 +23,143 @@ import {
   getWorldWidth,
 } from "@/components/Engine/math";
 
+export type EngineOptions = {
+  // Camera UX
+  manualTilt?: boolean; // Allow user to tilt manually (otherwise auto-tilt by zoom)
+
+  // Resolution & performance
+  renderScale?: number; // 1 = native CSS resolution, 0.5 = half res, 1.25 = super-sample
+  fpsCap?: number; // 0 or undefined = uncapped; otherwise, minimum ms between renders enforced
+  adaptToDeviceRatio?: boolean; // Use devicePixelRatio for base resolution (restart required)
+
+  // Engine/GPU flags (restart required)
+  antialias?: boolean; // Multi-sample antialias at context level (restart required)
+  preserveDrawingBuffer?: boolean;
+  stencil?: boolean;
+  disableWebGL2Support?: boolean; // Force WebGL1 if true
+  powerPreference?: WebGLPowerPreference; // "default" | "high-performance" | "low-power"
+
+  // Visual effects (post-process pipeline)
+  hdr?: boolean; // Enable HDR pipeline when supported
+  useFxaa?: boolean; // FXAA post-process
+  useBloom?: boolean; // Bloom post-process
+  bloomThreshold?: number; // 0..1
+  bloomWeight?: number; // 0..1
+};
+
+export const RestartRequiredOptionKeys: (keyof EngineOptions)[] = [
+  "antialias",
+  "preserveDrawingBuffer",
+  "stencil",
+  "disableWebGL2Support",
+  "powerPreference",
+  "adaptToDeviceRatio",
+];
+
+export const DefaultEngineOptions: Required<EngineOptions> = {
+  manualTilt: false,
+  renderScale: 1,
+  fpsCap: 0,
+  adaptToDeviceRatio: false,
+  antialias: true,
+  preserveDrawingBuffer: true,
+  stencil: true,
+  disableWebGL2Support: false,
+  powerPreference: "high-performance",
+  hdr: true,
+  useFxaa: true,
+  useBloom: false,
+  bloomThreshold: 0.9,
+  bloomWeight: 0.15,
+};
+
+export type EngineOptionPreset = { id: string; label: string; value: EngineOptions };
+
+export const EngineOptionPresets: EngineOptionPreset[] = [
+  {
+    id: "low",
+    label: "Low",
+    value: {
+      manualTilt: false,
+      renderScale: 0.5,
+      fpsCap: 30,
+      adaptToDeviceRatio: false,
+      antialias: false,
+      preserveDrawingBuffer: false,
+      stencil: false,
+      disableWebGL2Support: false,
+      powerPreference: "low-power",
+      hdr: false,
+      useFxaa: false,
+      useBloom: false,
+    } as EngineOptions,
+  },
+  {
+    id: "medium",
+    label: "Medium",
+    value: {
+      manualTilt: false,
+      renderScale: 0.75,
+      fpsCap: 60,
+      adaptToDeviceRatio: false,
+      antialias: true,
+      preserveDrawingBuffer: false,
+      stencil: false,
+      disableWebGL2Support: false,
+      powerPreference: "default",
+      hdr: false,
+      useFxaa: true,
+      useBloom: false,
+    } as EngineOptions,
+  },
+  {
+    id: "high",
+    label: "High",
+    value: {
+      manualTilt: false,
+      renderScale: 1.0,
+      fpsCap: 0,
+      adaptToDeviceRatio: false,
+      antialias: true,
+      preserveDrawingBuffer: true,
+      stencil: true,
+      disableWebGL2Support: false,
+      powerPreference: "high-performance",
+      hdr: true,
+      useFxaa: true,
+      useBloom: true,
+      bloomThreshold: 0.9,
+      bloomWeight: 0.15,
+    } as EngineOptions,
+  },
+  {
+    id: "ultra",
+    label: "Ultra",
+    value: {
+      manualTilt: false,
+      renderScale: 1.0, // keep safe by default; user can increase manually
+      fpsCap: 0,
+      adaptToDeviceRatio: true,
+      antialias: true,
+      preserveDrawingBuffer: true,
+      stencil: true,
+      disableWebGL2Support: false,
+      powerPreference: "high-performance",
+      hdr: true,
+      useFxaa: true,
+      useBloom: true,
+      bloomThreshold: 0.85,
+      bloomWeight: 0.2,
+    } as EngineOptions,
+  },
+];
+
 export class EngineService {
   // Camera settings
   panSpeed = 5; // 1 = slow, 10 = fast
   maxRotation = Math.PI / 6; // bigger divisor = less rotation
   maxTilt = 0.8; // higher = more tilt upwards
   minTilt = 0.1; // 0 = top-down
-  manualTilt = false; // Allow user to set tilt manually (false = auto-tilt by zoom)
   maxZoomIn = 10; // smaller = closer
   maxZoomOut = 100; // larger = further
 
@@ -46,25 +177,51 @@ export class EngineService {
   light: HemisphericLight;
   tileRoot: TransformNode;
 
+  // Options & rendering pipeline
+  options: EngineOptions = { ...DefaultEngineOptions };
+  pipeline?: DefaultRenderingPipeline;
+  private _lastRenderTime = 0;
+  private _rotationInput = new ArcRotateCameraPointersInput();
+  private _manualTiltEnabled = false;
+
   // No animation state needed for simple, instant flyTo
 
-  constructor(world: WorldState, canvas: HTMLCanvasElement, minimapCanvas: HTMLCanvasElement) {
+  constructor(
+    world: WorldState,
+    canvas: HTMLCanvasElement,
+    minimapCanvas: HTMLCanvasElement,
+    options?: EngineOptions,
+  ) {
     this.world = world;
     this.canvas = canvas;
     this.minimapCanvas = minimapCanvas;
+    this.options = { ...DefaultEngineOptions, ...(options ?? {}) };
 
     // Create Engine and Scene
-    this.engine = new BabylonEngine(this.canvas, true, {
-      preserveDrawingBuffer: true,
-      stencil: true,
-    });
+    this.engine = new BabylonEngine(
+      this.canvas,
+      this.options.antialias ?? true,
+      {
+        preserveDrawingBuffer: this.options.preserveDrawingBuffer ?? true,
+        stencil: this.options.stencil ?? true,
+        disableWebGL2Support: this.options.disableWebGL2Support ?? false,
+        powerPreference: this.options.powerPreference ?? "high-performance",
+      },
+      this.options.adaptToDeviceRatio ?? false,
+    );
     this.scene = new Scene(this.engine);
     this.scene.clearColor = new Color4(0.63, 0.63, 0.63, 1); // Same-ish as snow
+
+    // Resolution / hardware scaling
+    this.applyRenderScale(this.options.renderScale ?? 1);
 
     // Create Cameras and Light
     this.camera = this.initCamera();
     this.minimapCamera = this.initMinimap();
     this.light = this.initLight();
+
+    // Post-process pipeline (FXAA / Bloom / HDR)
+    this.rebuildPipeline();
 
     // Init Tiles
     this.tileRoot = buildTileGrid(this.world, this.scene).root;
@@ -74,8 +231,14 @@ export class EngineService {
       this.captureMinimapOnce();
     });
 
-    // Render loop
+    // Render loop with optional FPS cap
     this.engine.runRenderLoop(() => {
+      if (this.options.fpsCap && this.options.fpsCap > 0) {
+        const now = performance.now();
+        const minDelta = 1000 / this.options.fpsCap;
+        if (now - this._lastRenderTime < minDelta) return;
+        this._lastRenderTime = now;
+      }
       this.scene.render();
     });
 
@@ -111,6 +274,10 @@ export class EngineService {
   detach(): void {
     window.removeEventListener("resize", this.onResize);
     this.engine.stopRenderLoop();
+    if (this.pipeline) {
+      this.pipeline.dispose();
+      this.pipeline = undefined;
+    }
     this.scene.dispose();
     this.engine.dispose();
   }
@@ -148,6 +315,7 @@ export class EngineService {
       new Vector3(0, 0, 0),
       this.scene,
     );
+    this.camera = camera;
 
     // Controls (clear all, then add back the ones we want)
     camera.inputs.clear();
@@ -158,14 +326,11 @@ export class EngineService {
     camera.useNaturalPinchZoom = true;
 
     // b) Rotation Control from the mouse right and middle buttons
-    const rot = new ArcRotateCameraPointersInput();
     camera.attachControl(this.canvas, true);
     camera.useAutoRotationBehavior = false;
-    if (this.manualTilt) {
-      rot.buttons = [1, 2]; // 1=right, 2=middle
-      rot.panningSensibility = 0;
-      camera.inputs.add(rot);
-    }
+    this._rotationInput.buttons = [1, 2]; // 1=right, 2=middle
+    this._rotationInput.panningSensibility = 0;
+    this.setManualTilt(!!this.options.manualTilt);
 
     // c) Panning Control from the mouse left button
     let dragging = false;
@@ -240,13 +405,12 @@ export class EngineService {
       else if (t.x < worldMinX) t.x += worldWidth;
 
       // Auto-tilt if manualTilt === false
-      if (!this.manualTilt) {
+      if (!this.options.manualTilt) {
         const frac = (camera.radius - this.maxZoomIn) / (this.maxZoomOut - this.maxZoomIn);
         camera.beta = this.maxTilt - frac * (this.maxTilt - this.minTilt);
       }
     });
 
-    this.camera = camera;
     return camera;
   }
 
@@ -288,4 +452,81 @@ export class EngineService {
   private onResize = () => {
     this.engine.resize();
   };
+
+  // --- Options application helpers ---
+  private applyRenderScale(scale: number) {
+    const safeScale = Math.max(0.25, Math.min(2, scale || 1));
+    const level = 1 / safeScale;
+    this.engine.setHardwareScalingLevel(level);
+  }
+
+  private rebuildPipeline() {
+    // Dispose previous
+    if (this.pipeline) {
+      this.pipeline.dispose();
+      this.pipeline = undefined;
+    }
+    const useHdr = !!this.options.hdr;
+    this.pipeline = new DefaultRenderingPipeline(
+      "default",
+      useHdr,
+      this.scene,
+      [this.camera], // Intentionally exclude minimap camera to keep it crisp and avoid post FX on the overview
+    );
+    // FXAA
+    this.pipeline.fxaaEnabled = !!this.options.useFxaa;
+    // Bloom
+    this.pipeline.bloomEnabled = !!this.options.useBloom;
+    if (this.pipeline.bloomEnabled) {
+      if (typeof this.options.bloomThreshold === "number")
+        this.pipeline.bloomThreshold = this.options.bloomThreshold;
+      if (typeof this.options.bloomWeight === "number")
+        this.pipeline.bloomWeight = this.options.bloomWeight;
+    }
+  }
+
+  applyOptions(next: EngineOptions): { restartKeysChanged: (keyof EngineOptions)[] } {
+    const prev = this.options;
+    this.options = { ...prev, ...next };
+
+    // Collect restart-required changes
+    const restartKeysChanged: (keyof EngineOptions)[] = [];
+    for (const k of RestartRequiredOptionKeys) {
+      if (prev[k] !== this.options[k]) restartKeysChanged.push(k);
+    }
+
+    // Live-applied options
+    if (prev.renderScale !== this.options.renderScale) {
+      this.applyRenderScale(this.options.renderScale ?? 1);
+    }
+    if (prev.fpsCap !== this.options.fpsCap) {
+      this._lastRenderTime = 0; // reset limiter
+    }
+    if (
+      prev.hdr !== this.options.hdr ||
+      prev.useFxaa !== this.options.useFxaa ||
+      prev.useBloom !== this.options.useBloom ||
+      prev.bloomThreshold !== this.options.bloomThreshold ||
+      prev.bloomWeight !== this.options.bloomWeight
+    ) {
+      this.rebuildPipeline();
+    }
+    if (prev.manualTilt !== this.options.manualTilt) {
+      this.setManualTilt(!!this.options.manualTilt);
+    }
+    return { restartKeysChanged };
+  }
+
+  // --- Live toggles ---
+  private setManualTilt(enabled: boolean) {
+    // When enabled: add the rotation/tilt input (RMB/MMB) and disable panning from it.
+    // When disabled: remove the rotation/tilt input and rely on auto-tilt behavior.
+    if (enabled && !this._manualTiltEnabled) {
+      this.camera.inputs.add(this._rotationInput);
+      this._manualTiltEnabled = true;
+    } else if (!enabled && this._manualTiltEnabled) {
+      this.camera.inputs.remove(this._rotationInput);
+      this._manualTiltEnabled = false;
+    }
+  }
 }
