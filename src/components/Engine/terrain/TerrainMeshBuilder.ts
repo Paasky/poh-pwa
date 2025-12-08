@@ -22,7 +22,7 @@ import {
   hexDepth,
   hexWidth,
 } from "@/components/Engine/math";
-import { CompassHex, getHexNeighborDirections } from "@/helpers/mapTools";
+import { CompassHexEdge, getHexEdgeNeighborDirections } from "@/helpers/mapTools";
 import { Color3, Color4, Mesh, MeshBuilder, Scene, StandardMaterial, TransformNode, } from "@babylonjs/core";
 import { VertexData } from "@babylonjs/core/Meshes/mesh.vertexData";
 import { terrainColorMap } from "@/assets/materials/terrains";
@@ -71,9 +71,8 @@ export class TerrainMeshBuilder {
     const angleDeg: number[] = [30, 90, 150, 210, 270, 330]; // pointy-top hex rim angles
     const angleRad = angleDeg.map((a) => (a * Math.PI) / 180);
 
-    // Precompute heights for speed
-    this.blender.precomputeAll();
-    const heightMap = this.blender.getHeightMap();
+    // Heights: for corner-based blending we use base heights directly
+    // (no pre-smoothed map) to avoid cross-tile feedback.
 
     // Buffers: land only (water is a single world plane for now)
     const positionsLand: number[] = [];
@@ -89,18 +88,19 @@ export class TerrainMeshBuilder {
     const colorOf = (t: Tile): Color3 => terrainColorMap[t.terrain.key] ?? Color3.Purple();
 
     // todo move to mapTools
-    const isWater = (t: Tile): boolean => {
-      const k = t.terrain.key;
-      return (
-        k === "terrainType:ocean" ||
-        k === "terrainType:sea" ||
-        k === "terrainType:coast" ||
-        k === "terrainType:lake" ||
-        k === "terrainType:majorRiver"
-      );
+    const isSaltWater = (t: Tile): boolean => {
+      const k = t.terrain.key as string;
+      return k === "terrainType:ocean" || k === "terrainType:sea" || k === "terrainType:coast";
     };
+    const isFreshWater = (t: Tile): boolean => {
+      const k = t.terrain.key as string;
+      return k === "terrainType:lake" || k === "terrainType:majorRiver";
+    };
+    const isWater = (t: Tile): boolean => isSaltWater(t) || isFreshWater(t);
 
-    const coastColor = terrainColorMap["terrainType:coast"];
+    const beachColor = terrainColorMap["terrainType:desert"];
+    const riverBankColor = terrainColorMap["terrainType:grass"];
+    const rocksColor = terrainColorMap["terrainType:rocks"];
 
     const vertex = (x: number, y: number, z: number, c: Color4) => {
       positionsLand.push(x, y, z);
@@ -118,73 +118,80 @@ export class TerrainMeshBuilder {
         const cx = offsetX + hexWidth * (x + 0.5 * (y & 1));
         const cz = offsetZ + hexDepth * y;
 
-        const hCenter = this.sampleH(heightMap, x, y);
+        // Skip generating per-tile water geometry; a single world water plane is used now
+        if (isWater(tile)) continue;
+
+        const hCenter = this.blender.sampleBaseHeight(x, y);
         const cCenter3 = colorOf(tile);
         const cCenter = new Color4(cCenter3.r, cCenter3.g, cCenter3.b, 1);
 
-        const dir = getHexNeighborDirections(y);
         const ring: { x: number; z: number; h: number; color: Color4 }[] = [];
-
-        // Build six rim vertices (average height/color with neighbor)
+        // Corner order matching angleRad: 30°, 90°, 150°, 210°, 270°, 330°
+        // Note: +Z grows south in our world space, so the N/S labels must be flipped
+        // relative to mathematical angles. The correct edge order for our angles is:
+        //   30°→se, 90°→s, 150°→sw, 210°→nw, 270°→n, 330°→ne
+        const edges: CompassHexEdge[] = ["se", "s", "sw", "nw", "n", "ne"];
         for (let i = 0; i < 6; i++) {
-          // todo move to math
           const a = angleRad[i];
           const rx = cx + Math.cos(a) * s;
           const rz = cz + Math.sin(a) * s;
 
-          // Neighbor mapping index order matching angles for pointy-top:
-          // angles [30, 90, 150, 210, 270, 330] roughly correspond to [ne, nw, w, sw, se, e]
-          const dirKey = ((): CompassHex => {
-            switch (i) {
-              case 0:
-                return "ne";
-              case 1:
-                return "nw";
-              case 2:
-                return "w";
-              case 3:
-                return "sw";
-              case 4:
-                return "se";
-              case 5:
-              default:
-                return "e";
-            }
-          })();
+          // Get the two neighbor deltas for this corner
+          const [dA, dB] = getHexEdgeNeighborDirections(y, edges[i]);
 
-          // Neighbor coords with wrap on X and clamp on Y like mapTools
-          let nx = x + dir[dirKey].x;
-          let ny = y + dir[dirKey].y;
-          if (ny < 0 || ny >= this.world.sizeY) {
-            // No neighbor beyond poles -> use self for averaging
-            nx = x;
-            ny = y;
-          } else {
-            // todo move to math
+          // Resolve neighbor coords with wrap/clamp rules
+          const resolve = (dx: number, dy: number): { x: number; y: number } => {
+            let nx = x + dx;
+            const ny = y + dy;
+            if (ny < 0 || ny >= this.world.sizeY) return { x, y };
             nx = ((nx % this.world.sizeX) + this.world.sizeX) % this.world.sizeX;
-          }
+            return { x: nx, y: ny };
+          };
 
-          const hNeighbor = this.sampleH(heightMap, nx, ny);
-          const tNeighbor = this.tilesByKey[Tile.getKey(nx, ny)] ?? tile;
+          const nA = resolve(dA.x, dA.y);
+          const nB = resolve(dB.x, dB.y);
 
-          // Height and color at rim: blend with neighbor
-          const hRim = 0.5 * (hCenter + hNeighbor);
+          const hA = this.blender.sampleBaseHeight(nA.x, nA.y);
+          const hB = this.blender.sampleBaseHeight(nB.x, nB.y);
+          const hRim = (hCenter + hA + hB) / 3;
 
-          // Base color blend
-          let cRim3 = cCenter3.clone();
-          cRim3 = new Color3(
-            0.5 * (cRim3.r + colorOf(tNeighbor).r),
-            0.5 * (cRim3.g + colorOf(tNeighbor).g),
-            0.5 * (cRim3.b + colorOf(tNeighbor).b),
-          );
+          const tA = this.tilesByKey[Tile.getKey(nA.x, nA.y)] ?? tile;
+          const tB = this.tilesByKey[Tile.getKey(nB.x, nB.y)] ?? tile;
 
-          // If mixing water/land, bias towards coast color to emulate beach/cliff edge
-          const mixWater = isWater(tile) !== isWater(tNeighbor);
-          if (mixWater) {
+          // Determine corner color
+          let cRim3: Color3;
+          const hasSalt = isSaltWater(tA) || isSaltWater(tB);
+          const hasFresh = isFreshWater(tA) || isFreshWater(tB);
+          if (hasSalt || hasFresh) {
+            // Mix land (center) with water neighbors: pick beach/fertile/rocks based on elevation diff
+            let waterH = 0;
+            let wCount = 0;
+            if (isWater(tA)) {
+              waterH += this.blender.sampleBaseHeight(nA.x, nA.y);
+              wCount++;
+            }
+            if (isWater(tB)) {
+              waterH += this.blender.sampleBaseHeight(nB.x, nB.y);
+              wCount++;
+            }
+            const avgWaterH = wCount ? waterH / wCount : hCenter;
+            const elevDiff = Math.abs(hCenter - avgWaterH);
+            if (hasSalt && !hasFresh) {
+              cRim3 = elevDiff < 0.5 ? beachColor : rocksColor;
+            } else if (hasFresh && !hasSalt) {
+              cRim3 = elevDiff < 0.5 ? riverBankColor : rocksColor;
+            } else {
+              // In the rare case both exist, prefer salt beach heuristic
+              cRim3 = elevDiff < 0.5 ? beachColor : rocksColor;
+            }
+          } else {
+            // Pure land corner: average of three tile colors
+            const cA = colorOf(tA);
+            const cB = colorOf(tB);
             cRim3 = new Color3(
-              0.5 * (cRim3.r + coastColor.r),
-              0.5 * (cRim3.g + coastColor.g),
-              0.5 * (cRim3.b + coastColor.b),
+              (cCenter3.r + cA.r + cB.r) / 3,
+              (cCenter3.g + cA.g + cB.g) / 3,
+              (cCenter3.b + cA.b + cB.b) / 3,
             );
           }
 
@@ -244,6 +251,7 @@ export class TerrainMeshBuilder {
     return this.root;
   }
 
+  // noinspection JSUnusedGlobalSymbols
   getMesh(): Mesh | null {
     return this.mesh;
   }
@@ -253,11 +261,5 @@ export class TerrainMeshBuilder {
     if (this.root) this.root.dispose(false, true);
     this.mesh = null;
     this.root = null;
-  }
-
-  private sampleH(hmap: Float32Array | null, x: number, y: number): number {
-    if (!hmap) return this.blender.computeBlendedHeight(x, y);
-    const idx = y * this.world.sizeX + x;
-    return hmap[idx];
   }
 }

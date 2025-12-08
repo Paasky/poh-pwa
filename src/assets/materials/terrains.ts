@@ -11,6 +11,7 @@ export const terrainColorMap: Record<TypeKey, Color3> = {
   "terrainType:plains": Color3.FromHexString("#a58111"),
   "terrainType:sea": Color3.FromHexString("#1e3a8a"),
   "terrainType:snow": Color3.FromHexString("#a0a0a0"),
+  "terrainType:rocks": Color3.FromHexString("#494642"),
   "terrainType:tundra": Color3.FromHexString("#3e5234"),
 };
 

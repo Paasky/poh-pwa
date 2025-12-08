@@ -27,8 +27,40 @@ export function getHexNeighborDirections(y: number): Record<CompassHex, Coords> 
       };
 }
 
-export function getHexEdgeNeighborDirections(edge: CompassHexEdge): Coords[] {
-  // todo return the two directions to get to the edge neighbors
+// Returns the two neighbor direction deltas (relative to the center tile)
+// for the two tiles that meet at the given corner/edge of a POINTY-TOP hex
+// in an odd-r (row-offset) layout.
+//
+// Edge names map to hex corners as follows (angles for reference):
+//   ne (≈30°), n (≈90°), nw (≈150°), sw (≈210°), s (≈270°), se (≈330°)
+//
+// Because NE/NW/SE/SW offsets depend on row parity, this helper requires `y`.
+export function getHexEdgeNeighborDirections(y: number, edge: CompassHexEdge): Coords[] {
+  const dirs = getHexNeighborDirections(y);
+
+  // For a corner, the two adjacent tiles are reached by moving 1 step in each
+  // of the two axial directions that span that corner.
+  switch (edge) {
+    case "ne":
+      // Adjacent tiles: E and NE
+      return [dirs.e, dirs.ne];
+    case "n":
+      // Adjacent tiles: NE and NW
+      return [dirs.ne, dirs.nw];
+    case "nw":
+      // Adjacent tiles: NW and W
+      return [dirs.nw, dirs.w];
+    case "sw":
+      // Adjacent tiles: W and SW
+      return [dirs.w, dirs.sw];
+    case "s":
+      // Adjacent tiles: SW and SE
+      return [dirs.sw, dirs.se];
+    case "se":
+    default:
+      // Adjacent tiles: SE and E
+      return [dirs.se, dirs.e];
+  }
 }
 
 /**
