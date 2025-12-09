@@ -17,6 +17,11 @@ export const buildHexGpuBuffer = (
   // Values will be pushed into this buffer
   gpuBuffer: TerrainTileBuffers,
 ) => {
+  // If there are no points, there is nothing to append — and any incoming
+  // triangle indices would be invalid (would reference non-existent vertices).
+  // Early-exit to keep buffers unchanged in that case.
+  if (!points.length) return
+
   const colors = points.map((p) => getColor(p.ringNumFromCenter, p.corner, p.edge))
 
   const positions = points.map((p) => ({
@@ -28,5 +33,5 @@ export const buildHexGpuBuffer = (
   const positionBase = gpuBuffer.positions.length / 3
   gpuBuffer.colors.push(...colors.flatMap((c) => [c.r, c.g, c.b, c.a]))
   gpuBuffer.positions.push(...positions.flatMap((p) => [p.x, p.y, p.z]))
-  gpuBuffer.indices.push(...triangles.map((i) => i + positionBase))
+  gpuBuffer.indices.push(...triangles.map((i) => positionBase + i))
 }
