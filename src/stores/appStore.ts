@@ -17,7 +17,7 @@ import { useUnitsTabStore } from "@/components/PlayerDetails/Tabs/unitsTabStore"
 import { useCitiesTabStore } from "@/components/PlayerDetails/Tabs/citiesTabStore";
 import { useTradeTabStore } from "@/components/PlayerDetails/Tabs/tradeTabStore";
 
-async function fetchJSON<T>(url: string): Promise<T> {
+export async function fetchJSON<T>(url: string): Promise<T> {
   const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) throw new Error(`${url} HTTP ${res.status}`);
   return (await res.json()) as Promise<T>;

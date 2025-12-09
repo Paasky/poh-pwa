@@ -4,6 +4,7 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router"
 import HomeView from "@/views/HomeView.vue";
 import GameView from "@/views/GameView.vue";
 import MapGeneratorView from "@/views/MapGeneratorView.vue";
+import TestView from "@/views/TestView.vue";
 import { useAppStore } from "@/stores/appStore";
 import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
 import { usePlayerDetailsStoreNew } from "@/components/PlayerDetails/playerDetailsStore";
@@ -12,6 +13,7 @@ const routes: Readonly<RouteRecordRaw[]> = [
   { path: "/", name: "home", component: HomeView },
   { path: "/game", name: "game", component: GameView },
   { path: "/generator", name: "generator", component: MapGeneratorView },
+  { path: "/test", name: "test", component: TestView },
 ];
 
 const router = createRouter({
