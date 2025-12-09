@@ -33,10 +33,10 @@ export class GameLevel {
           regTile.domain.id === this.gen.water.id
             ? // Water tiles are always flat
               this.gen.flat
-            : // 25% chance of flat, 25% chance for elevation swap for extra variety
-              elevChance < 0.25
+            : // 75% chance of flat, 10% chance for elevation swap for extra variety
+              elevChance < 0.75
               ? this.gen.flat
-              : elevChance < 0.5
+              : elevChance < 0.85
                 ? regTile.elevation === this.gen.flat
                   ? this.gen.hill
                   : this.gen.flat

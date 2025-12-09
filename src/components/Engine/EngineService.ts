@@ -3,7 +3,9 @@ import {
   ArcRotateCamera,
   ArcRotateCameraPointersInput,
   Camera,
+  Color3,
   Color4,
+  DirectionalLight,
   Engine as BabylonEngine,
   HemisphericLight,
   PointerEventTypes,
@@ -11,9 +13,12 @@ import {
   TransformNode,
   Vector3,
 } from "@babylonjs/core";
+import { ShadowGenerator } from "@babylonjs/core/Lights/Shadows/shadowGenerator";
+// Required side-effect to register ShadowGenerator with the Scene
+import "@babylonjs/core/Lights/Shadows/shadowGeneratorSceneComponent";
 import { DefaultRenderingPipeline } from "@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/defaultRenderingPipeline";
 import { CreateScreenshotUsingRenderTarget } from "@babylonjs/core/Misc/screenshotTools";
-import { buildTileGrid } from "@/components/Engine/meshes/tile";
+import { TerrainMeshBuilder } from "@/components/Engine/terrain/TerrainMeshBuilder";
 import {
   clamp,
   getWorldDepth,
@@ -175,7 +180,10 @@ export class EngineService {
   camera: ArcRotateCamera;
   minimapCamera: ArcRotateCamera;
   light: HemisphericLight;
+  sunLight!: DirectionalLight;
+  shadowGen!: ShadowGenerator;
   tileRoot: TransformNode;
+  terrainBuilder: TerrainMeshBuilder;
 
   // Options & rendering pipeline
   options: EngineOptions = { ...DefaultEngineOptions };
@@ -223,12 +231,28 @@ export class EngineService {
     // Post-process pipeline (FXAA / Bloom / HDR)
     this.rebuildPipeline();
 
-    // Init Tiles
-    this.tileRoot = buildTileGrid(this.world, this.scene).root;
+    // Build merged terrain mesh (new pipeline)
+    this.terrainBuilder = new TerrainMeshBuilder(this.scene, this.world, {
+      smoothing: 0.6,
+      jitter: 0.04,
+    });
+    this.tileRoot = this.terrainBuilder.build();
+
+    // Shadows: make terrain cast/receive
+    const land = this.terrainBuilder.getMesh();
+    if (land) {
+      land.receiveShadows = true;
+      this.shadowGen.addShadowCaster(land, true);
+    }
+    const water = this.scene.getMeshByName("terrain.water.plane");
+    if (water) {
+      // Optional: water receives soft shadows from terrain
+      water.receiveShadows = true;
+    }
 
     // Once the scene is ready, capture a one-time minimap image into the minimap canvas
     this.scene.executeWhenReady(() => {
-      this.captureMinimapOnce();
+      this.captureMinimap();
     });
 
     // Render loop with optional FPS cap
@@ -247,7 +271,7 @@ export class EngineService {
     window.addEventListener("resize", this.onResize);
   }
 
-  captureMinimapOnce(): EngineService {
+  captureMinimap(): EngineService {
     // Render a 512x256 screenshot using the orthographic minimap camera and draw it to the canvas
     const width = 512;
     const height = 256;
@@ -274,6 +298,7 @@ export class EngineService {
   detach(): void {
     window.removeEventListener("resize", this.onResize);
     this.engine.stopRenderLoop();
+    this.terrainBuilder.dispose();
     if (this.pipeline) {
       this.pipeline.dispose();
       this.pipeline = undefined;
@@ -415,7 +440,56 @@ export class EngineService {
   }
 
   private initLight(): HemisphericLight {
-    return new HemisphericLight("light", new Vector3(0, 1, 0), this.scene);
+    // Ambient fill light so shaded areas are not fully black
+    const hemi = new HemisphericLight("light.ambient", new Vector3(0, 1, 0), this.scene);
+    // Reduce ambient to deepen shadows and remove hemi specular highlights
+    hemi.intensity = 0.2;
+    // Remove hemispheric specular contribution (reflections come from sun only)
+    // noinspection SuspiciousTypeOfGuard
+    (hemi as unknown as { specular?: Color3 }).specular = Color3.Black();
+
+    // Sun directional light for shadows
+    // We'll drive its direction dynamically relative to the camera each frame so
+    // shadows remain readable: sun sits lower in the sky and behind the camera view.
+    const sun = new DirectionalLight("light.sun", new Vector3(0, -1, 0), this.scene);
+    // Boost sun to compensate for lower ambient and create stronger, darker shadows
+    sun.intensity = 1.8;
+    this.sunLight = sun;
+
+    // Shadow generator
+    const sg = new ShadowGenerator(2048, sun);
+    sg.bias = 0.0005;
+    sg.normalBias = 0.02;
+    sg.usePoissonSampling = true; // stable, good default across platforms
+    this.shadowGen = sg;
+
+    // Keep the sun anchored around the camera target so shadow map follows panning
+    // Place it further back and lower to make shadows more apparent.
+    const followDistance = 100;
+    this.scene.onBeforeRenderObservable.add(() => {
+      const t = this.camera.target;
+      // Compute view direction from camera to target
+      const viewDir = t.subtract(this.camera.position).normalize();
+      // Put sun behind the camera, with a guaranteed downward component to bring it lower
+      let sx = -viewDir.x - 4;
+      let sy = -Math.abs(viewDir.y) - 0.5; // push downward to ~2-3pm feel
+      let sz = -viewDir.z;
+      const len = Math.hypot(sx, sy, sz) || 1;
+      sx /= len;
+      sy /= len;
+      sz /= len;
+
+      // Position along this direction at a fixed distance, looking at the target
+      const pos = new Vector3(
+        t.x - sx * followDistance,
+        t.y - sy * followDistance,
+        t.z - sz * followDistance,
+      );
+      sun.position.copyFrom(pos);
+      sun.setDirectionToTarget(t);
+    });
+
+    return hemi;
   }
 
   private initMinimap(): ArcRotateCamera {
