@@ -57,24 +57,24 @@ export const validK2Data = {
     { x: Math.sqrt(3) / 4, z: 0.25, ringNumFromCenter: 1, corner: "ne" },
   ],
   ring2: [
-    // N → NW edge
+    // N → NW edge (radius = 1, with one midpoint per edge)
     { x: 0, z: 1, ringNumFromCenter: 2, corner: "n" },
-    { x: -0.25 * Math.sqrt(3), z: 0.75, ringNumFromCenter: 2, edge: "nw" },
+    { x: -0.433, z: 0.75, ringNumFromCenter: 2, edge: "nw" },
     // NW → SW edge
-    { x: -0.5 * Math.sqrt(3), z: 0.5, ringNumFromCenter: 2, corner: "nw" },
-    { x: -0.75 * Math.sqrt(3), z: 0.25, ringNumFromCenter: 2, edge: "sw" },
+    { x: -0.866, z: 0.5, ringNumFromCenter: 2, corner: "nw" },
+    { x: -0.866, z: 0, ringNumFromCenter: 2, edge: "sw" },
     // SW → S edge
-    { x: -Math.sqrt(3) / 2, z: 0, ringNumFromCenter: 2, corner: "sw" },
-    { x: -0.5 * Math.sqrt(3), z: -0.5, ringNumFromCenter: 2, edge: "s" },
+    { x: -0.866, z: -0.5, ringNumFromCenter: 2, corner: "sw" },
+    { x: -0.433, z: -0.75, ringNumFromCenter: 2, edge: "s" },
     // S → SE edge
     { x: 0, z: -1, ringNumFromCenter: 2, corner: "s" },
-    { x: 0.5 * Math.sqrt(3), z: -0.5, ringNumFromCenter: 2, edge: "se" },
+    { x: 0.433, z: -0.75, ringNumFromCenter: 2, edge: "se" },
     // SE → NE edge
-    { x: Math.sqrt(3) / 2, z: -0.5, ringNumFromCenter: 2, corner: "se" },
-    { x: 0.75 * Math.sqrt(3), z: 0.25, ringNumFromCenter: 2, edge: "ne" },
+    { x: 0.866, z: -0.5, ringNumFromCenter: 2, corner: "se" },
+    { x: 0.866, z: 0, ringNumFromCenter: 2, edge: "ne" },
     // NE → N edge
-    { x: Math.sqrt(3) / 2, z: 0.5, ringNumFromCenter: 2, corner: "ne" },
-    { x: 0.25 * Math.sqrt(3), z: 0.75, ringNumFromCenter: 2, edge: "n" },
+    { x: 0.866, z: 0.5, ringNumFromCenter: 2, corner: "ne" },
+    { x: 0.433, z: 0.75, ringNumFromCenter: 2, edge: "n" },
   ],
 };
 
@@ -89,396 +89,162 @@ export const validK3Data = {
   ],
 
   ring2: [
-    // C, E, C, E, C, E, C, E, C, E, C, E
-    { x: 0, z: 2 / 3, ringNumFromCenter: 2, corner: "n" },
-    {
-      x: (-(Math.sqrt(3) / 2) * (2 / 3)) / 2,
-      z: (0.5 * (2 / 3) + 2 / 3) / 2,
-      ringNumFromCenter: 2,
-      edge: "nw",
-    },
+    // radius = 2/3, one midpoint per edge
+    { x: 0, z: 0.667, ringNumFromCenter: 2, corner: "n" },
+    { x: -0.289, z: 0.5, ringNumFromCenter: 2, edge: "nw" },
 
-    { x: -(Math.sqrt(3) / 2) * (2 / 3), z: 0.5 * (2 / 3), ringNumFromCenter: 2, corner: "nw" },
-    {
-      x: -(Math.sqrt(3) / 2) * (2 / 3),
-      z: (0.5 * (2 / 3) + -0.5 * (2 / 3)) / 2,
-      ringNumFromCenter: 2,
-      edge: "sw",
-    },
+    { x: -0.577, z: 0.333, ringNumFromCenter: 2, corner: "nw" },
+    { x: -0.577, z: 0, ringNumFromCenter: 2, edge: "sw" },
 
-    { x: -(Math.sqrt(3) / 2) * (2 / 3), z: -0.5 * (2 / 3), ringNumFromCenter: 2, corner: "sw" },
-    {
-      x: (-(Math.sqrt(3) / 2) * (2 / 3)) / 2,
-      z: (-0.5 * (2 / 3) + -2 / 3) / 2,
-      ringNumFromCenter: 2,
-      edge: "s",
-    },
+    { x: -0.577, z: -0.333, ringNumFromCenter: 2, corner: "sw" },
+    { x: -0.289, z: -0.5, ringNumFromCenter: 2, edge: "s" },
 
-    { x: 0, z: -2 / 3, ringNumFromCenter: 2, corner: "s" },
-    {
-      x: ((Math.sqrt(3) / 2) * (2 / 3)) / 2,
-      z: (-2 / 3 + -0.5 * (2 / 3)) / 2,
-      ringNumFromCenter: 2,
-      edge: "se",
-    },
+    { x: 0, z: -0.667, ringNumFromCenter: 2, corner: "s" },
+    { x: 0.289, z: -0.5, ringNumFromCenter: 2, edge: "se" },
 
-    { x: (Math.sqrt(3) / 2) * (2 / 3), z: -0.5 * (2 / 3), ringNumFromCenter: 2, corner: "se" },
-    {
-      x: (Math.sqrt(3) / 2) * (2 / 3),
-      z: (-0.5 * (2 / 3) + 0.5 * (2 / 3)) / 2,
-      ringNumFromCenter: 2,
-      edge: "ne",
-    },
+    { x: 0.577, z: -0.333, ringNumFromCenter: 2, corner: "se" },
+    { x: 0.577, z: 0, ringNumFromCenter: 2, edge: "ne" },
 
-    { x: (Math.sqrt(3) / 2) * (2 / 3), z: 0.5 * (2 / 3), ringNumFromCenter: 2, corner: "ne" },
-    {
-      x: ((Math.sqrt(3) / 2) * (2 / 3)) / 2,
-      z: (0.5 * (2 / 3) + 2 / 3) / 2,
-      ringNumFromCenter: 2,
-      edge: "n",
-    },
+    { x: 0.577, z: 0.333, ringNumFromCenter: 2, corner: "ne" },
+    { x: 0.289, z: 0.5, ringNumFromCenter: 2, edge: "n" },
   ],
 
   ring3: [
-    // *** CORNER → EDGE → EDGE pattern (6 corners + 12 edges) ***
-
+    // radius = 1, two midpoints per edge
     // N side
     { x: 0, z: 1, ringNumFromCenter: 3, corner: "n" },
-    { x: -(Math.sqrt(3) / 2) / 3, z: (0.5 + 1 * 2) / 3, ringNumFromCenter: 3, edge: "nw" },
-    { x: (-(Math.sqrt(3) / 2) * 2) / 3, z: (0.5 * 2 + 1) / 3, ringNumFromCenter: 3, edge: "nw" },
+    { x: -0.289, z: 0.833, ringNumFromCenter: 3, edge: "nw" },
+    { x: -0.577, z: 0.667, ringNumFromCenter: 3, edge: "nw" },
 
     // NW side
-    { x: -(Math.sqrt(3) / 2), z: 0.5, ringNumFromCenter: 3, corner: "nw" },
-    {
-      x: (-(Math.sqrt(3) / 2) * (1 + 2)) / 3,
-      z: (0.5 + -0.5 * 2) / 3,
-      ringNumFromCenter: 3,
-      edge: "sw",
-    },
-    {
-      x: (-(Math.sqrt(3) / 2) * (2 + 1)) / 3,
-      z: (-0.5 + 0.5 * 2) / 3,
-      ringNumFromCenter: 3,
-      edge: "sw",
-    },
+    { x: -0.866, z: 0.5, ringNumFromCenter: 3, corner: "nw" },
+    { x: -0.866, z: 0.167, ringNumFromCenter: 3, edge: "sw" },
+    { x: -0.866, z: -0.167, ringNumFromCenter: 3, edge: "sw" },
 
     // SW side
-    { x: -(Math.sqrt(3) / 2), z: -0.5, ringNumFromCenter: 3, corner: "sw" },
-    { x: -(Math.sqrt(3) / 2) * (2 / 3), z: (-0.5 + -1 * 2) / 3, ringNumFromCenter: 3, edge: "s" },
-    { x: -(Math.sqrt(3) / 2) * (1 / 3), z: (-1 + -0.5 * 2) / 3, ringNumFromCenter: 3, edge: "s" },
+    { x: -0.866, z: -0.5, ringNumFromCenter: 3, corner: "sw" },
+    { x: -0.577, z: -0.667, ringNumFromCenter: 3, edge: "s" },
+    { x: -0.289, z: -0.833, ringNumFromCenter: 3, edge: "s" },
 
     // S side
     { x: 0, z: -1, ringNumFromCenter: 3, corner: "s" },
-    { x: Math.sqrt(3) / 2 / 3, z: (-1 + -0.5 * 2) / 3, ringNumFromCenter: 3, edge: "se" },
-    { x: ((Math.sqrt(3) / 2) * 2) / 3, z: (-0.5 * 2 + -1) / 3, ringNumFromCenter: 3, edge: "se" },
+    { x: 0.289, z: -0.833, ringNumFromCenter: 3, edge: "se" },
+    { x: 0.577, z: -0.667, ringNumFromCenter: 3, edge: "se" },
 
     // SE side
-    { x: Math.sqrt(3) / 2, z: -0.5, ringNumFromCenter: 3, corner: "se" },
-    {
-      x: ((Math.sqrt(3) / 2) * (1 + 2)) / 3,
-      z: (-0.5 + 0.5 * 2) / 3,
-      ringNumFromCenter: 3,
-      edge: "ne",
-    },
-    {
-      x: ((Math.sqrt(3) / 2) * (2 + 1)) / 3,
-      z: (0.5 + -0.5 * 2) / 3,
-      ringNumFromCenter: 3,
-      edge: "ne",
-    },
+    { x: 0.866, z: -0.5, ringNumFromCenter: 3, corner: "se" },
+    { x: 0.866, z: -0.167, ringNumFromCenter: 3, edge: "ne" },
+    { x: 0.866, z: 0.167, ringNumFromCenter: 3, edge: "ne" },
 
     // NE side
-    { x: Math.sqrt(3) / 2, z: 0.5, ringNumFromCenter: 3, corner: "ne" },
-    { x: Math.sqrt(3) / 2 / 3, z: (0.5 + 1 * 2) / 3, ringNumFromCenter: 3, edge: "n" },
-    { x: ((Math.sqrt(3) / 2) * 2) / 3, z: (1 + 0.5 * 2) / 3, ringNumFromCenter: 3, edge: "n" },
+    { x: 0.866, z: 0.5, ringNumFromCenter: 3, corner: "ne" },
+    { x: 0.577, z: 0.667, ringNumFromCenter: 3, edge: "n" },
+    { x: 0.289, z: 0.833, ringNumFromCenter: 3, edge: "n" },
   ],
 };
 
 export const validK4Data = {
   ring1: [
-    { x: 0, z: 1 / 4, ringNumFromCenter: 1, corner: "n" },
-    { x: -(Math.sqrt(3) / 2) * (1 / 4), z: 0.5 * (1 / 4), ringNumFromCenter: 1, corner: "nw" },
-    { x: -(Math.sqrt(3) / 2) * (1 / 4), z: -0.5 * (1 / 4), ringNumFromCenter: 1, corner: "sw" },
-    { x: 0, z: -1 / 4, ringNumFromCenter: 1, corner: "s" },
-    { x: (Math.sqrt(3) / 2) * (1 / 4), z: -0.5 * (1 / 4), ringNumFromCenter: 1, corner: "se" },
-    { x: (Math.sqrt(3) / 2) * (1 / 4), z: 0.5 * (1 / 4), ringNumFromCenter: 1, corner: "ne" },
+    { x: 0, z: 0.25, ringNumFromCenter: 1, corner: "n" },
+    { x: -0.217, z: 0.125, ringNumFromCenter: 1, corner: "nw" },
+    { x: -0.217, z: -0.125, ringNumFromCenter: 1, corner: "sw" },
+    { x: 0, z: -0.25, ringNumFromCenter: 1, corner: "s" },
+    { x: 0.217, z: -0.125, ringNumFromCenter: 1, corner: "se" },
+    { x: 0.217, z: 0.125, ringNumFromCenter: 1, corner: "ne" },
   ],
 
   ring2: [
-    // N side
-    { x: 0, z: 2 / 4, ringNumFromCenter: 2, corner: "n" },
-    {
-      x: (-(Math.sqrt(3) / 2) * (2 / 4)) / 2,
-      z: ((0.5 + 1) * (2 / 4)) / 2,
-      ringNumFromCenter: 2,
-      edge: "nw",
-    },
+    // radius = 1/2, one midpoint per edge
+    { x: 0, z: 0.5, ringNumFromCenter: 2, corner: "n" },
+    { x: -0.217, z: 0.375, ringNumFromCenter: 2, edge: "nw" },
 
-    // NW side
-    { x: -(Math.sqrt(3) / 2) * (2 / 4), z: 0.5 * (2 / 4), ringNumFromCenter: 2, corner: "nw" },
-    {
-      x: -(Math.sqrt(3) / 2) * (2 / 4),
-      z: (0.5 * (2 / 4) + -0.5 * (2 / 4)) / 2,
-      ringNumFromCenter: 2,
-      edge: "w",
-    },
+    { x: -0.433, z: 0.25, ringNumFromCenter: 2, corner: "nw" },
+    { x: -0.433, z: 0, ringNumFromCenter: 2, edge: "sw" },
 
-    // SW side
-    { x: -(Math.sqrt(3) / 2) * (2 / 4), z: -0.5 * (2 / 4), ringNumFromCenter: 2, corner: "sw" },
-    {
-      x: (-(Math.sqrt(3) / 2) * (2 / 4)) / 2,
-      z: (-0.5 * (2 / 4) + -2 / 4) / 2,
-      ringNumFromCenter: 2,
-      edge: "sw",
-    },
+    { x: -0.433, z: -0.25, ringNumFromCenter: 2, corner: "sw" },
+    { x: -0.217, z: -0.375, ringNumFromCenter: 2, edge: "s" },
 
-    // S side
-    { x: 0, z: -2 / 4, ringNumFromCenter: 2, corner: "s" },
-    {
-      x: ((Math.sqrt(3) / 2) * (2 / 4)) / 2,
-      z: (-2 / 4 + -0.5 * (2 / 4)) / 2,
-      ringNumFromCenter: 2,
-      edge: "se",
-    },
+    { x: 0, z: -0.5, ringNumFromCenter: 2, corner: "s" },
+    { x: 0.217, z: -0.375, ringNumFromCenter: 2, edge: "se" },
 
-    // SE side
-    { x: (Math.sqrt(3) / 2) * (2 / 4), z: -0.5 * (2 / 4), ringNumFromCenter: 2, corner: "se" },
-    {
-      x: (Math.sqrt(3) / 2) * (2 / 4),
-      z: (-0.5 * (2 / 4) + 0.5 * (2 / 4)) / 2,
-      ringNumFromCenter: 2,
-      edge: "e",
-    },
+    { x: 0.433, z: -0.25, ringNumFromCenter: 2, corner: "se" },
+    { x: 0.433, z: 0, ringNumFromCenter: 2, edge: "ne" },
 
-    // NE side
-    { x: (Math.sqrt(3) / 2) * (2 / 4), z: 0.5 * (2 / 4), ringNumFromCenter: 2, corner: "ne" },
-    {
-      x: ((Math.sqrt(3) / 2) * (2 / 4)) / 2,
-      z: (0.5 * (2 / 4) + 2 / 4) / 2,
-      ringNumFromCenter: 2,
-      edge: "ne",
-    },
+    { x: 0.433, z: 0.25, ringNumFromCenter: 2, corner: "ne" },
+    { x: 0.217, z: 0.375, ringNumFromCenter: 2, edge: "n" },
   ],
 
   // ------- RING 3 (radius = 3/4) -------
   ring3: [
+    // radius = 3/4, two midpoints per edge
     // N side
-    { x: 0, z: 3 / 4, ringNumFromCenter: 3, corner: "n" },
-    {
-      x: -(Math.sqrt(3) / 2) * (3 / 4) * (1 / 3),
-      z: (0.5 + 2) * (3 / 4) * (1 / 3),
-      ringNumFromCenter: 3,
-      edge: "nw",
-    },
-    {
-      x: -(Math.sqrt(3) / 2) * (3 / 4) * (2 / 3),
-      z: (0.5 * 2 + 1) * (3 / 4) * (1 / 3),
-      ringNumFromCenter: 3,
-      edge: "nw",
-    },
+    { x: 0, z: 0.75, ringNumFromCenter: 3, corner: "n" },
+    { x: -0.217, z: 0.625, ringNumFromCenter: 3, edge: "nw" },
+    { x: -0.433, z: 0.5, ringNumFromCenter: 3, edge: "nw" },
 
     // NW side
-    { x: -(Math.sqrt(3) / 2) * (3 / 4), z: 0.5 * (3 / 4), ringNumFromCenter: 3, corner: "nw" },
-    {
-      x: -(Math.sqrt(3) / 2) * (3 / 4) * (2 / 3),
-      z: (0.5 + -0.5 * 2) * (3 / 4) * (1 / 3),
-      ringNumFromCenter: 3,
-      edge: "w",
-    },
-    {
-      x: -(Math.sqrt(3) / 2) * (3 / 4) * (1 / 3),
-      z: (-0.5 + 0.5 * 2) * (3 / 4) * (1 / 3),
-      ringNumFromCenter: 3,
-      edge: "w",
-    },
+    { x: -0.65, z: 0.375, ringNumFromCenter: 3, corner: "nw" },
+    { x: -0.65, z: 0.125, ringNumFromCenter: 3, edge: "sw" },
+    { x: -0.65, z: -0.125, ringNumFromCenter: 3, edge: "sw" },
 
     // SW side
-    { x: -(Math.sqrt(3) / 2) * (3 / 4), z: -0.5 * (3 / 4), ringNumFromCenter: 3, corner: "sw" },
-    {
-      x: -(Math.sqrt(3) / 2) * (2 / 4),
-      z: (-0.5 + -2) * (3 / 4) * (1 / 3),
-      ringNumFromCenter: 3,
-      edge: "sw",
-    },
-    {
-      x: -(Math.sqrt(3) / 2) * (1 / 4),
-      z: (-1 + -0.5 * 2) * (3 / 4) * (1 / 3),
-      ringNumFromCenter: 3,
-      edge: "sw",
-    },
+    { x: -0.65, z: -0.375, ringNumFromCenter: 3, corner: "sw" },
+    { x: -0.433, z: -0.5, ringNumFromCenter: 3, edge: "s" },
+    { x: -0.217, z: -0.625, ringNumFromCenter: 3, edge: "s" },
 
     // S side
-    { x: 0, z: -3 / 4, ringNumFromCenter: 3, corner: "s" },
-    {
-      x: (Math.sqrt(3) / 2) * (1 / 4),
-      z: (-1 + -0.5 * 2) * (3 / 4) * (1 / 3),
-      ringNumFromCenter: 3,
-      edge: "se",
-    },
-    {
-      x: (Math.sqrt(3) / 2) * (2 / 4),
-      z: (-0.5 * 2 + -1) * (3 / 4) * (1 / 3),
-      ringNumFromCenter: 3,
-      edge: "se",
-    },
+    { x: 0, z: -0.75, ringNumFromCenter: 3, corner: "s" },
+    { x: 0.217, z: -0.625, ringNumFromCenter: 3, edge: "se" },
+    { x: 0.433, z: -0.5, ringNumFromCenter: 3, edge: "se" },
 
     // SE side
-    { x: (Math.sqrt(3) / 2) * (3 / 4), z: -0.5 * (3 / 4), ringNumFromCenter: 3, corner: "se" },
-    {
-      x: (Math.sqrt(3) / 2) * (3 / 4) * (2 / 3),
-      z: (-0.5 + 0.5 * 2) * (3 / 4) * (1 / 3),
-      ringNumFromCenter: 3,
-      edge: "e",
-    },
-    {
-      x: (Math.sqrt(3) / 2) * (3 / 4) * (1 / 3),
-      z: (0.5 + -0.5 * 2) * (3 / 4) * (1 / 3),
-      ringNumFromCenter: 3,
-      edge: "e",
-    },
+    { x: 0.65, z: -0.375, ringNumFromCenter: 3, corner: "se" },
+    { x: 0.65, z: -0.125, ringNumFromCenter: 3, edge: "ne" },
+    { x: 0.65, z: 0.125, ringNumFromCenter: 3, edge: "ne" },
 
     // NE side
-    { x: (Math.sqrt(3) / 2) * (3 / 4), z: 0.5 * (3 / 4), ringNumFromCenter: 3, corner: "ne" },
-    {
-      x: (Math.sqrt(3) / 2) * (1 / 4),
-      z: (0.5 + 2) * (3 / 4) * (1 / 3),
-      ringNumFromCenter: 3,
-      edge: "ne",
-    },
-    {
-      x: (Math.sqrt(3) / 2) * (2 / 4),
-      z: (1 + 0.5 * 2) * (3 / 4) * (1 / 3),
-      ringNumFromCenter: 3,
-      edge: "ne",
-    },
+    { x: 0.65, z: 0.375, ringNumFromCenter: 3, corner: "ne" },
+    { x: 0.433, z: 0.5, ringNumFromCenter: 3, edge: "n" },
+    { x: 0.217, z: 0.625, ringNumFromCenter: 3, edge: "n" },
   ],
 
   // ------- RING 4 (radius = full = 1) -------
   ring4: [
+    // radius = 1, three midpoints per edge
     // N side (corner + 3 edges)
     { x: 0, z: 1, ringNumFromCenter: 4, corner: "n" },
-    {
-      x: -(Math.sqrt(3) / 2) * (1 / 4),
-      z: (0.5 + 3 * 0.5) * (1 / 4),
-      ringNumFromCenter: 4,
-      edge: "nw",
-    },
-    {
-      x: -(Math.sqrt(3) / 2) * (2 / 4),
-      z: (0.5 * 2 + 2) * (1 / 4),
-      ringNumFromCenter: 4,
-      edge: "nw",
-    },
-    {
-      x: -(Math.sqrt(3) / 2) * (3 / 4),
-      z: (0.5 * 3 + 1) * (1 / 4),
-      ringNumFromCenter: 4,
-      edge: "nw",
-    },
+    { x: -0.217, z: 0.875, ringNumFromCenter: 4, edge: "nw" },
+    { x: -0.433, z: 0.75, ringNumFromCenter: 4, edge: "nw" },
+    { x: -0.65, z: 0.625, ringNumFromCenter: 4, edge: "nw" },
 
     // NW side
-    { x: -(Math.sqrt(3) / 2), z: 0.5, ringNumFromCenter: 4, corner: "nw" },
-    {
-      x: -(Math.sqrt(3) / 2) * (3 / 4),
-      z: (0.5 + -0.5 * 3) * (1 / 4),
-      ringNumFromCenter: 4,
-      edge: "w",
-    },
-    {
-      x: -(Math.sqrt(3) / 2) * (2 / 4),
-      z: (0.5 + -0.5 * 2) * (1 / 4),
-      ringNumFromCenter: 4,
-      edge: "w",
-    },
-    {
-      x: -(Math.sqrt(3) / 2) * (1 / 4),
-      z: (0.5 + -0.5 * 1) * (1 / 4),
-      ringNumFromCenter: 4,
-      edge: "w",
-    },
+    { x: -0.866, z: 0.5, ringNumFromCenter: 4, corner: "nw" },
+    { x: -0.866, z: 0.25, ringNumFromCenter: 4, edge: "sw" },
+    { x: -0.866, z: 0, ringNumFromCenter: 4, edge: "sw" },
+    { x: -0.866, z: -0.25, ringNumFromCenter: 4, edge: "sw" },
 
     // SW side
-    { x: -(Math.sqrt(3) / 2), z: -0.5, ringNumFromCenter: 4, corner: "sw" },
-    {
-      x: -(Math.sqrt(3) / 2) * (3 / 4),
-      z: (-0.5 + -1 * 3) * (1 / 4),
-      ringNumFromCenter: 4,
-      edge: "sw",
-    },
-    {
-      x: -(Math.sqrt(3) / 2) * (2 / 4),
-      z: (-0.5 + -1 * 2) * (1 / 4),
-      ringNumFromCenter: 4,
-      edge: "sw",
-    },
-    {
-      x: -(Math.sqrt(3) / 2) * (1 / 4),
-      z: (-0.5 + -1 * 1) * (1 / 4),
-      ringNumFromCenter: 4,
-      edge: "sw",
-    },
+    { x: -0.866, z: -0.5, ringNumFromCenter: 4, corner: "sw" },
+    { x: -0.65, z: -0.625, ringNumFromCenter: 4, edge: "s" },
+    { x: -0.433, z: -0.75, ringNumFromCenter: 4, edge: "s" },
+    { x: -0.217, z: -0.875, ringNumFromCenter: 4, edge: "s" },
 
     // S side
     { x: 0, z: -1, ringNumFromCenter: 4, corner: "s" },
-    {
-      x: (Math.sqrt(3) / 2) * (1 / 4),
-      z: (-1 + -0.5 * 3) * (1 / 4),
-      ringNumFromCenter: 4,
-      edge: "se",
-    },
-    {
-      x: (Math.sqrt(3) / 2) * (2 / 4),
-      z: (-1 + -0.5 * 2) * (1 / 4),
-      ringNumFromCenter: 4,
-      edge: "se",
-    },
-    {
-      x: (Math.sqrt(3) / 2) * (3 / 4),
-      z: (-1 + -0.5 * 1) * (1 / 4),
-      ringNumFromCenter: 4,
-      edge: "se",
-    },
+    { x: 0.217, z: -0.875, ringNumFromCenter: 4, edge: "se" },
+    { x: 0.433, z: -0.75, ringNumFromCenter: 4, edge: "se" },
+    { x: 0.65, z: -0.625, ringNumFromCenter: 4, edge: "se" },
 
     // SE side
-    { x: Math.sqrt(3) / 2, z: -0.5, ringNumFromCenter: 4, corner: "se" },
-    {
-      x: (Math.sqrt(3) / 2) * (3 / 4),
-      z: (-0.5 + 0.5 * 3) * (1 / 4),
-      ringNumFromCenter: 4,
-      edge: "e",
-    },
-    {
-      x: (Math.sqrt(3) / 2) * (2 / 4),
-      z: (-0.5 + 0.5 * 2) * (1 / 4),
-      ringNumFromCenter: 4,
-      edge: "e",
-    },
-    {
-      x: (Math.sqrt(3) / 2) * (1 / 4),
-      z: (-0.5 + 0.5 * 1) * (1 / 4),
-      ringNumFromCenter: 4,
-      edge: "e",
-    },
+    { x: 0.866, z: -0.5, ringNumFromCenter: 4, corner: "se" },
+    { x: 0.866, z: -0.25, ringNumFromCenter: 4, edge: "ne" },
+    { x: 0.866, z: 0, ringNumFromCenter: 4, edge: "ne" },
+    { x: 0.866, z: 0.25, ringNumFromCenter: 4, edge: "ne" },
 
     // NE side
-    { x: Math.sqrt(3) / 2, z: 0.5, ringNumFromCenter: 4, corner: "ne" },
-    {
-      x: (Math.sqrt(3) / 2) * (3 / 4),
-      z: (0.5 + 1 * 3) * (1 / 4),
-      ringNumFromCenter: 4,
-      edge: "ne",
-    },
-    {
-      x: (Math.sqrt(3) / 2) * (2 / 4),
-      z: (0.5 + 1 * 2) * (1 / 4),
-      ringNumFromCenter: 4,
-      edge: "ne",
-    },
-    {
-      x: (Math.sqrt(3) / 2) * (1 / 4),
-      z: (0.5 + 1 * 1) * (1 / 4),
-      ringNumFromCenter: 4,
-      edge: "ne",
-    },
+    { x: 0.866, z: 0.5, ringNumFromCenter: 4, corner: "ne" },
+    { x: 0.65, z: 0.625, ringNumFromCenter: 4, edge: "n" },
+    { x: 0.433, z: 0.75, ringNumFromCenter: 4, edge: "n" },
+    { x: 0.217, z: 0.875, ringNumFromCenter: 4, edge: "n" },
   ],
 };

@@ -5,12 +5,12 @@ import { PointData } from "@/factories/TerrainMeshBuilder/_terrainMeshTypes";
 /**
  * Returns hex points for a given ring index.
  * Points are ordered counter-clockwise starting from the 0° (n) corner.
- * Ring radius is scaled by ringIndex / totalRings.
+ * Ring radius is scaled by ringIndex / ringCount.
  */
-export function pointsInRing(ringNumFromCenter: number, totalRings: number): PointData[] {
+export function pointsInRing(ringNumFromCenter: number, ringCount: number): PointData[] {
   if (ringNumFromCenter === 0) return [{ x: 0, z: 0, ringNumFromCenter }];
 
-  const radius = ringNumFromCenter / totalRings;
+  const radius = ringNumFromCenter / ringCount;
 
   // edge: starting from the corner, walking counter-clockwise
   // NOTE! As we are dealing in x,z (not x,y), reality flips: north is 90deg, and counter-clockwise is to the right
