@@ -33,10 +33,10 @@ export class GameLevel {
           regTile.domain.id === this.gen.water.id
             ? // Water tiles are always flat
               this.gen.flat
-            : // 25% chance of flat, 25% chance for elevation swap for extra variety
-              elevChance < 0.25
+            : // 50% chance of flat, 20% chance for elevation swap for extra variety
+              elevChance < 0.5
               ? this.gen.flat
-              : elevChance < 0.5
+              : elevChance < 0.7
                 ? regTile.elevation === this.gen.flat
                   ? this.gen.hill
                   : this.gen.flat
@@ -93,17 +93,19 @@ export class GameLevel {
       removeOrphanArea(tile, neighbors);
       removeOrphanTerrain(tile, neighbors);
 
-      // If it's a mountain, make 50% of flat neighbors into hills
-      // If it's a snow mountain, make 75% of flat neighbors into hills
       if (tile.elevation.id === "mountain") {
+        // If it's a mountain, make 50% of flat neighbors into hills
         neighbors
           .filter((n) => n.elevation.id === "flat")
           .forEach((n) => (Math.random() < 0.5 ? (n.elevation = this.gen.hill) : null));
       }
       if (tile.elevation.id === "snowMountain") {
+        // If it's a snow mountain, make 50%/50% of flat/hill neighbors into hills/mountains
         neighbors
-          .filter((n) => n.elevation.id === "flat")
-          .forEach((n) => (Math.random() < 0.75 ? (n.elevation = this.gen.hill) : null));
+          .filter((n) => n.elevation.id === "flat" || n.elevation.id === "hill")
+          .forEach((n) =>
+            Math.random() < 0.5 ? (n.elevation = this.gen.hill) : (n.elevation = this.gen.mountain),
+          );
       }
 
       // If on center of regTile

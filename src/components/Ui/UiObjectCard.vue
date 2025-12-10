@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { defineEmits } from "vue";
 import UiButton from "@/components/Ui/UiButton.vue";
 import UiYields from "@/components/Ui/UiYields.vue";
 import UiObjectChip from "@/components/Ui/UiObjectChip.vue";

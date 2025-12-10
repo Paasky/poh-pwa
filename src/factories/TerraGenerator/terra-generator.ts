@@ -35,6 +35,7 @@ export class TerraGenerator {
   water: TypeObject;
   flat: TypeObject;
   hill: TypeObject;
+  mountain: TypeObject;
   terrains: TypeObject[];
   oceans: TypeObject[];
   oceanTerrain: TypeObject;
@@ -65,6 +66,7 @@ export class TerraGenerator {
     this.water = this.objStore.getTypeObject("domainType:water");
     this.flat = this.objStore.getTypeObject("elevationType:flat");
     this.hill = this.objStore.getTypeObject("elevationType:hill");
+    this.mountain = this.objStore.getTypeObject("elevationType:mountain");
 
     this.terrains = this.objStore.getClassTypes("terrainType");
 
