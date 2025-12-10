@@ -13,15 +13,7 @@ import { range } from "@/helpers/arrayTools";
 import { pointsInRing } from "@/factories/TerrainMeshBuilder/pointsInRing";
 import { hexTrianglesFromPoints } from "@/factories/TerrainMeshBuilder/hexTrianglesFromPoints";
 import { colorOf, terrainColorMap } from "@/assets/materials/terrains";
-import {
-  Color3,
-  Color4,
-  Mesh,
-  Scene,
-  StandardMaterial,
-  TransformNode,
-  VertexData,
-} from "@babylonjs/core";
+import { Color4, Mesh, Scene, TransformNode } from "@babylonjs/core";
 import { avg, clamp, tileCenter } from "@/helpers/math";
 import { buildHexGpuBuffer } from "@/factories/TerrainMeshBuilder/buildHexGpuBuffer";
 import {
@@ -31,6 +23,7 @@ import {
 } from "@/factories/TerrainMeshBuilder/_terrainMeshTypes";
 import { weldGpuBuffer } from "@/factories/TerrainMeshBuilder/weldGpuBuffer";
 import { createWaterMesh } from "@/factories/TerrainMeshBuilder/waterMesh";
+import { meshFromWeld } from "@/factories/TerrainMeshBuilder/meshFromWeld";
 
 export class TerrainMeshBuilder {
   scene: Scene;
@@ -108,7 +101,7 @@ export class TerrainMeshBuilder {
     );
 
     // Step 3: Create the mesh
-    this.mesh = this.meshFromWeld(welded);
+    this.mesh = meshFromWeld(this.scene, this.root, welded);
 
     // Simple world-sized water plane to denote global sea level
     const water = createWaterMesh(this.scene, this.size, this.root);
@@ -249,28 +242,5 @@ export class TerrainMeshBuilder {
     // 2x emphasis for Center vs. Neighbor
     const centerEmphasis = Math.round(1 / (ringNumFromCenter / this.hexRingCount));
     return Array(centerEmphasis).fill(fill) as T[];
-  }
-
-  private meshFromWeld(welded: TerrainTileBuffers): Mesh {
-    // Build a single mesh for all tiles from welded buffers
-    //   - Compute normals once on the welded geometry for smooth shading
-    //   - Apply a matte material (tiles shouldn't have specular highlights)
-    const tiles = new Mesh("terrain.tiles", this.scene);
-    const vd = new VertexData();
-    vd.positions = welded.positions;
-    vd.indices = welded.indices;
-    vd.colors = welded.colors;
-    const normals: number[] = [];
-    if (welded.positions.length && welded.indices.length)
-      VertexData.ComputeNormals(welded.positions, welded.indices, normals);
-    vd.normals = normals;
-    vd.applyToMesh(tiles, true);
-    const matTiles = new StandardMaterial("terrainMat.tiles", this.scene);
-    // Keep tiles matte; specular comes from water plane only
-    matTiles.specularColor = Color3.Black();
-    tiles.material = matTiles;
-    tiles.parent = this.root;
-
-    return tiles;
   }
 }

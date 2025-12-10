@@ -4,38 +4,30 @@ import { Tile } from "@/objects/game/Tile";
 
 export const terrainColorMap: Record<TypeKey, Color4> = {
   "terrainType:coast": Color4.FromHexString("#3d73a5"),
-  "terrainType:desert": Color4.FromHexString("#b3a500"),
+  "terrainType:desert": Color4.FromHexString("#b1ac1e"),
   "terrainType:grass": Color4.FromHexString("#3f6212"),
   "terrainType:lake": Color4.FromHexString("#505d67"),
   "terrainType:majorRiver": Color4.FromHexString("#50675e"),
   "terrainType:ocean": Color4.FromHexString("#172554"),
-  "terrainType:plains": Color4.FromHexString("#a58111"),
+  "terrainType:plains": Color4.FromHexString("#775416"),
+  "terrainType:rocks": Color4.FromHexString("#616161"),
   "terrainType:sea": Color4.FromHexString("#1e3a8a"),
   "terrainType:snow": Color4.FromHexString("#a0a0a0"),
-  "terrainType:rocks": Color4.FromHexString("#424242"),
   "terrainType:tundra": Color4.FromHexString("#3e5234"),
 };
 
-// Normal map file paths (served from /public). These are placeholders you can replace.
-// Shared groups:
-// - "sandy" for: ocean, sea, coast, lake, majorRiver, desert
-// - "undergrowth" for: tundra, grass, plains
-// - "rock" for: rocks
-// - "snow" for: snow
-export const terrainNormalMap: Record<TypeKey, string> = {
-  "terrainType:ocean": "/textures/normals/sand.png",
-  "terrainType:sea": "/textures/normals/sand.png",
-  "terrainType:coast": "/textures/normals/sand.png",
-  "terrainType:lake": "/textures/normals/sand.png",
-  "terrainType:majorRiver": "/textures/normals/sand.png",
-  "terrainType:desert": "/textures/normals/sand.png",
-
-  "terrainType:tundra": "/textures/normals/grass.png",
-  "terrainType:grass": "/textures/normals/grass.png",
-  "terrainType:plains": "/textures/normals/grass.png",
-
-  "terrainType:rocks": "/textures/normals/rock.png",
-  "terrainType:snow": "/textures/normals/snow.png",
+export const terrainBumpMap: Record<TypeKey, string> = {
+  "terrainType:coast": "/textures/bump/sand.png",
+  "terrainType:desert": "/textures/bump/sand.png",
+  "terrainType:grass": "/textures/bump/grass.png",
+  "terrainType:lake": "/textures/bump/sand.png",
+  "terrainType:majorRiver": "/textures/bump/sand.png",
+  "terrainType:ocean": "/textures/bump/sand.png",
+  "terrainType:plains": "/textures/bump/grass.png",
+  "terrainType:rocks": "/textures/bump/rocks.png",
+  "terrainType:sea": "/textures/bump/sand.png",
+  "terrainType:snow": "/textures/bump/snow.png",
+  "terrainType:tundra": "/textures/bump/grass.png",
 };
 
 export const allTerrainMaterials = (scene: Scene): Record<TypeKey, StandardMaterial> => {
@@ -44,7 +36,7 @@ export const allTerrainMaterials = (scene: Scene): Record<TypeKey, StandardMater
     const mat = new StandardMaterial(`mat-${key}`, scene);
     mat.diffuseColor = asColor3(color);
     mat.specularColor = Color3.Black();
-    mat.bumpTexture = new Texture(terrainNormalMap[key], scene);
+    mat.bumpTexture = new Texture(terrainBumpMap[key], scene);
     out[key] = mat;
   }
   return out;
@@ -63,4 +55,4 @@ export const colorOf = (tile: Tile, isCenter: boolean = false): Color4 => {
 
 export const asColor3 = (color: Color4): Color3 => new Color3(color.r, color.g, color.b);
 
-export const normalMapOf = (tile: Tile): string => terrainNormalMap[tile.terrain.key];
+export const bumpMapOf = (tile: Tile): string => terrainBumpMap[tile.terrain.key];
