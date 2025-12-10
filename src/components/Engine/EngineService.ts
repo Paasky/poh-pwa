@@ -15,18 +15,12 @@ import {
 } from "@babylonjs/core";
 import { ShadowGenerator } from "@babylonjs/core/Lights/Shadows/shadowGenerator";
 // Required side-effect to register ShadowGenerator with the Scene
-import "@babylonjs/core/Lights/Shadows/shadowGeneratorSceneComponent";
+import '@babylonjs/core/Lights/Shadows/shadowGeneratorSceneComponent'
 import { DefaultRenderingPipeline } from "@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/defaultRenderingPipeline";
-import { CreateScreenshotUsingRenderTarget } from "@babylonjs/core/Misc/screenshotTools";
-import { TerrainMeshBuilder } from "@/components/Engine/terrain/TerrainMeshBuilder";
-import {
-  clamp,
-  getWorldDepth,
-  getWorldMaxX,
-  getWorldMinX,
-  getWorldMinZ,
-  getWorldWidth,
-} from "@/components/Engine/math";
+import { CreateScreenshotUsingRenderTarget } from '@babylonjs/core/Misc/screenshotTools'
+import { clamp, getWorldDepth, getWorldMaxX, getWorldMinX, getWorldMinZ, getWorldWidth, } from '@/helpers/math'
+import { TerrainMeshBuilder } from '@/factories/TerrainMeshBuilder/TerrainMeshBuilder'
+import { useObjectsStore } from '@/stores/objectStore'
 
 export type EngineOptions = {
   // Camera UX
@@ -169,21 +163,21 @@ export class EngineService {
   maxZoomOut = 100; // larger = further
 
   // Headless/game state
-  world: WorldState;
+  world: WorldState
 
   // Babylon rendering state
-  engine: BabylonEngine;
-  scene: Scene;
-  canvas: HTMLCanvasElement;
-  minimapCanvas: HTMLCanvasElement;
+  engine: BabylonEngine
+  scene: Scene
+  canvas: HTMLCanvasElement
+  minimapCanvas: HTMLCanvasElement
 
-  camera: ArcRotateCamera;
-  minimapCamera: ArcRotateCamera;
-  light: HemisphericLight;
-  sunLight!: DirectionalLight;
-  shadowGen!: ShadowGenerator;
-  tileRoot: TransformNode;
-  terrainBuilder: TerrainMeshBuilder;
+  camera: ArcRotateCamera
+  minimapCamera: ArcRotateCamera
+  light: HemisphericLight
+  sunLight!: DirectionalLight
+  shadowGen!: ShadowGenerator
+  tileRoot: TransformNode
+  terrainBuilder: TerrainMeshBuilder
 
   // Options & rendering pipeline
   options: EngineOptions = { ...DefaultEngineOptions };
@@ -216,44 +210,45 @@ export class EngineService {
         powerPreference: this.options.powerPreference ?? "high-performance",
       },
       this.options.adaptToDeviceRatio ?? false,
-    );
-    this.scene = new Scene(this.engine);
-    this.scene.clearColor = new Color4(0.63, 0.63, 0.63, 1); // Same-ish as snow
+    )
+    this.scene = new Scene(this.engine)
+    this.scene.clearColor = new Color4(0.63, 0.63, 0.63, 1) // Same-ish as snow
 
     // Resolution / hardware scaling
     this.applyRenderScale(this.options.renderScale ?? 1);
 
     // Create Cameras and Light
-    this.camera = this.initCamera();
-    this.minimapCamera = this.initMinimap();
-    this.light = this.initLight();
+    this.camera = this.initCamera()
+    this.minimapCamera = this.initMinimap()
+    this.light = this.initLight()
 
     // Post-process pipeline (FXAA / Bloom / HDR)
     this.rebuildPipeline();
 
     // Build merged terrain mesh (new pipeline)
-    this.terrainBuilder = new TerrainMeshBuilder(this.scene, this.world, {
-      smoothing: 0.6,
-      jitter: 0.04,
-    });
-    this.tileRoot = this.terrainBuilder.build();
+    this.terrainBuilder = new TerrainMeshBuilder(
+      this.scene,
+      { x: this.world.sizeX, y: this.world.sizeY },
+      useObjectsStore().getTiles
+    )
+    this.tileRoot = this.terrainBuilder.build().root
 
     // Shadows: make terrain cast/receive
-    const land = this.terrainBuilder.getMesh();
+    const land = this.terrainBuilder.getMesh()
     if (land) {
-      land.receiveShadows = true;
-      this.shadowGen.addShadowCaster(land, true);
+      land.receiveShadows = true
+      this.shadowGen.addShadowCaster(land, true)
     }
-    const water = this.scene.getMeshByName("terrain.water.plane");
+    const water = this.scene.getMeshByName('terrain.water.plane')
     if (water) {
       // Optional: water receives soft shadows from terrain
-      water.receiveShadows = true;
+      water.receiveShadows = true
     }
 
     // Once the scene is ready, capture a one-time minimap image into the minimap canvas
     this.scene.executeWhenReady(() => {
-      this.captureMinimap();
-    });
+      this.captureMinimap()
+    })
 
     // Render loop with optional FPS cap
     this.engine.runRenderLoop(() => {
@@ -263,77 +258,77 @@ export class EngineService {
         if (now - this._lastRenderTime < minDelta) return;
         this._lastRenderTime = now;
       }
-      this.scene.render();
-    });
+      this.scene.render()
+    })
 
     // Resize to window
-    this.engine.resize();
-    window.addEventListener("resize", this.onResize);
+    this.engine.resize()
+    window.addEventListener('resize', this.onResize)
   }
 
-  captureMinimap(): EngineService {
+  captureMinimap (): EngineService {
     // Render a 512x256 screenshot using the orthographic minimap camera and draw it to the canvas
-    const width = 512;
-    const height = 256;
+    const width = 512
+    const height = 256
 
     CreateScreenshotUsingRenderTarget(
       this.engine,
       this.minimapCamera,
       { width, height },
       (data) => {
-        const ctx = this.minimapCanvas.getContext("2d");
-        if (!ctx) return;
-        const img = new Image();
+        const ctx = this.minimapCanvas.getContext('2d')
+        if (!ctx) return
+        const img = new Image()
         img.onload = () => {
-          ctx.clearRect(0, 0, width, height);
-          ctx.drawImage(img, 0, 0, width, height);
-        };
-        img.src = data as string;
+          ctx.clearRect(0, 0, width, height)
+          ctx.drawImage(img, 0, 0, width, height)
+        }
+        img.src = data as string
       },
-    );
+    )
 
-    return this;
+    return this
   }
 
-  detach(): void {
-    window.removeEventListener("resize", this.onResize);
-    this.engine.stopRenderLoop();
-    this.terrainBuilder.dispose();
+  detach (): void {
+    window.removeEventListener('resize', this.onResize)
+    this.engine.stopRenderLoop()
+    this.terrainBuilder.dispose()
     if (this.pipeline) {
       this.pipeline.dispose();
       this.pipeline = undefined;
     }
-    this.scene.dispose();
-    this.engine.dispose();
+    this.scene.dispose()
+    this.engine.dispose()
   }
 
   // Public: move instantly to a percentage of world width/depth (0..1 each)
-  flyTo(xPercent: number, yPercent: number): EngineService {
+  flyTo (xPercent: number, yPercent: number): EngineService {
     // Clamp percents
-    const widthPercent = clamp(xPercent, 0, 1);
-    const depthPercent = clamp(yPercent, 0, 1);
+    const widthPercent = clamp(xPercent, 0, 1)
+    const depthPercent = clamp(yPercent, 0, 1)
 
     // Map to world coordinates
-    const worldWidth = getWorldWidth(this.world.sizeX);
-    const worldDepth = getWorldDepth(this.world.sizeY);
+    const worldWidth = getWorldWidth(this.world.sizeX)
+    const worldDepth = getWorldDepth(this.world.sizeY)
     const target = new Vector3(
       getWorldMaxX(worldWidth) - widthPercent * worldWidth,
       0,
       getWorldMinZ(worldDepth) + depthPercent * worldDepth,
-    );
+    )
 
     // Apply instantly
-    this.camera.target.copyFrom(target);
+    this.camera.target.copyFrom(target)
 
-    return this;
+    return this
   }
 
-  private initCamera(): ArcRotateCamera {
-    if (!this.world) throw new Error("EngineService.init() must be called before attach()");
+  private initCamera (): ArcRotateCamera {
+    if (!this.world) throw new Error('EngineService.init() must be called before attach()')
 
     // Create Camera at the World center with max zoom in
     const camera = new ArcRotateCamera(
-      "camera",
+      'camera',
       Math.PI / 2, // Look North
       this.maxTilt, // Full Tilt
       this.maxZoomIn, // Zoomed in
@@ -343,12 +338,12 @@ export class EngineService {
     this.camera = camera;
 
     // Controls (clear all, then add back the ones we want)
-    camera.inputs.clear();
+    camera.inputs.clear()
 
     // a) Zoom Control from the mouse wheel
-    camera.inputs.addMouseWheel();
-    camera.wheelDeltaPercentage = 0.02;
-    camera.useNaturalPinchZoom = true;
+    camera.inputs.addMouseWheel()
+    camera.wheelDeltaPercentage = 0.02
+    camera.useNaturalPinchZoom = true
 
     // b) Rotation Control from the mouse right and middle buttons
     camera.attachControl(this.canvas, true);
@@ -358,169 +353,169 @@ export class EngineService {
     this.setManualTilt(!!this.options.manualTilt);
 
     // c) Panning Control from the mouse left button
-    let dragging = false;
-    let lastX = 0;
-    let lastY = 0;
+    let dragging = false
+    let lastX = 0
+    let lastY = 0
     this.scene.onPointerObservable.add((pi) => {
-      const ev = pi.event;
+      const ev = pi.event
       if (pi.type === PointerEventTypes.POINTERDOWN) {
         if (ev.button === 0) {
           // 0 = Left mouse button
-          dragging = true;
-          lastX = ev.clientX;
-          lastY = ev.clientY;
+          dragging = true
+          lastX = ev.clientX
+          lastY = ev.clientY
         }
       }
 
       if (pi.type === PointerEventTypes.POINTERUP) {
-        dragging = false;
+        dragging = false
       }
 
       if (pi.type === PointerEventTypes.POINTERMOVE) {
-        if (!dragging) return;
+        if (!dragging) return
 
-        const dx = ev.clientX - lastX;
-        const dy = ev.clientY - lastY;
-        lastX = ev.clientX;
-        lastY = ev.clientY;
+        const dx = ev.clientX - lastX
+        const dy = ev.clientY - lastY
+        lastX = ev.clientX
+        lastY = ev.clientY
 
         // zoom-scaled speed
-        const k = (this.panSpeed / 625) * (camera.radius / camera.lowerRadiusLimit!);
+        const k = (this.panSpeed / 625) * (camera.radius / camera.lowerRadiusLimit!)
 
-        camera.target.x += dx * k;
-        camera.target.z -= dy * k;
+        camera.target.x += dx * k
+        camera.target.z -= dy * k
       }
-    });
+    })
 
     // Rotation/Tilt/Zoom limits
 
     // a) Rotation (Left-Right)
-    const rotationNorth = Math.PI / 2;
-    camera.lowerAlphaLimit = rotationNorth - this.maxRotation;
-    camera.upperAlphaLimit = rotationNorth + this.maxRotation;
+    const rotationNorth = Math.PI / 2
+    camera.lowerAlphaLimit = rotationNorth - this.maxRotation
+    camera.upperAlphaLimit = rotationNorth + this.maxRotation
 
     // b) Tilt
-    camera.upperBetaLimit = this.maxTilt; // How much the camera can tilt upwards towards the horizon
-    camera.lowerBetaLimit = this.minTilt; // How close to top-down the camera can get
+    camera.upperBetaLimit = this.maxTilt // How much the camera can tilt upwards towards the horizon
+    camera.lowerBetaLimit = this.minTilt // How close to top-down the camera can get
 
     // c) Zoom
-    camera.lowerRadiusLimit = this.maxZoomIn;
-    camera.upperRadiusLimit = this.maxZoomOut;
+    camera.lowerRadiusLimit = this.maxZoomIn
+    camera.upperRadiusLimit = this.maxZoomOut
 
     // Panning and auto-tilt Camera values
 
     // World size math once
-    const worldWidth = getWorldWidth(this.world.sizeX);
-    const worldMinX = getWorldMinX(worldWidth);
-    const worldMaxX = getWorldMaxX(worldWidth);
+    const worldWidth = getWorldWidth(this.world.sizeX)
+    const worldMinX = getWorldMinX(worldWidth)
+    const worldMaxX = getWorldMaxX(worldWidth)
 
     // Clamp to N/S poles
     // Wrap X (West-East) for a simulated "globe" effect
     // Auto-tilt on zoom
     camera.onViewMatrixChangedObservable.add(() => {
-      const t = camera.target;
+      const t = camera.target
 
       // Clamp Z (North-South) normally
-      const minZ = -this.world!.sizeY / 1.385;
-      const maxZ = this.world!.sizeY / 1.425;
-      t.z = Math.min(Math.max(t.z, minZ), maxZ);
+      const minZ = -this.world!.sizeY / 1.385
+      const maxZ = this.world!.sizeY / 1.425
+      t.z = Math.min(Math.max(t.z, minZ), maxZ)
 
       // Wrap X (West-East)
-      if (t.x > worldMaxX) t.x -= worldWidth;
-      else if (t.x < worldMinX) t.x += worldWidth;
+      if (t.x > worldMaxX) t.x -= worldWidth
+      else if (t.x < worldMinX) t.x += worldWidth
 
       // Auto-tilt if manualTilt === false
       if (!this.options.manualTilt) {
-        const frac = (camera.radius - this.maxZoomIn) / (this.maxZoomOut - this.maxZoomIn);
-        camera.beta = this.maxTilt - frac * (this.maxTilt - this.minTilt);
+        const frac = (camera.radius - this.maxZoomIn) / (this.maxZoomOut - this.maxZoomIn)
+        camera.beta = this.maxTilt - frac * (this.maxTilt - this.minTilt)
       }
-    });
+    })
 
     return camera;
   }
 
-  private initLight(): HemisphericLight {
+  private initLight (): HemisphericLight {
     // Ambient fill light so shaded areas are not fully black
-    const hemi = new HemisphericLight("light.ambient", new Vector3(0, 1, 0), this.scene);
+    const hemi = new HemisphericLight('light.ambient', new Vector3(0, 1, 0), this.scene)
     // Reduce ambient to deepen shadows and remove hemi specular highlights
     hemi.intensity = 0.2;
     // Remove hemispheric specular contribution (reflections come from sun only)
     // noinspection SuspiciousTypeOfGuard
-    (hemi as unknown as { specular?: Color3 }).specular = Color3.Black();
+    (hemi as unknown as { specular?: Color3 }).specular = Color3.Black()
 
     // Sun directional light for shadows
     // We'll drive its direction dynamically relative to the camera each frame so
     // shadows remain readable: sun sits lower in the sky and behind the camera view.
-    const sun = new DirectionalLight("light.sun", new Vector3(0, -1, 0), this.scene);
+    const sun = new DirectionalLight('light.sun', new Vector3(0, -1, 0), this.scene)
     // Boost sun to compensate for lower ambient and create stronger, darker shadows
-    sun.intensity = 1.8;
-    this.sunLight = sun;
+    sun.intensity = 1.8
+    this.sunLight = sun
 
     // Shadow generator
-    const sg = new ShadowGenerator(2048, sun);
-    sg.bias = 0.0005;
-    sg.normalBias = 0.02;
-    sg.usePoissonSampling = true; // stable, good default across platforms
-    this.shadowGen = sg;
+    const sg = new ShadowGenerator(2048, sun)
+    sg.bias = 0.0005
+    sg.normalBias = 0.02
+    sg.usePoissonSampling = true // stable, good default across platforms
+    this.shadowGen = sg
 
     // Keep the sun anchored around the camera target so shadow map follows panning
     // Place it further back and lower to make shadows more apparent.
-    const followDistance = 100;
+    const followDistance = 100
     this.scene.onBeforeRenderObservable.add(() => {
-      const t = this.camera.target;
+      const t = this.camera.target
       // Compute view direction from camera to target
-      const viewDir = t.subtract(this.camera.position).normalize();
+      const viewDir = t.subtract(this.camera.position).normalize()
       // Put sun behind the camera, with a guaranteed downward component to bring it lower
-      let sx = -viewDir.x - 4;
-      let sy = -Math.abs(viewDir.y) - 0.5; // push downward to ~2-3pm feel
-      let sz = -viewDir.z;
-      const len = Math.hypot(sx, sy, sz) || 1;
-      sx /= len;
-      sy /= len;
-      sz /= len;
+      let sx = -viewDir.x - 4
+      let sy = -Math.abs(viewDir.y) - 0.5 // push downward to ~2-3pm feel
+      let sz = -viewDir.z
+      const len = Math.hypot(sx, sy, sz) || 1
+      sx /= len
+      sy /= len
+      sz /= len
 
       // Position along this direction at a fixed distance, looking at the target
       const pos = new Vector3(
         t.x - sx * followDistance,
         t.y - sy * followDistance,
         t.z - sz * followDistance,
-      );
-      sun.position.copyFrom(pos);
-      sun.setDirectionToTarget(t);
-    });
+      )
+      sun.position.copyFrom(pos)
+      sun.setDirectionToTarget(t)
+    })
 
-    return hemi;
+    return hemi
   }
 
-  private initMinimap(): ArcRotateCamera {
+  private initMinimap (): ArcRotateCamera {
     // Top-down orthographic camera centered on the world
     const camera = new ArcRotateCamera(
-      "minimapCamera",
+      'minimapCamera',
       Math.PI / 2, // look North
       0.0001, // nearly top-down
       10,
       new Vector3(0, 0, 0),
       this.scene,
-    );
-    camera.mode = Camera.ORTHOGRAPHIC_CAMERA;
+    )
+    camera.mode = Camera.ORTHOGRAPHIC_CAMERA
 
     // Lock rotation/tilt
-    camera.lowerAlphaLimit = Math.PI / 2;
-    camera.upperAlphaLimit = Math.PI / 2;
-    camera.lowerBetaLimit = 0;
-    camera.upperBetaLimit = 0;
-    camera.panningSensibility = 0;
+    camera.lowerAlphaLimit = Math.PI / 2
+    camera.upperAlphaLimit = Math.PI / 2
+    camera.lowerBetaLimit = 0
+    camera.upperBetaLimit = 0
+    camera.panningSensibility = 0
 
     // Cover the full world extents with a small margin
-    const halfWidth = getWorldWidth(this.world.sizeX) / 2;
-    const halfDepth = getWorldDepth(this.world.sizeY) / 2;
-    camera.orthoLeft = -halfWidth;
-    camera.orthoRight = halfWidth;
-    camera.orthoBottom = -halfDepth;
-    camera.orthoTop = halfDepth;
+    const halfWidth = getWorldWidth(this.world.sizeX) / 2
+    const halfDepth = getWorldDepth(this.world.sizeY) / 2
+    camera.orthoLeft = -halfWidth
+    camera.orthoRight = halfWidth
+    camera.orthoBottom = -halfDepth
+    camera.orthoTop = halfDepth
 
     // Do not attach controls; this camera is only for minimap capture
-    return camera;
+    return camera
   }
 
   private onResize = () => {
