@@ -4,16 +4,16 @@ import { Tile } from "@/objects/game/Tile";
 
 export const terrainColorMap: Record<TypeKey, Color4> = {
   "terrainType:coast": Color4.FromHexString("#3d73a5"),
-  "terrainType:desert": Color4.FromHexString("#b1ac1e"),
+  "terrainType:desert": Color4.FromHexString("#d1d143"),
   "terrainType:grass": Color4.FromHexString("#3f6212"),
   "terrainType:lake": Color4.FromHexString("#505d67"),
   "terrainType:majorRiver": Color4.FromHexString("#50675e"),
   "terrainType:ocean": Color4.FromHexString("#172554"),
-  "terrainType:plains": Color4.FromHexString("#775416"),
-  "terrainType:rocks": Color4.FromHexString("#616161"),
+  "terrainType:plains": Color4.FromHexString("#81791c"),
   "terrainType:sea": Color4.FromHexString("#1e3a8a"),
-  "terrainType:snow": Color4.FromHexString("#a0a0a0"),
-  "terrainType:tundra": Color4.FromHexString("#3e5234"),
+  "terrainType:snow": Color4.FromHexString("#ffffff"),
+  "terrainType:rocks": Color4.FromHexString("#484848"),
+  "terrainType:tundra": Color4.FromHexString("#3b5118"),
 };
 
 export const terrainBumpMap: Record<TypeKey, string> = {
