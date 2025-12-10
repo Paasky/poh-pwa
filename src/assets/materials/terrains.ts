@@ -23,16 +23,16 @@ export const terrainColorMap: Record<TypeKey, Color4> = {
 // - "rock" for: rocks
 // - "snow" for: snow
 export const terrainNormalMap: Record<TypeKey, string> = {
-  "terrainType:ocean": "/textures/normals/sandy.png",
-  "terrainType:sea": "/textures/normals/sandy.png",
-  "terrainType:coast": "/textures/normals/sandy.png",
-  "terrainType:lake": "/textures/normals/sandy.png",
-  "terrainType:majorRiver": "/textures/normals/sandy.png",
-  "terrainType:desert": "/textures/normals/sandy.png",
+  "terrainType:ocean": "/textures/normals/sand.png",
+  "terrainType:sea": "/textures/normals/sand.png",
+  "terrainType:coast": "/textures/normals/sand.png",
+  "terrainType:lake": "/textures/normals/sand.png",
+  "terrainType:majorRiver": "/textures/normals/sand.png",
+  "terrainType:desert": "/textures/normals/sand.png",
 
-  "terrainType:tundra": "/textures/normals/undergrowth.png",
-  "terrainType:grass": "/textures/normals/undergrowth.png",
-  "terrainType:plains": "/textures/normals/undergrowth.png",
+  "terrainType:tundra": "/textures/normals/grass.png",
+  "terrainType:grass": "/textures/normals/grass.png",
+  "terrainType:plains": "/textures/normals/grass.png",
 
   "terrainType:rocks": "/textures/normals/rock.png",
   "terrainType:snow": "/textures/normals/snow.png",

@@ -252,7 +252,7 @@ export function wrapX(size: Coords, x: number) {
   return m < 0 ? m + size.x : m;
 }
 
-export const waterLevel = -0.1;
+export const waterLevel = -0.2;
 export const maxWaterHeight = -0.3;
 
 export function tileHeight(tile: Tile): number {

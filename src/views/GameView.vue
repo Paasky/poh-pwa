@@ -37,7 +37,7 @@ onUnmounted(() => {
 
 // Quit confirmation state & stop accidental nav-ing away
 // Set to false to enable the "Are you sure you want to quit?" browser prompt
-let userHasQuit = false;
+let userHasQuit = true;
 
 function confirmReload() {
   userHasQuit = true;
