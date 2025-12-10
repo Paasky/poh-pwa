@@ -1,5 +1,6 @@
 import { Tile } from "@/objects/game/Tile";
 import { GameKey } from "@/objects/game/_GameObject";
+import { getRandom } from "@/helpers/arrayTools";
 
 export type CompassHexEdge = "ne" | "e" | "se" | "sw" | "w" | "nw";
 export type CompassHexCorner = "n" | "se" | "sw" | "s" | "nw" | "ne";
@@ -35,14 +36,16 @@ export function getHexNeighbor(
   direction: CompassHexEdge,
 ): Tile | null {
   const dirCoords = getHexNeighborDirections(tile.y)[direction];
-  return getTile(
-    size,
-    {
-      x: tile.x + dirCoords.x,
-      y: tile.y + dirCoords.y,
-    },
-    tiles,
-  );
+  return dirCoords
+    ? getTile(
+        size,
+        {
+          x: tile.x + dirCoords.x,
+          y: tile.y + dirCoords.y,
+        },
+        tiles,
+      )
+    : null;
 }
 
 // Returns the two neighbor direction deltas (relative to the center tile)
@@ -249,28 +252,30 @@ export function wrapX(size: Coords, x: number) {
   return m < 0 ? m + size.x : m;
 }
 
+export const waterLevel = -0.1;
+export const maxWaterHeight = -0.3;
+
 export function tileHeight(tile: Tile): number {
   if (tile.terrain.key === "terrainType:ocean") {
-    return -0.8;
+    return getRandom([-1, -1.1, -1.2]);
   }
   if (tile.terrain.key === "terrainType:sea") {
-    return -0.6;
+    return getRandom([-0.65, -0.7, -0.75]);
   }
-  if (
-    tile.terrain.key === "terrainType:coast" ||
-    tile.terrain.key === "terrainType:lake" ||
-    tile.terrain.key === "terrainType:majorRiver"
-  ) {
-    return -0.4;
+  if (tile.terrain.key === "terrainType:coast") {
+    return getRandom([-0.38, -0.4, -0.42]);
+  }
+  if (tile.terrain.key === "terrainType:lake" || tile.terrain.key === "terrainType:majorRiver") {
+    return getRandom([-0.4]);
   }
   if (tile.elevation.key === "elevationType:hill") {
-    return 0.6;
+    return getRandom([0.2, 0.25, 0.3]);
   }
   if (tile.elevation.key === "elevationType:mountain") {
-    return 1.6;
+    return getRandom([0.6, 0.8, 1, 1.2]);
   }
   if (tile.elevation.key === "elevationType:snowMountain") {
-    return 2;
+    return getRandom([1.4, 1.6, 1.8, 2]);
   }
   return 0;
 }

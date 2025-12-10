@@ -5,22 +5,25 @@ import {
   Coords,
   getHexCornerNeighbors,
   getHexNeighbor,
+  maxWaterHeight,
   tileHeight,
+  waterLevel,
 } from "@/helpers/mapTools";
 import { range } from "@/helpers/arrayTools";
 import { pointsInRing } from "@/factories/TerrainMeshBuilder/pointsInRing";
 import { hexTrianglesFromPoints } from "@/factories/TerrainMeshBuilder/hexTrianglesFromPoints";
-import { colorOf, terrainColorMap } from "@/assets/materials/terrains";
+import { asColor3, colorOf, terrainColorMap } from "@/assets/materials/terrains";
 import {
   Color3,
   Color4,
   Mesh,
+  MeshBuilder,
   Scene,
   StandardMaterial,
   TransformNode,
   VertexData,
 } from "@babylonjs/core";
-import { avg, tileCenter } from "@/helpers/math";
+import { avg, clamp, getWorldDepth, getWorldWidth, tileCenter } from "@/helpers/math";
 import { buildHexGpuBuffer } from "@/factories/TerrainMeshBuilder/buildHexGpuBuffer";
 import {
   HexMeshConf,
@@ -28,7 +31,6 @@ import {
   TerrainTileBuffers,
 } from "@/factories/TerrainMeshBuilder/_terrainMeshTypes";
 import { weldGpuBuffer } from "@/factories/TerrainMeshBuilder/weldGpuBuffer";
-import { createWaterMesh } from "@/factories/TerrainMeshBuilder/waterMesh";
 
 export class TerrainMeshBuilder {
   scene: Scene;
@@ -56,7 +58,7 @@ export class TerrainMeshBuilder {
     scene: Scene,
     size: Coords,
     tilesByKey: Record<string, Tile>,
-    hexRingCount: number = 1,
+    hexRingCount: number = 3,
   ) {
     this.scene = scene;
     this.size = size;
@@ -133,6 +135,14 @@ export class TerrainMeshBuilder {
     // Note: Keep the root as other things may be attached to it, we are just clearing our internal data
   }
 
+  getMesh(): Mesh | null {
+    return this.mesh;
+  }
+
+  getWaterMesh(): Mesh | null {
+    return this.waterMesh;
+  }
+
   // If corner and edge are both undefined, assume it's the center vertex
   private getColor(
     center: HexMeshConf,
@@ -141,21 +151,44 @@ export class TerrainMeshBuilder {
     corner?: CompassHexCorner,
     edge?: CompassHexEdge,
   ) {
-    // center vertex
-    if (!corner && !edge) return center.color;
+    // center-ish vertex
+    if (ringNumFromCenter <= 1) return center.color;
 
     // The closer to the center, the more we emphasize the center
     const affectingColors = this.centerAffection(ringNumFromCenter, center.color);
 
-    if (corner) {
+    // Only affect E-SW in the compass to prevent cross-contamination
+    if (corner && ["se", "s", "sw"].includes(corner)) {
       const cornerNeighbors = getHexCornerNeighbors(this.size, tile, this.tilesByKey, corner);
-      affectingColors.push(
-        cornerNeighbors[0] ? colorOf(cornerNeighbors[0]) : this.snowColor,
-        cornerNeighbors[1] ? colorOf(cornerNeighbors[1]) : this.snowColor,
-      );
-    } else if (edge) {
+      for (const neighbor of [cornerNeighbors[0], cornerNeighbors[1]]) {
+        // No neighbor -> it's the N/S Pole
+        if (!neighbor) {
+          affectingColors.push(this.snowColor);
+          continue;
+        }
+
+        // If we are above water and the neighbor is not, their color cannot affect us
+        if (center.height > waterLevel && tileHeight(neighbor) < waterLevel) {
+          continue;
+        }
+
+        affectingColors.push(colorOf(neighbor));
+      }
+    }
+
+    // Only affect E-SW in the compass to prevent cross-contamination
+    if (edge && ["e", "se", "sw"].includes(edge)) {
       const edgeNeighbor = getHexNeighbor(this.size, tile, this.tilesByKey, edge);
-      affectingColors.push(edgeNeighbor ? colorOf(edgeNeighbor) : this.snowColor);
+
+      // No neighbor -> it's the N/S Pole
+      if (!edgeNeighbor) {
+        affectingColors.push(this.snowColor);
+      } else {
+        // If we are above water and the neighbor is not, their color cannot affect us
+        if (!(center.height > waterLevel && tileHeight(edgeNeighbor) < waterLevel)) {
+          affectingColors.push(colorOf(edgeNeighbor));
+        }
+      }
     }
 
     return new Color4(
@@ -166,14 +199,6 @@ export class TerrainMeshBuilder {
     );
   }
 
-  getMesh(): Mesh | null {
-    return this.mesh;
-  }
-
-  getWaterMesh(): Mesh | null {
-    return this.waterMesh;
-  }
-
   // If corner and edge are both undefined, assume it's the center vertex
   private getHeight(
     center: HexMeshConf,
@@ -182,31 +207,47 @@ export class TerrainMeshBuilder {
     corner?: CompassHexCorner,
     edge?: CompassHexEdge,
   ) {
-    // center vertex
-    if (!corner && !edge) return center.height;
+    // center-ish vertex
+    if (ringNumFromCenter <= 0) return tileHeight(tile);
 
     // The closer to the center, the more we emphasize the center
-    const affectingHeights = this.centerAffection(ringNumFromCenter, center.height);
+    const affectingHeights = this.centerAffection(ringNumFromCenter, tileHeight(tile));
 
-    if (corner) {
+    // Only affect E-SW in the compass to prevent cross-contamination
+    if (corner && ["se", "s", "sw"].includes(corner)) {
       const cornerNeighbors = getHexCornerNeighbors(this.size, tile, this.tilesByKey, corner);
       affectingHeights.push(
-        cornerNeighbors[0] ? tileHeight(cornerNeighbors[0]) : 0,
-        cornerNeighbors[1] ? tileHeight(cornerNeighbors[1]) : 0,
+        cornerNeighbors[0] ? tileHeight(cornerNeighbors[0]) : tileHeight(tile),
+        cornerNeighbors[1] ? tileHeight(cornerNeighbors[1]) : tileHeight(tile),
       );
-    } else if (edge) {
-      const edgeNeighbor = getHexNeighbor(this.size, tile, this.tilesByKey, edge);
-      affectingHeights.push(edgeNeighbor ? tileHeight(edgeNeighbor) : 0);
     }
 
-    return avg(affectingHeights);
+    // Only affect E-SW in the compass to prevent cross-contamination
+    if (edge && ["e", "se", "sw"].includes(edge)) {
+      const edgeNeighbor = getHexNeighbor(this.size, tile, this.tilesByKey, edge);
+      affectingHeights.push(edgeNeighbor ? tileHeight(edgeNeighbor) : tileHeight(tile));
+    }
+
+    let height = avg(affectingHeights);
+
+    // If we're on the rim, add noise
+    if (ringNumFromCenter === this.hexRingCount) {
+      // Apply edge-noise only if it's clearly different from the center
+      if (height < center.height - 0.1 || height > center.height + 0.1) {
+        height += (Math.random() - 0.5) / 5;
+      }
+    }
+
+    // If we're below the water level, don't rise above it
+    if (center.height < waterLevel) {
+      return clamp(height, -3, maxWaterHeight);
+    }
+    return height;
   }
 
   private centerAffection<T>(ringNumFromCenter: number, fill: T): T[] {
     // 2x emphasis for Center vs. Neighbor
-    const centerEmphasis = ringNumFromCenter
-      ? 1
-      : Math.round((2 * this.hexRingCount) / ringNumFromCenter);
+    const centerEmphasis = Math.round(1 / (ringNumFromCenter / this.hexRingCount));
     return Array(centerEmphasis).fill(fill) as T[];
   }
 
@@ -232,6 +273,4 @@ export class TerrainMeshBuilder {
 
     return tiles;
   }
-
-  // Water helpers moved to waterMesh.ts
 }

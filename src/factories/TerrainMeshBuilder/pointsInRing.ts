@@ -16,11 +16,11 @@ export function pointsInRing(ringNumFromCenter: number, ringCount: number): Poin
   // NOTE! As we are dealing in x,z (not x,y), reality flips: north is 90deg, and counter-clockwise is to the right
   const corners = [
     { direction: 90, corner: "n", edge: "nw" },
-    { direction: 150, corner: "nw", edge: "sw" },
-    { direction: 210, corner: "sw", edge: "s" },
+    { direction: 150, corner: "nw", edge: "w" },
+    { direction: 210, corner: "sw", edge: "sw" },
     { direction: 270, corner: "s", edge: "se" },
-    { direction: 330, corner: "se", edge: "ne" },
-    { direction: 30, corner: "ne", edge: "n" },
+    { direction: 330, corner: "se", edge: "e" },
+    { direction: 30, corner: "ne", edge: "ne" },
   ] as { direction: number; corner: CompassHexCorner; edge: CompassHexEdge }[];
 
   const points: PointData[] = [];

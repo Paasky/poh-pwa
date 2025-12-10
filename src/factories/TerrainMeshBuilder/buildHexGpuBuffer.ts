@@ -39,7 +39,18 @@ export const buildHexGpuBuffer = (
   }));
 
   const positionBase = gpuBuffer.positions.length / 3;
-  gpuBuffer.colors.push(...colors.flatMap((c) => [c.r, c.g, c.b, c.a]));
-  gpuBuffer.positions.push(...positions.flatMap((p) => [p.x, p.y, p.z]));
+  gpuBuffer.colors.push(
+    ...colors.flatMap((c) => [
+      // Add slight color noise
+      c.r * (1 + (Math.random() - 0.5) / 15),
+      c.g * (1 + (Math.random() - 0.5) / 15),
+      c.b * (1 + (Math.random() - 0.5) / 15),
+      c.a,
+    ]),
+  );
+  gpuBuffer.positions.push(
+    // Add very slight height noise to make large flat plains get some variation
+    ...positions.flatMap((p) => [p.x, p.y + (Math.random() - 0.5) / 50, p.z]),
+  );
   gpuBuffer.indices.push(...triangles.map((i) => positionBase + i));
 };
