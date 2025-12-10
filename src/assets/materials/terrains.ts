@@ -1,4 +1,4 @@
-import { Color3, Color4, Scene, StandardMaterial } from "@babylonjs/core";
+import { Color3, Color4, Scene, StandardMaterial, Texture } from "@babylonjs/core";
 import { TypeKey } from "@/types/common";
 import { Tile } from "@/objects/game/Tile";
 
@@ -16,12 +16,35 @@ export const terrainColorMap: Record<TypeKey, Color4> = {
   "terrainType:tundra": Color4.FromHexString("#3e5234"),
 };
 
+// Normal map file paths (served from /public). These are placeholders you can replace.
+// Shared groups:
+// - "sandy" for: ocean, sea, coast, lake, majorRiver, desert
+// - "undergrowth" for: tundra, grass, plains
+// - "rock" for: rocks
+// - "snow" for: snow
+export const terrainNormalMap: Record<TypeKey, string> = {
+  "terrainType:ocean": "/textures/normals/sand.png",
+  "terrainType:sea": "/textures/normals/sand.png",
+  "terrainType:coast": "/textures/normals/sand.png",
+  "terrainType:lake": "/textures/normals/sand.png",
+  "terrainType:majorRiver": "/textures/normals/sand.png",
+  "terrainType:desert": "/textures/normals/sand.png",
+
+  "terrainType:tundra": "/textures/normals/grass.png",
+  "terrainType:grass": "/textures/normals/grass.png",
+  "terrainType:plains": "/textures/normals/grass.png",
+
+  "terrainType:rocks": "/textures/normals/rock.png",
+  "terrainType:snow": "/textures/normals/snow.png",
+};
+
 export const allTerrainMaterials = (scene: Scene): Record<TypeKey, StandardMaterial> => {
   const out = {} as Record<TypeKey, StandardMaterial>;
   for (const [key, color] of Object.entries(terrainColorMap) as [TypeKey, Color4][]) {
     const mat = new StandardMaterial(`mat-${key}`, scene);
     mat.diffuseColor = asColor3(color);
     mat.specularColor = Color3.Black();
+    mat.bumpTexture = new Texture(terrainNormalMap[key], scene);
     out[key] = mat;
   }
   return out;
@@ -39,3 +62,5 @@ export const colorOf = (tile: Tile, isCenter: boolean = false): Color4 => {
 };
 
 export const asColor3 = (color: Color4): Color3 => new Color3(color.r, color.g, color.b);
+
+export const normalMapOf = (tile: Tile): string => terrainNormalMap[tile.terrain.key];

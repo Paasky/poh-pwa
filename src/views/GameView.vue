@@ -37,8 +37,15 @@ onUnmounted(() => {
 
 // Quit confirmation state & stop accidental nav-ing away
 // Set to false to enable the "Are you sure you want to quit?" browser prompt
-let userHasQuit = false;
+let userHasQuit = true;
 
+function confirmReload() {
+  userHasQuit = true;
+  destroyFullscreen();
+
+  // Set the browser to home to fully destroy all stores
+  document.location.reload();
+}
 function confirmQuit() {
   userHasQuit = true;
   destroyFullscreen();
@@ -49,9 +56,7 @@ function confirmQuit() {
 
 function onBeforeUnload(e: BeforeUnloadEvent) {
   if (!userHasQuit) {
-    // Some browsers require setting returnValue to trigger the confirmation dialog
     e.preventDefault();
-    e.returnValue = "";
   }
 }
 </script>
@@ -79,13 +84,13 @@ function onBeforeUnload(e: BeforeUnloadEvent) {
     class="absolute top-0 left-0 w-100 h-100 overflow-hidden"
   >
     <!-- Top-left -->
-    <PlayerDetailsBar v-if="app.loaded" class="position-absolute top-0 left-0" style="z-index: 9" />
+    <PlayerDetailsBar v-if="app.loaded" class="position-absolute top-0 left-0" />
 
     <!-- Top-right -->
     <GameMenu
       v-if="app.loaded"
       class="position-absolute top-0 right-0"
-      style="z-index: 10"
+      @reload="confirmReload"
       @quit="confirmQuit"
     />
 
@@ -104,11 +109,7 @@ function onBeforeUnload(e: BeforeUnloadEvent) {
     />
 
     <!-- Bottom-left -->
-    <v-sheet
-      color="secondary"
-      class="position-absolute bottom-0 left-0 rounded-tr-lg pt-1 pr-1"
-      style="z-index: 10"
-    >
+    <v-sheet color="secondary" class="position-absolute bottom-0 left-0 rounded-tr-lg pt-1 pr-1">
       <Minimap />
     </v-sheet>
 
@@ -120,7 +121,7 @@ function onBeforeUnload(e: BeforeUnloadEvent) {
     />
 
     <!-- Bottom-right -->
-    <NextAction v-if="app.loaded" class="position-absolute bottom-0 right-0" style="z-index: 10" />
+    <NextAction v-if="app.loaded" class="position-absolute bottom-0 right-0" />
 
     <!-- Modals -->
     <PlayerDetailsDialog v-if="app.ready" />
@@ -134,7 +135,6 @@ function onBeforeUnload(e: BeforeUnloadEvent) {
       key="loader"
       color="background"
       class="d-flex align-center justify-center text-center position-absolute w-100 h-100 overflow-hidden"
-      style="z-index: 1000"
     >
       <div>
         <img src="/book.gif" alt="Book" width="480" height="480" decoding="async" />

@@ -12,18 +12,17 @@ import {
 import { range } from "@/helpers/arrayTools";
 import { pointsInRing } from "@/factories/TerrainMeshBuilder/pointsInRing";
 import { hexTrianglesFromPoints } from "@/factories/TerrainMeshBuilder/hexTrianglesFromPoints";
-import { asColor3, colorOf, terrainColorMap } from "@/assets/materials/terrains";
+import { colorOf, terrainColorMap } from "@/assets/materials/terrains";
 import {
   Color3,
   Color4,
   Mesh,
-  MeshBuilder,
   Scene,
   StandardMaterial,
   TransformNode,
   VertexData,
 } from "@babylonjs/core";
-import { avg, clamp, getWorldDepth, getWorldWidth, tileCenter } from "@/helpers/math";
+import { avg, clamp, tileCenter } from "@/helpers/math";
 import { buildHexGpuBuffer } from "@/factories/TerrainMeshBuilder/buildHexGpuBuffer";
 import {
   HexMeshConf,
@@ -31,6 +30,7 @@ import {
   TerrainTileBuffers,
 } from "@/factories/TerrainMeshBuilder/_terrainMeshTypes";
 import { weldGpuBuffer } from "@/factories/TerrainMeshBuilder/weldGpuBuffer";
+import { createWaterMesh } from "@/factories/TerrainMeshBuilder/waterMesh";
 
 export class TerrainMeshBuilder {
   scene: Scene;
@@ -50,6 +50,7 @@ export class TerrainMeshBuilder {
 
   mesh: Mesh | null = null;
   waterMesh: Mesh | null = null;
+  private waterDispose?: () => void;
 
   snowColor = terrainColorMap["terrainType:snow"];
 
@@ -110,7 +111,9 @@ export class TerrainMeshBuilder {
     this.mesh = this.meshFromWeld(welded);
 
     // Simple world-sized water plane to denote global sea level
-    this.waterMesh = this.waterPlane();
+    const water = createWaterMesh(this.scene, this.size, this.root);
+    this.waterMesh = water.mesh;
+    this.waterDispose = water.dispose;
 
     return this;
   }
@@ -121,9 +124,12 @@ export class TerrainMeshBuilder {
       colors: [],
       indices: [],
     };
+
     this.mesh?.dispose();
     this.mesh = null;
-    this.waterMesh?.dispose();
+
+    if (this.waterDispose) this.waterDispose();
+    this.waterDispose = undefined;
     this.waterMesh = null;
 
     // Note: Keep the root as other things may be attached to it, we are just clearing our internal data
@@ -266,25 +272,5 @@ export class TerrainMeshBuilder {
     tiles.parent = this.root;
 
     return tiles;
-  }
-
-  private waterPlane(): Mesh {
-    const worldWidth = getWorldWidth(this.size.x);
-    const worldDepth = getWorldDepth(this.size.y);
-    const waterPlane = MeshBuilder.CreateGround(
-      "terrain.water.plane",
-      { width: worldWidth, height: worldDepth, subdivisions: 1 },
-      this.scene,
-    );
-    // Place below ground level (y=0)
-    waterPlane.position.y = waterLevel;
-    const matWater = new StandardMaterial("terrainMat.water.plane", this.scene);
-    matWater.diffuseColor = asColor3(terrainColorMap["terrainType:ocean"]);
-    matWater.specularColor = new Color3(0.8, 0.85, 0.95);
-    matWater.specularPower = 128;
-    matWater.alpha = 0.5;
-    waterPlane.material = matWater;
-    waterPlane.parent = this.root;
-    return waterPlane;
   }
 }

@@ -46,7 +46,6 @@ export function hexTrianglesFromPoints(points: PointData[], ringCount: number): 
     const firstI1 = outerStart + (outerIdx % outerCount); // the last triangle of last step of last edge connects to this one
     for (let edge = 0; edge < 6; edge++) {
       const innerEdgeCount = r; // midpoints per edge = ring number
-
       for (let step = 0; step < innerEdgeCount; step++) {
         const i0 = innerStart + (innerIdx % innerCount); // inner current
         const i1 = outerStart + (outerIdx % outerCount); // outer current
