@@ -42,3 +42,5 @@ export const tileCenter = (size: Coords, tile: Tile): { x: number; z: number } =
 
 export const avg = (vals: number[]): number => (vals.length ? sum(vals) / vals.length : 0);
 export const sum = (vals: number[]): number => vals.reduce((acc, val) => acc + val, 0);
+export const degToRad = (deg: number) => deg * (Math.PI / 180);
+export const radToDeg = (rad: number) => rad * (180 / Math.PI);

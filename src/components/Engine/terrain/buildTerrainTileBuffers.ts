@@ -1,11 +1,12 @@
 import type { WorldState } from "@/types/common";
 import { Tile } from "@/objects/game/Tile";
-import { avg, tileCenter } from "@/components/Engine/math";
+import { avg, degToRad, tileCenter } from "@/components/Engine/math";
 import {
+  CompassHexCorner,
+  CompassHexEdge,
   Coords,
   getHexCornerNeighbors,
   getHexNeighbor,
-  pointsInRing,
   tileHeight,
 } from "@/helpers/mapTools";
 import { Color4 } from "@babylonjs/core";
@@ -166,4 +167,146 @@ function stitchHexRings(prevRingIndices: number[], currRingIndices: number[], in
     indices.push(p0, c0, c1); // CCW
     indices.push(p0, c1, c2); // CCW
   }
+}
+
+type EngineCoords = {
+  x: number;
+  z: number;
+};
+
+type VertexData = {
+  positions: number[];
+  colors: number[];
+  indices: number[];
+};
+
+export type PointData = {
+  x: number; // offset from the tile center
+  z: number; // offset from the tile center
+  ringNumFromCenter: number; // 0 for the center
+  corner?: CompassHexCorner;
+  edge?: CompassHexEdge;
+};
+
+export const k1Hex = (
+  // this is the center of the hex tile in the world
+  center: EngineCoords,
+
+  // Used to set the color of a vertex, e.g., getColor(2, "n", undefined) for "top corner in 2nd ring"
+  getColor: (ringNumFromCenter: number, corner?: CompassHexCorner, edge?: CompassHexEdge) => Color4,
+
+  // Used to set the height of a vertex, e.g., getY(3, undefined, "w") for "a left edge vertex in 3rd ring"
+  getY: (ringNumFromCenter: number, corner?: CompassHexCorner, edge?: CompassHexEdge) => number,
+
+  // Values will be pushed into this buffer
+  gpuBuffer: VertexData,
+) => {
+  // index numbers:
+  // 0: center
+  // 1: n corner
+  // 2: nw corner
+  // 3: sw corner
+  // 4: s corner
+  // 5: se corner
+  // 6: ne corner
+  const points = [...pointsInRing(0, 1), ...pointsInRing(1, 1)];
+
+  const triangles = [
+    // starting from the n corner, going counter-clockwise
+    // triangles are also walked counter-clockwise
+    1, 6, 0,
+
+    // nw corner
+    2, 1, 0,
+
+    // sw corner
+    3, 2, 0,
+
+    // s corner
+    4, 3, 0,
+
+    // se corner
+    5, 4, 0,
+
+    // ne corner
+    6, 5, 0,
+  ];
+  /*
+       1
+     /    \
+   2        6
+   |   0    |
+   3        5
+     \     /
+        4
+   */
+
+  const colors = points.map((p) => getColor(p.ringNumFromCenter, p.corner, p.edge));
+
+  const positions = points.map((p) => ({
+    x: center.x + p.x,
+    y: getY(p.ringNumFromCenter, p.corner, p.edge),
+    z: center.z + -p.z, // Z is inverted to match Babylon's coordinate system (N = -Z, S = +Z)
+  }));
+
+  gpuBuffer.positions.push(...positions.flatMap((p) => [p.x, p.y, p.z]));
+  gpuBuffer.colors.push(...colors.flatMap((c) => [c.r, c.g, c.b, c.a]));
+  gpuBuffer.indices.push(...triangles);
+};
+
+/**
+ * Returns hex points for a given ring index.
+ * Points are ordered counter-clockwise starting from the 0° (n) corner.
+ * Ring radius is scaled by ringIndex / totalRings.
+ */
+function pointsInRing(ringNumFromCenter: number, totalRings: number): PointData[] {
+  if (ringNumFromCenter === 0) return [{ x: 0, z: 0, ringNumFromCenter }];
+
+  const radius = ringNumFromCenter / totalRings;
+
+  // edge: starting from the corner, walking counter-clockwise
+  const corners = [
+    { direction: 0, corner: "n", edge: "nw" },
+    { direction: 300, corner: "nw", edge: "sw" },
+    { direction: 240, corner: "sw", edge: "s" },
+    { direction: 180, corner: "s", edge: "se" },
+    { direction: 120, corner: "se", edge: "ne" },
+    { direction: 60, corner: "ne", edge: "n" },
+  ] as { direction: number; corner: CompassHexCorner; edge: CompassHexEdge }[];
+
+  const points: PointData[] = [];
+
+  for (const [i, cornerData] of corners.entries()) {
+    // Convert angles to radians
+    // A = current angle, B = next angle (counter-clockwise)
+    const radA = degToRad(cornerData.direction);
+    const radB = degToRad(corners[(i + 1) % 6].direction);
+
+    // First point = corner
+    points.push({
+      x: Math.cos(radA) * radius,
+      z: Math.sin(radA) * radius,
+      ringNumFromCenter,
+      corner: cornerData.corner,
+    });
+
+    // When past the 1st ring, insert 1 intermediate point per nth ring over 1, along the same edge
+    // As we are building the points counter-clockwise, we will walk the edge counter-clockwise too
+    // (e.g., 2nd ring: edge = 2 corners + 1 mid-point, 3rd ring: 2 corners + 2 mid-points, etc.)
+    for (let step = 1; step < ringNumFromCenter; step++) {
+      const fractionAlongEdge = step / ringNumFromCenter;
+      points.push({
+        x:
+          (1 - fractionAlongEdge) * Math.cos(radA) * radius +
+          fractionAlongEdge * Math.cos(radB) * radius,
+        z:
+          (1 - fractionAlongEdge) * Math.sin(radA) * radius +
+          fractionAlongEdge * Math.sin(radB) * radius,
+        ringNumFromCenter,
+        edge: cornerData.edge,
+      });
+    }
+  }
+
+  return points;
 }
