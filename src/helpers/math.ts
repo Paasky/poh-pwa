@@ -1,5 +1,19 @@
 import type { Coords } from "@/helpers/mapTools";
 import type { Tile } from "@/objects/game/Tile";
+import { type EngineCoords } from "@/factories/TerrainMeshBuilder/_terrainMeshTypes";
+
+export const avg = (vals: number[]): number => (vals.length ? sum(vals) / vals.length : 0);
+
+export const clamp = (val: number, min: number, max: number): number =>
+  Math.max(min, Math.min(max, val));
+
+export const degToRad = (deg: number) => deg * (Math.PI / 180);
+
+export const radToDeg = (rad: number) => rad * (180 / Math.PI);
+
+export const sum = (vals: number[]): number => vals.reduce((acc, val) => acc + val, 0);
+
+// Hex Trigonometry
 
 export const hexDepth = 1.5;
 export const hexWidth = Math.sqrt(3);
@@ -11,21 +25,11 @@ export const getWorldMinZ = (worldDepth: number) => -worldDepth / 2;
 export const getWorldMaxX = (worldWidth: number) => worldWidth / 2;
 export const getWorldMaxZ = (worldDepth: number) => worldDepth / 2;
 
-export function clamp(val: number, min: number, max: number): number {
-  return Math.max(min, Math.min(max, val));
-}
-
-// Hex Trigonometry
-
-// x,z position of a hex corner, relative to the center
-export const getHexPointPosition = (
-  centerX: number,
-  centerZ: number,
-  angle: number,
-  distance = 1,
-) => ({
-  x: centerX + Math.cos(angle) * distance,
-  z: centerZ + Math.sin(angle) * distance,
+export const xInDir = (rad: number, radius: number): number => Math.cos(rad) * radius;
+export const zInDir = (rad: number, radius: number): number => Math.sin(rad) * radius;
+export const pointInDir = (rad: number, radius: number): EngineCoords => ({
+  x: xInDir(rad, radius),
+  z: zInDir(rad, radius),
 });
 
 export const tileCenter = (size: Coords, tile: Tile): { x: number; z: number } => {
@@ -39,8 +43,3 @@ export const tileCenter = (size: Coords, tile: Tile): { x: number; z: number } =
     z: offsetZ + hexDepth * tile.y,
   };
 };
-
-export const avg = (vals: number[]): number => (vals.length ? sum(vals) / vals.length : 0);
-export const sum = (vals: number[]): number => vals.reduce((acc, val) => acc + val, 0);
-export const degToRad = (deg: number) => deg * (Math.PI / 180);
-export const radToDeg = (rad: number) => rad * (180 / Math.PI);
