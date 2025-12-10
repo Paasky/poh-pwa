@@ -1,60 +1,58 @@
-import { CompassHexCorner, CompassHexEdge } from '@/helpers/mapTools'
-import { degToRad } from '@/helpers/math'
-import { PointData } from '@/factories/TerrainMeshBuilder/_terrainMeshTypes'
+import { CompassHexCorner, CompassHexEdge } from "@/helpers/mapTools";
+import { degToRad, pointInDir, xInDir, zInDir } from "@/helpers/math";
+import { PointData } from "@/factories/TerrainMeshBuilder/_terrainMeshTypes";
 
 /**
  * Returns hex points for a given ring index.
  * Points are ordered counter-clockwise starting from the 0° (n) corner.
- * Ring radius is scaled by ringIndex / totalRings.
+ * Ring radius is scaled by ringIndex / ringCount.
  */
-export function pointsInRing (ringNumFromCenter: number, totalRings: number): PointData[] {
-  if (ringNumFromCenter === 0) return [{ x: 0, z: 0, ringNumFromCenter }]
+export function pointsInRing(ringNumFromCenter: number, ringCount: number): PointData[] {
+  if (ringNumFromCenter === 0) return [{ x: 0, z: 0, ringNumFromCenter }];
 
-  const radius = ringNumFromCenter / totalRings
+  const radius = ringNumFromCenter / ringCount;
 
   // edge: starting from the corner, walking counter-clockwise
+  // NOTE! As we are dealing in x,z (not x,y), reality flips: north is 90deg, and counter-clockwise is to the right
   const corners = [
-    { direction: 0, corner: 'n', edge: 'nw' },
-    { direction: 300, corner: 'nw', edge: 'sw' },
-    { direction: 240, corner: 'sw', edge: 's' },
-    { direction: 180, corner: 's', edge: 'se' },
-    { direction: 120, corner: 'se', edge: 'ne' },
-    { direction: 60, corner: 'ne', edge: 'n' },
-  ] as { direction: number; corner: CompassHexCorner; edge: CompassHexEdge }[]
+    { direction: 90, corner: "n", edge: "nw" },
+    { direction: 150, corner: "nw", edge: "sw" },
+    { direction: 210, corner: "sw", edge: "s" },
+    { direction: 270, corner: "s", edge: "se" },
+    { direction: 330, corner: "se", edge: "ne" },
+    { direction: 30, corner: "ne", edge: "n" },
+  ] as { direction: number; corner: CompassHexCorner; edge: CompassHexEdge }[];
 
-  const points: PointData[] = []
+  const points: PointData[] = [];
 
   for (const [i, cornerData] of corners.entries()) {
     // Convert angles to radians
     // A = current angle, B = next angle (counter-clockwise)
-    const radA = degToRad(cornerData.direction)
-    const radB = degToRad(corners[(i + 1) % 6].direction)
+    const radA = degToRad(cornerData.direction);
+    const radB = degToRad(corners[(i + 1) % 6].direction);
 
     // First point = corner
     points.push({
-      x: Math.cos(radA) * radius,
-      z: Math.sin(radA) * radius,
+      ...pointInDir(radA, radius),
       ringNumFromCenter,
       corner: cornerData.corner,
-    })
+    });
 
     // When past the 1st ring, insert 1 intermediate point per nth ring over 1, along the same edge
     // As we are building the points counter-clockwise, we will walk the edge counter-clockwise too
     // (e.g., 2nd ring: edge = 2 corners + 1 mid-point, 3rd ring: 2 corners + 2 mid-points, etc.)
     for (let step = 1; step < ringNumFromCenter; step++) {
-      const fractionAlongEdge = step / ringNumFromCenter
+      const fractionAlongEdge = step / ringNumFromCenter;
       points.push({
         x:
-          (1 - fractionAlongEdge) * Math.cos(radA) * radius +
-          fractionAlongEdge * Math.cos(radB) * radius,
+          (1 - fractionAlongEdge) * xInDir(radA, radius) + fractionAlongEdge * xInDir(radB, radius),
         z:
-          (1 - fractionAlongEdge) * Math.sin(radA) * radius +
-          fractionAlongEdge * Math.sin(radB) * radius,
+          (1 - fractionAlongEdge) * zInDir(radA, radius) + fractionAlongEdge * zInDir(radB, radius),
         ringNumFromCenter,
         edge: cornerData.edge,
-      })
+      });
     }
   }
 
-  return points
+  return points;
 }
