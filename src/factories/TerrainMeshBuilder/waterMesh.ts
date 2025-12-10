@@ -11,7 +11,7 @@ import {
   TransformNode,
 } from "@babylonjs/core";
 
-import type { Coords } from "@/helpers/mapTools";
+import { Coords, waterLevel } from "@/helpers/mapTools";
 
 export type WaterMeshHandle = {
   mesh: Mesh;
@@ -32,8 +32,7 @@ export function createWaterMesh(
     scene,
   );
   if (parent) waterPlane.parent = parent;
-  // Place between ground (0) and coast floor (-0.4)
-  waterPlane.position.y = -0.2;
+  waterPlane.position.y = waterLevel;
 
   const matWater = new StandardMaterial("terrainMat.water.plane", scene);
   matWater.diffuseColor = asColor3(terrainColorMap["terrainType:ocean"]);

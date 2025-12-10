@@ -12,18 +12,17 @@ import {
 import { range } from "@/helpers/arrayTools";
 import { pointsInRing } from "@/factories/TerrainMeshBuilder/pointsInRing";
 import { hexTrianglesFromPoints } from "@/factories/TerrainMeshBuilder/hexTrianglesFromPoints";
-import { asColor3, colorOf, terrainColorMap } from "@/assets/materials/terrains";
+import { colorOf, terrainColorMap } from "@/assets/materials/terrains";
 import {
   Color3,
   Color4,
   Mesh,
-  MeshBuilder,
   Scene,
   StandardMaterial,
   TransformNode,
   VertexData,
 } from "@babylonjs/core";
-import { avg, clamp, getWorldDepth, getWorldWidth, tileCenter } from "@/helpers/math";
+import { avg, clamp, tileCenter } from "@/helpers/math";
 import { buildHexGpuBuffer } from "@/factories/TerrainMeshBuilder/buildHexGpuBuffer";
 import {
   HexMeshConf,
@@ -31,6 +30,7 @@ import {
   TerrainTileBuffers,
 } from "@/factories/TerrainMeshBuilder/_terrainMeshTypes";
 import { weldGpuBuffer } from "@/factories/TerrainMeshBuilder/weldGpuBuffer";
+import { createWaterMesh } from "@/factories/TerrainMeshBuilder/waterMesh";
 
 export class TerrainMeshBuilder {
   scene: Scene;
