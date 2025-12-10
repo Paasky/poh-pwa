@@ -237,6 +237,14 @@ export const makeRiver = (
         // If we're next to a lake, turn on major mode
         if (neighbor.terrain.id === "lake") {
           majorMode = true;
+
+          // if the neighbor is not a river tile, we become a lake
+          if (!neighbor.riverKey) {
+            tile.domain = neighbor.domain;
+            tile.terrain = neighbor.terrain;
+            tile.elevation = neighbor.elevation;
+            tile.feature.value = null;
+          }
         }
       }
 
