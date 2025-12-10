@@ -447,7 +447,7 @@ export class EngineService {
     // Ambient fill light so shaded areas are not fully black
     const hemi = new HemisphericLight("light.ambient", new Vector3(0, 1, 0), this.scene);
     // Reduce ambient to deepen shadows and remove hemi specular highlights
-    hemi.intensity = 0.2;
+    hemi.intensity = 0.5;
     // Remove hemispheric specular contribution (reflections come from sun only)
     // noinspection SuspiciousTypeOfGuard
     (hemi as unknown as { specular?: Color3 }).specular = Color3.Black();
@@ -455,9 +455,9 @@ export class EngineService {
     // Sun directional light for shadows
     // We'll drive its direction dynamically relative to the camera each frame so
     // shadows remain readable: sun sits lower in the sky and behind the camera view.
-    const sun = new DirectionalLight("light.sun", new Vector3(0, -1, 0), this.scene);
+    const sun = new DirectionalLight("light.sun", new Vector3(0, 1, 0), this.scene);
     // Boost sun to compensate for lower ambient and create stronger, darker shadows
-    sun.intensity = 1.8;
+    sun.intensity = 1;
     this.sunLight = sun;
 
     // Shadow generator
