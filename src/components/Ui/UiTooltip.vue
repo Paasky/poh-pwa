@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { withDefaults, defineProps } from "vue";
+import { defineProps, withDefaults } from "vue";
 
 type Location =
   | "top"
@@ -24,13 +24,18 @@ const props = withDefaults(
   {
     location: "bottom",
     contentClass: "text-grey bg-grey-darken-4",
-  }
+  },
 );
 </script>
 
 <template>
   <!-- Pass any extra attrs directly to v-tooltip (e.g., open-on-click, disabled, etc.) -->
-  <v-tooltip :text="props.text" :location="props.location" :content-class="props.contentClass" v-bind="$attrs">
+  <v-tooltip
+    :text="props.text"
+    :location="props.location"
+    :content-class="props.contentClass"
+    v-bind="$attrs"
+  >
     <template #activator="{ props: tip }">
       <!-- Apply Vuetify-provided activator props to an inline wrapper.
            This keeps consumer usage clean: <UiTooltip> <v-icon/> </UiTooltip> -->
@@ -39,7 +44,6 @@ const props = withDefaults(
       </span>
     </template>
   </v-tooltip>
-  
 </template>
 
 <style scoped>

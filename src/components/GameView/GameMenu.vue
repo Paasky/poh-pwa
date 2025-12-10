@@ -5,7 +5,11 @@ import { toggleFullscreen } from "@/helpers/fullscreen";
 import UiButton from "@/components/Ui/UiButton.vue";
 import { useSettingsStore } from "@/stores/settingsStore";
 import { useAppStore } from "@/stores/appStore";
-import { EngineOptionPresets, type EngineOptions, RestartRequiredOptionKeys, } from "@/components/Engine/EngineService";
+import {
+  EngineOptionPresets,
+  type EngineOptions,
+  RestartRequiredOptionKeys,
+} from "@/components/Engine/EngineService";
 
 const emit = defineEmits(["quit", "reload"]);
 const showQuitConfirm = ref(false);
