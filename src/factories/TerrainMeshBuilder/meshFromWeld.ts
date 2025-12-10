@@ -19,8 +19,13 @@ import { terrainColorMap } from "@/assets/materials/terrains";
 // Tweakable config (easy to edit)
 // --------------------------------------
 
-// UV tiling scale for the terrain normal maps
-const UV_SCALE = 0.25; // larger = more tiling (more detail), smaller = less tiling
+// UV tiling scales per texture (larger = more tiling/detail)
+const UV_SCALES = {
+  grass: 0.1,
+  sand: 0.2,
+  rocks: 0.7,
+  snow: 0.3,
+} as const;
 
 // Normal map texture paths (served from /public)
 const NORMAL_TEXTURES = {
@@ -30,17 +35,35 @@ const NORMAL_TEXTURES = {
   snow: "/textures/bump/snow.png",
 };
 
-// Reference terrain colors used to derive blend weights from vColor
-// Picked from existing terrainColorMap keys
-const REF_COLORS = {
-  grass: terrainColorMap["terrainType:grass"],
-  sand: terrainColorMap["terrainType:desert"],
-  rocks: terrainColorMap["terrainType:rocks"],
-  snow: terrainColorMap["terrainType:snow"],
-};
+// Reference terrain color groups (Phase A+):
+// We derive weights by measuring distance to the NEAREST color within each group.
+// This fixes cases where plains/water hues were closer to 'rocks' gray.
+const REF_GROUPS = {
+  grass: [
+    terrainColorMap["terrainType:grass"],
+    terrainColorMap["terrainType:plains"],
+    terrainColorMap["terrainType:tundra"],
+  ],
+  sand: [
+    terrainColorMap["terrainType:desert"],
+    terrainColorMap["terrainType:coast"],
+    terrainColorMap["terrainType:sea"],
+    terrainColorMap["terrainType:ocean"],
+    terrainColorMap["terrainType:lake"],
+    terrainColorMap["terrainType:majorRiver"],
+  ],
+  rocks: [terrainColorMap["terrainType:rocks"]],
+  snow: [terrainColorMap["terrainType:snow"]],
+} as const;
 
-// Bump/normal map intensity (0..1)
-const NORMAL_INTENSITY = 0.5;
+// Per-texture bump/normal intensities (0..1) and a master multiplier
+const NORMAL_INTENSITIES = {
+  grass: 0.3,
+  sand: 0.5,
+  rocks: 1,
+  snow: 1,
+} as const;
+const NORMAL_INTENSITY_MASTER = 0.65;
 
 // Flip axes if a normal map looks inverted (rarely needed)
 const INVERT_NORMAL_X = false;
@@ -49,7 +72,7 @@ const INVERT_NORMAL_Y = false;
 // Lighting strength scalars (relative multipliers applied on top of Babylon light intensities)
 // Tweak these to balance the custom terrain shader with the rest of the scene without
 // changing global light settings in EngineService.
-const DIR_LIGHT_STRENGTH = 0.6; // directional (sun) contribution multiplier
+const DIR_LIGHT_STRENGTH = 1; // directional (sun) contribution multiplier
 const AMBIENT_STRENGTH = 0.25; // hemispheric (ambient) contribution multiplier
 
 // Simple ambient light fallback (used if no hemispheric light found)
@@ -110,15 +133,34 @@ uniform sampler2D uTexRocks;
 uniform sampler2D uTexSnow;
 
 // Uniforms
-uniform float uUVScale;
-uniform float uNormalIntensity;
+uniform float uUVScaleGrass;
+uniform float uUVScaleSand;
+uniform float uUVScaleRocks;
+uniform float uUVScaleSnow;
+uniform float uIntMaster;
 uniform float uInvertX;
 uniform float uInvertY;
 
-uniform vec3 uRefGrass;
-uniform vec3 uRefSand;
-uniform vec3 uRefRocks;
-uniform vec3 uRefSnow;
+// Per-texture intensities
+uniform float uIntGrass;
+uniform float uIntSand;
+uniform float uIntRocks;
+uniform float uIntSnow;
+
+// Reference color groups (fixed counts)
+uniform vec3 uRefGrassA;
+uniform vec3 uRefGrassB;
+uniform vec3 uRefGrassC;
+
+uniform vec3 uRefSandA;
+uniform vec3 uRefSandB;
+uniform vec3 uRefSandC;
+uniform vec3 uRefSandD;
+uniform vec3 uRefSandE;
+uniform vec3 uRefSandF;
+
+uniform vec3 uRefRocksA;
+uniform vec3 uRefSnowA;
 
 uniform vec3 uLightDir;   // world-space direction (points from light toward scene)
 uniform vec3 uLightColor; // 0..1
@@ -127,6 +169,29 @@ uniform vec3 uAmbient;    // 0..1
 float invdistWeight(vec3 c, vec3 ref) {
   float d = length(c - ref);
   return 1.0 / (d + 1e-4);
+}
+
+float invdistFromMin3(vec3 c, vec3 a, vec3 b, vec3 d2) {
+  float dA = length(c - a);
+  float dB = length(c - b);
+  float dC = length(c - d2);
+  float dMin = min(dA, min(dB, dC));
+  return 1.0 / (dMin + 1e-4);
+}
+
+float invdistFromMin6(
+  vec3 c,
+  vec3 a, vec3 b, vec3 d2,
+  vec3 e, vec3 f, vec3 g
+) {
+  float dA = length(c - a);
+  float dB = length(c - b);
+  float dC = length(c - d2);
+  float dE = length(c - e);
+  float dF = length(c - f);
+  float dG = length(c - g);
+  float dMin = min(min(dA, dB), min(min(dC, dE), min(dF, dG)));
+  return 1.0 / (dMin + 1e-4);
 }
 
 vec3 decodeNormal(vec3 rgb, float invX, float invY) {
@@ -150,28 +215,37 @@ mat3 cotangentFrame(vec3 N, vec3 pos, vec2 uv) {
 }
 
 void main() {
-  // Derive 4 weights from vertex color vs. reference colors
+  // Derive 4 weights from vertex color vs. grouped reference colors (min-distance per group)
   vec3 c = clamp(vColor.rgb, 0.0, 1.0);
-  float wG = invdistWeight(c, uRefGrass);
-  float wS = invdistWeight(c, uRefSand);
-  float wR = invdistWeight(c, uRefRocks);
-  float wW = invdistWeight(c, uRefSnow);
+  float wG = invdistFromMin3(c, uRefGrassA, uRefGrassB, uRefGrassC);
+  float wS = invdistFromMin6(c, uRefSandA, uRefSandB, uRefSandC, uRefSandD, uRefSandE, uRefSandF);
+  float wR = invdistWeight(c, uRefRocksA);
+  float wW = invdistWeight(c, uRefSnowA);
   float wSum = max(wG + wS + wR + wW, 1e-5);
   wG /= wSum; wS /= wSum; wR /= wSum; wW /= wSum;
 
-  vec2 uv = vUV * uUVScale;
-  vec3 nG = decodeNormal(texture2D(uTexGrass, uv).xyz, uInvertX, uInvertY);
-  vec3 nS = decodeNormal(texture2D(uTexSand,  uv).xyz, uInvertX, uInvertY);
-  vec3 nR = decodeNormal(texture2D(uTexRocks, uv).xyz, uInvertX, uInvertY);
-  vec3 nW = decodeNormal(texture2D(uTexSnow,  uv).xyz, uInvertX, uInvertY);
+  vec2 uvG = vUV * uUVScaleGrass;
+  vec2 uvS = vUV * uUVScaleSand;
+  vec2 uvR = vUV * uUVScaleRocks;
+  vec2 uvW = vUV * uUVScaleSnow;
+  vec3 nG = decodeNormal(texture2D(uTexGrass, uvG).xyz, uInvertX, uInvertY);
+  vec3 nS = decodeNormal(texture2D(uTexSand,  uvS).xyz, uInvertX, uInvertY);
+  vec3 nR = decodeNormal(texture2D(uTexRocks, uvR).xyz, uInvertX, uInvertY);
+  vec3 nW = decodeNormal(texture2D(uTexSnow,  uvW).xyz, uInvertX, uInvertY);
+
+  // Apply per-texture intensity toward flat normal
+  nG = normalize(mix(vec3(0.0, 0.0, 1.0), nG, clamp(uIntGrass, 0.0, 1.0)));
+  nS = normalize(mix(vec3(0.0, 0.0, 1.0), nS, clamp(uIntSand, 0.0, 1.0)));
+  nR = normalize(mix(vec3(0.0, 0.0, 1.0), nR, clamp(uIntRocks, 0.0, 1.0)));
+  nW = normalize(mix(vec3(0.0, 0.0, 1.0), nW, clamp(uIntSnow, 0.0, 1.0)));
 
   // Simple normalized weighted sum blending
   vec3 nTS = normalize(nG * wG + nS * wS + nR * wR + nW * wW);
   // Intensity blend toward flat normal (0,0,1)
-  nTS = normalize(mix(vec3(0.0, 0.0, 1.0), nTS, clamp(uNormalIntensity, 0.0, 1.0)));
+  nTS = normalize(mix(vec3(0.0, 0.0, 1.0), nTS, clamp(uIntMaster, 0.0, 1.0)));
 
   // Transform to world space using TBN
-  mat3 TBN = cotangentFrame(normalize(vNormalW), vPositionW, uv);
+  mat3 TBN = cotangentFrame(normalize(vNormalW), vPositionW, vUV);
   vec3 nWld = normalize(TBN * nTS);
 
   // Lighting (Lambert + ambient)
@@ -220,14 +294,28 @@ export function meshFromWeld(
     uniforms: [
       "world",
       "worldViewProjection",
-      "uUVScale",
-      "uNormalIntensity",
+      "uUVScaleGrass",
+      "uUVScaleSand",
+      "uUVScaleRocks",
+      "uUVScaleSnow",
+      "uIntMaster",
       "uInvertX",
       "uInvertY",
-      "uRefGrass",
-      "uRefSand",
-      "uRefRocks",
-      "uRefSnow",
+      "uIntGrass",
+      "uIntSand",
+      "uIntRocks",
+      "uIntSnow",
+      "uRefGrassA",
+      "uRefGrassB",
+      "uRefGrassC",
+      "uRefSandA",
+      "uRefSandB",
+      "uRefSandC",
+      "uRefSandD",
+      "uRefSandE",
+      "uRefSandF",
+      "uRefRocksA",
+      "uRefSnowA",
       "uLightDir",
       "uLightColor",
       "uAmbient",
@@ -238,17 +326,34 @@ export function meshFromWeld(
   });
 
   // Set static uniforms from config
-  shader.setFloat("uUVScale", UV_SCALE);
-  shader.setFloat("uNormalIntensity", NORMAL_INTENSITY);
+  shader.setFloat("uUVScaleGrass", UV_SCALES.grass);
+  shader.setFloat("uUVScaleSand", UV_SCALES.sand);
+  shader.setFloat("uUVScaleRocks", UV_SCALES.rocks);
+  shader.setFloat("uUVScaleSnow", UV_SCALES.snow);
+  shader.setFloat("uIntMaster", NORMAL_INTENSITY_MASTER);
   shader.setFloat("uInvertX", INVERT_NORMAL_X ? -1 : 1);
   shader.setFloat("uInvertY", INVERT_NORMAL_Y ? -1 : 1);
+  shader.setFloat("uIntGrass", NORMAL_INTENSITIES.grass);
+  shader.setFloat("uIntSand", NORMAL_INTENSITIES.sand);
+  shader.setFloat("uIntRocks", NORMAL_INTENSITIES.rocks);
+  shader.setFloat("uIntSnow", NORMAL_INTENSITIES.snow);
 
   // Reference colors from config (Color4 -> vec3)
   const refToVec3 = (c: Color4 | Color3) => new Color3((c as any).r, (c as any).g, (c as any).b);
-  shader.setColor3("uRefGrass", refToVec3(REF_COLORS.grass));
-  shader.setColor3("uRefSand", refToVec3(REF_COLORS.sand));
-  shader.setColor3("uRefRocks", refToVec3(REF_COLORS.rocks));
-  shader.setColor3("uRefSnow", refToVec3(REF_COLORS.snow));
+  // Grass group (3)
+  shader.setColor3("uRefGrassA", refToVec3(REF_GROUPS.grass[0]));
+  shader.setColor3("uRefGrassB", refToVec3(REF_GROUPS.grass[1]));
+  shader.setColor3("uRefGrassC", refToVec3(REF_GROUPS.grass[2]));
+  // Sand group (6)
+  shader.setColor3("uRefSandA", refToVec3(REF_GROUPS.sand[0]));
+  shader.setColor3("uRefSandB", refToVec3(REF_GROUPS.sand[1]));
+  shader.setColor3("uRefSandC", refToVec3(REF_GROUPS.sand[2]));
+  shader.setColor3("uRefSandD", refToVec3(REF_GROUPS.sand[3]));
+  shader.setColor3("uRefSandE", refToVec3(REF_GROUPS.sand[4]));
+  shader.setColor3("uRefSandF", refToVec3(REF_GROUPS.sand[5]));
+  // Rocks (1), Snow (1)
+  shader.setColor3("uRefRocksA", refToVec3(REF_GROUPS.rocks[0]));
+  shader.setColor3("uRefSnowA", refToVec3(REF_GROUPS.snow[0]));
 
   // Textures (normal maps)
   const texGrass = new Texture(
