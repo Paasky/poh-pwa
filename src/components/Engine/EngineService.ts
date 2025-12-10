@@ -159,6 +159,7 @@ export class EngineService {
   maxRotation = Math.PI / 6; // bigger divisor = less rotation
   maxTilt = 0.8; // higher = more tilt upwards
   minTilt = 0.1; // 0 = top-down
+  manualTilt = false; // Allow user to set tilt manually (false = auto-tilt by zoom)
   maxZoomIn = 10; // smaller = closer
   maxZoomOut = 100; // larger = further
 
@@ -166,10 +167,10 @@ export class EngineService {
   world: WorldState
 
   // Babylon rendering state
-  engine: BabylonEngine
-  scene: Scene
-  canvas: HTMLCanvasElement
-  minimapCanvas: HTMLCanvasElement
+  engine: BabylonEngine;
+  scene: Scene;
+  canvas: HTMLCanvasElement;
+  minimapCanvas: HTMLCanvasElement | null = null;
 
   camera: ArcRotateCamera
   minimapCamera: ArcRotateCamera
@@ -191,12 +192,12 @@ export class EngineService {
   constructor(
     world: WorldState,
     canvas: HTMLCanvasElement,
-    minimapCanvas: HTMLCanvasElement,
+    minimapCanvas?: HTMLCanvasElement,
     options?: EngineOptions,
   ) {
     this.world = world;
     this.canvas = canvas;
-    this.minimapCanvas = minimapCanvas;
+    if (minimapCanvas) this.minimapCanvas = minimapCanvas;
     this.options = { ...DefaultEngineOptions, ...(options ?? {}) };
 
     // Create Engine and Scene
@@ -267,6 +268,7 @@ export class EngineService {
   }
 
   captureMinimap (): EngineService {
+    if (!this.minimapCanvas) return this;
     // Render a 512x256 screenshot using the orthographic minimap camera and draw it to the canvas
     const width = 512
     const height = 256
@@ -276,7 +278,7 @@ export class EngineService {
       this.minimapCamera,
       { width, height },
       (data) => {
-        const ctx = this.minimapCanvas.getContext('2d')
+        const ctx = this.minimapCanvas!.getContext('2d')
         if (!ctx) return
         const img = new Image()
         img.onload = () => {
