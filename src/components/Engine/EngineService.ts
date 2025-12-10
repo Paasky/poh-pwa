@@ -5,7 +5,6 @@ import {
   Camera,
   Color3,
   Color4,
-  DirectionalLight,
   Engine as BabylonEngine,
   HemisphericLight,
   PointerEventTypes,
@@ -13,10 +12,7 @@ import {
   TransformNode,
   Vector3,
 } from "@babylonjs/core";
-import { ShadowGenerator } from "@babylonjs/core/Lights/Shadows/shadowGenerator";
-// Required side-effect to register ShadowGenerator with the Scene
 import "@babylonjs/core/Lights/Shadows/shadowGeneratorSceneComponent";
-import { DefaultRenderingPipeline } from "@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/defaultRenderingPipeline";
 import { CreateScreenshotUsingRenderTarget } from "@babylonjs/core/Misc/screenshotTools";
 import {
   clamp,
@@ -28,6 +24,9 @@ import {
 } from "@/helpers/math";
 import { TerrainMeshBuilder } from "@/factories/TerrainMeshBuilder/TerrainMeshBuilder";
 import { useObjectsStore } from "@/stores/objectStore";
+import { EnvironmentService } from "@/components/Engine/EnvironmentService";
+import type { DefaultPostProcessingOptions } from "@/components/Engine/environments/postFx";
+import type { WeatherType } from "@/components/Engine/environments/weather";
 
 export type EngineOptions = {
   // Camera UX
@@ -175,22 +174,21 @@ export class EngineService {
 
   // Babylon rendering state
   engine: BabylonEngine;
+  private _lastRenderTime = 0;
   scene: Scene;
   canvas: HTMLCanvasElement;
   minimapCanvas: HTMLCanvasElement | null = null;
 
+  tileRoot: TransformNode;
+
   camera: ArcRotateCamera;
   minimapCamera: ArcRotateCamera;
-  light: HemisphericLight;
-  sunLight!: DirectionalLight;
-  shadowGen!: ShadowGenerator;
-  tileRoot: TransformNode;
-  terrainBuilder: TerrainMeshBuilder;
 
-  // Options & rendering pipeline
+  terrainBuilder: TerrainMeshBuilder;
+  environmentService: EnvironmentService;
+
+  // Options
   options: EngineOptions = { ...DefaultEngineOptions };
-  pipeline?: DefaultRenderingPipeline;
-  private _lastRenderTime = 0;
   private _rotationInput = new ArcRotateCameraPointersInput();
   private _manualTiltEnabled = false;
 
@@ -225,13 +223,10 @@ export class EngineService {
     // Resolution / hardware scaling
     this.applyRenderScale(this.options.renderScale ?? 1);
 
-    // Create Cameras and Light
+    // Create Cameras and Environment
     this.camera = this.initCamera();
     this.minimapCamera = this.initMinimap();
-    this.light = this.initLight();
-
-    // Post-process pipeline (FXAA / Bloom / HDR)
-    this.rebuildPipeline();
+    this.environmentService = new EnvironmentService(this.scene, this.camera, this.engine);
 
     // Build merged terrain mesh (new pipeline)
     this.terrainBuilder = new TerrainMeshBuilder(
@@ -239,24 +234,7 @@ export class EngineService {
       { x: this.world.sizeX, y: this.world.sizeY },
       useObjectsStore().getTiles,
     );
-    this.tileRoot = this.terrainBuilder.build().root;
-
-    // Shadows: make terrain cast/receive
-    const land = this.terrainBuilder.getMesh();
-    if (land) {
-      land.receiveShadows = true;
-      this.shadowGen.addShadowCaster(land, true);
-    }
-    const water = this.scene.getMeshByName("terrain.water.plane");
-    if (water) {
-      // Optional: water receives soft shadows from terrain
-      water.receiveShadows = true;
-    }
-
-    // Once the scene is ready, capture a one-time minimap image into the minimap canvas
-    this.scene.executeWhenReady(() => {
-      this.captureMinimap();
-    });
+    this.tileRoot = this.terrainBuilder.root;
 
     // Render loop with optional FPS cap
     this.engine.runRenderLoop(() => {
@@ -266,33 +244,94 @@ export class EngineService {
         if (now - this._lastRenderTime < minDelta) return;
         this._lastRenderTime = now;
       }
+
+      // Tick environment (clock/effects) before rendering
+      const deltaSeconds = this.engine.getDeltaTime() / 1000;
+      this.environmentService.update(deltaSeconds);
       this.scene.render();
     });
 
     // Resize to window
     this.engine.resize();
     window.addEventListener("resize", this.onResize);
+
+    // Once the scene is ready, capture a one-time minimap image into the minimap canvas
+    this.scene.executeWhenReady(() => {
+      this.captureMinimap();
+    });
   }
 
+  // todo move to separate minimap.ts
   captureMinimap(): EngineService {
     if (!this.minimapCanvas) return this;
-    // Render a 512x256 screenshot using the orthographic minimap camera and draw it to the canvas
+
+    // Render a 512x256 screenshot using the orthographic minimap camera and draw it to the canvas.
+    // For consistency, render with neutral, temporary lights and no fog so the minimap
+    // is not affected by the current world environment (time of day, weather, fog, post FX).
     const width = 512;
     const height = 256;
 
+    // --- Prepare isolated lighting for the minimap capture
+    // 1) Save and disable existing lights (set intensity to 0)
+    const existingSceneLights = this.scene.lights.slice();
+    const previousLightIntensities: number[] = existingSceneLights.map((light) => light.intensity);
+    for (const light of existingSceneLights) {
+      light.intensity = 0;
+    }
+
+    // 2) Save and disable fog
+    const previousFogMode = this.scene.fogMode;
+    const previousFogDensity = this.scene.fogDensity;
+    const previousFogColor = this.scene.fogColor.clone();
+    this.scene.fogMode = Scene.FOGMODE_NONE;
+    this.scene.fogDensity = 0;
+
+    // 3) Temporarily hide the global water plane so the minimap ignores water effects
+    // Keep it simple: just disable the mesh during capture and restore its previous enabled state.
+    const previousWaterEnabled = this.terrainBuilder.waterMesh.isEnabled();
+    this.terrainBuilder.waterMesh.setEnabled(false);
+
+    // 4) Create temporary neutral lights for the minimap (slightly brighter for clearer overview)
+    const temporaryMinimapHemisphericLight = new HemisphericLight(
+      "minimap.hemisphericAmbientLight",
+      Vector3.Up(),
+      this.scene,
+    );
+    temporaryMinimapHemisphericLight.intensity = 1.0;
+    temporaryMinimapHemisphericLight.diffuse = new Color3(0.95, 0.98, 1.0);
+    temporaryMinimapHemisphericLight.groundColor = new Color3(0.8, 0.85, 0.82);
+    // Remove hemi specular to avoid flat specular glare
+    (temporaryMinimapHemisphericLight as unknown as { specular?: Color3 }).specular =
+      Color3.Black();
+
+    // --- Perform capture
     CreateScreenshotUsingRenderTarget(
       this.engine,
       this.minimapCamera,
       { width, height },
       (data) => {
-        const ctx = this.minimapCanvas!.getContext("2d");
-        if (!ctx) return;
-        const img = new Image();
-        img.onload = () => {
-          ctx.clearRect(0, 0, width, height);
-          ctx.drawImage(img, 0, 0, width, height);
+        // Cleanup temporary lighting and restore world state regardless of capture outcome
+        temporaryMinimapHemisphericLight.dispose();
+        // Restore water visibility
+        if (previousWaterEnabled) {
+          this.terrainBuilder.waterMesh.setEnabled(previousWaterEnabled);
+        }
+        for (let i = 0; i < existingSceneLights.length; i++) {
+          existingSceneLights[i].intensity =
+            previousLightIntensities[i] ?? existingSceneLights[i].intensity;
+        }
+        this.scene.fogMode = previousFogMode;
+        this.scene.fogDensity = previousFogDensity;
+        this.scene.fogColor = previousFogColor;
+
+        // Draw into the minimap canvas
+        const renderingContext2d = this.minimapCanvas!.getContext("2d")!;
+        const imageElement = new Image();
+        imageElement.onload = () => {
+          renderingContext2d.clearRect(0, 0, width, height);
+          renderingContext2d.drawImage(imageElement, 0, 0, width, height);
         };
-        img.src = data as string;
+        imageElement.src = data as string;
       },
     );
 
@@ -303,10 +342,7 @@ export class EngineService {
     window.removeEventListener("resize", this.onResize);
     this.engine.stopRenderLoop();
     this.terrainBuilder.dispose();
-    if (this.pipeline) {
-      this.pipeline.dispose();
-      this.pipeline = undefined;
-    }
+    this.environmentService.dispose();
     this.scene.dispose();
     this.engine.dispose();
   }
@@ -443,59 +479,6 @@ export class EngineService {
     return camera;
   }
 
-  private initLight(): HemisphericLight {
-    // Ambient fill light so shaded areas are not fully black
-    const hemi = new HemisphericLight("light.ambient", new Vector3(0, 1, 0), this.scene);
-    // Reduce ambient to deepen shadows and remove hemi specular highlights
-    hemi.intensity = 0.25;
-    // Remove hemispheric specular contribution (reflections come from sun only)
-    // noinspection SuspiciousTypeOfGuard
-    (hemi as unknown as { specular?: Color3 }).specular = Color3.Black();
-
-    // Sun directional light for shadows
-    // We'll drive its direction dynamically relative to the camera each frame so
-    // shadows remain readable: sun sits lower in the sky and behind the camera view.
-    const sun = new DirectionalLight("light.sun", new Vector3(0, 1, 0), this.scene);
-    // Boost sun to compensate for lower ambient and create stronger, darker shadows
-    sun.intensity = 0.5;
-    this.sunLight = sun;
-
-    // Shadow generator
-    const sg = new ShadowGenerator(2048, sun);
-    sg.bias = 0.0005;
-    sg.normalBias = 0.02;
-    sg.usePoissonSampling = true; // stable, good default across platforms
-    this.shadowGen = sg;
-
-    // Keep the sun anchored around the camera target so shadow map follows panning
-    // Place it further back and lower to make shadows more apparent.
-    const followDistance = 100;
-    this.scene.onBeforeRenderObservable.add(() => {
-      const t = this.camera.target;
-      // Compute view direction from camera to target
-      const viewDir = t.subtract(this.camera.position).normalize();
-      // Put sun behind the camera, with a guaranteed downward component to bring it lower
-      let sx = -viewDir.x - 4;
-      let sy = -Math.abs(viewDir.y) - 0.5; // push downward to ~2-3pm feel
-      let sz = -viewDir.z;
-      const len = Math.hypot(sx, sy, sz) || 1;
-      sx /= len;
-      sy /= len;
-      sz /= len;
-
-      // Position along this direction at a fixed distance, looking at the target
-      const pos = new Vector3(
-        t.x - sx * followDistance,
-        t.y - sy * followDistance,
-        t.z - sz * followDistance,
-      );
-      sun.position.copyFrom(pos);
-      sun.setDirectionToTarget(t);
-    });
-
-    return hemi;
-  }
-
   private initMinimap(): ArcRotateCamera {
     // Top-down orthographic camera centered on the world
     const camera = new ArcRotateCamera(
@@ -538,31 +521,6 @@ export class EngineService {
     this.engine.setHardwareScalingLevel(level);
   }
 
-  private rebuildPipeline() {
-    // Dispose previous
-    if (this.pipeline) {
-      this.pipeline.dispose();
-      this.pipeline = undefined;
-    }
-    const useHdr = !!this.options.hdr;
-    this.pipeline = new DefaultRenderingPipeline(
-      "default",
-      useHdr,
-      this.scene,
-      [this.camera], // Intentionally exclude minimap camera to keep it crisp and avoid post FX on the overview
-    );
-    // FXAA
-    this.pipeline.fxaaEnabled = !!this.options.useFxaa;
-    // Bloom
-    this.pipeline.bloomEnabled = !!this.options.useBloom;
-    if (this.pipeline.bloomEnabled) {
-      if (typeof this.options.bloomThreshold === "number")
-        this.pipeline.bloomThreshold = this.options.bloomThreshold;
-      if (typeof this.options.bloomWeight === "number")
-        this.pipeline.bloomWeight = this.options.bloomWeight;
-    }
-  }
-
   applyOptions(next: EngineOptions): { restartKeysChanged: (keyof EngineOptions)[] } {
     const prev = this.options;
     this.options = { ...prev, ...next };
@@ -579,15 +537,6 @@ export class EngineService {
     }
     if (prev.fpsCap !== this.options.fpsCap) {
       this._lastRenderTime = 0; // reset limiter
-    }
-    if (
-      prev.hdr !== this.options.hdr ||
-      prev.useFxaa !== this.options.useFxaa ||
-      prev.useBloom !== this.options.useBloom ||
-      prev.bloomThreshold !== this.options.bloomThreshold ||
-      prev.bloomWeight !== this.options.bloomWeight
-    ) {
-      this.rebuildPipeline();
     }
     if (prev.manualTilt !== this.options.manualTilt) {
       this.setManualTilt(!!this.options.manualTilt);
@@ -606,5 +555,30 @@ export class EngineService {
       this.camera.inputs.remove(this._rotationInput);
       this._manualTiltEnabled = false;
     }
+  }
+
+  /** Set the time of day (0..2400). */
+  public setTimeOfDay(timeOfDayValue2400: number): void {
+    this.environmentService.setTimeOfDay(timeOfDayValue2400);
+  }
+
+  /** Set the season as a month index (1..12). */
+  public setSeason(monthIndex1to12: number): void {
+    this.environmentService.setSeason(monthIndex1to12);
+  }
+
+  /** Set the active weather type. */
+  public setWeather(weatherType: WeatherType): void {
+    this.environmentService.setWeather(weatherType);
+  }
+
+  /** Start or stop the environment's internal clock. */
+  public setIsClockRunning(isRunning: boolean): void {
+    this.environmentService.setIsClockRunning(isRunning);
+  }
+
+  /** Update post-processing toggles/values for the environment's rendering pipeline. */
+  public setEnvironmentPostProcessingOptions(options: Partial<DefaultPostProcessingOptions>): void {
+    this.environmentService.setPostProcessingOptions(options);
   }
 }

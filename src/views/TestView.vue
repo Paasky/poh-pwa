@@ -4,15 +4,17 @@ import UiCols from "@/components/Ui/UiCols.vue";
 import { Tile } from "@/objects/game/Tile";
 import { useObjectsStore } from "@/stores/objectStore";
 import { StaticData } from "@/types/api";
-import { fetchJSON } from "@/stores/appStore";
+import { fetchJSON, useAppStore } from "@/stores/appStore";
 import { TypeObject } from "@/types/typeObjects";
 import { EngineService } from "@/components/Engine/EngineService";
+import GameMenu from "@/components/GameView/GameMenu.vue";
 
 // Init static data
 const objStore = useObjectsStore();
 
 // Init engine
 let engine: EngineService | null = null;
+const appStore = useAppStore();
 onMounted(async () => {
   objStore.initStatic(await fetchJSON<StaticData>("/staticData.json"));
 
@@ -237,13 +239,29 @@ onMounted(async () => {
   const engineCanvas = document.getElementById("engine-canvas") as HTMLCanvasElement | null;
   if (!engineCanvas) throw new Error("Engine canvas `#engine-canvas` not found");
   engine = new EngineService(objStore.world, engineCanvas);
+  // Expose the engine to the GameMenu via the app store so options can be applied in TestView
+  appStore.engineService = engine;
 });
+
+function onReload() {
+  // Minimal reload handler for TestView
+  document.location.reload();
+}
+
+function onQuit() {
+  // Navigate home in this test harness
+  document.location.href = "/";
+}
 </script>
 
 <template>
-  <UiCols>
+  <UiCols :cols="{ left: 3, right: 9 }">
     <template #left>
-      <h1>Test</h1>
+      <div class="d-flex align-center justify-space-between">
+        <h1>Test</h1>
+        <!-- Game menu (top-right of the left pane for convenience) -->
+        <GameMenu @reload="onReload" @quit="onQuit" />
+      </div>
     </template>
     <template #right>
       <canvas id="engine-canvas"></canvas>

@@ -41,9 +41,9 @@ export class TerrainMeshBuilder {
     indices: [],
   };
 
-  mesh: Mesh | null = null;
-  waterMesh: Mesh | null = null;
-  private waterDispose?: () => void;
+  mesh: Mesh;
+  waterMesh: Mesh;
+  waterDispose: () => void;
 
   snowColor = terrainColorMap["terrainType:snow"];
 
@@ -61,10 +61,6 @@ export class TerrainMeshBuilder {
     this.root = new TransformNode("terrainRoot", this.scene);
     this.points = range(0, hexRingCount).flatMap((ring) => pointsInRing(ring, hexRingCount));
     this.triangles = hexTrianglesFromPoints(this.points, hexRingCount);
-  }
-
-  build(): TerrainMeshBuilder {
-    this.dispose();
 
     // Step 1: Build Hex GPU Buffer
     for (let tileY = 0; tileY < this.size.y; tileY++) {
@@ -118,12 +114,8 @@ export class TerrainMeshBuilder {
       indices: [],
     };
 
-    this.mesh?.dispose();
-    this.mesh = null;
-
-    if (this.waterDispose) this.waterDispose();
-    this.waterDispose = undefined;
-    this.waterMesh = null;
+    this.mesh.dispose();
+    this.waterDispose();
 
     // Note: Keep the root as other things may be attached to it, we are just clearing our internal data
   }

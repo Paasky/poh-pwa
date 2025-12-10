@@ -63,7 +63,8 @@ const NORMAL_INTENSITIES = {
   rocks: 1,
   snow: 1,
 } as const;
-const NORMAL_INTENSITY_MASTER = 0.65;
+// Raise the master intensity slightly so normal detail is more apparent under neutral lighting
+const NORMAL_INTENSITY_MASTER = 0.85;
 
 // Flip axes if a normal map looks inverted (rarely needed)
 const INVERT_NORMAL_X = false;
@@ -72,8 +73,9 @@ const INVERT_NORMAL_Y = false;
 // Lighting strength scalars (relative multipliers applied on top of Babylon light intensities)
 // Tweak these to balance the custom terrain shader with the rest of the scene without
 // changing global light settings in EngineService.
-const DIR_LIGHT_STRENGTH = 1; // directional (sun) contribution multiplier
-const AMBIENT_STRENGTH = 0.25; // hemispheric (ambient) contribution multiplier
+// Increase directional light impact and reduce ambient to help bump/normal details read better.
+const DIR_LIGHT_STRENGTH = 1.35; // directional (sun) contribution multiplier
+const AMBIENT_STRENGTH = 0.12; // hemispheric (ambient) contribution multiplier
 
 // Simple ambient light fallback (used if no hemispheric light found)
 const AMBIENT_FALLBACK = new Color3(0.15, 0.15, 0.18);
@@ -82,6 +84,7 @@ const AMBIENT_FALLBACK = new Color3(0.15, 0.15, 0.18);
 const DIRECTIONAL_COLOR_FALLBACK = new Color3(1, 1, 1);
 const DIRECTIONAL_DIR_FALLBACK = new Vector3(0.3, -1.0, 0.2).normalize();
 
+// todo: shouldn't all this shader business be handled by our EnvironmentService? Maybe as a shader.ts?
 // --------------------------------------
 // Shader sources (inline)
 // --------------------------------------

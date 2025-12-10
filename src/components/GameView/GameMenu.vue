@@ -10,12 +10,17 @@ import {
   type EngineOptions,
   RestartRequiredOptionKeys,
 } from "@/components/Engine/EngineService";
+import { defaultTimeOfDay2400 } from "@/components/Engine/environments/timeOfDay";
+import { defaultSeasonMonth1to12 } from "@/components/Engine/environments/season";
+import { defaultWeatherType, WeatherType } from "@/components/Engine/environments/weather";
 
 const emit = defineEmits(["quit", "reload"]);
 const showQuitConfirm = ref(false);
 const showOptions = ref(false);
+const isSavingOptions = ref(false); // prevent double-clicks and allow UI to show loading state
 
 const app = useAppStore();
+// todo settings store should load values from browser storage, falling back to default per option
 const settings = useSettingsStore();
 
 // todo should this be in settingsStore using Pinia-built-in functionality/simple public backup() & reset() api?
@@ -23,19 +28,31 @@ const settings = useSettingsStore();
 const localPresetId = ref<string>(settings.selectedPresetId);
 const local = reactive<EngineOptions>({ ...settings.engine });
 
+// Environment local state (simple, non-persistent for MVP)
+const localTimeOfDayValue2400 = ref<number>(defaultTimeOfDay2400);
+const localIsClockRunning = ref<boolean>(false);
+const localSeasonMonthIndex1to12 = ref<number>(defaultSeasonMonth1to12);
+const localWeatherType = ref<WeatherType>(defaultWeatherType);
+
 watch(
   () => showOptions.value,
   (open) => {
     if (open) {
-      // Reset local state when dialog opens
+      // todo use settingsStore for this, no weird reset on open
       localPresetId.value = settings.selectedPresetId;
       Object.assign(local, settings.engine);
+      localTimeOfDayValue2400.value = defaultTimeOfDay2400;
+      localIsClockRunning.value = false;
+      localSeasonMonthIndex1to12.value = defaultSeasonMonth1to12;
+      localWeatherType.value = defaultWeatherType;
     }
   },
 );
 
 function onPresetChange(id: string) {
   const preset = EngineOptionPresets.find((p) => p.id === id);
+  // always always everywhere when input is invalid: throw! not return
+  // -> returning is percieved as "why does it not do anything"; throwing can be caught and helpful info shown to user
   if (!preset) return;
   // Apply preset values into local
   Object.assign(local, preset.value);
@@ -53,6 +70,7 @@ function onCancelOptions() {
 }
 
 function onSaveOptions() {
+  if (isSavingOptions.value) return; // guard re-entry
   // Determine if any restart-required options are modified
   const changedRestart: (keyof EngineOptions)[] = [];
   for (const k of restartKeys) {
@@ -63,12 +81,48 @@ function onSaveOptions() {
     showRestartConfirm.value = true;
     return;
   }
-  // Live-apply safe options
-  app.engineService.applyOptions({ ...local });
-  settings.selectedPresetId = localPresetId.value;
-  Object.assign(settings.engine, { ...local });
-  settings.save();
+  // Persist settings first (cheap), close dialog to let UI update, then apply heavy engine changes in RAF
+  isSavingOptions.value = true;
+  try {
+    settings.selectedPresetId = localPresetId.value;
+    Object.assign(settings.engine, { ...local });
+    settings.save();
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error("Failed to save settings:", err);
+  }
   showOptions.value = false;
+  // Defer engine updates to next frame to avoid blocking the interaction frame
+  requestAnimationFrame(() => {
+    try {
+      if (app.engineService && typeof app.engineService.applyOptions === "function") {
+        app.engineService.applyOptions({ ...local });
+      }
+      if (
+        app.engineService &&
+        typeof app.engineService.setEnvironmentPostProcessingOptions === "function"
+      ) {
+        app.engineService.setEnvironmentPostProcessingOptions({
+          enableFastApproximateAntialiasing: !!local.useFxaa,
+          enableBloom: !!local.useBloom,
+          bloomThreshold:
+            typeof local.bloomThreshold === "number" ? local.bloomThreshold : undefined,
+          bloomWeight: typeof local.bloomWeight === "number" ? local.bloomWeight : undefined,
+        });
+      }
+      if (app.engineService) {
+        app.engineService.setTimeOfDay(localTimeOfDayValue2400.value);
+        app.engineService.setIsClockRunning(localIsClockRunning.value);
+        app.engineService.setSeason(localSeasonMonthIndex1to12.value);
+        app.engineService.setWeather(localWeatherType.value);
+      }
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error("Failed to apply engine options:", err);
+    } finally {
+      isSavingOptions.value = false;
+    }
+  });
 }
 
 function confirmRestartProceed() {
@@ -86,6 +140,13 @@ function confirmRestartCancel() {
   _pendingSave = false;
   showRestartConfirm.value = false;
 }
+
+// todo in <template>:
+// wire up to settingsStore
+// - separate tabs for "Game" & "Graphics"
+// - buttons: [Cancel] [Reset]
+// - Game: Tilt, time/season/weather (auto or manual set). These are set immediately (no save button).
+// - Graphics: All rendering settings. These are set on save (show [Save] after [Reset])
 </script>
 
 <template>
@@ -231,6 +292,49 @@ function confirmRestartCancel() {
                 v-model.number="local.bloomWeight"
                 label="Bloom weight"
               />
+            </div>
+          </div>
+
+          <!-- Environment (managed by EnvironmentService) -->
+          <div>
+            <div class="text-subtitle-2 mb-2">Environment</div>
+            <div class="d-flex flex-column ga-4">
+              <div class="d-flex flex-wrap ga-4">
+                <v-slider
+                  class="flex-1-1"
+                  min="0"
+                  max="2400"
+                  step="25"
+                  thumb-label
+                  v-model.number="localTimeOfDayValue2400"
+                  label="Time of day (0-2400)"
+                  hint="24h clock encoded as 0..2400 (e.g., 1430 = 2:30 PM)"
+                  persistent-hint
+                />
+                <v-switch v-model="localIsClockRunning" label="Run environment clock" inset />
+              </div>
+              <div class="d-flex flex-wrap ga-4">
+                <v-select
+                  :items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]"
+                  v-model.number="localSeasonMonthIndex1to12"
+                  label="Season month (1..12)"
+                  density="comfortable"
+                />
+                <v-select
+                  :items="[
+                    { title: 'Sunny', value: WeatherType.Sunny },
+                    { title: 'Half-Cloud', value: WeatherType.HalfCloud },
+                    { title: 'Foggy', value: WeatherType.Foggy },
+                    { title: 'Rainy', value: WeatherType.Rainy },
+                    { title: 'Thunderstorm', value: WeatherType.Thunderstorm },
+                  ]"
+                  item-title="title"
+                  item-value="value"
+                  v-model="localWeatherType"
+                  label="Weather"
+                  density="comfortable"
+                />
+              </div>
             </div>
           </div>
 
