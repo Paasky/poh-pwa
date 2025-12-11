@@ -19,6 +19,7 @@ import type { WeatherType } from '@/components/Engine/environments/weather'
 import LogicMeshBuilder from '@/factories/LogicMeshBuilder'
 import { useHoveredTile } from '@/stores/hoveredTile'
 import { Minimap } from '@/components/Engine/interaction/Minimap'
+import FeatureInstancer from '@/components/Engine/features/FeatureInstancer'
 
 export type EngineOptions = {
   // Camera UX
@@ -42,6 +43,9 @@ export type EngineOptions = {
   useBloom?: boolean; // Bloom post-process
   bloomThreshold?: number; // 0..1
   bloomWeight?: number; // 0..1
+
+  // Feature layers
+  showFeatures?: boolean; // Toggle GPU-instanced feature props (trees etc.)
 };
 
 export const RestartRequiredOptionKeys: (keyof EngineOptions)[] = [
@@ -68,6 +72,7 @@ export const DefaultEngineOptions: Required<EngineOptions> = {
   useBloom: false,
   bloomThreshold: 0.9,
   bloomWeight: 0.15,
+  showFeatures: true,
 }
 
 export type EngineOptionPreset = { id: string; label: string; value: EngineOptions };
@@ -178,6 +183,7 @@ export class EngineService {
   terrainBuilder: TerrainMeshBuilder
   environmentService: EnvironmentService
   logicMesh: LogicMeshBuilder
+  featureInstancer: FeatureInstancer
 
   // Options
   options: EngineOptions = { ...DefaultEngineOptions }
@@ -240,6 +246,13 @@ export class EngineService {
     this.logicMesh.onTileHover((tile) => hovered.set(tile))
     this.logicMesh.onTileExit(() => hovered.clear())
 
+    this.featureInstancer = new FeatureInstancer(
+      this.scene,
+      this.world,
+      Object.values(useObjectsStore().getTiles),
+      this.tileRoot,
+    ).setIsVisible(options?.showFeatures ?? true)
+
     // Render loop with optional FPS cap
     this.engine.runRenderLoop(() => {
       if (this.options.fpsCap && this.options.fpsCap > 0) {
@@ -268,6 +281,7 @@ export class EngineService {
   detach (): void {
     window.removeEventListener('resize', this.onResize)
     this.engine.stopRenderLoop()
+    this.featureInstancer.dispose()
     this.logicMesh.dispose()
     this.terrainBuilder.dispose()
     this.environmentService.dispose()
@@ -275,6 +289,7 @@ export class EngineService {
     this.engine.dispose()
   }
 
+  // todo: if this is all attached to the store, why have this here?
   // ————————————————————————————————————————————
   // Logic mesh helpers / event surface
   onTileHover (handler: Parameters<LogicMeshBuilder['onTileHover']>[0]): () => void {
@@ -293,17 +308,20 @@ export class EngineService {
     return this.logicMesh.onTileContextMenu(handler)
   }
 
+  // todo move this to our settingsStore and remove from here
   setLogicDebugEnabled (enabled: boolean): this {
     this.logicMesh.setDebugEnabled(enabled)
     return this
   }
 
+  // todo this should not even be optional, but always set to enabled on engine init
   setPreventContextMenuDefault (enabled: boolean): this {
     this.logicMesh.setPreventContextMenuDefault(enabled)
     return this
   }
 
   // Public: move instantly to a percentage of world width/depth (0..1 each)
+  // todo add a super-super-simple 1s flying animation (never crossing world x-limits, even if wrap would be "closer")
   flyTo (xPercent: number, yPercent: number): EngineService {
     // Clamp percents
     const widthPercent = clamp(xPercent, 0, 1)
@@ -324,6 +342,7 @@ export class EngineService {
     return this
   }
 
+  // todo move all camera-code to a separate class interaction/Camera.ts
   private initCamera (): ArcRotateCamera {
     if (!this.world) throw new Error('EngineService.init() must be called before attach()')
 
@@ -466,6 +485,9 @@ export class EngineService {
     if (prev.manualTilt !== this.options.manualTilt) {
       this.setManualTilt(!!this.options.manualTilt)
     }
+    if (prev.showFeatures !== this.options.showFeatures) {
+      this.setShowFeatures(!!this.options.showFeatures)
+    }
     return { restartKeysChanged }
   }
 
@@ -505,5 +527,16 @@ export class EngineService {
   /** Update post-processing toggles/values for the environment's rendering pipeline. */
   public setEnvironmentPostProcessingOptions (options: Partial<DefaultPostProcessingOptions>): void {
     this.environmentService.setPostProcessingOptions(options)
+  }
+
+  // Feature layers
+  setShowFeatures (showFeatures: boolean): this {
+    this.featureInstancer.setIsVisible(showFeatures)
+    return this
+  }
+
+  updateFeatureTiles (): this {
+    this.featureInstancer.set(Object.values(useObjectsStore().getTiles))
+    return this
   }
 }
