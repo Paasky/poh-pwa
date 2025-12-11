@@ -23,6 +23,9 @@ const settings = useSettingsStore();
 const localPresetId = ref<string>(settings.selectedPresetId);
 const local = reactive<EngineOptions>({ ...settings.engine });
 
+// Debug toggles (live, not persisted in EngineOptions)
+const localLogicDebugEnabled = ref(false);
+
 watch(
   () => showOptions.value,
   (open) => {
@@ -238,6 +241,19 @@ function confirmRestartCancel() {
           <div>
             <div class="text-subtitle-2 mb-2">Camera</div>
             <v-switch v-model="local.manualTilt" label="Manual tilt (disable auto-tilt)" inset />
+          </div>
+
+          <!-- Debug -->
+          <div>
+            <div class="text-subtitle-2 mb-2">Debug</div>
+            <v-switch
+              v-model="localLogicDebugEnabled"
+              label="Logic mesh debug overlay"
+              inset
+              @update:model-value="
+                (v: boolean | null) => app.engineService.setLogicDebugEnabled(!!v)
+              "
+            />
           </div>
         </v-card-text>
         <v-divider />

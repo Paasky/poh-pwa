@@ -255,27 +255,27 @@ export function wrapX(size: Coords, x: number) {
 export const waterLevel = -0.2;
 export const maxWaterHeight = -0.3;
 
-export function tileHeight(tile: Tile): number {
+export function tileHeight(tile: Tile, forLogic: boolean = false): number {
   if (tile.terrain.key === "terrainType:ocean") {
-    return getRandom([-1, -1.1, -1.2]);
+    return forLogic ? waterLevel : getRandom([-1, -1.1, -1.2]);
   }
   if (tile.terrain.key === "terrainType:sea") {
-    return getRandom([-0.65, -0.7, -0.75]);
+    return forLogic ? waterLevel : getRandom([-0.65, -0.7, -0.75]);
   }
   if (tile.terrain.key === "terrainType:coast") {
-    return getRandom([-0.38, -0.4, -0.42]);
+    return forLogic ? waterLevel : getRandom([-0.38, -0.4, -0.42]);
   }
   if (tile.terrain.key === "terrainType:lake" || tile.terrain.key === "terrainType:majorRiver") {
-    return getRandom([-0.4]);
+    return forLogic ? waterLevel : getRandom([-0.4]);
   }
   if (tile.elevation.key === "elevationType:hill") {
-    return getRandom([0.2, 0.25, 0.3]);
+    return forLogic ? 0.25 : getRandom([0.2, 0.25, 0.3]);
   }
   if (tile.elevation.key === "elevationType:mountain") {
-    return getRandom([0.6, 0.8, 1, 1.2]);
+    return forLogic ? 0.8 : getRandom([0.6, 0.8, 1, 1.2]);
   }
   if (tile.elevation.key === "elevationType:snowMountain") {
-    return getRandom([1.4, 1.6, 1.8, 2]);
+    return forLogic ? 1.6 : getRandom([1.4, 1.6, 1.8, 2]);
   }
   return 0;
 }
