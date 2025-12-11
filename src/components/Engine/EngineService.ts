@@ -27,6 +27,8 @@ import { useObjectsStore } from "@/stores/objectStore";
 import { EnvironmentService } from "@/components/Engine/EnvironmentService";
 import type { DefaultPostProcessingOptions } from "@/components/Engine/environments/postFx";
 import type { WeatherType } from "@/components/Engine/environments/weather";
+import LogicMeshBuilder from "@/factories/LogicMeshBuilder";
+import { useHoveredTile } from "@/stores/hoveredTile";
 
 export type EngineOptions = {
   // Camera UX
@@ -186,6 +188,7 @@ export class EngineService {
 
   terrainBuilder: TerrainMeshBuilder;
   environmentService: EnvironmentService;
+  logicMesh: LogicMeshBuilder;
 
   // Options
   options: EngineOptions = { ...DefaultEngineOptions };
@@ -235,6 +238,18 @@ export class EngineService {
       useObjectsStore().getTiles,
     );
     this.tileRoot = this.terrainBuilder.root;
+
+    // Build logic mesh for interactions (thin-instance, invisible)
+    this.logicMesh = new LogicMeshBuilder(
+      this.scene,
+      { x: this.world.sizeX, y: this.world.sizeY },
+      useObjectsStore().getTiles,
+    ).build();
+
+    // Wire hovered tile to a lightweight reactive store
+    const hovered = useHoveredTile();
+    this.logicMesh.onTileHover((tile) => hovered.set(tile));
+    this.logicMesh.onTileExit(() => hovered.clear());
 
     // Render loop with optional FPS cap
     this.engine.runRenderLoop(() => {
@@ -341,10 +356,39 @@ export class EngineService {
   detach(): void {
     window.removeEventListener("resize", this.onResize);
     this.engine.stopRenderLoop();
+    this.logicMesh.dispose();
     this.terrainBuilder.dispose();
     this.environmentService.dispose();
     this.scene.dispose();
     this.engine.dispose();
+  }
+
+  // ————————————————————————————————————————————
+  // Logic mesh helpers / event surface
+  onTileHover(handler: Parameters<LogicMeshBuilder["onTileHover"]>[0]): () => void {
+    return this.logicMesh.onTileHover(handler);
+  }
+
+  onTileExit(handler: Parameters<LogicMeshBuilder["onTileExit"]>[0]): () => void {
+    return this.logicMesh.onTileExit(handler);
+  }
+
+  onTileClick(handler: Parameters<LogicMeshBuilder["onTileClick"]>[0]): () => void {
+    return this.logicMesh.onTileClick(handler);
+  }
+
+  onTileContextMenu(handler: Parameters<LogicMeshBuilder["onTileContextMenu"]>[0]): () => void {
+    return this.logicMesh.onTileContextMenu(handler);
+  }
+
+  setLogicDebugEnabled(enabled: boolean): this {
+    this.logicMesh.setDebugEnabled(enabled);
+    return this;
+  }
+
+  setPreventContextMenuDefault(enabled: boolean): this {
+    this.logicMesh.setPreventContextMenuDefault(enabled);
+    return this;
   }
 
   // Public: move instantly to a percentage of world width/depth (0..1 each)
