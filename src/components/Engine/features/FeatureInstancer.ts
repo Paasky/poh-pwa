@@ -3,8 +3,7 @@ import { Coords, tileHeight } from '@/helpers/mapTools'
 import type { GameKey } from '@/objects/game/_GameObject'
 import type { Tile } from '@/objects/game/Tile'
 import type { WorldState } from '@/types/common'
-import { Mesh, Scene, TransformNode, } from '@babylonjs/core'
-import { SolidParticleSystem } from '@babylonjs/core/Particles/solidParticleSystem'
+import { Matrix, Mesh, Quaternion, Scene, TransformNode, Vector3 } from '@babylonjs/core'
 import { FeatureGroup, featureMeshMap } from '@/assets/meshes/features'
 
 export default class FeatureInstancer {
@@ -13,8 +12,7 @@ export default class FeatureInstancer {
   isVisible = true
 
   root: TransformNode
-  baseMeshContainer: TransformNode
-  lib: Record<FeatureGroup, { mesh: Mesh, sps: SolidParticleSystem, indices: Record<GameKey, number> }>
+  lib: Record<FeatureGroup, { mesh: Mesh, indices: Record<GameKey, number> }>
 
   constructor (
     scene: Scene,
@@ -27,17 +25,16 @@ export default class FeatureInstancer {
     this.root = new TransformNode('featuresRoot', this.scene)
     this.root.parent = parent
 
-    this.baseMeshContainer = new TransformNode('featuresBase', this.scene)
-    this.baseMeshContainer.setEnabled(false)
-    this.lib = {} as any
-    for (const [featureGroup, getMesh] of Object.entries(featureMeshMap)) {
+    this.lib = {} as Record<FeatureGroup, { mesh: Mesh, indices: Record<GameKey, number> }>
+    for (const featureGroup of Object.keys(featureMeshMap) as FeatureGroup[]) {
+      const getMesh = featureMeshMap[featureGroup]
       const mesh = getMesh(this.scene)
       mesh.setEnabled(false)
-      mesh.parent = this.baseMeshContainer
+      mesh.parent = this.root
+      mesh.isPickable = false
 
-      this.lib[featureGroup as FeatureGroup] = {
+      this.lib[featureGroup] = {
         mesh,
-        sps: this.initSps(featureGroup as FeatureGroup),
         indices: {},
       }
     }
@@ -76,41 +73,46 @@ export default class FeatureInstancer {
       tilesPerGroup[featureGroup].push(tile)
     }
 
-    for (const [featureGroup, tiles] of Object.entries(tilesPerGroup)) {
-      const lib = this.lib[featureGroup as FeatureGroup]
+    for (const featureGroup of Object.keys(tilesPerGroup) as FeatureGroup[]) {
+      const groupTiles = tilesPerGroup[featureGroup]
+      const lib = this.lib[featureGroup]
 
-      // Make our life much easier: reset the sps and indices before each batch
-      if (lib.sps.nbParticles > 0) {
-        lib.sps.dispose()
-        lib.sps = this.initSps(featureGroup as FeatureGroup)
-      }
+      // Reset indices for this batch
+      lib.indices = {}
 
-      // Nothing to draw for this group
-      if (tiles.length === 0) {
-        lib.indices = {}
+      if (groupTiles.length === 0) {
+        // Clear thin instances and hide mesh
+        lib.mesh.thinInstanceSetBuffer('matrix', new Float32Array(0), 16)
+        lib.mesh.isVisible = false
+        lib.mesh.setEnabled(false)
         continue
       }
 
-      // Add the base mesh
-      lib.sps.addShape(lib.mesh, tiles.length)
+      // Build instance matrices (4x4 per instance)
+      const count = groupTiles.length
+      const stride = 16
+      const data = new Float32Array(count * stride)
 
-      // Build and attach the SPS mesh
-      const meshNode = lib.sps.buildMesh()
-      meshNode.parent = this.root
-      meshNode.isPickable = false
+      const scale = Vector3.One()
+      const rotation = Quaternion.Identity()
+      const m = new Matrix()
 
-      // Set update-function for tile <-> particle -> index <-> position
-      lib.sps.updateParticle = (p) => {
-        const tile = tiles[p.idx]
-
-        lib.indices[tile.key] = p.idx
-
-        const center = tileCenter(this.size, tile)
-        p.position.set(center.x, tileHeight(tile, true), center.z)
-
-        return p
+      for (let i = 0; i < count; i++) {
+        const tile = groupTiles[i]
+        lib.indices[tile.key] = i
+        const c = tileCenter(this.size, tile)
+        const y = tileHeight(tile, true)
+        Matrix.ComposeToRef(scale, rotation, new Vector3(c.x, y, c.z), m)
+        m.copyToArray(data, i * stride)
       }
-      lib.sps.setParticles()
+
+      lib.mesh.thinInstanceSetBuffer('matrix', data, stride, true)
+      // Ensure the source mesh is actually rendered (isVisible was false in factories)
+      lib.mesh.isVisible = this.isVisible
+      lib.mesh.setEnabled(this.isVisible)
+      // Refresh bounds so thin instances aren’t culled by the tiny source bounds
+      const maybeTI = lib.mesh as unknown as { thinInstanceRefreshBoundingInfo?: (force?: boolean) => void }
+      maybeTI.thinInstanceRefreshBoundingInfo?.(true)
     }
 
     return this
@@ -118,10 +120,8 @@ export default class FeatureInstancer {
 
   dispose (): void {
     for (const lib of Object.values(this.lib)) {
-      lib.sps.dispose()
       lib.mesh.dispose(false, true)
     }
-    this.baseMeshContainer.dispose(false, true)
     this.root.dispose(false, true)
   }
 
@@ -141,11 +141,5 @@ export default class FeatureInstancer {
     return null
   }
 
-  private initSps (featureGroup: FeatureGroup): SolidParticleSystem {
-    return new SolidParticleSystem(
-      `features.${featureGroup}SPS`,
-      this.scene,
-      { updatable: false }
-    )
-  }
+  // Thin instances do not require per-group initialization helpers
 }

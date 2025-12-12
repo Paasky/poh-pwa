@@ -116,7 +116,7 @@ export class Tile extends GameObject {
   tradeRoutes = hasMany<TradeRoute>(this.tradeRouteKeys, `${this.key}.tradeRoutes`);
 
   unitKeys = ref([] as GameKey[]);
-  units = hasMany<Unit[]>(this.unitKeys, `${this.key}.units`);
+  units = hasMany<Unit>(this.unitKeys, `${this.key}.units`);
 
   /*
    * Computed

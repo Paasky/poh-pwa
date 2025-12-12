@@ -1,0 +1,11 @@
+node_modules
+dist
+.dist
+.git
+*.log
+.vscode
+.idea
+Dockerfile*
+pnpm-debug.log*
+coverage
+tests/**/artifacts
