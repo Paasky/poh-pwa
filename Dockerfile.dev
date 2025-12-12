@@ -22,4 +22,4 @@ EXPOSE 5173
 
 # Bind to 0.0.0.0 so host can reach it, and keep container port at 5173
 # strictPort ensures Vite fails instead of auto-switching, matching our published port
-CMD ["pnpm", "dev", "--", "--host", "0.0.0.0", "--port", "5173", "--strictPort"]
+CMD ["pnpm", "dev"]

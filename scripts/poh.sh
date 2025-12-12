@@ -116,22 +116,47 @@ dev_up() {
   if ! docker image inspect "${DEV_IMAGE}" >/dev/null 2>&1; then
     build_dev_image
   fi
+  local lan_flag="0"
+  local port_cli=""
+  # Parse optional flags: support --lan as either first or second arg; optional port is numeric
+  for arg in "$@"; do
+    case "$arg" in
+      --lan) lan_flag="1" ;;
+      *)
+        if [[ -z "$port_cli" && "$arg" =~ ^[0-9]+$ ]]; then
+          port_cli="$arg"
+        fi
+        ;;
+    esac
+  done
+
+  # Allow env override for LAN publishing
+  if [[ "${POH_LAN:-}" == "1" ]]; then
+    lan_flag="1"
+  fi
+
   local chosen_port
-  if ! chosen_port=$(choose_port "${1:-}" 5173 5174); then
+  if ! chosen_port=$(choose_port "${port_cli:-}" 5173 5174); then
     exit 2
   fi
   DEV_HOST_PORT="$chosen_port"
   if [[ "$DEV_HOST_PORT" != "5173" ]]; then
     echo "Using port $DEV_HOST_PORT (5173 was busy)."
   fi
-  echo "Starting dev server on http://localhost:${DEV_HOST_PORT} (Ctrl+C to stop)"
-  docker run -it --name "${DEV_CONT}" \
+  if [[ "$lan_flag" == "1" ]]; then
+    echo "LAN mode enabled: publishing on 0.0.0.0:${DEV_HOST_PORT}"
+    echo "Open from other devices: http://<your-lan-ip>:${DEV_HOST_PORT}/"
+  fi
+  docker run -it --init --name "${DEV_CONT}" \
     --network "${NETWORK}" \
-    -p "${DEV_HOST_PORT}:${DEV_CONT_PORT}" \
+    -p "$([[ "$lan_flag" == "1" ]] && echo "${DEV_HOST_PORT}:${DEV_CONT_PORT}" || echo "127.0.0.1:${DEV_HOST_PORT}:${DEV_CONT_PORT}")" \
     -v "${PWD}:/app" \
     -v /app/node_modules \
     -e CHOKIDAR_USEPOLLING=true \
-    --rm "${DEV_IMAGE}" sh -lc "mkdir -p /app/node_modules && cp -a /opt/node_modules_cache/. /app/node_modules/ 2>/dev/null || true; pnpm dev -- --host 0.0.0.0 --port 5173 --strictPort"
+    --rm "${DEV_IMAGE}" sh -lc "mkdir -p /app/node_modules \
+      && cp -a /opt/node_modules_cache/. /app/node_modules/ 2>/dev/null || true \
+      && HUSKY=0 CI=true pnpm install --strict-peer-dependencies=false --prefer-offline \
+      && pnpm dev"
 }
 
 dev_down() {
@@ -152,9 +177,9 @@ prod_up() {
   PROD_HOST_PORT="$chosen_port"
   docker run -d --name "${PROD_CONT}" \
     --network "${NETWORK}" \
-    -p "${PROD_HOST_PORT}:${PROD_CONT_PORT}" \
+    -p "127.0.0.1:${PROD_HOST_PORT}:${PROD_CONT_PORT}" \
     --rm "${PROD_IMAGE_TAG}"
-  echo "Prod-like container running at http://localhost:${PROD_HOST_PORT}"
+  echo "Prod-like container running at http://localhost:${PROD_HOST_PORT} (or http://127.0.0.1:${PROD_HOST_PORT})"
 }
 
 prod_down() {
@@ -222,7 +247,7 @@ toggle_default() {
     echo "Dev is running -> stopping..."
     dev_down
   else
-    echo "Dev is not running -> starting..."
+    echo "Starting Dev Up..."
     dev_up
   fi
 }
@@ -235,7 +260,7 @@ Pages of History PWA — Docker manager
 
 Choose an action (press Enter for default = 0):
   0) Toggle Dev (up if down, down if up) [default]
-  1) Dev Up (foreground, hot reload) [optional: port]
+  1) Dev Up (foreground, hot reload) [optional: port] [--lan]
   2) Dev Down
   3) Prod Up (detached, nginx) [optional: port]
   4) Prod Down
@@ -253,23 +278,25 @@ EOF
 run_choice() {
   # Allow optional port as second argument
   local cmd="${1:-0}"
-  local port_arg="${2:-}"
+  shift || true
+  # Collect remaining args (port or --lan)
+  local extra_args=("$@")
   case "$cmd" in
     0) toggle_default ;;
-    1) dev_up "$port_arg" ;;
-    2) dev_down ;;
-    3) prod_up "$port_arg" ;;
-    4) prod_down ;;
-    5) rebuild_all ;;
+    1) echo "Starting Dev Up..."; dev_up "${extra_args[@]}" ;;
+    2) echo "Stopping Dev..."; dev_down ;;
+    3) echo "Starting Prod Up..."; prod_up "${extra_args[@]:0:1}" ;;
+    4) echo "Stopping Prod..."; prod_down ;;
+    5) echo "Rebuilding images (dev + prod)..."; rebuild_all ;;
     6) status ;;
     7) run_fix ;;
     8) run_check ;;
     9) run_prep ;;
-    dev-up) dev_up "$port_arg" ;;
-    dev-down) dev_down ;;
-    prod-up) prod_up "$port_arg" ;;
-    prod-down) prod_down ;;
-    rebuild) rebuild_all ;;
+    dev-up) echo "Starting Dev Up..."; dev_up "${extra_args[@]}" ;;
+    dev-down) echo "Stopping Dev..."; dev_down ;;
+    prod-up) echo "Starting Prod Up..."; prod_up "${extra_args[@]:0:1}" ;;
+    prod-down) echo "Stopping Prod..."; prod_down ;;
+    rebuild) echo "Rebuilding images (dev + prod)..."; rebuild_all ;;
     status) status ;;
     fix) run_fix ;;
     check) run_check ;;

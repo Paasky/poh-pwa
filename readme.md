@@ -15,7 +15,7 @@ public/textures/bump/sand.png
 ### 1.2 Docker
 
 Quickstart: `bash scripts/poh.sh`
-> Toggles between up/down
+> Toggles between up/down. If Dev isn’t running, starts it and prints the local URL.
 >
 > May need `chmod +x scripts/poh.sh` to execute
 >
@@ -47,6 +47,9 @@ Defaults:
 #### Dev Up
 
 `bash scripts/poh.sh dev-up` (hot reload; tries 5173 then 5174)
+
+Auto-install: Dev Up automatically runs `pnpm install` inside the container so branch switches and lockfile changes are
+handled without extra steps.
 
 #### Dev Down
 
@@ -82,12 +85,25 @@ Defaults:
 `bash scripts/poh.sh prod-up 9090` or
 `POH_PORT=3000`.
 
+#### LAN mode (test on real devices)
+
+- Use `--lan` (or env `POH_LAN=1`) to publish on all interfaces instead of only localhost:
+    - `bash scripts/poh.sh dev-up --lan`
+    - Then open from another device: `http://<your-lan-ip>:5173/`
+- HMR over LAN: usually works out of the box. If you see HMR connection issues, set
+  `VITE_HMR_HOST=<your-lan-ip>` before starting Dev Up. Example:
+    - `VITE_HMR_HOST=192.168.1.50 bash scripts/poh.sh dev-up --lan`
+- macOS: if prompted, allow Docker Desktop to accept incoming connections (System Settings → Network → Firewall).
+
 #### Notes
 
 - Uses an isolated Docker network `poh-pwa-net`, unique image/container names.
-- Dev mounts your working directory for instant reload; node_modules is masked inside the container (no files written to your host).
+- Dev mounts your working directory for instant reload; node_modules is masked inside the container (no files written to
+  your host).
 - Fix/Check/Prep run inside Docker (no local Node/pnpm needed).
-- Dev Up uses dependencies baked into the image; after changing package.json or pnpm-lock.yaml, run `bash scripts/poh.sh rebuild` and restart.
+- Dev Up automatically installs deps in the container when needed, so you generally do NOT need to rebuild images after
+  changing `package.json` or `pnpm-lock.yaml`. Use `rebuild` only if the base dev image itself changes (e.g., Node
+  version, global tools).
 
 ## 3. Development
 
