@@ -4,7 +4,7 @@
  */
 
 /** Default time of day (24h clock encoded as 0..2400). 1400 = 2:00 PM. */
-export const defaultTimeOfDay2400: number = 1400;
+export const defaultTimeOfDay2400: number = 900;
 
 /** Clamp a 24-hour time integer to 0..2400 inclusive. */
 export const clampTimeOfDay2400 = (timeOfDayValue2400: number): number => {

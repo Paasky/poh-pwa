@@ -81,7 +81,8 @@ export class GameLevel {
       .spreadSalt()
       .setSaltFreshEffects()
       .setSeaBetweenCoastAndOcean()
-      .addRivers();
+      .addRivers()
+      .fixInvalidTiles();
 
     return this;
   }
@@ -264,6 +265,42 @@ export class GameLevel {
     }
 
     this.gen.rivers = rivers;
+
+    return this;
+  }
+
+  private fixInvalidTiles(): GameLevel {
+    for (const tile of Object.values(this.gen.gameTiles)) {
+      // Fix invalid features
+      if (tile.feature.value) {
+        if (tile.elevation.id === "mountain" || tile.elevation.id === "snowMountain") {
+          // Mountains cannot have features
+          tile.feature.value = null;
+        } else if (tile.elevation.id === "hill") {
+          // Hills cannot have flat features
+          const flatFeatures = ["oasis", "floodPlain", "swamp"];
+          if (flatFeatures.includes(tile.feature.value.id)) {
+            tile.feature.value = null;
+          }
+        } else if (tile.terrain.id === "ocean" && tile.feature.value.id !== "tradeWind") {
+          // Ocean can ony have trade wind
+          tile.feature.value = null;
+        } else {
+          const waterFeatures = ["ice", "kelp", "lagoon", "atoll", "tradeWind"];
+          if (tile.domain.id === "water") {
+            // Water can only have water features
+            if (!waterFeatures.includes(tile.feature.value.id)) {
+              tile.feature.value = null;
+            }
+          } else {
+            // Land can only have land features
+            if (waterFeatures.includes(tile.feature.value.id)) {
+              tile.feature.value = null;
+            }
+          }
+        }
+      }
+    }
 
     return this;
   }

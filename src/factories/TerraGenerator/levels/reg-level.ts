@@ -108,9 +108,9 @@ export class RegLevel {
         delete landTilesPerContinent[startTile.area.key][startTile.key];
       }
 
-      // Add 3 mountain ranges per continent
+      // Add 5 mountain ranges per continent
       const landTiles = Object.values(landTilesPerContinent[continent.type.key]);
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < 5; i++) {
         const rangeStart = takeRandom(landTiles);
         const mountainTiles = mountainRange(rangeStart, this.gen.regTiles, this.gen.regSize);
 

@@ -6,8 +6,8 @@ import { EngineCoords } from "@/factories/TerrainMeshBuilder/_terrainMeshTypes";
 
 export function buildRandomPointsInHex(
   count: number,
-  mode: "even" | "semi-even" | "random",
-  minSpace: number,
+  mode: "even" | "semi-even" | "random" = "semi-even",
+  minSpace: number = 0.2,
 ): EngineCoords[] {
   if (mode === "even") {
     return buildTriangularLatticeApprox(count);
