@@ -42,8 +42,8 @@ export class TerrainMeshBuilder {
   };
 
   mesh: Mesh;
-  waterMesh: Mesh;
-  waterDispose: () => void;
+  waterMesh?: Mesh;
+  waterDispose?: () => void;
 
   snowColor = terrainColorMap["terrainType:snow"];
 
@@ -51,16 +51,21 @@ export class TerrainMeshBuilder {
     scene: Scene,
     size: Coords,
     tilesByKey: Record<string, Tile>,
-    hexRingCount: number = 3,
+    opts?: {
+      hexRingCount?: number;
+      lowDetail?: boolean;
+    },
   ) {
     this.scene = scene;
     this.size = size;
     this.tilesByKey = tilesByKey;
-    this.hexRingCount = hexRingCount;
+    this.hexRingCount = opts?.hexRingCount ?? 3;
 
     this.root = new TransformNode("terrainRoot", this.scene);
-    this.points = range(0, hexRingCount).flatMap((ring) => pointsInRing(ring, hexRingCount));
-    this.triangles = hexTrianglesFromPoints(this.points, hexRingCount);
+    this.points = range(0, this.hexRingCount).flatMap((ring) =>
+      pointsInRing(ring, this.hexRingCount),
+    );
+    this.triangles = hexTrianglesFromPoints(this.points, this.hexRingCount);
 
     // Step 1: Build Hex GPU Buffer
     for (let tileY = 0; tileY < this.size.y; tileY++) {
@@ -97,9 +102,11 @@ export class TerrainMeshBuilder {
     );
 
     // Step 3: Create the mesh
-    this.mesh = meshFromWeld(this.scene, this.root, welded);
+    this.mesh = meshFromWeld(this.scene, this.root, welded, opts?.lowDetail ?? false);
 
     // Simple world-sized water plane to denote global sea level
+    if (opts?.lowDetail) return this;
+
     const water = createWaterMesh(this.scene, this.size, this.root);
     this.waterMesh = water.mesh;
     this.waterDispose = water.dispose;
@@ -115,16 +122,16 @@ export class TerrainMeshBuilder {
     };
 
     this.mesh.dispose();
-    this.waterDispose();
+    this.waterDispose?.();
 
     // Note: Keep the root as other things may be attached to it, we are just clearing our internal data
   }
 
-  getMesh(): Mesh | null {
+  getMesh(): Mesh {
     return this.mesh;
   }
 
-  getWaterMesh(): Mesh | null {
+  getWaterMesh(): Mesh | undefined {
     return this.waterMesh;
   }
 

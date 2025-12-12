@@ -50,9 +50,19 @@ export const useAppStore = defineStore("app", {
         objects.world = gameData.world;
         objects.bulkSet(Object.values(gameObjects));
       } else {
-        const gameData = createWorld(worldSizes[4]);
-        objects.world = gameData.world;
-        objects.bulkSet(gameData.objects);
+        let tries = 0;
+        do {
+          try {
+            const gameData = createWorld(worldSizes[4]);
+            objects.world = gameData.world;
+            objects.bulkSet(gameData.objects);
+            break;
+          } catch (e) {
+            tries++;
+            // eslint-disable-next-line
+            console.warn("Failed to create world, retrying...", e);
+          }
+        } while (tries < 3);
       }
       objects.ready = true;
 

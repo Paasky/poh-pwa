@@ -265,6 +265,7 @@ export function meshFromWeld(
   scene: Scene,
   parent: TransformNode,
   welded: TerrainTileBuffers,
+  lowDetail = false,
 ): Mesh {
   // --- Build geometry
   const mesh = new Mesh("terrain.tiles", scene);
@@ -277,7 +278,7 @@ export function meshFromWeld(
   const uvs: number[] = [];
   if (welded.positions.length) {
     for (let i = 0; i < welded.positions.length; i += 3) {
-      const x = welded.positions[i + 0];
+      const x = welded.positions[i];
       const z = welded.positions[i + 2];
       uvs.push(x, z); // scale applied in shader via uUVScale
     }
@@ -290,7 +291,16 @@ export function meshFromWeld(
   }
   vd.normals = normals;
   vd.applyToMesh(mesh, true);
+  mesh.parent = parent;
 
+  if (!lowDetail) {
+    setBumpMap(scene, mesh);
+  }
+
+  return mesh;
+}
+
+function setBumpMap(scene: Scene, mesh: Mesh) {
   // --- Material: custom shader blending 4 normal maps
   const shader = new ShaderMaterial("mat.terrain.blendNormals", scene, SHADER_BASE, {
     attributes: ["position", "normal", "uv", "color"],
@@ -342,7 +352,7 @@ export function meshFromWeld(
   shader.setFloat("uIntSnow", NORMAL_INTENSITIES.snow);
 
   // Reference colors from config (Color4 -> vec3)
-  const refToVec3 = (c: Color4 | Color3) => new Color3((c as any).r, (c as any).g, (c as any).b);
+  const refToVec3 = (c: Color4 | Color3) => new Color3(c.r, c.g, c.b);
   // Grass group (3)
   shader.setColor3("uRefGrassA", refToVec3(REF_GROUPS.grass[0]));
   shader.setColor3("uRefGrassB", refToVec3(REF_GROUPS.grass[1]));
@@ -418,7 +428,4 @@ export function meshFromWeld(
   };
 
   mesh.material = shader;
-  mesh.parent = parent;
-
-  return mesh;
 }
