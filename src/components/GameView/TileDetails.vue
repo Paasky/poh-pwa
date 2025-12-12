@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { Ref } from "vue";
 import { Tile, useHoveredTile } from "@/stores/hoveredTile";
-import { useObjectsStore } from "@/stores/objectStore";
-import UiObjectChip from "@/components/Ui/UiObjectChip.vue"; // Force the output type so the IDE in <template> understands refs correctly
-
-const objects = useObjectsStore();
+import UiObjectChip from "@/components/Ui/UiObjectChip.vue";
 
 // Force the output type so the IDE in <template> understands refs correctly
 // eslint-disable-next-line
@@ -12,30 +9,42 @@ const { hoveredTile } = useHoveredTile() as any as { hoveredTile: Ref<Tile> };
 </script>
 
 <template>
-  <v-sheet class="tile-details" color="secondary" rounded="lg" elevation="2">
-    <div v-if="hoveredTile">
-      <div>
+  <v-sheet class="tile-details" color="secondary" style="width: 12rem">
+    <div v-if="hoveredTile" class="d-flex flex-column ga-1">
+      <div class="d-flex ga-1">
         <UiObjectChip :type="hoveredTile.elevation" />
         <UiObjectChip :type="hoveredTile.terrain" />
+      </div>
+      <div
+        class="d-flex ga-1"
+        v-if="hoveredTile.feature.value || hoveredTile.isFresh || hoveredTile.isSalt"
+      >
         <UiObjectChip v-if="hoveredTile.feature.value" :type="hoveredTile.feature.value" />
         <UiObjectChip v-if="hoveredTile.isFresh" type="conceptType:freshWater" />
         <span v-if="hoveredTile.isSalt">(Salt Water)</span>
       </div>
-      <div>
+      <div
+        class="d-flex ga-1"
+        v-if="
+          hoveredTile.resource.value || hoveredTile.naturalWonder || hoveredTile.pollution.value
+        "
+      >
         <UiObjectChip v-if="hoveredTile.resource.value" :type="hoveredTile.resource.value.name" />
         <UiObjectChip v-if="hoveredTile.naturalWonder" :type="hoveredTile.naturalWonder.name" />
         <UiObjectChip v-if="hoveredTile.pollution.value" :type="hoveredTile.pollution.value.name" />
       </div>
       <div v-if="hoveredTile.playerKey.value">Owner: ({{ hoveredTile.player.value!.name }})</div>
-      <div v-if="hoveredTile.unitKeys.value.length > 0">
+      <div v-if="hoveredTile.unitKeys.value.length > 0" class="d-flex ga-1">
         Units:
         <span v-for="unit of hoveredTile.units.value" :key="unit.key"> ({{ unit.name }}) </span>
       </div>
-      <div>
-        <span v-if="hoveredTile.riverKey">River: ({{ hoveredTile.river.value!.name }})</span>
-        <UiObjectChip :type="hoveredTile.area" />
+      <div class="d-flex ga-1">
         <UiObjectChip :type="hoveredTile.climate" />
         <UiObjectChip :type="hoveredTile.domain" />
+      </div>
+      <div class="d-flex ga-1">
+        <span v-if="hoveredTile.riverKey">({{ hoveredTile.river.value!.name }})</span>
+        <UiObjectChip :type="hoveredTile.area" />
       </div>
       <v-code>
         {{ hoveredTile.key }}
@@ -44,10 +53,4 @@ const { hoveredTile } = useHoveredTile() as any as { hoveredTile: Ref<Tile> };
   </v-sheet>
 </template>
 
-<style scoped>
-.tile-details {
-  font-size: 0.9rem;
-  line-height: 1.4;
-  padding: 8px;
-}
-</style>
+<style scoped></style>
