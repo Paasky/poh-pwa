@@ -27,6 +27,7 @@ import LogicMeshBuilder from "@/factories/LogicMeshBuilder";
 import { useHoveredTile } from "@/stores/hoveredTile";
 import { Minimap } from "@/components/Engine/interaction/Minimap";
 import FeatureInstancer from "@/components/Engine/features/FeatureInstancer";
+import GridOverlay from "@/components/Engine/overlays/GridOverlay";
 
 export type EngineOptions = {
   // Camera UX
@@ -53,6 +54,8 @@ export type EngineOptions = {
 
   // Feature layers
   showFeatures?: boolean; // Toggle GPU-instanced feature props (trees etc.)
+  // Overlays
+  showGrid?: boolean; // Toggle hex grid overlay
 };
 
 export const RestartRequiredOptionKeys: (keyof EngineOptions)[] = [
@@ -80,6 +83,7 @@ export const DefaultEngineOptions: Required<EngineOptions> = {
   bloomThreshold: 0.9,
   bloomWeight: 0.15,
   showFeatures: true,
+  showGrid: true,
 };
 
 export type EngineOptionPreset = { id: string; label: string; value: EngineOptions };
@@ -191,6 +195,7 @@ export class EngineService {
   environmentService: EnvironmentService;
   logicMesh: LogicMeshBuilder;
   featureInstancer: FeatureInstancer;
+  gridOverlay: GridOverlay;
 
   // Options
   options: EngineOptions = { ...DefaultEngineOptions };
@@ -260,6 +265,14 @@ export class EngineService {
       this.tileRoot,
     ).setIsVisible(options?.showFeatures ?? true);
 
+    // Grid overlay (always created; visibility controlled by option)
+    this.gridOverlay = new GridOverlay(
+      this.scene,
+      { x: this.world.sizeX, y: this.world.sizeY },
+      useObjectsStore().getTiles,
+    );
+    this.gridOverlay.setVisible(options?.showGrid ?? true);
+
     // Render loop with optional FPS cap
     this.engine.runRenderLoop(() => {
       if (this.options.fpsCap && this.options.fpsCap > 0) {
@@ -289,6 +302,7 @@ export class EngineService {
     window.removeEventListener("resize", this.onResize);
     this.engine.stopRenderLoop();
     this.featureInstancer.dispose();
+    this.gridOverlay.dispose();
     this.logicMesh.dispose();
     this.terrainBuilder.dispose();
     this.environmentService.dispose();
@@ -494,6 +508,9 @@ export class EngineService {
     }
     if (prev.showFeatures !== this.options.showFeatures) {
       this.setShowFeatures(!!this.options.showFeatures);
+    }
+    if (prev.showGrid !== this.options.showGrid) {
+      this.gridOverlay.setVisible(!!this.options.showGrid);
     }
     return { restartKeysChanged };
   }

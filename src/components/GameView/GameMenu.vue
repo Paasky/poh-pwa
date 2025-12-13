@@ -299,6 +299,14 @@ function confirmRestartCancel() {
             </div>
           </div>
 
+          <!-- Overlays & Layers -->
+          <div>
+            <div class="text-subtitle-2 mb-2">Overlays & Layers</div>
+            <div class="d-flex flex-wrap ga-4">
+              <v-switch v-model="local.showGrid" label="Show Grid" inset />
+            </div>
+          </div>
+
           <!-- Environment (managed by EnvironmentService) -->
           <div>
             <div class="text-subtitle-2 mb-2">Environment</div>
