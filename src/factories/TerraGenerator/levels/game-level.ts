@@ -282,8 +282,11 @@ export class GameLevel {
           if (flatFeatures.includes(tile.feature.value.id)) {
             tile.feature.value = null;
           }
-        } else if (tile.terrain.id === "ocean" && tile.feature.value.id !== "tradeWind") {
-          // Ocean can ony have trade wind
+        } else if (
+          tile.terrain.id === "ocean" &&
+          !["tradeWind", "ice"].includes(tile.feature.value.id)
+        ) {
+          // Ocean can ony have trade wind/ice
           tile.feature.value = null;
         } else {
           const waterFeatures = ["ice", "kelp", "lagoon", "atoll", "tradeWind"];

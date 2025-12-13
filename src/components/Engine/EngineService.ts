@@ -10,14 +10,7 @@ import {
   Vector3,
 } from "@babylonjs/core";
 import "@babylonjs/core/Lights/Shadows/shadowGeneratorSceneComponent";
-import {
-  clamp,
-  getWorldDepth,
-  getWorldMaxX,
-  getWorldMinX,
-  getWorldMinZ,
-  getWorldWidth,
-} from "@/helpers/math";
+import { clamp, getWorldDepth, getWorldMaxX, getWorldMinX, getWorldMinZ, getWorldWidth, } from "@/helpers/math";
 import { TerrainMeshBuilder } from "@/factories/TerrainMeshBuilder/TerrainMeshBuilder";
 import { useObjectsStore } from "@/stores/objectStore";
 import { EnvironmentService } from "@/components/Engine/EnvironmentService";
@@ -525,7 +518,47 @@ export class EngineService {
     } else if (!enabled && this._manualTiltEnabled) {
       this.camera.inputs.remove(this._rotationInput);
       this._manualTiltEnabled = false;
+      // Reset camera orientation to defaults when manual tilt is disabled
+      // Alpha: face North-up (same as initial setup = Math.PI/2)
+      // Beta: compute auto-tilt for current zoom
+      try {
+        const frac = (this.camera.radius - this.maxZoomIn) / (this.maxZoomOut - this.maxZoomIn);
+        const autoBeta = this.maxTilt - frac * (this.maxTilt - this.minTilt);
+        // Cancel any inertial rotations so reset is immediate
+        this.camera.inertialAlphaOffset = 0;
+        this.camera.inertialBetaOffset = 0;
+        this.camera.alpha = Math.PI / 2;
+        this.camera.beta = autoBeta;
+      } catch {
+        // no-op if camera values are not ready
+      }
     }
+  }
+
+  // --- Public getters for UI sync ---
+  /** Current effective engine options (do not mutate the returned object). */
+  public getOptions(): Readonly<EngineOptions> {
+    return this.options as Readonly<EngineOptions>;
+  }
+
+  /** Effective time of day 0..2400 used for rendering. */
+  public getEffectiveTimeOfDay2400(): number {
+    return this.environmentService.getEffectiveTimeOfDay2400();
+  }
+
+  /** Whether the environment clock is running. */
+  public getIsClockRunning(): boolean {
+    return this.environmentService.getIsClockRunning();
+  }
+
+  /** Current season month (1..12). */
+  public getSeasonMonth1to12(): number {
+    return this.environmentService.getSeasonMonth1to12();
+  }
+
+  /** Current weather type. */
+  public getWeatherType(): import("@/components/Engine/environments/weather").WeatherType {
+    return this.environmentService.getWeatherType();
   }
 
   /** Set the time of day (0..2400). */

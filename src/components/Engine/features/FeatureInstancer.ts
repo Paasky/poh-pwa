@@ -52,15 +52,15 @@ export default class FeatureInstancer {
       case "jungleTree":
         return { count: 8, scaleJitter: 0.1 };
       case "palmTree":
-        return { count: 4, minSpace: 0.5, scaleJitter: 0.25 };
+        return { count: 5, minSpace: 0.25, scaleJitter: 0.25 };
       case "bush":
         return { count: 8, scaleJitter: 0.25 };
       case "kelp":
-        return { count: 12, scaleJitter: 0.0 };
+        return { count: 18, scaleJitter: 0.2 };
       case "floodPlain":
-        return { count: 12, scaleJitter: 0.0 };
+        return { count: 18, scaleJitter: 0.2 };
       case "swamp":
-        return { count: 4, minSpace: 0.5, scaleJitter: 0.25 };
+        return { count: 5, minSpace: 0.25, scaleJitter: 0.5 };
       case "ice":
         return { count: 6, scaleJitter: 0.5 };
       case "atoll":

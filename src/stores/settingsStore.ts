@@ -8,6 +8,9 @@ import {
   RestartRequiredOptionKeys,
 } from "@/components/Engine/EngineService";
 import { loadPersisted, savePersisted } from "@/utils/persistentStorage";
+import { defaultTimeOfDay2400 } from "@/components/Engine/environments/timeOfDay";
+import { defaultSeasonMonth1to12 } from "@/components/Engine/environments/season";
+import { defaultWeatherType, type WeatherType } from "@/components/Engine/environments/weather";
 
 const STORAGE_KEY = "poh.settings";
 const STORAGE_VERSION = 1;
@@ -15,6 +18,13 @@ const STORAGE_VERSION = 1;
 export type SettingsData = {
   selectedPresetId: string; // one of EngineOptionPresets ids
   engine: EngineOptions;
+  lastSettingsTab?: "game" | "graphics";
+  environment?: {
+    timeOfDay2400: number;
+    isClockRunning: boolean;
+    seasonMonth1to12: number;
+    weatherType: WeatherType;
+  };
 };
 
 function clone<T>(o: T): T {
@@ -26,6 +36,13 @@ export const useSettingsStore = defineStore("settings", {
     ready: false,
     selectedPresetId: "high",
     engine: reactive({ ...DefaultEngineOptions }) as EngineOptions,
+    lastSettingsTab: "game" as "game" | "graphics",
+    environment: reactive({
+      timeOfDay2400: defaultTimeOfDay2400,
+      isClockRunning: false,
+      seasonMonth1to12: defaultSeasonMonth1to12,
+      weatherType: defaultWeatherType as WeatherType,
+    }),
   }),
   actions: {
     init() {
@@ -35,6 +52,21 @@ export const useSettingsStore = defineStore("settings", {
       if (saved) {
         this.selectedPresetId = saved.selectedPresetId ?? "high";
         this.engine = reactive({ ...DefaultEngineOptions, ...(saved.engine ?? {}) });
+        this.lastSettingsTab = (saved.lastSettingsTab as any) === "graphics" ? "graphics" : "game";
+        // Environment (game settings)
+        const env = saved.environment;
+        if (env) {
+          this.environment = reactive({
+            timeOfDay2400:
+              typeof env.timeOfDay2400 === "number" ? env.timeOfDay2400 : defaultTimeOfDay2400,
+            isClockRunning: !!env.isClockRunning,
+            seasonMonth1to12:
+              typeof env.seasonMonth1to12 === "number"
+                ? env.seasonMonth1to12
+                : defaultSeasonMonth1to12,
+            weatherType: (env.weatherType ?? defaultWeatherType) as WeatherType,
+          });
+        }
       } else {
         // todo select depending on a quick specs-check
         // Default to High preset
@@ -48,6 +80,8 @@ export const useSettingsStore = defineStore("settings", {
       const data: SettingsData = {
         selectedPresetId: this.selectedPresetId,
         engine: clone(this.engine),
+        lastSettingsTab: this.lastSettingsTab,
+        environment: clone(this.environment),
       };
       savePersisted(STORAGE_KEY, STORAGE_VERSION, data);
     },

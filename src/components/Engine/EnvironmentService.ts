@@ -147,9 +147,15 @@ export class EnvironmentService {
     this.updateSunFromTimeOfDay(initialEffectiveTime);
   }
 
-  /** Update the target time of day using a 24-hour clock encoded as 0..2400 integers. */
+  /** Update the target time of day using a 24-hour clock encoded as 0..2400 integers.
+   * If the clock is running, the current time is set as well so the change is visible immediately,
+   * and the clock continues advancing from the new value.
+   */
   public setTimeOfDay(timeOfDayValue2400: number): void {
     this.targetTimeOfDay2400 = EnvironmentService.clampTime2400(timeOfDayValue2400);
+    if (this.isClockRunning) {
+      this.currentTimeOfDay2400 = this.targetTimeOfDay2400;
+    }
     const effectiveTime = this.isClockRunning
       ? this.currentTimeOfDay2400
       : this.targetTimeOfDay2400;
@@ -172,6 +178,27 @@ export class EnvironmentService {
   /** Start or stop the internal clock. */
   public setIsClockRunning(isRunning: boolean): void {
     this.isClockRunning = isRunning;
+  }
+
+  // ---------- Getters (public, for UI sync) ----------
+  /** Returns the effective time of day (0..2400) currently used for rendering. */
+  public getEffectiveTimeOfDay2400(): number {
+    return this.isClockRunning ? this.currentTimeOfDay2400 : this.targetTimeOfDay2400;
+  }
+
+  /** Returns whether the environment clock is running. */
+  public getIsClockRunning(): boolean {
+    return this.isClockRunning;
+  }
+
+  /** Returns the currently selected target season month (1..12). */
+  public getSeasonMonth1to12(): number {
+    return this.targetSeasonMonth1to12;
+  }
+
+  /** Returns the currently selected target weather type. */
+  public getWeatherType(): WeatherType {
+    return this.targetWeatherType;
   }
 
   /**

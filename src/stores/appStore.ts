@@ -91,6 +91,18 @@ export const useAppStore = defineStore("app", {
         new EngineService(objects.world, engineCanvas, minimapCanvas, settings.engine),
       );
 
+      // Apply persisted Game (environment) settings after engine is created
+      try {
+        this.engineService
+          .setTimeOfDay(settings.environment.timeOfDay2400)
+          .setIsClockRunning(settings.environment.isClockRunning)
+          .setSeason(settings.environment.seasonMonth1to12)
+          .setWeather(settings.environment.weatherType);
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.warn("Failed to apply persisted environment settings on boot:", e);
+      }
+
       // 7) Loading is complete, tell the UI it can render
       this.loaded = true;
     },

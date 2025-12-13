@@ -1,13 +1,4 @@
-import {
-  Color3,
-  Matrix,
-  Mesh,
-  MeshBuilder,
-  Quaternion,
-  Scene,
-  StandardMaterial,
-  Vector3,
-} from "@babylonjs/core"; // All base meshes follow a normalized scale where no dimension exceeds 1 unit.
+import { Color3, Matrix, Mesh, MeshBuilder, Quaternion, Scene, StandardMaterial, Vector3, } from "@babylonjs/core"; // All base meshes follow a normalized scale where no dimension exceeds 1 unit.
 
 // All base meshes follow a normalized scale where no dimension exceeds 1 unit.
 // Returned meshes are intended to be master meshes for instancing, thus hidden by default.
@@ -236,7 +227,7 @@ export function getBaseKelp(scene: Scene): Mesh {
     { height: 1.0, diameter: 0.1, tessellation: 3 },
     scene,
   );
-  baseKelp.position.y = -0.6;
+  baseKelp.position.y = -0.49;
   baseKelp.material = colorMat(scene, 0.0, 0.3, 0.0); // dark green
   baseKelp.isVisible = false;
   return baseKelp;
