@@ -11,6 +11,11 @@ import { CreateScreenshotUsingRenderTarget } from "@babylonjs/core/Misc/screensh
 import { TerrainMeshBuilder } from "@/factories/TerrainMeshBuilder/TerrainMeshBuilder";
 import { useObjectsStore } from "@/stores/objectStore";
 import { getWorldDepth, getWorldWidth } from "@/helpers/math";
+import { FogOfWar } from "@/components/Engine/FogOfWar";
+import type { Tile } from "@/objects/game/Tile";
+import type { GameKey } from "@/objects/game/_GameObject";
+import { getNeighbors } from "@/helpers/mapTools";
+import type { Unit } from "@/objects/game/Unit";
 
 export class Minimap {
   world: WorldState;
@@ -20,6 +25,7 @@ export class Minimap {
   camera: ArcRotateCamera;
   light: HemisphericLight;
   terrain: TerrainMeshBuilder;
+  private fogOfWar?: FogOfWar;
 
   constructor(world: WorldState, canvas: HTMLCanvasElement, engine: BabylonEngine) {
     this.world = world;
@@ -69,6 +75,13 @@ export class Minimap {
       useObjectsStore().getTiles,
       { hexRingCount: 1, lowDetail: true },
     );
+
+    // Attach Fog of War to the minimap scene as well (mirrors main scene behavior)
+    const tilesByKey = useObjectsStore().getTiles as Record<string, Tile>;
+    const size = { x: this.world.sizeX, y: this.world.sizeY };
+    const init = this.computeInitialFogFromUnits(tilesByKey);
+    this.fogOfWar = new FogOfWar(this.scene, size, tilesByKey, init.knownKeys, init.visibleKeys);
+    this.fogOfWar.setEnabled(true);
   }
 
   capture(): void {
@@ -89,5 +102,55 @@ export class Minimap {
       };
       imageElement.src = data as string;
     });
+  }
+
+  dispose(): void {
+    this.fogOfWar?.dispose();
+    // Dispose scene resources created for minimap
+    this.terrain.dispose();
+    this.light.dispose();
+    this.scene.dispose();
+  }
+
+  // --- Fog of War mirroring API ---
+  addKnownTiles(tiles: Tile[]): void {
+    this.fogOfWar?.addKnownTiles(tiles);
+  }
+
+  setVisibleTiles(tiles: Tile[]): void {
+    this.fogOfWar?.setVisibleTiles(tiles);
+  }
+
+  updateFogVisibility(visibleKeys: Iterable<GameKey>, changedKeys?: GameKey[]): void {
+    this.fogOfWar?.updateFromVisibility(visibleKeys, changedKeys);
+  }
+
+  // --- FoW helper (mirrors EngineService behavior) ---
+  private computeInitialFogFromUnits(tilesByKey: Record<string, Tile>): {
+    knownKeys: GameKey[];
+    visibleKeys: GameKey[];
+  } {
+    const objStore = useObjectsStore();
+    const size = { x: this.world.sizeX, y: this.world.sizeY };
+    const visible = new Set<GameKey>();
+    const known = new Set<GameKey>();
+
+    const units = (objStore.currentPlayer.units.value as unknown as Unit[]) || [];
+    for (const u of units) {
+      const tile = (u as Unit).tile.value as Tile | null;
+      if (!tile) continue;
+      // Visible: unit tile + hex distance 1 neighbors
+      visible.add(tile.key as GameKey);
+      const v1 = getNeighbors(size, tile, tilesByKey, "hex", 1);
+      for (const t of v1) visible.add(t.key as GameKey);
+
+      // Known: include visible and ring at distance 2
+      known.add(tile.key as GameKey);
+      for (const t of v1) known.add(t.key as GameKey);
+      const k2 = getNeighbors(size, tile, tilesByKey, "hex", 2);
+      for (const t of k2) known.add(t.key as GameKey);
+    }
+
+    return { knownKeys: Array.from(known), visibleKeys: Array.from(visible) };
   }
 }

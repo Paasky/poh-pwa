@@ -17,6 +17,7 @@ import {
   getWorldMinX,
   getWorldMinZ,
   getWorldWidth,
+  tileCenter,
 } from "@/helpers/math";
 import { TerrainMeshBuilder } from "@/factories/TerrainMeshBuilder/TerrainMeshBuilder";
 import { useObjectsStore } from "@/stores/objectStore";
@@ -27,6 +28,11 @@ import LogicMeshBuilder from "@/factories/LogicMeshBuilder";
 import { useHoveredTile } from "@/stores/hoveredTile";
 import { Minimap } from "@/components/Engine/interaction/Minimap";
 import FeatureInstancer from "@/components/Engine/features/FeatureInstancer";
+import { FogOfWar } from "@/components/Engine/FogOfWar";
+import type { Tile } from "@/objects/game/Tile";
+import type { GameKey } from "@/objects/game/_GameObject";
+import { getNeighbors } from "@/helpers/mapTools";
+import type { Unit } from "@/objects/game/Unit";
 
 export type EngineOptions = {
   // Camera UX
@@ -53,6 +59,9 @@ export type EngineOptions = {
 
   // Feature layers
   showFeatures?: boolean; // Toggle GPU-instanced feature props (trees etc.)
+
+  // Internal features (not exposed to end-user UI for now)
+  fogOfWarEnabled?: boolean; // Enable/disable Fog of War post-process
 };
 
 export const RestartRequiredOptionKeys: (keyof EngineOptions)[] = [
@@ -80,6 +89,7 @@ export const DefaultEngineOptions: Required<EngineOptions> = {
   bloomThreshold: 0.9,
   bloomWeight: 0.15,
   showFeatures: true,
+  fogOfWarEnabled: true,
 };
 
 export type EngineOptionPreset = { id: string; label: string; value: EngineOptions };
@@ -192,6 +202,9 @@ export class EngineService {
   logicMesh: LogicMeshBuilder;
   featureInstancer: FeatureInstancer;
 
+  // Fog of War (main scene)
+  private fogOfWar?: FogOfWar;
+
   // Options
   options: EngineOptions = { ...DefaultEngineOptions };
   private _rotationInput = new ArcRotateCameraPointersInput();
@@ -260,6 +273,18 @@ export class EngineService {
       this.tileRoot,
     ).setIsVisible(options?.showFeatures ?? true);
 
+    // --- Fog of War (main scene) ---
+    if (this.options.fogOfWarEnabled) {
+      const tilesByKey = useObjectsStore().getTiles as Record<string, Tile>;
+      const size = { x: this.world.sizeX, y: this.world.sizeY };
+      const { knownKeys, visibleKeys } = this.computeInitialFogFromUnits(tilesByKey);
+      this.fogOfWar = new FogOfWar(this.scene, size, tilesByKey, knownKeys, visibleKeys);
+      this.fogOfWar.setEnabled(true);
+    }
+
+    // QoL: fly camera to the current player's first unit tile (if any)
+    this.flyToFirstUnitTile();
+
     // Render loop with optional FPS cap
     this.engine.runRenderLoop(() => {
       if (this.options.fpsCap && this.options.fpsCap > 0) {
@@ -286,6 +311,8 @@ export class EngineService {
   }
 
   detach(): void {
+    this.fogOfWar?.dispose();
+    this.fogOfWar = undefined;
     window.removeEventListener("resize", this.onResize);
     this.engine.stopRenderLoop();
     this.featureInstancer.dispose();
@@ -465,6 +492,61 @@ export class EngineService {
     this.engine.resize();
   };
 
+  // --- Fog of War helpers ---
+  private flyToFirstUnitTile(): void {
+    try {
+      const objStore = useObjectsStore();
+      const units = (objStore.currentPlayer.units.value as unknown as Unit[]) || [];
+      if (!units.length) return;
+      const tile = (units[0] as Unit).tile.value as Tile | null;
+      if (!tile) return;
+
+      // Compute world XZ of the tile center and convert to flyTo percents
+      const worldWidth = getWorldWidth(this.world.sizeX);
+      const worldDepth = getWorldDepth(this.world.sizeY);
+      const worldMaxX = getWorldMaxX(worldWidth);
+      const worldMinZ = getWorldMinZ(worldDepth);
+
+      // Use math.tileCenter as single source of truth
+      const center = tileCenter({ x: this.world.sizeX, y: this.world.sizeY }, tile);
+      const centerX = center.x;
+      const centerZ = center.z;
+
+      const widthPercent = (worldMaxX - centerX) / worldWidth;
+      const depthPercent = (centerZ - worldMinZ) / worldDepth;
+      this.flyTo(widthPercent, depthPercent);
+    } catch {
+      // best-effort only
+    }
+  }
+  private computeInitialFogFromUnits(tilesByKey: Record<string, Tile>): {
+    knownKeys: GameKey[];
+    visibleKeys: GameKey[];
+  } {
+    const objStore = useObjectsStore();
+    const size = { x: this.world.sizeX, y: this.world.sizeY };
+    const visible = new Set<GameKey>();
+    const known = new Set<GameKey>();
+
+    const units = (objStore.currentPlayer.units.value as unknown as Unit[]) || [];
+    for (const u of units) {
+      const tile = (u as Unit).tile.value as Tile | null;
+      if (!tile) continue;
+      // Visible: unit tile + hex distance 1 neighbors
+      visible.add(tile.key as GameKey);
+      const v1 = getNeighbors(size, tile, tilesByKey, "hex", 1);
+      for (const t of v1) visible.add(t.key as GameKey);
+
+      // Known: at minimum all visible, plus the hex distance 2 ring
+      known.add(tile.key as GameKey);
+      for (const t of v1) known.add(t.key as GameKey);
+      const k2 = getNeighbors(size, tile, tilesByKey, "hex", 2);
+      for (const t of k2) known.add(t.key as GameKey);
+    }
+
+    return { knownKeys: Array.from(known), visibleKeys: Array.from(visible) };
+  }
+
   // --- Options application helpers ---
   private applyRenderScale(scale: number) {
     const safeScale = Math.max(0.25, Math.min(2, scale || 1));
@@ -495,6 +577,19 @@ export class EngineService {
     if (prev.showFeatures !== this.options.showFeatures) {
       this.setShowFeatures(!!this.options.showFeatures);
     }
+    if (prev.fogOfWarEnabled !== this.options.fogOfWarEnabled) {
+      if (this.options.fogOfWarEnabled) {
+        if (!this.fogOfWar) {
+          const tilesByKey = useObjectsStore().getTiles as Record<string, Tile>;
+          const size = { x: this.world.sizeX, y: this.world.sizeY };
+          const { knownKeys, visibleKeys } = this.computeInitialFogFromUnits(tilesByKey);
+          this.fogOfWar = new FogOfWar(this.scene, size, tilesByKey, knownKeys, visibleKeys);
+        }
+        this.fogOfWar.setEnabled(true);
+      } else {
+        this.fogOfWar?.setEnabled(false);
+      }
+    }
     return { restartKeysChanged };
   }
 
@@ -524,6 +619,25 @@ export class EngineService {
   /** Set the active weather type. */
   public setWeather(weatherType: WeatherType): void {
     this.environmentService.setWeather(weatherType);
+  }
+
+  // --- Fog of War integration surface ---
+  /** Reveal tiles permanently (both in main scene and minimap, if present). */
+  public revealTiles(tiles: Tile[]): void {
+    this.fogOfWar?.addKnownTiles(tiles);
+    this.minimap?.addKnownTiles(tiles);
+  }
+
+  /** Replace current visible tiles (both in main scene and minimap). */
+  public setVisibleTiles(tiles: Tile[]): void {
+    this.fogOfWar?.setVisibleTiles(tiles);
+    this.minimap?.setVisibleTiles(tiles);
+  }
+
+  /** Advanced: update from visibility by keys, with optional changed set for minimal updates. */
+  public updateFogVisibility(visibleKeys: Iterable<GameKey>, changedKeys?: GameKey[]): void {
+    this.fogOfWar?.updateFromVisibility(visibleKeys, changedKeys);
+    this.minimap?.updateFogVisibility(visibleKeys, changedKeys);
   }
 
   /** Start or stop the environment's internal clock. */
