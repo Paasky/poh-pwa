@@ -21,7 +21,7 @@ export class FogOfWar {
   exploredDim = 0.33;
   // Alpha to blend unknown areas toward black (0..1)
   // Dev QoL: set to 0.75 so player can orient on the map
-  unknownDim = 0.75;
+  unknownDim = 0.95;
 
   // Inputs / configuration
   readonly scene: Scene;

@@ -145,12 +145,13 @@ export function getHexNeighborCoords(size: Coords, center: Coords, dist = 1): Co
     // Ensure X is wrapped (idempotent if already wrapped on enqueue)
     cur.x = wrapX(size, cur.x);
 
-    if (cur.d === dist) {
-      // At target distance: collect this coordinate (include axis-aligned)
-      // Return only x,y as Coords
+    // Collect all tiles within distance 1..dist (exclude center at d=0)
+    if (cur.d > 0 && cur.d <= dist) {
       result.push({ x: cur.x, y: cur.y });
-      continue;
     }
+
+    // If we've reached the max distance from center, do not expand further
+    if (cur.d === dist) continue;
 
     for (const nb of neighborCoords(cur)) {
       const nx = wrapX(size, nb.x);
@@ -188,13 +189,13 @@ export function getNeighborCoords(
   method: NeighborMethod = "chebyshev",
   distance = 1,
 ): Coords[] {
-  const neighbors: Coords[] = [];
-  // Track neighbors we've already added using a stable string key
-  const seen = new Set<string>();
-
   if (method === "hex") {
     return getHexNeighborCoords(size, tile, distance);
   }
+
+  const neighbors: Coords[] = [];
+  // Track neighbors we've already added using a stable string key
+  const seen = new Set<string>();
 
   for (let dy = -distance; dy <= distance; dy++) {
     const ny = tile.y + dy;

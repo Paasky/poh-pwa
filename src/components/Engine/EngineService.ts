@@ -1,9 +1,7 @@
 import {
   ArcRotateCamera,
-  ArcRotateCameraPointersInput,
   Color4,
   Engine as BabylonEngine,
-  PointerEventTypes,
   Scene,
   TransformNode,
   Vector3,
@@ -13,7 +11,6 @@ import {
   clamp,
   getWorldDepth,
   getWorldMaxX,
-  getWorldMinX,
   getWorldMinZ,
   getWorldWidth,
   tileCenter,
@@ -22,15 +19,15 @@ import { TerrainMeshBuilder } from "@/factories/TerrainMeshBuilder/TerrainMeshBu
 import { useObjectsStore } from "@/stores/objectStore";
 import { EnvironmentService } from "@/components/Engine/EnvironmentService";
 import type { DefaultPostProcessingOptions } from "@/components/Engine/environments/postFx";
-import type { WeatherType } from "@/components/Engine/environments/weather";
 import LogicMeshBuilder from "@/factories/LogicMeshBuilder";
 import { useHoveredTile } from "@/stores/hoveredTile";
 import { Minimap } from "@/components/Engine/interaction/Minimap";
+import { MainCamera } from "@/components/Engine/interaction/MainCamera";
 import FeatureInstancer from "@/components/Engine/features/FeatureInstancer";
 import { FogOfWar } from "@/components/Engine/FogOfWar";
 import type { Tile } from "@/objects/game/Tile";
 import type { GameKey } from "@/objects/game/_GameObject";
-import { Coords, getNeighbors } from "@/helpers/mapTools";
+import { Coords } from "@/helpers/mapTools";
 import type { Unit } from "@/objects/game/Unit";
 
 export type EngineOptions = {
@@ -176,6 +173,7 @@ export class EngineService {
   tileRoot: TransformNode;
 
   camera: ArcRotateCamera;
+  mainCamera: MainCamera;
   environmentService: EnvironmentService;
   terrainBuilder: TerrainMeshBuilder;
   logicMesh: LogicMeshBuilder;
@@ -186,16 +184,7 @@ export class EngineService {
   // Options
 
   options: EngineOptions = { ...DefaultEngineOptions };
-  // todo: move camera to separate file
-  panSpeed = 5; // 1 = slow, 10 = fast
-  maxRotation = Math.PI / 6; // bigger divisor = less rotation
-  maxTilt = 0.8; // higher = more tilt upwards
-  minTilt = 0.1; // 0 = top-down
-  manualTilt = false; // Allow user to set tilt manually (false = auto-tilt by zoom)
-  maxZoomIn = 10; // smaller = closer
-  maxZoomOut = 100; // larger = further
-  private _rotationInput = new ArcRotateCameraPointersInput();
-  private _manualTiltEnabled = false;
+  // Camera settings moved to MainCamera
 
   // todo the fps cap implementation is awful, just creates lag. this must go and either use built-in babylon settings or remove fps cap entirely
   private _lastRenderTime = 0;
@@ -229,7 +218,10 @@ export class EngineService {
 
     // Create Cameras and Environment
     this.applyRenderScale(this.options.renderScale ?? 1);
-    this.camera = this.initCamera();
+    this.mainCamera = new MainCamera(this.size, this.scene, this.canvas, {
+      manualTilt: this.options.manualTilt,
+    });
+    this.camera = this.mainCamera.camera;
     this.environmentService = new EnvironmentService(this.scene, this.camera, this.engine);
 
     // Build merged terrain mesh (new pipeline)
@@ -251,13 +243,17 @@ export class EngineService {
       this.tileRoot,
     ).setIsVisible(options?.showFeatures ?? true);
 
+    // Initialize FoW strictly from store-provided currentPlayer values
+    const storeKnown = useObjectsStore().currentPlayer.knownTileKeys.value as GameKey[];
+    const storeVisible = useObjectsStore().currentPlayer.visibleTileKeys.value as GameKey[];
+
     this.fogOfWar = new FogOfWar(
       this.size,
       this.scene,
       this.camera,
       tilesByKey,
-      useObjectsStore().currentPlayer.knownTileKeys.value,
-      useObjectsStore().currentPlayer.visibleTileKeys.value,
+      storeKnown,
+      storeVisible,
     );
 
     // QoL: fly camera to the current player's first unit tile (if any)
@@ -286,13 +282,13 @@ export class EngineService {
     this.engine.resize();
     window.addEventListener("resize", this.onResize);
 
-    // Once the scene is ready, capture a one-time minimap image into the minimap canvas
+    // Once the scene is ready, zoom minimap to known and capture a one-time minimap image
     this.scene.executeWhenReady(() => {
       this.minimap?.capture();
     });
   }
 
-  detach(): void {
+  dispose(): void {
     this.fogOfWar.dispose();
     window.removeEventListener("resize", this.onResize);
     this.engine.stopRenderLoop();
@@ -304,34 +300,9 @@ export class EngineService {
     this.engine.dispose();
   }
 
-  // todo: if this is all attached to the store, why have this here?
-  // ————————————————————————————————————————————
-  // Logic mesh helpers / event surface
-  onTileHover(handler: Parameters<LogicMeshBuilder["onTileHover"]>[0]): () => void {
-    return this.logicMesh.onTileHover(handler);
-  }
-
-  onTileExit(handler: Parameters<LogicMeshBuilder["onTileExit"]>[0]): () => void {
-    return this.logicMesh.onTileExit(handler);
-  }
-
-  onTileClick(handler: Parameters<LogicMeshBuilder["onTileClick"]>[0]): () => void {
-    return this.logicMesh.onTileClick(handler);
-  }
-
-  onTileContextMenu(handler: Parameters<LogicMeshBuilder["onTileContextMenu"]>[0]): () => void {
-    return this.logicMesh.onTileContextMenu(handler);
-  }
-
   // todo move this to our settingsStore and remove from here
   setLogicDebugEnabled(enabled: boolean): this {
     this.logicMesh.setDebugEnabled(enabled);
-    return this;
-  }
-
-  // todo this should not even be optional, but always set to enabled on engine init
-  setPreventContextMenuDefault(enabled: boolean): this {
-    this.logicMesh.setPreventContextMenuDefault(enabled);
     return this;
   }
 
@@ -357,115 +328,7 @@ export class EngineService {
     return this;
   }
 
-  // todo move all camera-code to a separate class interaction/Camera.ts
-  private initCamera(): ArcRotateCamera {
-    // Create Camera at the World center with max zoom in
-    const camera = new ArcRotateCamera(
-      "camera",
-      Math.PI / 2, // Look North
-      this.maxTilt, // Full Tilt
-      this.maxZoomIn, // Zoomed in
-      new Vector3(0, 0, 0),
-      this.scene,
-    );
-    this.camera = camera;
-
-    // Controls (clear all, then add back the ones we want)
-    camera.inputs.clear();
-
-    // a) Zoom Control from the mouse wheel
-    camera.inputs.addMouseWheel();
-    camera.wheelDeltaPercentage = 0.02;
-    camera.useNaturalPinchZoom = true;
-
-    // b) Rotation Control from the mouse right and middle buttons
-    camera.attachControl(this.canvas, true);
-    camera.useAutoRotationBehavior = false;
-    this._rotationInput.buttons = [1, 2]; // 1=right, 2=middle
-    this._rotationInput.panningSensibility = 0;
-    this.setManualTilt(!!this.options.manualTilt);
-
-    // c) Panning Control from the mouse left button
-    let dragging = false;
-    let lastX = 0;
-    let lastY = 0;
-    this.scene.onPointerObservable.add((pi) => {
-      const ev = pi.event;
-      if (pi.type === PointerEventTypes.POINTERDOWN) {
-        if (ev.button === 0) {
-          // 0 = Left mouse button
-          dragging = true;
-          lastX = ev.clientX;
-          lastY = ev.clientY;
-        }
-      }
-
-      if (pi.type === PointerEventTypes.POINTERUP) {
-        dragging = false;
-      }
-
-      if (pi.type === PointerEventTypes.POINTERMOVE) {
-        if (!dragging) return;
-
-        const dx = ev.clientX - lastX;
-        const dy = ev.clientY - lastY;
-        lastX = ev.clientX;
-        lastY = ev.clientY;
-
-        // zoom-scaled speed
-        const k = (this.panSpeed / 625) * (camera.radius / camera.lowerRadiusLimit!);
-
-        camera.target.x += dx * k;
-        camera.target.z -= dy * k;
-      }
-    });
-
-    // Rotation/Tilt/Zoom limits
-
-    // a) Rotation (Left-Right)
-    const rotationNorth = Math.PI / 2;
-    camera.lowerAlphaLimit = rotationNorth - this.maxRotation;
-    camera.upperAlphaLimit = rotationNorth + this.maxRotation;
-
-    // b) Tilt
-    camera.upperBetaLimit = this.maxTilt; // How much the camera can tilt upwards towards the horizon
-    camera.lowerBetaLimit = this.minTilt; // How close to top-down the camera can get
-
-    // c) Zoom
-    camera.lowerRadiusLimit = this.maxZoomIn;
-    camera.upperRadiusLimit = this.maxZoomOut;
-
-    // Panning and auto-tilt Camera values
-
-    // World size math once
-    const worldWidth = getWorldWidth(this.size.x);
-    const worldMinX = getWorldMinX(worldWidth);
-    const worldMaxX = getWorldMaxX(worldWidth);
-
-    // Clamp to N/S poles
-    // Wrap X (West-East) for a simulated "globe" effect
-    // Auto-tilt on zoom
-    camera.onViewMatrixChangedObservable.add(() => {
-      const t = camera.target;
-
-      // Clamp Z (North-South) normally
-      const minZ = -this.size.y / 1.385;
-      const maxZ = this.size.y / 1.425;
-      t.z = Math.min(Math.max(t.z, minZ), maxZ);
-
-      // Wrap X (West-East)
-      if (t.x > worldMaxX) t.x -= worldWidth;
-      else if (t.x < worldMinX) t.x += worldWidth;
-
-      // Auto-tilt if manualTilt === false
-      if (!this.options.manualTilt) {
-        const frac = (camera.radius - this.maxZoomIn) / (this.maxZoomOut - this.maxZoomIn);
-        camera.beta = this.maxTilt - frac * (this.maxTilt - this.minTilt);
-      }
-    });
-
-    return camera;
-  }
+  // Camera code moved into MainCamera
 
   private onResize = () => {
     this.engine.resize();
@@ -498,33 +361,6 @@ export class EngineService {
       // best-effort only
     }
   }
-  private computeInitialFogFromUnits(tilesByKey: Record<string, Tile>): {
-    knownKeys: GameKey[];
-    visibleKeys: GameKey[];
-  } {
-    const objStore = useObjectsStore();
-    const size = this.size;
-    const visible = new Set<GameKey>();
-    const known = new Set<GameKey>();
-
-    const units = (objStore.currentPlayer.units.value as unknown as Unit[]) || [];
-    for (const u of units) {
-      const tile = (u as Unit).tile.value as Tile | null;
-      if (!tile) continue;
-      // Visible: unit tile + hex distance 1 neighbors
-      visible.add(tile.key as GameKey);
-      const v1 = getNeighbors(size, tile, tilesByKey, "hex", 1);
-      for (const t of v1) visible.add(t.key as GameKey);
-
-      // Known: at minimum all visible, plus the hex distance 2 ring
-      known.add(tile.key as GameKey);
-      for (const t of v1) known.add(t.key as GameKey);
-      const k2 = getNeighbors(size, tile, tilesByKey, "hex", 2);
-      for (const t of k2) known.add(t.key as GameKey);
-    }
-
-    return { knownKeys: Array.from(known), visibleKeys: Array.from(visible) };
-  }
 
   // --- Options application helpers ---
   private applyRenderScale(scale: number) {
@@ -551,45 +387,12 @@ export class EngineService {
       this._lastRenderTime = 0; // reset limiter
     }
     if (prev.manualTilt !== this.options.manualTilt) {
-      this.setManualTilt(!!this.options.manualTilt);
+      this.mainCamera.setManualTilt(!!this.options.manualTilt);
     }
     if (prev.showFeatures !== this.options.showFeatures) {
       this.setShowFeatures(!!this.options.showFeatures);
     }
     return { restartKeysChanged };
-  }
-
-  // --- Live toggles ---
-  private setManualTilt(enabled: boolean) {
-    // When enabled: add the rotation/tilt input (RMB/MMB) and disable panning from it.
-    // When disabled: remove the rotation/tilt input and rely on auto-tilt behavior.
-    if (enabled && !this._manualTiltEnabled) {
-      this.camera.inputs.add(this._rotationInput);
-      this._manualTiltEnabled = true;
-    } else if (!enabled && this._manualTiltEnabled) {
-      this.camera.inputs.remove(this._rotationInput);
-      this._manualTiltEnabled = false;
-    }
-  }
-
-  /** Set the time of day (0..2400). */
-  public setTimeOfDay(timeOfDayValue2400: number): void {
-    this.environmentService.setTimeOfDay(timeOfDayValue2400);
-  }
-
-  /** Set the season as a month index (1..12). */
-  public setSeason(monthIndex1to12: number): void {
-    this.environmentService.setSeason(monthIndex1to12);
-  }
-
-  /** Set the active weather type. */
-  public setWeather(weatherType: WeatherType): void {
-    this.environmentService.setWeather(weatherType);
-  }
-
-  /** Start or stop the environment's internal clock. */
-  public setIsClockRunning(isRunning: boolean): void {
-    this.environmentService.setIsClockRunning(isRunning);
   }
 
   /** Update post-processing toggles/values for the environment's rendering pipeline. */
@@ -600,11 +403,6 @@ export class EngineService {
   // Feature layers
   setShowFeatures(showFeatures: boolean): this {
     this.featureInstancer.setIsVisible(showFeatures);
-    return this;
-  }
-
-  updateFeatureTiles(): this {
-    this.featureInstancer.set(Object.values(useObjectsStore().getTiles));
     return this;
   }
 }

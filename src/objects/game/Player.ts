@@ -93,27 +93,29 @@ export class Player extends GameObject {
 
   knownTileKeys = computed(() =>
     this.units.value
-      .map((u) =>
-        getNeighbors(
+      .map((u) => [
+        u.tileKey.value,
+        ...getNeighbors(
           useObjectsStore().world.size,
           u.tile.value,
           useObjectsStore().getTiles,
           "hex",
           2,
         ).map((t) => t.key),
-      )
+      ])
       .flat(),
   );
   visibleTileKeys = computed(() =>
     this.units.value
-      .map((u) =>
-        getNeighbors(
+      .map((u) => [
+        u.tileKey.value,
+        ...getNeighbors(
           useObjectsStore().world.size,
           u.tile.value,
           useObjectsStore().getTiles,
           "hex",
         ).map((t) => t.key),
-      )
+      ])
       .flat(),
   );
 
