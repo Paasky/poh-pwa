@@ -1,12 +1,23 @@
 import { Tile } from "@/objects/game/Tile";
 import { GameKey } from "@/objects/game/_GameObject";
 import { getRandom } from "@/helpers/arrayTools";
+import { EngineCoords } from "@/factories/TerrainMeshBuilder/_terrainMeshTypes";
 
 export type CompassHexEdge = "ne" | "e" | "se" | "sw" | "w" | "nw";
 export type CompassHexCorner = "n" | "se" | "sw" | "s" | "nw" | "ne";
 export type CompassSquare = "n" | "ne" | "e" | "se" | "s" | "sw" | "w" | "nw";
 export type Coords = { x: number; y: number };
 export type NeighborMethod = "chebyshev" | "manhattan" | "hex";
+
+export function getCoordsFromTileKey(tileKey: GameKey): Coords {
+  const [x, y] = tileKey.split(":").map(Number);
+  return { x, y };
+}
+
+export function getEngineCoordsFromTileKey(tileKey: GameKey): EngineCoords {
+  const [x, z] = tileKey.split(":").map(Number);
+  return { x, z };
+}
 
 export function getHexNeighborDirections(y: number): Record<CompassHexEdge, Coords> {
   const isOdd = (y & 1) === 1;

@@ -9,9 +9,17 @@ import {
 import { CreateScreenshotUsingRenderTarget } from "@babylonjs/core/Misc/screenshotTools";
 import { TerrainMeshBuilder } from "@/factories/TerrainMeshBuilder/TerrainMeshBuilder";
 import { useObjectsStore } from "@/stores/objectStore";
-import { getWorldDepth, getWorldWidth } from "@/helpers/math";
+import {
+  getWorldDepth,
+  getWorldMinX,
+  getWorldMinZ,
+  getWorldWidth,
+  hexDepth,
+  hexWidth,
+} from "@/helpers/math";
 import { FogOfWar } from "@/components/Engine/FogOfWar";
 import { Coords } from "@/helpers/mapTools";
+import { Tile } from "@/objects/game/Tile";
 
 export class Minimap {
   size: Coords;
@@ -82,13 +90,43 @@ export class Minimap {
     // Perform capture
     CreateScreenshotUsingRenderTarget(this.engine, this.camera, { width, height }, (data) => {
       // Draw into the minimap canvas
-      const renderingContext2d = this.canvas.getContext("2d")!;
-      const imageElement = new Image();
-      imageElement.onload = () => {
-        renderingContext2d.clearRect(0, 0, width, height);
-        renderingContext2d.drawImage(imageElement, 0, 0, width, height);
+      const ctx = this.canvas.getContext("2d")!;
+      const img = new Image();
+      img.onload = () => {
+        ctx.clearRect(0, 0, width, height);
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // KISS overlay: cover unknown tiles with simple black rectangles.
+        // Compute world-to-pixel mapping once.
+        const worldW = getWorldWidth(this.size.x);
+        const worldD = getWorldDepth(this.size.y);
+        const minX = getWorldMinX(worldW);
+        const minZ = getWorldMinZ(worldD);
+
+        // Rectangle size approximates hex bounds in pixels
+        const rectW = (hexWidth / worldW) * width;
+        const rectH = (hexDepth / worldD) * height;
+
+        ctx.fillStyle = "#000";
+        for (let y = 0; y < this.size.y; y++) {
+          for (let x = 0; x < this.size.x; x++) {
+            const key = Tile.getKey(x, y);
+            if (!this.fogOfWar.knownKeys.has(key)) {
+              // Odd-r pointy-top layout center in world units
+              const wx = minX + hexWidth * (x + 0.5 * (y & 1));
+              const wz = minZ + hexDepth * y;
+
+              // Map world -> pixel
+              const px = ((wx - minX) / worldW) * width;
+              const py = ((wz - minZ) / worldD) * height;
+
+              // Cover with a simple rectangle (good enough for 512x256 minimap)
+              ctx.fillRect(px - rectW / 2, py - rectH / 2, rectW, rectH);
+            }
+          }
+        }
       };
-      imageElement.src = data as string;
+      img.src = data as string;
     });
   }
 
