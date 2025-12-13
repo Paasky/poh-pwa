@@ -269,7 +269,7 @@ export function tileHeight(tile: Tile, forLogic: boolean = false): number {
     return forLogic ? waterLevel : getRandom([-0.4]);
   }
   if (tile.elevation.key === "elevationType:hill") {
-    return forLogic ? 0.25 : getRandom([0.2, 0.25, 0.3]);
+    return forLogic ? 0.25 : getRandom([0.3, 0.35, 0.4]);
   }
   if (tile.elevation.key === "elevationType:mountain") {
     return forLogic ? 0.8 : getRandom([0.6, 0.8, 1, 1.2]);

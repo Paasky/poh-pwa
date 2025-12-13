@@ -62,6 +62,30 @@ function onBeforeUnload(e: BeforeUnloadEvent) {
 </script>
 
 <template>
+  <!-- Loader Screen -->
+  <Transition name="fade" mode="out-in">
+    <v-sheet
+      v-if="!app.ready"
+      key="loader"
+      color="background"
+      class="d-flex align-center justify-center text-center"
+      style="
+        display: block;
+        position: absolute;
+        z-index: 100;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+      "
+    >
+      <div>
+        <img src="/book.gif" alt="Book" width="480" height="480" decoding="async" />
+        <h1 class="opacity-50">Loading the Pages of History…</h1>
+      </div>
+    </v-sheet>
+  </Transition>
+
   <!-- Game engine -->
   <canvas
     id="engine-canvas"
@@ -109,16 +133,13 @@ function onBeforeUnload(e: BeforeUnloadEvent) {
     />
 
     <!-- Bottom-left -->
-    <v-sheet color="secondary" class="position-absolute bottom-0 left-0 rounded-tr-lg pt-1 pr-1">
+    <v-sheet
+      color="secondary"
+      class="d-flex position-absolute bottom-0 left-0 rounded-tr-lg pt-1 pr-1"
+    >
       <Minimap />
+      <TileDetails v-if="app.loaded" />
     </v-sheet>
-
-    <!-- Bottom-center (horizontally centered on the axis) -->
-    <TileDetails
-      v-if="app.loaded"
-      class="position-absolute bottom-0"
-      style="left: 50%; transform: translateX(-50%); z-index: 9"
-    />
 
     <!-- Bottom-right -->
     <NextAction v-if="app.loaded" class="position-absolute bottom-0 right-0" />
@@ -127,21 +148,6 @@ function onBeforeUnload(e: BeforeUnloadEvent) {
     <PlayerDetailsDialog v-if="app.ready" />
     <EncyclopediaDialog v-if="app.ready" />
   </v-sheet>
-
-  <!-- Loader Screen -->
-  <Transition name="fade" mode="out-in">
-    <v-sheet
-      v-if="!app.ready"
-      key="loader"
-      color="background"
-      class="d-flex align-center justify-center text-center position-absolute w-100 h-100 overflow-hidden"
-    >
-      <div>
-        <img src="/book.gif" alt="Book" width="480" height="480" decoding="async" />
-        <h1 class="opacity-50">Loading the Pages of History…</h1>
-      </div>
-    </v-sheet>
-  </Transition>
 </template>
 
 <!--suppress CssUnusedSymbol -->
