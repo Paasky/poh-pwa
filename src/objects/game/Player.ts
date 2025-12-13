@@ -16,6 +16,8 @@ import type { Religion } from "@/objects/game/Religion";
 import type { Tile } from "@/objects/game/Tile";
 import type { TradeRoute } from "@/objects/game/TradeRoute";
 import type { Unit } from "@/objects/game/Unit";
+import { getNeighbors } from "@/helpers/mapTools";
+import { useObjectsStore } from "@/stores/objectStore";
 
 export class Player extends GameObject {
   constructor(
@@ -89,8 +91,31 @@ export class Player extends GameObject {
   designKeys = ref([] as GameKey[]);
   designs = hasMany<UnitDesign>(this.designKeys, `${this.key}.designs`);
 
-  knownTileKeys = ref([] as GameKey[]);
-  visibleTileKeys = ref([] as GameKey[]);
+  knownTileKeys = computed(() =>
+    this.units.value
+      .map((u) =>
+        getNeighbors(
+          useObjectsStore().world.size,
+          u.tile.value,
+          useObjectsStore().getTiles,
+          "hex",
+          2,
+        ).map((t) => t.key),
+      )
+      .flat(),
+  );
+  visibleTileKeys = computed(() =>
+    this.units.value
+      .map((u) =>
+        getNeighbors(
+          useObjectsStore().world.size,
+          u.tile.value,
+          useObjectsStore().getTiles,
+          "hex",
+        ).map((t) => t.key),
+      )
+      .flat(),
+  );
 
   religionKey = ref(null as GameKey | null);
   religion = canHaveOne<Religion>(this.religionKey, `${this.key}.religion`);

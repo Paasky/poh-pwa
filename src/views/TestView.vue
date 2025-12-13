@@ -229,8 +229,7 @@ onMounted(async () => {
   objStore.bulkSet(objs);
   objStore.world = {
     id: "test",
-    sizeX: 12,
-    sizeY: 12,
+    size: { x: 12, y: 12 },
     turn: 0,
     year: 0,
     currentPlayer: "player:1",
@@ -238,7 +237,7 @@ onMounted(async () => {
 
   const engineCanvas = document.getElementById("engine-canvas") as HTMLCanvasElement | null;
   if (!engineCanvas) throw new Error("Engine canvas `#engine-canvas` not found");
-  engine = new EngineService(objStore.world, engineCanvas);
+  engine = new EngineService(objStore.world.size, engineCanvas);
   // Expose the engine to the GameMenu via the app store so options can be applied in TestView
   appStore.engineService = engine;
 });

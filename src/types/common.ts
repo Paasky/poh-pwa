@@ -2,6 +2,7 @@ import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import getIcon from "@/types/icons";
 import { CategoryClass, CategoryObject, TypeClass, TypeObject } from "@/types/typeObjects";
 import { GameClass, GameKey, GameObject } from "@/objects/game/_GameObject";
+import { Coords } from "@/helpers/mapTools";
 
 export type ObjType = "TypeObject" | "CategoryObject" | "GameObject";
 export type CatKey = `${CategoryClass}:${string}`;
@@ -53,8 +54,7 @@ export function isGameObject(o: GameObject | PohObject): o is GameObject {
 
 export type WorldState = {
   id: string;
-  sizeX: number;
-  sizeY: number;
+  size: Coords;
   turn: number;
   year: number;
   currentPlayer: GameKey;

@@ -1,4 +1,3 @@
-import type { WorldState } from "@/types/common";
 import {
   ArcRotateCamera,
   ArcRotateCameraPointersInput,
@@ -31,7 +30,7 @@ import FeatureInstancer from "@/components/Engine/features/FeatureInstancer";
 import { FogOfWar } from "@/components/Engine/FogOfWar";
 import type { Tile } from "@/objects/game/Tile";
 import type { GameKey } from "@/objects/game/_GameObject";
-import { getNeighbors } from "@/helpers/mapTools";
+import { Coords, getNeighbors } from "@/helpers/mapTools";
 import type { Unit } from "@/objects/game/Unit";
 
 export type EngineOptions = {
@@ -59,9 +58,6 @@ export type EngineOptions = {
 
   // Feature layers
   showFeatures?: boolean; // Toggle GPU-instanced feature props (trees etc.)
-
-  // Internal features (not exposed to end-user UI for now)
-  fogOfWarEnabled?: boolean; // Enable/disable Fog of War post-process
 };
 
 export const RestartRequiredOptionKeys: (keyof EngineOptions)[] = [
@@ -89,7 +85,6 @@ export const DefaultEngineOptions: Required<EngineOptions> = {
   bloomThreshold: 0.9,
   bloomWeight: 0.15,
   showFeatures: true,
-  fogOfWarEnabled: true,
 };
 
 export type EngineOptionPreset = { id: string; label: string; value: EngineOptions };
@@ -174,7 +169,24 @@ export const EngineOptionPresets: EngineOptionPreset[] = [
 ];
 
 export class EngineService {
-  // Camera settings
+  size: Coords;
+  canvas: HTMLCanvasElement;
+  engine: BabylonEngine;
+  scene: Scene;
+  tileRoot: TransformNode;
+
+  camera: ArcRotateCamera;
+  environmentService: EnvironmentService;
+  terrainBuilder: TerrainMeshBuilder;
+  logicMesh: LogicMeshBuilder;
+  featureInstancer: FeatureInstancer;
+  fogOfWar: FogOfWar;
+
+  minimap?: Minimap;
+  // Options
+
+  options: EngineOptions = { ...DefaultEngineOptions };
+  // todo: move camera to separate file
   panSpeed = 5; // 1 = slow, 10 = fast
   maxRotation = Math.PI / 6; // bigger divisor = less rotation
   maxTilt = 0.8; // higher = more tilt upwards
@@ -182,45 +194,23 @@ export class EngineService {
   manualTilt = false; // Allow user to set tilt manually (false = auto-tilt by zoom)
   maxZoomIn = 10; // smaller = closer
   maxZoomOut = 100; // larger = further
-
-  // Headless/game state
-  world: WorldState;
-
-  // Babylon rendering state
-  engine: BabylonEngine;
-  private _lastRenderTime = 0;
-  scene: Scene;
-  canvas: HTMLCanvasElement;
-  minimap?: Minimap;
-
-  tileRoot: TransformNode;
-
-  camera: ArcRotateCamera;
-
-  terrainBuilder: TerrainMeshBuilder;
-  environmentService: EnvironmentService;
-  logicMesh: LogicMeshBuilder;
-  featureInstancer: FeatureInstancer;
-
-  // Fog of War (main scene)
-  private fogOfWar?: FogOfWar;
-
-  // Options
-  options: EngineOptions = { ...DefaultEngineOptions };
   private _rotationInput = new ArcRotateCameraPointersInput();
   private _manualTiltEnabled = false;
 
-  // No animation state needed for simple, instant flyTo
+  // todo the fps cap implementation is awful, just creates lag. this must go and either use built-in babylon settings or remove fps cap entirely
+  private _lastRenderTime = 0;
 
   constructor(
-    world: WorldState,
+    size: Coords,
     canvas: HTMLCanvasElement,
     minimapCanvas?: HTMLCanvasElement,
     options?: EngineOptions,
   ) {
-    this.world = world;
+    this.size = size;
     this.canvas = canvas;
     this.options = { ...DefaultEngineOptions, ...(options ?? {}) };
+
+    const tilesByKey = useObjectsStore().getTiles;
 
     // Create Engine and Scene
     this.engine = new BabylonEngine(
@@ -237,29 +227,17 @@ export class EngineService {
     this.scene = new Scene(this.engine);
     this.scene.clearColor = new Color4(0.63, 0.63, 0.63, 1); // Same-ish as snow
 
-    if (minimapCanvas) this.minimap = new Minimap(world, minimapCanvas, this.engine);
-
-    // Resolution / hardware scaling
-    this.applyRenderScale(this.options.renderScale ?? 1);
-
     // Create Cameras and Environment
+    this.applyRenderScale(this.options.renderScale ?? 1);
     this.camera = this.initCamera();
     this.environmentService = new EnvironmentService(this.scene, this.camera, this.engine);
 
     // Build merged terrain mesh (new pipeline)
-    this.terrainBuilder = new TerrainMeshBuilder(
-      this.scene,
-      { x: this.world.sizeX, y: this.world.sizeY },
-      useObjectsStore().getTiles,
-    );
+    this.terrainBuilder = new TerrainMeshBuilder(this.scene, this.size, tilesByKey);
     this.tileRoot = this.terrainBuilder.root;
 
     // Build logic mesh for interactions (thin-instance, invisible)
-    this.logicMesh = new LogicMeshBuilder(
-      this.scene,
-      { x: this.world.sizeX, y: this.world.sizeY },
-      useObjectsStore().getTiles,
-    );
+    this.logicMesh = new LogicMeshBuilder(this.scene, this.size, tilesByKey);
 
     // Wire hovered tile to a lightweight reactive store
     const hovered = useHoveredTile();
@@ -268,22 +246,26 @@ export class EngineService {
 
     this.featureInstancer = new FeatureInstancer(
       this.scene,
-      this.world,
-      Object.values(useObjectsStore().getTiles),
+      this.size,
+      Object.values(tilesByKey),
       this.tileRoot,
     ).setIsVisible(options?.showFeatures ?? true);
 
-    // --- Fog of War (main scene) ---
-    if (this.options.fogOfWarEnabled) {
-      const tilesByKey = useObjectsStore().getTiles as Record<string, Tile>;
-      const size = { x: this.world.sizeX, y: this.world.sizeY };
-      const { knownKeys, visibleKeys } = this.computeInitialFogFromUnits(tilesByKey);
-      this.fogOfWar = new FogOfWar(this.scene, size, tilesByKey, knownKeys, visibleKeys);
-      this.fogOfWar.setEnabled(true);
-    }
+    this.fogOfWar = new FogOfWar(
+      this.size,
+      this.scene,
+      this.camera,
+      tilesByKey,
+      useObjectsStore().currentPlayer.knownTileKeys.value,
+      useObjectsStore().currentPlayer.visibleTileKeys.value,
+    );
 
     // QoL: fly camera to the current player's first unit tile (if any)
     this.flyToFirstUnitTile();
+
+    if (minimapCanvas) {
+      this.minimap = new Minimap(this.size, minimapCanvas, this.engine, this.fogOfWar);
+    }
 
     // Render loop with optional FPS cap
     this.engine.runRenderLoop(() => {
@@ -311,8 +293,7 @@ export class EngineService {
   }
 
   detach(): void {
-    this.fogOfWar?.dispose();
-    this.fogOfWar = undefined;
+    this.fogOfWar.dispose();
     window.removeEventListener("resize", this.onResize);
     this.engine.stopRenderLoop();
     this.featureInstancer.dispose();
@@ -362,8 +343,8 @@ export class EngineService {
     const depthPercent = clamp(yPercent, 0, 1);
 
     // Map to world coordinates
-    const worldWidth = getWorldWidth(this.world.sizeX);
-    const worldDepth = getWorldDepth(this.world.sizeY);
+    const worldWidth = getWorldWidth(this.size.x);
+    const worldDepth = getWorldDepth(this.size.y);
     const target = new Vector3(
       getWorldMaxX(worldWidth) - widthPercent * worldWidth,
       0,
@@ -378,8 +359,6 @@ export class EngineService {
 
   // todo move all camera-code to a separate class interaction/Camera.ts
   private initCamera(): ArcRotateCamera {
-    if (!this.world) throw new Error("EngineService.init() must be called before attach()");
-
     // Create Camera at the World center with max zoom in
     const camera = new ArcRotateCamera(
       "camera",
@@ -459,7 +438,7 @@ export class EngineService {
     // Panning and auto-tilt Camera values
 
     // World size math once
-    const worldWidth = getWorldWidth(this.world.sizeX);
+    const worldWidth = getWorldWidth(this.size.x);
     const worldMinX = getWorldMinX(worldWidth);
     const worldMaxX = getWorldMaxX(worldWidth);
 
@@ -470,8 +449,8 @@ export class EngineService {
       const t = camera.target;
 
       // Clamp Z (North-South) normally
-      const minZ = -this.world!.sizeY / 1.385;
-      const maxZ = this.world!.sizeY / 1.425;
+      const minZ = -this.size.y / 1.385;
+      const maxZ = this.size.y / 1.425;
       t.z = Math.min(Math.max(t.z, minZ), maxZ);
 
       // Wrap X (West-East)
@@ -502,13 +481,13 @@ export class EngineService {
       if (!tile) return;
 
       // Compute world XZ of the tile center and convert to flyTo percents
-      const worldWidth = getWorldWidth(this.world.sizeX);
-      const worldDepth = getWorldDepth(this.world.sizeY);
+      const worldWidth = getWorldWidth(this.size.x);
+      const worldDepth = getWorldDepth(this.size.y);
       const worldMaxX = getWorldMaxX(worldWidth);
       const worldMinZ = getWorldMinZ(worldDepth);
 
       // Use math.tileCenter as single source of truth
-      const center = tileCenter({ x: this.world.sizeX, y: this.world.sizeY }, tile);
+      const center = tileCenter(this.size, tile);
       const centerX = center.x;
       const centerZ = center.z;
 
@@ -524,7 +503,7 @@ export class EngineService {
     visibleKeys: GameKey[];
   } {
     const objStore = useObjectsStore();
-    const size = { x: this.world.sizeX, y: this.world.sizeY };
+    const size = this.size;
     const visible = new Set<GameKey>();
     const known = new Set<GameKey>();
 
@@ -577,19 +556,6 @@ export class EngineService {
     if (prev.showFeatures !== this.options.showFeatures) {
       this.setShowFeatures(!!this.options.showFeatures);
     }
-    if (prev.fogOfWarEnabled !== this.options.fogOfWarEnabled) {
-      if (this.options.fogOfWarEnabled) {
-        if (!this.fogOfWar) {
-          const tilesByKey = useObjectsStore().getTiles as Record<string, Tile>;
-          const size = { x: this.world.sizeX, y: this.world.sizeY };
-          const { knownKeys, visibleKeys } = this.computeInitialFogFromUnits(tilesByKey);
-          this.fogOfWar = new FogOfWar(this.scene, size, tilesByKey, knownKeys, visibleKeys);
-        }
-        this.fogOfWar.setEnabled(true);
-      } else {
-        this.fogOfWar?.setEnabled(false);
-      }
-    }
     return { restartKeysChanged };
   }
 
@@ -619,19 +585,6 @@ export class EngineService {
   /** Set the active weather type. */
   public setWeather(weatherType: WeatherType): void {
     this.environmentService.setWeather(weatherType);
-  }
-
-  // --- Fog of War integration surface ---
-  /** Reveal tiles permanently (both in main scene and minimap, if present). */
-  public revealTiles(tiles: Tile[]): void {
-    this.fogOfWar?.addKnownTiles(tiles);
-    this.minimap?.addKnownTiles(tiles);
-  }
-
-  /** Replace current visible tiles (both in main scene and minimap). */
-  public setVisibleTiles(tiles: Tile[]): void {
-    this.fogOfWar?.setVisibleTiles(tiles);
-    this.minimap?.setVisibleTiles(tiles);
   }
 
   /** Start or stop the environment's internal clock. */

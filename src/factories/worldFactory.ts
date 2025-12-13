@@ -69,8 +69,7 @@ export const createWorld = (size: WorldSize): GameData => {
   const bundle = {
     world: {
       id: crypto.randomUUID(),
-      sizeX: size.x,
-      sizeY: size.y,
+      size,
       turn: 0,
       year: yearsPerTurnConfig[0].start,
       currentPlayer: "" as ObjKey,

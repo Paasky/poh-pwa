@@ -88,7 +88,7 @@ export const useAppStore = defineStore("app", {
       settings.init();
 
       this.engineService = markRaw(
-        new EngineService(objects.world, engineCanvas, minimapCanvas, settings.engine),
+        new EngineService(objects.world.size, engineCanvas, minimapCanvas, settings.engine),
       );
 
       // 7) Loading is complete, tell the UI it can render
