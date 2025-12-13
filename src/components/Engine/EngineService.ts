@@ -634,12 +634,6 @@ export class EngineService {
     this.minimap?.setVisibleTiles(tiles);
   }
 
-  /** Advanced: update from visibility by keys, with optional changed set for minimal updates. */
-  public updateFogVisibility(visibleKeys: Iterable<GameKey>, changedKeys?: GameKey[]): void {
-    this.fogOfWar?.updateFromVisibility(visibleKeys, changedKeys);
-    this.minimap?.updateFogVisibility(visibleKeys, changedKeys);
-  }
-
   /** Start or stop the environment's internal clock. */
   public setIsClockRunning(isRunning: boolean): void {
     this.environmentService.setIsClockRunning(isRunning);

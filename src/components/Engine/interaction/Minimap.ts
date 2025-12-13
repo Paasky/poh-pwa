@@ -6,31 +6,28 @@ import {
   Scene,
   Vector3,
 } from "@babylonjs/core";
-import type { WorldState } from "@/types/common";
 import { CreateScreenshotUsingRenderTarget } from "@babylonjs/core/Misc/screenshotTools";
 import { TerrainMeshBuilder } from "@/factories/TerrainMeshBuilder/TerrainMeshBuilder";
 import { useObjectsStore } from "@/stores/objectStore";
 import { getWorldDepth, getWorldWidth } from "@/helpers/math";
 import { FogOfWar } from "@/components/Engine/FogOfWar";
-import type { Tile } from "@/objects/game/Tile";
-import type { GameKey } from "@/objects/game/_GameObject";
-import { getNeighbors } from "@/helpers/mapTools";
-import type { Unit } from "@/objects/game/Unit";
+import { Coords } from "@/helpers/mapTools";
 
 export class Minimap {
-  world: WorldState;
+  size: Coords;
   canvas: HTMLCanvasElement;
   engine: BabylonEngine;
   scene: Scene;
   camera: ArcRotateCamera;
   light: HemisphericLight;
   terrain: TerrainMeshBuilder;
-  private fogOfWar?: FogOfWar;
+  fogOfWar: FogOfWar;
 
-  constructor(world: WorldState, canvas: HTMLCanvasElement, engine: BabylonEngine) {
-    this.world = world;
+  constructor(size: Coords, canvas: HTMLCanvasElement, engine: BabylonEngine, fogOfWar: FogOfWar) {
+    this.size = size;
     this.canvas = canvas;
     this.engine = engine;
+    this.fogOfWar = fogOfWar;
 
     // Create an isolated, low-cost scene just for minimap capture
     this.scene = new Scene(this.engine);
@@ -60,8 +57,8 @@ export class Minimap {
     this.camera.panningSensibility = 0;
 
     // Cover the full world extents with a small margin
-    const halfWidth = getWorldWidth(this.world.sizeX) / 2;
-    const halfDepth = getWorldDepth(this.world.sizeY) / 2;
+    const halfWidth = getWorldWidth(this.size.x) / 2;
+    const halfDepth = getWorldDepth(this.size.y) / 2;
     this.camera.orthoLeft = -halfWidth;
     this.camera.orthoRight = halfWidth;
     this.camera.orthoBottom = -halfDepth;
@@ -69,19 +66,10 @@ export class Minimap {
     // No controls attached; this.camera is used only for one-off minimap capture
 
     // Build a simple terrain for the minimap to capture
-    this.terrain = new TerrainMeshBuilder(
-      this.scene,
-      { x: this.world.sizeX, y: this.world.sizeY },
-      useObjectsStore().getTiles,
-      { hexRingCount: 1, lowDetail: true },
-    );
-
-    // Attach Fog of War to the minimap scene as well (mirrors main scene behavior)
-    const tilesByKey = useObjectsStore().getTiles as Record<string, Tile>;
-    const size = { x: this.world.sizeX, y: this.world.sizeY };
-    const init = this.computeInitialFogFromUnits(tilesByKey);
-    this.fogOfWar = new FogOfWar(this.scene, size, tilesByKey, init.knownKeys, init.visibleKeys);
-    this.fogOfWar.setEnabled(true);
+    this.terrain = new TerrainMeshBuilder(this.scene, this.size, useObjectsStore().getTiles, {
+      hexRingCount: 1,
+      lowDetail: true,
+    });
   }
 
   capture(): void {
@@ -105,52 +93,9 @@ export class Minimap {
   }
 
   dispose(): void {
-    this.fogOfWar?.dispose();
-    // Dispose scene resources created for minimap
-    this.terrain.dispose();
+    // Only dispose things we created
+    this.camera.dispose();
     this.light.dispose();
-    this.scene.dispose();
-  }
-
-  // --- Fog of War mirroring API ---
-  addKnownTiles(tiles: Tile[]): void {
-    this.fogOfWar?.addKnownTiles(tiles);
-  }
-
-  setVisibleTiles(tiles: Tile[]): void {
-    this.fogOfWar?.setVisibleTiles(tiles);
-  }
-
-  updateFogVisibility(visibleKeys: Iterable<GameKey>, changedKeys?: GameKey[]): void {
-    this.fogOfWar?.updateFromVisibility(visibleKeys, changedKeys);
-  }
-
-  // --- FoW helper (mirrors EngineService behavior) ---
-  private computeInitialFogFromUnits(tilesByKey: Record<string, Tile>): {
-    knownKeys: GameKey[];
-    visibleKeys: GameKey[];
-  } {
-    const objStore = useObjectsStore();
-    const size = { x: this.world.sizeX, y: this.world.sizeY };
-    const visible = new Set<GameKey>();
-    const known = new Set<GameKey>();
-
-    const units = (objStore.currentPlayer.units.value as unknown as Unit[]) || [];
-    for (const u of units) {
-      const tile = (u as Unit).tile.value as Tile | null;
-      if (!tile) continue;
-      // Visible: unit tile + hex distance 1 neighbors
-      visible.add(tile.key as GameKey);
-      const v1 = getNeighbors(size, tile, tilesByKey, "hex", 1);
-      for (const t of v1) visible.add(t.key as GameKey);
-
-      // Known: include visible and ring at distance 2
-      known.add(tile.key as GameKey);
-      for (const t of v1) known.add(t.key as GameKey);
-      const k2 = getNeighbors(size, tile, tilesByKey, "hex", 2);
-      for (const t of k2) known.add(t.key as GameKey);
-    }
-
-    return { knownKeys: Array.from(known), visibleKeys: Array.from(visible) };
+    this.terrain.dispose();
   }
 }
