@@ -16,8 +16,9 @@ import { defaultWeatherType, WeatherType } from "@/components/Engine/environment
 
 const emit = defineEmits(["quit", "reload"]);
 const showQuitConfirm = ref(false);
-const showOptions = ref(false);
-const isSavingOptions = ref(false); // prevent double-clicks and allow UI to show loading state
+const showSettings = ref(false);
+const isSavingSettings = ref(false); // prevent double-clicks and allow UI to show loading state
+const settingsTab = ref<"game" | "graphics">("graphics");
 
 const app = useAppStore();
 // todo settings store should load values from browser storage, falling back to default per option
@@ -39,7 +40,7 @@ const localWeatherType = ref<WeatherType>(defaultWeatherType);
 const localLogicDebugEnabled = ref(false);
 
 watch(
-  () => showOptions.value,
+  () => showSettings.value,
   (open) => {
     if (open) {
       // todo use settingsStore for this, no weird reset on open
@@ -69,12 +70,12 @@ const restartKeys = new Set<keyof EngineOptions>(RestartRequiredOptionKeys);
 const showRestartConfirm = ref(false);
 let _pendingSave = false;
 
-function onCancelOptions() {
-  showOptions.value = false;
+function onCancelSettings() {
+  showSettings.value = false;
 }
 
-function onSaveOptions() {
-  if (isSavingOptions.value) return; // guard re-entry
+function onSaveSettings() {
+  if (isSavingSettings.value) return; // guard re-entry
   // Determine if any restart-required options are modified
   const changedRestart: (keyof EngineOptions)[] = [];
   for (const k of restartKeys) {
@@ -86,7 +87,7 @@ function onSaveOptions() {
     return;
   }
   // Persist settings first (cheap), close dialog to let UI update, then apply heavy engine changes in RAF
-  isSavingOptions.value = true;
+  isSavingSettings.value = true;
   try {
     settings.selectedPresetId = localPresetId.value;
     Object.assign(settings.engine, { ...local });
@@ -95,7 +96,7 @@ function onSaveOptions() {
     // eslint-disable-next-line no-console
     console.error("Failed to save settings:", err);
   }
-  showOptions.value = false;
+  showSettings.value = false;
   // Defer engine updates to next frame to avoid blocking the interaction frame
   requestAnimationFrame(() => {
     try {
@@ -122,9 +123,9 @@ function onSaveOptions() {
       }
     } catch (err) {
       // eslint-disable-next-line no-console
-      console.error("Failed to apply engine options:", err);
+      console.error("Failed to apply engine settings:", err);
     } finally {
-      isSavingOptions.value = false;
+      isSavingSettings.value = false;
     }
   });
 }
@@ -183,196 +184,221 @@ function confirmRestartCancel() {
       <v-list density="comfortable">
         <v-list-item value="save" title="Save" />
         <v-list-item value="load" title="Load" />
-        <v-list-item value="options" title="Options" @click="showOptions = true" />
+        <v-list-item value="settings" title="Settings" @click="showSettings = true" />
         <v-divider class="my-1" />
         <v-list-item value="quit" title="Quit" @click="showQuitConfirm = true" />
       </v-list>
     </v-menu>
 
-    <!-- Options dialog -->
-    <v-dialog v-model="showOptions" max-width="820" scrollable>
+    <!-- Settings dialog -->
+    <v-dialog v-model="showSettings" max-width="820" scrollable>
       <v-card rounded="lg">
-        <v-card-title class="text-h6">Options</v-card-title>
+        <v-card-title class="text-h6">Settings</v-card-title>
         <v-card-subtitle>
           Rendering and visual effects. Items marked {{ restartNote }} will restart the engine to
           take effect.
         </v-card-subtitle>
         <v-divider class="my-2" />
         <v-card-text class="d-flex flex-column ga-5">
-          <!-- Preset -->
-          <div>
-            <div class="text-subtitle-2 mb-2">Preset</div>
-            <v-select
-              :items="EngineOptionPresets"
-              item-title="label"
-              item-value="id"
-              v-model="localPresetId"
-              label="Quality Preset"
-              density="comfortable"
-              @update:model-value="onPresetChange"
-            />
-          </div>
+          <v-tabs v-model="settingsTab" color="primary" class="mb-4">
+            <v-tab value="game">Game</v-tab>
+            <v-tab value="graphics">Graphics</v-tab>
+          </v-tabs>
 
-          <!-- Resolution & Performance -->
-          <div>
-            <div class="text-subtitle-2 mb-2">Resolution & Performance</div>
-            <div class="d-flex flex-wrap ga-4">
-              <v-slider
-                class="flex-1-1"
-                min="0.5"
-                max="2"
-                step="0.05"
-                thumb-label="always"
-                v-model.number="local.renderScale"
-                label="Render scale"
-                hint="Lower for performance (0.5), higher for clarity (1.25)."
-                persistent-hint
-              />
-              <v-text-field
-                class="flex-1-1"
-                type="number"
-                min="0"
-                step="1"
-                v-model.number="local.fpsCap"
-                label="FPS cap (0 = uncapped)"
-              />
-              <v-switch
-                v-model="local.adaptToDeviceRatio"
-                :label="`Adapt to device pixel ratio ${restartNote}`"
-                inset
-              />
-            </div>
-          </div>
+          <v-window v-model="settingsTab">
+            <!-- Game tab -->
+            <v-window-item value="game">
+              <div class="d-flex flex-column ga-5">
+                <!-- Overlays & Layers -->
+                <div>
+                  <div class="text-subtitle-2 mb-2">Overlays & Layers</div>
+                  <div class="d-flex flex-wrap ga-4">
+                    <v-switch v-model="local.showGrid" label="Show Grid" inset />
+                  </div>
+                </div>
 
-          <!-- Engine / GPU Context (restart) -->
-          <div>
-            <div class="text-subtitle-2 mb-2">GPU Context</div>
-            <div class="d-flex flex-wrap ga-4">
-              <v-switch v-model="local.antialias" :label="`Antialias ${restartNote}`" inset />
-              <v-switch
-                v-model="local.preserveDrawingBuffer"
-                :label="`Preserve drawing buffer ${restartNote}`"
-                inset
-              />
-              <v-switch v-model="local.stencil" :label="`Stencil buffer ${restartNote}`" inset />
-              <v-switch
-                v-model="local.disableWebGL2Support"
-                :label="`Disable WebGL2 ${restartNote}`"
-                inset
-              />
-              <v-select
-                :items="['default', 'high-performance', 'low-power']"
-                v-model="local.powerPreference"
-                :label="`Power preference ${restartNote}`"
-                density="comfortable"
-              />
-            </div>
-          </div>
+                <!-- Environment (managed by EnvironmentService) -->
+                <div>
+                  <div class="text-subtitle-2 mb-2">Environment</div>
+                  <div class="d-flex flex-column ga-4">
+                    <div class="d-flex flex-wrap ga-4">
+                      <v-slider
+                        class="flex-1-1"
+                        min="0"
+                        max="2400"
+                        step="25"
+                        thumb-label
+                        v-model.number="localTimeOfDayValue2400"
+                        label="Time of day (0-2400)"
+                        hint="24h clock encoded as 0..2400 (e.g., 1430 = 2:30 PM)"
+                        persistent-hint
+                      />
+                      <v-switch v-model="localIsClockRunning" label="Run environment clock" inset />
+                    </div>
+                    <div class="d-flex flex-wrap ga-4">
+                      <v-select
+                        :items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]"
+                        v-model.number="localSeasonMonthIndex1to12"
+                        label="Season month (1..12)"
+                        density="comfortable"
+                      />
+                      <v-select
+                        :items="[
+                          { title: 'Sunny', value: WeatherType.Sunny },
+                          { title: 'Half-Cloud', value: WeatherType.HalfCloud },
+                          { title: 'Foggy', value: WeatherType.Foggy },
+                          { title: 'Rainy', value: WeatherType.Rainy },
+                          { title: 'Thunderstorm', value: WeatherType.Thunderstorm },
+                        ]"
+                        item-title="title"
+                        item-value="value"
+                        v-model="localWeatherType"
+                        label="Weather"
+                        density="comfortable"
+                      />
+                    </div>
+                  </div>
+                </div>
 
-          <!-- Visual effects -->
-          <div>
-            <div class="text-subtitle-2 mb-2">Visual effects</div>
-            <div class="d-flex flex-wrap ga-4">
-              <v-switch v-model="local.hdr" label="HDR" inset />
-              <v-switch v-model="local.useFxaa" label="FXAA" inset />
-              <v-switch v-model="local.useBloom" label="Bloom" inset />
-              <v-slider
-                class="flex-1-1"
-                min="0"
-                max="1"
-                step="0.01"
-                thumb-label
-                :disabled="!local.useBloom"
-                v-model.number="local.bloomThreshold"
-                label="Bloom threshold"
-              />
-              <v-slider
-                class="flex-1-1"
-                min="0"
-                max="1"
-                step="0.01"
-                thumb-label
-                :disabled="!local.useBloom"
-                v-model.number="local.bloomWeight"
-                label="Bloom weight"
-              />
-            </div>
-          </div>
+                <!-- Camera UX -->
+                <div>
+                  <div class="text-subtitle-2 mb-2">Camera</div>
+                  <v-switch
+                    v-model="local.manualTilt"
+                    label="Manual tilt (disable auto-tilt)"
+                    inset
+                  />
+                </div>
 
-          <!-- Overlays & Layers -->
-          <div>
-            <div class="text-subtitle-2 mb-2">Overlays & Layers</div>
-            <div class="d-flex flex-wrap ga-4">
-              <v-switch v-model="local.showGrid" label="Show Grid" inset />
-            </div>
-          </div>
-
-          <!-- Environment (managed by EnvironmentService) -->
-          <div>
-            <div class="text-subtitle-2 mb-2">Environment</div>
-            <div class="d-flex flex-column ga-4">
-              <div class="d-flex flex-wrap ga-4">
-                <v-slider
-                  class="flex-1-1"
-                  min="0"
-                  max="2400"
-                  step="25"
-                  thumb-label
-                  v-model.number="localTimeOfDayValue2400"
-                  label="Time of day (0-2400)"
-                  hint="24h clock encoded as 0..2400 (e.g., 1430 = 2:30 PM)"
-                  persistent-hint
-                />
-                <v-switch v-model="localIsClockRunning" label="Run environment clock" inset />
+                <!-- Debug -->
+                <div>
+                  <div class="text-subtitle-2 mb-2">Debug</div>
+                  <v-switch
+                    v-model="localLogicDebugEnabled"
+                    label="Logic mesh debug overlay"
+                    inset
+                    @update:model-value="
+                      (v: boolean | null) => app.engineService.setLogicDebugEnabled(!!v)
+                    "
+                  />
+                </div>
               </div>
-              <div class="d-flex flex-wrap ga-4">
-                <v-select
-                  :items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]"
-                  v-model.number="localSeasonMonthIndex1to12"
-                  label="Season month (1..12)"
-                  density="comfortable"
-                />
-                <v-select
-                  :items="[
-                    { title: 'Sunny', value: WeatherType.Sunny },
-                    { title: 'Half-Cloud', value: WeatherType.HalfCloud },
-                    { title: 'Foggy', value: WeatherType.Foggy },
-                    { title: 'Rainy', value: WeatherType.Rainy },
-                    { title: 'Thunderstorm', value: WeatherType.Thunderstorm },
-                  ]"
-                  item-title="title"
-                  item-value="value"
-                  v-model="localWeatherType"
-                  label="Weather"
-                  density="comfortable"
-                />
+            </v-window-item>
+
+            <!-- Graphics tab -->
+            <v-window-item value="graphics">
+              <div class="d-flex flex-column ga-5">
+                <!-- Preset -->
+                <div>
+                  <div class="text-subtitle-2 mb-2">Preset</div>
+                  <v-select
+                    :items="EngineOptionPresets"
+                    item-title="label"
+                    item-value="id"
+                    v-model="localPresetId"
+                    label="Quality Preset"
+                    density="comfortable"
+                    @update:model-value="onPresetChange"
+                  />
+                </div>
+
+                <!-- Resolution & Performance -->
+                <div>
+                  <div class="text-subtitle-2 mb-2">Resolution & Performance</div>
+                  <div class="d-flex flex-wrap ga-4">
+                    <v-slider
+                      class="flex-1-1"
+                      min="0.5"
+                      max="2"
+                      step="0.05"
+                      thumb-label="always"
+                      v-model.number="local.renderScale"
+                      label="Render scale"
+                      hint="Lower for performance (0.5), higher for clarity (1.25)."
+                      persistent-hint
+                    />
+                    <v-text-field
+                      class="flex-1-1"
+                      type="number"
+                      min="0"
+                      step="1"
+                      v-model.number="local.fpsCap"
+                      label="FPS cap (0 = uncapped)"
+                    />
+                    <v-switch
+                      v-model="local.adaptToDeviceRatio"
+                      :label="`Adapt to device pixel ratio ${restartNote}`"
+                      inset
+                    />
+                  </div>
+                </div>
+
+                <!-- Engine / GPU Context (restart) -->
+                <div>
+                  <div class="text-subtitle-2 mb-2">GPU Context</div>
+                  <div class="d-flex flex-wrap ga-4">
+                    <v-switch v-model="local.antialias" :label="`Antialias ${restartNote}`" inset />
+                    <v-switch
+                      v-model="local.preserveDrawingBuffer"
+                      :label="`Preserve drawing buffer ${restartNote}`"
+                      inset
+                    />
+                    <v-switch
+                      v-model="local.stencil"
+                      :label="`Stencil buffer ${restartNote}`"
+                      inset
+                    />
+                    <v-switch
+                      v-model="local.disableWebGL2Support"
+                      :label="`Disable WebGL2 ${restartNote}`"
+                      inset
+                    />
+                    <v-select
+                      :items="['default', 'high-performance', 'low-power']"
+                      v-model="local.powerPreference"
+                      :label="`Power preference ${restartNote}`"
+                      density="comfortable"
+                    />
+                  </div>
+                </div>
+
+                <!-- Visual effects -->
+                <div>
+                  <div class="text-subtitle-2 mb-2">Visual effects</div>
+                  <div class="d-flex flex-wrap ga-4">
+                    <v-switch v-model="local.hdr" label="HDR" inset />
+                    <v-switch v-model="local.useFxaa" label="FXAA" inset />
+                    <v-switch v-model="local.useBloom" label="Bloom" inset />
+                    <v-slider
+                      class="flex-1-1"
+                      min="0"
+                      max="1"
+                      step="0.01"
+                      thumb-label
+                      :disabled="!local.useBloom"
+                      v-model.number="local.bloomThreshold"
+                      label="Bloom threshold"
+                    />
+                    <v-slider
+                      class="flex-1-1"
+                      min="0"
+                      max="1"
+                      step="0.01"
+                      thumb-label
+                      :disabled="!local.useBloom"
+                      v-model.number="local.bloomWeight"
+                      label="Bloom weight"
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-
-          <!-- Camera UX -->
-          <div>
-            <div class="text-subtitle-2 mb-2">Camera</div>
-            <v-switch v-model="local.manualTilt" label="Manual tilt (disable auto-tilt)" inset />
-          </div>
-
-          <!-- Debug -->
-          <div>
-            <div class="text-subtitle-2 mb-2">Debug</div>
-            <v-switch
-              v-model="localLogicDebugEnabled"
-              label="Logic mesh debug overlay"
-              inset
-              @update:model-value="
-                (v: boolean | null) => app.engineService.setLogicDebugEnabled(!!v)
-              "
-            />
-          </div>
+            </v-window-item>
+          </v-window>
         </v-card-text>
         <v-divider />
         <v-card-actions class="justify-end ga-2">
-          <v-btn variant="text" @click="onCancelOptions">Cancel</v-btn>
-          <v-btn color="primary" variant="flat" @click="onSaveOptions">Save</v-btn>
+          <v-btn variant="text" @click="onCancelSettings">Cancel</v-btn>
+          <v-btn color="primary" variant="flat" @click="onSaveSettings">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -382,7 +408,7 @@ function confirmRestartCancel() {
       <v-card rounded="lg">
         <v-card-title class="text-h6">Restart Required</v-card-title>
         <v-card-text>
-          Some changed options require an engine restart to take effect. Reload the game now?
+          Some changed settings require an engine restart to take effect. Reload the game now?
         </v-card-text>
         <v-card-actions class="justify-end ga-2">
           <v-btn variant="text" @click="confirmRestartCancel">Cancel</v-btn>
