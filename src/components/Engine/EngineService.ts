@@ -10,7 +10,14 @@ import {
   Vector3,
 } from "@babylonjs/core";
 import "@babylonjs/core/Lights/Shadows/shadowGeneratorSceneComponent";
-import { clamp, getWorldDepth, getWorldMaxX, getWorldMinX, getWorldMinZ, getWorldWidth, } from "@/helpers/math";
+import {
+  clamp,
+  getWorldDepth,
+  getWorldMaxX,
+  getWorldMinX,
+  getWorldMinZ,
+  getWorldWidth,
+} from "@/helpers/math";
 import { TerrainMeshBuilder } from "@/factories/TerrainMeshBuilder/TerrainMeshBuilder";
 import { useObjectsStore } from "@/stores/objectStore";
 import { EnvironmentService } from "@/components/Engine/EnvironmentService";
