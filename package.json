@@ -28,7 +28,8 @@
     "pnpm": ">=10.0.0"
   },
   "dependencies": {
-    "@babylonjs/core": "^8.39.2",
+    "@babylonjs/core": "^8.41.1",
+    "@babylonjs/materials": "^8.41.1",
     "@floating-ui/dom": "^1.7.4",
     "@fontsource/dm-sans": "^5.2.8",
     "@fontsource/poiret-one": "^5.2.8",
@@ -42,31 +43,31 @@
     "pluralize": "^8.0.0",
     "vite-plugin-pwa": "^1.2.0",
     "vue": "^3.5.25",
-    "vue-router": "^4.6.3",
-    "vuetify": "^3.11.0",
+    "vue-router": "^4.6.4",
+    "vuetify": "^3.11.3",
     "workbox-window": "^7.4.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.1",
-    "@types/node": "^24.10.1",
+    "@eslint/js": "^9.39.2",
+    "@types/node": "^24.10.3",
     "@types/pluralize": "^0.0.33",
-    "@vitejs/plugin-vue": "^6.0.2",
+    "@vitejs/plugin-vue": "^6.0.3",
     "@vue/eslint-config-typescript": "^14.6.0",
     "cross-env": "^7.0.3",
-    "eslint": "^9.39.1",
+    "eslint": "^9.39.2",
     "eslint-plugin-vue": "^10.6.2",
     "husky": "^9.1.7",
     "only-allow": "^1.2.2",
-    "prettier": "^3.7.3",
-    "sass": "^1.94.2",
+    "prettier": "^3.7.4",
+    "sass": "^1.96.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.48.1",
-    "vite": "^7.2.6",
+    "typescript-eslint": "^8.49.0",
+    "vite": "^7.2.7",
     "vite-plugin-vue-devtools": "^7.7.9",
     "vite-plugin-vuetify": "^2.1.2",
-    "vitest": "^4.0.14",
+    "vitest": "^4.0.15",
     "vue-eslint-parser": "^10.2.0",
-    "vue-tsc": "^3.1.5"
+    "vue-tsc": "^3.1.8"
   }
 }

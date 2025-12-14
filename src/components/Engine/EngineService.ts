@@ -1,10 +1,7 @@
-import type { WorldState } from "@/types/common";
 import {
   ArcRotateCamera,
-  ArcRotateCameraPointersInput,
   Color4,
   Engine as BabylonEngine,
-  PointerEventTypes,
   Scene,
   TransformNode,
   Vector3,
@@ -13,21 +10,25 @@ import "@babylonjs/core/Lights/Shadows/shadowGeneratorSceneComponent";
 import {
   clamp,
   getWorldDepth,
-  getWorldMaxX,
   getWorldMinX,
   getWorldMinZ,
   getWorldWidth,
+  tileCenter,
 } from "@/helpers/math";
 import { TerrainMeshBuilder } from "@/factories/TerrainMeshBuilder/TerrainMeshBuilder";
 import { useObjectsStore } from "@/stores/objectStore";
 import { EnvironmentService } from "@/components/Engine/EnvironmentService";
 import type { DefaultPostProcessingOptions } from "@/components/Engine/environments/postFx";
-import type { WeatherType } from "@/components/Engine/environments/weather";
 import LogicMeshBuilder from "@/factories/LogicMeshBuilder";
 import { useHoveredTile } from "@/stores/hoveredTile";
 import { Minimap } from "@/components/Engine/interaction/Minimap";
+import { MainCamera } from "@/components/Engine/interaction/MainCamera";
 import FeatureInstancer from "@/components/Engine/features/FeatureInstancer";
-import GridOverlay from "@/components/Engine/overlays/GridOverlay";
+import { FogOfWar } from "@/components/Engine/FogOfWar";
+import type { Tile } from "@/objects/game/Tile";
+import type { GameKey } from "@/objects/game/_GameObject";
+import { Coords, getCoordsFromTileKey } from "@/helpers/mapTools";
+import { EngineCoords } from "@/factories/TerrainMeshBuilder/_terrainMeshTypes";
 
 export type EngineOptions = {
   // Camera UX
@@ -54,8 +55,6 @@ export type EngineOptions = {
 
   // Feature layers
   showFeatures?: boolean; // Toggle GPU-instanced feature props (trees etc.)
-  // Overlays
-  showGrid?: boolean; // Toggle hex grid overlay
 };
 
 export const RestartRequiredOptionKeys: (keyof EngineOptions)[] = [
@@ -83,7 +82,6 @@ export const DefaultEngineOptions: Required<EngineOptions> = {
   bloomThreshold: 0.9,
   bloomWeight: 0.15,
   showFeatures: true,
-  showGrid: true,
 };
 
 export type EngineOptionPreset = { id: string; label: string; value: EngineOptions };
@@ -168,51 +166,40 @@ export const EngineOptionPresets: EngineOptionPreset[] = [
 ];
 
 export class EngineService {
-  // Camera settings
-  panSpeed = 5; // 1 = slow, 10 = fast
-  maxRotation = Math.PI / 6; // bigger divisor = less rotation
-  maxTilt = 0.8; // higher = more tilt upwards
-  minTilt = 0.1; // 0 = top-down
-  manualTilt = false; // Allow user to set tilt manually (false = auto-tilt by zoom)
-  maxZoomIn = 10; // smaller = closer
-  maxZoomOut = 100; // larger = further
-
-  // Headless/game state
-  world: WorldState;
-
-  // Babylon rendering state
-  engine: BabylonEngine;
-  private _lastRenderTime = 0;
-  scene: Scene;
+  size: Coords;
   canvas: HTMLCanvasElement;
-  minimap?: Minimap;
-
+  engine: BabylonEngine;
+  scene: Scene;
   tileRoot: TransformNode;
 
   camera: ArcRotateCamera;
-
-  terrainBuilder: TerrainMeshBuilder;
+  mainCamera: MainCamera;
   environmentService: EnvironmentService;
+  terrainBuilder: TerrainMeshBuilder;
   logicMesh: LogicMeshBuilder;
   featureInstancer: FeatureInstancer;
-  gridOverlay: GridOverlay;
+  fogOfWar: FogOfWar;
 
+  minimap?: Minimap;
   // Options
-  options: EngineOptions = { ...DefaultEngineOptions };
-  private _rotationInput = new ArcRotateCameraPointersInput();
-  private _manualTiltEnabled = false;
 
-  // No animation state needed for simple, instant flyTo
+  options: EngineOptions = { ...DefaultEngineOptions };
+  // Camera settings moved to MainCamera
+
+  // todo the fps cap implementation is awful, just creates lag. this must go and either use built-in babylon settings or remove fps cap entirely
+  private _lastRenderTime = 0;
 
   constructor(
-    world: WorldState,
+    size: Coords,
     canvas: HTMLCanvasElement,
     minimapCanvas?: HTMLCanvasElement,
     options?: EngineOptions,
   ) {
-    this.world = world;
+    this.size = size;
     this.canvas = canvas;
     this.options = { ...DefaultEngineOptions, ...(options ?? {}) };
+
+    const tilesByKey = useObjectsStore().getTiles;
 
     // Create Engine and Scene
     this.engine = new BabylonEngine(
@@ -229,29 +216,20 @@ export class EngineService {
     this.scene = new Scene(this.engine);
     this.scene.clearColor = new Color4(0.63, 0.63, 0.63, 1); // Same-ish as snow
 
-    if (minimapCanvas) this.minimap = new Minimap(world, minimapCanvas, this.engine);
-
-    // Resolution / hardware scaling
-    this.applyRenderScale(this.options.renderScale ?? 1);
-
     // Create Cameras and Environment
-    this.camera = this.initCamera();
+    this.applyRenderScale(this.options.renderScale ?? 1);
+    this.mainCamera = new MainCamera(this.size, this.scene, this.canvas, {
+      manualTilt: this.options.manualTilt,
+    });
+    this.camera = this.mainCamera.camera;
     this.environmentService = new EnvironmentService(this.scene, this.camera, this.engine);
 
     // Build merged terrain mesh (new pipeline)
-    this.terrainBuilder = new TerrainMeshBuilder(
-      this.scene,
-      { x: this.world.sizeX, y: this.world.sizeY },
-      useObjectsStore().getTiles,
-    );
+    this.terrainBuilder = new TerrainMeshBuilder(this.scene, this.size, tilesByKey);
     this.tileRoot = this.terrainBuilder.root;
 
     // Build logic mesh for interactions (thin-instance, invisible)
-    this.logicMesh = new LogicMeshBuilder(
-      this.scene,
-      { x: this.world.sizeX, y: this.world.sizeY },
-      useObjectsStore().getTiles,
-    );
+    this.logicMesh = new LogicMeshBuilder(this.scene, this.size, tilesByKey).build();
 
     // Wire hovered tile to a lightweight reactive store
     const hovered = useHoveredTile();
@@ -260,18 +238,30 @@ export class EngineService {
 
     this.featureInstancer = new FeatureInstancer(
       this.scene,
-      this.world,
-      Object.values(useObjectsStore().getTiles),
+      this.size,
+      Object.values(tilesByKey),
       this.tileRoot,
     ).setIsVisible(options?.showFeatures ?? true);
 
-    // Grid overlay (always created; visibility controlled by option)
-    this.gridOverlay = new GridOverlay(
+    // Initialize FoW strictly from store-provided currentPlayer values
+    const storeKnown = useObjectsStore().currentPlayer.knownTileKeys.value as GameKey[];
+    const storeVisible = useObjectsStore().currentPlayer.visibleTileKeys.value as GameKey[];
+
+    this.fogOfWar = new FogOfWar(
+      this.size,
       this.scene,
-      { x: this.world.sizeX, y: this.world.sizeY },
-      useObjectsStore().getTiles,
+      this.camera,
+      tilesByKey,
+      storeKnown,
+      storeVisible,
     );
-    this.gridOverlay.setVisible(options?.showGrid ?? true);
+
+    // QoL: fly camera to the current player's first unit tile (if any)
+    this.flyToCurrentPlayer();
+
+    if (minimapCanvas) {
+      this.minimap = new Minimap(this.size, minimapCanvas, this.engine, this.fogOfWar);
+    }
 
     // Render loop with optional FPS cap
     this.engine.runRenderLoop(() => {
@@ -292,41 +282,22 @@ export class EngineService {
     this.engine.resize();
     window.addEventListener("resize", this.onResize);
 
-    // Once the scene is ready, capture a one-time minimap image into the minimap canvas
+    // Once the scene is ready, zoom minimap to known and capture a one-time minimap image
     this.scene.executeWhenReady(() => {
       this.minimap?.capture();
     });
   }
 
-  detach(): void {
+  dispose(): void {
+    this.fogOfWar.dispose();
     window.removeEventListener("resize", this.onResize);
     this.engine.stopRenderLoop();
     this.featureInstancer.dispose();
-    this.gridOverlay.dispose();
     this.logicMesh.dispose();
     this.terrainBuilder.dispose();
     this.environmentService.dispose();
     this.scene.dispose();
     this.engine.dispose();
-  }
-
-  // todo: if this is all attached to the store, why have this here?
-  // ————————————————————————————————————————————
-  // Logic mesh helpers / event surface
-  onTileHover(handler: Parameters<LogicMeshBuilder["onTileHover"]>[0]): () => void {
-    return this.logicMesh.onTileHover(handler);
-  }
-
-  onTileExit(handler: Parameters<LogicMeshBuilder["onTileExit"]>[0]): () => void {
-    return this.logicMesh.onTileExit(handler);
-  }
-
-  onTileClick(handler: Parameters<LogicMeshBuilder["onTileClick"]>[0]): () => void {
-    return this.logicMesh.onTileClick(handler);
-  }
-
-  onTileContextMenu(handler: Parameters<LogicMeshBuilder["onTileContextMenu"]>[0]): () => void {
-    return this.logicMesh.onTileContextMenu(handler);
   }
 
   // todo move this to our settingsStore and remove from here
@@ -335,144 +306,57 @@ export class EngineService {
     return this;
   }
 
-  // todo this should not even be optional, but always set to enabled on engine init
-  setPreventContextMenuDefault(enabled: boolean): this {
-    this.logicMesh.setPreventContextMenuDefault(enabled);
-    return this;
-  }
-
-  // Public: move instantly to a percentage of world width/depth (0..1 each)
-  // todo add a super-super-simple 1s flying animation (never crossing world x-limits, even if wrap would be "closer")
-  flyTo(xPercent: number, yPercent: number): EngineService {
-    // Clamp percents
-    const widthPercent = clamp(xPercent, 0, 1);
-    const depthPercent = clamp(yPercent, 0, 1);
-
-    // Map to world coordinates
-    const worldWidth = getWorldWidth(this.world.sizeX);
-    const worldDepth = getWorldDepth(this.world.sizeY);
-    const target = new Vector3(
-      getWorldMaxX(worldWidth) - widthPercent * worldWidth,
-      0,
-      getWorldMinZ(worldDepth) + depthPercent * worldDepth,
-    );
+  flyTo(coords: EngineCoords): EngineService {
+    const target = new Vector3(coords.x, 0, coords.z);
 
     // Apply instantly
+    // todo add a super-super-simple 1s flying animation (never crossing world x-limits, even if wrap would be "closer")
     this.camera.target.copyFrom(target);
 
     return this;
   }
 
-  // todo move all camera-code to a separate class interaction/Camera.ts
-  private initCamera(): ArcRotateCamera {
-    if (!this.world) throw new Error("EngineService.init() must be called before attach()");
+  flyToCurrentPlayer(): void {
+    const currentPlayer = useObjectsStore().currentPlayer;
 
-    // Create Camera at the World center with max zoom in
-    const camera = new ArcRotateCamera(
-      "camera",
-      Math.PI / 2, // Look North
-      this.maxTilt, // Full Tilt
-      this.maxZoomIn, // Zoomed in
-      new Vector3(0, 0, 0),
-      this.scene,
-    );
-    this.camera = camera;
+    // Capital or first unit
+    const capital = currentPlayer.cities.value.find((c) => c.isCapital);
+    if (capital) {
+      this.flyToTile(capital.tileKey);
+    }
 
-    // Controls (clear all, then add back the ones we want)
-    camera.inputs.clear();
+    const unit = currentPlayer.units.value[0];
+    if (unit) {
+      this.flyToTile(unit.tileKey.value);
+    }
 
-    // a) Zoom Control from the mouse wheel
-    camera.inputs.addMouseWheel();
-    camera.wheelDeltaPercentage = 0.02;
-    camera.useNaturalPinchZoom = true;
+    return;
+  }
 
-    // b) Rotation Control from the mouse right and middle buttons
-    camera.attachControl(this.canvas, true);
-    camera.useAutoRotationBehavior = false;
-    this._rotationInput.buttons = [1, 2]; // 1=right, 2=middle
-    this._rotationInput.panningSensibility = 0;
-    this.setManualTilt(!!this.options.manualTilt);
+  // Public: move instantly to a percentage of world width/depth (0..1 each)
+  flyToPercent(xPercent: number, yPercent: number): EngineService {
+    // Clamp percents
+    const widthPercent = clamp(xPercent, 0, 1);
+    const depthPercent = clamp(yPercent, 0, 1);
 
-    // c) Panning Control from the mouse left button
-    let dragging = false;
-    let lastX = 0;
-    let lastY = 0;
-    this.scene.onPointerObservable.add((pi) => {
-      const ev = pi.event;
-      if (pi.type === PointerEventTypes.POINTERDOWN) {
-        if (ev.button === 0) {
-          // 0 = Left mouse button
-          dragging = true;
-          lastX = ev.clientX;
-          lastY = ev.clientY;
-        }
-      }
+    // Map to world coordinates
+    const worldWidth = getWorldWidth(this.size.x);
+    const worldDepth = getWorldDepth(this.size.y);
+    return this.flyTo({
+      x: getWorldMinX(worldWidth) + widthPercent * worldWidth,
 
-      if (pi.type === PointerEventTypes.POINTERUP) {
-        dragging = false;
-      }
-
-      if (pi.type === PointerEventTypes.POINTERMOVE) {
-        if (!dragging) return;
-
-        const dx = ev.clientX - lastX;
-        const dy = ev.clientY - lastY;
-        lastX = ev.clientX;
-        lastY = ev.clientY;
-
-        // zoom-scaled speed
-        const k = (this.panSpeed / 625) * (camera.radius / camera.lowerRadiusLimit!);
-
-        camera.target.x += dx * k;
-        camera.target.z -= dy * k;
-      }
+      // Flip Z (y=0 is north, y=max is south)
+      z: getWorldMinZ(worldDepth) - depthPercent * worldDepth,
     });
+  }
 
-    // Rotation/Tilt/Zoom limits
-
-    // a) Rotation (Left-Right)
-    const rotationNorth = Math.PI / 2;
-    camera.lowerAlphaLimit = rotationNorth - this.maxRotation;
-    camera.upperAlphaLimit = rotationNorth + this.maxRotation;
-
-    // b) Tilt
-    camera.upperBetaLimit = this.maxTilt; // How much the camera can tilt upwards towards the horizon
-    camera.lowerBetaLimit = this.minTilt; // How close to top-down the camera can get
-
-    // c) Zoom
-    camera.lowerRadiusLimit = this.maxZoomIn;
-    camera.upperRadiusLimit = this.maxZoomOut;
-
-    // Panning and auto-tilt Camera values
-
-    // World size math once
-    const worldWidth = getWorldWidth(this.world.sizeX);
-    const worldMinX = getWorldMinX(worldWidth);
-    const worldMaxX = getWorldMaxX(worldWidth);
-
-    // Clamp to N/S poles
-    // Wrap X (West-East) for a simulated "globe" effect
-    // Auto-tilt on zoom
-    camera.onViewMatrixChangedObservable.add(() => {
-      const t = camera.target;
-
-      // Clamp Z (North-South) normally
-      const minZ = -this.world!.sizeY / 1.385;
-      const maxZ = this.world!.sizeY / 1.425;
-      t.z = Math.min(Math.max(t.z, minZ), maxZ);
-
-      // Wrap X (West-East)
-      if (t.x > worldMaxX) t.x -= worldWidth;
-      else if (t.x < worldMinX) t.x += worldWidth;
-
-      // Auto-tilt if manualTilt === false
-      if (!this.options.manualTilt) {
-        const frac = (camera.radius - this.maxZoomIn) / (this.maxZoomOut - this.maxZoomIn);
-        camera.beta = this.maxTilt - frac * (this.maxTilt - this.minTilt);
-      }
-    });
-
-    return camera;
+  flyToTile(tile: GameKey | string | Tile): EngineService {
+    if (typeof tile === "string") {
+      const coords = getCoordsFromTileKey(tile as GameKey);
+      return this.flyTo(tileCenter(this.size, coords));
+    } else {
+      return this.flyTo(tileCenter(this.size, tile));
+    }
   }
 
   private onResize = () => {
@@ -504,88 +388,12 @@ export class EngineService {
       this._lastRenderTime = 0; // reset limiter
     }
     if (prev.manualTilt !== this.options.manualTilt) {
-      this.setManualTilt(!!this.options.manualTilt);
+      this.mainCamera.setManualTilt(!!this.options.manualTilt);
     }
     if (prev.showFeatures !== this.options.showFeatures) {
       this.setShowFeatures(!!this.options.showFeatures);
     }
-    if (prev.showGrid !== this.options.showGrid) {
-      this.gridOverlay.setVisible(!!this.options.showGrid);
-    }
     return { restartKeysChanged };
-  }
-
-  // --- Live toggles ---
-  private setManualTilt(enabled: boolean) {
-    // When enabled: add the rotation/tilt input (RMB/MMB) and disable panning from it.
-    // When disabled: remove the rotation/tilt input and rely on auto-tilt behavior.
-    if (enabled && !this._manualTiltEnabled) {
-      this.camera.inputs.add(this._rotationInput);
-      this._manualTiltEnabled = true;
-    } else if (!enabled && this._manualTiltEnabled) {
-      this.camera.inputs.remove(this._rotationInput);
-      this._manualTiltEnabled = false;
-      // Reset camera orientation to defaults when manual tilt is disabled
-      // Alpha: face North-up (same as initial setup = Math.PI/2)
-      // Beta: compute auto-tilt for current zoom
-      try {
-        const frac = (this.camera.radius - this.maxZoomIn) / (this.maxZoomOut - this.maxZoomIn);
-        const autoBeta = this.maxTilt - frac * (this.maxTilt - this.minTilt);
-        // Cancel any inertial rotations so reset is immediate
-        this.camera.inertialAlphaOffset = 0;
-        this.camera.inertialBetaOffset = 0;
-        this.camera.alpha = Math.PI / 2;
-        this.camera.beta = autoBeta;
-      } catch {
-        // no-op if camera values are not ready
-      }
-    }
-  }
-
-  // --- Public getters for UI sync ---
-  /** Current effective engine options (do not mutate the returned object). */
-  public getOptions(): Readonly<EngineOptions> {
-    return this.options as Readonly<EngineOptions>;
-  }
-
-  /** Effective time of day 0..2400 used for rendering. */
-  public getEffectiveTimeOfDay2400(): number {
-    return this.environmentService.getEffectiveTimeOfDay2400();
-  }
-
-  /** Whether the environment clock is running. */
-  public getIsClockRunning(): boolean {
-    return this.environmentService.getIsClockRunning();
-  }
-
-  /** Current season month (1..12). */
-  public getSeasonMonth1to12(): number {
-    return this.environmentService.getSeasonMonth1to12();
-  }
-
-  /** Current weather type. */
-  public getWeatherType(): import("@/components/Engine/environments/weather").WeatherType {
-    return this.environmentService.getWeatherType();
-  }
-
-  /** Set the time of day (0..2400). */
-  public setTimeOfDay(timeOfDayValue2400: number): void {
-    this.environmentService.setTimeOfDay(timeOfDayValue2400);
-  }
-
-  /** Set the season as a month index (1..12). */
-  public setSeason(monthIndex1to12: number): void {
-    this.environmentService.setSeason(monthIndex1to12);
-  }
-
-  /** Set the active weather type. */
-  public setWeather(weatherType: WeatherType): void {
-    this.environmentService.setWeather(weatherType);
-  }
-
-  /** Start or stop the environment's internal clock. */
-  public setIsClockRunning(isRunning: boolean): void {
-    this.environmentService.setIsClockRunning(isRunning);
   }
 
   /** Update post-processing toggles/values for the environment's rendering pipeline. */
@@ -596,11 +404,6 @@ export class EngineService {
   // Feature layers
   setShowFeatures(showFeatures: boolean): this {
     this.featureInstancer.setIsVisible(showFeatures);
-    return this;
-  }
-
-  updateFeatureTiles(): this {
-    this.featureInstancer.set(Object.values(useObjectsStore().getTiles));
     return this;
   }
 }

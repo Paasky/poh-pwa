@@ -274,8 +274,7 @@ export class LogicMeshBuilder {
   private createBaseHexMesh(): Mesh {
     const mesh = new Mesh("logicHexBase", this.scene);
 
-    const hexagonRadiusWorldUnits = 1; // must match math.ts spacing (depth 1.5 ⇒ r=1)
-    const vertexData = LogicMeshBuilder.createFlatHexVertexData(hexagonRadiusWorldUnits);
+    const vertexData = LogicMeshBuilder.createFlatHexVertexData();
     vertexData.applyToMesh(mesh, true);
 
     const mat = new StandardMaterial("logicHexMaterial", this.scene);
@@ -287,7 +286,7 @@ export class LogicMeshBuilder {
     return mesh;
   }
 
-  private static createFlatHexVertexData(radius: number): VertexData {
+  private static createFlatHexVertexData(): VertexData {
     const vd = new VertexData();
 
     const positions: number[] = [];
@@ -299,8 +298,8 @@ export class LogicMeshBuilder {
     const pointyTopAngleOffset = Math.PI / 6; // 30° ensures width = sqrt(3)*r, depth = 2*r
     for (let sideIndex = 0; sideIndex < 6; sideIndex++) {
       const angleRadians = pointyTopAngleOffset + (Math.PI / 3) * sideIndex; // 60 degrees per side
-      const x = Math.cos(angleRadians) * radius;
-      const z = Math.sin(angleRadians) * radius;
+      const x = Math.cos(angleRadians);
+      const z = Math.sin(angleRadians);
       vertices.push(new Vector3(x, 0, z));
     }
 

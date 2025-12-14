@@ -11,7 +11,7 @@ function onClick(ev: MouseEvent) {
 
   // Get % of x/y that was clicked & fly to it
   const rect = canvas.getBoundingClientRect();
-  app.engineService.flyTo(
+  app.engineService.flyToPercent(
     (ev.clientX - rect.left) / rect.width,
     (ev.clientY - rect.top) / rect.height,
   );

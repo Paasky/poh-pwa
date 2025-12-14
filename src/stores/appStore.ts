@@ -88,7 +88,7 @@ export const useAppStore = defineStore("app", {
       settings.init();
 
       this.engineService = markRaw(
-        new EngineService(objects.world, engineCanvas, minimapCanvas, settings.engine),
+        new EngineService(objects.world.size, engineCanvas, minimapCanvas, settings.engine),
       );
 
       // Apply persisted Game (environment) settings after engine is created

@@ -27,8 +27,7 @@ export const useObjectsStore = defineStore("objects", {
     // These will be filled in init() or WorldManager.create()
     world: {
       id: "",
-      sizeX: 0,
-      sizeY: 0,
+      size: { x: 0, y: 0 },
       turn: 0,
       year: 0,
       currentPlayer: "" as GameKey,

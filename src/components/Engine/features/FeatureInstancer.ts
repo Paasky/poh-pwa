@@ -2,7 +2,6 @@ import { tileCenter } from "@/helpers/math";
 import { Coords, tileHeight } from "@/helpers/mapTools";
 import type { GameKey } from "@/objects/game/_GameObject";
 import type { Tile } from "@/objects/game/Tile";
-import type { WorldState } from "@/types/common";
 import { Matrix, Mesh, Quaternion, Scene, TransformNode, Vector3 } from "@babylonjs/core";
 import { FeatureGroup, featureMeshMap } from "@/assets/meshes/features";
 import { buildRandomPointsInHex } from "@/helpers/hexPointSampling";
@@ -15,9 +14,9 @@ export default class FeatureInstancer {
   root: TransformNode;
   lib: Record<FeatureGroup, { mesh: Mesh; indices: Record<GameKey, number> }>;
 
-  constructor(scene: Scene, world: WorldState, tiles: Tile[], parent: TransformNode) {
+  constructor(scene: Scene, size: Coords, tiles: Tile[], parent: TransformNode) {
     this.scene = scene;
-    this.size = { x: world.sizeX, y: world.sizeY };
+    this.size = size;
     this.root = new TransformNode("featuresRoot", this.scene);
     this.root.parent = parent;
 
