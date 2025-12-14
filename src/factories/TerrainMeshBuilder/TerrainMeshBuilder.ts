@@ -127,14 +127,6 @@ export class TerrainMeshBuilder {
     // Note: Keep the root as other things may be attached to it, we are just clearing our internal data
   }
 
-  getMesh(): Mesh {
-    return this.mesh;
-  }
-
-  getWaterMesh(): Mesh | undefined {
-    return this.waterMesh;
-  }
-
   // If corner and edge are both undefined, assume it's the center vertex
   private getColor(
     center: HexMeshConf,

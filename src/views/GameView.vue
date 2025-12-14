@@ -31,7 +31,7 @@ onMounted(async () => {
 
 onUnmounted(() => {
   window.removeEventListener("beforeunload", onBeforeUnload);
-  app.engineService.detach();
+  app.engineService.dispose();
   destroyFullscreen();
 });
 

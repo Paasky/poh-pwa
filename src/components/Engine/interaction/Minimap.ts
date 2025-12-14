@@ -20,6 +20,7 @@ import {
 import { FogOfWar } from "@/components/Engine/FogOfWar";
 import { Coords } from "@/helpers/mapTools";
 import { Tile } from "@/objects/game/Tile";
+import { rotNorth } from "@/components/Engine/interaction/MainCamera";
 
 export class Minimap {
   size: Coords;
@@ -49,20 +50,13 @@ export class Minimap {
     // Top-down orthographic camera centered on the world
     this.camera = new ArcRotateCamera(
       "minimapCamera",
-      Math.PI / 2, // look North
+      rotNorth, // look North
       0.0001, // nearly top-down
       10,
       new Vector3(0, 0, 0),
       this.scene,
     );
     this.camera.mode = Camera.ORTHOGRAPHIC_CAMERA;
-
-    // Lock rotation/tilt
-    this.camera.lowerAlphaLimit = Math.PI / 2;
-    this.camera.upperAlphaLimit = Math.PI / 2;
-    this.camera.lowerBetaLimit = 0;
-    this.camera.upperBetaLimit = 0;
-    this.camera.panningSensibility = 0;
 
     // Cover the full world extents with a small margin
     const halfWidth = getWorldWidth(this.size.x) / 2;

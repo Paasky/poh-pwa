@@ -18,6 +18,9 @@ export type MainCameraOptions = {
   manualTilt?: boolean;
 };
 
+export const rot30 = Math.PI / 6;
+export const rotNorth = -rot30 * 3;
+
 export class MainCamera {
   readonly size: Coords;
   readonly scene: Scene;
@@ -41,7 +44,7 @@ export class MainCamera {
     this.canvas = canvas;
 
     this.panSpeed = opts?.panSpeed ?? 5;
-    this.maxRotation = opts?.maxRotation ?? Math.PI / 6;
+    this.maxRotation = opts?.maxRotation ?? rot30;
     this.maxTilt = opts?.maxTilt ?? 0.8;
     this.minTilt = opts?.minTilt ?? 0.1;
     this.maxZoomIn = opts?.maxZoomIn ?? 10;
@@ -50,7 +53,7 @@ export class MainCamera {
     // Create camera
     this.camera = new ArcRotateCamera(
       "camera",
-      Math.PI / 2,
+      rotNorth,
       this.maxTilt,
       this.maxZoomIn,
       new Vector3(0, 0, 0),
@@ -72,9 +75,8 @@ export class MainCamera {
     this.installPanning();
 
     // Limits
-    const rotationNorth = Math.PI / 2;
-    this.camera.lowerAlphaLimit = rotationNorth - this.maxRotation;
-    this.camera.upperAlphaLimit = rotationNorth + this.maxRotation;
+    this.camera.lowerAlphaLimit = rotNorth - this.maxRotation;
+    this.camera.upperAlphaLimit = rotNorth + this.maxRotation;
     this.camera.upperBetaLimit = this.maxTilt;
     this.camera.lowerBetaLimit = this.minTilt;
     this.camera.lowerRadiusLimit = this.maxZoomIn;
@@ -115,8 +117,8 @@ export class MainCamera {
         lastX = ev.clientX;
         lastY = ev.clientY;
         const k = (this.panSpeed / 625) * (this.camera.radius / this.camera.lowerRadiusLimit!);
-        this.camera.target.x += dx * k;
-        this.camera.target.z -= dy * k;
+        this.camera.target.x -= dx * k;
+        this.camera.target.z += dy * k;
       }
     });
   }

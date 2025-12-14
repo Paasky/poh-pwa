@@ -1,5 +1,4 @@
 import type { Coords } from "@/helpers/mapTools";
-import type { Tile } from "@/objects/game/Tile";
 import { type EngineCoords } from "@/factories/TerrainMeshBuilder/_terrainMeshTypes";
 
 export const avg = (vals: number[]): number => (vals.length ? sum(vals) / vals.length : 0);
@@ -20,10 +19,16 @@ export const hexWidth = Math.sqrt(3);
 
 export const getWorldDepth = (worldSizeY: number) => hexDepth * (worldSizeY - 1);
 export const getWorldWidth = (worldSizeX: number) => hexWidth * (worldSizeX - 1) + hexWidth / 2;
+
 export const getWorldMinX = (worldWidth: number) => -worldWidth / 2;
-export const getWorldMinZ = (worldDepth: number) => -worldDepth / 2;
+
+// Flip Z as our map tile y0 = top
+export const getWorldMinZ = (worldDepth: number) => worldDepth / 2;
+
 export const getWorldMaxX = (worldWidth: number) => worldWidth / 2;
-export const getWorldMaxZ = (worldDepth: number) => worldDepth / 2;
+
+// Flip Z as our map tile y0 = top
+export const getWorldMaxZ = (worldDepth: number) => -worldDepth / 2;
 
 export const xInDir = (rad: number, radius: number): number => Math.cos(rad) * radius;
 export const zInDir = (rad: number, radius: number): number => Math.sin(rad) * radius;
@@ -32,7 +37,7 @@ export const pointInDir = (rad: number, radius: number): EngineCoords => ({
   z: zInDir(rad, radius),
 });
 
-export const tileCenter = (size: Coords, tile: Tile): { x: number; z: number } => {
+export const tileCenter = (size: Coords, tile: Coords): EngineCoords => {
   const worldWidth = getWorldWidth(size.x);
   const worldDepth = getWorldDepth(size.y);
   const offsetX = getWorldMinX(worldWidth);
@@ -40,7 +45,8 @@ export const tileCenter = (size: Coords, tile: Tile): { x: number; z: number } =
 
   return {
     x: offsetX + hexWidth * (tile.x + 0.5 * (tile.y & 1)),
-    z: offsetZ + hexDepth * tile.y,
+    // Flip Z as our map tile y0 = top
+    z: offsetZ - hexDepth * tile.y,
   };
 };
 

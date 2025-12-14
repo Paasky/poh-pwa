@@ -10,7 +10,7 @@ import "@babylonjs/core/Lights/Shadows/shadowGeneratorSceneComponent";
 import {
   clamp,
   getWorldDepth,
-  getWorldMaxX,
+  getWorldMinX,
   getWorldMinZ,
   getWorldWidth,
   tileCenter,
@@ -27,8 +27,8 @@ import FeatureInstancer from "@/components/Engine/features/FeatureInstancer";
 import { FogOfWar } from "@/components/Engine/FogOfWar";
 import type { Tile } from "@/objects/game/Tile";
 import type { GameKey } from "@/objects/game/_GameObject";
-import { Coords } from "@/helpers/mapTools";
-import type { Unit } from "@/objects/game/Unit";
+import { Coords, getCoordsFromTileKey } from "@/helpers/mapTools";
+import { EngineCoords } from "@/factories/TerrainMeshBuilder/_terrainMeshTypes";
 
 export type EngineOptions = {
   // Camera UX
@@ -229,7 +229,7 @@ export class EngineService {
     this.tileRoot = this.terrainBuilder.root;
 
     // Build logic mesh for interactions (thin-instance, invisible)
-    this.logicMesh = new LogicMeshBuilder(this.scene, this.size, tilesByKey);
+    this.logicMesh = new LogicMeshBuilder(this.scene, this.size, tilesByKey).build();
 
     // Wire hovered tile to a lightweight reactive store
     const hovered = useHoveredTile();
@@ -257,7 +257,7 @@ export class EngineService {
     );
 
     // QoL: fly camera to the current player's first unit tile (if any)
-    this.flyToFirstUnitTile();
+    this.flyToCurrentPlayer();
 
     if (minimapCanvas) {
       this.minimap = new Minimap(this.size, minimapCanvas, this.engine, this.fogOfWar);
@@ -306,9 +306,35 @@ export class EngineService {
     return this;
   }
 
+  flyTo(coords: EngineCoords): EngineService {
+    const target = new Vector3(coords.x, 0, coords.z);
+
+    // Apply instantly
+    // todo add a super-super-simple 1s flying animation (never crossing world x-limits, even if wrap would be "closer")
+    this.camera.target.copyFrom(target);
+
+    return this;
+  }
+
+  flyToCurrentPlayer(): void {
+    const currentPlayer = useObjectsStore().currentPlayer;
+
+    // Capital or first unit
+    const capital = currentPlayer.cities.value.find((c) => c.isCapital);
+    if (capital) {
+      this.flyToTile(capital.tileKey);
+    }
+
+    const unit = currentPlayer.units.value[0];
+    if (unit) {
+      this.flyToTile(unit.tileKey.value);
+    }
+
+    return;
+  }
+
   // Public: move instantly to a percentage of world width/depth (0..1 each)
-  // todo add a super-super-simple 1s flying animation (never crossing world x-limits, even if wrap would be "closer")
-  flyTo(xPercent: number, yPercent: number): EngineService {
+  flyToPercent(xPercent: number, yPercent: number): EngineService {
     // Clamp percents
     const widthPercent = clamp(xPercent, 0, 1);
     const depthPercent = clamp(yPercent, 0, 1);
@@ -316,51 +342,26 @@ export class EngineService {
     // Map to world coordinates
     const worldWidth = getWorldWidth(this.size.x);
     const worldDepth = getWorldDepth(this.size.y);
-    const target = new Vector3(
-      getWorldMaxX(worldWidth) - widthPercent * worldWidth,
-      0,
-      getWorldMinZ(worldDepth) + depthPercent * worldDepth,
-    );
+    return this.flyTo({
+      x: getWorldMinX(worldWidth) + widthPercent * worldWidth,
 
-    // Apply instantly
-    this.camera.target.copyFrom(target);
-
-    return this;
+      // Flip Z (y=0 is north, y=max is south)
+      z: getWorldMinZ(worldDepth) - depthPercent * worldDepth,
+    });
   }
 
-  // Camera code moved into MainCamera
+  flyToTile(tile: GameKey | string | Tile): EngineService {
+    if (typeof tile === "string") {
+      const coords = getCoordsFromTileKey(tile as GameKey);
+      return this.flyTo(tileCenter(this.size, coords));
+    } else {
+      return this.flyTo(tileCenter(this.size, tile));
+    }
+  }
 
   private onResize = () => {
     this.engine.resize();
   };
-
-  // --- Fog of War helpers ---
-  private flyToFirstUnitTile(): void {
-    try {
-      const objStore = useObjectsStore();
-      const units = (objStore.currentPlayer.units.value as unknown as Unit[]) || [];
-      if (!units.length) return;
-      const tile = (units[0] as Unit).tile.value as Tile | null;
-      if (!tile) return;
-
-      // Compute world XZ of the tile center and convert to flyTo percents
-      const worldWidth = getWorldWidth(this.size.x);
-      const worldDepth = getWorldDepth(this.size.y);
-      const worldMaxX = getWorldMaxX(worldWidth);
-      const worldMinZ = getWorldMinZ(worldDepth);
-
-      // Use math.tileCenter as single source of truth
-      const center = tileCenter(this.size, tile);
-      const centerX = center.x;
-      const centerZ = center.z;
-
-      const widthPercent = (worldMaxX - centerX) / worldWidth;
-      const depthPercent = (centerZ - worldMinZ) / worldDepth;
-      this.flyTo(widthPercent, depthPercent);
-    } catch {
-      // best-effort only
-    }
-  }
 
   // --- Options application helpers ---
   private applyRenderScale(scale: number) {

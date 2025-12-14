@@ -1,7 +1,6 @@
 import { Tile } from "@/objects/game/Tile";
 import { GameKey } from "@/objects/game/_GameObject";
 import { getRandom } from "@/helpers/arrayTools";
-import { EngineCoords } from "@/factories/TerrainMeshBuilder/_terrainMeshTypes";
 
 export type CompassHexEdge = "ne" | "e" | "se" | "sw" | "w" | "nw";
 export type CompassHexCorner = "n" | "se" | "sw" | "s" | "nw" | "ne";
@@ -10,13 +9,15 @@ export type Coords = { x: number; y: number };
 export type NeighborMethod = "chebyshev" | "manhattan" | "hex";
 
 export function getCoordsFromTileKey(tileKey: GameKey): Coords {
-  const [x, y] = tileKey.split(":").map(Number);
-  return { x, y };
-}
-
-export function getEngineCoordsFromTileKey(tileKey: GameKey): EngineCoords {
-  const [x, z] = tileKey.split(":").map(Number);
-  return { x, z };
+  // convert tile key (tile:x{num},y{num}) -> {x: num, y: num} and return
+  const match = tileKey.match(/tile:x(-?\d+),y(-?\d+)/);
+  if (!match) {
+    throw new Error(`Invalid tile key format: ${tileKey}`);
+  }
+  return {
+    x: parseInt(match[1], 10),
+    y: parseInt(match[2], 10),
+  };
 }
 
 export function getHexNeighborDirections(y: number): Record<CompassHexEdge, Coords> {
