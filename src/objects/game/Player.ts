@@ -161,7 +161,13 @@ export class Player extends GameObject {
     this.research.startTurn();
   }
 
-  endTurn(): void {
-    //
+  endTurn(): boolean {
+    // Try to move remaining auto-moves (units on multi-turn move + units on trade routes)
+    // On refusal, return false
+    // After all done, return true
+    for (const unit of this.units.value) {
+      if (!unit.endTurn()) return false;
+    }
+    return true;
   }
 }
