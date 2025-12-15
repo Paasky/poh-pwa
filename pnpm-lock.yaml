@@ -41,6 +41,9 @@ importers:
       change-case:
         specifier: ^5.4.4
         version: 5.4.4
+      indefinite:
+        specifier: ^2.5.2
+        version: 2.5.2
       pinia:
         specifier: ^3.0.4
         version: 3.0.4(typescript@5.9.3)(vue@3.5.25(typescript@5.9.3))
@@ -2201,6 +2204,10 @@ packages:
   imurmurhash@0.1.4:
     resolution: {integrity: sha512-JmXMZ6wuvDmLiHEml9ykzqO6lwFbof0GG4IkcGaENdCRDDmMVnny7s5HsIgHCbaq0w2MyPhDqkhTUgS2LU2PHA==}
     engines: {node: '>=0.8.19'}
+
+  indefinite@2.5.2:
+    resolution: {integrity: sha512-J3ELLIk835hmgDMUfNltTCrHz9+CteTnSuXJqvxZT18wo1U2M9/QeeJMw99QdZwPEEr1DE2aBYda101Ojjdw5g==}
+    engines: {node: '>=6.0.0'}
 
   internal-slot@1.1.0:
     resolution: {integrity: sha512-4gd7VpWNQNB4UKKCFFVcp1AVv+FMOgs9NKzjHKusc8jTMhd5eL1NqQqOpE0KzMds804/yHlglp3uxgluOqAPLw==}
@@ -5567,6 +5574,8 @@ snapshots:
       resolve-from: 4.0.0
 
   imurmurhash@0.1.4: {}
+
+  indefinite@2.5.2: {}
 
   internal-slot@1.1.0:
     dependencies:

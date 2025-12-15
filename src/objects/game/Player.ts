@@ -18,6 +18,7 @@ import type { TradeRoute } from "@/objects/game/TradeRoute";
 import type { Unit } from "@/objects/game/Unit";
 import { getNeighbors } from "@/helpers/mapTools";
 import { useObjectsStore } from "@/stores/objectStore";
+import { Diplomacy } from "@/objects/player/Diplomacy";
 
 export class Player extends GameObject {
   constructor(
@@ -30,6 +31,7 @@ export class Player extends GameObject {
   ) {
     super(key);
 
+    this.diplomacy = new Diplomacy(key);
     this.isCurrent = isCurrent;
     this.isMinor = isMinor;
     this.government = new Government(key);
@@ -62,6 +64,7 @@ export class Player extends GameObject {
   /*
    * Attributes
    */
+  diplomacy: Diplomacy;
   government: Government;
   isCurrent = false;
   isMinor = false;
@@ -138,10 +141,27 @@ export class Player extends GameObject {
 
   leader = computed(() => this.culture.value.leader.value);
 
+  // Player yields is the total lump output (+/-) of all Cities, Deals, Units and Trade Routes
   yields = computed(() => new Yields());
 
   /*
    * Actions
    */
-  // todo add here
+  startTurn(): void {
+    // Load the yields from the end of the prev turn into storage
+    this.storage.load(this.yields.value.toStorage().all());
+
+    this.cities.value.forEach((c) => c.startTurn());
+    this.units.value.forEach((u) => u.startTurn());
+
+    this.culture.value.startTurn();
+    this.diplomacy.startTurn();
+    this.government.startTurn();
+    this.religion.value?.startTurn();
+    this.research.startTurn();
+  }
+
+  endTurn(): void {
+    //
+  }
 }

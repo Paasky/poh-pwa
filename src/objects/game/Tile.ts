@@ -11,6 +11,7 @@ import type { City } from "@/objects/game/City";
 import type { Player } from "@/objects/game/Player";
 import type { TradeRoute } from "@/objects/game/TradeRoute";
 import type { Unit } from "@/objects/game/Unit";
+import { getNeighbors } from "@/helpers/mapTools";
 
 export class Tile extends GameObject {
   constructor(
@@ -138,6 +139,16 @@ export class Tile extends GameObject {
         ...this._dynamicTypes.flatMap((t) => t.yields.all()),
       ]),
   );
+
+  getNeighbors(dist = 1): Tile[] {
+    return getNeighbors(
+      useObjectsStore().world.size,
+      this,
+      useObjectsStore().getTiles,
+      "hex",
+      dist,
+    );
+  }
 
   /*
    * Actions

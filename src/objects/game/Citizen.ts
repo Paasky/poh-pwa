@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { canHaveOne, hasOne } from "@/objects/game/_relations";
 import { TypeObject } from "@/types/typeObjects";
 import { computed, ComputedRef, Ref, ref } from "vue";
@@ -8,6 +9,10 @@ import type { Player } from "@/objects/game/Player";
 import type { Culture } from "@/objects/game/Culture";
 import type { Religion } from "@/objects/game/Religion";
 import type { Tile } from "@/objects/game/Tile";
+import { getRandom } from "@/helpers/arrayTools";
+import { useEventStore } from "@/stores/eventStore";
+import { CitizenGained, CitizenLost } from "@/events/Citizen";
+import { useObjectsStore } from "@/stores/objectStore";
 
 export class Citizen extends GameObject {
   constructor(
@@ -96,5 +101,85 @@ export class Citizen extends GameObject {
   /*
    * Actions
    */
-  // todo add here
+  complete() {
+    this.city.value.citizenKeys.value.push(this.key);
+
+    this.pickTile();
+
+    // Use any as IDE has a Ref value mismatch
+    useEventStore().turnEvents.push(new CitizenGained(this, "growth") as any);
+  }
+
+  delete(reason: string) {
+    this.city.value.citizenKeys.value = this.city.value.citizenKeys.value.filter(
+      (k) => k !== this.key,
+    );
+    this.culture.value.citizenKeys.value = this.culture.value.citizenKeys.value.filter(
+      (k) => k !== this.key,
+    );
+    this.player.value.citizenKeys.value = this.player.value.citizenKeys.value.filter(
+      (k) => k !== this.key,
+    );
+    if (this.religion.value) {
+      this.religion.value.citizenKeys.value = this.religion.value.citizenKeys.value.filter(
+        (k) => k !== this.key,
+      );
+    }
+    this.tile.value.citizenKeys.value = this.tile.value.citizenKeys.value.filter(
+      (k) => k !== this.key,
+    );
+
+    delete useObjectsStore()._gameObjects[this.key];
+
+    useEventStore().turnEvents.push(
+      // Use any as IDE has a Ref value mismatch
+      new CitizenLost(this.city.value, this.tile.value, reason) as any,
+    );
+  }
+
+  migrate(toCity: City) {
+    const fromCity = this.city.value;
+
+    fromCity.citizenKeys.value = fromCity.citizenKeys.value.filter((k) => k !== this.key);
+    this.player.value.citizenKeys.value = this.player.value.citizenKeys.value.filter(
+      (k) => k !== this.key,
+    );
+
+    useEventStore().turnEvents.push(
+      new CitizenLost(
+        fromCity,
+        this.tile.value,
+        `migration to ${toCity.name} (${toCity.player.value.name})`,
+        this,
+        // Use any as IDE has a Ref value mismatch
+      ) as any,
+    );
+
+    this.cityKey = toCity.key;
+    toCity.citizenKeys.value.push(this.key);
+    this.pickTile();
+
+    useEventStore().turnEvents.push(
+      new CitizenGained(
+        this,
+        `immigrated from ${fromCity.name} (${fromCity.player.value.name})`,
+        // Use any as IDE has a Ref value mismatch
+      ) as any,
+    );
+  }
+
+  pickTile() {
+    if (this.tileKey) {
+      this.tile.value.citizenKeys.value = this.tile.value.citizenKeys.value.filter(
+        (k) => k !== this.key,
+      );
+    }
+
+    // todo pick tile per city preferences
+    this.tileKey.value = getRandom(
+      this.city.value.tile.value.getNeighbors(3).filter((n) => n.playerKey === this.playerKey),
+    ).key;
+
+    this.tile.value.citizenKeys.value.push(this.key);
+  }
 }

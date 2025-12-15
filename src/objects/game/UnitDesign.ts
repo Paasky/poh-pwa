@@ -5,6 +5,7 @@ import { TypeObject } from "@/types/typeObjects";
 import { canHaveOne, hasMany } from "@/objects/game/_relations";
 import type { Player } from "@/objects/game/Player";
 import type { Unit } from "@/objects/game/Unit";
+import { TypeKey } from "@/types/common";
 
 export class UnitDesign extends GameObject {
   constructor(
@@ -82,6 +83,34 @@ export class UnitDesign extends GameObject {
       vs: [],
     }),
   );
+
+  domainKey(): TypeKey {
+    if (
+      [
+        "platformCategory:sailHull",
+        "platformCategory:poweredHull",
+        "platformCategory:submersible",
+      ].includes(this.platform.key)
+    ) {
+      return "domainType:water";
+    }
+
+    if (
+      [
+        "platformCategory:aircraft",
+        "platformCategory:helicopter",
+        "platformCategory:missile",
+      ].includes(this.platform.key)
+    ) {
+      return "domainType:air";
+    }
+
+    if (["platformCategory:satellite"].includes(this.platform.key)) {
+      return "domainType:space";
+    }
+
+    return "domainType:land";
+  }
 
   /*
    * Actions

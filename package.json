@@ -39,6 +39,7 @@
     "@fortawesome/vue-fontawesome": "^3.1.2",
     "@urbanzoo/remove-accents": "^1.0.2",
     "change-case": "^5.4.4",
+    "indefinite": "^2.5.2",
     "pinia": "^3.0.4",
     "pluralize": "^8.0.0",
     "vite-plugin-pwa": "^1.2.0",

@@ -1,413 +1,399 @@
-     1  import {
-     2    ArcRotateCamera,
-     3    Color4,
-     4    Engine as BabylonEngine,
-     5    Scene,
-     6    TransformNode,
-     7    Vector3,
-     8  } from "@babylonjs/core";
-     9  import "@babylonjs/core/Lights/Shadows/shadowGeneratorSceneComponent";
-    10  import {
-    11    clamp,
-    12    getWorldDepth,
-    13    getWorldMinX,
-    14    getWorldMinZ,
-    15    getWorldWidth,
-    16    tileCenter,
-    17  } from "@/helpers/math";
-    18  import { TerrainMeshBuilder } from "@/factories/TerrainMeshBuilder/TerrainMeshBuilder";
-    19  import { useObjectsStore } from "@/stores/objectStore";
-    20  import { EnvironmentService } from "@/components/Engine/EnvironmentService";
-    21  import type { DefaultPostProcessingOptions } from "@/components/Engine/environments/postFx";
-    22  import LogicMeshBuilder from "@/factories/LogicMeshBuilder";
-    23  import { useHoveredTile } from "@/stores/hoveredTile";
-    24  import { Minimap } from "@/components/Engine/interaction/Minimap";
-    25  import { MainCamera } from "@/components/Engine/interaction/MainCamera";
-    26  import FeatureInstancer from "@/components/Engine/features/FeatureInstancer";
-    27  import { FogOfWar } from "@/components/Engine/FogOfWar";
-    28  import type { Tile } from "@/objects/game/Tile";
-    29  import type { GameKey } from "@/objects/game/_GameObject";
-    30  import { Coords, getCoordsFromTileKey } from "@/helpers/mapTools";
-    31  import { EngineCoords } from "@/factories/TerrainMeshBuilder/_terrainMeshTypes";
-    32
-    33  export type EngineOptions = {
-    34    // Camera UX
-    35    manualTilt?: boolean; // Allow user to tilt manually (otherwise auto-tilt by zoom)
-    36
-    37    // Resolution & performance
-    38    renderScale?: number; // 1 = native CSS resolution, 0.5 = half res, 1.25 = super-sample
-    39    fpsCap?: number; // 0 or undefined = uncapped; otherwise, minimum ms between renders enforced
-    40    adaptToDeviceRatio?: boolean; // Use devicePixelRatio for base resolution (restart required)
-    41
-    42    // Engine/GPU flags (restart required)
-    43    antialias?: boolean; // Multi-sample antialias at context level (restart required)
-    44    preserveDrawingBuffer?: boolean;
-    45    stencil?: boolean;
-    46    disableWebGL2Support?: boolean; // Force WebGL1 if true
-    47    powerPreference?: WebGLPowerPreference; // "default" | "high-performance" | "low-power"
-    48
-    49    // Visual effects (post-process pipeline)
-    50    hdr?: boolean; // Enable HDR pipeline when supported
-    51    useFxaa?: boolean; // FXAA post-process
-    52    useBloom?: boolean; // Bloom post-process
-    53    bloomThreshold?: number; // 0..1
-    54    bloomWeight?: number; // 0..1
-    55
-    56    // Feature layers
-    57    showFeatures?: boolean; // Toggle GPU-instanced feature props (trees etc.)
-    58  };
-    59
-    60  export const RestartRequiredOptionKeys: (keyof EngineOptions)[] = [
-    61    "antialias",
-    62    "preserveDrawingBuffer",
-    63    "stencil",
-    64    "disableWebGL2Support",
-    65    "powerPreference",
-    66    "adaptToDeviceRatio",
-    67  ];
-    68
-    69  export const DefaultEngineOptions: Required<EngineOptions> = {
-    70    manualTilt: false,
-    71    renderScale: 1,
-    72    fpsCap: 0,
-    73    adaptToDeviceRatio: false,
-    74    antialias: true,
-    75    preserveDrawingBuffer: true,
-    76    stencil: true,
-    77    disableWebGL2Support: false,
-    78    powerPreference: "high-performance",
-    79    hdr: true,
-    80    useFxaa: true,
-    81    useBloom: false,
-    82    bloomThreshold: 0.9,
-    83    bloomWeight: 0.15,
-    84    showFeatures: true,
-    85  };
-    86
-    87  export type EngineOptionPreset = { id: string; label: string; value: EngineOptions };
-    88
-    89  export const EngineOptionPresets: EngineOptionPreset[] = [
-    90    {
-    91      id: "low",
-    92      label: "Low",
-    93      value: {
-    94        manualTilt: false,
-    95        renderScale: 0.5,
-    96        fpsCap: 30,
-    97        adaptToDeviceRatio: false,
-    98        antialias: false,
-    99        preserveDrawingBuffer: false,
-   100        stencil: false,
-   101        disableWebGL2Support: false,
-   102        powerPreference: "low-power",
-   103        hdr: false,
-   104        useFxaa: false,
-   105        useBloom: false,
-   106      } as EngineOptions,
-   107    },
-   108    {
-   109      id: "medium",
-   110      label: "Medium",
-   111      value: {
-   112        manualTilt: false,
-   113        renderScale: 0.75,
-   114        fpsCap: 60,
-   115        adaptToDeviceRatio: false,
-   116        antialias: true,
-   117        preserveDrawingBuffer: false,
-   118        stencil: false,
-   119        disableWebGL2Support: false,
-   120        powerPreference: "default",
-   121        hdr: false,
-   122        useFxaa: true,
-   123        useBloom: false,
-   124      } as EngineOptions,
-   125    },
-   126    {
-   127      id: "high",
-   128      label: "High",
-   129      value: {
-   130        manualTilt: false,
-   131        renderScale: 1.0,
-   132        fpsCap: 0,
-   133        adaptToDeviceRatio: false,
-   134        antialias: true,
-   135        preserveDrawingBuffer: true,
-   136        stencil: true,
-   137        disableWebGL2Support: false,
-   138        powerPreference: "high-performance",
-   139        hdr: true,
-   140        useFxaa: true,
-   141        useBloom: true,
-   142        bloomThreshold: 0.9,
-   143        bloomWeight: 0.15,
-   144      } as EngineOptions,
-   145    },
-   146    {
-   147      id: "ultra",
-   148      label: "Ultra",
-   149      value: {
-   150        manualTilt: false,
-   151        renderScale: 1.0, // keep safe by default; user can increase manually
-   152        fpsCap: 0,
-   153        adaptToDeviceRatio: true,
-   154        antialias: true,
-   155        preserveDrawingBuffer: true,
-   156        stencil: true,
-   157        disableWebGL2Support: false,
-   158        powerPreference: "high-performance",
-   159        hdr: true,
-   160        useFxaa: true,
-   161        useBloom: true,
-   162        bloomThreshold: 0.85,
-   163        bloomWeight: 0.2,
-   164      } as EngineOptions,
-   165    },
-   166  ];
-   167
-   168  export class EngineService {
-   169    size: Coords;
-   170    canvas: HTMLCanvasElement;
-   171    engine: BabylonEngine;
-   172    scene: Scene;
-   173    tileRoot: TransformNode;
-   174
-   175    camera: ArcRotateCamera;
-   176    mainCamera: MainCamera;
-   177    environmentService: EnvironmentService;
-   178    terrainBuilder: TerrainMeshBuilder;
-   179    logicMesh: LogicMeshBuilder;
-   180    featureInstancer: FeatureInstancer;
----SLICE---
-   181    fogOfWar: FogOfWar;
-   182
-   183    minimap?: Minimap;
-   184    // Options
-   185
-   186    options: EngineOptions = { ...DefaultEngineOptions };
-   187    // Camera settings moved to MainCamera
-   188
-   189    // todo the fps cap implementation is awful, just creates lag. this must go and either use built-in babylon settings or remove fps cap entirely
-   190    private _lastRenderTime = 0;
-   191
-   192    constructor(
-   193      size: Coords,
-   194      canvas: HTMLCanvasElement,
-   195      minimapCanvas?: HTMLCanvasElement,
-   196      options?: EngineOptions,
-   197    ) {
-   198      this.size = size;
-   199      this.canvas = canvas;
-   200      this.options = { ...DefaultEngineOptions, ...(options ?? {}) };
-   201
-   202      const tilesByKey = useObjectsStore().getTiles;
-   203
-   204      // Create Engine and Scene
-   205      this.engine = new BabylonEngine(
-   206        this.canvas,
-   207        this.options.antialias ?? true,
-   208        {
-   209          preserveDrawingBuffer: this.options.preserveDrawingBuffer ?? true,
-   210          stencil: this.options.stencil ?? true,
-   211          disableWebGL2Support: this.options.disableWebGL2Support ?? false,
-   212          powerPreference: this.options.powerPreference ?? "high-performance",
-   213        },
-   214        this.options.adaptToDeviceRatio ?? false,
-   215      );
-   216      this.scene = new Scene(this.engine);
-   217      this.scene.clearColor = new Color4(0.63, 0.63, 0.63, 1); // Same-ish as snow
-   218
-   219      // Create Cameras and Environment
-   220      this.applyRenderScale(this.options.renderScale ?? 1);
-   221      this.mainCamera = new MainCamera(this.size, this.scene, this.canvas, {
-   222        manualTilt: this.options.manualTilt,
-   223      });
-   224      this.camera = this.mainCamera.camera;
-   225      this.environmentService = new EnvironmentService(this.scene, this.camera, this.engine);
-   226
-   227      // Build merged terrain mesh (new pipeline)
-   228      this.terrainBuilder = new TerrainMeshBuilder(this.scene, this.size, tilesByKey);
-   229      this.tileRoot = this.terrainBuilder.root;
-   230
-   231      // Build logic mesh for interactions (thin-instance, invisible)
-   232      this.logicMesh = new LogicMeshBuilder(this.scene, this.size, tilesByKey).build();
-   233
-   234      // Wire hovered tile to a lightweight reactive store
-   235      const hovered = useHoveredTile();
-   236      this.logicMesh.onTileHover((tile) => hovered.set(tile));
-   237      this.logicMesh.onTileExit(() => hovered.clear());
-   238
-   239      this.featureInstancer = new FeatureInstancer(
-   240        this.scene,
-   241        this.size,
-   242        Object.values(tilesByKey),
-   243        this.tileRoot,
-   244      ).setIsVisible(options?.showFeatures ?? true);
-   245
-   246      // Initialize FoW strictly from store-provided currentPlayer values
-   247      const storeKnown = useObjectsStore().currentPlayer.knownTileKeys.value as GameKey[];
-   248      const storeVisible = useObjectsStore().currentPlayer.visibleTileKeys.value as GameKey[];
-   249
-   250      this.fogOfWar = new FogOfWar(
-   251        this.size,
-   252        this.scene,
-   253        this.camera,
-   254        tilesByKey,
-   255        storeKnown,
-   256        storeVisible,
-   257      );
-   258
-   259      // QoL: fly camera to the current player's first unit tile (if any)
-   260      this.flyToCurrentPlayer();
-   261
-   262      if (minimapCanvas) {
-   263        this.minimap = new Minimap(this.size, minimapCanvas, this.engine, this.fogOfWar);
-   264      }
-   265
-   266      // Render loop with optional FPS cap
-   267      this.engine.runRenderLoop(() => {
-   268        if (this.options.fpsCap && this.options.fpsCap > 0) {
-   269          const now = performance.now();
-   270          const minDelta = 1000 / this.options.fpsCap;
-   271          if (now - this._lastRenderTime < minDelta) return;
-   272          this._lastRenderTime = now;
-   273        }
-   274
-   275        // Tick environment (clock/effects) before rendering
-   276        const deltaSeconds = this.engine.getDeltaTime() / 1000;
-   277        this.environmentService.update(deltaSeconds);
-   278        this.scene.render();
-   279      });
-   280
-   281      // Resize to window
-   282      this.engine.resize();
-   283      window.addEventListener("resize", this.onResize);
-   284
-   285      // Once the scene is ready, zoom minimap to known and capture a one-time minimap image
-   286      this.scene.executeWhenReady(() => {
-   287        this.minimap?.capture();
-   288      });
-   289    }
-   290
-   291    dispose(): void {
-   292      this.fogOfWar.dispose();
-   293      window.removeEventListener("resize", this.onResize);
-   294      this.engine.stopRenderLoop();
-   295      this.featureInstancer.dispose();
-   296      this.logicMesh.dispose();
-   297      this.terrainBuilder.dispose();
-   298      this.environmentService.dispose();
-   299      this.scene.dispose();
-   300      this.engine.dispose();
-   301    }
-   302
-   303    // todo move this to our settingsStore and remove from here
-   304    setLogicDebugEnabled(enabled: boolean): this {
-   305      this.logicMesh.setDebugEnabled(enabled);
-   306      return this;
-   307    }
-   308
-   309    flyTo(coords: EngineCoords): EngineService {
-   310      const target = new Vector3(coords.x, 0, coords.z);
-   311
-   312      // Apply instantly
-   313      // todo add a super-super-simple 1s flying animation (never crossing world x-limits, even if wrap would be "closer")
-   314      this.camera.target.copyFrom(target);
-   315
-   316      return this;
-   317    }
-   318
-   319    flyToCurrentPlayer(): void {
-   320      const currentPlayer = useObjectsStore().currentPlayer;
-   321
-   322      // Capital or first unit
-   323      const capital = currentPlayer.cities.value.find((c) => c.isCapital);
-   324      if (capital) {
-   325        this.flyToTile(capital.tileKey);
-   326      }
-   327
-   328      const unit = currentPlayer.units.value[0];
-   329      if (unit) {
-   330        this.flyToTile(unit.tileKey.value);
-   331      }
-   332
-   333      return;
-   334    }
-   335
-   336    // Public: move instantly to a percentage of world width/depth (0..1 each)
-   337    flyToPercent(xPercent: number, yPercent: number): EngineService {
-   338      // Clamp percents
-   339      const widthPercent = clamp(xPercent, 0, 1);
-   340      const depthPercent = clamp(yPercent, 0, 1);
-   341
-   342      // Map to world coordinates
-   343      const worldWidth = getWorldWidth(this.size.x);
-   344      const worldDepth = getWorldDepth(this.size.y);
-   345      return this.flyTo({
-   346        x: getWorldMinX(worldWidth) + widthPercent * worldWidth,
-   347
-   348        // Flip Z (y=0 is north, y=max is south)
-   349        z: getWorldMinZ(worldDepth) - depthPercent * worldDepth,
-   350      });
-   351    }
-   352
-   353    flyToTile(tile: GameKey | string | Tile): EngineService {
-   354      if (typeof tile === "string") {
-   355        const coords = getCoordsFromTileKey(tile as GameKey);
-   356        return this.flyTo(tileCenter(this.size, coords));
-   357      } else {
-   358        return this.flyTo(tileCenter(this.size, tile));
-   359      }
-   360    }
----SLICE---
-   361
-   362    private onResize = () => {
-   363      this.engine.resize();
-   364    };
-   365
-   366    // --- Options application helpers ---
-   367    private applyRenderScale(scale: number) {
-   368      const safeScale = Math.max(0.25, Math.min(2, scale || 1));
-   369      const level = 1 / safeScale;
-   370      this.engine.setHardwareScalingLevel(level);
-   371    }
-   372
-   373    applyOptions(next: EngineOptions): { restartKeysChanged: (keyof EngineOptions)[] } {
-   374      const prev = this.options;
-   375      this.options = { ...prev, ...next };
-   376
-   377      // Collect restart-required changes
-   378      const restartKeysChanged: (keyof EngineOptions)[] = [];
-   379      for (const k of RestartRequiredOptionKeys) {
-   380        if (prev[k] !== this.options[k]) restartKeysChanged.push(k);
-   381      }
-   382
-   383      // Live-applied options
-   384      if (prev.renderScale !== this.options.renderScale) {
-   385        this.applyRenderScale(this.options.renderScale ?? 1);
-   386      }
-   387      if (prev.fpsCap !== this.options.fpsCap) {
-   388        this._lastRenderTime = 0; // reset limiter
-   389      }
-   390      if (prev.manualTilt !== this.options.manualTilt) {
-   391        this.mainCamera.setManualTilt(!!this.options.manualTilt);
-   392      }
-   393      if (prev.showFeatures !== this.options.showFeatures) {
-   394        this.setShowFeatures(!!this.options.showFeatures);
-   395      }
-   396      return { restartKeysChanged };
-   397    }
-   398
-   399    /** Update post-processing toggles/values for the environment's rendering pipeline. */
-   400    public setEnvironmentPostProcessingOptions(options: Partial<DefaultPostProcessingOptions>): void {
-   401      this.environmentService.setPostProcessingOptions(options);
-   402    }
-   403
-   404    // Feature layers
-   405    setShowFeatures(showFeatures: boolean): this {
-   406      this.featureInstancer.setIsVisible(showFeatures);
-   407      return this;
-   408    }
-   409  }
----SLICE---
----SLICE---
+
+ RUN  v4.0.14 /mnt/C2B4A757B4A74CAB/code/poh-pwa
+ ❯ tests/factories/TerrainMeshBuilder/pointsInHexRing.test.ts (4 tests | 3 failed) 20ms
+     ✓ K1 output 1ms
+     × K2 output 10ms
+     × K3 output 7ms
+     × K4 output 1ms
+ ✓ tests/factories/TerraGenerator/helpers/post-processors/makeIsland.test.ts (3 tests) 2ms
+ ✓ tests/helpers/arrayTools.test.ts (7 tests) 4ms
+ ✓ tests/factories/TerraGenerator/helpers/post-processors/crawlTiles.test.ts (3 tests) 74ms
+ ❯ tests/factories/TerraGenerator/helpers/post-processors/spreadSalt.test.ts (3 tests | 3 failed) 78ms
+     × marks all contiguous water tiles as salt 49ms
+     × finds its way through a 5x5 'spiral maze' of water tiles 17ms
+     × does not salt isolated water surrounded by land (3-ring 5x5) 11ms
+ ✓ tests/factories/TerraGenerator/helpers/post-processors/river.test.ts (8 tests) 156ms
+ ❯ tests/dataLoaders/gameDataLoader.test.ts (3 tests | 3 failed) 83ms
+     × Throws on missing/invalid key/data 48ms
+     × Build game objects and returns correct JSON, without optional 20ms
+     × Build game objects and returns correct JSON, with optional 15ms
+ ❯ tests/factories/TerrainMeshBuilder/hexTrianglesFromPoints.test.ts (8 tests | 3 failed) 15ms
+     ✓ K1 output 1ms
+     × K2 output 8ms
+     × K3 output 2ms
+     × K4 output 1ms
+     ✓ K1 output 0ms
+     ✓ K2 output 0ms
+     ✓ K3 output 0ms
+     ✓ K4 output 0ms
+ ✓ tests/factories/TerraGenerator/helpers/mapTools.test.ts (1 test) 1ms
+ ✓ tests/factories/TerraGenerator/helpers/post-processors/removeOrphanTerrain.test.ts (4 tests) 2ms
+ ✓ tests/factories/TerraGenerator/helpers/post-processors/removeOrphanArea.test.ts (4 tests) 2ms
+ ❯ tests/factories/TerrainMeshBuilder/buildHexGpuBuffer.test.ts (9 tests | 5 failed) 12ms
+     ✓ K1 output 1ms
+     × K2 output 6ms
+     × K3 output 1ms
+     × K4 output 1ms
+     × writes vertex data in point order and flattens RGBA/XYZ correctly (K1) 1ms
+     × applies center offset (x,z) and inverts Z 0ms
+     ✓ calls getColor/getHeight with correct argument triplets for center, corners, and edges (K2) 0ms
+     ✓ offsets indices by existing vertex count when appending to a non-empty buffer 0ms
+     ✓ does not mutate inputs and supports empty triangles/points 0ms
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ Failed Tests 17 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+ FAIL  tests/dataLoaders/gameDataLoader.test.ts > gameDataLoader > Throws on missing/invalid key/data
+AssertionError: expected [Function] to throw error including 'GameObject.key: \'player:1\', Attribu…' but got 'GameObject.key: \'player:1\', Attribu…'
+Expected: "GameObject.key: 'player:1', Attribute: {"attrName":"cultureKey","attrNotRef":true,"related":{"theirKeyAttr":"playerKey","isOne":true}}, Message: Related object 'culture:1' does not exist. Raw data: {"key":"player:1","cultureKey":"culture:1","name":"test player","isCurrent":false}"
+Received: "GameObject.key: 'player:1', Attribute: {"attrName":"cultureKey","attrNotRef":true,"related":{"theirKeyAttr":"playerKey","isOne":true}}, Message: Related object 'culture:1' does not exist. Raw data: {"key":"player:1","cultureKey":"culture:1","name":"test player","isCurrent":false,"isMinor":false}"
+ ❯ tests/dataLoaders/gameDataLoader.test.ts:50:77
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/17]⎯
+ FAIL  tests/dataLoaders/gameDataLoader.test.ts > gameDataLoader > Build game objects and returns correct JSON, without optional
+AssertionError: expected { 'agenda:1': { …(2) }, …(11) } to deeply equal { 'agenda:1': { …(2) }, …(11) }
+- Expected
++ Received
+@@ -38,10 +38,11 @@
+      "toPlayerKey": "player:1",
+    },
+    "player:1": {
+      "cultureKey": "culture:1",
+      "isCurrent": false,
++     "isMinor": false,
+      "key": "player:1",
+      "name": "test player",
+    },
+    "religion:1": {
+      "cityKey": "city:1",
+ ❯ tests/dataLoaders/gameDataLoader.test.ts:157:53
+    155|
+    156|     // output = input + defaults
+    157|     expect(JSON.parse(JSON.stringify(gameObjects))).toEqual({
+       |                                                     ^
+    158|       "agenda:1": agendaData,
+    159|       "citizen:1": citizenData,
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/17]⎯
+ FAIL  tests/dataLoaders/gameDataLoader.test.ts > gameDataLoader > Build game objects and returns correct JSON, with optional
+AssertionError: expected { 'player:1': { …(5) }, …(1) } to deeply equal { 'player:1': { …(4) }, …(1) }
+- Expected
++ Received
+@@ -5,9 +5,10 @@
+      "type": "majorCultureType:viking",
+    },
+    "player:1": {
+      "cultureKey": "culture:1",
+      "isCurrent": true,
++     "isMinor": false,
+      "key": "player:1",
+      "name": "test player",
+    },
+  }
+ ❯ tests/dataLoaders/gameDataLoader.test.ts:205:53
+    203|     const gameObjects = loader.initFromRaw({ objects: [playerData, cul…
+    204|
+    205|     expect(JSON.parse(JSON.stringify(gameObjects))).toEqual({
+       |                                                     ^
+    206|       "player:1": playerData,
+    207|       "culture:1": cultureData,
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/17]⎯
+ FAIL  tests/factories/TerrainMeshBuilder/buildHexGpuBuffer.test.ts > pointsInRing > K2 output
+ FAIL  tests/factories/TerrainMeshBuilder/hexTrianglesFromPoints.test.ts > pointsInRing > K2 output
+ FAIL  tests/factories/TerrainMeshBuilder/pointsInHexRing.test.ts > pointsInRing > K2 output
+AssertionError: expected [ { x: +0, z: 1, …(2) }, …(11) ] to deeply equal [ { x: +0, z: 1, …(2) }, …(11) ]
+- Expected
++ Received
+@@ -16,11 +16,11 @@
+      "ringNumFromCenter": 2,
+      "x": -0.866,
+      "z": 0.5,
+    },
+    {
+-     "edge": "sw",
++     "edge": "w",
+      "ringNumFromCenter": 2,
+      "x": -0.866,
+      "z": 0,
+    },
+    {
+@@ -28,11 +28,11 @@
+      "ringNumFromCenter": 2,
+      "x": -0.866,
+      "z": -0.5,
+    },
+    {
+-     "edge": "s",
++     "edge": "sw",
+      "ringNumFromCenter": 2,
+      "x": -0.433,
+      "z": -0.75,
+    },
+    {
+@@ -52,11 +52,11 @@
+      "ringNumFromCenter": 2,
+      "x": 0.866,
+      "z": -0.5,
+    },
+    {
+-     "edge": "ne",
++     "edge": "e",
+      "ringNumFromCenter": 2,
+      "x": 0.866,
+      "z": 0,
+    },
+    {
+@@ -64,11 +64,11 @@
+      "ringNumFromCenter": 2,
+      "x": 0.866,
+      "z": 0.5,
+    },
+    {
+-     "edge": "n",
++     "edge": "ne",
+      "ringNumFromCenter": 2,
+      "x": 0.433,
+      "z": 0.75,
+    },
+  ]
+ ❯ expectFloatsToBeClose tests/_setup/testHelpers.ts:5:42
+      3|
+      4| export const expectFloatsToBeClose = (expected: object, toBe: object) …
+      5|   return expect(crawlForFloat(expected)).toEqual(crawlForFloat(toBe));
+       |                                          ^
+      6|
+      7|   function crawlForFloat(crawlIn: any): any {
+ ❯ tests/factories/TerrainMeshBuilder/pointsInHexRing.test.ts:14:5
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/17]⎯
+ FAIL  tests/factories/TerrainMeshBuilder/buildHexGpuBuffer.test.ts > pointsInRing > K3 output
+ FAIL  tests/factories/TerrainMeshBuilder/hexTrianglesFromPoints.test.ts > pointsInRing > K3 output
+ FAIL  tests/factories/TerrainMeshBuilder/pointsInHexRing.test.ts > pointsInRing > K3 output
+AssertionError: expected [ { x: +0, z: 0.667, …(2) }, …(11) ] to deeply equal [ { x: +0, z: 0.667, …(2) }, …(11) ]
+- Expected
++ Received
+@@ -16,11 +16,11 @@
+      "ringNumFromCenter": 2,
+      "x": -0.577,
+      "z": 0.333,
+    },
+    {
+-     "edge": "sw",
++     "edge": "w",
+      "ringNumFromCenter": 2,
+      "x": -0.577,
+      "z": 0,
+    },
+    {
+@@ -28,11 +28,11 @@
+      "ringNumFromCenter": 2,
+      "x": -0.577,
+      "z": -0.333,
+    },
+    {
+-     "edge": "s",
++     "edge": "sw",
+      "ringNumFromCenter": 2,
+      "x": -0.289,
+      "z": -0.5,
+    },
+    {
+@@ -52,11 +52,11 @@
+      "ringNumFromCenter": 2,
+      "x": 0.577,
+      "z": -0.333,
+    },
+    {
+-     "edge": "ne",
++     "edge": "e",
+      "ringNumFromCenter": 2,
+      "x": 0.577,
+      "z": 0,
+    },
+    {
+@@ -64,11 +64,11 @@
+      "ringNumFromCenter": 2,
+      "x": 0.577,
+      "z": 0.333,
+    },
+    {
+-     "edge": "n",
++     "edge": "ne",
+      "ringNumFromCenter": 2,
+      "x": 0.289,
+      "z": 0.5,
+    },
+  ]
+ ❯ expectFloatsToBeClose tests/_setup/testHelpers.ts:5:42
+      3|
+      4| export const expectFloatsToBeClose = (expected: object, toBe: object) …
+      5|   return expect(crawlForFloat(expected)).toEqual(crawlForFloat(toBe));
+       |                                          ^
+      6|
+      7|   function crawlForFloat(crawlIn: any): any {
+ ❯ tests/factories/TerrainMeshBuilder/pointsInHexRing.test.ts:20:5
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/17]⎯
+ FAIL  tests/factories/TerrainMeshBuilder/buildHexGpuBuffer.test.ts > pointsInRing > K4 output
+ FAIL  tests/factories/TerrainMeshBuilder/hexTrianglesFromPoints.test.ts > pointsInRing > K4 output
+ FAIL  tests/factories/TerrainMeshBuilder/pointsInHexRing.test.ts > pointsInRing > K4 output
+AssertionError: expected [ { x: +0, z: 0.5, …(2) }, …(11) ] to deeply equal [ { x: +0, z: 0.5, …(2) }, …(11) ]
+- Expected
++ Received
+@@ -16,11 +16,11 @@
+      "ringNumFromCenter": 2,
+      "x": -0.433,
+      "z": 0.25,
+    },
+    {
+-     "edge": "sw",
++     "edge": "w",
+      "ringNumFromCenter": 2,
+      "x": -0.433,
+      "z": 0,
+    },
+    {
+@@ -28,11 +28,11 @@
+      "ringNumFromCenter": 2,
+      "x": -0.433,
+      "z": -0.25,
+    },
+    {
+-     "edge": "s",
++     "edge": "sw",
+      "ringNumFromCenter": 2,
+      "x": -0.217,
+      "z": -0.375,
+    },
+    {
+@@ -52,11 +52,11 @@
+      "ringNumFromCenter": 2,
+      "x": 0.433,
+      "z": -0.25,
+    },
+    {
+-     "edge": "ne",
++     "edge": "e",
+      "ringNumFromCenter": 2,
+      "x": 0.433,
+      "z": 0,
+    },
+    {
+@@ -64,11 +64,11 @@
+      "ringNumFromCenter": 2,
+      "x": 0.433,
+      "z": 0.25,
+    },
+    {
+-     "edge": "n",
++     "edge": "ne",
+      "ringNumFromCenter": 2,
+      "x": 0.217,
+      "z": 0.375,
+    },
+  ]
+ ❯ expectFloatsToBeClose tests/_setup/testHelpers.ts:5:42
+      3|
+      4| export const expectFloatsToBeClose = (expected: object, toBe: object) …
+      5|   return expect(crawlForFloat(expected)).toEqual(crawlForFloat(toBe));
+       |                                          ^
+      6|
+      7|   function crawlForFloat(crawlIn: any): any {
+ ❯ tests/factories/TerrainMeshBuilder/pointsInHexRing.test.ts:27:5
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/17]⎯
+ FAIL  tests/factories/TerrainMeshBuilder/buildHexGpuBuffer.test.ts > buildHexGpuBuffer > writes vertex data in point order and flattens RGBA/XYZ correctly (K1)
+AssertionError: expected [ Array(21) ] to deeply equal [ +0, 10, +0, +0, 11, -1, …(15) ]
+- Expected
++ Received
+  [
+    0,
+-   10,
++   10.00405741783178,
+    0,
+    0,
+-   11,
++   10.990143492794193,
+    -1,
+    -0.8660254037844386,
+-   12,
++   11.990621833110223,
+    -0.5,
+    -0.8660254037844386,
+-   13,
++   13.004958605108403,
+    0.5,
+    0,
+-   14,
++   14.00853648027208,
+    1,
+    0.8660254037844386,
+-   15,
++   14.992379201168953,
+    0.5,
+    0.8660254037844386,
+-   16,
++   15.995063680893534,
+    -0.5,
+  ]
+ ❯ tests/factories/TerrainMeshBuilder/buildHexGpuBuffer.test.ts:14:27
+     12|     buildHexGpuBuffer(centerA, points, trisK1Small, getColor, getHeigh…
+     13|
+     14|     expect(buf.positions).toEqual(expK1PositionsFromCenterA);
+       |                           ^
+     15|     expect(buf.colors).toEqual(expK1Colors);
+     16|     expect(buf.indices).toEqual(trisK1Small);
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/17]⎯
+ FAIL  tests/factories/TerrainMeshBuilder/buildHexGpuBuffer.test.ts > buildHexGpuBuffer > applies center offset (x,z) and inverts Z
+AssertionError: expected [ 10, 10.003042145155211, -7 ] to deeply equal [ 10, 10, -7 ]
+- Expected
++ Received
+  [
+    10,
+-   10,
++   10.003042145155211,
+    -7,
+  ]
+ ❯ tests/factories/TerrainMeshBuilder/buildHexGpuBuffer.test.ts:29:39
+     27|
+     28|     // center
+     29|     expect(buf.positions.slice(0, 3)).toEqual([centerB.x + 0, heightMa…
+       |                                       ^
+     30|     // N corner (z=+1 → centerB.z - 1)
+     31|     expect(buf.positions.slice(3, 6)).toEqual([centerB.x + 0, heightMa…
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/17]⎯
+ FAIL  tests/factories/TerraGenerator/helpers/post-processors/spreadSalt.test.ts > spreadSalt > marks all contiguous water tiles as salt
+TypeError: Cannot read properties of undefined (reading 'id')
+ ❯ waterCheck src/factories/TerraGenerator/helpers/post-processors.ts:178:47
+    176| export const spreadSalt = (gen: TerraGenerator, start: GenTile): void …
+    177|   const seen = new Set<string>();
+    178|   const waterCheck = (t: GenTile) => t.domain.id === "water";
+       |                                               ^
+    179|   const visited = crawlTiles(gen, "game", start, seen, waterCheck);
+    180|   for (const t of visited) {
+ ❯ crawlTiles src/factories/TerraGenerator/helpers/post-processors.ts:138:18
+ ❯ spreadSalt src/factories/TerraGenerator/helpers/post-processors.ts:179:19
+ ❯ tests/factories/TerraGenerator/helpers/post-processors/spreadSalt.test.ts:43:5
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/17]⎯
+ FAIL  tests/factories/TerraGenerator/helpers/post-processors/spreadSalt.test.ts > spreadSalt > finds its way through a 5x5 'spiral maze' of water tiles
+TypeError: Cannot read properties of undefined (reading 'id')
+ ❯ waterCheck src/factories/TerraGenerator/helpers/post-processors.ts:178:47
+    176| export const spreadSalt = (gen: TerraGenerator, start: GenTile): void …
+    177|   const seen = new Set<string>();
+    178|   const waterCheck = (t: GenTile) => t.domain.id === "water";
+       |                                               ^
+    179|   const visited = crawlTiles(gen, "game", start, seen, waterCheck);
+    180|   for (const t of visited) {
+ ❯ crawlTiles src/factories/TerraGenerator/helpers/post-processors.ts:138:18
+ ❯ spreadSalt src/factories/TerraGenerator/helpers/post-processors.ts:179:19
+ ❯ tests/factories/TerraGenerator/helpers/post-processors/spreadSalt.test.ts:111:5
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/17]⎯
+ FAIL  tests/factories/TerraGenerator/helpers/post-processors/spreadSalt.test.ts > spreadSalt > does not salt isolated water surrounded by land (3-ring 5x5)
+TypeError: Cannot read properties of undefined (reading 'id')
+ ❯ waterCheck src/factories/TerraGenerator/helpers/post-processors.ts:178:47
+    176| export const spreadSalt = (gen: TerraGenerator, start: GenTile): void …
+    177|   const seen = new Set<string>();
+    178|   const waterCheck = (t: GenTile) => t.domain.id === "water";
+       |                                               ^
+    179|   const visited = crawlTiles(gen, "game", start, seen, waterCheck);
+    180|   for (const t of visited) {
+ ❯ crawlTiles src/factories/TerraGenerator/helpers/post-processors.ts:138:18
+ ❯ spreadSalt src/factories/TerraGenerator/helpers/post-processors.ts:179:19
+ ❯ tests/factories/TerraGenerator/helpers/post-processors/spreadSalt.test.ts:140:5
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/17]⎯
+ Test Files  5 failed | 7 passed (12)
+      Tests  17 failed | 40 passed (57)
+   Start at  09:21:58
+   Duration  1.36s (transform 842ms, setup 0ms, import 3.03s, tests 450ms, environment 3ms)

@@ -11,6 +11,7 @@ import type { Tile } from "@/objects/game/Tile";
 import type { TradeRoute } from "@/objects/game/TradeRoute";
 import type { Unit } from "@/objects/game/Unit";
 import { useObjectsStore } from "@/stores/objectStore";
+import { Construction } from "@/objects/game/Construction";
 
 export class City extends GameObject {
   constructor(
@@ -68,6 +69,9 @@ export class City extends GameObject {
   citizenKeys = ref([] as GameKey[]);
   citizens = hasMany<Citizen>(this.citizenKeys, `${this.key}.citizens`);
 
+  constructionKeys = ref([] as GameKey[]);
+  constructions = hasMany<Construction>(this.constructionKeys, `${this.key}.constructions`);
+
   holyCityForKeys = ref([] as GameKey[]);
   holyCityFor = hasMany<Religion>(this.holyCityForKeys, `${this.key}.holyCityFor`);
 
@@ -112,5 +116,7 @@ export class City extends GameObject {
   /*
    * Actions
    */
-  // todo add here
+  startTurn(): void {
+    //
+  }
 }
