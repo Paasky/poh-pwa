@@ -330,6 +330,12 @@ export class Unit extends GameObject {
   }
 
   startTurn(): void {
-    //
+    // Reset moves
+    this.moves.value = this.design.value.yields.getLumpAmount("yieldType:moves");
+
+    // Heal
+    if (this.health.value < 100 && this.action.value?.key === "actionType:heal") {
+      this.modifyHealth(10, "healing");
+    }
   }
 }

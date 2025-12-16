@@ -80,6 +80,8 @@ export class Construction extends GameObject {
   /*
    * Computed
    */
+  isActive = computed(() => this.progress.value === 100 && this.health.value > 0);
+
   yields = computed(() => {
     // Is a Wonder or full health -> no yield changes
     if (

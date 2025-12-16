@@ -105,7 +105,7 @@ export const playerDetailConfig = [
   },
 ] as DetailItem[];
 
-export const usePlayerDetailsStoreNew = defineStore("playerDetailsNew", {
+export const usePlayerDetailsStore = defineStore("playerDetails", {
   state: () => ({
     isOpen: false as boolean,
     tab: undefined as undefined | TabId,

@@ -2,10 +2,10 @@
 import UiButton from "@/components/Ui/UiButton.vue";
 import {
   playerDetailConfig,
-  usePlayerDetailsStoreNew,
+  usePlayerDetailsStore,
 } from "@/components/PlayerDetails/playerDetailsStore";
 
-const store = usePlayerDetailsStoreNew();
+const store = usePlayerDetailsStore();
 </script>
 
 <template>

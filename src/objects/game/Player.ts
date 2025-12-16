@@ -2,7 +2,7 @@ import { canHaveOne, hasMany, hasOne } from "@/objects/game/_relations";
 import { computed, ComputedRef, ref } from "vue";
 import { TypeObject } from "@/types/typeObjects";
 import { TypeStorage } from "@/objects/storage";
-import { Yields } from "@/objects/yield";
+import { Yield, Yields } from "@/objects/yield";
 import { GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
 import type { UnitDesign } from "@/objects/game/UnitDesign";
 import type { City } from "@/objects/game/City";
@@ -19,6 +19,7 @@ import type { Unit } from "@/objects/game/Unit";
 import { getNeighbors } from "@/helpers/mapTools";
 import { useObjectsStore } from "@/stores/objectStore";
 import { Diplomacy } from "@/objects/player/Diplomacy";
+import { ObjKey, TypeKey } from "@/types/common";
 
 export class Player extends GameObject {
   constructor(
@@ -141,8 +142,116 @@ export class Player extends GameObject {
 
   leader = computed(() => this.culture.value.leader.value);
 
-  // Player yields is the total lump output (+/-) of all Cities, Deals, Units and Trade Routes
-  yields = computed(() => new Yields());
+  commonTypes = computed(
+    (): TypeObject[] =>
+      [...this.government.policies.value, ...this.research.researched.value] as TypeObject[],
+  );
+
+  specialTypes = computed(
+    () =>
+      [
+        ...this.culture.value.heritages.value,
+        ...this.culture.value.traits.value,
+        ...(this.religion.value?.myths.value ?? []),
+        ...(this.religion.value?.gods.value ?? []),
+        ...(this.religion.value?.dogmas.value ?? []),
+      ] as TypeObject[],
+  );
+
+  ownedTypes = computed(() => this.cities.value.flatMap((city) => city.ownedTypes.value));
+
+  // Player yield mods are the combined nation-wide yield for/vs
+  yieldMods = computed(() => {
+    const yieldMods = new Yields();
+
+    // Add any Common Type yield that is for/vs (aka is a yield mod)
+    for (const type of this.commonTypes.value) {
+      for (const y of type.yields.all()) {
+        if (y.for.length + y.vs.length > 0) {
+          yieldMods.add(y);
+        }
+      }
+    }
+
+    // Add any Culture/Religion Type yield that is for/vs AND NOT for Citizens
+    for (const type of this.specialTypes.value) {
+      for (const y of type.yields.all()) {
+        const forOthers = y.for.filter((forKey: ObjKey) => forKey !== "conceptType:citizen");
+
+        // Does it have any mods we can use?
+        if (forOthers.length + y.vs.length > 0) {
+          yieldMods.add({
+            type: y.type,
+            amount: y.amount,
+            method: y.method,
+            for: forOthers,
+            vs: y.vs,
+          } as Yield);
+        }
+      }
+    }
+
+    // Add any Owned Type yields that is for/vs a specialType
+    for (const type of this.ownedTypes.value) {
+      for (const y of type.yields.all()) {
+        const forSpecials = y.for.filter((forKey: ObjKey) => forKey.startsWith("specialType:"));
+        const vsSpecials = y.for.filter((forKey: ObjKey) => forKey.startsWith("specialType:"));
+
+        // Does it have any mods we can use?
+        if (forSpecials.length + vsSpecials.length > 0) {
+          yieldMods.add({
+            type: y.type,
+            amount: y.amount,
+            method: y.method,
+            for: forSpecials,
+            vs: vsSpecials,
+          } as Yield);
+        }
+      }
+    }
+
+    return yieldMods;
+  });
+
+  // Player yields is the total lump output (+/-) of all Cities, Deals and Units
+  yields = computed(() => {
+    const yields = new Yields();
+    const inheritYieldTypes = [
+      "yieldType:culture",
+      "yieldType:faith",
+      "yieldType:gold",
+      "yieldType:influence",
+      "yieldType:science",
+      "yieldType:upkeep",
+    ] as TypeKey[];
+
+    const inheritFromGameObjs = [
+      ...this.cities.value,
+      ...this.deals.value,
+      ...this.units.value,
+    ] as (City | Deal | Unit)[];
+
+    for (const gameObj of inheritFromGameObjs) {
+      for (const y of gameObj.yields.value.applyMods().all()) {
+        if (
+          y.amount &&
+          y.method === "lump" &&
+          y.for.length + y.vs.length === 0 &&
+          inheritYieldTypes.includes(y.type)
+        ) {
+          yields.add({
+            type: y.type,
+            amount: y.amount,
+            method: y.method,
+            for: [],
+            vs: [],
+          } as Yield);
+        }
+      }
+    }
+
+    return yields;
+  });
 
   /*
    * Actions
@@ -154,10 +263,10 @@ export class Player extends GameObject {
     this.cities.value.forEach((c) => c.startTurn());
     this.units.value.forEach((u) => u.startTurn());
 
-    this.culture.value.startTurn();
-    this.diplomacy.startTurn();
+    // this.culture.value.startTurn();
+    // this.diplomacy.startTurn();
     this.government.startTurn();
-    this.religion.value?.startTurn();
+    //this.religion.value?.startTurn();
     this.research.startTurn();
   }
 
@@ -166,7 +275,7 @@ export class Player extends GameObject {
     // On refusal, return false
     // After all done, return true
     for (const unit of this.units.value) {
-      if (!unit.endTurn()) return false;
+      //if (!unit.endTurn()) return false;
     }
     return true;
   }

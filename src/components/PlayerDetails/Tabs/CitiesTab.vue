@@ -3,12 +3,12 @@ import { computed, ref } from "vue";
 import UiTable, { TableColumn } from "@/components/Ui/UiTable.vue";
 import UiYields from "@/components/Ui/UiYields.vue";
 import { City } from "@/objects/game/City";
-import { usePlayerDetailsStoreNew } from "@/components/PlayerDetails/playerDetailsStore";
+import { usePlayerDetailsStore } from "@/components/PlayerDetails/playerDetailsStore";
 import { includes } from "@/helpers/textTools";
 import UiCols from "@/components/Ui/UiCols.vue";
 import { useCitiesTabStore } from "@/components/PlayerDetails/Tabs/citiesTabStore";
 
-const detailsStore = usePlayerDetailsStoreNew();
+const detailsStore = usePlayerDetailsStore();
 const store = useCitiesTabStore();
 
 const cities = computed<City[]>(() => store.cities);
