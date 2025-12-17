@@ -21,7 +21,11 @@ export const useCitiesTabStore = defineStore("citiesTabStore", () => {
 
   function init() {
     if (initialized.value) return;
+
+    // Warm up computed values
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     cities.value;
+
     initialized.value = true;
   }
 

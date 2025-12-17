@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
 import { useObjectsStore } from "@/stores/objectStore";
@@ -20,10 +21,13 @@ export const useResearchTabStore = defineStore("researchTabStore", () => {
     if (initialized.value) return;
     techs.value = objStore.getClassTypes("technologyType");
     eras.value = objStore.getClassTypes("eraType");
+
+    // Warm up computed values
     player.value;
     research.value;
     maxX.value;
     maxY.value;
+
     initialized.value = true;
   }
 

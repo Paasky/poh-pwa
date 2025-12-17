@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { canHaveOne, hasMany } from "@/objects/game/_relations";
 import { TypeObject } from "@/types/typeObjects";
 import { Yields } from "@/objects/yield";

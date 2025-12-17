@@ -25,14 +25,15 @@ import {
   Vector3,
 } from "@babylonjs/core";
 import { EnvironmentHelper } from "@babylonjs/core/Helpers/environmentHelper";
-import {
-  DefaultRenderingPipeline
-} from "@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/defaultRenderingPipeline";
+import { DefaultRenderingPipeline } from "@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/defaultRenderingPipeline";
 
 import { defaultTimeOfDay2400 } from "@/components/Engine/environments/timeOfDay";
 import { defaultSeasonMonth1to12 } from "@/components/Engine/environments/season";
 import { defaultWeatherType, WeatherType } from "@/components/Engine/environments/weather";
-import { DefaultPostProcessingOptions, defaultPostProcessingOptions, } from "@/components/Engine/environments/postFx";
+import {
+  DefaultPostProcessingOptions,
+  defaultPostProcessingOptions,
+} from "@/components/Engine/environments/postFx";
 
 /**
  * Weather configuration is enumerated with WeatherType. Additional per-weather tunables can be added later.

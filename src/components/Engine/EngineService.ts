@@ -1,6 +1,20 @@
-import { ArcRotateCamera, Color4, Engine as BabylonEngine, Scene, TransformNode, Vector3, } from "@babylonjs/core";
+import {
+  ArcRotateCamera,
+  Color4,
+  Engine as BabylonEngine,
+  Scene,
+  TransformNode,
+  Vector3,
+} from "@babylonjs/core";
 import "@babylonjs/core/Lights/Shadows/shadowGeneratorSceneComponent";
-import { clamp, getWorldDepth, getWorldMinX, getWorldMinZ, getWorldWidth, tileCenter, } from "@/helpers/math";
+import {
+  clamp,
+  getWorldDepth,
+  getWorldMinX,
+  getWorldMinZ,
+  getWorldWidth,
+  tileCenter,
+} from "@/helpers/math";
 import { TerrainMeshBuilder } from "@/factories/TerrainMeshBuilder/TerrainMeshBuilder";
 import { useObjectsStore } from "@/stores/objectStore";
 import { EnvironmentService } from "@/components/Engine/EnvironmentService";
@@ -151,6 +165,7 @@ export const EngineOptionPresets: EngineOptionPreset[] = [
   },
 ];
 
+// noinspection JSUnusedGlobalSymbols
 export class EngineService {
   size: Coords;
   canvas: HTMLCanvasElement;
@@ -201,7 +216,9 @@ export class EngineService {
     this.scene = new Scene(this.engine);
     this.scene.clearColor = new Color4(0.63, 0.63, 0.63, 1); // Same-ish as snow
 
-    (document as any).engineService = this
+    // Allow for easy debugging
+    // eslint-disable-next-line
+    (document as any).engineService = this;
 
     return this;
   }

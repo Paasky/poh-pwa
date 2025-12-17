@@ -1,4 +1,13 @@
-import { Color3, Matrix, Mesh, MeshBuilder, Quaternion, Scene, StandardMaterial, Vector3, } from "@babylonjs/core"; // All base meshes follow a normalized scale where no dimension exceeds 1 unit.
+import {
+  Color3,
+  Matrix,
+  Mesh,
+  MeshBuilder,
+  Quaternion,
+  Scene,
+  StandardMaterial,
+  Vector3,
+} from "@babylonjs/core"; // All base meshes follow a normalized scale where no dimension exceeds 1 unit.
 
 // All base meshes follow a normalized scale where no dimension exceeds 1 unit.
 // Returned meshes are intended to be master meshes for instancing, thus hidden by default.

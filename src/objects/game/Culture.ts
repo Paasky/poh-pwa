@@ -9,7 +9,12 @@ import { useObjectsStore } from "@/stores/objectStore";
 import type { Citizen } from "@/objects/game/Citizen";
 import type { Player } from "@/objects/game/Player";
 import { useEventStore } from "@/stores/eventStore";
-import { CultureCanSelect, CultureCanSettle, CultureHasNewType, CultureHasSettled, } from "@/events/Culture";
+import {
+  CultureCanSelect,
+  CultureCanSettle,
+  CultureHasNewType,
+  CultureHasSettled,
+} from "@/events/Culture";
 
 export type CultureStatus = "notSettled" | "canSettle" | "mustSettle" | "settled";
 
@@ -24,11 +29,13 @@ export class Culture extends GameObject {
 
     watch(this.canSelect, (newValue, oldValue) => {
       if (!oldValue && newValue) {
+        // eslint-disable-next-line
         useEventStore().turnEvents.push(new CultureCanSelect(this) as any);
       }
     });
     watch(this.canSettle, (newValue, oldValue) => {
       if (!oldValue && newValue) {
+        // eslint-disable-next-line
         useEventStore().turnEvents.push(new CultureCanSettle(this) as any);
       }
     });
@@ -180,6 +187,7 @@ export class Culture extends GameObject {
 
     // Add the heritage
     this.heritages.value.push(heritage);
+    // eslint-disable-next-line
     useEventStore().turnEvents.push(new CultureHasNewType(this, heritage) as any);
 
     // Check if culture status needs to change
@@ -205,6 +213,7 @@ export class Culture extends GameObject {
     }
 
     this.traits.value.push(trait);
+    // eslint-disable-next-line
     useEventStore().turnEvents.push(new CultureHasNewType(this, trait) as any);
 
     if (trait.isPositive!) {
@@ -218,6 +227,7 @@ export class Culture extends GameObject {
     if (this.status.value === "settled") return;
     this.status.value = "settled";
     this.mustSelectTraits.value = { positive: 2, negative: 2 };
+    // eslint-disable-next-line
     useEventStore().turnEvents.push(new CultureHasSettled(this) as any);
   }
 

@@ -121,7 +121,6 @@ const showRestartConfirm = ref(false);
 let _pendingSave = false;
 
 // --- Per-tab UX helpers ---
-const gameOptionKeys: (keyof EngineOptions)[] = ["manualTilt", "showGrid"];
 const graphicsOptionKeys: (keyof EngineOptions)[] = [
   "renderScale",
   "fpsCap",

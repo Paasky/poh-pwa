@@ -321,7 +321,7 @@ function createMultiSparkleField(scene: Scene, cfg: MultiFieldConfig): SparkleFi
       rand(lr.patternScale.min, lr.patternScale.max) * (cfg.patternScaleMulByLayer?.[idx] ?? 1.0);
     const driftCPM = rand(lr.driftCPM.min, lr.driftCPM.max);
     const rotationDPM = rand(lr.rotationDPM.min, lr.rotationDPM.max);
-    const baseAngleRad = ((cfg.baseAnglesDeg?.[idx] ?? ((idx * 120) % 360)) * DEG2RAD) as number;
+    const baseAngleRad = ((cfg.baseAnglesDeg?.[idx] ?? (idx * 120) % 360) * DEG2RAD) as number;
     const wobbleAmpPx = size * rand(lr.wobbleAmpPercent.min, lr.wobbleAmpPercent.max);
     const wobbleF1 = rand(lr.wobbleFreq1.min, lr.wobbleFreq1.max);
     const wobbleF2 = rand(lr.wobbleFreq2.min, lr.wobbleFreq2.max);

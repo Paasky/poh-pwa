@@ -15,7 +15,11 @@ export const useCultureTabStore = defineStore("cultureTabStore", () => {
     if (initialized.value) return;
     heritageCats.value = objStore.getClassTypesPerCategory("heritageType");
     traitCats.value = objStore.getClassTypesPerCategory("traitType");
+
+    // Warm up computed values
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     culture.value;
+
     initialized.value = true;
   }
 

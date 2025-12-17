@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
 import { useObjectsStore } from "@/stores/objectStore";
@@ -44,7 +45,7 @@ export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
   });
 
   const leaderTimeline = computed(() => {
-    return cultureTimeline.value.map((c: any) =>
+    return cultureTimeline.value.map((c) =>
       objStore.getTypeObject(
         c.allows.find((a: string) => a.startsWith("majorLeaderType:")) as TypeKey,
       ),
@@ -54,9 +55,12 @@ export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
   function init() {
     if (initialized.value) return;
     current.value = objStore.currentPlayer as Player;
+
+    // Warm up computed values
     players.value;
     cultureTimeline.value;
     leaderTimeline.value;
+
     initialized.value = true;
   }
 

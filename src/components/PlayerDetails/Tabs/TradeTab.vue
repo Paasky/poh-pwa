@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useTradeTabStore } from "@/components/PlayerDetails/Tabs/tradeTabStore";
 
-const store = useTradeTabStore();
+useTradeTabStore();
 </script>
 
 <template>

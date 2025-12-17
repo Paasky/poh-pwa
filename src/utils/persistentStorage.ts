@@ -38,6 +38,7 @@ export function loadPersisted<T>(key: string, expectedVersion: number): T | unde
     return anyEnv.data as T;
   } catch (err) {
     // Swallow errors but log a concise message so the app continues with defaults
+    // eslint-disable-next-line
     console.warn(`[persistentStorage] Failed to load key '${key}':`, err);
     return undefined;
   }

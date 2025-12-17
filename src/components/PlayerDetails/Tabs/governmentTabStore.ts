@@ -15,7 +15,11 @@ export const useGovernmentTabStore = defineStore("governmentTabStore", () => {
   function init() {
     if (initialized.value) return;
     policyCats.value = objStore.getClassTypesPerCategory("policyType");
+
+    // Warm up computed values
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     government.value;
+
     initialized.value = true;
   }
 

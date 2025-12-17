@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any,@typescript-eslint/no-unused-expressions */
 import { canHaveOne, hasOne } from "@/objects/game/_relations";
 import { TypeObject } from "@/types/typeObjects";
 import { computed, ComputedRef, Ref, ref } from "vue";

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = withDefaults(
+withDefaults(
   defineProps<{
     items?: unknown[];
     colCount?: number; // desired columns on lg+

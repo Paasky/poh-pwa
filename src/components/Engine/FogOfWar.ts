@@ -56,13 +56,14 @@ export class FogOfWar {
 
     this.knownKeys = new Set(knownTileKeys);
     this.visibleKeys = new Set(visibleTileKeys);
-    console.log(this.knownKeys, this.visibleKeys);
 
     // init resources and run once
     this.initResources();
     this.process();
   }
 
+  // todo: wire up to unit movement/border growth/map trading
+  // noinspection JSUnusedGlobalSymbols
   addAndSetTiles(addKnownKeys: GameKey[], setVisibleKeys?: GameKey[]): this {
     addKnownKeys.forEach((k) => this.knownKeys.add(k));
     if (setVisibleKeys) this.visibleKeys = new Set(setVisibleKeys);

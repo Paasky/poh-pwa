@@ -35,6 +35,7 @@ export class Religion extends GameObject {
 
     watch(this.canSelect, (newValue, oldValue) => {
       if (!oldValue && newValue) {
+        // eslint-disable-next-line
         useEventStore().turnEvents.push(new ReligionCanSelect(this) as any);
       }
     });
@@ -211,6 +212,7 @@ export class Religion extends GameObject {
         throw new Error(`Can't evolve ${this.name}`);
     }
 
+    // eslint-disable-next-line
     useEventStore().turnEvents.push(new ReligionHasEvolved(this) as any);
   }
 
@@ -220,6 +222,7 @@ export class Religion extends GameObject {
     }
     this.myths.value.push(myth);
 
+    // eslint-disable-next-line
     useEventStore().turnEvents.push(new ReligionHasNewType(this, myth) as any);
   }
 
@@ -229,6 +232,7 @@ export class Religion extends GameObject {
     }
     this.gods.value.push(god);
 
+    // eslint-disable-next-line
     useEventStore().turnEvents.push(new ReligionHasNewType(this, god) as any);
   }
 
@@ -246,6 +250,7 @@ export class Religion extends GameObject {
 
     this.dogmas.value.push(dogma);
 
+    // eslint-disable-next-line
     useEventStore().turnEvents.push(new ReligionHasNewType(this, dogma) as any);
   }
 }

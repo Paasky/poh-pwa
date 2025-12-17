@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { canHaveOne, hasMany, hasOne } from "@/objects/game/_relations";
 import { computed, ComputedRef, ref } from "vue";
 import { TypeObject } from "@/types/typeObjects";
@@ -279,6 +280,7 @@ export class Player extends GameObject {
     }
     return true;
   }
+
   warmUp(): void {
     this.agendas.value;
     this.citizens.value;

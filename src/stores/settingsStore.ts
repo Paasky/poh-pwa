@@ -41,7 +41,7 @@ export const useSettingsStore = defineStore("settings", {
       timeOfDay2400: defaultTimeOfDay2400,
       isClockRunning: false,
       seasonMonth1to12: defaultSeasonMonth1to12,
-      weatherType: defaultWeatherType as WeatherType,
+      weatherType: defaultWeatherType,
     }),
   }),
   actions: {
@@ -52,19 +52,15 @@ export const useSettingsStore = defineStore("settings", {
       if (saved) {
         this.selectedPresetId = saved.selectedPresetId ?? "high";
         this.engine = reactive({ ...DefaultEngineOptions, ...(saved.engine ?? {}) });
-        this.lastSettingsTab = (saved.lastSettingsTab as any) === "graphics" ? "graphics" : "game";
+        this.lastSettingsTab = saved.lastSettingsTab === "graphics" ? "graphics" : "game";
         // Environment (game settings)
         const env = saved.environment;
         if (env) {
           this.environment = reactive({
-            timeOfDay2400:
-              typeof env.timeOfDay2400 === "number" ? env.timeOfDay2400 : defaultTimeOfDay2400,
-            isClockRunning: !!env.isClockRunning,
-            seasonMonth1to12:
-              typeof env.seasonMonth1to12 === "number"
-                ? env.seasonMonth1to12
-                : defaultSeasonMonth1to12,
-            weatherType: (env.weatherType ?? defaultWeatherType) as WeatherType,
+            timeOfDay2400: env.timeOfDay2400 ?? defaultTimeOfDay2400,
+            isClockRunning: env.isClockRunning ?? true,
+            seasonMonth1to12: env.seasonMonth1to12 ?? defaultSeasonMonth1to12,
+            weatherType: env.weatherType ?? defaultWeatherType,
           });
         }
       } else {
