@@ -4,7 +4,6 @@ import { TypeObject } from "@/types/typeObjects";
 import { computed, ComputedRef, Ref, ref } from "vue";
 import { Yields } from "@/objects/yield";
 import { roundToTenth } from "@/types/common";
-import { EventManager } from "@/managers/EventManager";
 import { GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
 import { useObjectsStore } from "@/stores/objectStore";
 import type { UnitDesign } from "@/objects/game/UnitDesign";
@@ -13,7 +12,7 @@ import type { Player } from "@/objects/game/Player";
 import type { TradeRoute } from "@/objects/game/TradeRoute";
 import type { Tile } from "@/objects/game/Tile";
 import { useEventStore } from "@/stores/eventStore";
-import { UnitCreated, UnitLost } from "@/events/Unit";
+import { UnitCreated, UnitHealed, UnitLost } from "@/events/Unit";
 
 // mercenary: +10% strength, +50% upkeep, 1/city/t;
 // regular: no effects
@@ -178,12 +177,7 @@ export class Unit extends GameObject {
     }
 
     if (this.health.value >= 100 && this.action.value?.key === "actionType:heal") {
-      new EventManager().create(
-        "unitHealed",
-        `${this.name.value} is fully healed`,
-        this.player.value,
-        this,
-      );
+      useEventStore().turnEvents.push(new UnitHealed(this) as any);
       this.action.value = null;
     }
   }

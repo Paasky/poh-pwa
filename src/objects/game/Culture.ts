@@ -2,19 +2,13 @@ import { hasMany, hasOne } from "@/objects/game/_relations";
 import { TypeObject } from "@/types/typeObjects";
 import { computed, ComputedRef, Ref, ref, UnwrapRef, watch } from "vue";
 import { CatKey, TypeKey } from "@/types/common";
-import { EventManager } from "@/managers/EventManager";
 import { Yields } from "@/objects/yield";
 import { GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
 import { useObjectsStore } from "@/stores/objectStore";
 import type { Citizen } from "@/objects/game/Citizen";
 import type { Player } from "@/objects/game/Player";
 import { useEventStore } from "@/stores/eventStore";
-import {
-  CultureCanSelect,
-  CultureCanSettle,
-  CultureHasNewType,
-  CultureHasSettled,
-} from "@/events/Culture";
+import { CultureCanSelect, CultureCanSettle, CultureHasNewType, CultureHasSettled, } from "@/events/Culture";
 
 export type CultureStatus = "notSettled" | "canSettle" | "mustSettle" | "settled";
 
@@ -172,12 +166,7 @@ export class Culture extends GameObject {
       this.mustSelectTraits.value.negative++;
     }
 
-    new EventManager().create(
-      "cultureEvolved",
-      `evolved to the ${this.type.value.name} culture`,
-      this.player.value,
-      this,
-    );
+    // todo CultureEvolved event
   }
 
   selectHeritage(heritage: TypeObject) {
