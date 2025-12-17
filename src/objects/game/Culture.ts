@@ -8,7 +8,12 @@ import { useObjectsStore } from "@/stores/objectStore";
 import type { Citizen } from "@/objects/game/Citizen";
 import type { Player } from "@/objects/game/Player";
 import { useEventStore } from "@/stores/eventStore";
-import { CultureCanSelect, CultureCanSettle, CultureHasNewType, CultureHasSettled, } from "@/events/Culture";
+import {
+  CultureCanSelect,
+  CultureCanSettle,
+  CultureHasNewType,
+  CultureHasSettled,
+} from "@/events/Culture";
 
 export type CultureStatus = "notSettled" | "canSettle" | "mustSettle" | "settled";
 

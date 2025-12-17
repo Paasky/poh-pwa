@@ -72,13 +72,14 @@ export function cityTestData(): void {
         generateKey("construction"),
         objStore.getTypeObject("buildingType:palisades"),
         city.tileKey,
+        city.key,
         100,
         10,
       );
       objStore.set(cons);
       city.tile.value.constructionKey.value = cons.key;
       city.constructionQueue.add(cons);
-      city.constructionQueue.queue[0]!.progress = 10;
+      city.constructionQueue.queue[0]!.progress.value = 10;
     }
 
     // 5) Training: add all current player's designs to Paris training queue with progress (5, 10, rest 0)
@@ -86,8 +87,8 @@ export function cityTestData(): void {
       const designs = objStore.currentPlayer.designs.value;
       designs.forEach((d, idx) => {
         city.trainingQueue.add(d);
-        if (idx === 0) city.trainingQueue.queue[0]!.progress = 5;
-        else if (idx === 1) city.trainingQueue.queue[1]!.progress = 10;
+        if (idx === 0) city.trainingQueue.queue[0]!.progress.value = 5;
+        else if (idx === 1) city.trainingQueue.queue[1]!.progress.value = 10;
       });
     }
   }

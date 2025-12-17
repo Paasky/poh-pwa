@@ -24,6 +24,13 @@ function eraY(era: TypeObject): number {
 
   return ys.length ? Math.min(...ys) : 0;
 }
+
+function onTechClick(tech: TypeObject, e: MouseEvent) {
+  if (!store.research.researched.value.includes(tech) && store.research.current.value !== tech) {
+    // Reset the queue unless Shift is held while clicking
+    store.research.addToQueue(tech as TypeObject, !e.shiftKey);
+  }
+}
 </script>
 
 <template>
@@ -52,13 +59,16 @@ function eraY(era: TypeObject): number {
       :key="era.key"
       class="position-absolute"
       :style="{
-        top: i > 0 ? `${(eraY(era) - 1.125) * ySize}rem` : `${(eraY(era) - 1) * ySize}rem`,
+        top:
+          i > 0
+            ? `${(eraY(era as TypeObject) - 1.125) * ySize}rem`
+            : `${(eraY(era as TypeObject) - 1) * ySize}rem`,
         left: '-1rem',
         width: `${containerWidthRem + 2.8}rem`,
         borderTop: i > 0 ? '1px solid rgba(133, 77, 14, 0.75)' : undefined,
       }"
       :title="`${era.name} Era`"
-      :type="era"
+      :type="era as TypeObject"
     />
 
     <!-- Technology cards using UiObjectCard -->
@@ -76,21 +86,11 @@ function eraY(era: TypeObject): number {
             ? 'pointer'
             : 'default',
       }"
-      @click="
-        (e: MouseEvent) => {
-          if (
-            !store.research.researched.value.includes(tech) &&
-            store.research.current.value !== tech
-          ) {
-            // Reset queue unless Shift is held while clicking
-            store.research.addToQueue(tech, !e.shiftKey);
-          }
-        }
-      "
+      @click="onTechClick(tech as TypeObject, $event)"
     >
       <UiObjectCard
         class="h-100"
-        :type="tech"
+        :type="tech as TypeObject"
         :canSelect="!store.research.researched.value.includes(tech)"
         :isSelected="
           store.research.queue.value.includes(tech) || store.research.current.value === tech

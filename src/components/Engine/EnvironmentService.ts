@@ -394,9 +394,10 @@ export class EnvironmentService {
 
     // Store the weather multiplier and re-apply sun intensity using current time-of-day
     this.weatherSunIntensityScale = preset.sunIntensityScale;
-    const effectiveTime = this.isClockRunning
-      ? this.currentTimeOfDay2400
-      : this.targetTimeOfDay2400;
+
+    // todo: is targetTimeOfDay2400 actually needed for anything? We have one clock now
+    // Use the reactive clock refs for the effective time when running; otherwise use target
+    const effectiveTime = isClockRunning.value ? timeOfDay2400.value : this.targetTimeOfDay2400;
     this.updateSunFromTimeOfDay(effectiveTime);
   }
 

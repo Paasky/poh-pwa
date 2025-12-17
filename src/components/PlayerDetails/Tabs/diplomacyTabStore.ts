@@ -5,6 +5,7 @@ import { useObjectsStore } from "@/stores/objectStore";
 import type { Player } from "@/objects/game/Player";
 import { TypeKey } from "@/types/common";
 import { TypeObject, typeTimeline } from "@/types/typeObjects";
+import type { TableColumn } from "@/components/Ui/UiTable.vue";
 
 export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
   const objStore = useObjectsStore();
@@ -13,7 +14,7 @@ export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
   const players = computed(() => objStore.getClassGameObjects("player") as Player[]);
   const current = ref<Player | null>(null);
 
-  const columns = ref([
+  const columns = ref<TableColumn<Player>[]>([
     { title: "Name", key: "name", value: (p: Player) => p.name },
     { title: "Culture", key: "culture", value: (p: Player) => p.culture.value.type.value.name },
     { title: "Leader", key: "leader", value: (p: Player) => p.leader.value.name },

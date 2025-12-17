@@ -10,8 +10,9 @@ import { useDiplomacyTabStore } from "@/components/PlayerDetails/Tabs/diplomacyT
 
 const store = useDiplomacyTabStore();
 
-function onRowClick(_e: unknown, payload: { item: unknown }) {
-  store.current = payload.item as Player;
+function onRowClick(_e: unknown, payload: { item: { raw: Player } }) {
+  // IDE doesn't understand that both are Player
+  store.current = payload.item.raw as never;
 }
 
 // Search predicate similar to CitiesTab.searchCity

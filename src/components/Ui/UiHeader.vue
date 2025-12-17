@@ -6,7 +6,7 @@ import type { TypeObject } from "@/types/typeObjects";
 
 const props = defineProps<{
   title: string;
-  type?: TypeKey | TypeObject;
+  type?: TypeKey | TypeObject | undefined;
 }>();
 
 const typeKey = computed((): TypeKey | undefined => {

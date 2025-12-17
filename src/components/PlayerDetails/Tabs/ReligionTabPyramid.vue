@@ -36,7 +36,9 @@ function buildPyramid(pyramid: CatKey[][], selectedTypes: TypeObject[]): CatData
   );
 }
 
-const pyramid = computed(() => buildPyramid(props.catPyramid, props.current.myths as TypeObject[]));
+const pyramid = computed(() =>
+  buildPyramid(props.catPyramid, props.current.myths.value as TypeObject[]),
+);
 </script>
 
 <template>

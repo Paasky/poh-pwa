@@ -4,6 +4,7 @@ import UiObjectCards from "@/components/Ui/UiObjectCards.vue";
 import { TypeObject } from "@/types/typeObjects";
 import UiCols from "@/components/Ui/UiCols.vue";
 import { useGovernmentTabStore } from "@/components/PlayerDetails/Tabs/governmentTabStore";
+import { CatData } from "@/stores/objectStore";
 
 const store = useGovernmentTabStore();
 </script>
@@ -15,9 +16,9 @@ const store = useGovernmentTabStore();
         <UiGrid :items="store.policyCats" :col-count="5" class="w-100">
           <template #cell="{ item: catData }">
             <UiObjectCards
-              :title="catData.category.name"
+              :title="(catData as CatData).category.name"
               title-class="text-h5"
-              :types="catData.types"
+              :types="(catData as CatData).types"
               :selectable="store.government.selectablePolicies.value"
               :selected="store.government.policies.value as TypeObject[]"
               :select-pos="'right'"
