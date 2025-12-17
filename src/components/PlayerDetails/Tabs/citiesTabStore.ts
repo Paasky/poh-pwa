@@ -21,6 +21,7 @@ export const useCitiesTabStore = defineStore("citiesTabStore", () => {
 
   function init() {
     if (initialized.value) return;
+    cities.value;
     initialized.value = true;
   }
 

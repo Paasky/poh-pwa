@@ -153,7 +153,16 @@ export class Tile extends GameObject {
   /*
    * Actions
    */
-  // todo add here
+  warmUp(): void {
+    this.city.value;
+    this.construction.value;
+    this.player.value;
+    this.river.value;
+    this.tradeRoutes.value;
+    this.units.value;
+    this.types.value;
+    this.yields.value;
+  }
 
   // Used all over to always generate standard tile ID
   static getKey(x: number, y: number): GameKey {

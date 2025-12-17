@@ -15,6 +15,7 @@ export const useCultureTabStore = defineStore("cultureTabStore", () => {
     if (initialized.value) return;
     heritageCats.value = objStore.getClassTypesPerCategory("heritageType");
     traitCats.value = objStore.getClassTypesPerCategory("traitType");
+    culture.value;
     initialized.value = true;
   }
 

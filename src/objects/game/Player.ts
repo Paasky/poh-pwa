@@ -263,10 +263,10 @@ export class Player extends GameObject {
     this.cities.value.forEach((c) => c.startTurn());
     this.units.value.forEach((u) => u.startTurn());
 
-    // this.culture.value.startTurn();
-    // this.diplomacy.startTurn();
+    this.culture.value.startTurn();
+    this.diplomacy.startTurn();
     this.government.startTurn();
-    //this.religion.value?.startTurn();
+    this.religion.value?.startTurn();
     this.research.startTurn();
   }
 
@@ -275,8 +275,30 @@ export class Player extends GameObject {
     // On refusal, return false
     // After all done, return true
     for (const unit of this.units.value) {
-      //if (!unit.endTurn()) return false;
+      if (!unit.endTurn()) return false;
     }
     return true;
+  }
+  warmUp(): void {
+    this.agendas.value;
+    this.citizens.value;
+    this.culture.value;
+    this.cities.value;
+    this.deals.value;
+    this.designs.value;
+    this.knownTileKeys.value;
+    this.visibleTileKeys.value;
+    this.religion.value;
+    this.tiles.value;
+    this.tradeRoutes.value;
+    this.units.value;
+
+    this.activeDesigns.value;
+    this.leader.value;
+    this.commonTypes.value;
+    this.specialTypes.value;
+    this.ownedTypes.value;
+    this.yieldMods.value;
+    this.yields.value;
   }
 }

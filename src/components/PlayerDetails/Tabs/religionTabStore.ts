@@ -68,7 +68,9 @@ export const useReligionTabStore = defineStore("religionTabStore", () => {
 
   function init() {
     if (initialized.value) return;
-    // All data here is static or computed from static stores
+    religions.value;
+    citizensCount.value;
+    defaultCurrent.value;
     initialized.value = true;
   }
 

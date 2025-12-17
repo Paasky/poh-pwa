@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 import { useObjectsStore } from "@/stores/objectStore";
 import type { Player } from "@/objects/game/Player";
 import { TypeKey } from "@/types/common";
+import { TypeObject, typeTimeline } from "@/types/typeObjects";
 
 export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
   const objStore = useObjectsStore();
@@ -38,10 +39,8 @@ export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
   ]);
 
   const cultureTimeline = computed(() => {
-    if (!current.value?.culture.type.value) return [];
-    // Lazy import to avoid cycles if any
-    const { typeTimeline } = require("@/types/typeObjects");
-    return typeTimeline(current.value.culture.type.value);
+    if (!current.value?.culture.type?.value) return [];
+    return typeTimeline(current.value.culture.type.value as TypeObject);
   });
 
   const leaderTimeline = computed(() => {
@@ -55,6 +54,9 @@ export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
   function init() {
     if (initialized.value) return;
     current.value = objStore.currentPlayer as Player;
+    players.value;
+    cultureTimeline.value;
+    leaderTimeline.value;
     initialized.value = true;
   }
 

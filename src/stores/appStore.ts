@@ -4,7 +4,7 @@ import { useObjectsStore } from "@/stores/objectStore";
 import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
 import { GameData, StaticData } from "@/types/api";
 import { EngineService } from "@/components/Engine/EngineService";
-import { createWorld, worldSizes } from "@/factories/worldFactory";
+import { createWorld, WorldSize, worldSizes } from "@/factories/worldFactory";
 import { GameDataLoader } from "@/dataLoaders/GameDataLoader";
 import type { Router } from "vue-router";
 import { useGovernmentTabStore } from "@/components/PlayerDetails/Tabs/governmentTabStore";
@@ -17,6 +17,10 @@ import { useUnitsTabStore } from "@/components/PlayerDetails/Tabs/unitsTabStore"
 import { useCitiesTabStore } from "@/components/PlayerDetails/Tabs/citiesTabStore";
 import { useTradeTabStore } from "@/components/PlayerDetails/Tabs/tradeTabStore";
 import { useSettingsStore } from "@/stores/settingsStore";
+import { asyncProcess } from "@/helpers/asyncProcess";
+import { Tile } from "@/objects/game/Tile";
+import { Player } from "@/objects/game/Player";
+import { Unit } from "@/objects/game/Unit";
 
 export async function fetchJSON<T>(url: string): Promise<T> {
   const res = await fetch(url, { cache: "no-store" });
@@ -28,6 +32,7 @@ export const useAppStore = defineStore("app", {
   state: () => ({
     engineService: markRaw({}) as EngineService,
     loaded: false,
+    loadPercent: "",
     uiStateListeners: markRaw({}) as Record<string, UiStateConfig>,
     _router: markRaw({}) as Router,
   }),
@@ -35,75 +40,84 @@ export const useAppStore = defineStore("app", {
     async init(gameDataUrl?: string) {
       if (this.ready) return; // Happens on hot-reload
 
-      // 1) Load static data to memory
-      const objects = useObjectsStore();
-      objects.initStatic(await fetchJSON<StaticData>("/staticData.json"));
+      // Download data & Init Object Store
+      const staticData = await fetchJSON<StaticData>("/staticData.json");
+      const saveGameData = gameDataUrl
+        ? ((await fetchJSON<GameData>(gameDataUrl)) as GameData)
+        : null;
+      const size = saveGameData?.world.size ?? worldSizes[4];
 
-      // 2) Build the encyclopedia after types are ready
-      const encyclopedia = useEncyclopediaStore();
-      encyclopedia.init();
+      const objStore = useObjectsStore();
+      const settings = useSettingsStore();
 
-      // 3) Load game or create a new world
-      if (gameDataUrl) {
-        const gameData = (await fetchJSON<GameData>(gameDataUrl)) as GameData;
-        const gameObjects = new GameDataLoader().initFromRaw(gameData);
-        objects.world = gameData.world;
-        objects.bulkSet(Object.values(gameObjects));
-      } else {
-        let tries = 0;
-        do {
-          try {
-            const gameData = createWorld(worldSizes[4]);
-            objects.world = gameData.world;
-            objects.bulkSet(gameData.objects);
-            break;
-          } catch (e) {
-            tries++;
-            // eslint-disable-next-line
-            console.warn("Failed to create world, retrying...", e);
-          }
-        } while (tries < 3);
-      }
-      objects.ready = true;
-
-      // 5) Initialize all tab stores (static, derived from currentPlayer/objects) before engine init
-      useGovernmentTabStore().init();
-      useCultureTabStore().init();
-      useResearchTabStore().init();
-      useReligionTabStore().init();
-      useDiplomacyTabStore().init();
-      useEconomyTabStore().init();
-      useUnitsTabStore().init();
-      useCitiesTabStore().init();
-      useTradeTabStore().init();
-
-      // 6) Initialize the game engine (throw if critical DOM is missing)
       const engineCanvas = document.getElementById("engine-canvas") as HTMLCanvasElement | null;
       if (!engineCanvas) throw new Error("Engine canvas `#engine-canvas` not found");
       const minimapCanvas = document.getElementById("minimap-canvas") as HTMLCanvasElement | null;
       if (!minimapCanvas) throw new Error("Minimap canvas `#minimap-canvas` not found");
 
-      // Initialize settings and pass engine options
-      const settings = useSettingsStore();
-      settings.init();
-
       this.engineService = markRaw(
-        new EngineService(objects.world.size, engineCanvas, minimapCanvas, settings.engine),
+        new EngineService(size, engineCanvas, minimapCanvas, settings.engine),
       );
 
-      // Apply persisted Game (environment) settings after engine is created
-      try {
-        this.engineService
-          .setTimeOfDay(settings.environment.timeOfDay2400)
-          .setIsClockRunning(settings.environment.isClockRunning)
-          .setSeason(settings.environment.seasonMonth1to12)
-          .setWeather(settings.environment.weatherType);
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.warn("Failed to apply persisted environment settings on boot:", e);
-      }
+      await asyncProcess(
+        [
+          () => objStore.initStatic(staticData),
+          () => {
+            if (saveGameData) {
+              objStore.world = saveGameData.world;
+              const gameObjects = new GameDataLoader().initFromRaw(saveGameData);
+              objStore.bulkSet(Object.values(gameObjects));
+            } else {
+              let tries = 0;
+              do {
+                try {
+                  const gameData = createWorld(size as WorldSize);
+                  objStore.world = gameData.world;
+                  objStore.bulkSet(gameData.objects);
 
-      // 7) Loading is complete, tell the UI it can render
+                  break;
+                } catch (e) {
+                  tries++;
+                  if (tries >= 5) throw e;
+
+                  // eslint-disable-next-line
+                  console.warn("Failed to create world, retrying...", e);
+                }
+              } while (tries < 5);
+            }
+          },
+          () => (objStore.getClassGameObjects("player") as Player[]).forEach((p) => p.warmUp()),
+          () => (objStore.getClassGameObjects("tile") as Tile[]).forEach((t) => t.warmUp()),
+          () => (objStore.getClassGameObjects("unit") as Unit[]).forEach((u) => u.warmUp()),
+          () => useEncyclopediaStore().init(),
+          () => settings.init(),
+          ...this.engineService.initOrder(),
+          () => {
+            this.engineService.environmentService.setTimeOfDay(settings.environment.timeOfDay2400);
+            this.engineService.environmentService.setIsClockRunning(
+              settings.environment.isClockRunning,
+            );
+            this.engineService.environmentService.setSeason(settings.environment.seasonMonth1to12);
+            this.engineService.environmentService.setWeather(settings.environment.weatherType);
+          },
+          () => useGovernmentTabStore().init(),
+          () => useCultureTabStore().init(),
+          () => useResearchTabStore().init(),
+          () => useReligionTabStore().init(),
+          () => useDiplomacyTabStore().init(),
+          () => useEconomyTabStore().init(),
+          () => useUnitsTabStore().init(),
+          () => useCitiesTabStore().init(),
+          () => useTradeTabStore().init(),
+        ],
+        (fn): void => fn(),
+        (progress): void => {
+          this.loadPercent = typeof progress === "number" ? progress + "%" : "Ready!";
+        },
+        1,
+        1,
+      );
+
       this.loaded = true;
     },
 

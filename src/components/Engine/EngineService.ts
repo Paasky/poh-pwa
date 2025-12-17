@@ -1,20 +1,6 @@
-import {
-  ArcRotateCamera,
-  Color4,
-  Engine as BabylonEngine,
-  Scene,
-  TransformNode,
-  Vector3,
-} from "@babylonjs/core";
+import { ArcRotateCamera, Color4, Engine as BabylonEngine, Scene, TransformNode, Vector3, } from "@babylonjs/core";
 import "@babylonjs/core/Lights/Shadows/shadowGeneratorSceneComponent";
-import {
-  clamp,
-  getWorldDepth,
-  getWorldMinX,
-  getWorldMinZ,
-  getWorldWidth,
-  tileCenter,
-} from "@/helpers/math";
+import { clamp, getWorldDepth, getWorldMinX, getWorldMinZ, getWorldWidth, tileCenter, } from "@/helpers/math";
 import { TerrainMeshBuilder } from "@/factories/TerrainMeshBuilder/TerrainMeshBuilder";
 import { useObjectsStore } from "@/stores/objectStore";
 import { EnvironmentService } from "@/components/Engine/EnvironmentService";
@@ -168,26 +154,22 @@ export const EngineOptionPresets: EngineOptionPreset[] = [
 export class EngineService {
   size: Coords;
   canvas: HTMLCanvasElement;
-  engine: BabylonEngine;
-  scene: Scene;
-  tileRoot: TransformNode;
+  engine!: BabylonEngine;
+  scene!: Scene;
+  tileRoot!: TransformNode;
 
-  camera: ArcRotateCamera;
-  mainCamera: MainCamera;
-  environmentService: EnvironmentService;
-  terrainBuilder: TerrainMeshBuilder;
-  logicMesh: LogicMeshBuilder;
-  featureInstancer: FeatureInstancer;
-  fogOfWar: FogOfWar;
+  camera!: ArcRotateCamera;
+  mainCamera!: MainCamera;
+  environmentService!: EnvironmentService;
+  terrainBuilder!: TerrainMeshBuilder;
+  logicMesh!: LogicMeshBuilder;
+  featureInstancer!: FeatureInstancer;
+  fogOfWar!: FogOfWar;
 
+  minimapCanvas?: HTMLCanvasElement;
   minimap?: Minimap;
-  // Options
 
   options: EngineOptions = { ...DefaultEngineOptions };
-  // Camera settings moved to MainCamera
-
-  // todo the fps cap implementation is awful, just creates lag. this must go and either use built-in babylon settings or remove fps cap entirely
-  private _lastRenderTime = 0;
 
   constructor(
     size: Coords,
@@ -195,13 +177,16 @@ export class EngineService {
     minimapCanvas?: HTMLCanvasElement,
     options?: EngineOptions,
   ) {
+    // Prevent strange bugs from happening
+    if (size.x <= 0 || size.y <= 0) throw new Error("Invalid map size");
+
     this.size = size;
     this.canvas = canvas;
+    this.minimapCanvas = minimapCanvas;
     this.options = { ...DefaultEngineOptions, ...(options ?? {}) };
+  }
 
-    const tilesByKey = useObjectsStore().getTiles;
-
-    // Create Engine and Scene
+  initEngine(): this {
     this.engine = new BabylonEngine(
       this.canvas,
       this.options.antialias ?? true,
@@ -216,34 +201,62 @@ export class EngineService {
     this.scene = new Scene(this.engine);
     this.scene.clearColor = new Color4(0.63, 0.63, 0.63, 1); // Same-ish as snow
 
-    // Create Cameras and Environment
+    (document as any).engineService = this
+
+    return this;
+  }
+
+  initCamera(): this {
     this.applyRenderScale(this.options.renderScale ?? 1);
     this.mainCamera = new MainCamera(this.size, this.scene, this.canvas, {
       manualTilt: this.options.manualTilt,
     });
     this.camera = this.mainCamera.camera;
+
+    this.flyToCurrentPlayer();
+
+    return this;
+  }
+
+  initEnvironment(): this {
     this.environmentService = new EnvironmentService(this.scene, this.camera, this.engine);
 
-    // Build merged terrain mesh (new pipeline)
-    this.terrainBuilder = new TerrainMeshBuilder(this.scene, this.size, tilesByKey);
-    this.tileRoot = this.terrainBuilder.root;
+    return this;
+  }
 
-    // Build logic mesh for interactions (thin-instance, invisible)
-    this.logicMesh = new LogicMeshBuilder(this.scene, this.size, tilesByKey).build();
+  initLogic(): this {
+    this.logicMesh = new LogicMeshBuilder(
+      this.scene,
+      this.size,
+      useObjectsStore().getTiles,
+    ).build();
 
-    // Wire hovered tile to a lightweight reactive store
     const hovered = useHoveredTile();
     this.logicMesh.onTileHover((tile) => hovered.set(tile));
     this.logicMesh.onTileExit(() => hovered.clear());
 
+    return this;
+  }
+
+  initTerrain(): this {
+    this.terrainBuilder = new TerrainMeshBuilder(this.scene, this.size, useObjectsStore().getTiles);
+    this.tileRoot = this.terrainBuilder.root;
+
+    return this;
+  }
+
+  initFeatures(): this {
     this.featureInstancer = new FeatureInstancer(
       this.scene,
       this.size,
-      Object.values(tilesByKey),
+      Object.values(useObjectsStore().getTiles),
       this.tileRoot,
-    ).setIsVisible(options?.showFeatures ?? true);
+    ).setIsVisible(this.options.showFeatures ?? true);
 
-    // Initialize FoW strictly from store-provided currentPlayer values
+    return this;
+  }
+
+  initFogOfWar(): this {
     const storeKnown = useObjectsStore().currentPlayer.knownTileKeys.value as GameKey[];
     const storeVisible = useObjectsStore().currentPlayer.visibleTileKeys.value as GameKey[];
 
@@ -251,27 +264,15 @@ export class EngineService {
       this.size,
       this.scene,
       this.camera,
-      tilesByKey,
+      useObjectsStore().getTiles,
       storeKnown,
       storeVisible,
     );
+    return this;
+  }
 
-    // QoL: fly camera to the current player's first unit tile (if any)
-    this.flyToCurrentPlayer();
-
-    if (minimapCanvas) {
-      this.minimap = new Minimap(this.size, minimapCanvas, this.engine, this.fogOfWar);
-    }
-
-    // Render loop with optional FPS cap
+  render(): this {
     this.engine.runRenderLoop(() => {
-      if (this.options.fpsCap && this.options.fpsCap > 0) {
-        const now = performance.now();
-        const minDelta = 1000 / this.options.fpsCap;
-        if (now - this._lastRenderTime < minDelta) return;
-        this._lastRenderTime = now;
-      }
-
       // Tick environment (clock/effects) before rendering
       const deltaSeconds = this.engine.getDeltaTime() / 1000;
       this.environmentService.update(deltaSeconds);
@@ -282,10 +283,35 @@ export class EngineService {
     this.engine.resize();
     window.addEventListener("resize", this.onResize);
 
-    // Once the scene is ready, zoom minimap to known and capture a one-time minimap image
-    this.scene.executeWhenReady(() => {
-      this.minimap?.capture();
-    });
+    return this;
+  }
+
+  initMinimap(): this {
+    if (this.minimapCanvas) {
+      this.minimap = new Minimap(this.size, this.minimapCanvas, this.engine, this.fogOfWar);
+      this.minimap.capture();
+    }
+
+    return this;
+  }
+
+  initOrder() {
+    return [
+      () => this.initEngine(),
+      () => this.initCamera(),
+      () => this.initEnvironment(),
+      () => this.initLogic(),
+      () => this.initTerrain(),
+      () => this.initFeatures(),
+      () => this.initFogOfWar(),
+      () => this.render(),
+      () => this.initMinimap(),
+    ];
+  }
+
+  init(): this {
+    this.initOrder().forEach((fn) => fn());
+    return this;
   }
 
   dispose(): void {
@@ -383,9 +409,6 @@ export class EngineService {
     // Live-applied options
     if (prev.renderScale !== this.options.renderScale) {
       this.applyRenderScale(this.options.renderScale ?? 1);
-    }
-    if (prev.fpsCap !== this.options.fpsCap) {
-      this._lastRenderTime = 0; // reset limiter
     }
     if (prev.manualTilt !== this.options.manualTilt) {
       this.mainCamera.setManualTilt(!!this.options.manualTilt);

@@ -1,6 +1,6 @@
 import { hasMany, hasOne } from "@/objects/game/_relations";
 import { TypeObject } from "@/types/typeObjects";
-import { computed, ComputedRef, Ref, ref, UnwrapRef } from "vue";
+import { computed, ComputedRef, Ref, ref, UnwrapRef, watch } from "vue";
 import { CatKey, TypeKey } from "@/types/common";
 import { EventManager } from "@/managers/EventManager";
 import { Yields } from "@/objects/yield";
@@ -8,6 +8,8 @@ import { GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
 import { useObjectsStore } from "@/stores/objectStore";
 import type { Citizen } from "@/objects/game/Citizen";
 import type { Player } from "@/objects/game/Player";
+import { useEventStore } from "@/stores/eventStore";
+import { CultureCanSelect, CultureCanSettle, CultureHasNewType, CultureHasSettled, } from "@/events/Culture";
 
 export type CultureStatus = "notSettled" | "canSettle" | "mustSettle" | "settled";
 
@@ -19,6 +21,17 @@ export class Culture extends GameObject {
 
     this.playerKey = playerKey;
     this.player = hasOne<Player>(this.playerKey, `${this.key}.player`);
+
+    watch(this.canSelect, (newValue, oldValue) => {
+      if (!oldValue && newValue) {
+        useEventStore().turnEvents.push(new CultureCanSelect(this) as any);
+      }
+    });
+    watch(this.canSettle, (newValue, oldValue) => {
+      if (!oldValue && newValue) {
+        useEventStore().turnEvents.push(new CultureCanSettle(this) as any);
+      }
+    });
   }
 
   static attrsConf: GameObjAttr[] = [
@@ -52,6 +65,14 @@ export class Culture extends GameObject {
   /*
    * Computed
    */
+  canSelect = computed(
+    () => this.selectableHeritages.value.length + this.selectableTraits.value.length > 0,
+  );
+
+  canSettle = computed(
+    () => this.status.value == "canSettle" || this.status.value === "mustSettle",
+  );
+
   leader = computed(() => {
     const leaderKey = this.type.value.allows.find(
       (a) => a.indexOf("majorLeaderType:") >= 0,
@@ -159,6 +180,7 @@ export class Culture extends GameObject {
 
     // Add the heritage
     this.heritages.value.push(heritage);
+    useEventStore().turnEvents.push(new CultureHasNewType(this, heritage) as any);
 
     // Check if culture status needs to change
     if (this.heritages.value.length === 2) {
@@ -178,10 +200,13 @@ export class Culture extends GameObject {
 
   selectTrait(trait: TypeObject) {
     if (this.traits.value.includes(trait)) return;
-    if (!this.selectableTraits.value.includes(trait))
+    if (!this.selectableTraits.value.includes(trait)) {
       throw new Error(`${this.key}: ${trait.name} not selectable`);
+    }
 
     this.traits.value.push(trait);
+    useEventStore().turnEvents.push(new CultureHasNewType(this, trait) as any);
+
     if (trait.isPositive!) {
       this.mustSelectTraits.value.positive--;
     } else {
@@ -193,6 +218,10 @@ export class Culture extends GameObject {
     if (this.status.value === "settled") return;
     this.status.value = "settled";
     this.mustSelectTraits.value = { positive: 2, negative: 2 };
-    new EventManager().create("settled", `settled down`, this.player.value, this);
+    useEventStore().turnEvents.push(new CultureHasSettled(this) as any);
+  }
+
+  startTurn(): void {
+    //
   }
 }

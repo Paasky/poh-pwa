@@ -15,6 +15,7 @@ export const useGovernmentTabStore = defineStore("governmentTabStore", () => {
   function init() {
     if (initialized.value) return;
     policyCats.value = objStore.getClassTypesPerCategory("policyType");
+    government.value;
     initialized.value = true;
   }
 
