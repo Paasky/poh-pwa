@@ -97,7 +97,7 @@ export const useAppStore = defineStore("app", {
             this.engineService.environmentService.setIsClockRunning(
               settings.environment.isClockRunning,
             );
-            this.engineService.environmentService.setSeason(settings.environment.seasonMonth1to12);
+            this.engineService.environmentService.setMonth(settings.environment.month);
             this.engineService.environmentService.setWeather(settings.environment.weatherType);
           },
           () => useGovernmentTabStore().init(),

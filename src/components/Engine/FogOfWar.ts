@@ -18,10 +18,10 @@ import type { GameKey } from "@/objects/game/_GameObject";
 export class FogOfWar {
   // === Fog of War tunables (kept internal; not user-adjustable) ===
   // How much to dim explored-but-not-currently-visible tiles (0..1, multiplier)
-  exploredDim = 0.33;
+  exploredDim = 0.01;
   // Alpha to blend unknown areas toward black (0..1)
   // Dev QoL: set to 0.75 so player can orient on the map
-  unknownDim = 0.75;
+  unknownDim = 0.01;
 
   // Inputs / configuration
   readonly scene: Scene;

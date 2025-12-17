@@ -1,20 +1,6 @@
-import {
-  ArcRotateCamera,
-  Color4,
-  Engine as BabylonEngine,
-  Scene,
-  TransformNode,
-  Vector3,
-} from "@babylonjs/core";
+import { ArcRotateCamera, Color4, Engine as BabylonEngine, Scene, TransformNode, Vector3, } from "@babylonjs/core";
 import "@babylonjs/core/Lights/Shadows/shadowGeneratorSceneComponent";
-import {
-  clamp,
-  getWorldDepth,
-  getWorldMinX,
-  getWorldMinZ,
-  getWorldWidth,
-  tileCenter,
-} from "@/helpers/math";
+import { clamp, getWorldDepth, getWorldMinX, getWorldMinZ, getWorldWidth, tileCenter, } from "@/helpers/math";
 import { TerrainMeshBuilder } from "@/factories/TerrainMeshBuilder/TerrainMeshBuilder";
 import { useObjectsStore } from "@/stores/objectStore";
 import { EnvironmentService } from "@/components/Engine/EnvironmentService";
@@ -25,6 +11,7 @@ import { Minimap } from "@/components/Engine/interaction/Minimap";
 import { MainCamera } from "@/components/Engine/interaction/MainCamera";
 import FeatureInstancer from "@/components/Engine/features/FeatureInstancer";
 import { FogOfWar } from "@/components/Engine/FogOfWar";
+import GridOverlay from "@/components/Engine/overlays/GridOverlay";
 import type { Tile } from "@/objects/game/Tile";
 import type { GameKey } from "@/objects/game/_GameObject";
 import { Coords, getCoordsFromTileKey } from "@/helpers/mapTools";
@@ -33,10 +20,11 @@ import { EngineCoords } from "@/factories/TerrainMeshBuilder/_terrainMeshTypes";
 export type EngineOptions = {
   // Camera UX
   manualTilt?: boolean; // Allow user to tilt manually (otherwise auto-tilt by zoom)
+  // Overlays
+  showGrid?: boolean; // Show/hide hex grid overlay
 
   // Resolution & performance
   renderScale?: number; // 1 = native CSS resolution, 0.5 = half res, 1.25 = super-sample
-  fpsCap?: number; // 0 or undefined = uncapped; otherwise, minimum ms between renders enforced
   adaptToDeviceRatio?: boolean; // Use devicePixelRatio for base resolution (restart required)
 
   // Engine/GPU flags (restart required)
@@ -68,8 +56,8 @@ export const RestartRequiredOptionKeys: (keyof EngineOptions)[] = [
 
 export const DefaultEngineOptions: Required<EngineOptions> = {
   manualTilt: false,
+  showGrid: true,
   renderScale: 1,
-  fpsCap: 0,
   adaptToDeviceRatio: false,
   antialias: true,
   preserveDrawingBuffer: true,
@@ -93,7 +81,6 @@ export const EngineOptionPresets: EngineOptionPreset[] = [
     value: {
       manualTilt: false,
       renderScale: 0.5,
-      fpsCap: 30,
       adaptToDeviceRatio: false,
       antialias: false,
       preserveDrawingBuffer: false,
@@ -111,7 +98,6 @@ export const EngineOptionPresets: EngineOptionPreset[] = [
     value: {
       manualTilt: false,
       renderScale: 0.75,
-      fpsCap: 60,
       adaptToDeviceRatio: false,
       antialias: true,
       preserveDrawingBuffer: false,
@@ -129,7 +115,6 @@ export const EngineOptionPresets: EngineOptionPreset[] = [
     value: {
       manualTilt: false,
       renderScale: 1.0,
-      fpsCap: 0,
       adaptToDeviceRatio: false,
       antialias: true,
       preserveDrawingBuffer: true,
@@ -149,7 +134,6 @@ export const EngineOptionPresets: EngineOptionPreset[] = [
     value: {
       manualTilt: false,
       renderScale: 1.0, // keep safe by default; user can increase manually
-      fpsCap: 0,
       adaptToDeviceRatio: true,
       antialias: true,
       preserveDrawingBuffer: true,
@@ -180,6 +164,7 @@ export class EngineService {
   logicMesh!: LogicMeshBuilder;
   featureInstancer!: FeatureInstancer;
   fogOfWar!: FogOfWar;
+  gridOverlay?: GridOverlay;
 
   minimapCanvas?: HTMLCanvasElement;
   minimap?: Minimap;
@@ -232,6 +217,9 @@ export class EngineService {
 
     this.flyToCurrentPlayer();
 
+    // Initialize camera-dependent visuals immediately
+    this.applyCameraZoomEffects();
+
     return this;
   }
 
@@ -259,6 +247,17 @@ export class EngineService {
     this.terrainBuilder = new TerrainMeshBuilder(this.scene, this.size, useObjectsStore().getTiles);
     this.tileRoot = this.terrainBuilder.root;
 
+    return this;
+  }
+
+  private initGridOverlay(): this {
+    // Build overlay once and set its visibility according to options
+    if (!this.gridOverlay) {
+      this.gridOverlay = new GridOverlay(this.scene, this.size, useObjectsStore().getTiles);
+    }
+    this.gridOverlay.setVisible(this.options.showGrid ?? true);
+    // Apply initial thickness based on current zoom
+    this.applyCameraZoomEffects();
     return this;
   }
 
@@ -293,6 +292,8 @@ export class EngineService {
       // Tick environment (clock/effects) before rendering
       const deltaSeconds = this.engine.getDeltaTime() / 1000;
       this.environmentService.update(deltaSeconds);
+      // Centralized camera-position dependent adjustments
+      this.applyCameraZoomEffects();
       this.scene.render();
     });
 
@@ -301,6 +302,24 @@ export class EngineService {
     window.addEventListener("resize", this.onResize);
 
     return this;
+  }
+
+  /**
+   * Central place to apply camera position / zoom dependent visual adjustments.
+   * Keep KISS: calculate normalized zoom and drive overlays from here.
+   */
+  private applyCameraZoomEffects(): void {
+    if (!this.camera) return;
+    // Normalize zoom: 0 at max zoom-out (upperRadius), 1 at max zoom-in (lowerRadius)
+    const lower = this.camera.lowerRadiusLimit ?? 10;
+    const upper = this.camera.upperRadiusLimit ?? 100;
+    const denom = Math.max(0.0001, upper - lower);
+    const r = this.camera.radius;
+    const norm = clamp((upper - r) / denom, 0, 1);
+
+    // Grid thickness scaling: 0.25x at max out -> 1.5x at max in
+    const thicknessScale = 0.25 + norm * 1.25;
+    if (this.gridOverlay) this.gridOverlay.setThicknessScale(thicknessScale);
   }
 
   initMinimap(): this {
@@ -319,6 +338,7 @@ export class EngineService {
       () => this.initEnvironment(),
       () => this.initLogic(),
       () => this.initTerrain(),
+      () => this.initGridOverlay(),
       () => this.initFeatures(),
       () => this.initFogOfWar(),
       () => this.render(),
@@ -332,6 +352,10 @@ export class EngineService {
   }
 
   dispose(): void {
+    if (this.gridOverlay) {
+      this.gridOverlay.dispose();
+      this.gridOverlay = undefined;
+    }
     this.fogOfWar.dispose();
     window.removeEventListener("resize", this.onResize);
     this.engine.stopRenderLoop();
@@ -429,6 +453,13 @@ export class EngineService {
     }
     if (prev.manualTilt !== this.options.manualTilt) {
       this.mainCamera.setManualTilt(!!this.options.manualTilt);
+    }
+    if (prev.showGrid !== this.options.showGrid) {
+      // Create overlay on demand if needed
+      if (!this.gridOverlay) {
+        this.gridOverlay = new GridOverlay(this.scene, this.size, useObjectsStore().getTiles);
+      }
+      this.gridOverlay.setVisible(!!this.options.showGrid);
     }
     if (prev.showFeatures !== this.options.showFeatures) {
       this.setShowFeatures(!!this.options.showFeatures);

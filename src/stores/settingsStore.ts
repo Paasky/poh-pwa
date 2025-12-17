@@ -9,7 +9,7 @@ import {
 } from "@/components/Engine/EngineService";
 import { loadPersisted, savePersisted } from "@/utils/persistentStorage";
 import { defaultTimeOfDay2400 } from "@/components/Engine/environments/timeOfDay";
-import { defaultSeasonMonth1to12 } from "@/components/Engine/environments/season";
+import { defaultMonth } from "@/components/Engine/environments/season";
 import { defaultWeatherType, type WeatherType } from "@/components/Engine/environments/weather";
 
 const STORAGE_KEY = "poh.settings";
@@ -22,7 +22,7 @@ export type SettingsData = {
   environment?: {
     timeOfDay2400: number;
     isClockRunning: boolean;
-    seasonMonth1to12: number;
+    month: number;
     weatherType: WeatherType;
   };
 };
@@ -40,7 +40,7 @@ export const useSettingsStore = defineStore("settings", {
     environment: reactive({
       timeOfDay2400: defaultTimeOfDay2400,
       isClockRunning: false,
-      seasonMonth1to12: defaultSeasonMonth1to12,
+      month: defaultMonth,
       weatherType: defaultWeatherType,
     }),
   }),
@@ -59,7 +59,7 @@ export const useSettingsStore = defineStore("settings", {
           this.environment = reactive({
             timeOfDay2400: env.timeOfDay2400 ?? defaultTimeOfDay2400,
             isClockRunning: env.isClockRunning ?? true,
-            seasonMonth1to12: env.seasonMonth1to12 ?? defaultSeasonMonth1to12,
+            month: env.month ?? defaultMonth,
             weatherType: env.weatherType ?? defaultWeatherType,
           });
         }
