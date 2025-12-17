@@ -13,6 +13,7 @@ export const useEconomyTabStore = defineStore("economyTabStore", () => {
 
   function init() {
     if (initialized.value) return;
+    cities.value;
     initialized.value = true;
   }
 

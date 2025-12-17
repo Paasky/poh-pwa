@@ -1,11 +1,13 @@
 import { hasMany, hasOne } from "@/objects/game/_relations";
 import { TypeObject } from "@/types/typeObjects";
-import { computed, ComputedRef, ref } from "vue";
+import { computed, ComputedRef, ref, watch } from "vue";
 import { GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
 import { useObjectsStore } from "@/stores/objectStore";
 import type { Citizen } from "@/objects/game/Citizen";
 import type { Player } from "@/objects/game/Player";
 import type { City } from "@/objects/game/City";
+import { useEventStore } from "@/stores/eventStore";
+import { ReligionCanSelect, ReligionHasEvolved, ReligionHasNewType } from "@/events/Religion";
 
 export type ReligionStatus = "myths" | "gods" | "dogmas";
 
@@ -30,6 +32,12 @@ export class Religion extends GameObject {
 
     this.cityKey = cityKey;
     this.city = hasOne<City>(this.cityKey, `${this.key}.city`);
+
+    watch(this.canSelect, (newValue, oldValue) => {
+      if (!oldValue && newValue) {
+        useEventStore().turnEvents.push(new ReligionCanSelect(this) as any);
+      }
+    });
   }
 
   static attrsConf: GameObjAttr[] = [
@@ -71,7 +79,35 @@ export class Religion extends GameObject {
   /*
    * Computed
    */
-  canEvolve = computed(() => false);
+  canEvolve = computed(() => {
+    // Can only evolve if can select a new type
+    if (!this.canSelect.value) return false;
+
+    switch (this.status.value) {
+      case "myths":
+        return this.myths.value.length > 3;
+      case "gods":
+        return this.gods.value.length > 6;
+      default:
+        return false;
+    }
+  });
+
+  canSelect = computed(() => {
+    const holyCityOwner = this.city.value.player.value;
+    // If the holy city owner doesn't follow the religion: can never select
+    if (holyCityOwner.religionKey.value !== this.key) {
+      return false;
+    }
+
+    return holyCityOwner.storage.amount("yieldType:faith") >= this.faithToGrow.value;
+  });
+
+  faithToGrow = computed(() =>
+    Math.round(
+      ((this.dogmas.value.length + this.gods.value.length + this.myths.value.length) * 7) ** 1.2,
+    ),
+  );
 
   selectableDogmas = computed((): TypeObject[] => {
     if (this.status.value !== "dogmas") return [];
@@ -150,7 +186,66 @@ export class Religion extends GameObject {
   ]);
 
   /*
+   * Watchers
+   */
+
+  /*
    * Actions
    */
-  // todo add here
+  startTurn(): void {
+    //
+  }
+
+  evolve(): void {
+    if (!this.canEvolve.value) {
+      throw new Error(`Can't evolve ${this.name}`);
+    }
+    switch (this.status.value) {
+      case "myths":
+        this.status.value = "gods";
+        break;
+      case "gods":
+        this.status.value = "dogmas";
+        break;
+      default:
+        throw new Error(`Can't evolve ${this.name}`);
+    }
+
+    useEventStore().turnEvents.push(new ReligionHasEvolved(this) as any);
+  }
+
+  selectMyth(myth: TypeObject): void {
+    if (this.myths.value.includes(myth)) {
+      throw new Error(`Myth ${myth.name} already selected`);
+    }
+    this.myths.value.push(myth);
+
+    useEventStore().turnEvents.push(new ReligionHasNewType(this, myth) as any);
+  }
+
+  selectGod(god: TypeObject): void {
+    if (this.gods.value.includes(god)) {
+      throw new Error(`God ${god.name} already selected`);
+    }
+    this.gods.value.push(god);
+
+    useEventStore().turnEvents.push(new ReligionHasNewType(this, god) as any);
+  }
+
+  selectDogma(dogma: TypeObject, keepGod?: TypeObject): void {
+    if (this.dogmas.value.includes(dogma)) {
+      throw new Error(`Dogma ${dogma.name} already selected`);
+    }
+
+    if (dogma.specials.includes("specialType:canHaveOnlyOneGod")) {
+      if (!keepGod || !this.gods.value.includes(keepGod)) {
+        throw new Error(`Can only keep one selected God with ${dogma.name}`);
+      }
+      this.gods.value = [keepGod];
+    }
+
+    this.dogmas.value.push(dogma);
+
+    useEventStore().turnEvents.push(new ReligionHasNewType(this, dogma) as any);
+  }
 }

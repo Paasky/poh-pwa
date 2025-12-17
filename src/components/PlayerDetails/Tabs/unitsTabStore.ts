@@ -16,6 +16,9 @@ export const useUnitsTabStore = defineStore("unitsTabStore", () => {
 
   function init() {
     if (initialized.value) return;
+    player.value;
+    units.value;
+    designs.value;
     initialized.value = true;
   }
 

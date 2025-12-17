@@ -160,14 +160,7 @@ export class Unit extends GameObject {
     return this.myTypes.value.concat(this.tile.value.types.value);
   });
 
-  yields = computed(
-    () =>
-      new Yields([
-        ...this.design.value.yields.all(),
-        ...this.playerYields.value.all(),
-        ...this.tileYields.value.all(),
-      ]),
-  );
+  yields = computed(() => new Yields());
 
   /*
    * Actions
@@ -337,5 +330,25 @@ export class Unit extends GameObject {
     if (this.health.value < 100 && this.action.value?.key === "actionType:heal") {
       this.modifyHealth(10, "healing");
     }
+  }
+
+  endTurn(): boolean {
+    // todo run automove / trade route move until out of moves/see danger
+    return true;
+  }
+
+  warmUp(): void {
+    this.city.value;
+    this.design.value;
+    this.player.value;
+    this.origPlayer.value;
+    this.tile.value;
+    this.tradeRoute.value;
+
+    this.myTypes.value;
+    this.playerYields.value;
+    this.tileYields.value;
+    this.types.value;
+    this.yields.value;
   }
 }

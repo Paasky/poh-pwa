@@ -1,16 +1,10 @@
-export async function asyncProcess<T>({
-  objs,
-  process,
-  onProgress,
-  batchSize = 200,
-  yieldEveryMs = 100,
-}: {
-  objs: readonly T[];
-  process: (obj: T, index: number) => void;
-  onProgress?: (percent: number | true) => void;
-  batchSize?: number; // default 200
-  yieldEveryMs?: number; // default 100
-}): Promise<void> {
+export async function asyncProcess<T>(
+  objs: readonly T[],
+  process: (obj: T, index: number) => void,
+  onProgress?: (percent: number | true) => void,
+  batchSize: number = 100,
+  yieldEveryMs: number = 10,
+): Promise<void> {
   const total = objs.length;
   let i = 0;
   let lastYield = performance.now();
@@ -25,7 +19,9 @@ export async function asyncProcess<T>({
     onProgress?.(Math.floor((i / total) * 100));
 
     if (performance.now() - lastYield >= yieldEveryMs) {
-      await Promise.resolve(); // yield to UI
+      await new Promise<void>((resolve) => {
+        requestAnimationFrame(() => resolve());
+      });
       lastYield = performance.now();
     }
   }
