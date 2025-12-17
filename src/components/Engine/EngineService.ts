@@ -177,6 +177,9 @@ export class EngineService {
     minimapCanvas?: HTMLCanvasElement,
     options?: EngineOptions,
   ) {
+    // Prevent strange bugs from happening
+    if (size.x <= 0 || size.y <= 0) throw new Error("Invalid map size");
+
     this.size = size;
     this.canvas = canvas;
     this.minimapCanvas = minimapCanvas;

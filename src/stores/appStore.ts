@@ -4,7 +4,7 @@ import { useObjectsStore } from "@/stores/objectStore";
 import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
 import { GameData, StaticData } from "@/types/api";
 import { EngineService } from "@/components/Engine/EngineService";
-import { createWorld, worldSizes } from "@/factories/worldFactory";
+import { createWorld, WorldSize, worldSizes } from "@/factories/worldFactory";
 import { GameDataLoader } from "@/dataLoaders/GameDataLoader";
 import type { Router } from "vue-router";
 import { useGovernmentTabStore } from "@/components/PlayerDetails/Tabs/governmentTabStore";
@@ -45,6 +45,7 @@ export const useAppStore = defineStore("app", {
       const saveGameData = gameDataUrl
         ? ((await fetchJSON<GameData>(gameDataUrl)) as GameData)
         : null;
+      const size = saveGameData?.world.size ?? worldSizes[4];
 
       const objStore = useObjectsStore();
       const settings = useSettingsStore();
@@ -55,7 +56,7 @@ export const useAppStore = defineStore("app", {
       if (!minimapCanvas) throw new Error("Minimap canvas `#minimap-canvas` not found");
 
       this.engineService = markRaw(
-        new EngineService(objStore.world.size, engineCanvas, minimapCanvas, settings.engine),
+        new EngineService(size, engineCanvas, minimapCanvas, settings.engine),
       );
 
       await asyncProcess(
@@ -70,7 +71,7 @@ export const useAppStore = defineStore("app", {
               let tries = 0;
               do {
                 try {
-                  const gameData = createWorld(worldSizes[4]);
+                  const gameData = createWorld(size as WorldSize);
                   objStore.world = gameData.world;
                   objStore.bulkSet(gameData.objects);
 
