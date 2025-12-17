@@ -1,8 +1,37 @@
 import { Color3, Mesh, MeshBuilder, Scene, StandardMaterial, Vector3 } from "@babylonjs/core";
+import { TypeKey } from "@/types/common";
+
+const baseMeshLib = {
+  // todo test these once pink boxes work
+  //"platformType:human": getBaseHuman,
+  //"platformType:horse": getBaseHorse,
+  //"platformType:chariot": getBaseChariot,
+  //"platformType:raft": getBaseRaft,
+  //"platformType:galley": getBaseGalley,
+} as Record<TypeKey, (scene: Scene) => Mesh>;
+
+export function objectBaseMesh(scene: Scene, typeKey: TypeKey): Mesh {
+  const mesh = baseMeshLib[typeKey] ? baseMeshLib[typeKey](scene) : baseNaMesh(scene, typeKey);
+  mesh.isVisible = false;
+  mesh.isPickable = false;
+  mesh.checkCollisions = false;
+  mesh.receiveShadows = false;
+  mesh.doNotSyncBoundingInfo = true;
+  mesh.freezeWorldMatrix();
+  return mesh;
+}
+
+function baseNaMesh(scene: Scene, typeKey: TypeKey): Mesh {
+  const size = 1;
+  const mesh = MeshBuilder.CreateBox(`baseNaMesh-${typeKey}`, { size }, scene);
+  mesh.position.y = size / 2; // keep bottom at Y=0
+  mesh.material = colorMat(scene, 1, 0, 1); // bright pink
+  return mesh;
+}
 
 // All returned meshes are masters intended for instancing. Keep max dimension ≤ 1 unit.
 
-export const getBaseHuman = (scene: Scene): Mesh => {
+function getBaseHuman(scene: Scene): Mesh {
   const root = new Mesh("baseHuman", scene);
 
   // Colors
@@ -59,9 +88,9 @@ export const getBaseHuman = (scene: Scene): Mesh => {
 
   root.isVisible = false;
   return root;
-};
+}
 
-export const getBaseHorse = (scene: Scene): Mesh => {
+function getBaseHorse(scene: Scene): Mesh {
   const root = new Mesh("baseHorse", scene);
 
   const bodyMat = colorMat(scene, 0.35, 0.23, 0.15);
@@ -127,9 +156,9 @@ export const getBaseHorse = (scene: Scene): Mesh => {
 
   root.isVisible = false;
   return root;
-};
+}
 
-export const getBaseChariot = (scene: Scene): Mesh => {
+function getBaseChariot(scene: Scene): Mesh {
   const root = new Mesh("baseChariot", scene);
 
   const cartMat = colorMat(scene, 0.25, 0.18, 0.1);
@@ -200,9 +229,9 @@ export const getBaseChariot = (scene: Scene): Mesh => {
 
   root.isVisible = false;
   return root;
-};
+}
 
-export const getBaseRaft = (scene: Scene): Mesh => {
+function getBaseRaft(scene: Scene): Mesh {
   const root = new Mesh("baseRaft", scene);
 
   const wood = colorMat(scene, 0.45, 0.32, 0.18);
@@ -238,9 +267,9 @@ export const getBaseRaft = (scene: Scene): Mesh => {
 
   root.isVisible = false;
   return root;
-};
+}
 
-export const getBaseGalley = (scene: Scene): Mesh => {
+function getBaseGalley(scene: Scene): Mesh {
   const root = new Mesh("baseGalley", scene);
 
   const wood = colorMat(scene, 0.4, 0.28, 0.16);
@@ -299,7 +328,7 @@ export const getBaseGalley = (scene: Scene): Mesh => {
 
   root.isVisible = false;
   return root;
-};
+}
 
 // Local helper
 const colorMat = (scene: Scene, r: number, g: number, b: number): StandardMaterial => {
