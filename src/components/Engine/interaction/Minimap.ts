@@ -21,6 +21,7 @@ import { FogOfWar } from "@/components/Engine/FogOfWar";
 import { Coords } from "@/helpers/mapTools";
 import { Tile } from "@/objects/game/Tile";
 import { rotNorth } from "@/components/Engine/interaction/MainCamera";
+import { useSettingsStore } from "@/stores/settingsStore";
 
 export class Minimap {
   size: Coords;
@@ -101,21 +102,24 @@ export class Minimap {
         const rectW = (hexWidth / worldW) * width;
         const rectH = (hexDepth / worldD) * height;
 
-        ctx.fillStyle = "#000";
-        for (let y = 0; y < this.size.y; y++) {
-          for (let x = 0; x < this.size.x; x++) {
-            const key = Tile.getKey(x, y);
-            if (!this.fogOfWar.knownKeys.has(key)) {
-              // Odd-r pointy-top layout center in world units
-              const wx = minX + hexWidth * (x + 0.5 * (y & 1));
-              const wz = minZ + hexDepth * y;
+        // Replicate Fog of War
+        if (useSettingsStore().engine.enableFogOfWar) {
+          ctx.fillStyle = "#000";
+          for (let y = 0; y < this.size.y; y++) {
+            for (let x = 0; x < this.size.x; x++) {
+              const key = Tile.getKey(x, y);
+              if (!this.fogOfWar.knownKeys.has(key)) {
+                // Odd-r pointy-top layout center in world units
+                const wx = minX + hexWidth * (x + 0.5 * (y & 1));
+                const wz = minZ + hexDepth * y;
 
-              // Map world -> pixel
-              const px = ((wx - minX) / worldW) * width;
-              const py = ((wz - minZ) / worldD) * height;
+                // Map world -> pixel
+                const px = ((wx - minX) / worldW) * width;
+                const py = ((wz - minZ) / worldD) * height;
 
-              // Cover with a simple rectangle (good enough for 512x256 minimap)
-              ctx.fillRect(px - rectW / 2, py - rectH / 2, rectW, rectH);
+                // Cover with a simple rectangle (good enough for 512x256 minimap)
+                ctx.fillRect(px - rectW / 2, py - rectH / 2, rectW, rectH);
+              }
             }
           }
         }

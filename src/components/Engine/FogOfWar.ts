@@ -10,18 +10,20 @@ import {
   Vector3,
   Vector4,
 } from "@babylonjs/core";
+import { watch } from "vue";
 import { getWorldDepth, getWorldMinX, getWorldMinZ, getWorldWidth } from "@/helpers/math";
 import type { Coords } from "@/helpers/mapTools";
 import { Tile } from "@/objects/game/Tile";
 import type { GameKey } from "@/objects/game/_GameObject";
+import { useSettingsStore } from "@/stores/settingsStore";
 
 export class FogOfWar {
   // === Fog of War tunables (kept internal; not user-adjustable) ===
   // How much to dim explored-but-not-currently-visible tiles (0..1, multiplier)
-  exploredDim = 0.01;
+  exploredDim = 0.33;
   // Alpha to blend unknown areas toward black (0..1)
   // Dev QoL: set to 0.75 so player can orient on the map
-  unknownDim = 0.01;
+  unknownDim = 1;
 
   // Inputs / configuration
   readonly scene: Scene;
@@ -124,6 +126,19 @@ export class FogOfWar {
     // Create the projector post-process and wire uniforms
     this.createPostProcess();
 
+    watch(
+      () => useSettingsStore().engineSettings.enableFogOfWar,
+      (isEnabled, oldVal) => {
+        if (isEnabled !== oldVal) {
+          if (isEnabled) {
+            this.camera.attachPostProcess(this.postProcess);
+          } else {
+            this.camera.detachPostProcess(this.postProcess);
+          }
+        }
+      },
+    );
+
     this._initialized = true;
   }
 
@@ -163,6 +178,11 @@ export class FogOfWar {
       effect.setFloat("unknownAlpha", this.unknownDim);
       effect.setTexture("maskTex", this.maskTexture);
     };
+
+    // Respect the current enabled flag
+    if (!useSettingsStore().engineSettings.enableFogOfWar) {
+      camera.detachPostProcess(this.postProcess);
+    }
   }
 
   private registerShader(): void {

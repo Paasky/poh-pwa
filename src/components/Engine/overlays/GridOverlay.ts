@@ -38,10 +38,6 @@ export class GridOverlay {
     this.build();
   }
 
-  setVisible(visible: boolean): void {
-    this.root.setEnabled(visible);
-  }
-
   dispose(): void {
     for (const c of this.chunks) c.dispose();
     this.root.dispose();

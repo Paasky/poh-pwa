@@ -18,7 +18,6 @@ import {
 import { TerrainMeshBuilder } from "@/factories/TerrainMeshBuilder/TerrainMeshBuilder";
 import { useObjectsStore } from "@/stores/objectStore";
 import { EnvironmentService } from "@/components/Engine/EnvironmentService";
-import type { DefaultPostProcessingOptions } from "@/components/Engine/environments/postFx";
 import LogicMeshBuilder from "@/factories/LogicMeshBuilder";
 import { useHoveredTile } from "@/stores/hoveredTile";
 import { Minimap } from "@/components/Engine/interaction/Minimap";
@@ -30,138 +29,8 @@ import type { Tile } from "@/objects/game/Tile";
 import type { GameKey } from "@/objects/game/_GameObject";
 import { Coords, getCoordsFromTileKey } from "@/helpers/mapTools";
 import { EngineCoords } from "@/factories/TerrainMeshBuilder/_terrainMeshTypes";
-
-export type EngineOptions = {
-  // Camera UX
-  manualTilt?: boolean; // Allow user to tilt manually (otherwise auto-tilt by zoom)
-  // Overlays
-  showGrid?: boolean; // Show/hide hex grid overlay
-
-  // Resolution & performance
-  renderScale?: number; // 1 = native CSS resolution, 0.5 = half res, 1.25 = super-sample
-  adaptToDeviceRatio?: boolean; // Use devicePixelRatio for base resolution (restart required)
-
-  // Engine/GPU flags (restart required)
-  antialias?: boolean; // Multi-sample antialias at context level (restart required)
-  preserveDrawingBuffer?: boolean;
-  stencil?: boolean;
-  disableWebGL2Support?: boolean; // Force WebGL1 if true
-  powerPreference?: WebGLPowerPreference; // "default" | "high-performance" | "low-power"
-
-  // Visual effects (post-process pipeline)
-  hdr?: boolean; // Enable HDR pipeline when supported
-  useFxaa?: boolean; // FXAA post-process
-  useBloom?: boolean; // Bloom post-process
-  bloomThreshold?: number; // 0..1
-  bloomWeight?: number; // 0..1
-
-  // Feature layers
-  showFeatures?: boolean; // Toggle GPU-instanced feature props (trees etc.)
-};
-
-export const RestartRequiredOptionKeys: (keyof EngineOptions)[] = [
-  "antialias",
-  "preserveDrawingBuffer",
-  "stencil",
-  "disableWebGL2Support",
-  "powerPreference",
-  "adaptToDeviceRatio",
-];
-
-export const DefaultEngineOptions: Required<EngineOptions> = {
-  manualTilt: false,
-  showGrid: true,
-  renderScale: 1,
-  adaptToDeviceRatio: false,
-  antialias: true,
-  preserveDrawingBuffer: true,
-  stencil: true,
-  disableWebGL2Support: false,
-  powerPreference: "high-performance",
-  hdr: true,
-  useFxaa: true,
-  useBloom: false,
-  bloomThreshold: 0.9,
-  bloomWeight: 0.15,
-  showFeatures: true,
-};
-
-export type EngineOptionPreset = { id: string; label: string; value: EngineOptions };
-
-export const EngineOptionPresets: EngineOptionPreset[] = [
-  {
-    id: "low",
-    label: "Low",
-    value: {
-      manualTilt: false,
-      renderScale: 0.5,
-      adaptToDeviceRatio: false,
-      antialias: false,
-      preserveDrawingBuffer: false,
-      stencil: false,
-      disableWebGL2Support: false,
-      powerPreference: "low-power",
-      hdr: false,
-      useFxaa: false,
-      useBloom: false,
-    } as EngineOptions,
-  },
-  {
-    id: "medium",
-    label: "Medium",
-    value: {
-      manualTilt: false,
-      renderScale: 0.75,
-      adaptToDeviceRatio: false,
-      antialias: true,
-      preserveDrawingBuffer: false,
-      stencil: false,
-      disableWebGL2Support: false,
-      powerPreference: "default",
-      hdr: false,
-      useFxaa: true,
-      useBloom: false,
-    } as EngineOptions,
-  },
-  {
-    id: "high",
-    label: "High",
-    value: {
-      manualTilt: false,
-      renderScale: 1.0,
-      adaptToDeviceRatio: false,
-      antialias: true,
-      preserveDrawingBuffer: true,
-      stencil: true,
-      disableWebGL2Support: false,
-      powerPreference: "high-performance",
-      hdr: true,
-      useFxaa: true,
-      useBloom: true,
-      bloomThreshold: 0.9,
-      bloomWeight: 0.15,
-    } as EngineOptions,
-  },
-  {
-    id: "ultra",
-    label: "Ultra",
-    value: {
-      manualTilt: false,
-      renderScale: 1.0, // keep safe by default; user can increase manually
-      adaptToDeviceRatio: true,
-      antialias: true,
-      preserveDrawingBuffer: true,
-      stencil: true,
-      disableWebGL2Support: false,
-      powerPreference: "high-performance",
-      hdr: true,
-      useFxaa: true,
-      useBloom: true,
-      bloomThreshold: 0.85,
-      bloomWeight: 0.2,
-    } as EngineOptions,
-  },
-];
+import { useSettingsStore } from "@/stores/settingsStore";
+import { EngineSettings, restartRequiredSettingKeys } from "@/components/Engine/engineSettings";
 
 // noinspection JSUnusedGlobalSymbols
 export class EngineService {
@@ -183,34 +52,29 @@ export class EngineService {
   minimapCanvas?: HTMLCanvasElement;
   minimap?: Minimap;
 
-  options: EngineOptions = { ...DefaultEngineOptions };
+  private settings: EngineSettings;
 
-  constructor(
-    size: Coords,
-    canvas: HTMLCanvasElement,
-    minimapCanvas?: HTMLCanvasElement,
-    options?: EngineOptions,
-  ) {
+  constructor(size: Coords, canvas: HTMLCanvasElement, minimapCanvas?: HTMLCanvasElement) {
     // Prevent strange bugs from happening
     if (size.x <= 0 || size.y <= 0) throw new Error("Invalid map size");
 
     this.size = size;
     this.canvas = canvas;
     this.minimapCanvas = minimapCanvas;
-    this.options = { ...DefaultEngineOptions, ...(options ?? {}) };
+    this.settings = useSettingsStore().engineSettings;
   }
 
   initEngine(): this {
     this.engine = new BabylonEngine(
       this.canvas,
-      this.options.antialias ?? true,
+      this.settings.antialias,
       {
-        preserveDrawingBuffer: this.options.preserveDrawingBuffer ?? true,
-        stencil: this.options.stencil ?? true,
-        disableWebGL2Support: this.options.disableWebGL2Support ?? false,
-        powerPreference: this.options.powerPreference ?? "high-performance",
+        preserveDrawingBuffer: this.settings.preserveDrawingBuffer,
+        stencil: this.settings.stencil,
+        disableWebGL2Support: this.settings.disableWebGL2Support,
+        powerPreference: this.settings.powerPreference,
       },
-      this.options.adaptToDeviceRatio ?? false,
+      this.settings.adaptToDeviceRatio,
     );
     this.scene = new Scene(this.engine);
     this.scene.clearColor = new Color4(0.63, 0.63, 0.63, 1); // Same-ish as snow
@@ -223,9 +87,9 @@ export class EngineService {
   }
 
   initCamera(): this {
-    this.applyRenderScale(this.options.renderScale ?? 1);
+    this.applyRenderScale(this.settings.renderScale);
     this.mainCamera = new MainCamera(this.size, this.scene, this.canvas, {
-      manualTilt: this.options.manualTilt,
+      manualTilt: this.settings.manualTilt,
     });
     this.camera = this.mainCamera.camera;
 
@@ -244,11 +108,7 @@ export class EngineService {
   }
 
   initLogic(): this {
-    this.logicMesh = new LogicMeshBuilder(
-      this.scene,
-      this.size,
-      useObjectsStore().getTiles,
-    ).build();
+    this.logicMesh = new LogicMeshBuilder(this.scene, this.size, useObjectsStore().getTiles);
 
     const hovered = useHoveredTile();
     this.logicMesh.onTileHover((tile) => hovered.set(tile));
@@ -269,7 +129,7 @@ export class EngineService {
     if (!this.gridOverlay) {
       this.gridOverlay = new GridOverlay(this.scene, this.size, useObjectsStore().getTiles);
     }
-    this.gridOverlay.setVisible(this.options.showGrid ?? true);
+    this.gridOverlay.setVisible(this.settings.showGrid);
     // Apply initial thickness based on current zoom
     this.applyCameraZoomEffects();
     return this;
@@ -281,7 +141,7 @@ export class EngineService {
       this.size,
       Object.values(useObjectsStore().getTiles),
       this.tileRoot,
-    ).setIsVisible(this.options.showFeatures ?? true);
+    );
 
     return this;
   }
@@ -381,12 +241,6 @@ export class EngineService {
     this.engine.dispose();
   }
 
-  // todo move this to our settingsStore and remove from here
-  setLogicDebugEnabled(enabled: boolean): this {
-    this.logicMesh.setDebugEnabled(enabled);
-    return this;
-  }
-
   flyTo(coords: EngineCoords): EngineService {
     const target = new Vector3(coords.x, 0, coords.z);
 
@@ -451,44 +305,31 @@ export class EngineService {
     this.engine.setHardwareScalingLevel(level);
   }
 
-  applyOptions(next: EngineOptions): { restartKeysChanged: (keyof EngineOptions)[] } {
-    const prev = this.options;
-    this.options = { ...prev, ...next };
+  applyOptions(next: EngineSettings): { restartKeysChanged: (keyof EngineSettings)[] } {
+    const prev = this.settings;
+    this.settings = { ...prev, ...next };
 
     // Collect restart-required changes
-    const restartKeysChanged: (keyof EngineOptions)[] = [];
-    for (const k of RestartRequiredOptionKeys) {
-      if (prev[k] !== this.options[k]) restartKeysChanged.push(k);
+    const restartKeysChanged: (keyof EngineSettings)[] = [];
+    for (const k of restartRequiredSettingKeys) {
+      if (prev[k] !== this.settings[k]) restartKeysChanged.push(k);
     }
 
     // Live-applied options
-    if (prev.renderScale !== this.options.renderScale) {
-      this.applyRenderScale(this.options.renderScale ?? 1);
+    if (prev.renderScale !== this.settings.renderScale) {
+      this.applyRenderScale(this.settings.renderScale);
     }
-    if (prev.manualTilt !== this.options.manualTilt) {
-      this.mainCamera.setManualTilt(!!this.options.manualTilt);
+    if (prev.manualTilt !== this.settings.manualTilt) {
+      this.mainCamera.setManualTilt(this.settings.manualTilt);
     }
-    if (prev.showGrid !== this.options.showGrid) {
+    if (prev.showGrid !== this.settings.showGrid) {
+      // todo: no, the grid should be created on init, and only hidden/shown
       // Create overlay on demand if needed
       if (!this.gridOverlay) {
         this.gridOverlay = new GridOverlay(this.scene, this.size, useObjectsStore().getTiles);
       }
-      this.gridOverlay.setVisible(!!this.options.showGrid);
-    }
-    if (prev.showFeatures !== this.options.showFeatures) {
-      this.setShowFeatures(!!this.options.showFeatures);
+      this.gridOverlay.setVisible(this.settings.showGrid);
     }
     return { restartKeysChanged };
-  }
-
-  /** Update post-processing toggles/values for the environment's rendering pipeline. */
-  public setEnvironmentPostProcessingOptions(options: Partial<DefaultPostProcessingOptions>): void {
-    this.environmentService.setPostProcessingOptions(options);
-  }
-
-  // Feature layers
-  setShowFeatures(showFeatures: boolean): this {
-    this.featureInstancer.setIsVisible(showFeatures);
-    return this;
   }
 }

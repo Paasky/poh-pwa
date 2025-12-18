@@ -1,28 +1,32 @@
 <script setup lang="ts">
-import { computed, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useSettingsDialog } from "@/composables/useSettingsDialog";
-import { EngineOptionPresets } from "@/components/Engine/EngineService";
+import { useSettingsStore } from "@/stores/settingsStore";
+import { engineSettingPresets } from "@/components/Engine/engineSettings";
 import { WeatherType } from "@/components/Engine/environments/weather";
 
 // Use modern defineModel for v-model binding (no local mirror ref needed)
 const open = defineModel<boolean>({ required: true });
 const emit = defineEmits<{ (e: "requestReload"): void }>();
 
-const dialog = useSettingsDialog({ onRequestReload: () => emit("requestReload") });
+const settings = useSettingsStore();
+const dialog = useSettingsDialog(() => emit("requestReload"));
 
-// Call lifecycle when dialog opens/closes
+// Local, ephemeral tab state
+const tab = ref<"game" | "graphics">("game");
+
+// Call lifecycle when dialog opens
 watch(
   () => open.value,
   (v) => {
     if (v) dialog.onOpen();
-    else dialog.onClose();
   },
   { immediate: true },
 );
 
 const restartNote = "(requires restart)";
 
-const isGameTab = computed(() => dialog.tab.value === "game");
+const isGameTab = computed(() => tab.value === "game");
 
 function closeDialog() {
   open.value = false;
@@ -30,8 +34,10 @@ function closeDialog() {
 
 // Time-of-day UX: expose an hour slider (0..23), map to/from 0..2400 in store
 const hour24 = computed<number>({
-  get: () => Math.round((dialog.timeOfDay2400.value ?? 0) / 100),
-  set: (h: number) => dialog.setTimeOfDayPersist(Math.max(0, Math.min(23, Math.round(h))) * 100),
+  get: () => Math.round((settings.engineSettings.timeOfDay2400 ?? 0) / 100),
+  set: (h: number) => {
+    settings.engineSettings.timeOfDay2400 = Math.max(0, Math.min(23, Math.round(h))) * 100;
+  },
 });
 
 function fmtHour(h: number): string {
@@ -49,12 +55,12 @@ function fmtHour(h: number): string {
       </v-card-subtitle>
       <v-divider class="my-2" />
       <v-card-text class="d-flex flex-column ga-5">
-        <v-tabs v-model="dialog.tab.value" color="primary" class="mb-4">
+        <v-tabs v-model="tab" color="primary" class="mb-4">
           <v-tab value="game">Game</v-tab>
           <v-tab value="graphics">Graphics</v-tab>
         </v-tabs>
 
-        <v-window v-model="dialog.tab.value">
+        <v-window v-model="tab">
           <!-- Game tab -->
           <v-window-item value="game">
             <div class="d-flex flex-column ga-5">
@@ -62,12 +68,7 @@ function fmtHour(h: number): string {
               <div>
                 <div class="text-subtitle-2 mb-2">Overlays & Layers</div>
                 <div class="d-flex flex-wrap ga-4">
-                  <v-switch
-                    v-model="dialog.localEngine.showGrid"
-                    label="Show Grid"
-                    inset
-                    @update:model-value="dialog.setShowGrid"
-                  />
+                  <v-switch v-model="settings.engineSettings.showGrid" label="Show Grid" inset />
                 </div>
               </div>
 
@@ -92,19 +93,17 @@ function fmtHour(h: number): string {
                       </template>
                     </v-slider>
                     <v-switch
-                      v-model="dialog.isClockRunning.value"
+                      v-model="settings.engineSettings.isClockRunning"
                       label="Run environment clock"
                       inset
-                      @update:model-value="dialog.setClockRunningPersist"
                     />
                   </div>
                   <div class="d-flex flex-wrap ga-4">
                     <v-select
                       :items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]"
-                      v-model.number="dialog.month.value"
+                      v-model.number="settings.engineSettings.month"
                       label="Month (1–12)"
                       density="comfortable"
-                      @update:model-value="dialog.setMonthPersist"
                     />
                     <v-select
                       :items="[
@@ -116,10 +115,9 @@ function fmtHour(h: number): string {
                       ]"
                       item-title="title"
                       item-value="value"
-                      v-model="dialog.weatherType.value"
+                      v-model="settings.engineSettings.weatherType"
                       label="Weather"
                       density="comfortable"
-                      @update:model-value="dialog.setWeatherPersist"
                     />
                   </div>
                 </div>
@@ -129,22 +127,27 @@ function fmtHour(h: number): string {
               <div>
                 <div class="text-subtitle-2 mb-2">Camera</div>
                 <v-switch
-                  v-model="dialog.localEngine.manualTilt"
+                  v-model="settings.engineSettings.manualTilt"
                   label="Manual Camera"
                   inset
-                  @update:model-value="dialog.setManualTilt"
                 />
               </div>
 
               <!-- Debug -->
               <div>
                 <div class="text-subtitle-2 mb-2">Debug</div>
-                <v-switch
-                  v-model="dialog.logicDebug.value"
-                  label="Logic mesh debug overlay"
-                  inset
-                  @update:model-value="dialog.setLogicDebug"
-                />
+                <div class="d-flex ga-4">
+                  <v-switch
+                    v-model="settings.engineSettings.enableFogOfWar"
+                    label="Enable Fog of War"
+                    inset
+                  />
+                  <v-switch
+                    v-model="settings.engineSettings.enableDebug"
+                    label="Logic mesh debug overlay"
+                    inset
+                  />
+                </div>
               </div>
             </div>
           </v-window-item>
@@ -156,18 +159,13 @@ function fmtHour(h: number): string {
               <div>
                 <div class="text-subtitle-2 mb-2">Preset</div>
                 <v-select
-                  :items="EngineOptionPresets"
+                  :items="engineSettingPresets"
                   item-title="label"
                   item-value="id"
-                  v-model="dialog.localPresetId.value"
+                  v-model="dialog.localPresetId"
                   label="Quality Preset"
                   density="comfortable"
-                  @update:model-value="
-                    (id: string) => {
-                      const p = EngineOptionPresets.find((x) => x.id === id);
-                      if (p) Object.assign(dialog.localEngine, p.value);
-                    }
-                  "
+                  @update:model-value="(v) => dialog.loadPreset(v.value)"
                 />
               </div>
 
@@ -181,14 +179,14 @@ function fmtHour(h: number): string {
                     max="2"
                     step="0.05"
                     thumb-label="always"
-                    v-model.number="dialog.localEngine.renderScale"
+                    v-model.number="dialog.localGraphicsSettings.renderScale"
                     label="Render scale"
                     hint="Scales internal render resolution. Lower = faster (0.5), higher = crisper (1.25). Impact: medium"
                     persistent-hint
                   />
                   <v-switch
-                    v-model="dialog.localEngine.adaptToDeviceRatio"
-                    :label="`Adapt to device pixel ratio ${restartNote}`"
+                    v-model="dialog.localGraphicsSettings.adaptToDeviceRatio"
+                    label="Adapt to device pixel ratio"
                     hint="Use devicePixelRatio for base resolution. Improves clarity on HiDPI; can be heavier on GPU. Impact: medium"
                     persistent-hint
                     inset
@@ -201,28 +199,28 @@ function fmtHour(h: number): string {
                 <div class="text-subtitle-2 mb-2">GPU Context</div>
                 <div class="d-flex flex-wrap ga-4">
                   <v-switch
-                    v-model="dialog.localEngine.antialias"
+                    v-model="dialog.localGraphicsSettings.antialias"
                     :label="`Antialias ${restartNote}`"
                     hint="Enable multi-sample antialiasing at context level. Smoother edges. Impact: low–medium"
                     persistent-hint
                     inset
                   />
                   <v-switch
-                    v-model="dialog.localEngine.preserveDrawingBuffer"
+                    v-model="dialog.localGraphicsSettings.preserveDrawingBuffer"
                     :label="`Preserve drawing buffer ${restartNote}`"
                     hint="Keeps previous frame buffer. Needed for screenshots on some platforms; increases memory. Impact: low"
                     persistent-hint
                     inset
                   />
                   <v-switch
-                    v-model="dialog.localEngine.stencil"
+                    v-model="dialog.localGraphicsSettings.stencil"
                     :label="`Stencil buffer ${restartNote}`"
                     hint="Enable stencil buffer support. Required for some effects. Impact: low"
                     persistent-hint
                     inset
                   />
                   <v-switch
-                    v-model="dialog.localEngine.disableWebGL2Support"
+                    v-model="dialog.localGraphicsSettings.disableWebGL2Support"
                     :label="`Disable WebGL2 ${restartNote}`"
                     hint="Force WebGL1 for compatibility. Generally slower and less featureful."
                     persistent-hint
@@ -230,7 +228,7 @@ function fmtHour(h: number): string {
                   />
                   <v-select
                     :items="['default', 'high-performance', 'low-power']"
-                    v-model="dialog.localEngine.powerPreference"
+                    v-model="dialog.localGraphicsSettings.powerPreference"
                     :label="`Power preference ${restartNote}`"
                     hint="Request GPU power profile from browser/OS. Might be ignored depending on platform."
                     persistent-hint
@@ -244,21 +242,21 @@ function fmtHour(h: number): string {
                 <div class="text-subtitle-2 mb-2">Visual effects</div>
                 <div class="d-flex flex-wrap ga-4">
                   <v-switch
-                    v-model="dialog.localEngine.hdr"
+                    v-model="dialog.localGraphicsSettings.hdr"
                     label="HDR"
                     hint="High dynamic range rendering for brighter brights and deeper darks (when supported). Impact: medium"
                     persistent-hint
                     inset
                   />
                   <v-switch
-                    v-model="dialog.localEngine.useFxaa"
+                    v-model="dialog.localGraphicsSettings.useFxaa"
                     label="FXAA"
                     hint="Fast Approximate Anti-Aliasing. Smooths jagged edges at low cost. Impact: low"
                     persistent-hint
                     inset
                   />
                   <v-switch
-                    v-model="dialog.localEngine.useBloom"
+                    v-model="dialog.localGraphicsSettings.useBloom"
                     label="Bloom"
                     hint="Glowing halo around bright areas. Tune threshold/weight below. Impact: medium–high"
                     persistent-hint
@@ -270,8 +268,8 @@ function fmtHour(h: number): string {
                     max="1"
                     step="0.01"
                     thumb-label
-                    :disabled="!dialog.localEngine.useBloom"
-                    v-model.number="dialog.localEngine.bloomThreshold"
+                    :disabled="!dialog.localGraphicsSettings.useBloom"
+                    v-model.number="dialog.localGraphicsSettings.bloomThreshold"
                     label="Bloom threshold"
                     hint="How bright a pixel must be to start glowing. Lower = more areas bloom. Impact: low"
                     persistent-hint
@@ -282,8 +280,8 @@ function fmtHour(h: number): string {
                     max="1"
                     step="0.01"
                     thumb-label
-                    :disabled="!dialog.localEngine.useBloom"
-                    v-model.number="dialog.localEngine.bloomWeight"
+                    :disabled="!dialog.localGraphicsSettings.useBloom"
+                    v-model.number="dialog.localGraphicsSettings.bloomWeight"
                     label="Bloom weight"
                     hint="Strength of the bloom effect. Higher = stronger glow. Impact: low"
                     persistent-hint
@@ -298,18 +296,18 @@ function fmtHour(h: number): string {
       <v-card-actions class="justify-space-between ga-2 flex-wrap">
         <div class="text-caption text-medium-emphasis">
           <template v-if="!isGameTab">
-            <span v-if="dialog.isGraphicsDirty.value">You have unapplied changes</span>
+            <span v-if="dialog.isGraphicsDirty">You have unapplied changes</span>
             <span v-else>No pending changes</span>
           </template>
           <template v-else>
-            <span v-if="dialog.isGameDirty.value">Changes take effect immediately</span>
+            <span v-if="dialog.isGameDirty">Changes take effect immediately</span>
             <span v-else>No changes</span>
           </template>
         </div>
         <div class="d-flex ga-2">
           <template v-if="isGameTab">
             <v-btn variant="text" @click="dialog.cancelGame(closeDialog)">Cancel</v-btn>
-            <v-btn variant="text" :disabled="!dialog.isGameDirty.value" @click="dialog.revertGame"
+            <v-btn variant="text" :disabled="!dialog.isGameDirty" @click="dialog.revertGame"
               >Revert</v-btn
             >
             <v-btn color="primary" variant="flat" @click="closeDialog">Close</v-btn>
@@ -318,14 +316,14 @@ function fmtHour(h: number): string {
             <v-btn variant="text" @click="dialog.cancelGraphics(closeDialog)">Cancel</v-btn>
             <v-btn
               variant="tonal"
-              :disabled="!dialog.isGraphicsDirty.value"
+              :disabled="!dialog.isGraphicsDirty"
               @click="dialog.revertGraphics"
               >Revert</v-btn
             >
             <v-btn
               color="primary"
               variant="flat"
-              :disabled="!dialog.isGraphicsDirty.value"
+              :disabled="!dialog.isGraphicsDirty"
               @click="dialog.applyGraphics(closeDialog)"
               >Apply</v-btn
             >
