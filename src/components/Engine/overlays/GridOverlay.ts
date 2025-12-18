@@ -12,6 +12,8 @@ import type { GameKey } from "@/objects/game/_GameObject";
 import type { Coords } from "@/helpers/mapTools";
 import { tileHeight } from "@/helpers/mapTools";
 import { tileCenter } from "@/helpers/math";
+import { watch } from "vue";
+import { useSettingsStore } from "@/stores/settingsStore";
 
 // ---- Tuning constants (adjust freely) ----
 export const GRID_COLOR = new Color3(1, 1, 1); // white
@@ -35,16 +37,7 @@ export class GridOverlay {
     this.size = size;
     this.tilesByKey = tilesByKey;
     this.root = new TransformNode("gridOverlayRoot", scene);
-    this.build();
-  }
 
-  dispose(): void {
-    for (const c of this.chunks) c.dispose();
-    this.root.dispose();
-    this.chunks = [];
-  }
-
-  private build(): void {
     // Build chunks covering the whole map
     this.totalLinesCount = 0;
     for (let y0 = 0; y0 < this.size.y; y0 += GRID_CHUNK_SIZE) {
@@ -54,6 +47,19 @@ export class GridOverlay {
         this.buildChunk(x0, y0, x1, y1);
       }
     }
+
+    const settings = useSettingsStore();
+    this.root.setEnabled(settings.engineSettings.showGrid);
+    watch(
+      () => settings.engineSettings.showGrid,
+      (visible) => this.root.setEnabled(visible),
+    );
+  }
+
+  dispose(): void {
+    for (const c of this.chunks) c.dispose();
+    this.root.dispose();
+    this.chunks = [];
   }
 
   private buildChunk(x0: number, y0: number, x1: number, y1: number): void {

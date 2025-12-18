@@ -56,7 +56,7 @@ export const useAppStore = defineStore("app", {
       if (!minimapCanvas) throw new Error("Minimap canvas `#minimap-canvas` not found");
 
       this.engineService = markRaw(
-        new EngineService(size, engineCanvas, minimapCanvas, settings.engine),
+        new EngineService(size, engineCanvas, minimapCanvas),
       );
 
       await asyncProcess(
@@ -92,14 +92,6 @@ export const useAppStore = defineStore("app", {
           () => useEncyclopediaStore().init(),
           () => settings.init(),
           ...this.engineService.initOrder(),
-          () => {
-            this.engineService.environmentService.setTimeOfDay(settings.environment.timeOfDay2400);
-            this.engineService.environmentService.setIsClockRunning(
-              settings.environment.isClockRunning,
-            );
-            this.engineService.environmentService.setMonth(settings.environment.month);
-            this.engineService.environmentService.setWeather(settings.environment.weatherType);
-          },
           () => useGovernmentTabStore().init(),
           () => useCultureTabStore().init(),
           () => useResearchTabStore().init(),

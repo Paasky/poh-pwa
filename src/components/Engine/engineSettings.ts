@@ -27,7 +27,8 @@ export type EngineSettings = {
   powerPreference: WebGLPowerPreference; // "default" | "high-performance" | "low-power"
 
   // Visual effects (post-process pipeline)
-  hdr: boolean; // Enable HDR pipeline when supported
+  // todo allow disabling all post-processing (enablePostProcessing)
+  hdr: boolean; // Enable HDR pipeline when supported  (restart required)
   useFxaa: boolean; // FXAA post-process
   useBloom: boolean; // Bloom post-process
   bloomThreshold: number; // 0..1
@@ -66,6 +67,7 @@ export const restartRequiredSettingKeys: (keyof EngineSettings)[] = [
   "stencil",
   "disableWebGL2Support",
   "powerPreference",
+  "hdr",
 ];
 
 // This is the same as "high" preset

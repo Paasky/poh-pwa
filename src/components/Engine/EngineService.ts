@@ -30,7 +30,8 @@ import type { GameKey } from "@/objects/game/_GameObject";
 import { Coords, getCoordsFromTileKey } from "@/helpers/mapTools";
 import { EngineCoords } from "@/factories/TerrainMeshBuilder/_terrainMeshTypes";
 import { useSettingsStore } from "@/stores/settingsStore";
-import { EngineSettings, restartRequiredSettingKeys } from "@/components/Engine/engineSettings";
+import { EngineSettings } from "@/components/Engine/engineSettings";
+import { watch } from "vue";
 
 // noinspection JSUnusedGlobalSymbols
 export class EngineService {
@@ -83,20 +84,21 @@ export class EngineService {
     // eslint-disable-next-line
     (document as any).engineService = this;
 
+    const settings = useSettingsStore()
+    this.applyRenderScale(settings.engineSettings.renderScale);
+    watch(
+      () => settings.engineSettings.renderScale,
+      (scale) => this.applyRenderScale(scale),
+    );
+
     return this;
   }
 
   initCamera(): this {
-    this.applyRenderScale(this.settings.renderScale);
-    this.mainCamera = new MainCamera(this.size, this.scene, this.canvas, {
-      manualTilt: this.settings.manualTilt,
-    });
+    this.mainCamera = new MainCamera(this.size, this.scene, this.canvas);
     this.camera = this.mainCamera.camera;
 
     this.flyToCurrentPlayer();
-
-    // Initialize camera-dependent visuals immediately
-    this.applyCameraZoomEffects();
 
     return this;
   }
@@ -129,9 +131,6 @@ export class EngineService {
     if (!this.gridOverlay) {
       this.gridOverlay = new GridOverlay(this.scene, this.size, useObjectsStore().getTiles);
     }
-    this.gridOverlay.setVisible(this.settings.showGrid);
-    // Apply initial thickness based on current zoom
-    this.applyCameraZoomEffects();
     return this;
   }
 
@@ -163,9 +162,12 @@ export class EngineService {
 
   render(): this {
     this.engine.runRenderLoop(() => {
+      // todo: the env service should run according to an internal clock, not the rendering framerate
       // Tick environment (clock/effects) before rendering
       const deltaSeconds = this.engine.getDeltaTime() / 1000;
       this.environmentService.update(deltaSeconds);
+
+      // todo: should this only run on zoom change, not on _every frame_ ?
       // Centralized camera-position dependent adjustments
       this.applyCameraZoomEffects();
       this.scene.render();
@@ -183,7 +185,6 @@ export class EngineService {
    * Keep KISS: calculate normalized zoom and drive overlays from here.
    */
   private applyCameraZoomEffects(): void {
-    if (!this.camera) return;
     // Normalize zoom: 0 at max zoom-out (upperRadius), 1 at max zoom-in (lowerRadius)
     const lower = this.camera.lowerRadiusLimit ?? 10;
     const upper = this.camera.upperRadiusLimit ?? 100;
@@ -191,6 +192,7 @@ export class EngineService {
     const r = this.camera.radius;
     const norm = clamp((upper - r) / denom, 0, 1);
 
+    // todo: we have plenty of other zoom-dependant settings (camera tilt, more?) Find them and centralize here
     // Grid thickness scaling: 0.25x at max out -> 1.5x at max in
     const thicknessScale = 0.25 + norm * 1.25;
     if (this.gridOverlay) this.gridOverlay.setThicknessScale(thicknessScale);
@@ -298,38 +300,9 @@ export class EngineService {
     this.engine.resize();
   };
 
-  // --- Options application helpers ---
   private applyRenderScale(scale: number) {
     const safeScale = Math.max(0.25, Math.min(2, scale || 1));
     const level = 1 / safeScale;
     this.engine.setHardwareScalingLevel(level);
-  }
-
-  applyOptions(next: EngineSettings): { restartKeysChanged: (keyof EngineSettings)[] } {
-    const prev = this.settings;
-    this.settings = { ...prev, ...next };
-
-    // Collect restart-required changes
-    const restartKeysChanged: (keyof EngineSettings)[] = [];
-    for (const k of restartRequiredSettingKeys) {
-      if (prev[k] !== this.settings[k]) restartKeysChanged.push(k);
-    }
-
-    // Live-applied options
-    if (prev.renderScale !== this.settings.renderScale) {
-      this.applyRenderScale(this.settings.renderScale);
-    }
-    if (prev.manualTilt !== this.settings.manualTilt) {
-      this.mainCamera.setManualTilt(this.settings.manualTilt);
-    }
-    if (prev.showGrid !== this.settings.showGrid) {
-      // todo: no, the grid should be created on init, and only hidden/shown
-      // Create overlay on demand if needed
-      if (!this.gridOverlay) {
-        this.gridOverlay = new GridOverlay(this.scene, this.size, useObjectsStore().getTiles);
-      }
-      this.gridOverlay.setVisible(this.settings.showGrid);
-    }
-    return { restartKeysChanged };
   }
 }

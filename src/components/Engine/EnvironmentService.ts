@@ -17,6 +17,8 @@ import {
   Scene,
   Vector3,
 } from "@babylonjs/core";
+import { watch } from "vue";
+import { useSettingsStore } from "@/stores/settingsStore";
 import { EnvironmentHelper } from "@babylonjs/core/Helpers/environmentHelper";
 import { DefaultRenderingPipeline } from "@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/defaultRenderingPipeline";
 
@@ -27,15 +29,12 @@ import {
 import { defaultMonth } from "@/components/Engine/environments/season";
 import { defaultWeatherType, WeatherType } from "@/components/Engine/environments/weather";
 import {
-  DefaultPostProcessingOptions,
-  defaultPostProcessingOptions,
-} from "@/components/Engine/environments/postFx";
-import {
   clockHoursPerRealMinute,
   isClockRunning,
   timeOfDay2400,
   wrapTime2400,
 } from "@/components/Engine/environments/clock";
+import { EngineSettings } from "@/components/Engine/engineSettings";
 
 export { WeatherType };
 
@@ -48,8 +47,6 @@ export type EnvironmentServiceConfig = {
   enableShadows: boolean;
   /** Enable the default post-processing pipeline (FXAA, Bloom). */
   enablePostProcessing: boolean;
-  /** Post-processing default options (thresholds, toggles). */
-  postProcessingOptions: DefaultPostProcessingOptions;
   /**
    * Clock rate: how many in-game hours pass per one real-time minute when the clock is running.
    * Example: 1.0 means 1 in-game hour per real minute.
@@ -75,7 +72,6 @@ const defaultEnvironmentServiceConfig: EnvironmentServiceConfig = {
   skyboxSizeWorldUnits: 1000,
   enableShadows: false,
   enablePostProcessing: true,
-  postProcessingOptions: defaultPostProcessingOptions,
   // Run fast by default so cycle is clearly visible: 1 in-game hour per 1 real second
   // 60 in-game hours per real minute
   clockHoursPerRealMinute: 60.0,
@@ -137,7 +133,6 @@ export class EnvironmentService {
     // Set up the environment and core lights with safe defaults.
     this.setupEnvironmentSkyboxAndTexture();
     this.setupLights();
-    this.setupPostProcessingIfEnabled();
 
     // Apply initial weather preset (fog/intensity) based on defaults
     this.applyWeatherPreset(this.targetWeatherType);
@@ -146,6 +141,53 @@ export class EnvironmentService {
     // Initialize sun direction/intensity from time of day and start clock if needed
     this.updateSunFromTimeOfDay(timeOfDay2400.value);
     if (isClockRunning.value) this.startClockInterval();
+
+    // --- Settings watchers (each key independently) ---
+    const settings = useSettingsStore();
+
+    // Time of day (0..2400)
+    this.setTimeOfDay(settings.engineSettings.timeOfDay2400)
+    watch(
+      () => settings.engineSettings.timeOfDay2400,
+      (v) => this.setTimeOfDay(v),
+    );
+    // Clock running toggle
+    this.setIsClockRunning(settings.engineSettings.isClockRunning)
+    watch(
+      () => settings.engineSettings.isClockRunning,
+      (v) => this.setIsClockRunning(v),
+    );
+    // Month 1..12
+    this.setMonth(settings.engineSettings.month)
+    watch(
+      () => settings.engineSettings.month,
+      (v) => this.setMonth(v),
+    );
+    // Weather type
+    this.setWeather(settings.engineSettings.weatherType)
+    watch(
+      () => settings.engineSettings.weatherType,
+      (v) => this.setWeather(v),
+    );
+
+    // FX toggles and params
+    this.setPostProcessing(settings.engineSettings);
+    watch(
+      () => settings.engineSettings.useFxaa,
+      (v) => this.setPostProcessing({ useFxaa: v }),
+    );
+    watch(
+      () => settings.engineSettings.useBloom,
+      (v) => this.setPostProcessing({ useBloom: v }),
+    );
+    watch(
+      () => settings.engineSettings.bloomThreshold,
+      (v) => this.setPostProcessing({ bloomThreshold: v }),
+    );
+    watch(
+      () => settings.engineSettings.bloomWeight,
+      (v) => this.setPostProcessing({ bloomWeight: v }),
+    );
   }
 
   /** Update the target time of day using a 24-hour clock encoded as 0..2400 integers.
@@ -298,41 +340,33 @@ export class EnvironmentService {
     // TODO: Optional shadow generator can be created here if/when needed.
   }
 
-  // todo can this be combined with setPostProcessingOptions()?
-  private setupPostProcessingIfEnabled(): void {
-    // todo: If the pipeline is setup, dispose it and set to undefined
-    if (!this.configuration.enablePostProcessing) return;
-
-    const post = new DefaultRenderingPipeline("defaultRenderingPipeline", true, this.scene, [
-      this.camera,
-    ]);
-    this.renderingPipeline = post;
-
-    // FXAA
-    post.fxaaEnabled = this.configuration.postProcessingOptions.enableFastApproximateAntialiasing;
-
-    // Bloom
-    post.bloomEnabled = this.configuration.postProcessingOptions.enableBloom;
-    post.bloomThreshold = this.configuration.postProcessingOptions.bloomThreshold;
-    post.bloomWeight = this.configuration.postProcessingOptions.bloomWeight;
-  }
-
   /**
    * Update post-processing options at runtime. Safe to call even if the pipeline is disabled.
    * Only provided fields are applied.
    */
-  public setPostProcessingOptions(options: Partial<DefaultPostProcessingOptions>): void {
-    // Update stored configuration so future resets remain consistent
-    this.configuration.postProcessingOptions = {
-      ...this.configuration.postProcessingOptions,
-      ...options,
-    };
-    if (!this.renderingPipeline) return;
-    if (options.enableFastApproximateAntialiasing !== undefined) {
-      this.renderingPipeline.fxaaEnabled = options.enableFastApproximateAntialiasing;
+  public setPostProcessing(options: Partial<EngineSettings>): void {
+    if (!this.configuration.enablePostProcessing) {
+      if (this.renderingPipeline) {
+        this.renderingPipeline.dispose();
+        this.renderingPipeline = undefined;
+      }
+      return;
     }
-    if (options.enableBloom !== undefined) {
-      this.renderingPipeline.bloomEnabled = options.enableBloom;
+
+    if (!this.renderingPipeline){
+      this.renderingPipeline = new DefaultRenderingPipeline(
+        "defaultRenderingPipeline",
+        options.hdr,
+        this.scene,
+        [this.camera],
+      );
+    }
+
+    if (options.useFxaa !== undefined) {
+      this.renderingPipeline.fxaaEnabled = options.useFxaa;
+    }
+    if (options.useBloom !== undefined) {
+      this.renderingPipeline.bloomEnabled = options.useBloom;
     }
     if (options.bloomThreshold !== undefined) {
       this.renderingPipeline.bloomThreshold = options.bloomThreshold;

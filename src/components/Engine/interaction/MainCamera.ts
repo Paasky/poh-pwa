@@ -5,6 +5,8 @@ import {
   Scene,
   Vector3,
 } from "@babylonjs/core";
+import { watch } from "vue";
+import { useSettingsStore } from "@/stores/settingsStore";
 import { Coords } from "@/helpers/mapTools";
 import { getWorldMaxX, getWorldMinX, getWorldWidth } from "@/helpers/math";
 
@@ -15,7 +17,6 @@ export type MainCameraOptions = {
   minTilt?: number;
   maxZoomIn?: number;
   maxZoomOut?: number;
-  manualTilt?: boolean;
 };
 
 export const rot30 = Math.PI / 6;
@@ -69,7 +70,6 @@ export class MainCamera {
     this.camera.useAutoRotationBehavior = false;
     this._rotationInput.buttons = [1, 2];
     this._rotationInput.panningSensibility = 0;
-    this.setManualTilt(!!opts?.manualTilt);
 
     // Left-button panning
     this.installPanning();
@@ -84,6 +84,13 @@ export class MainCamera {
 
     // Wrap/clamp/autotilt each frame
     this.installViewMatrixObserver();
+
+    const settings = useSettingsStore();
+    this.setManualTilt(settings.engineSettings.manualTilt);
+    watch(
+      () => settings.engineSettings.manualTilt,
+      (enabled) => this.setManualTilt(enabled),
+    );
   }
 
   setManualTilt(enabled: boolean): void {

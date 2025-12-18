@@ -18,6 +18,7 @@ import {
   VertexData,
 } from "@babylonjs/core";
 import { useSettingsStore } from "@/stores/settingsStore";
+import { watch } from "vue";
 
 /**
  * LogicMeshBuilder
@@ -71,9 +72,14 @@ export class LogicMeshBuilder {
     this.baseHexMesh.thinInstanceEnablePicking = true;
     this.baseHexMesh.freezeWorldMatrix();
 
-    this.applyDebugVisibility();
-
     this.attachPointerObservers();
+
+    const settings = useSettingsStore();
+    this.baseHexMesh.visibility = settings.engineSettings.enableDebug ? 1 : 0;
+    watch(
+      () => settings.engineSettings.enableDebug,
+      () => this.baseHexMesh.visibility = useSettingsStore().engineSettings.enableDebug ? 1 : 0,
+    );
 
     return this;
   }
@@ -272,14 +278,6 @@ export class LogicMeshBuilder {
   private static matrixFromPosition(x: number, y: number, z: number): Float32Array {
     // Column‑major 4x4 translation matrix
     return new Float32Array([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, x, y, z, 1]);
-  }
-
-  private applyDebugVisibility(): void {
-    if (useSettingsStore().engineSettings.enableDebug) {
-      this.baseHexMesh.visibility = 1;
-    } else {
-      this.baseHexMesh.visibility = 0;
-    }
   }
 
   private buildDetails(

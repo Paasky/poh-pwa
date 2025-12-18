@@ -2,7 +2,11 @@
 import { computed, ref, watch } from "vue";
 import { useSettingsDialog } from "@/composables/useSettingsDialog";
 import { useSettingsStore } from "@/stores/settingsStore";
-import { engineSettingPresets } from "@/components/Engine/engineSettings";
+import {
+  engineSettingPresets,
+  restartRequiredSettingKeys,
+  type EngineSettings,
+} from "@/components/Engine/engineSettings";
 import { WeatherType } from "@/components/Engine/environments/weather";
 
 // Use modern defineModel for v-model binding (no local mirror ref needed)
@@ -25,6 +29,10 @@ watch(
 );
 
 const restartNote = "(requires restart)";
+
+function labelFor<K extends keyof EngineSettings>(key: K, base: string): string {
+  return restartRequiredSettingKeys.includes(key) ? `${base} ${restartNote}` : base;
+}
 
 const isGameTab = computed(() => tab.value === "game");
 
@@ -200,28 +208,28 @@ function fmtHour(h: number): string {
                 <div class="d-flex flex-wrap ga-4">
                   <v-switch
                     v-model="dialog.localGraphicsSettings.antialias"
-                    :label="`Antialias ${restartNote}`"
+                    :label="labelFor('antialias', 'Antialias')"
                     hint="Enable multi-sample antialiasing at context level. Smoother edges. Impact: low–medium"
                     persistent-hint
                     inset
                   />
                   <v-switch
                     v-model="dialog.localGraphicsSettings.preserveDrawingBuffer"
-                    :label="`Preserve drawing buffer ${restartNote}`"
+                    :label="labelFor('preserveDrawingBuffer', 'Preserve drawing buffer')"
                     hint="Keeps previous frame buffer. Needed for screenshots on some platforms; increases memory. Impact: low"
                     persistent-hint
                     inset
                   />
                   <v-switch
                     v-model="dialog.localGraphicsSettings.stencil"
-                    :label="`Stencil buffer ${restartNote}`"
+                    :label="labelFor('stencil', 'Stencil buffer')"
                     hint="Enable stencil buffer support. Required for some effects. Impact: low"
                     persistent-hint
                     inset
                   />
                   <v-switch
                     v-model="dialog.localGraphicsSettings.disableWebGL2Support"
-                    :label="`Disable WebGL2 ${restartNote}`"
+                    :label="labelFor('disableWebGL2Support', 'Disable WebGL2')"
                     hint="Force WebGL1 for compatibility. Generally slower and less featureful."
                     persistent-hint
                     inset
@@ -229,7 +237,7 @@ function fmtHour(h: number): string {
                   <v-select
                     :items="['default', 'high-performance', 'low-power']"
                     v-model="dialog.localGraphicsSettings.powerPreference"
-                    :label="`Power preference ${restartNote}`"
+                    :label="labelFor('powerPreference', 'Power preference')"
                     hint="Request GPU power profile from browser/OS. Might be ignored depending on platform."
                     persistent-hint
                     density="comfortable"
