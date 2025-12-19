@@ -48,7 +48,7 @@ describe("gameDataLoader", () => {
       name: "test player",
     };
     expect(() => loader.initFromRaw({ objects: [playerData] } as GameData)).toThrow(
-      `GameObject.key: 'player:1', Attribute: ${JSON.stringify(Player.attrsConf[0])}, Message: Related object 'culture:1' does not exist. Raw data: ${JSON.stringify({ ...playerData, isCurrent: false })}`,
+      `GameObject.key: 'player:1', Attribute: ${JSON.stringify(Player.attrsConf[0])}, Message: Related object 'culture:1' does not exist. Raw data: ${JSON.stringify({ ...playerData, isCurrent: false, isMinor: false })}`,
     );
   });
 
@@ -167,7 +167,7 @@ describe("gameDataLoader", () => {
       "construction:1": { ...constructionData, health: 100, progress: 0 },
       "culture:1": cultureData,
       "deal:1": dealData,
-      "player:1": { ...playerData, isCurrent: false },
+      "player:1": { ...playerData, isCurrent: false, isMinor: false },
       "religion:1": { ...religionData, status: "myths" },
       "tile:x12,y23": tileData,
       "tradeRoute:1": tradeRouteData,
@@ -192,6 +192,7 @@ describe("gameDataLoader", () => {
       name: "test player",
       cultureKey: "culture:1",
       isCurrent: true,
+      isMinor: true,
     };
 
     const cultureData = {

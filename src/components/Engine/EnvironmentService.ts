@@ -146,25 +146,25 @@ export class EnvironmentService {
     const settings = useSettingsStore();
 
     // Time of day (0..2400)
-    this.setTimeOfDay(settings.engineSettings.timeOfDay2400)
+    this.setTimeOfDay(settings.engineSettings.timeOfDay2400);
     watch(
       () => settings.engineSettings.timeOfDay2400,
       (v) => this.setTimeOfDay(v),
     );
     // Clock running toggle
-    this.setIsClockRunning(settings.engineSettings.isClockRunning)
+    this.setIsClockRunning(settings.engineSettings.isClockRunning);
     watch(
       () => settings.engineSettings.isClockRunning,
       (v) => this.setIsClockRunning(v),
     );
     // Month 1..12
-    this.setMonth(settings.engineSettings.month)
+    this.setMonth(settings.engineSettings.month);
     watch(
       () => settings.engineSettings.month,
       (v) => this.setMonth(v),
     );
     // Weather type
-    this.setWeather(settings.engineSettings.weatherType)
+    this.setWeather(settings.engineSettings.weatherType);
     watch(
       () => settings.engineSettings.weatherType,
       (v) => this.setWeather(v),
@@ -353,7 +353,7 @@ export class EnvironmentService {
       return;
     }
 
-    if (!this.renderingPipeline){
+    if (!this.renderingPipeline) {
       this.renderingPipeline = new DefaultRenderingPipeline(
         "defaultRenderingPipeline",
         options.hdr,

@@ -4,8 +4,9 @@ import { defineStore } from "pinia";
 import { useObjectsStore } from "@/stores/objectStore";
 import type { Player } from "@/objects/game/Player";
 import { TypeKey } from "@/types/common";
-import { TypeObject, typeTimeline } from "@/types/typeObjects";
+import { TypeObject } from "@/types/typeObjects";
 import type { TableColumn } from "@/components/Ui/UiTable.vue";
+import { typeTimeline } from "@/helpers/types";
 
 export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
   const objStore = useObjectsStore();

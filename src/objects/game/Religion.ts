@@ -33,12 +33,16 @@ export class Religion extends GameObject {
     this.cityKey = cityKey;
     this.city = hasOne<City>(this.cityKey, `${this.key}.city`);
 
-    watch(this.canSelect, (newValue, oldValue) => {
-      if (!oldValue && newValue) {
-        // eslint-disable-next-line
-        useEventStore().turnEvents.push(new ReligionCanSelect(this) as any);
-      }
-    });
+    watch(
+      this.canSelect,
+      (newValue, oldValue) => {
+        if (!oldValue && newValue) {
+          // eslint-disable-next-line
+          useEventStore().turnEvents.push(new ReligionCanSelect(this) as any);
+        }
+      },
+      { immediate: false },
+    );
   }
 
   static attrsConf: GameObjAttr[] = [
@@ -95,6 +99,9 @@ export class Religion extends GameObject {
   });
 
   canSelect = computed(() => {
+    // Prevent crashing when objStore is not fully loaded yet
+    if (!useObjectsStore().ready) return false;
+
     const holyCityOwner = this.city.value.player.value;
     // If the holy city owner doesn't follow the religion: can never select
     if (holyCityOwner.religionKey.value !== this.key) {

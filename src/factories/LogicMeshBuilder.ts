@@ -78,7 +78,7 @@ export class LogicMeshBuilder {
     this.baseHexMesh.visibility = settings.engineSettings.enableDebug ? 1 : 0;
     watch(
       () => settings.engineSettings.enableDebug,
-      () => this.baseHexMesh.visibility = useSettingsStore().engineSettings.enableDebug ? 1 : 0,
+      () => (this.baseHexMesh.visibility = useSettingsStore().engineSettings.enableDebug ? 1 : 0),
     );
 
     return this;

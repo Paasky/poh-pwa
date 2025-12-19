@@ -103,7 +103,7 @@ export class Minimap {
         const rectH = (hexDepth / worldD) * height;
 
         // Replicate Fog of War
-        if (useSettingsStore().engine.enableFogOfWar) {
+        if (useSettingsStore().engineSettings.enableFogOfWar) {
           ctx.fillStyle = "#000";
           for (let y = 0; y < this.size.y; y++) {
             for (let x = 0; x < this.size.x; x++) {

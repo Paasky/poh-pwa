@@ -55,9 +55,7 @@ export const useAppStore = defineStore("app", {
       const minimapCanvas = document.getElementById("minimap-canvas") as HTMLCanvasElement | null;
       if (!minimapCanvas) throw new Error("Minimap canvas `#minimap-canvas` not found");
 
-      this.engineService = markRaw(
-        new EngineService(size, engineCanvas, minimapCanvas),
-      );
+      this.engineService = markRaw(new EngineService(size, engineCanvas, minimapCanvas));
 
       await asyncProcess(
         [

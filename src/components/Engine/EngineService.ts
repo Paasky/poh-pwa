@@ -84,7 +84,7 @@ export class EngineService {
     // eslint-disable-next-line
     (document as any).engineService = this;
 
-    const settings = useSettingsStore()
+    const settings = useSettingsStore();
     this.applyRenderScale(settings.engineSettings.renderScale);
     watch(
       () => settings.engineSettings.renderScale,

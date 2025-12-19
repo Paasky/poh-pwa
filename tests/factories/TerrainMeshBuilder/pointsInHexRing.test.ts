@@ -62,19 +62,19 @@ export const validK2Data = {
     { x: -0.433, z: 0.75, ringNumFromCenter: 2, edge: "nw" },
     // NW → SW edge
     { x: -0.866, z: 0.5, ringNumFromCenter: 2, corner: "nw" },
-    { x: -0.866, z: 0, ringNumFromCenter: 2, edge: "sw" },
+    { x: -0.866, z: 0, ringNumFromCenter: 2, edge: "w" },
     // SW → S edge
     { x: -0.866, z: -0.5, ringNumFromCenter: 2, corner: "sw" },
-    { x: -0.433, z: -0.75, ringNumFromCenter: 2, edge: "s" },
+    { x: -0.433, z: -0.75, ringNumFromCenter: 2, edge: "sw" },
     // S → SE edge
     { x: 0, z: -1, ringNumFromCenter: 2, corner: "s" },
     { x: 0.433, z: -0.75, ringNumFromCenter: 2, edge: "se" },
     // SE → NE edge
     { x: 0.866, z: -0.5, ringNumFromCenter: 2, corner: "se" },
-    { x: 0.866, z: 0, ringNumFromCenter: 2, edge: "ne" },
+    { x: 0.866, z: 0, ringNumFromCenter: 2, edge: "e" },
     // NE → N edge
     { x: 0.866, z: 0.5, ringNumFromCenter: 2, corner: "ne" },
-    { x: 0.433, z: 0.75, ringNumFromCenter: 2, edge: "n" },
+    { x: 0.433, z: 0.75, ringNumFromCenter: 2, edge: "ne" },
   ],
 };
 
@@ -94,19 +94,19 @@ export const validK3Data = {
     { x: -0.289, z: 0.5, ringNumFromCenter: 2, edge: "nw" },
 
     { x: -0.577, z: 0.333, ringNumFromCenter: 2, corner: "nw" },
-    { x: -0.577, z: 0, ringNumFromCenter: 2, edge: "sw" },
+    { x: -0.577, z: 0, ringNumFromCenter: 2, edge: "w" },
 
     { x: -0.577, z: -0.333, ringNumFromCenter: 2, corner: "sw" },
-    { x: -0.289, z: -0.5, ringNumFromCenter: 2, edge: "s" },
+    { x: -0.289, z: -0.5, ringNumFromCenter: 2, edge: "sw" },
 
     { x: 0, z: -0.667, ringNumFromCenter: 2, corner: "s" },
     { x: 0.289, z: -0.5, ringNumFromCenter: 2, edge: "se" },
 
     { x: 0.577, z: -0.333, ringNumFromCenter: 2, corner: "se" },
-    { x: 0.577, z: 0, ringNumFromCenter: 2, edge: "ne" },
+    { x: 0.577, z: 0, ringNumFromCenter: 2, edge: "e" },
 
     { x: 0.577, z: 0.333, ringNumFromCenter: 2, corner: "ne" },
-    { x: 0.289, z: 0.5, ringNumFromCenter: 2, edge: "n" },
+    { x: 0.289, z: 0.5, ringNumFromCenter: 2, edge: "ne" },
   ],
 
   ring3: [
@@ -118,13 +118,13 @@ export const validK3Data = {
 
     // NW side
     { x: -0.866, z: 0.5, ringNumFromCenter: 3, corner: "nw" },
-    { x: -0.866, z: 0.167, ringNumFromCenter: 3, edge: "sw" },
-    { x: -0.866, z: -0.167, ringNumFromCenter: 3, edge: "sw" },
+    { x: -0.866, z: 0.167, ringNumFromCenter: 3, edge: "w" },
+    { x: -0.866, z: -0.167, ringNumFromCenter: 3, edge: "w" },
 
     // SW side
     { x: -0.866, z: -0.5, ringNumFromCenter: 3, corner: "sw" },
-    { x: -0.577, z: -0.667, ringNumFromCenter: 3, edge: "s" },
-    { x: -0.289, z: -0.833, ringNumFromCenter: 3, edge: "s" },
+    { x: -0.577, z: -0.667, ringNumFromCenter: 3, edge: "sw" },
+    { x: -0.289, z: -0.833, ringNumFromCenter: 3, edge: "sw" },
 
     // S side
     { x: 0, z: -1, ringNumFromCenter: 3, corner: "s" },
@@ -133,13 +133,13 @@ export const validK3Data = {
 
     // SE side
     { x: 0.866, z: -0.5, ringNumFromCenter: 3, corner: "se" },
-    { x: 0.866, z: -0.167, ringNumFromCenter: 3, edge: "ne" },
-    { x: 0.866, z: 0.167, ringNumFromCenter: 3, edge: "ne" },
+    { x: 0.866, z: -0.167, ringNumFromCenter: 3, edge: "e" },
+    { x: 0.866, z: 0.167, ringNumFromCenter: 3, edge: "e" },
 
     // NE side
     { x: 0.866, z: 0.5, ringNumFromCenter: 3, corner: "ne" },
-    { x: 0.577, z: 0.667, ringNumFromCenter: 3, edge: "n" },
-    { x: 0.289, z: 0.833, ringNumFromCenter: 3, edge: "n" },
+    { x: 0.577, z: 0.667, ringNumFromCenter: 3, edge: "ne" },
+    { x: 0.289, z: 0.833, ringNumFromCenter: 3, edge: "ne" },
   ],
 };
 
@@ -159,19 +159,19 @@ export const validK4Data = {
     { x: -0.217, z: 0.375, ringNumFromCenter: 2, edge: "nw" },
 
     { x: -0.433, z: 0.25, ringNumFromCenter: 2, corner: "nw" },
-    { x: -0.433, z: 0, ringNumFromCenter: 2, edge: "sw" },
+    { x: -0.433, z: 0, ringNumFromCenter: 2, edge: "w" },
 
     { x: -0.433, z: -0.25, ringNumFromCenter: 2, corner: "sw" },
-    { x: -0.217, z: -0.375, ringNumFromCenter: 2, edge: "s" },
+    { x: -0.217, z: -0.375, ringNumFromCenter: 2, edge: "sw" },
 
     { x: 0, z: -0.5, ringNumFromCenter: 2, corner: "s" },
     { x: 0.217, z: -0.375, ringNumFromCenter: 2, edge: "se" },
 
     { x: 0.433, z: -0.25, ringNumFromCenter: 2, corner: "se" },
-    { x: 0.433, z: 0, ringNumFromCenter: 2, edge: "ne" },
+    { x: 0.433, z: 0, ringNumFromCenter: 2, edge: "e" },
 
     { x: 0.433, z: 0.25, ringNumFromCenter: 2, corner: "ne" },
-    { x: 0.217, z: 0.375, ringNumFromCenter: 2, edge: "n" },
+    { x: 0.217, z: 0.375, ringNumFromCenter: 2, edge: "ne" },
   ],
 
   // ------- RING 3 (radius = 3/4) -------
@@ -184,13 +184,13 @@ export const validK4Data = {
 
     // NW side
     { x: -0.65, z: 0.375, ringNumFromCenter: 3, corner: "nw" },
-    { x: -0.65, z: 0.125, ringNumFromCenter: 3, edge: "sw" },
-    { x: -0.65, z: -0.125, ringNumFromCenter: 3, edge: "sw" },
+    { x: -0.65, z: 0.125, ringNumFromCenter: 3, edge: "w" },
+    { x: -0.65, z: -0.125, ringNumFromCenter: 3, edge: "w" },
 
     // SW side
     { x: -0.65, z: -0.375, ringNumFromCenter: 3, corner: "sw" },
-    { x: -0.433, z: -0.5, ringNumFromCenter: 3, edge: "s" },
-    { x: -0.217, z: -0.625, ringNumFromCenter: 3, edge: "s" },
+    { x: -0.433, z: -0.5, ringNumFromCenter: 3, edge: "sw" },
+    { x: -0.217, z: -0.625, ringNumFromCenter: 3, edge: "sw" },
 
     // S side
     { x: 0, z: -0.75, ringNumFromCenter: 3, corner: "s" },
@@ -199,13 +199,13 @@ export const validK4Data = {
 
     // SE side
     { x: 0.65, z: -0.375, ringNumFromCenter: 3, corner: "se" },
-    { x: 0.65, z: -0.125, ringNumFromCenter: 3, edge: "ne" },
-    { x: 0.65, z: 0.125, ringNumFromCenter: 3, edge: "ne" },
+    { x: 0.65, z: -0.125, ringNumFromCenter: 3, edge: "e" },
+    { x: 0.65, z: 0.125, ringNumFromCenter: 3, edge: "e" },
 
     // NE side
     { x: 0.65, z: 0.375, ringNumFromCenter: 3, corner: "ne" },
-    { x: 0.433, z: 0.5, ringNumFromCenter: 3, edge: "n" },
-    { x: 0.217, z: 0.625, ringNumFromCenter: 3, edge: "n" },
+    { x: 0.433, z: 0.5, ringNumFromCenter: 3, edge: "ne" },
+    { x: 0.217, z: 0.625, ringNumFromCenter: 3, edge: "ne" },
   ],
 
   // ------- RING 4 (radius = full = 1) -------
@@ -219,15 +219,15 @@ export const validK4Data = {
 
     // NW side
     { x: -0.866, z: 0.5, ringNumFromCenter: 4, corner: "nw" },
-    { x: -0.866, z: 0.25, ringNumFromCenter: 4, edge: "sw" },
-    { x: -0.866, z: 0, ringNumFromCenter: 4, edge: "sw" },
-    { x: -0.866, z: -0.25, ringNumFromCenter: 4, edge: "sw" },
+    { x: -0.866, z: 0.25, ringNumFromCenter: 4, edge: "w" },
+    { x: -0.866, z: 0, ringNumFromCenter: 4, edge: "w" },
+    { x: -0.866, z: -0.25, ringNumFromCenter: 4, edge: "w" },
 
     // SW side
     { x: -0.866, z: -0.5, ringNumFromCenter: 4, corner: "sw" },
-    { x: -0.65, z: -0.625, ringNumFromCenter: 4, edge: "s" },
-    { x: -0.433, z: -0.75, ringNumFromCenter: 4, edge: "s" },
-    { x: -0.217, z: -0.875, ringNumFromCenter: 4, edge: "s" },
+    { x: -0.65, z: -0.625, ringNumFromCenter: 4, edge: "sw" },
+    { x: -0.433, z: -0.75, ringNumFromCenter: 4, edge: "sw" },
+    { x: -0.217, z: -0.875, ringNumFromCenter: 4, edge: "sw" },
 
     // S side
     { x: 0, z: -1, ringNumFromCenter: 4, corner: "s" },
@@ -237,14 +237,14 @@ export const validK4Data = {
 
     // SE side
     { x: 0.866, z: -0.5, ringNumFromCenter: 4, corner: "se" },
-    { x: 0.866, z: -0.25, ringNumFromCenter: 4, edge: "ne" },
-    { x: 0.866, z: 0, ringNumFromCenter: 4, edge: "ne" },
-    { x: 0.866, z: 0.25, ringNumFromCenter: 4, edge: "ne" },
+    { x: 0.866, z: -0.25, ringNumFromCenter: 4, edge: "e" },
+    { x: 0.866, z: 0, ringNumFromCenter: 4, edge: "e" },
+    { x: 0.866, z: 0.25, ringNumFromCenter: 4, edge: "e" },
 
     // NE side
     { x: 0.866, z: 0.5, ringNumFromCenter: 4, corner: "ne" },
-    { x: 0.65, z: 0.625, ringNumFromCenter: 4, edge: "n" },
-    { x: 0.433, z: 0.75, ringNumFromCenter: 4, edge: "n" },
-    { x: 0.217, z: 0.875, ringNumFromCenter: 4, edge: "n" },
+    { x: 0.65, z: 0.625, ringNumFromCenter: 4, edge: "ne" },
+    { x: 0.433, z: 0.75, ringNumFromCenter: 4, edge: "ne" },
+    { x: 0.217, z: 0.875, ringNumFromCenter: 4, edge: "ne" },
   ],
 };
