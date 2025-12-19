@@ -10,7 +10,6 @@ import {
 import { Tile } from "@/objects/game/Tile";
 import type { GameKey } from "@/objects/game/_GameObject";
 import type { Coords } from "@/helpers/mapTools";
-import { tileHeight } from "@/helpers/mapTools";
 import { tileCenter } from "@/helpers/math";
 import { watch } from "vue";
 import { useSettingsStore } from "@/stores/settingsStore";
@@ -75,10 +74,8 @@ export class GridOverlay {
         // Hex geometry around center (pointy-top, radius = 1 world unit)
         const center = tileCenter(this.size, tile);
         const radius = 1; // matches math.ts spacing (hexDepth 1.5 => R=1)
-        // Follow tile height for water, stick to max 0 on land
-        const y = Math.min(0, tileHeight(tile, true));
 
-        const vertices = GridOverlay.hexVertices(center.x, center.z, radius, y);
+        const vertices = GridOverlay.hexVertices(center.x, center.z, radius, 0);
 
         // To avoid duplicate edges between neighbors, draw only 3 edges per tile:
         // E (v1->v2), SE (v2->v3), SW (v3->v4)

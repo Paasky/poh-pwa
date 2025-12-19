@@ -2,7 +2,7 @@
 // If we ever need code‑splitting or optional dependencies, we will use dynamic imports in a
 // very targeted manner. This file does not require them.
 import { tileCenter } from "@/helpers/math";
-import { Coords, tileHeight } from "@/helpers/mapTools";
+import { Coords } from "@/helpers/mapTools";
 import { Tile } from "@/objects/game/Tile";
 import type { GameKey } from "@/objects/game/_GameObject";
 import type { PickingInfo } from "@babylonjs/core";
@@ -201,7 +201,6 @@ export class LogicMeshBuilder {
     this.clickHandlers.forEach((h) => h(tile, button, details));
   }
 
-  // todo: replace the matrices with sps hexagons: a single 6-point pointy-top cylinder, height 2, and tileHeight() is the _top_ of the hexagon
   // -> reason: now as flat surfaces there are gaps between water 6 mountain for example, breaking tile picking
   private buildInstanceMatricesAndMaps(): Float32Array {
     const matrices: number[] = [];
@@ -218,7 +217,7 @@ export class LogicMeshBuilder {
         this.instanceIndexByTileKey[tile.key] = instanceIndex;
 
         const center = tileCenter(this.size, tile); // { x, z }
-        const m = LogicMeshBuilder.matrixFromPosition(center.x, tileHeight(tile, true), center.z);
+        const m = LogicMeshBuilder.matrixFromPosition(center.x, 0, center.z);
         for (let i = 0; i < 16; i++) matrices.push(m[i]);
       }
     }

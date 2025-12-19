@@ -1,17 +1,47 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onBeforeUnmount, onMounted, ref } from "vue";
 import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
 import { toggleFullscreen } from "@/helpers/fullscreen";
 import UiButton from "@/components/Ui/UiButton.vue";
 import SettingsDialog from "@/components/Settings/SettingsDialog.vue";
+import { useSettingsStore } from "@/stores/settingsStore";
 
 defineEmits(["quit", "reload"]);
 const showQuitConfirm = ref(false);
 const showSettings = ref(false);
+
+const settings = useSettingsStore();
+
+const time = ref("");
+let timer: ReturnType<typeof setInterval> | null = null;
+
+function updateTime() {
+  time.value = new Date().toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+}
+
+onMounted(() => {
+  updateTime();
+  timer = setInterval(updateTime, 1000);
+});
+
+onBeforeUnmount(() => {
+  if (timer) clearInterval(timer);
+});
 </script>
 
 <template>
   <div class="d-flex ga-2">
+    <div
+      v-if="settings.engineSettings.showClock"
+      class="rounded-b-lg elevation-4 d-flex align-center px-3 bg-background"
+      style="height: 1.5rem; min-width: 3rem; justify-content: center; user-select: none"
+    >
+      {{ time }}
+    </div>
     <UiButton
       icon="fa-question"
       color="secondary"

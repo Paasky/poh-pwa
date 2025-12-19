@@ -4,8 +4,8 @@ import { useSettingsDialog } from "@/composables/useSettingsDialog";
 import { useSettingsStore } from "@/stores/settingsStore";
 import {
   engineSettingPresets,
-  restartRequiredSettingKeys,
   type EngineSettings,
+  restartRequiredSettingKeys,
 } from "@/components/Engine/engineSettings";
 import { WeatherType } from "@/components/Engine/environments/weather";
 
@@ -77,6 +77,7 @@ function fmtHour(h: number): string {
                 <div class="text-subtitle-2 mb-2">Overlays & Layers</div>
                 <div class="d-flex flex-wrap ga-4">
                   <v-switch v-model="settings.engineSettings.showGrid" label="Show Grid" inset />
+                  <v-switch v-model="settings.engineSettings.showClock" label="Show Clock" inset />
                 </div>
               </div>
 

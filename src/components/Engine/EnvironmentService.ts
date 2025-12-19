@@ -89,13 +89,10 @@ export class EnvironmentService {
   private readonly camera: Camera;
   private readonly configuration: EnvironmentServiceConfig;
 
-  // @ts-expect-error This is set via setupEnvironmentSkyboxAndTexture() in constructor
-  private environmentHelper: EnvironmentHelper;
+  private environmentHelper?: EnvironmentHelper;
 
-  // @ts-expect-error This is set via setupLights() in constructor
-  private hemisphericAmbientLight: HemisphericLight;
-  // @ts-expect-error This is set via setupLights() in constructor
-  private directionalSunLight: DirectionalLight;
+  private hemisphericAmbientLight!: HemisphericLight;
+  private directionalSunLight!: DirectionalLight;
   private baseDirectionalSunLightIntensity: number = 1.0;
   private weatherSunIntensityScale: number = 1.0;
 
@@ -258,7 +255,7 @@ export class EnvironmentService {
     this.stopClockInterval();
     this.renderingPipeline?.dispose();
     this.renderingPipeline = undefined;
-    this.environmentHelper.dispose();
+    if (this.environmentHelper) this.environmentHelper.dispose();
     this.directionalSunLight.dispose();
     this.hemisphericAmbientLight.dispose();
   }
@@ -266,13 +263,12 @@ export class EnvironmentService {
   // ----- Internal setup helpers -----
 
   private setupEnvironmentSkyboxAndTexture(): void {
-    // todo should this have a default value? Would it make sense to create a separate sky.ts (or will the sky depend on weather?)
-    const shouldCreateEnvironmentTexture =
-      this.configuration.environmentTextureUrl.trim().length > 0;
+    if (!this.configuration.environmentTextureUrl.trim()) return;
 
-    const environmentTexture = shouldCreateEnvironmentTexture
-      ? CubeTexture.CreateFromPrefilteredData(this.configuration.environmentTextureUrl, this.scene)
-      : undefined;
+    const environmentTexture = CubeTexture.CreateFromPrefilteredData(
+      this.configuration.environmentTextureUrl,
+      this.scene,
+    );
 
     this.environmentHelper = new EnvironmentHelper(
       {

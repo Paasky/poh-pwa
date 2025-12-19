@@ -6,6 +6,7 @@ export type EngineSettings = {
 
   // Overlays
   showGrid: boolean; // Show/hide hex grid overlay
+  showClock: boolean; // Show/hide clock in UI
   enableDebug: boolean; // Show/hide hex grid overlay
   enableFogOfWar: boolean; // Show/hide hex grid overlay
 
@@ -38,6 +39,7 @@ export type EngineSettings = {
 export const gameSettingKeys: (keyof EngineSettings)[] = [
   "manualTilt",
   "showGrid",
+  "showClock",
   "enableDebug",
   "enableFogOfWar",
   "timeOfDay2400",
@@ -74,6 +76,7 @@ export const restartRequiredSettingKeys: (keyof EngineSettings)[] = [
 export const defaultEngineSettings: Required<EngineSettings> = {
   manualTilt: false,
   showGrid: true,
+  showClock: true,
   enableDebug: false,
   enableFogOfWar: true,
   renderScale: 1,
