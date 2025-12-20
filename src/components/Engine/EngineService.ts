@@ -2,6 +2,8 @@ import {
   ArcRotateCamera,
   Color4,
   Engine as BabylonEngine,
+  Observer,
+  Scalar,
   Scene,
   TransformNode,
   Vector3,
@@ -30,7 +32,6 @@ import type { GameKey } from "@/objects/game/_GameObject";
 import { Coords, getCoordsFromTileKey } from "@/helpers/mapTools";
 import { EngineCoords } from "@/factories/TerrainMeshBuilder/_terrainMeshTypes";
 import { useSettingsStore } from "@/stores/settingsStore";
-import { EngineSettings } from "@/components/Engine/engineSettings";
 import { watch } from "vue";
 
 // noinspection JSUnusedGlobalSymbols
@@ -39,7 +40,7 @@ export class EngineService {
   canvas: HTMLCanvasElement;
   engine!: BabylonEngine;
   scene!: Scene;
-  tileRoot!: TransformNode;
+  terrainRoot!: TransformNode;
 
   camera!: ArcRotateCamera;
   mainCamera!: MainCamera;
@@ -48,12 +49,12 @@ export class EngineService {
   logicMesh!: LogicMeshBuilder;
   featureInstancer!: FeatureInstancer;
   fogOfWar!: FogOfWar;
-  gridOverlay?: GridOverlay;
+  gridOverlay!: GridOverlay;
 
   minimapCanvas?: HTMLCanvasElement;
   minimap?: Minimap;
 
-  private settings: EngineSettings;
+  private flyToObserver: Observer<Scene> | null = null;
 
   constructor(size: Coords, canvas: HTMLCanvasElement, minimapCanvas?: HTMLCanvasElement) {
     // Prevent strange bugs from happening
@@ -62,20 +63,21 @@ export class EngineService {
     this.size = size;
     this.canvas = canvas;
     this.minimapCanvas = minimapCanvas;
-    this.settings = useSettingsStore().engineSettings;
   }
 
-  initEngine(): this {
+  initEngineAndScene(): this {
+    const settings = useSettingsStore().engineSettings;
+
     this.engine = new BabylonEngine(
       this.canvas,
-      this.settings.antialias,
+      settings.antialias,
       {
-        preserveDrawingBuffer: this.settings.preserveDrawingBuffer,
-        stencil: this.settings.stencil,
-        disableWebGL2Support: this.settings.disableWebGL2Support,
-        powerPreference: this.settings.powerPreference,
+        preserveDrawingBuffer: settings.preserveDrawingBuffer,
+        stencil: settings.stencil,
+        disableWebGL2Support: settings.disableWebGL2Support,
+        powerPreference: settings.powerPreference,
       },
-      this.settings.adaptToDeviceRatio,
+      settings.adaptToDeviceRatio,
     );
     this.scene = new Scene(this.engine);
     this.scene.clearColor = new Color4(0.63, 0.63, 0.63, 1); // Same-ish as snow
@@ -84,10 +86,10 @@ export class EngineService {
     // eslint-disable-next-line
     (document as any).engineService = this;
 
-    const settings = useSettingsStore();
-    this.applyRenderScale(settings.engineSettings.renderScale);
+    // Watch for non-restart settings changes
+    this.applyRenderScale(settings.renderScale);
     watch(
-      () => settings.engineSettings.renderScale,
+      () => settings.renderScale,
       (scale) => this.applyRenderScale(scale),
     );
 
@@ -95,7 +97,7 @@ export class EngineService {
   }
 
   initCamera(): this {
-    this.mainCamera = new MainCamera(this.size, this.scene, this.canvas);
+    this.mainCamera = new MainCamera(this.size, this.scene, this.canvas, this.gridOverlay);
     this.camera = this.mainCamera.camera;
 
     this.flyToCurrentPlayer();
@@ -104,7 +106,7 @@ export class EngineService {
   }
 
   initEnvironment(): this {
-    this.environmentService = new EnvironmentService(this.scene, this.camera, this.engine);
+    this.environmentService = new EnvironmentService(this.scene, this.camera);
 
     return this;
   }
@@ -121,16 +123,14 @@ export class EngineService {
 
   initTerrain(): this {
     this.terrainBuilder = new TerrainMeshBuilder(this.scene, this.size, useObjectsStore().getTiles);
-    this.tileRoot = this.terrainBuilder.root;
+    this.terrainRoot = this.terrainBuilder.root;
 
     return this;
   }
 
-  private initGridOverlay(): this {
-    // Build overlay once and set its visibility according to options
-    if (!this.gridOverlay) {
-      this.gridOverlay = new GridOverlay(this.scene, this.size, useObjectsStore().getTiles);
-    }
+  initGridOverlay(): this {
+    this.gridOverlay = new GridOverlay(this.scene, this.size, useObjectsStore().getTiles);
+
     return this;
   }
 
@@ -139,7 +139,7 @@ export class EngineService {
       this.scene,
       this.size,
       Object.values(useObjectsStore().getTiles),
-      this.tileRoot,
+      this.terrainRoot,
     );
 
     return this;
@@ -162,14 +162,6 @@ export class EngineService {
 
   render(): this {
     this.engine.runRenderLoop(() => {
-      // todo: the env service should run according to an internal clock, not the rendering framerate
-      // Tick environment (clock/effects) before rendering
-      const deltaSeconds = this.engine.getDeltaTime() / 1000;
-      this.environmentService.update(deltaSeconds);
-
-      // todo: should this only run on zoom change, not on _every frame_ ?
-      // Centralized camera-position dependent adjustments
-      this.applyCameraZoomEffects();
       this.scene.render();
     });
 
@@ -178,24 +170,6 @@ export class EngineService {
     window.addEventListener("resize", this.onResize);
 
     return this;
-  }
-
-  /**
-   * Central place to apply camera position / zoom dependent visual adjustments.
-   * Keep KISS: calculate normalized zoom and drive overlays from here.
-   */
-  private applyCameraZoomEffects(): void {
-    // Normalize zoom: 0 at max zoom-out (upperRadius), 1 at max zoom-in (lowerRadius)
-    const lower = this.camera.lowerRadiusLimit ?? 10;
-    const upper = this.camera.upperRadiusLimit ?? 100;
-    const denom = Math.max(0.0001, upper - lower);
-    const r = this.camera.radius;
-    const norm = clamp((upper - r) / denom, 0, 1);
-
-    // todo: we have plenty of other zoom-dependant settings (camera tilt, more?) Find them and centralize here
-    // Grid thickness scaling: 0.25x at max out -> 1.5x at max in
-    const thicknessScale = 0.25 + norm * 1.25;
-    if (this.gridOverlay) this.gridOverlay.setThicknessScale(thicknessScale);
   }
 
   initMinimap(): this {
@@ -209,15 +183,28 @@ export class EngineService {
 
   initOrder() {
     return [
-      () => this.initEngine(),
-      () => this.initCamera(),
-      () => this.initEnvironment(),
+      // All components require the engine/scene
+      () => this.initEngineAndScene(),
+
+      // No other requirements
+      () => this.initGridOverlay(),
       () => this.initLogic(),
       () => this.initTerrain(),
-      () => this.initGridOverlay(),
+
+      // Requires GridOverlay
+      () => this.initCamera(),
+
+      // Requires Terrain
       () => this.initFeatures(),
+
+      // Requires Camera
+      () => this.initEnvironment(),
       () => this.initFogOfWar(),
+
+      // Start Rendering!
       () => this.render(),
+
+      // Optional minimap (if canvas was given)
       () => this.initMinimap(),
     ];
   }
@@ -228,27 +215,59 @@ export class EngineService {
   }
 
   dispose(): void {
-    if (this.gridOverlay) {
-      this.gridOverlay.dispose();
-      this.gridOverlay = undefined;
-    }
-    this.fogOfWar.dispose();
+    // Dispose in reverse order of initOrder()
+
+    // Stop flying
+    this.stopFlying();
+
+    // Optional minimap
+    if (this.minimap) this.minimap.dispose();
+
+    // Stop rendering
     window.removeEventListener("resize", this.onResize);
     this.engine.stopRenderLoop();
+
+    // Stop requires camera
+    this.environmentService.dispose();
+    this.fogOfWar.dispose();
+
+    // Stop requires terrain
     this.featureInstancer.dispose();
+
+    // Stop requires GridOverlay
+    this.camera.dispose();
+
+    // Stop others
+    this.gridOverlay.dispose();
     this.logicMesh.dispose();
     this.terrainBuilder.dispose();
-    this.environmentService.dispose();
+
+    // Finally, stop the scene & engine
     this.scene.dispose();
     this.engine.dispose();
   }
 
   flyTo(coords: EngineCoords): EngineService {
-    const target = new Vector3(coords.x, 0, coords.z);
+    const targetPos = new Vector3(coords.x, 0, coords.z);
+    const startPos = this.camera.target.clone();
+    const duration = 1.0; // 1 second
+    let elapsed = 0;
 
-    // Apply instantly
-    // todo add a super-super-simple 1s flying animation (never crossing world x-limits, even if wrap would be "closer")
-    this.camera.target.copyFrom(target);
+    // Remove any existing flyTo observer
+    this.stopFlying();
+
+    this.flyToObserver = this.scene.onBeforeRenderObservable.add(() => {
+      const dt = this.engine.getDeltaTime() / 1000;
+      elapsed += dt;
+      const t = Scalar.Clamp(elapsed / duration, 0, 1);
+
+      // Simple Lerp animation over 1s.
+      Vector3.LerpToRef(startPos, targetPos, t, this.camera.target);
+
+      if (t >= 1) {
+        this.stopFlying();
+      }
+    });
 
     return this;
   }
@@ -294,6 +313,15 @@ export class EngineService {
     } else {
       return this.flyTo(tileCenter(this.size, tile));
     }
+  }
+
+  stopFlying(): this {
+    if (this.flyToObserver) {
+      this.scene.onBeforeRenderObservable.remove(this.flyToObserver);
+      this.flyToObserver = null;
+    }
+
+    return this;
   }
 
   private onResize = () => {

@@ -220,7 +220,7 @@ export class FogOfWar {
         return p.xz;
       }
 
-      // Convert world XZ -> tile index (odd-r pointy-top). Matches TS worldToTileIndices.
+      // Convert world XZ -> tile index (odd-r pointy-top).
       ivec2 worldXZToTile(vec2 xz, vec4 bounds, vec2 grid) {
         float minX = bounds.x; float minZ = bounds.y;
         // Flip Z-axis: game world increases "south" with decreasing world Z, so measure from maxZ

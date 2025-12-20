@@ -1,6 +1,7 @@
 import { type Tile } from "@/objects/game/Tile";
 import { type GameKey, getKey } from "@/objects/game/_GameObject";
 import { getRandom } from "@/helpers/arrayTools";
+import { wrapExclusive } from "@/helpers/math";
 
 export type CompassHexEdge = "ne" | "e" | "se" | "sw" | "w" | "nw";
 export type CompassHexCorner = "n" | "se" | "sw" | "s" | "nw" | "ne";
@@ -220,7 +221,7 @@ export function getNeighborCoords(
       if (method === "manhattan" && Math.abs(dx) + Math.abs(dy) > distance) continue;
 
       // Include x-wrapping for new X
-      const nx = (((tile.x + dx) % size.x) + size.x) % size.x;
+      const nx = wrapExclusive(tile.x + dx, 0, size.x);
 
       // Skip self, skip duplicates
       if (nx === tile.x && ny === tile.y) continue;
@@ -261,8 +262,7 @@ export function getTile<T extends Tile>(
 
 // Wrap x on the horizontal axis
 export function wrapX(size: Coords, x: number) {
-  const m = x % size.x;
-  return m < 0 ? m + size.x : m;
+  return wrapExclusive(x, 0, size.x);
 }
 
 export const waterLevel = -0.2;

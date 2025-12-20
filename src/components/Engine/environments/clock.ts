@@ -1,5 +1,6 @@
 import { ref } from "vue";
 import { defaultTimeOfDay2400 } from "@/components/Engine/environments/timeOfDay";
+import { wrapInclusive } from "@/helpers/math";
 
 /**
  * Ultra‑simple shared clock state for the environment.
@@ -10,16 +11,6 @@ export const isClockRunning = ref<boolean>(true);
 // How many in‑game hours advance per one real minute when clock runs.
 export const clockHoursPerRealMinute = ref<number>(60.0); // 1 hour per second by default
 
-export function clampTime2400(v: number): number {
-  const x = Math.round(v);
-  if (x < 0) return 0;
-  if (x > 2400) return 2400;
-  return x;
-}
-
 export function wrapTime2400(v: number): number {
-  let x = Math.round(v);
-  while (x < 0) x += 2400;
-  while (x >= 2400) x -= 2400;
-  return x;
+  return wrapInclusive(Math.round(v), 0, 2399);
 }

@@ -1,7 +1,7 @@
 import { expect } from "vitest";
 import { crawl } from "../../src/helpers/arrayTools";
 
-export const expectFloatsToBeClose = (expected: object, toBe: object, tolerance = 0.001) => {
+export const expectFloatsToBeClose = (expected: any, toBe: any, tolerance = 0.001) => {
   const roundingMultiplier = Math.round(1 / tolerance);
   return expect(crawlForFloat(expected)).toEqual(crawlForFloat(toBe));
 

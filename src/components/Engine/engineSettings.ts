@@ -64,6 +64,7 @@ export const graphicsSettingKeys: (keyof EngineSettings)[] = [
 ];
 
 export const restartRequiredSettingKeys: (keyof EngineSettings)[] = [
+  "adaptToDeviceRatio",
   "antialias",
   "preserveDrawingBuffer",
   "stencil",
