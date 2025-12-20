@@ -8,7 +8,7 @@ import {
 import { watch } from "vue";
 import { useSettingsStore } from "@/stores/settingsStore";
 import { Coords } from "@/helpers/mapTools";
-import { clamp, getWorldMaxX, getWorldMinX, getWorldWidth } from "@/helpers/math";
+import { clamp, clampCoordsToBoundaries, type OrthoBounds } from "@/helpers/math";
 import GridOverlay from "@/components/Engine/overlays/GridOverlay";
 import { FogOfWar } from "@/components/Engine/FogOfWar";
 
@@ -39,6 +39,7 @@ export class MainCamera {
     canvas: HTMLCanvasElement,
     fogOfWar: FogOfWar,
     gridOverlay: GridOverlay,
+    private getKnownBounds: () => OrthoBounds | null,
   ) {
     this.size = size;
     this.scene = scene;
@@ -127,21 +128,11 @@ export class MainCamera {
   }
 
   private installViewMatrixObserver(): void {
-    const worldWidth = getWorldWidth(this.size.x);
-    const worldMinX = getWorldMinX(worldWidth);
-    const worldMaxX = getWorldMaxX(worldWidth);
-
     this.camera.onViewMatrixChangedObservable.add(() => {
-      const t = this.camera.target;
-
-      // Default N/S clamp based on world rows
-      const minZ = -this.size.y / 1.385;
-      const maxZ = this.size.y / 1.425;
-      t.z = Math.min(Math.max(t.z, minZ), maxZ);
-
-      // Wrap X across world bounds
-      if (t.x > worldMaxX) t.x -= worldWidth;
-      else if (t.x < worldMinX) t.x += worldWidth;
+      const bounds = this.getKnownBounds();
+      const clamped = clampCoordsToBoundaries(this.camera.target, this.size, bounds);
+      this.camera.target.x = clamped.x;
+      this.camera.target.z = clamped.z;
 
       this.applyZoomEffects();
     });

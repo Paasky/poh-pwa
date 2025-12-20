@@ -176,9 +176,9 @@ export class TerrainMeshBuilder {
     }
 
     return new Color4(
-      avg(affectingColors.map((c) => c.r)),
-      avg(affectingColors.map((c) => c.g)),
-      avg(affectingColors.map((c) => c.b)),
+      avg(affectingColors.map((color) => color.r)),
+      avg(affectingColors.map((color) => color.g)),
+      avg(affectingColors.map((color) => color.b)),
       1,
     );
   }

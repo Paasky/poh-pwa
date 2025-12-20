@@ -1,20 +1,10 @@
-import {
-  ArcRotateCamera,
-  Color4,
-  Engine as BabylonEngine,
-  Observer,
-  Scalar,
-  Scene,
-  TransformNode,
-  Vector3,
-} from "@babylonjs/core";
+import { Color4, Engine as BabylonEngine, Observer, Scalar, Scene, Vector3 } from "@babylonjs/core";
 import "@babylonjs/core/Lights/Shadows/shadowGeneratorSceneComponent";
 import {
-  clamp,
-  getWorldDepth,
-  getWorldMinX,
-  getWorldMinZ,
-  getWorldWidth,
+  calculateKnownBounds,
+  clampCoordsToBoundaries,
+  getEngineCoordsFromPercent,
+  type OrthoBounds,
   tileCenter,
 } from "@/helpers/math";
 import { TerrainMeshBuilder } from "@/factories/TerrainMeshBuilder/TerrainMeshBuilder";
@@ -40,9 +30,7 @@ export class EngineService {
   canvas: HTMLCanvasElement;
   engine!: BabylonEngine;
   scene!: Scene;
-  terrainRoot!: TransformNode;
 
-  camera!: ArcRotateCamera;
   mainCamera!: MainCamera;
   environmentService!: EnvironmentService;
   terrainBuilder!: TerrainMeshBuilder;
@@ -54,6 +42,7 @@ export class EngineService {
   minimapCanvas?: HTMLCanvasElement;
   minimap?: Minimap;
 
+  private _knownBounds: OrthoBounds | null = null;
   private flyToObserver: Observer<Scene> | null = null;
 
   constructor(size: Coords, canvas: HTMLCanvasElement, minimapCanvas?: HTMLCanvasElement) {
@@ -90,7 +79,7 @@ export class EngineService {
     this.applyRenderScale(settings.renderScale);
     watch(
       () => settings.renderScale,
-      (scale) => this.applyRenderScale(scale),
+      (newScale) => this.applyRenderScale(newScale),
     );
 
     return this;
@@ -103,16 +92,16 @@ export class EngineService {
       this.canvas,
       this.fogOfWar,
       this.gridOverlay,
+      () => this.knownBounds,
     );
-    this.camera = this.mainCamera.camera;
 
-    this.flyToCurrentPlayer();
+    this.flyToCurrentPlayer(true);
 
     return this;
   }
 
   initEnvironment(): this {
-    this.environmentService = new EnvironmentService(this.scene, this.camera);
+    this.environmentService = new EnvironmentService(this.scene, this.mainCamera.camera);
 
     return this;
   }
@@ -129,7 +118,6 @@ export class EngineService {
 
   initTerrain(): this {
     this.terrainBuilder = new TerrainMeshBuilder(this.scene, this.size, useObjectsStore().getTiles);
-    this.terrainRoot = this.terrainBuilder.root;
 
     return this;
   }
@@ -145,15 +133,32 @@ export class EngineService {
       this.scene,
       this.size,
       Object.values(useObjectsStore().getTiles),
-      this.terrainRoot,
+      this.terrainBuilder.root,
     );
 
     return this;
   }
 
   initFogOfWar(): this {
-    this.fogOfWar = new FogOfWar(this.size, this.scene, useObjectsStore().getTiles);
+    this.fogOfWar = new FogOfWar(this.size, this.scene);
+
+    // Watch for known area changes to update clamping bounds
+    const player = useObjectsStore().currentPlayer;
+    watch(
+      player.knownTileKeys,
+      (keys) => {
+        this._knownBounds = calculateKnownBounds(this.size, keys);
+        // Trigger minimap update if it exists
+        if (this.minimap) this.minimap.capture();
+      },
+      { immediate: true },
+    );
+
     return this;
+  }
+
+  public get knownBounds(): OrthoBounds | null {
+    return this._knownBounds;
   }
 
   render(): this {
@@ -170,14 +175,20 @@ export class EngineService {
 
   initMinimap(): this {
     if (this.minimapCanvas) {
-      this.minimap = new Minimap(this.size, this.minimapCanvas, this.engine, this.fogOfWar);
+      this.minimap = new Minimap(
+        this.size,
+        this.minimapCanvas,
+        this.engine,
+        this.fogOfWar,
+        () => this.knownBounds,
+      );
       this.minimap.capture();
     }
 
     return this;
   }
 
-  initOrder() {
+  initOrder(): (() => void)[] {
     return [
       // All components require the engine/scene
       () => this.initEngineAndScene(),
@@ -188,7 +199,7 @@ export class EngineService {
       () => this.initLogic(),
       () => this.initTerrain(),
 
-      // Requires  FogOfWar & GridOverlay
+      // Requires FogOfWar & GridOverlay
       () => this.initCamera(),
 
       // Requires Terrain
@@ -211,8 +222,6 @@ export class EngineService {
   }
 
   dispose(): void {
-    // Dispose in reverse order of initOrder()
-
     // Stop flying
     this.stopFlying();
 
@@ -231,7 +240,7 @@ export class EngineService {
     this.featureInstancer.dispose();
 
     // Stop requires GridOverlay
-    this.camera.dispose();
+    this.mainCamera.camera.dispose();
 
     // Stop others
     this.gridOverlay.dispose();
@@ -243,30 +252,37 @@ export class EngineService {
     this.engine.dispose();
   }
 
-  flyTo(coords: EngineCoords): EngineService {
-    const targetPos = new Vector3(coords.x, 0, coords.z);
-    const startPos = this.camera.target.clone();
-    const duration = 0.5; // 1 second
-    let elapsed = 0;
+  flyTo(coords: EngineCoords, teleport = false): EngineService {
+    const clamped = clampCoordsToBoundaries(coords, this.size, this._knownBounds);
+    const targetPos = new Vector3(clamped.x, 0, clamped.z);
 
     // Remove any existing flyTo observer
     this.stopFlying();
 
+    if (teleport) {
+      this.mainCamera.camera.target.copyFrom(targetPos);
+      return this;
+    }
+
+    const startPos = this.mainCamera.camera.target.clone();
+    const duration = 0.5;
+    let elapsed = 0;
+
     this.flyToObserver = this.scene.onBeforeRenderObservable.add(() => {
-      const dt = this.engine.getDeltaTime() / 1000;
-      elapsed += dt;
+      const deltaTime = this.engine.getDeltaTime() / 1000;
+      elapsed += deltaTime;
 
       // 1. Calculate linear completion (0 to 1)
-      const linearT = Scalar.Clamp(elapsed / duration, 0, 1);
+      const completion = Scalar.Clamp(elapsed / duration, 0, 1);
 
       // 2. Apply SmoothStep to get the "speed up, then speed down" effect
       // This creates the organic acceleration/deceleration curve
-      const easedT = Scalar.SmoothStep(0, 1, linearT);
+      const easedCompletion = Scalar.SmoothStep(0, 1, completion);
 
       // 3. Use the eased value for position interpolation
-      Vector3.LerpToRef(startPos, targetPos, easedT, this.camera.target);
+      Vector3.LerpToRef(startPos, targetPos, easedCompletion, this.mainCamera.camera.target);
 
-      if (linearT >= 1) {
+      if (completion >= 1) {
         this.stopFlying();
       }
     });
@@ -274,46 +290,35 @@ export class EngineService {
     return this;
   }
 
-  flyToCurrentPlayer(): void {
+  flyToCurrentPlayer(teleport = false): void {
     const currentPlayer = useObjectsStore().currentPlayer;
 
-    // Capital or first unit
-    const capital = currentPlayer.cities.value.find((c) => c.isCapital);
-    if (capital) {
-      this.flyToTile(capital.tileKey);
-    }
-
+    // Unit has priority
     const unit = currentPlayer.units.value[0];
     if (unit) {
-      this.flyToTile(unit.tileKey.value);
+      this.flyToTile(unit.tileKey.value, teleport);
+      return;
     }
 
-    return;
+    // Then capital
+    const capital = currentPlayer.cities.value.find((city) => city.isCapital);
+    if (capital) {
+      this.flyToTile(capital.tileKey, teleport);
+      return;
+    }
   }
 
   // Public: move instantly to a percentage of world width/depth (0..1 each)
-  flyToPercent(xPercent: number, yPercent: number): EngineService {
-    // Clamp percents
-    const widthPercent = clamp(xPercent, 0, 1);
-    const depthPercent = clamp(yPercent, 0, 1);
-
-    // Map to world coordinates
-    const worldWidth = getWorldWidth(this.size.x);
-    const worldDepth = getWorldDepth(this.size.y);
-    return this.flyTo({
-      x: getWorldMinX(worldWidth) + widthPercent * worldWidth,
-
-      // Flip Z (y=0 is north, y=max is south)
-      z: getWorldMinZ(worldDepth) - depthPercent * worldDepth,
-    });
+  flyToPercent(xPercent: number, yPercent: number, teleport = false): EngineService {
+    return this.flyTo(getEngineCoordsFromPercent(this.size, xPercent, yPercent), teleport);
   }
 
-  flyToTile(tile: GameKey | string | Tile): EngineService {
+  flyToTile(tile: GameKey | string | Tile, teleport = false): EngineService {
     if (typeof tile === "string") {
       const coords = getCoordsFromTileKey(tile as GameKey);
-      return this.flyTo(tileCenter(this.size, coords));
+      return this.flyTo(tileCenter(this.size, coords), teleport);
     } else {
-      return this.flyTo(tileCenter(this.size, tile));
+      return this.flyTo(tileCenter(this.size, tile), teleport);
     }
   }
 
@@ -330,9 +335,9 @@ export class EngineService {
     this.engine.resize();
   };
 
-  private applyRenderScale(scale: number) {
-    const safeScale = Math.max(0.25, Math.min(2, scale || 1));
-    const level = 1 / safeScale;
-    this.engine.setHardwareScalingLevel(level);
+  private applyRenderScale(renderScale: number) {
+    const safeScale = Math.max(0.25, Math.min(2, renderScale || 1));
+    const hardwareScalingLevel = 1 / safeScale;
+    this.engine.setHardwareScalingLevel(hardwareScalingLevel);
   }
 }

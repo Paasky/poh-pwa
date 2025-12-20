@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import { canHaveOne, hasMany, hasOne } from "@/objects/game/_relations";
-import { computed, ComputedRef, ref, watch } from "vue";
+import { computed, ComputedRef, ref, shallowRef, triggerRef, watch } from "vue";
 import { TypeObject } from "@/types/typeObjects";
 import { TypeStorage } from "@/objects/storage";
 import { Yield, Yields } from "@/objects/yield";
@@ -48,9 +48,17 @@ export class Player extends GameObject {
 
     if (knownTileKeys) this.knownTileKeys.value = new Set(knownTileKeys);
 
-    // Always include visile tiles in known keys
+    // Always include visible tiles in known keys
     watch(this.visibleTileKeys, (keys) => {
-      keys.forEach((k) => this.knownTileKeys.value.add(k));
+      let changed = false;
+      const known = this.knownTileKeys.value;
+      for (const key of keys) {
+        if (!known.has(key)) {
+          known.add(key);
+          changed = true;
+        }
+      }
+      if (changed) triggerRef(this.knownTileKeys);
     });
   }
 
@@ -107,7 +115,7 @@ export class Player extends GameObject {
   designKeys = ref([] as GameKey[]);
   designs = hasMany<UnitDesign>(this.designKeys, `${this.key}.designs`);
 
-  knownTileKeys = ref(new Set<GameKey>());
+  knownTileKeys = shallowRef(new Set<GameKey>());
 
   religionKey = ref(null as GameKey | null);
   religion = canHaveOne<Religion>(this.religionKey, `${this.key}.religion`);

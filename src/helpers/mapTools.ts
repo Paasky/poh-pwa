@@ -1,7 +1,7 @@
 import { type Tile } from "@/objects/game/Tile";
 import { type GameKey, getKey } from "@/objects/game/_GameObject";
 import { getRandom } from "@/helpers/arrayTools";
-import { wrapExclusive } from "@/helpers/math";
+import { wrapExclusive } from "@/helpers/basicMath";
 
 export type CompassHexEdge = "ne" | "e" | "se" | "sw" | "w" | "nw";
 export type CompassHexCorner = "n" | "se" | "sw" | "s" | "nw" | "ne";
