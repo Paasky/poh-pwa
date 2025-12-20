@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import { canHaveOne, hasMany, hasOne } from "@/objects/game/_relations";
-import { computed, ComputedRef, ref } from "vue";
+import { computed, ComputedRef, ref, watch } from "vue";
 import { TypeObject } from "@/types/typeObjects";
 import { TypeStorage } from "@/objects/storage";
 import { Yield, Yields } from "@/objects/yield";
@@ -17,8 +17,6 @@ import type { Religion } from "@/objects/game/Religion";
 import type { Tile } from "@/objects/game/Tile";
 import type { TradeRoute } from "@/objects/game/TradeRoute";
 import type { Unit } from "@/objects/game/Unit";
-import { getNeighbors } from "@/helpers/mapTools";
-import { useObjectsStore } from "@/stores/objectStore";
 import { Diplomacy } from "@/objects/player/Diplomacy";
 import { ObjKey, TypeKey } from "@/types/common";
 
@@ -30,6 +28,7 @@ export class Player extends GameObject {
     isCurrent = false,
     isMinor = false,
     religionKey?: GameKey,
+    knownTileKeys?: GameKey[],
   ) {
     super(key);
 
@@ -45,6 +44,13 @@ export class Player extends GameObject {
     this.culture = hasOne<Culture>(this.cultureKey, `${this.key}.culture`);
 
     if (religionKey) this.religionKey.value = religionKey;
+
+    if (knownTileKeys) this.knownTileKeys.value = new Set(knownTileKeys);
+
+    // Always include visile tiles in known keys
+    watch(this.visibleTileKeys, (keys) => {
+      keys.forEach((k) => this.knownTileKeys.value.add(k));
+    });
   }
 
   static attrsConf: GameObjAttr[] = [
@@ -60,6 +66,10 @@ export class Player extends GameObject {
       attrName: "religionKey",
       isOptional: true,
       related: { theirKeyAttr: "playerKeys" },
+    },
+    {
+      attrName: "knownTileKeys",
+      isOptional: true,
     },
   ];
 
@@ -96,33 +106,7 @@ export class Player extends GameObject {
   designKeys = ref([] as GameKey[]);
   designs = hasMany<UnitDesign>(this.designKeys, `${this.key}.designs`);
 
-  knownTileKeys = computed(() =>
-    this.units.value
-      .map((u) => [
-        u.tileKey.value,
-        ...getNeighbors(
-          useObjectsStore().world.size,
-          u.tile.value,
-          useObjectsStore().getTiles,
-          "hex",
-          2,
-        ).map((t) => t.key),
-      ])
-      .flat(),
-  );
-  visibleTileKeys = computed(() =>
-    this.units.value
-      .map((u) => [
-        u.tileKey.value,
-        ...getNeighbors(
-          useObjectsStore().world.size,
-          u.tile.value,
-          useObjectsStore().getTiles,
-          "hex",
-        ).map((t) => t.key),
-      ])
-      .flat(),
-  );
+  knownTileKeys = ref(new Set<GameKey>());
 
   religionKey = ref(null as GameKey | null);
   religion = canHaveOne<Religion>(this.religionKey, `${this.key}.religion`);
@@ -141,12 +125,14 @@ export class Player extends GameObject {
    */
   activeDesigns = computed(() => this.designs.value.filter((d) => d.isActive.value));
 
-  leader = computed(() => this.culture.value.leader.value);
-
   commonTypes = computed(
     (): TypeObject[] =>
       [...this.government.policies.value, ...this.research.researched.value] as TypeObject[],
   );
+
+  leader = computed(() => this.culture.value.leader.value);
+
+  ownedTypes = computed(() => this.cities.value.flatMap((city) => city.ownedTypes.value));
 
   specialTypes = computed(
     () =>
@@ -159,7 +145,11 @@ export class Player extends GameObject {
       ] as TypeObject[],
   );
 
-  ownedTypes = computed(() => this.cities.value.flatMap((city) => city.ownedTypes.value));
+  visibleTileKeys = computed(() => {
+    const keys = new Set<GameKey>(this.tileKeys.value);
+    this.units.value.forEach((u) => u.visibleTileKeys.value.forEach((k) => keys.add(k)));
+    return keys;
+  });
 
   // Player yield mods are the combined nation-wide yield for/vs
   yieldMods = computed(() => {

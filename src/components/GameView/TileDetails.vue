@@ -13,9 +13,7 @@ const { hoveredTile } = useHoveredTile() as any as { hoveredTile: Ref<Tile | nul
   <v-sheet class="d-flex flex-column ga-1" color="secondary" style="width: 12rem; overflow: hidden">
     <div
       class="d-flex flex-column ga-1"
-      v-if="
-        hoveredTile && useObjectsStore().currentPlayer.knownTileKeys.value.includes(hoveredTile.key)
-      "
+      v-if="hoveredTile && useObjectsStore().currentPlayer.knownTileKeys.value.has(hoveredTile.key)"
     >
       <div class="d-flex ga-1">
         <UiObjectChip :type="hoveredTile.elevation" />
