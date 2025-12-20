@@ -6,15 +6,18 @@ const app = useAppStore();
 const canvasEl = ref<HTMLCanvasElement | null>(null);
 
 function onClick(ev: MouseEvent) {
-  const canvas = canvasEl.value;
-  if (!canvas) return;
-
   // Get % of x/y that was clicked & fly to it
-  const rect = canvas.getBoundingClientRect();
-  app.engineService.flyToPercent(
-    (ev.clientX - rect.left) / rect.width,
-    (ev.clientY - rect.top) / rect.height,
-  );
+  const rect = canvasEl.value!.getBoundingClientRect();
+  const xPercent = (ev.clientX - rect.left) / rect.width;
+  const yPercent = (ev.clientY - rect.top) / rect.height;
+
+  const { minX, maxX, minZ, maxZ } = app.engineService.minimap!.bounds;
+
+  // Map percentages to the zoomed-in bounding box
+  app.engineService.flyTo({
+    x: minX + xPercent * (maxX - minX),
+    z: maxZ - yPercent * (maxZ - minZ), // Flip Y because canvas 0 is top
+  });
 }
 </script>
 
@@ -22,8 +25,8 @@ function onClick(ev: MouseEvent) {
   <canvas
     id="minimap-canvas"
     ref="canvasEl"
-    width="512"
-    height="256"
+    width="1024"
+    height="512"
     style="display: block; width: 20rem; height: 10rem; background-color: #000; cursor: pointer"
     @click="onClick"
   />

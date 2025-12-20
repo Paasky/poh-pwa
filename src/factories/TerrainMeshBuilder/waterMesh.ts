@@ -1,5 +1,5 @@
 import { asColor3, terrainColorMap } from "@/assets/materials/terrains";
-import { getWorldDepth, getWorldWidth } from "@/helpers/math";
+import { getWorldDepth, getWorldWidth, wrapExclusive } from "@/helpers/math";
 import {
   Color3,
   DynamicTexture,
@@ -321,7 +321,7 @@ function createMultiSparkleField(scene: Scene, cfg: MultiFieldConfig): SparkleFi
       rand(lr.patternScale.min, lr.patternScale.max) * (cfg.patternScaleMulByLayer?.[idx] ?? 1.0);
     const driftCPM = rand(lr.driftCPM.min, lr.driftCPM.max);
     const rotationDPM = rand(lr.rotationDPM.min, lr.rotationDPM.max);
-    const baseAngleRad = ((cfg.baseAnglesDeg?.[idx] ?? ((idx * 120) % 360)) * DEG2RAD) as number;
+    const baseAngleRad = ((cfg.baseAnglesDeg?.[idx] ?? (idx * 120) % 360) * DEG2RAD) as number;
     const wobbleAmpPx = size * rand(lr.wobbleAmpPercent.min, lr.wobbleAmpPercent.max);
     const wobbleF1 = rand(lr.wobbleFreq1.min, lr.wobbleFreq1.max);
     const wobbleF2 = rand(lr.wobbleFreq2.min, lr.wobbleFreq2.max);
@@ -408,14 +408,8 @@ function createMultiSparkleField(scene: Scene, cfg: MultiFieldConfig): SparkleFi
       const positions = wrapPositions([tx, ty], d.r);
       for (const [px, py] of positions) {
         // Regional modulation based on transformed position
-        const cxIdx = Math.max(
-          0,
-          Math.min(gx - 1, Math.floor((((px % size) + size) % size) / cellW)),
-        );
-        const cyIdx = Math.max(
-          0,
-          Math.min(gy - 1, Math.floor((((py % size) + size) % size) / cellH)),
-        );
+        const cxIdx = Math.max(0, Math.min(gx - 1, Math.floor(wrapExclusive(px, 0, size) / cellW)));
+        const cyIdx = Math.max(0, Math.min(gy - 1, Math.floor(wrapExclusive(py, 0, size) / cellH)));
         const f =
           0.3 +
           Math.abs(Math.sin(tSec * freq[cyIdx][cxIdx] + phase[cyIdx][cxIdx])) *

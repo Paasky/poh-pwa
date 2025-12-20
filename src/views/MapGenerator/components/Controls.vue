@@ -65,7 +65,7 @@ function onSizeChange(v: { x: number; y: number }) {
       label="Alignment"
       :model-value="store.alignment"
       :options="store.alignmentOptions"
-      @update:model-value="(v) => updateAlignment(v)"
+      @update:model-value="(v: typeof store.alignment) => updateAlignment(v)"
     />
 
     <UiButton @click.prevent="store.generate()"> Generate </UiButton>

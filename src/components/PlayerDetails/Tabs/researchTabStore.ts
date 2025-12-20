@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
 import { useObjectsStore } from "@/stores/objectStore";
@@ -13,13 +14,20 @@ export const useResearchTabStore = defineStore("researchTabStore", () => {
   const player = computed(() => objStore.currentPlayer);
   const research = computed(() => player.value.research);
 
-  const maxY = computed(() => (techs.value.length ? Math.max(...techs.value.map((t) => t.y!)) : 0));
-  const maxX = computed(() => (techs.value.length ? Math.max(...techs.value.map((t) => t.x!)) : 0));
+  const maxX = computed(() => Math.max(...techs.value.map((t) => t.x!)));
+  const maxY = computed(() => Math.max(...techs.value.map((t) => t.y!)));
 
   function init() {
     if (initialized.value) return;
     techs.value = objStore.getClassTypes("technologyType");
     eras.value = objStore.getClassTypes("eraType");
+
+    // Warm up computed values
+    player.value;
+    research.value;
+    maxX.value;
+    maxY.value;
+
     initialized.value = true;
   }
 

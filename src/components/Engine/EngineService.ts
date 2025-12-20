@@ -1,280 +1,168 @@
-import {
-  ArcRotateCamera,
-  Color4,
-  Engine as BabylonEngine,
-  Scene,
-  TransformNode,
-  Vector3,
-} from "@babylonjs/core";
+import { Color4, Engine as BabylonEngine, Observer, Scalar, Scene, Vector3 } from "@babylonjs/core";
 import "@babylonjs/core/Lights/Shadows/shadowGeneratorSceneComponent";
 import {
-  clamp,
-  getWorldDepth,
-  getWorldMinX,
-  getWorldMinZ,
-  getWorldWidth,
+  calculateKnownBounds,
+  clampCoordsToBoundaries,
+  getEngineCoordsFromPercent,
+  type OrthoBounds,
   tileCenter,
 } from "@/helpers/math";
 import { TerrainMeshBuilder } from "@/factories/TerrainMeshBuilder/TerrainMeshBuilder";
 import { useObjectsStore } from "@/stores/objectStore";
 import { EnvironmentService } from "@/components/Engine/EnvironmentService";
-import type { DefaultPostProcessingOptions } from "@/components/Engine/environments/postFx";
 import LogicMeshBuilder from "@/factories/LogicMeshBuilder";
 import { useHoveredTile } from "@/stores/hoveredTile";
 import { Minimap } from "@/components/Engine/interaction/Minimap";
 import { MainCamera } from "@/components/Engine/interaction/MainCamera";
 import FeatureInstancer from "@/components/Engine/features/FeatureInstancer";
 import { FogOfWar } from "@/components/Engine/FogOfWar";
+import GridOverlay from "@/components/Engine/overlays/GridOverlay";
 import type { Tile } from "@/objects/game/Tile";
 import type { GameKey } from "@/objects/game/_GameObject";
 import { Coords, getCoordsFromTileKey } from "@/helpers/mapTools";
 import { EngineCoords } from "@/factories/TerrainMeshBuilder/_terrainMeshTypes";
+import { useSettingsStore } from "@/stores/settingsStore";
+import { watch } from "vue";
 
-export type EngineOptions = {
-  // Camera UX
-  manualTilt?: boolean; // Allow user to tilt manually (otherwise auto-tilt by zoom)
-
-  // Resolution & performance
-  renderScale?: number; // 1 = native CSS resolution, 0.5 = half res, 1.25 = super-sample
-  fpsCap?: number; // 0 or undefined = uncapped; otherwise, minimum ms between renders enforced
-  adaptToDeviceRatio?: boolean; // Use devicePixelRatio for base resolution (restart required)
-
-  // Engine/GPU flags (restart required)
-  antialias?: boolean; // Multi-sample antialias at context level (restart required)
-  preserveDrawingBuffer?: boolean;
-  stencil?: boolean;
-  disableWebGL2Support?: boolean; // Force WebGL1 if true
-  powerPreference?: WebGLPowerPreference; // "default" | "high-performance" | "low-power"
-
-  // Visual effects (post-process pipeline)
-  hdr?: boolean; // Enable HDR pipeline when supported
-  useFxaa?: boolean; // FXAA post-process
-  useBloom?: boolean; // Bloom post-process
-  bloomThreshold?: number; // 0..1
-  bloomWeight?: number; // 0..1
-
-  // Feature layers
-  showFeatures?: boolean; // Toggle GPU-instanced feature props (trees etc.)
-};
-
-export const RestartRequiredOptionKeys: (keyof EngineOptions)[] = [
-  "antialias",
-  "preserveDrawingBuffer",
-  "stencil",
-  "disableWebGL2Support",
-  "powerPreference",
-  "adaptToDeviceRatio",
-];
-
-export const DefaultEngineOptions: Required<EngineOptions> = {
-  manualTilt: false,
-  renderScale: 1,
-  fpsCap: 0,
-  adaptToDeviceRatio: false,
-  antialias: true,
-  preserveDrawingBuffer: true,
-  stencil: true,
-  disableWebGL2Support: false,
-  powerPreference: "high-performance",
-  hdr: true,
-  useFxaa: true,
-  useBloom: false,
-  bloomThreshold: 0.9,
-  bloomWeight: 0.15,
-  showFeatures: true,
-};
-
-export type EngineOptionPreset = { id: string; label: string; value: EngineOptions };
-
-export const EngineOptionPresets: EngineOptionPreset[] = [
-  {
-    id: "low",
-    label: "Low",
-    value: {
-      manualTilt: false,
-      renderScale: 0.5,
-      fpsCap: 30,
-      adaptToDeviceRatio: false,
-      antialias: false,
-      preserveDrawingBuffer: false,
-      stencil: false,
-      disableWebGL2Support: false,
-      powerPreference: "low-power",
-      hdr: false,
-      useFxaa: false,
-      useBloom: false,
-    } as EngineOptions,
-  },
-  {
-    id: "medium",
-    label: "Medium",
-    value: {
-      manualTilt: false,
-      renderScale: 0.75,
-      fpsCap: 60,
-      adaptToDeviceRatio: false,
-      antialias: true,
-      preserveDrawingBuffer: false,
-      stencil: false,
-      disableWebGL2Support: false,
-      powerPreference: "default",
-      hdr: false,
-      useFxaa: true,
-      useBloom: false,
-    } as EngineOptions,
-  },
-  {
-    id: "high",
-    label: "High",
-    value: {
-      manualTilt: false,
-      renderScale: 1.0,
-      fpsCap: 0,
-      adaptToDeviceRatio: false,
-      antialias: true,
-      preserveDrawingBuffer: true,
-      stencil: true,
-      disableWebGL2Support: false,
-      powerPreference: "high-performance",
-      hdr: true,
-      useFxaa: true,
-      useBloom: true,
-      bloomThreshold: 0.9,
-      bloomWeight: 0.15,
-    } as EngineOptions,
-  },
-  {
-    id: "ultra",
-    label: "Ultra",
-    value: {
-      manualTilt: false,
-      renderScale: 1.0, // keep safe by default; user can increase manually
-      fpsCap: 0,
-      adaptToDeviceRatio: true,
-      antialias: true,
-      preserveDrawingBuffer: true,
-      stencil: true,
-      disableWebGL2Support: false,
-      powerPreference: "high-performance",
-      hdr: true,
-      useFxaa: true,
-      useBloom: true,
-      bloomThreshold: 0.85,
-      bloomWeight: 0.2,
-    } as EngineOptions,
-  },
-];
-
+// noinspection JSUnusedGlobalSymbols
 export class EngineService {
   size: Coords;
   canvas: HTMLCanvasElement;
-  engine: BabylonEngine;
-  scene: Scene;
-  tileRoot: TransformNode;
+  engine!: BabylonEngine;
+  scene!: Scene;
 
-  camera: ArcRotateCamera;
-  mainCamera: MainCamera;
-  environmentService: EnvironmentService;
-  terrainBuilder: TerrainMeshBuilder;
-  logicMesh: LogicMeshBuilder;
-  featureInstancer: FeatureInstancer;
-  fogOfWar: FogOfWar;
+  mainCamera!: MainCamera;
+  environmentService!: EnvironmentService;
+  terrainBuilder!: TerrainMeshBuilder;
+  logicMesh!: LogicMeshBuilder;
+  featureInstancer!: FeatureInstancer;
+  fogOfWar!: FogOfWar;
+  gridOverlay!: GridOverlay;
 
+  minimapCanvas?: HTMLCanvasElement;
   minimap?: Minimap;
-  // Options
 
-  options: EngineOptions = { ...DefaultEngineOptions };
-  // Camera settings moved to MainCamera
+  private _knownBounds: OrthoBounds | null = null;
+  private flyToObserver: Observer<Scene> | null = null;
 
-  // todo the fps cap implementation is awful, just creates lag. this must go and either use built-in babylon settings or remove fps cap entirely
-  private _lastRenderTime = 0;
+  constructor(size: Coords, canvas: HTMLCanvasElement, minimapCanvas?: HTMLCanvasElement) {
+    // Prevent strange bugs from happening
+    if (size.x <= 0 || size.y <= 0) throw new Error("Invalid map size");
 
-  constructor(
-    size: Coords,
-    canvas: HTMLCanvasElement,
-    minimapCanvas?: HTMLCanvasElement,
-    options?: EngineOptions,
-  ) {
     this.size = size;
     this.canvas = canvas;
-    this.options = { ...DefaultEngineOptions, ...(options ?? {}) };
+    this.minimapCanvas = minimapCanvas;
+  }
 
-    const tilesByKey = useObjectsStore().getTiles;
+  initEngineAndScene(): this {
+    const settings = useSettingsStore().engineSettings;
 
-    // Create Engine and Scene
     this.engine = new BabylonEngine(
       this.canvas,
-      this.options.antialias ?? true,
+      settings.antialias,
       {
-        preserveDrawingBuffer: this.options.preserveDrawingBuffer ?? true,
-        stencil: this.options.stencil ?? true,
-        disableWebGL2Support: this.options.disableWebGL2Support ?? false,
-        powerPreference: this.options.powerPreference ?? "high-performance",
+        preserveDrawingBuffer: settings.preserveDrawingBuffer,
+        stencil: settings.stencil,
+        disableWebGL2Support: settings.disableWebGL2Support,
+        powerPreference: settings.powerPreference,
       },
-      this.options.adaptToDeviceRatio ?? false,
+      settings.adaptToDeviceRatio,
     );
     this.scene = new Scene(this.engine);
     this.scene.clearColor = new Color4(0.63, 0.63, 0.63, 1); // Same-ish as snow
 
-    // Create Cameras and Environment
-    this.applyRenderScale(this.options.renderScale ?? 1);
-    this.mainCamera = new MainCamera(this.size, this.scene, this.canvas, {
-      manualTilt: this.options.manualTilt,
-    });
-    this.camera = this.mainCamera.camera;
-    this.environmentService = new EnvironmentService(this.scene, this.camera, this.engine);
+    // Allow for easy debugging
+    // eslint-disable-next-line
+    (document as any).engineService = this;
 
-    // Build merged terrain mesh (new pipeline)
-    this.terrainBuilder = new TerrainMeshBuilder(this.scene, this.size, tilesByKey);
-    this.tileRoot = this.terrainBuilder.root;
+    // Watch for non-restart settings changes
+    this.applyRenderScale(settings.renderScale);
+    watch(
+      () => settings.renderScale,
+      (newScale) => this.applyRenderScale(newScale),
+    );
 
-    // Build logic mesh for interactions (thin-instance, invisible)
-    this.logicMesh = new LogicMeshBuilder(this.scene, this.size, tilesByKey).build();
+    return this;
+  }
 
-    // Wire hovered tile to a lightweight reactive store
+  initCamera(): this {
+    this.mainCamera = new MainCamera(
+      this.size,
+      this.scene,
+      this.canvas,
+      this.fogOfWar,
+      this.gridOverlay,
+      () => this.knownBounds,
+    );
+
+    this.flyToCurrentPlayer(true);
+
+    return this;
+  }
+
+  initEnvironment(): this {
+    this.environmentService = new EnvironmentService(this.scene, this.mainCamera.camera);
+
+    return this;
+  }
+
+  initLogic(): this {
+    this.logicMesh = new LogicMeshBuilder(this.scene, this.size, useObjectsStore().getTiles);
+
     const hovered = useHoveredTile();
     this.logicMesh.onTileHover((tile) => hovered.set(tile));
     this.logicMesh.onTileExit(() => hovered.clear());
 
+    return this;
+  }
+
+  initTerrain(): this {
+    this.terrainBuilder = new TerrainMeshBuilder(this.scene, this.size, useObjectsStore().getTiles);
+
+    return this;
+  }
+
+  initGridOverlay(): this {
+    this.gridOverlay = new GridOverlay(this.scene, this.size, useObjectsStore().getTiles);
+
+    return this;
+  }
+
+  initFeatures(): this {
     this.featureInstancer = new FeatureInstancer(
       this.scene,
       this.size,
-      Object.values(tilesByKey),
-      this.tileRoot,
-    ).setIsVisible(options?.showFeatures ?? true);
-
-    // Initialize FoW strictly from store-provided currentPlayer values
-    const storeKnown = useObjectsStore().currentPlayer.knownTileKeys.value as GameKey[];
-    const storeVisible = useObjectsStore().currentPlayer.visibleTileKeys.value as GameKey[];
-
-    this.fogOfWar = new FogOfWar(
-      this.size,
-      this.scene,
-      this.camera,
-      tilesByKey,
-      storeKnown,
-      storeVisible,
+      Object.values(useObjectsStore().getTiles),
+      this.terrainBuilder.root,
     );
 
-    // QoL: fly camera to the current player's first unit tile (if any)
-    this.flyToCurrentPlayer();
+    return this;
+  }
 
-    if (minimapCanvas) {
-      this.minimap = new Minimap(this.size, minimapCanvas, this.engine, this.fogOfWar);
-    }
+  initFogOfWar(): this {
+    this.fogOfWar = new FogOfWar(this.size, this.scene);
 
-    // Render loop with optional FPS cap
+    // Watch for known area changes to update clamping bounds
+    const player = useObjectsStore().currentPlayer;
+    watch(
+      player.knownTileKeys,
+      (keys) => {
+        this._knownBounds = calculateKnownBounds(this.size, keys);
+        // Trigger minimap update if it exists
+        if (this.minimap) this.minimap.capture();
+      },
+      { immediate: true },
+    );
+
+    return this;
+  }
+
+  public get knownBounds(): OrthoBounds | null {
+    return this._knownBounds;
+  }
+
+  render(): this {
     this.engine.runRenderLoop(() => {
-      if (this.options.fpsCap && this.options.fpsCap > 0) {
-        const now = performance.now();
-        const minDelta = 1000 / this.options.fpsCap;
-        if (now - this._lastRenderTime < minDelta) return;
-        this._lastRenderTime = now;
-      }
-
-      // Tick environment (clock/effects) before rendering
-      const deltaSeconds = this.engine.getDeltaTime() / 1000;
-      this.environmentService.update(deltaSeconds);
       this.scene.render();
     });
 
@@ -282,128 +170,174 @@ export class EngineService {
     this.engine.resize();
     window.addEventListener("resize", this.onResize);
 
-    // Once the scene is ready, zoom minimap to known and capture a one-time minimap image
-    this.scene.executeWhenReady(() => {
-      this.minimap?.capture();
-    });
+    return this;
+  }
+
+  initMinimap(): this {
+    if (this.minimapCanvas) {
+      this.minimap = new Minimap(
+        this.size,
+        this.minimapCanvas,
+        this.engine,
+        this.fogOfWar,
+        () => this.knownBounds,
+      );
+      this.minimap.capture();
+    }
+
+    return this;
+  }
+
+  initOrder(): (() => void)[] {
+    return [
+      // All components require the engine/scene
+      () => this.initEngineAndScene(),
+
+      // No other requirements
+      () => this.initFogOfWar(),
+      () => this.initGridOverlay(),
+      () => this.initLogic(),
+      () => this.initTerrain(),
+
+      // Requires FogOfWar & GridOverlay
+      () => this.initCamera(),
+
+      // Requires Terrain
+      () => this.initFeatures(),
+
+      // Requires Camera
+      () => this.initEnvironment(),
+
+      // Start Rendering!
+      () => this.render(),
+
+      // Optional minimap (if canvas was given)
+      () => this.initMinimap(),
+    ];
+  }
+
+  init(): this {
+    this.initOrder().forEach((fn) => fn());
+    return this;
   }
 
   dispose(): void {
-    this.fogOfWar.dispose();
+    // Stop flying
+    this.stopFlying();
+
+    // Optional minimap
+    if (this.minimap) this.minimap.dispose();
+
+    // Stop rendering
     window.removeEventListener("resize", this.onResize);
     this.engine.stopRenderLoop();
+
+    // Stop requires camera
+    this.environmentService.dispose();
+    this.fogOfWar.dispose();
+
+    // Stop requires terrain
     this.featureInstancer.dispose();
+
+    // Stop requires GridOverlay
+    this.mainCamera.camera.dispose();
+
+    // Stop others
+    this.gridOverlay.dispose();
     this.logicMesh.dispose();
     this.terrainBuilder.dispose();
-    this.environmentService.dispose();
+
+    // Finally, stop the scene & engine
     this.scene.dispose();
     this.engine.dispose();
   }
 
-  // todo move this to our settingsStore and remove from here
-  setLogicDebugEnabled(enabled: boolean): this {
-    this.logicMesh.setDebugEnabled(enabled);
+  flyTo(coords: EngineCoords, teleport = false): EngineService {
+    const clamped = clampCoordsToBoundaries(coords, this.size, this._knownBounds);
+    const targetPos = new Vector3(clamped.x, 0, clamped.z);
+
+    // Remove any existing flyTo observer
+    this.stopFlying();
+
+    if (teleport) {
+      this.mainCamera.camera.target.copyFrom(targetPos);
+      return this;
+    }
+
+    const startPos = this.mainCamera.camera.target.clone();
+    const duration = 0.5;
+    let elapsed = 0;
+
+    this.flyToObserver = this.scene.onBeforeRenderObservable.add(() => {
+      const deltaTime = this.engine.getDeltaTime() / 1000;
+      elapsed += deltaTime;
+
+      // 1. Calculate linear completion (0 to 1)
+      const completion = Scalar.Clamp(elapsed / duration, 0, 1);
+
+      // 2. Apply SmoothStep to get the "speed up, then speed down" effect
+      // This creates the organic acceleration/deceleration curve
+      const easedCompletion = Scalar.SmoothStep(0, 1, completion);
+
+      // 3. Use the eased value for position interpolation
+      Vector3.LerpToRef(startPos, targetPos, easedCompletion, this.mainCamera.camera.target);
+
+      if (completion >= 1) {
+        this.stopFlying();
+      }
+    });
+
     return this;
   }
 
-  flyTo(coords: EngineCoords): EngineService {
-    const target = new Vector3(coords.x, 0, coords.z);
-
-    // Apply instantly
-    // todo add a super-super-simple 1s flying animation (never crossing world x-limits, even if wrap would be "closer")
-    this.camera.target.copyFrom(target);
-
-    return this;
-  }
-
-  flyToCurrentPlayer(): void {
+  flyToCurrentPlayer(teleport = false): void {
     const currentPlayer = useObjectsStore().currentPlayer;
 
-    // Capital or first unit
-    const capital = currentPlayer.cities.value.find((c) => c.isCapital);
-    if (capital) {
-      this.flyToTile(capital.tileKey);
-    }
-
+    // Unit has priority
     const unit = currentPlayer.units.value[0];
     if (unit) {
-      this.flyToTile(unit.tileKey.value);
+      this.flyToTile(unit.tileKey.value, teleport);
+      return;
     }
 
-    return;
+    // Then capital
+    const capital = currentPlayer.cities.value.find((city) => city.isCapital);
+    if (capital) {
+      this.flyToTile(capital.tileKey, teleport);
+      return;
+    }
   }
 
   // Public: move instantly to a percentage of world width/depth (0..1 each)
-  flyToPercent(xPercent: number, yPercent: number): EngineService {
-    // Clamp percents
-    const widthPercent = clamp(xPercent, 0, 1);
-    const depthPercent = clamp(yPercent, 0, 1);
-
-    // Map to world coordinates
-    const worldWidth = getWorldWidth(this.size.x);
-    const worldDepth = getWorldDepth(this.size.y);
-    return this.flyTo({
-      x: getWorldMinX(worldWidth) + widthPercent * worldWidth,
-
-      // Flip Z (y=0 is north, y=max is south)
-      z: getWorldMinZ(worldDepth) - depthPercent * worldDepth,
-    });
+  flyToPercent(xPercent: number, yPercent: number, teleport = false): EngineService {
+    return this.flyTo(getEngineCoordsFromPercent(this.size, xPercent, yPercent), teleport);
   }
 
-  flyToTile(tile: GameKey | string | Tile): EngineService {
+  flyToTile(tile: GameKey | string | Tile, teleport = false): EngineService {
     if (typeof tile === "string") {
       const coords = getCoordsFromTileKey(tile as GameKey);
-      return this.flyTo(tileCenter(this.size, coords));
+      return this.flyTo(tileCenter(this.size, coords), teleport);
     } else {
-      return this.flyTo(tileCenter(this.size, tile));
+      return this.flyTo(tileCenter(this.size, tile), teleport);
     }
+  }
+
+  stopFlying(): this {
+    if (this.flyToObserver) {
+      this.scene.onBeforeRenderObservable.remove(this.flyToObserver);
+      this.flyToObserver = null;
+    }
+
+    return this;
   }
 
   private onResize = () => {
     this.engine.resize();
   };
 
-  // --- Options application helpers ---
-  private applyRenderScale(scale: number) {
-    const safeScale = Math.max(0.25, Math.min(2, scale || 1));
-    const level = 1 / safeScale;
-    this.engine.setHardwareScalingLevel(level);
-  }
-
-  applyOptions(next: EngineOptions): { restartKeysChanged: (keyof EngineOptions)[] } {
-    const prev = this.options;
-    this.options = { ...prev, ...next };
-
-    // Collect restart-required changes
-    const restartKeysChanged: (keyof EngineOptions)[] = [];
-    for (const k of RestartRequiredOptionKeys) {
-      if (prev[k] !== this.options[k]) restartKeysChanged.push(k);
-    }
-
-    // Live-applied options
-    if (prev.renderScale !== this.options.renderScale) {
-      this.applyRenderScale(this.options.renderScale ?? 1);
-    }
-    if (prev.fpsCap !== this.options.fpsCap) {
-      this._lastRenderTime = 0; // reset limiter
-    }
-    if (prev.manualTilt !== this.options.manualTilt) {
-      this.mainCamera.setManualTilt(!!this.options.manualTilt);
-    }
-    if (prev.showFeatures !== this.options.showFeatures) {
-      this.setShowFeatures(!!this.options.showFeatures);
-    }
-    return { restartKeysChanged };
-  }
-
-  /** Update post-processing toggles/values for the environment's rendering pipeline. */
-  public setEnvironmentPostProcessingOptions(options: Partial<DefaultPostProcessingOptions>): void {
-    this.environmentService.setPostProcessingOptions(options);
-  }
-
-  // Feature layers
-  setShowFeatures(showFeatures: boolean): this {
-    this.featureInstancer.setIsVisible(showFeatures);
-    return this;
+  private applyRenderScale(renderScale: number) {
+    const safeScale = Math.max(0.25, Math.min(2, renderScale || 1));
+    const hardwareScalingLevel = 1 / safeScale;
+    this.engine.setHardwareScalingLevel(hardwareScalingLevel);
   }
 }

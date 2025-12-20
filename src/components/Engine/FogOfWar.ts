@@ -1,19 +1,20 @@
 import type { Scene } from "@babylonjs/core";
 import {
-  ArcRotateCamera,
+  Camera,
   Effect,
-  Matrix,
   PostProcess,
   RawTexture,
   Texture,
   Vector2,
-  Vector3,
   Vector4,
 } from "@babylonjs/core";
-import { getWorldDepth, getWorldMinX, getWorldMinZ, getWorldWidth } from "@/helpers/math";
+import { watchEffect } from "vue";
+import { getMapBounds } from "@/helpers/math";
 import type { Coords } from "@/helpers/mapTools";
 import { Tile } from "@/objects/game/Tile";
 import type { GameKey } from "@/objects/game/_GameObject";
+import { useSettingsStore } from "@/stores/settingsStore";
+import { useObjectsStore } from "@/stores/objectStore";
 
 export class FogOfWar {
   // === Fog of War tunables (kept internal; not user-adjustable) ===
@@ -21,94 +22,129 @@ export class FogOfWar {
   exploredDim = 0.33;
   // Alpha to blend unknown areas toward black (0..1)
   // Dev QoL: set to 0.75 so player can orient on the map
-  unknownDim = 0.95;
+  unknownDim = 1;
 
   // Inputs / configuration
   readonly scene: Scene;
   readonly size: Coords;
-  readonly tilesByKey: Record<string, Tile>;
-  readonly camera: ArcRotateCamera;
 
   // Logical state
   knownKeys: Set<GameKey>;
   visibleKeys: Set<GameKey>;
 
   // GPU/CPU resources
-  private maskBuffer!: Uint8Array;
-  private maskTexture!: RawTexture;
-  private postProcess!: PostProcess;
+  maskBuffer!: Uint8Array;
+  maskTexture!: RawTexture;
+  public visibilityMask!: Uint8Array;
+  private _keyToIndex = new Map<GameKey, number>();
+  private _postProcesses = new Map<Camera, PostProcess>();
+  private _stopHandles: (() => void)[] = [];
+  private _ppStopHandles = new Map<Camera, () => void>();
 
   private _initialized = false;
+  private _pendingProcess = false;
 
-  constructor(
-    size: Coords,
-    scene: Scene,
-    camera: ArcRotateCamera,
-    tilesByKey: Record<string, Tile>,
-    knownTileKeys: GameKey[],
-    visibleTileKeys: GameKey[],
-  ) {
+  constructor(size: Coords, scene: Scene) {
     // Required fields initialized in constructor (no lazy nulls)
     this.scene = scene;
     this.size = size;
-    this.tilesByKey = tilesByKey;
-    this.camera = camera;
 
-    this.knownKeys = new Set(knownTileKeys);
-    this.visibleKeys = new Set(visibleTileKeys);
-    console.log(this.knownKeys, this.visibleKeys);
+    const player = useObjectsStore().currentPlayer;
+    this.knownKeys = player.knownTileKeys.value;
+    this.visibleKeys = player.visibleTileKeys.value;
 
-    // init resources and run once
+    // init resources
     this.initResources();
-    this.process();
-  }
 
-  addAndSetTiles(addKnownKeys: GameKey[], setVisibleKeys?: GameKey[]): this {
-    addKnownKeys.forEach((k) => this.knownKeys.add(k));
-    if (setVisibleKeys) this.visibleKeys = new Set(setVisibleKeys);
-    this.process();
-
-    return this;
+    this._stopHandles.push(
+      watchEffect(() => {
+        this.knownKeys = player.knownTileKeys.value;
+        this.visibleKeys = player.visibleTileKeys.value;
+        this.triggerProcess();
+      }),
+    );
   }
 
   dispose(): void {
     // dispose of all data created during my lifespan
-    if (this.postProcess) this.postProcess.dispose();
+    this._stopHandles.forEach((handle) => handle());
+    this._ppStopHandles.forEach((handle) => handle());
+    this._ppStopHandles.clear();
+
+    for (const postProcess of this._postProcesses.values()) {
+      postProcess.dispose();
+    }
+    this._postProcesses.clear();
     if (this.maskTexture) this.maskTexture.dispose();
     // buffer is GC-managed
+  }
+
+  private triggerProcess() {
+    if (this._pendingProcess) return;
+    this._pendingProcess = true;
+
+    // Coalesce updates in the same "tick"
+    Promise.resolve().then(() => {
+      this.process();
+      this._pendingProcess = false;
+    });
   }
 
   private process(): this {
     // Build or update RG mask from known/visible sets
     if (!this._initialized) this.initResources();
-    const w = this.size.x;
-    const h = this.size.y;
-    const buf = this.maskBuffer;
-    let i = 0;
-    for (let y = 0; y < h; y++) {
-      for (let x = 0; x < w; x++) {
-        const key = Tile.getKey(x, y);
-        const known = this.knownKeys.has(key as GameKey) ? 255 : 0;
-        const visible = this.visibleKeys.has(key as GameKey) ? 255 : 0;
-        buf[i++] = known; // R
-        buf[i++] = visible; // G
-        buf[i++] = 0; // B
-        buf[i++] = 255; // A
+
+    const buffer = this.maskBuffer;
+    const visibilityMask = this.visibilityMask;
+
+    // Reset R and G channels. B is 0, A is 255.
+    visibilityMask.fill(0);
+    for (let index = 0; index < visibilityMask.length; index++) {
+      const offset = index * 4;
+      buffer[offset] = 0; // R
+      buffer[offset + 1] = 0; // G
+    }
+
+    for (const key of this.knownKeys) {
+      const index = this._keyToIndex.get(key);
+      if (index !== undefined) {
+        visibilityMask[index] = 1;
+        buffer[index * 4] = 255;
       }
     }
-    this.maskTexture.update(buf);
+    for (const key of this.visibleKeys) {
+      const index = this._keyToIndex.get(key);
+      if (index !== undefined) {
+        visibilityMask[index] = 2;
+        buffer[index * 4 + 1] = 255;
+      }
+    }
+
+    this.maskTexture.update(buffer);
     return this;
   }
 
   private initResources(): void {
     if (this._initialized) return;
-    const w = this.size.x;
-    const h = this.size.y;
-    this.maskBuffer = new Uint8Array(w * h * 4);
+    const width = this.size.x;
+    const height = this.size.y;
+    this.maskBuffer = new Uint8Array(width * height * 4);
+    this.visibilityMask = new Uint8Array(width * height);
+
+    for (let row = 0; row < height; row++) {
+      for (let col = 0; col < width; col++) {
+        const index = row * width + col;
+        this._keyToIndex.set(Tile.getKey(col, row), index);
+
+        const offset = index * 4;
+        this.maskBuffer[offset + 3] = 255; // Alpha is always 255
+      }
+    }
+
     this.maskTexture = RawTexture.CreateRGBATexture(
       this.maskBuffer,
-      w,
-      h,
+      width,
+      height,
       this.scene.getEngine(),
       false,
       false,
@@ -120,52 +156,66 @@ export class FogOfWar {
     // Register shader once
     this.registerShader();
 
-    // Create the projector post-process and wire uniforms
-    this.createPostProcess();
-
     this._initialized = true;
   }
 
-  private createPostProcess(): void {
-    const camera = this.camera;
-    const size = this.size;
-    const worldWidth = getWorldWidth(size.x);
-    const worldDepth = getWorldDepth(size.y);
-    const minX = getWorldMinX(worldWidth);
-    const minZ = getWorldMinZ(worldDepth);
+  public attachToCamera(camera: Camera): void {
+    if (this._postProcesses.has(camera)) return;
+    this.createPostProcess(camera);
+  }
 
-    this.postProcess = new PostProcess(
+  private createPostProcess(camera: Camera): void {
+    const size = this.size;
+    const { minX, topZ, worldWidth, worldDepth } = getMapBounds(size);
+
+    const postProcess = new PostProcess(
       "FoW",
       "fowProjector",
-      [
-        "invViewProjection",
-        "cameraPosition",
-        "worldXZBounds",
-        "gridSize",
-        "exploredDim",
-        "unknownAlpha",
-      ],
+      ["invViewProjection", "worldXZBounds", "gridSize", "exploredDim", "unknownAlpha"],
       ["maskTex"],
       1.0,
-      camera,
+      null,
+      Texture.NEAREST_SAMPLINGMODE,
+      this.scene.getEngine(),
     );
 
-    this.postProcess.onApply = (effect) => {
-      const view = camera.getViewMatrix();
-      const proj = camera.getProjectionMatrix();
-      const invVP = Matrix.Invert(view.multiply(proj));
-      effect.setMatrix("invViewProjection", invVP);
-      effect.setVector3("cameraPosition", camera.position as Vector3);
-      effect.setVector4("worldXZBounds", new Vector4(minX, minZ, worldWidth, worldDepth));
+    postProcess.onApply = (effect) => {
+      const invViewProjection = camera.getTransformationMatrix().clone().invert();
+      effect.setMatrix("invViewProjection", invViewProjection);
+      effect.setVector4("worldXZBounds", new Vector4(minX, topZ, worldWidth, worldDepth));
       effect.setVector2("gridSize", new Vector2(size.x, size.y));
       effect.setFloat("exploredDim", this.exploredDim);
       effect.setFloat("unknownAlpha", this.unknownDim);
       effect.setTexture("maskTex", this.maskTexture);
     };
+
+    this._postProcesses.set(camera, postProcess);
+
+    // Toggle post-process when settings change
+    const stopWatcher = watchEffect(() => {
+      const isEnabled = useSettingsStore().engineSettings.enableFogOfWar;
+      const isAttached = postProcess.getCamera() === camera;
+      if (isEnabled && !isAttached) {
+        camera.attachPostProcess(postProcess);
+      } else if (!isEnabled && isAttached) {
+        camera.detachPostProcess(postProcess);
+      }
+    });
+    this._ppStopHandles.set(camera, stopWatcher);
   }
 
   private registerShader(): void {
-    if (Effect.ShadersStore["fowProjectorFragmentShader"]) return; // once
+    if (Effect.ShadersStore["fowProjectorVertexShader"]) return;
+
+    Effect.ShadersStore["fowProjectorVertexShader"] = `
+      attribute vec2 position;
+      varying vec2 vUV;
+      void main(void) {
+        gl_Position = vec4(position, 0.0, 1.0);
+        vUV = position * 0.5 + 0.5;
+      }
+    `;
+
     Effect.ShadersStore["fowProjectorFragmentShader"] = `
       #ifdef GL_ES
       precision highp float;
@@ -176,50 +226,75 @@ export class FogOfWar {
       uniform sampler2D maskTex; // RG mask
 
       uniform mat4 invViewProjection;
-      uniform vec3 cameraPosition;
-      uniform vec4 worldXZBounds; // (minX, minZ, worldWidth, worldDepth)
+      uniform vec4 worldXZBounds; // (minX, topZ, worldWidth, worldDepth)
       uniform vec2 gridSize; // (sizeX, sizeY)
       uniform float exploredDim;
       uniform float unknownAlpha;
 
-      vec3 worldRayFromUV(vec2 uv) {
+      vec2 intersectXZ(vec2 uv) {
         vec2 ndc = uv * 2.0 - 1.0;
         vec4 nearH = invViewProjection * vec4(ndc, 0.0, 1.0);
         vec4 farH  = invViewProjection * vec4(ndc, 1.0, 1.0);
         vec3 nearW = nearH.xyz / nearH.w;
         vec3 farW  = farH.xyz / farH.w;
-        vec3 dir = normalize(farW - cameraPosition);
-        return dir;
-      }
-
-      vec2 intersectXZ(vec3 rayDir) {
+        
+        vec3 rayDir = farW - nearW;
         float denom = abs(rayDir.y) < 1e-5 ? (rayDir.y < 0.0 ? -1e-5 : 1e-5) : rayDir.y;
-        float t = -cameraPosition.y / denom;
-        vec3 p = cameraPosition + rayDir * t;
+        float t = -nearW.y / denom;
+        vec3 p = nearW + rayDir * t;
         return p.xz;
       }
 
-      // Convert world XZ -> tile index (odd-r pointy-top). Matches TS worldToTileIndices.
+      // Convert world XZ coordinates to tile grid indices (odd-r pointy-top hex layout).
+      // This is the inverse of the tileCenter() function in math.ts.
       ivec2 worldXZToTile(vec2 xz, vec4 bounds, vec2 grid) {
-        float minX = bounds.x; float minZ = bounds.y;
-        // Flip Z-axis: game world increases "south" with decreasing world Z, so measure from maxZ
-        // Correct constant offset: shift south by one worldDepth (negative sign for flipped-Z)
-        float xw = xz.x - minX; float zw = (minZ + bounds.w) - xz.y - bounds.w;
-        float q = 0.57735026919 * xw - 0.33333333333 * zw; // sqrt(3)/3, 1/3
-        float r = 0.66666666667 * zw; // 2/3
-        float cx = q; float cz = r; float cy = -cx - cz;
+        float minX = bounds.x;
+        float topZ = bounds.y;
+
+        // Calculate world-space distance from the top-left (minX, topZ)
+        float worldX = xz.x - minX;
+        float worldZ = topZ - xz.y;
+
+        // Transform to axial hex coordinates (q, r).
+        // Using constants for:
+        // q = (sqrt(3)/3 * worldX - 1/3 * worldZ)
+        // r = (2/3 * worldZ)
+        float q = 0.57735026919 * worldX - 0.33333333333 * worldZ;
+        float r = 0.66666666667 * worldZ;
+
+        // Convert axial hex to cube coordinates (x, y, z) for robust rounding.
+        float cx = q;
+        float cz = r;
+        float cy = -cx - cz;
+
         float rx = floor(cx + 0.5);
         float ry = floor(cy + 0.5);
         float rz = floor(cz + 0.5);
-        float dx = abs(rx - cx), dy = abs(ry - cy), dz = abs(rz - cz);
-        if (dx > dy && dx > dz) rx = -ry - rz; else if (dy > dz) ry = -rx - rz; else rz = -rx - ry;
+
+        // Find the axis with the largest rounding error and fix it to maintain x+y+z=0.
+        float dx = abs(rx - cx);
+        float dy = abs(ry - cy);
+        float dz = abs(rz - cz);
+
+        if (dx > dy && dx > dz) rx = -ry - rz;
+        else if (dy > dz) ry = -rx - rz;
+        else rz = -rx - ry;
+
+        // Convert cube/axial back to offset coordinates (odd-row layout).
         int row = int(rz);
-        if (row < 0) row = 0; else if (row >= int(grid.y)) row = int(grid.y) - 1;
+        // Clamp row to grid bounds.
+        if (row < 0) row = 0;
+        else if (row >= int(grid.y)) row = int(grid.y) - 1;
+
         int parity = row & 1;
         int col = int(rx + float((row - parity) >> 1));
-        int sx = int(grid.x);
-        int m = col % sx; if (m < 0) m += sx;
-        return ivec2(m, row);
+
+        // Apply horizontal (X) wrapping.
+        int gridWidth = int(grid.x);
+        int wrappedCol = col % gridWidth;
+        if (wrappedCol < 0) wrappedCol += gridWidth;
+
+        return ivec2(wrappedCol, row);
       }
 
       vec2 sampleMask(ivec2 tile, vec2 grid) {
@@ -229,10 +304,9 @@ export class FogOfWar {
 
       void main(void) {
         vec4 base = texture2D(textureSampler, vUV);
-        vec3 rayDir = worldRayFromUV(vUV);
-        vec2 xz = intersectXZ(rayDir);
-        ivec2 ij = worldXZToTile(xz, worldXZBounds, gridSize);
-        vec2 mask = sampleMask(ij, gridSize);
+        vec2 xz = intersectXZ(vUV);
+        ivec2 tileCoords = worldXZToTile(xz, worldXZBounds, gridSize);
+        vec2 mask = sampleMask(tileCoords, gridSize);
         float known = mask.r;
         float visible = mask.g;
 

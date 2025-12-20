@@ -3,7 +3,7 @@ import { computed } from "vue";
 import {
   playerDetailConfig,
   type TabId,
-  usePlayerDetailsStoreNew,
+  usePlayerDetailsStore,
 } from "@/components/PlayerDetails/playerDetailsStore";
 import EconomyTab from "@/components/PlayerDetails/Tabs/EconomyTab.vue";
 import ResearchTab from "@/components/PlayerDetails/Tabs/ResearchTab.vue";
@@ -15,11 +15,12 @@ import UnitsTab from "@/components/PlayerDetails/Tabs/UnitsTab.vue";
 import CitiesTab from "@/components/PlayerDetails/Tabs/CitiesTab.vue";
 import GovernmentTab from "@/components/PlayerDetails/Tabs/GovernmentTab.vue";
 
-const store = usePlayerDetailsStoreNew();
+const store = usePlayerDetailsStore();
 
-const tabModel = computed<null | TabId>({
-  get: () => store.tab,
-  set: (v) => store.open(v),
+// Map undefined in store to null for Vuetify v-model, and back on set
+const tabModel = computed<TabId | null>({
+  get: () => (store.tab === undefined ? null : store.tab),
+  set: (v: TabId | null) => store.open(v ?? undefined),
 });
 </script>
 

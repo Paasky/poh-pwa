@@ -1,8 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
 import { useObjectsStore } from "@/stores/objectStore";
 import type { Player } from "@/objects/game/Player";
 import { TypeKey } from "@/types/common";
+import { TypeObject } from "@/types/typeObjects";
+import type { TableColumn } from "@/components/Ui/UiTable.vue";
+import { typeTimeline } from "@/helpers/types";
 
 export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
   const objStore = useObjectsStore();
@@ -11,7 +15,7 @@ export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
   const players = computed(() => objStore.getClassGameObjects("player") as Player[]);
   const current = ref<Player | null>(null);
 
-  const columns = ref([
+  const columns = ref<TableColumn<Player>[]>([
     { title: "Name", key: "name", value: (p: Player) => p.name },
     { title: "Culture", key: "culture", value: (p: Player) => p.culture.value.type.value.name },
     { title: "Leader", key: "leader", value: (p: Player) => p.leader.value.name },
@@ -38,14 +42,12 @@ export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
   ]);
 
   const cultureTimeline = computed(() => {
-    if (!current.value?.culture.type.value) return [];
-    // Lazy import to avoid cycles if any
-    const { typeTimeline } = require("@/types/typeObjects");
-    return typeTimeline(current.value.culture.type.value);
+    if (!current.value?.culture.type?.value) return [];
+    return typeTimeline(current.value.culture.type.value as TypeObject);
   });
 
   const leaderTimeline = computed(() => {
-    return cultureTimeline.value.map((c: any) =>
+    return cultureTimeline.value.map((c) =>
       objStore.getTypeObject(
         c.allows.find((a: string) => a.startsWith("majorLeaderType:")) as TypeKey,
       ),
@@ -55,6 +57,12 @@ export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
   function init() {
     if (initialized.value) return;
     current.value = objStore.currentPlayer as Player;
+
+    // Warm up computed values
+    players.value;
+    cultureTimeline.value;
+    leaderTimeline.value;
+
     initialized.value = true;
   }
 

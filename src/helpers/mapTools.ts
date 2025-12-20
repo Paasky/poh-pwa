@@ -1,6 +1,7 @@
-import { Tile } from "@/objects/game/Tile";
-import { GameKey } from "@/objects/game/_GameObject";
+import { type Tile } from "@/objects/game/Tile";
+import { type GameKey, getKey } from "@/objects/game/_GameObject";
 import { getRandom } from "@/helpers/arrayTools";
+import { wrapExclusive } from "@/helpers/basicMath";
 
 export type CompassHexEdge = "ne" | "e" | "se" | "sw" | "w" | "nw";
 export type CompassHexCorner = "n" | "se" | "sw" | "s" | "nw" | "ne";
@@ -189,7 +190,7 @@ export function getNeighbors<T extends Tile>(
   const coords = getNeighborCoords(size, tile, method, distance);
   const out: T[] = [];
   for (const c of coords) {
-    const t = tiles[Tile.getKey(c.x, c.y)];
+    const t = tiles[tileKey(c.x, c.y)];
     if (t) out.push(t as T);
   }
   return out;
@@ -220,11 +221,11 @@ export function getNeighborCoords(
       if (method === "manhattan" && Math.abs(dx) + Math.abs(dy) > distance) continue;
 
       // Include x-wrapping for new X
-      const nx = (((tile.x + dx) % size.x) + size.x) % size.x;
+      const nx = wrapExclusive(tile.x + dx, 0, size.x);
 
       // Skip self, skip duplicates
       if (nx === tile.x && ny === tile.y) continue;
-      const nKey = Tile.getKey(nx, ny);
+      const nKey = tileKey(nx, ny);
       if (seen.has(nKey)) continue;
 
       // Add to neighbors and seen-list
@@ -236,7 +237,7 @@ export function getNeighborCoords(
   // 3 is the minimum of manhattan dist 1, something is off! Stop here to not cause strange bugs further down the line
   if (neighbors.length < 3) {
     throw new Error(
-      `Not enough neighbors found for tile ${Tile.getKey(tile.x, tile.y)}: ${neighbors.length}`,
+      `Not enough neighbors found for tile ${tileKey(tile.x, tile.y)}: ${neighbors.length}`,
     );
   }
   return neighbors;
@@ -255,14 +256,13 @@ export function getTile<T extends Tile>(
   tiles: Record<string, T>,
 ): T | null {
   const realCoords = getRealCoords(size, coords);
-  const t = realCoords ? tiles[Tile.getKey(realCoords.x, realCoords.y)] : undefined;
+  const t = realCoords ? tiles[tileKey(realCoords.x, realCoords.y)] : undefined;
   return t || null;
 }
 
 // Wrap x on the horizontal axis
 export function wrapX(size: Coords, x: number) {
-  const m = x % size.x;
-  return m < 0 ? m + size.x : m;
+  return wrapExclusive(x, 0, size.x);
 }
 
 export const waterLevel = -0.2;
@@ -291,4 +291,8 @@ export function tileHeight(tile: Tile, forLogic: boolean = false): number {
     return forLogic ? 1.6 : getRandom([1.4, 1.6, 1.8, 2]);
   }
   return 0;
+}
+
+export function tileKey(x: number, y: number): GameKey {
+  return getKey("tile", `x${x},y${y}`);
 }

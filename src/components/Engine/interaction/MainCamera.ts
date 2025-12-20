@@ -5,18 +5,12 @@ import {
   Scene,
   Vector3,
 } from "@babylonjs/core";
+import { watch } from "vue";
+import { useSettingsStore } from "@/stores/settingsStore";
 import { Coords } from "@/helpers/mapTools";
-import { getWorldMaxX, getWorldMinX, getWorldWidth } from "@/helpers/math";
-
-export type MainCameraOptions = {
-  panSpeed?: number;
-  maxRotation?: number;
-  maxTilt?: number;
-  minTilt?: number;
-  maxZoomIn?: number;
-  maxZoomOut?: number;
-  manualTilt?: boolean;
-};
+import { clamp, clampCoordsToBoundaries, type OrthoBounds } from "@/helpers/math";
+import GridOverlay from "@/components/Engine/overlays/GridOverlay";
+import { FogOfWar } from "@/components/Engine/FogOfWar";
 
 export const rot30 = Math.PI / 6;
 export const rotNorth = -rot30 * 3;
@@ -26,29 +20,32 @@ export class MainCamera {
   readonly scene: Scene;
   readonly canvas: HTMLCanvasElement;
   readonly camera: ArcRotateCamera;
+  fogOfWar: FogOfWar;
+  readonly gridOverlay: GridOverlay;
 
   private _rotationInput = new ArcRotateCameraPointersInput();
   private _manualTiltEnabled = false;
 
-  // Tunables (defaults mirror previous EngineService values)
-  panSpeed: number;
-  maxRotation: number;
-  maxTilt: number;
-  minTilt: number;
-  maxZoomIn: number;
-  maxZoomOut: number;
+  panSpeed: number = 5;
+  maxRotation: number = rot30;
+  maxTilt: number = 0.8;
+  minTilt: number = 0.1;
+  maxZoomIn: number = 10;
+  maxZoomOut: number = 100;
 
-  constructor(size: Coords, scene: Scene, canvas: HTMLCanvasElement, opts?: MainCameraOptions) {
+  constructor(
+    size: Coords,
+    scene: Scene,
+    canvas: HTMLCanvasElement,
+    fogOfWar: FogOfWar,
+    gridOverlay: GridOverlay,
+    private getKnownBounds: () => OrthoBounds | null,
+  ) {
     this.size = size;
     this.scene = scene;
     this.canvas = canvas;
-
-    this.panSpeed = opts?.panSpeed ?? 5;
-    this.maxRotation = opts?.maxRotation ?? rot30;
-    this.maxTilt = opts?.maxTilt ?? 0.8;
-    this.minTilt = opts?.minTilt ?? 0.1;
-    this.maxZoomIn = opts?.maxZoomIn ?? 10;
-    this.maxZoomOut = opts?.maxZoomOut ?? 100;
+    this.fogOfWar = fogOfWar;
+    this.gridOverlay = gridOverlay;
 
     // Create camera
     this.camera = new ArcRotateCamera(
@@ -59,6 +56,7 @@ export class MainCamera {
       new Vector3(0, 0, 0),
       this.scene,
     );
+    this.fogOfWar.attachToCamera(this.camera);
 
     // Controls
     this.camera.inputs.clear();
@@ -69,7 +67,6 @@ export class MainCamera {
     this.camera.useAutoRotationBehavior = false;
     this._rotationInput.buttons = [1, 2];
     this._rotationInput.panningSensibility = 0;
-    this.setManualTilt(!!opts?.manualTilt);
 
     // Left-button panning
     this.installPanning();
@@ -84,6 +81,13 @@ export class MainCamera {
 
     // Wrap/clamp/autotilt each frame
     this.installViewMatrixObserver();
+
+    const settings = useSettingsStore();
+    this.setManualTilt(settings.engineSettings.manualTilt);
+    watch(
+      () => settings.engineSettings.manualTilt,
+      (enabled) => this.setManualTilt(enabled),
+    );
   }
 
   setManualTilt(enabled: boolean): void {
@@ -124,27 +128,30 @@ export class MainCamera {
   }
 
   private installViewMatrixObserver(): void {
-    const worldWidth = getWorldWidth(this.size.x);
-    const worldMinX = getWorldMinX(worldWidth);
-    const worldMaxX = getWorldMaxX(worldWidth);
-
     this.camera.onViewMatrixChangedObservable.add(() => {
-      const t = this.camera.target;
+      const bounds = this.getKnownBounds();
+      const clamped = clampCoordsToBoundaries(this.camera.target, this.size, bounds);
+      this.camera.target.x = clamped.x;
+      this.camera.target.z = clamped.z;
 
-      // Default N/S clamp based on world rows
-      const minZ = -this.size.y / 1.385;
-      const maxZ = this.size.y / 1.425;
-      t.z = Math.min(Math.max(t.z, minZ), maxZ);
-
-      // Wrap X across world bounds
-      if (t.x > worldMaxX) t.x -= worldWidth;
-      else if (t.x < worldMinX) t.x += worldWidth;
-
-      // Auto-tilt if manual tilt disabled
-      if (!this._manualTiltEnabled) {
-        const frac = (this.camera.radius - this.maxZoomIn) / (this.maxZoomOut - this.maxZoomIn);
-        this.camera.beta = this.maxTilt - frac * (this.maxTilt - this.minTilt);
-      }
+      this.applyZoomEffects();
     });
+  }
+
+  private applyZoomEffects(): void {
+    const lower = this.camera.lowerRadiusLimit ?? 10;
+    const upper = this.camera.upperRadiusLimit ?? 100;
+    const denom = Math.max(0.0001, upper - lower);
+    const r = this.camera.radius;
+    const norm = clamp((upper - r) / denom, 0, 1);
+
+    // Auto-tilt if manual tilt disabled
+    if (!this._manualTiltEnabled) {
+      this.camera.beta = this.maxTilt - (1 - norm) * (this.maxTilt - this.minTilt);
+    }
+
+    // Grid thickness scaling: 0.25x at max out -> 1.5x at max in
+    const thicknessScale = 0.25 + norm * 1.25;
+    if (this.gridOverlay) this.gridOverlay.setThicknessScale(thicknessScale);
   }
 }

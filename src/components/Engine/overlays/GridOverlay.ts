@@ -10,13 +10,13 @@ import {
 import { Tile } from "@/objects/game/Tile";
 import type { GameKey } from "@/objects/game/_GameObject";
 import type { Coords } from "@/helpers/mapTools";
-import { tileHeight } from "@/helpers/mapTools";
 import { tileCenter } from "@/helpers/math";
+import { watch } from "vue";
+import { useSettingsStore } from "@/stores/settingsStore";
 
 // ---- Tuning constants (adjust freely) ----
 export const GRID_COLOR = new Color3(1, 1, 1); // white
 export const GRID_ALPHA = 0.5; // 0..1
-export const GRID_LINE_Z_BIAS = 0.02; // lift above terrain to avoid z-fighting
 export const GRID_CHUNK_SIZE = 32; // tiles per chunk (x and y)
 // Note: WebGL line width is platform-limited; kept for future shader-based thickness
 export const GRID_LINE_WIDTH = 1;
@@ -36,20 +36,7 @@ export class GridOverlay {
     this.size = size;
     this.tilesByKey = tilesByKey;
     this.root = new TransformNode("gridOverlayRoot", scene);
-    this.build();
-  }
 
-  setVisible(visible: boolean): void {
-    this.root.setEnabled(visible);
-  }
-
-  dispose(): void {
-    for (const c of this.chunks) c.dispose();
-    this.root.dispose();
-    this.chunks = [];
-  }
-
-  private build(): void {
     // Build chunks covering the whole map
     this.totalLinesCount = 0;
     for (let y0 = 0; y0 < this.size.y; y0 += GRID_CHUNK_SIZE) {
@@ -59,6 +46,19 @@ export class GridOverlay {
         this.buildChunk(x0, y0, x1, y1);
       }
     }
+
+    const settings = useSettingsStore();
+    this.root.setEnabled(settings.engineSettings.showGrid);
+    watch(
+      () => settings.engineSettings.showGrid,
+      (visible) => this.root.setEnabled(visible),
+    );
+  }
+
+  dispose(): void {
+    for (const c of this.chunks) c.dispose();
+    this.root.dispose();
+    this.chunks = [];
   }
 
   private buildChunk(x0: number, y0: number, x1: number, y1: number): void {
@@ -74,9 +74,8 @@ export class GridOverlay {
         // Hex geometry around center (pointy-top, radius = 1 world unit)
         const center = tileCenter(this.size, tile);
         const radius = 1; // matches math.ts spacing (hexDepth 1.5 => R=1)
-        const y = tileHeight(tile, true) + GRID_LINE_Z_BIAS;
 
-        const vertices = GridOverlay.hexVertices(center.x, center.z, radius, y);
+        const vertices = GridOverlay.hexVertices(center.x, center.z, radius, 0);
 
         // To avoid duplicate edges between neighbors, draw only 3 edges per tile:
         // E (v1->v2), SE (v2->v3), SW (v3->v4)
@@ -99,14 +98,34 @@ export class GridOverlay {
     mat.disableLighting = true; // unlit overlay look
     mat.emissiveColor = GRID_COLOR.clone();
     mat.alpha = GRID_ALPHA;
+    // Draw last without writing depth so it appears above terrain/features
+    mat.disableDepthWrite = true;
     lineSystem.material = mat;
 
     lineSystem.isPickable = false;
     lineSystem.applyFog = true;
+    // Rendering layer for overlays
+    lineSystem.renderingGroupId = 2; // 0: terrain, 1: features, 2: grid
 
     lineSystem.parent = this.root;
     this.chunks.push(lineSystem);
     this.totalLinesCount += lines.length;
+  }
+
+  /**
+   * Adjust perceived grid thickness (proxy). WebGL line width is fixed on most platforms,
+   * so we simulate thickness by adjusting alpha to make lines appear bolder/thinner.
+   *
+   * expectedScale: 0.5 (thinner) .. 2.0 (bolder)
+   */
+  setThicknessScale(expectedScale: number): void {
+    const scale = Math.max(0.5, Math.min(2.0, expectedScale));
+    // Map 0.5..2.0 -> alpha 0.35..0.9 linearly
+    const alpha = 0.35 + ((scale - 0.5) / 1.5) * (0.9 - 0.35);
+    for (const m of this.chunks) {
+      const mat = m.material as StandardMaterial | undefined;
+      if (mat) mat.alpha = alpha;
+    }
   }
 
   private static hexVertices(

@@ -23,6 +23,10 @@ function toggleExpand(cityKey: string) {
 function citizensOf(city: City): Citizen[] {
   return city.citizens.value as Citizen[];
 }
+
+function onRowClick(_e: unknown, payload: { item: { value: unknown } }) {
+  toggleExpand(payload.item.value as string);
+}
 </script>
 
 <template>
@@ -36,7 +40,7 @@ function citizensOf(city: City): Citizen[] {
       class="w-100 flex-1-1"
       show-expand
       v-model:expanded="expanded"
-      @click:row="(_e, payload) => toggleExpand(payload.item.value as string)"
+      @click:row="onRowClick"
     >
       <!-- Expanded content: one row per citizen under the city -->
       <template #expanded-row="{ item }">

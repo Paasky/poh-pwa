@@ -74,6 +74,22 @@ export class Research {
     return this.researching.value[tech.key]?.progress ?? 0;
   }
 
+  addProgress(tech: TypeObject, amount: number) {
+    if (!this.researching.value[tech.key]) {
+      this.researching.value[tech.key] = { progress: 0, target: tech };
+    }
+    const progress = this.researching.value[tech.key].progress;
+    this.researching.value[tech.key].progress = Math.round(progress + amount);
+
+    // Did it complete?
+    if (progress >= tech.scienceCost!) {
+      this.complete(tech);
+
+      // Add overflow to player storage
+      this.player.value.storage.add("yieldType:science", progress - tech.scienceCost!);
+    }
+  }
+
   isLaterEra(from: TypeObject, to: TypeObject): boolean {
     const eras = useObjectsStore().getClassTypes("eraType");
     return eras.indexOf(from) < eras.indexOf(to);
@@ -131,4 +147,13 @@ export class Research {
 
     return Math.ceil(costLeft / sciencePerTurn);
   });
+
+  startTurn() {
+    if (!this.current.value) return;
+
+    this.addProgress(
+      this.current.value as TypeObject,
+      this.player.value.storage.takeAll("yieldType:science"),
+    );
+  }
 }

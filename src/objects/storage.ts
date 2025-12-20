@@ -43,6 +43,10 @@ export class TypeStorage {
     return taken;
   }
 
+  all(): Record<TypeKey, number> {
+    return this._items.value;
+  }
+
   load(yields: Record<TypeKey, number>): TypeStorage {
     for (const [key, amount] of Object.entries(yields)) {
       if (amount > 0) this._items.value[key as TypeKey] = roundToTenth(amount);

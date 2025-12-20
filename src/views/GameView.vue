@@ -81,7 +81,7 @@ function onBeforeUnload(e: BeforeUnloadEvent) {
     >
       <div>
         <img src="/book.gif" alt="Book" width="480" height="480" decoding="async" />
-        <h1 class="opacity-50">Loading the Pages of History…</h1>
+        <h1 class="opacity-50">Loading the Pages of History… {{ app.loadPercent }}</h1>
       </div>
     </v-sheet>
   </Transition>

@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
 import { useObjectsStore } from "@/stores/objectStore";
-import type { Religion } from "@/objects/game/Religion";
+import { Religion } from "@/objects/game/Religion";
 import type { CatKey } from "@/types/common";
 import { generateKey } from "@/objects/game/_GameObject";
 
@@ -10,7 +11,7 @@ export const useReligionTabStore = defineStore("religionTabStore", () => {
   const initialized = ref(false);
 
   // Table columns (kept empty per current implementation)
-  const columns = ref<any[]>([]);
+  const columns = ref<never[]>([]);
 
   // Static pyramid data
   const mythData = ref<CatKey[][]>([
@@ -56,19 +57,17 @@ export const useReligionTabStore = defineStore("religionTabStore", () => {
     if (!firstCity) return null;
     // Construct a placeholder religion as in component
     // name and turn are placeholders
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return new (require("@/objects/game/Religion").Religion)(
-      generateKey("religion"),
-      "Zoroastrianism",
-      firstCity.key,
-      84,
-    ) as Religion;
+    return new Religion(generateKey("religion"), "Zoroastrianism", firstCity.key, 84) as Religion;
   });
 
   function init() {
     if (initialized.value) return;
-    // All data here is static or computed from static stores
+
+    // Warm up computed values
+    religions.value;
+    citizensCount.value;
+    defaultCurrent.value;
+
     initialized.value = true;
   }
 

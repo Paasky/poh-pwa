@@ -2,7 +2,7 @@
 // If we ever need code‑splitting or optional dependencies, we will use dynamic imports in a
 // very targeted manner. This file does not require them.
 import { tileCenter } from "@/helpers/math";
-import { Coords, tileHeight } from "@/helpers/mapTools";
+import { Coords } from "@/helpers/mapTools";
 import { Tile } from "@/objects/game/Tile";
 import type { GameKey } from "@/objects/game/_GameObject";
 import type { PickingInfo } from "@babylonjs/core";
@@ -17,6 +17,8 @@ import {
   Vector3,
   VertexData,
 } from "@babylonjs/core";
+import { useSettingsStore } from "@/stores/settingsStore";
+import { watch } from "vue";
 
 /**
  * LogicMeshBuilder
@@ -30,7 +32,7 @@ export class LogicMeshBuilder {
   readonly tilesByKey: Record<GameKey, Tile>;
 
   readonly root: TransformNode;
-  private baseHexMesh: Mesh | null = null;
+  private baseHexMesh: Mesh;
 
   private tileByInstanceIndex: Tile[] = [];
   private instanceIndexByTileKey: Record<GameKey, number> = {};
@@ -44,19 +46,13 @@ export class LogicMeshBuilder {
 
   private pointerObserver: Nullable<ReturnType<Scene["onPointerObservable"]["add"]>> = null;
   private lastHoveredInstanceIndex: number | null = null;
-  private debugEnabled: boolean = false;
-  private debugVisibleAlpha: number = 0.75; // semi‑transparent when debugging
-  private preventContextMenuDefaultEnabled: boolean = false;
+  private debugVisibleAlpha: number = 0.75;
 
   constructor(scene: Scene, size: Coords, tilesByKey: Record<GameKey, Tile>) {
     this.scene = scene;
     this.size = size;
     this.tilesByKey = tilesByKey;
     this.root = new TransformNode("logicRoot", this.scene);
-  }
-
-  build(): LogicMeshBuilder {
-    this.dispose();
 
     // Create base flat hex mesh (radius = 1 → matches math.ts spacing)
     this.baseHexMesh = this.createBaseHexMesh();
@@ -74,10 +70,17 @@ export class LogicMeshBuilder {
     // Invisible but pickable (unless debug mode is enabled)
     this.baseHexMesh.isPickable = true;
     this.baseHexMesh.thinInstanceEnablePicking = true;
-    this.applyDebugVisibility();
     this.baseHexMesh.freezeWorldMatrix();
 
     this.attachPointerObservers();
+
+    const settings = useSettingsStore();
+    this.baseHexMesh.visibility = settings.engineSettings.enableDebug ? 1 : 0;
+    watch(
+      () => settings.engineSettings.enableDebug,
+      () => (this.baseHexMesh.visibility = useSettingsStore().engineSettings.enableDebug ? 1 : 0),
+    );
+
     return this;
   }
 
@@ -96,34 +99,9 @@ export class LogicMeshBuilder {
     this.instanceIndexByTileKey = {} as Record<GameKey, number>;
     this.lastHoveredInstanceIndex = null;
 
-    if (this.baseHexMesh) {
-      this.baseHexMesh.dispose(false, true);
-      this.baseHexMesh = null;
-    }
+    this.baseHexMesh.dispose(false, true);
 
     this.root.getChildren().forEach((n) => n.dispose());
-  }
-
-  getRoot(): TransformNode {
-    return this.root;
-  }
-
-  enable(): void {
-    if (this.baseHexMesh) this.baseHexMesh.isPickable = true;
-    if (!this.pointerObserver) this.attachPointerObservers();
-  }
-
-  disable(): void {
-    if (this.baseHexMesh) this.baseHexMesh.isPickable = false;
-    if (this.pointerObserver) {
-      this.scene.onPointerObservable.remove(this.pointerObserver);
-      this.pointerObserver = null;
-    }
-    if (this.lastHoveredInstanceIndex !== null) {
-      const tile = this.tileByInstanceIndex[this.lastHoveredInstanceIndex];
-      if (tile) this.exitHandlers.forEach((h) => h(tile));
-      this.lastHoveredInstanceIndex = null;
-    }
   }
 
   // Event subscriptions
@@ -147,27 +125,6 @@ export class LogicMeshBuilder {
   onTileContextMenu(handler: (tile: Tile, details?: LogicPointerDetails) => void): () => void {
     this.contextHandlers.add(handler);
     return () => this.contextHandlers.delete(handler);
-  }
-
-  // Debug visibility and details toggle
-  setDebugEnabled(enabled: boolean): this {
-    this.debugEnabled = enabled;
-    this.applyDebugVisibility();
-    return this;
-  }
-
-  toggleDebug(): this {
-    return this.setDebugEnabled(!this.debugEnabled);
-  }
-
-  isDebugEnabled(): boolean {
-    return this.debugEnabled;
-  }
-
-  // When enabled, right-clicks on logic mesh will prevent the browser context menu
-  setPreventContextMenuDefault(enabled: boolean): this {
-    this.preventContextMenuDefaultEnabled = enabled;
-    return this;
   }
 
   // Internals
@@ -238,15 +195,12 @@ export class LogicMeshBuilder {
     const button = ev.button; // 0 left, 1 middle, 2 right
     const details = this.buildDetails(pick as PickingInfo, ev);
     if (button === 2) {
-      if (this.preventContextMenuDefaultEnabled) {
-        ev.preventDefault();
-      }
+      ev.preventDefault();
       this.contextHandlers.forEach((h) => h(tile, details));
     }
     this.clickHandlers.forEach((h) => h(tile, button, details));
   }
 
-  // todo: replace the matrices with actual hexagons: height 2, and tileHeight() is the _top_ of the hexagon
   // -> reason: now as flat surfaces there are gaps between water 6 mountain for example, breaking tile picking
   private buildInstanceMatricesAndMaps(): Float32Array {
     const matrices: number[] = [];
@@ -263,7 +217,7 @@ export class LogicMeshBuilder {
         this.instanceIndexByTileKey[tile.key] = instanceIndex;
 
         const center = tileCenter(this.size, tile); // { x, z }
-        const m = LogicMeshBuilder.matrixFromPosition(center.x, tileHeight(tile, true), center.z);
+        const m = LogicMeshBuilder.matrixFromPosition(center.x, 0, center.z);
         for (let i = 0; i < 16; i++) matrices.push(m[i]);
       }
     }
@@ -279,7 +233,7 @@ export class LogicMeshBuilder {
 
     const mat = new StandardMaterial("logicHexMaterial", this.scene);
     mat.diffuseColor = Color3.Purple();
-    mat.alpha = 0; // fully transparent by default (debug can change this)
+    mat.alpha = this.debugVisibleAlpha;
     mat.disableLighting = true;
     mesh.material = mat;
 
@@ -325,23 +279,15 @@ export class LogicMeshBuilder {
     return new Float32Array([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, x, y, z, 1]);
   }
 
-  private applyDebugVisibility(): void {
-    if (!this.baseHexMesh) return;
-    const mat = this.baseHexMesh.material as StandardMaterial | null;
-    if (this.debugEnabled) {
-      this.baseHexMesh.visibility = 1;
-      if (mat) mat.alpha = this.debugVisibleAlpha;
-    } else {
-      this.baseHexMesh.visibility = 0;
-      if (mat) mat.alpha = 0;
-    }
-  }
-
   private buildDetails(
     pick: PickingInfo | undefined,
     ev: PointerEvent | undefined,
   ): LogicPointerDetails | undefined {
-    if (!this.debugEnabled || !this.baseHexMesh || !pick || pick.thinInstanceIndex === undefined)
+    if (
+      !pick ||
+      pick.thinInstanceIndex === undefined ||
+      !useSettingsStore().engineSettings.enableDebug
+    )
       return undefined;
     return {
       mesh: this.baseHexMesh,

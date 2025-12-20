@@ -7,7 +7,7 @@ import MapGeneratorView from "@/views/MapGeneratorView.vue";
 import TestView from "@/views/TestView.vue";
 import { useAppStore } from "@/stores/appStore";
 import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
-import { usePlayerDetailsStoreNew } from "@/components/PlayerDetails/playerDetailsStore";
+import { usePlayerDetailsStore } from "@/components/PlayerDetails/playerDetailsStore";
 
 const routes: Readonly<RouteRecordRaw[]> = [
   { path: "/", name: "home", component: HomeView },
@@ -39,7 +39,7 @@ const injectIt = () => {
       (appStore._router?.currentRoute as any)?.value?.query == router.currentRoute.value.query
     ) {
       const encStore = useEncyclopediaStore();
-      const pdStore = usePlayerDetailsStoreNew();
+      const pdStore = usePlayerDetailsStore();
 
       // Connect the stores from above to prevent circular dependencies
       // Register URL -> UI sync functions

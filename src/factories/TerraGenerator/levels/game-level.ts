@@ -117,6 +117,7 @@ export class GameLevel {
         if (regTile.isStart) {
           const startTile = getRandom(neighbors.filter((n) => n.canBeStart()));
           startTile.isStart = regTile.isStart;
+          startTile.elevation = this.gen.flat;
           this.gen.continents[startTile.area.key].majorStarts.game.push(startTile);
         }
 

@@ -2,13 +2,6 @@
  * EnvironmentService
  * A black‑box service that owns lighting, sky/environment and basic post‑processing.
  *
- * Goals for this initial scaffold (minimal code, prefab-first):
- * - Create a Babylon EnvironmentHelper skybox + environment texture so PBR works offline.
- * - Create core lights (hemispheric + directional) with conservative defaults.
- * - Provide a small, clear public API to set the time of day, season, and weather without exposing internals.
- * - Keep every numeric or string setting configurable via a config object with explicit defaults.
- * - Do NOT wire this up elsewhere yet. No side-effects outside this file and the exported configs.
- *
  * Notes:
  * - Names are intentionally verbose for readability. Avoid cryptic short names.
  * - Complex effects (rain particles, lightning, SSAO2, volumetric light) are deferred with TODOs.
@@ -19,24 +12,34 @@ import {
   Color3,
   CubeTexture,
   DirectionalLight,
-  Engine,
   HemisphericLight,
   Scene,
   Vector3,
 } from "@babylonjs/core";
+import { watch } from "vue";
+import { useSettingsStore } from "@/stores/settingsStore";
 import { EnvironmentHelper } from "@babylonjs/core/Helpers/environmentHelper";
+import { DefaultRenderingPipeline } from "@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/defaultRenderingPipeline";
+
 import {
-  DefaultRenderingPipeline
-} from "@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/defaultRenderingPipeline";
+  defaultTimeOfDay2400,
+  getLightingForTimeOfDay,
+} from "@/components/Engine/environments/timeOfDay";
+import { defaultMonth, getBlendedSeasonPalette } from "@/components/Engine/environments/season";
+import {
+  defaultWeatherType,
+  weatherPresets,
+  WeatherType,
+} from "@/components/Engine/environments/weather";
+import {
+  clockHoursPerRealMinute,
+  isClockRunning,
+  timeOfDay2400,
+  wrapTime2400,
+} from "@/components/Engine/environments/clock";
+import { EngineSettings } from "@/components/Engine/engineSettings";
+import { clamp, wrapInclusive } from "@/helpers/math";
 
-import { defaultTimeOfDay2400 } from "@/components/Engine/environments/timeOfDay";
-import { defaultSeasonMonth1to12 } from "@/components/Engine/environments/season";
-import { defaultWeatherType, WeatherType } from "@/components/Engine/environments/weather";
-import { DefaultPostProcessingOptions, defaultPostProcessingOptions, } from "@/components/Engine/environments/postFx";
-
-/**
- * Weather configuration is enumerated with WeatherType. Additional per-weather tunables can be added later.
- */
 export { WeatherType };
 
 export type EnvironmentServiceConfig = {
@@ -48,8 +51,6 @@ export type EnvironmentServiceConfig = {
   enableShadows: boolean;
   /** Enable the default post-processing pipeline (FXAA, Bloom). */
   enablePostProcessing: boolean;
-  /** Post-processing default options (thresholds, toggles). */
-  postProcessingOptions: DefaultPostProcessingOptions;
   /**
    * Clock rate: how many in-game hours pass per one real-time minute when the clock is running.
    * Example: 1.0 means 1 in-game hour per real minute.
@@ -75,9 +76,10 @@ const defaultEnvironmentServiceConfig: EnvironmentServiceConfig = {
   skyboxSizeWorldUnits: 1000,
   enableShadows: false,
   enablePostProcessing: true,
-  postProcessingOptions: defaultPostProcessingOptions,
-  clockHoursPerRealMinute: 1.0,
-  startWithClockRunning: false,
+  // Run fast by default so cycle is clearly visible: 1 in-game hour per 1 real second
+  // 60 in-game hours per real minute
+  clockHoursPerRealMinute: 60.0,
+  startWithClockRunning: true,
   ambientHemisphericLightIntensity: 0.6,
   ambientHemisphericSkyColor: new Color3(0.85, 0.9, 1.0),
   ambientHemisphericGroundColor: new Color3(0.6, 0.7, 0.65),
@@ -87,17 +89,13 @@ const defaultEnvironmentServiceConfig: EnvironmentServiceConfig = {
 
 export class EnvironmentService {
   private readonly scene: Scene;
-  private readonly engine: Engine; // todo not used, can this be omitted? Is it needed for our various gfx settings?
   private readonly camera: Camera;
   private readonly configuration: EnvironmentServiceConfig;
 
-  // @ts-expect-error This is set via setupEnvironmentSkyboxAndTexture() in constructor
-  private environmentHelper: EnvironmentHelper;
+  private environmentHelper?: EnvironmentHelper;
 
-  // @ts-expect-error This is set via setupLights() in constructor
-  private hemisphericAmbientLight: HemisphericLight;
-  // @ts-expect-error This is set via setupLights() in constructor
-  private directionalSunLight: DirectionalLight;
+  private hemisphericAmbientLight!: HemisphericLight;
+  private directionalSunLight!: DirectionalLight;
   private baseDirectionalSunLightIntensity: number = 1.0;
   private weatherSunIntensityScale: number = 1.0;
 
@@ -105,46 +103,93 @@ export class EnvironmentService {
   private renderingPipeline?: DefaultRenderingPipeline;
 
   // World state (target values). These can be set from the outside via the public API.
-  private targetTimeOfDay2400: number = defaultTimeOfDay2400; // 0..2400
-  private targetSeasonMonth1to12: number = defaultSeasonMonth1to12; // 1..12
-  private targetWeatherType: WeatherType = defaultWeatherType;
+  private targetTimeOfDay2400: number = defaultTimeOfDay2400; // 0..2400 (kept for backward compat; source of truth is timeOfDay2400 ref)
+  private month: number = defaultMonth; // 1..12
+  private weatherType: WeatherType = defaultWeatherType;
 
-  // Clock state.
-  private isClockRunning: boolean;
-  private currentTimeOfDay2400: number;
+  private _clockIntervalId?: number;
 
-  constructor(
-    scene: Scene,
-    camera: Camera,
-    engine: Engine,
-    configuration?: Partial<EnvironmentServiceConfig>,
-  ) {
+  private watchers: (() => void)[] = [];
+
+  constructor(scene: Scene, camera: Camera, configuration?: Partial<EnvironmentServiceConfig>) {
     this.scene = scene;
     this.camera = camera;
-    this.engine = engine;
     this.configuration = {
       ...defaultEnvironmentServiceConfig,
       ...configuration,
     } as EnvironmentServiceConfig;
 
-    // Initialize clock state.
-    this.isClockRunning = this.configuration.startWithClockRunning;
-    this.currentTimeOfDay2400 = this.targetTimeOfDay2400;
+    // Initialize shared clock refs from defaults (only once at service creation)
+    timeOfDay2400.value = this.targetTimeOfDay2400;
+    isClockRunning.value = this.configuration.startWithClockRunning;
+    clockHoursPerRealMinute.value = this.configuration.clockHoursPerRealMinute;
 
     // Set up the environment and core lights with safe defaults.
     this.setupEnvironmentSkyboxAndTexture();
     this.setupLights();
-    this.setupPostProcessingIfEnabled();
 
-    // Apply initial weather preset (fog/intensity) based on defaults
-    this.applyWeatherPreset(this.targetWeatherType);
-    // Apply initial season palette to ambient light
-    this.applySeasonPalette(this.targetSeasonMonth1to12);
-    // Initialize sun direction/intensity from time of day
-    const initialEffectiveTime = this.isClockRunning
-      ? this.currentTimeOfDay2400
-      : this.targetTimeOfDay2400;
-    this.updateSunFromTimeOfDay(initialEffectiveTime);
+    // --- Settings watchers (each key independently) ---
+    const settings = useSettingsStore();
+
+    // Time of day (0..2400)
+    this.setTimeOfDay(settings.engineSettings.timeOfDay2400);
+    this.watchers.push(
+      watch(
+        () => settings.engineSettings.timeOfDay2400,
+        (v) => this.setTimeOfDay(v),
+      ),
+    );
+    // Clock running toggle
+    this.setIsClockRunning(settings.engineSettings.isClockRunning);
+    this.watchers.push(
+      watch(
+        () => settings.engineSettings.isClockRunning,
+        (v) => this.setIsClockRunning(v),
+      ),
+    );
+    // Month 1..12
+    this.setMonth(settings.engineSettings.month);
+    this.watchers.push(
+      watch(
+        () => settings.engineSettings.month,
+        (v) => this.setMonth(v),
+      ),
+    );
+    // Weather type
+    this.setWeather(settings.engineSettings.weatherType);
+    this.watchers.push(
+      watch(
+        () => settings.engineSettings.weatherType,
+        (v) => this.setWeather(v),
+      ),
+    );
+
+    // FX toggles and params
+    this.setPostProcessing(settings.engineSettings);
+    this.watchers.push(
+      watch(
+        () => settings.engineSettings.useFxaa,
+        (v) => this.setPostProcessing({ useFxaa: v }),
+      ),
+    );
+    this.watchers.push(
+      watch(
+        () => settings.engineSettings.useBloom,
+        (v) => this.setPostProcessing({ useBloom: v }),
+      ),
+    );
+    this.watchers.push(
+      watch(
+        () => settings.engineSettings.bloomThreshold,
+        (v) => this.setPostProcessing({ bloomThreshold: v }),
+      ),
+    );
+    this.watchers.push(
+      watch(
+        () => settings.engineSettings.bloomWeight,
+        (v) => this.setPostProcessing({ bloomWeight: v }),
+      ),
+    );
   }
 
   /** Update the target time of day using a 24-hour clock encoded as 0..2400 integers.
@@ -153,72 +198,28 @@ export class EnvironmentService {
    */
   public setTimeOfDay(timeOfDayValue2400: number): void {
     this.targetTimeOfDay2400 = EnvironmentService.clampTime2400(timeOfDayValue2400);
-    if (this.isClockRunning) {
-      this.currentTimeOfDay2400 = this.targetTimeOfDay2400;
-    }
-    const effectiveTime = this.isClockRunning
-      ? this.currentTimeOfDay2400
-      : this.targetTimeOfDay2400;
-    this.updateSunFromTimeOfDay(effectiveTime);
+    timeOfDay2400.value = this.targetTimeOfDay2400;
+    this.updateSunFromTimeOfDay(timeOfDay2400.value);
   }
 
   /** Update the current season using a 1..12 month index. */
-  public setSeason(monthIndex1to12: number): void {
-    this.targetSeasonMonth1to12 = EnvironmentService.normalizeMonth1to12(monthIndex1to12);
-    this.applySeasonPalette(this.targetSeasonMonth1to12);
+  public setMonth(month: number): void {
+    this.month = EnvironmentService.normalizeMonth1to12(month);
+    this.applySeasonPalette(this.month);
   }
 
   /** Update the active weather type. */
   public setWeather(weatherType: WeatherType): void {
-    this.targetWeatherType = weatherType;
+    this.weatherType = weatherType;
     // Apply immediate visual preset for the selected weather.
-    this.applyWeatherPreset(this.targetWeatherType);
+    this.applyWeatherPreset(this.weatherType);
   }
 
   /** Start or stop the internal clock. */
   public setIsClockRunning(isRunning: boolean): void {
-    this.isClockRunning = isRunning;
-  }
-
-  // ---------- Getters (public, for UI sync) ----------
-  /** Returns the effective time of day (0..2400) currently used for rendering. */
-  public getEffectiveTimeOfDay2400(): number {
-    return this.isClockRunning ? this.currentTimeOfDay2400 : this.targetTimeOfDay2400;
-  }
-
-  /** Returns whether the environment clock is running. */
-  public getIsClockRunning(): boolean {
-    return this.isClockRunning;
-  }
-
-  /** Returns the currently selected target season month (1..12). */
-  public getSeasonMonth1to12(): number {
-    return this.targetSeasonMonth1to12;
-  }
-
-  /** Returns the currently selected target weather type. */
-  public getWeatherType(): WeatherType {
-    return this.targetWeatherType;
-  }
-
-  /**
-   * Advance environment animations and clock. Call once per frame with elapsed seconds.
-   * This initial scaffold only advances the clock; visual transitions are deferred.
-   */
-  public update(elapsedSeconds: number): void {
-    if (this.isClockRunning && elapsedSeconds > 0) {
-      const hoursAdvanced = (this.configuration.clockHoursPerRealMinute / 60) * elapsedSeconds;
-      const valueAdvanced2400 = Math.round(hoursAdvanced * 100);
-      this.currentTimeOfDay2400 = EnvironmentService.wrapTime2400(
-        this.currentTimeOfDay2400 + valueAdvanced2400,
-      );
-    }
-
-    // Update sun direction and intensity based on current effective time of day
-    const effectiveTime = this.isClockRunning
-      ? this.currentTimeOfDay2400
-      : this.targetTimeOfDay2400;
-    this.updateSunFromTimeOfDay(effectiveTime);
+    isClockRunning.value = isRunning;
+    if (isRunning) this.startClockInterval();
+    else this.stopClockInterval();
   }
 
   /** Dispose all Babylon resources created by this service. */
@@ -226,9 +227,12 @@ export class EnvironmentService {
   // Shutting the engine process: app.Store.engine.dispose(); appStore.engine = undefined;
   // So each dispose down the chain doesn't set internals to undefined/null BUT has to make sure everything is decoupled for auto-garbage-collection
   public dispose(): void {
+    this.stopClockInterval();
+    this.watchers.forEach((unwatch) => unwatch());
+    this.watchers = [];
     this.renderingPipeline?.dispose();
     this.renderingPipeline = undefined;
-    this.environmentHelper.dispose();
+    if (this.environmentHelper) this.environmentHelper.dispose();
     this.directionalSunLight.dispose();
     this.hemisphericAmbientLight.dispose();
   }
@@ -236,13 +240,12 @@ export class EnvironmentService {
   // ----- Internal setup helpers -----
 
   private setupEnvironmentSkyboxAndTexture(): void {
-    // todo should this have a default value? Would it make sense to create a separate sky.ts (or will the sky depend on weather?)
-    const shouldCreateEnvironmentTexture =
-      this.configuration.environmentTextureUrl.trim().length > 0;
+    if (!this.configuration.environmentTextureUrl.trim()) return;
 
-    const environmentTexture = shouldCreateEnvironmentTexture
-      ? CubeTexture.CreateFromPrefilteredData(this.configuration.environmentTextureUrl, this.scene)
-      : undefined;
+    const environmentTexture = CubeTexture.CreateFromPrefilteredData(
+      this.configuration.environmentTextureUrl,
+      this.scene,
+    );
 
     this.environmentHelper = new EnvironmentHelper(
       {
@@ -253,6 +256,30 @@ export class EnvironmentService {
       },
       this.scene,
     );
+  }
+
+  // ----- Clock interval (single lightweight ticker) -----
+
+  private startClockInterval(): void {
+    if (this._clockIntervalId === undefined) {
+      this._clockIntervalId = window.setInterval(() => {
+        if (!isClockRunning.value) return;
+
+        timeOfDay2400.value = wrapTime2400(
+          timeOfDay2400.value + this.configuration.clockHoursPerRealMinute / 600,
+        );
+
+        this.updateSunFromTimeOfDay(timeOfDay2400.value);
+        this.applySeasonPalette(this.month);
+      }, 100);
+    }
+  }
+
+  private stopClockInterval(): void {
+    if (this._clockIntervalId) {
+      clearInterval(this._clockIntervalId);
+      this._clockIntervalId = undefined;
+    }
   }
 
   private setupLights(): void {
@@ -283,41 +310,33 @@ export class EnvironmentService {
     // TODO: Optional shadow generator can be created here if/when needed.
   }
 
-  // todo can this be combined with setPostProcessingOptions()?
-  private setupPostProcessingIfEnabled(): void {
-    // todo: If the pipeline is setup, dispose it and set to undefined
-    if (!this.configuration.enablePostProcessing) return;
-
-    const post = new DefaultRenderingPipeline("defaultRenderingPipeline", true, this.scene, [
-      this.camera,
-    ]);
-    this.renderingPipeline = post;
-
-    // FXAA
-    post.fxaaEnabled = this.configuration.postProcessingOptions.enableFastApproximateAntialiasing;
-
-    // Bloom
-    post.bloomEnabled = this.configuration.postProcessingOptions.enableBloom;
-    post.bloomThreshold = this.configuration.postProcessingOptions.bloomThreshold;
-    post.bloomWeight = this.configuration.postProcessingOptions.bloomWeight;
-  }
-
   /**
    * Update post-processing options at runtime. Safe to call even if the pipeline is disabled.
    * Only provided fields are applied.
    */
-  public setPostProcessingOptions(options: Partial<DefaultPostProcessingOptions>): void {
-    // Update stored configuration so future resets remain consistent
-    this.configuration.postProcessingOptions = {
-      ...this.configuration.postProcessingOptions,
-      ...options,
-    };
-    if (!this.renderingPipeline) return;
-    if (options.enableFastApproximateAntialiasing !== undefined) {
-      this.renderingPipeline.fxaaEnabled = options.enableFastApproximateAntialiasing;
+  public setPostProcessing(options: Partial<EngineSettings>): void {
+    if (!this.configuration.enablePostProcessing) {
+      if (this.renderingPipeline) {
+        this.renderingPipeline.dispose();
+        this.renderingPipeline = undefined;
+      }
+      return;
     }
-    if (options.enableBloom !== undefined) {
-      this.renderingPipeline.bloomEnabled = options.enableBloom;
+
+    if (!this.renderingPipeline) {
+      this.renderingPipeline = new DefaultRenderingPipeline(
+        "defaultRenderingPipeline",
+        options.hdr,
+        this.scene,
+        [this.camera],
+      );
+    }
+
+    if (options.useFxaa !== undefined) {
+      this.renderingPipeline.fxaaEnabled = options.useFxaa;
+    }
+    if (options.useBloom !== undefined) {
+      this.renderingPipeline.bloomEnabled = options.useBloom;
     }
     if (options.bloomThreshold !== undefined) {
       this.renderingPipeline.bloomThreshold = options.bloomThreshold;
@@ -329,102 +348,38 @@ export class EnvironmentService {
 
   // ----- Static helpers (validation and clamping) -----
 
-  // todo move these settings to weather.ts; our job here is just to apply, not define
-  // ----- Weather presets (fog and mood) -----
-  /** Apply simple per-weather presets: fog mode/density/color and sun intensity multiplier. */
   private applyWeatherPreset(weatherType: WeatherType): void {
     const scene = this.scene;
-    const presets: Record<
-      WeatherType,
-      { fogDensity: number; fogColor: Color3; sunIntensityScale: number }
-    > = {
-      [WeatherType.Sunny]: {
-        fogDensity: 0,
-        fogColor: this.hemisphericAmbientLight?.diffuse.clone() ?? new Color3(0.8, 0.85, 0.95),
-        sunIntensityScale: 1.0,
-      },
-      [WeatherType.HalfCloud]: {
-        fogDensity: 0.002,
-        fogColor: this.hemisphericAmbientLight?.diffuse.clone() ?? new Color3(0.75, 0.8, 0.9),
-        sunIntensityScale: 0.85,
-      },
-      [WeatherType.Foggy]: {
-        fogDensity: 0.02,
-        fogColor: Color3.FromHexString("#bfc8d6"),
-        sunIntensityScale: 0.6,
-      },
-      [WeatherType.Rainy]: {
-        fogDensity: 0.01,
-        fogColor: Color3.FromHexString("#a0a9b5"),
-        sunIntensityScale: 0.75,
-      },
-      [WeatherType.Thunderstorm]: {
-        fogDensity: 0.015,
-        fogColor: Color3.FromHexString("#8b95a5"),
-        sunIntensityScale: 0.7,
-      },
-    };
+    const preset = weatherPresets[weatherType];
 
-    const preset = presets[weatherType];
+    const fogColor = preset.fogColor.clone();
+
     if (preset.fogDensity > 0) {
       scene.fogMode = Scene.FOGMODE_EXP2;
       scene.fogDensity = preset.fogDensity;
-      scene.fogColor = preset.fogColor.clone();
+      scene.fogColor = fogColor;
     } else {
       scene.fogMode = Scene.FOGMODE_NONE;
       scene.fogDensity = 0;
       // Keep fogColor coherent with sky/ambient even if unused
-      scene.fogColor = preset.fogColor.clone();
+      scene.fogColor = fogColor;
     }
 
     // Store the weather multiplier and re-apply sun intensity using current time-of-day
     this.weatherSunIntensityScale = preset.sunIntensityScale;
-    const effectiveTime = this.isClockRunning
-      ? this.currentTimeOfDay2400
-      : this.targetTimeOfDay2400;
+
+    // Use the reactive clock refs for the effective time when running; otherwise use target
+    const effectiveTime = isClockRunning.value ? timeOfDay2400.value : this.targetTimeOfDay2400;
     this.updateSunFromTimeOfDay(effectiveTime);
   }
 
-  // todo move these settings to season.ts; our job here is just to apply, not define
-  // ----- Season palette (ambient sky/ground colors) -----
   /** Set hemispheric ambient sky and ground colors based on a month index (1..12). */
-  private applySeasonPalette(monthIndex1to12: number): void {
-    const month = EnvironmentService.normalizeMonth1to12(monthIndex1to12);
-    // Simple palette: spring (3-5), summer (6-8), autumn (9-11), winter (12-2)
-    const spring = {
-      sky: Color3.FromHexString("#cfe7ff"),
-      ground: Color3.FromHexString("#a5d6a7"),
-    };
-    const summer = {
-      sky: Color3.FromHexString("#bde0ff"),
-      ground: Color3.FromHexString("#8bdc65"),
-    };
-    const autumn = {
-      sky: Color3.FromHexString("#ffd9b3"),
-      ground: Color3.FromHexString("#d87b42"),
-    };
-    const winter = {
-      sky: Color3.FromHexString("#dbe6f2"),
-      ground: Color3.FromHexString("#b4c5d2"),
-    };
-    const palette = [
-      winter,
-      winter,
-      spring,
-      spring,
-      spring,
-      summer,
-      summer,
-      summer,
-      autumn,
-      autumn,
-      autumn,
-      winter,
-    ];
-    const p = palette[month - 1];
+  private applySeasonPalette(month: number): void {
+    const p = getBlendedSeasonPalette(month);
+
     if (this.hemisphericAmbientLight) {
-      this.hemisphericAmbientLight.diffuse = p.sky.clone();
-      this.hemisphericAmbientLight.groundColor = p.ground.clone();
+      this.hemisphericAmbientLight.diffuse = p.sky;
+      this.hemisphericAmbientLight.groundColor = p.ground;
     }
     // Keep fog color broadly consistent with the sky tint if fog is active
     if (this.scene.fogMode !== Scene.FOGMODE_NONE) {
@@ -432,71 +387,35 @@ export class EnvironmentService {
     }
   }
 
-  // todo use clamp() from math.ts
   /** Clamp a 24-hour clock integer to the inclusive range 0..2400. */
   public static clampTime2400(value2400: number): number {
-    const rounded = Math.round(value2400);
-    if (rounded < 0) return 0;
-    if (rounded > 2400) return 2400;
-    return rounded;
+    return clamp(Math.round(value2400), 0, 2399);
   }
 
-  // todo create wrap() from math.ts (very useful function, add a todo-note to make our wrapX functions use it too)
-  /** Wrap a 24-hour clock integer so it stays within 0..2400 while preserving modular time. */
-  public static wrapTime2400(value2400: number): number {
-    let wrapped = value2400 % 2400;
-    if (wrapped < 0) wrapped += 2400;
-    return wrapped;
-  }
-
-  // todo: use the new wrap function here?
   /** Normalize a month index to the inclusive range 1..12. */
   public static normalizeMonth1to12(monthIndex: number): number {
-    const rounded = Math.round(monthIndex);
-    const mod = (((rounded - 1) % 12) + 12) % 12; // safe modulo
-    return mod + 1;
+    return wrapInclusive(Math.round(monthIndex), 1, 12);
   }
 
-  // todo move these settings to timeOfDay.ts; our job here is just to apply, not define
-  // also: 1000-1600: day; 1900: sunset midpoint; 2200-0400: night; 0700: sunrise midpoint
-  // also: transition time at 1h (100) per 100ms for a cool effect
   // ----- Time-of-day lighting -----
   /**
-   * Update the directional sun light's direction, intensity and color from a 0..2400 time-of-day value.
-   * Uses a simple analytical sky path: azimuth sweeps ~270°, elevation follows a sine.
+   * KISS: Get lighting values from timeOfDay.ts and apply them. No derivation math here.
    */
   private updateSunFromTimeOfDay(timeOfDayValue2400: number): void {
-    if (!this.directionalSunLight) return;
-    const t = Math.max(0, Math.min(2400, Math.round(timeOfDayValue2400))) / 2400; // 0..1
-    // Azimuth: start slightly SE and sweep across the sky
-    const azimuthRadians = -Math.PI * 0.25 + t * Math.PI * 1.5; // ~-45° .. 225°
-    // Elevation: sine over a day; clamp a bit below horizon to keep a dim moon-like light
-    const elevationRadians = Math.sin(t * Math.PI * 2) * 0.9; // -0.9..0.9
+    if (!this.directionalSunLight || !this.hemisphericAmbientLight) return;
 
-    // Directional light points FROM the light to the scene (negative Y when sun is above horizon)
-    const dirX = Math.cos(elevationRadians) * Math.cos(azimuthRadians);
-    const dirY = -Math.sin(elevationRadians);
-    const dirZ = Math.cos(elevationRadians) * Math.sin(azimuthRadians);
-    this.directionalSunLight.direction.set(dirX, dirY, dirZ);
+    const state = getLightingForTimeOfDay(timeOfDayValue2400);
 
-    // Intensity rises with elevation; zero when far below horizon.
-    const dayFactor = Math.max(0, Math.sin(Math.max(0, elevationRadians)));
-    const intensity =
-      this.baseDirectionalSunLightIntensity *
-      this.weatherSunIntensityScale *
-      (0.2 + dayFactor * 1.0);
-    this.directionalSunLight.intensity = intensity;
+    // Apply sun (directional light)
+    this.directionalSunLight.direction.copyFrom(state.sunDirection);
+    this.directionalSunLight.intensity =
+      this.baseDirectionalSunLightIntensity * this.weatherSunIntensityScale * state.sunStrength01;
+    this.directionalSunLight.diffuse = state.sunColor.clone();
+    this.directionalSunLight.specular = state.sunColor.clone();
 
-    // Light color: blend night → dusk → day based on elevation
-    const dayColor = Color3.White();
-    const duskColor = Color3.FromHexString("#ffb380");
-    const nightColor = Color3.FromHexString("#a7c7ff").scale(0.35);
-    const k = Math.max(0, Math.min(1, (elevationRadians + 0.3) / 0.8));
-    const color =
-      k < 0.5
-        ? Color3.Lerp(nightColor, duskColor, k * 2)
-        : Color3.Lerp(duskColor, dayColor, (k - 0.5) * 2);
-    this.directionalSunLight.diffuse = color;
-    this.directionalSunLight.specular = color;
+    // Apply ambient (hemispheric) for moon glow / general ambience
+    this.hemisphericAmbientLight.intensity = state.ambientIntensity;
+    this.hemisphericAmbientLight.diffuse = state.ambientSkyColor.clone();
+    this.hemisphericAmbientLight.groundColor = state.ambientGroundColor.clone();
   }
 }

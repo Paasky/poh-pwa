@@ -10,4 +10,8 @@ export class Diplomacy {
 
   playerKey: GameKey;
   player = computed(() => useObjectsStore().get(this.playerKey) as Player);
+
+  startTurn(): void {
+    //
+  }
 }

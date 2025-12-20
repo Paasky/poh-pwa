@@ -10,6 +10,7 @@ export default [
     ignores: [
       "dist",
       "node_modules",
+      "pnpm-lock.yaml",
       "coverage",
       ".vite",
       "**/*.d.ts",

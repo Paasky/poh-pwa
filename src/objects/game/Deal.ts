@@ -1,7 +1,8 @@
 import { GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
-import { ComputedRef } from "vue";
+import { computed, ComputedRef } from "vue";
 import type { Player } from "@/objects/game/Player";
 import { hasOne } from "@/objects/game/_relations";
+import { Yields } from "@/objects/yield";
 
 export class Deal extends GameObject {
   constructor(key: GameKey, fromPlayerKey: GameKey, toPlayerKey: GameKey) {
@@ -42,7 +43,8 @@ export class Deal extends GameObject {
   /*
    * Computed
    */
-  // todo add here
+
+  yields = computed(() => new Yields([]));
 
   /*
    * Actions

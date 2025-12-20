@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { canHaveOne, hasMany } from "@/objects/game/_relations";
 import { TypeObject } from "@/types/typeObjects";
 import { Yields } from "@/objects/yield";
 import { computed, ref } from "vue";
-import { GameKey, GameObjAttr, GameObject, getKey } from "@/objects/game/_GameObject";
+import { GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
 import { useObjectsStore } from "@/stores/objectStore";
 import type { River } from "@/objects/game/River";
 import type { Construction } from "@/objects/game/Construction";
@@ -11,6 +12,7 @@ import type { City } from "@/objects/game/City";
 import type { Player } from "@/objects/game/Player";
 import type { TradeRoute } from "@/objects/game/TradeRoute";
 import type { Unit } from "@/objects/game/Unit";
+import { getNeighbors, tileKey } from "@/helpers/mapTools";
 
 export class Tile extends GameObject {
   constructor(
@@ -139,13 +141,32 @@ export class Tile extends GameObject {
       ]),
   );
 
+  getNeighbors(dist = 1): Tile[] {
+    return getNeighbors(
+      useObjectsStore().world.size,
+      this,
+      useObjectsStore().getTiles,
+      "hex",
+      dist,
+    );
+  }
+
   /*
    * Actions
    */
-  // todo add here
+  warmUp(): void {
+    this.city.value;
+    this.construction.value;
+    this.player.value;
+    this.river.value;
+    this.tradeRoutes.value;
+    this.units.value;
+    this.types.value;
+    this.yields.value;
+  }
 
   // Used all over to always generate standard tile ID
   static getKey(x: number, y: number): GameKey {
-    return getKey("tile", `x${x},y${y}`);
+    return tileKey(x, y);
   }
 }

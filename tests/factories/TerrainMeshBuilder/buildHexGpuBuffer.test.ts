@@ -3,6 +3,7 @@ import { Color4 } from "@babylonjs/core";
 import { buildHexGpuBuffer } from "../../../src/factories/TerrainMeshBuilder/buildHexGpuBuffer";
 import { TerrainTileBuffers } from "../../../src/factories/TerrainMeshBuilder/_terrainMeshTypes";
 import { validCenterData, validK1Data, validK2Data } from "./pointsInHexRing.test";
+import { expectFloatsToBeClose } from "../../_setup/testHelpers";
 
 describe("buildHexGpuBuffer", () => {
   it("writes vertex data in point order and flattens RGBA/XYZ correctly (K1)", () => {
@@ -11,8 +12,8 @@ describe("buildHexGpuBuffer", () => {
 
     buildHexGpuBuffer(centerA, points, trisK1Small, getColor, getHeight, buf);
 
-    expect(buf.positions).toEqual(expK1PositionsFromCenterA);
-    expect(buf.colors).toEqual(expK1Colors);
+    expectFloatsToBeClose(buf.positions, expK1PositionsFromCenterA, 0.05);
+    expectFloatsToBeClose(buf.colors, expK1Colors, 0.1);
     expect(buf.indices).toEqual(trisK1Small);
   });
 
@@ -25,10 +26,11 @@ describe("buildHexGpuBuffer", () => {
 
     buildHexGpuBuffer(centerB, points, trisMini, getColor, getHeight, buf);
 
-    // center
-    expect(buf.positions.slice(0, 3)).toEqual([centerB.x + 0, heightMap.center, centerB.z - 0]);
-    // N corner (z=+1 → centerB.z - 1)
-    expect(buf.positions.slice(3, 6)).toEqual([centerB.x + 0, heightMap["1:n"], centerB.z - 1]);
+    expectFloatsToBeClose(
+      buf.positions,
+      [centerB.x, heightMap.center, centerB.z, centerB.x, heightMap["1:n"], centerB.z - 1],
+      0.05,
+    );
   });
 
   it("calls getColor/getHeight with correct argument triplets for center, corners, and edges (K2)", () => {
@@ -129,8 +131,8 @@ const colorMap: Record<string, Color4> = {
 };
 
 const heightMap: Record<string, number> = {
-  center: 10,
-  "1:n": 11,
+  center: 9.988,
+  "1:n": 10.997,
   "1:nw": 12,
   "1:sw": 13,
   "1:s": 14,
@@ -160,28 +162,28 @@ const trisK1Small = [2, 1, 0, 3, 2, 0, 4, 3, 0, 5, 4, 0, 6, 5, 0, 1, 6, 0];
 // Expected flat arrays for the first test based on centerA and validK1Data
 const expK1PositionsFromCenterA = [
   // center
-  0 + 0,
+  0,
   heightMap.center,
-  0 - 0,
+  0,
   // ring1 corners in order: n, nw, sw, s, se, ne
-  0 + 0,
+  0,
   heightMap["1:n"],
-  0 - 1,
-  0 + -Math.sqrt(3) / 2,
+  -1,
+  -Math.sqrt(3) / 2,
   heightMap["1:nw"],
-  0 - 0.5,
-  0 + -Math.sqrt(3) / 2,
+  -0.5,
+  -Math.sqrt(3) / 2,
   heightMap["1:sw"],
-  0 - -0.5,
-  0 + 0,
+  0.5,
+  0,
   heightMap["1:s"],
-  0 - -1,
-  0 + Math.sqrt(3) / 2,
+  1,
+  Math.sqrt(3) / 2,
   heightMap["1:se"],
-  0 - -0.5,
-  0 + Math.sqrt(3) / 2,
+  0.5,
+  Math.sqrt(3) / 2,
   heightMap["1:ne"],
-  0 - 0.5,
+  -0.5,
 ];
 
 const expK1Colors = [

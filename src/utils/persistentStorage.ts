@@ -1,16 +1,18 @@
+// noinspection ExceptionCaughtLocallyJS
+
 export type PersistEnvelope<T> = {
   v: number; // schema version
   at: number; // saved at (ms since epoch)
   data: T;
 };
 
-export function savePersisted<T>(key: string, version: number, data: T): void {
+export function saveToBrowser<T>(key: string, version: number, data: T): void {
   const env: PersistEnvelope<T> = { v: version, at: Date.now(), data };
   // will throw on failure
   localStorage.setItem(key, JSON.stringify(env));
 }
 
-export function loadPersisted<T>(key: string, expectedVersion: number): T | undefined {
+export function loadFromBrowser<T>(key: string, expectedVersion: number): T | undefined {
   try {
     const raw = localStorage.getItem(key);
     if (!raw) return undefined;
@@ -38,6 +40,7 @@ export function loadPersisted<T>(key: string, expectedVersion: number): T | unde
     return anyEnv.data as T;
   } catch (err) {
     // Swallow errors but log a concise message so the app continues with defaults
+    // eslint-disable-next-line
     console.warn(`[persistentStorage] Failed to load key '${key}':`, err);
     return undefined;
   }
