@@ -10,9 +10,10 @@ import type { UnitDesign } from "@/objects/game/UnitDesign";
 import type { City } from "@/objects/game/City";
 import type { Player } from "@/objects/game/Player";
 import type { TradeRoute } from "@/objects/game/TradeRoute";
-import type { Tile } from "@/objects/game/Tile";
+import { type Tile } from "@/objects/game/Tile";
 import { useEventStore } from "@/stores/eventStore";
 import { UnitCreated, UnitHealed, UnitLost } from "@/events/Unit";
+import { getCoordsFromTileKey, getHexNeighborCoords, tileKey } from "@/helpers/mapTools";
 
 // mercenary: +10% strength, +50% upkeep, 1/city/t;
 // regular: no effects
@@ -157,6 +158,18 @@ export class Unit extends GameObject {
 
   types = computed((): TypeObject[] => {
     return this.myTypes.value.concat(this.tile.value.types.value);
+  });
+
+  visibleTileKeys = computed(() => {
+    const store = useObjectsStore();
+    const center = getCoordsFromTileKey(this.tileKey.value);
+    const neighbors = getHexNeighborCoords(store.world.size, center, 2);
+    const keys = new Set<GameKey>();
+    keys.add(this.tileKey.value);
+    for (const c of neighbors) {
+      keys.add(tileKey(c.x, c.y));
+    }
+    return keys;
   });
 
   yields = computed(() => new Yields());
@@ -343,6 +356,7 @@ export class Unit extends GameObject {
     this.playerYields.value;
     this.tileYields.value;
     this.types.value;
+    this.visibleTileKeys.value;
     this.yields.value;
   }
 }
