@@ -9,19 +9,11 @@ import {
 import { CreateScreenshotUsingRenderTarget } from "@babylonjs/core/Misc/screenshotTools";
 import { TerrainMeshBuilder } from "@/factories/TerrainMeshBuilder/TerrainMeshBuilder";
 import { useObjectsStore } from "@/stores/objectStore";
-import {
-  getWorldDepth,
-  getWorldMinX,
-  getWorldMinZ,
-  getWorldWidth,
-  hexDepth,
-  hexWidth,
-} from "@/helpers/math";
+import { getWorldDepth, getWorldWidth, hexDepth, hexWidth, tileCenter } from "@/helpers/math";
 import { FogOfWar } from "@/components/Engine/FogOfWar";
-import { Coords } from "@/helpers/mapTools";
-import { Tile } from "@/objects/game/Tile";
+import { Coords, getCoordsFromTileKey } from "@/helpers/mapTools";
 import { rotNorth } from "@/components/Engine/interaction/MainCamera";
-import { useSettingsStore } from "@/stores/settingsStore";
+import { Tile } from "@/objects/game/Tile";
 
 export class Minimap {
   size: Coords;
@@ -32,6 +24,7 @@ export class Minimap {
   light: HemisphericLight;
   terrain: TerrainMeshBuilder;
   fogOfWar: FogOfWar;
+  bounds = { minX: 0, maxX: 0, minZ: 0, maxZ: 0 };
 
   constructor(size: Coords, canvas: HTMLCanvasElement, engine: BabylonEngine, fogOfWar: FogOfWar) {
     this.size = size;
@@ -76,50 +69,95 @@ export class Minimap {
   }
 
   capture(): void {
-    // Render a 512x256 screenshot using the orthographic minimap camera and draw it to the canvas.
-    // For consistency, render with neutral, temporary lights and no fog so the minimap
-    // is not affected by the current world environment (time of day, weather, fog, post FX).
-    const width = 512;
-    const height = 256;
+    // 1. Calculate Bounds
+    let minX = Infinity,
+      maxX = -Infinity,
+      minZ = Infinity,
+      maxZ = -Infinity;
+    const minTileHeight = 12;
+    const minWorldHeight = minTileHeight * hexDepth;
 
-    // Perform capture
+    if (this.fogOfWar.knownKeys.size > 0) {
+      for (const key of this.fogOfWar.knownKeys) {
+        const { x, z } = tileCenter(this.size, getCoordsFromTileKey(key));
+        minX = Math.min(minX, x - hexWidth / 2);
+        maxX = Math.max(maxX, x + hexWidth / 2);
+        minZ = Math.min(minZ, z - hexDepth / 2);
+        maxZ = Math.max(maxZ, z + hexDepth / 2);
+      }
+    } else {
+      // Fallback to center if nothing is known
+      minX = -10;
+      maxX = 10;
+      minZ = -10;
+      maxZ = 10;
+    }
+
+    // Ensure minimum height
+    const currentHeight = maxZ - minZ;
+    if (currentHeight < minWorldHeight) {
+      const diff = (minWorldHeight - currentHeight) / 2;
+      minZ -= diff;
+      maxZ += diff;
+    }
+
+    // Adjust width to match canvas aspect ratio
+    const targetRatio = this.canvas.width / this.canvas.height;
+    const currentWidth = maxX - minX;
+    const actualHeight = maxZ - minZ;
+    const currentRatio = currentWidth / actualHeight;
+
+    if (currentRatio < targetRatio) {
+      const diff = (actualHeight * targetRatio - currentWidth) / 2;
+      minX -= diff;
+      maxX += diff;
+    } else {
+      const diff = (currentWidth / targetRatio - actualHeight) / 2;
+      minZ -= diff;
+      maxZ += diff;
+    }
+
+    this.camera.orthoLeft = minX;
+    this.camera.orthoRight = maxX;
+    this.camera.orthoBottom = minZ;
+    this.camera.orthoTop = maxZ;
+
+    // Update the public bounds property
+    this.bounds = { minX, maxX, minZ, maxZ };
+
+    const { width, height } = this.canvas;
     CreateScreenshotUsingRenderTarget(this.engine, this.camera, { width, height }, (data) => {
-      // Draw into the minimap canvas
       const ctx = this.canvas.getContext("2d")!;
       const img = new Image();
       img.onload = () => {
-        ctx.clearRect(0, 0, width, height);
-        ctx.drawImage(img, 0, 0, width, height);
+        // 1. Clear background with black
+        ctx.fillStyle = "#000";
+        ctx.fillRect(0, 0, width, height);
 
-        // KISS overlay: cover unknown tiles with simple black rectangles.
-        // Compute world-to-pixel mapping once.
-        const worldW = getWorldWidth(this.size.x);
-        const worldD = getWorldDepth(this.size.y);
-        const minX = getWorldMinX(worldW);
-        const minZ = getWorldMinZ(worldD);
+        // 2. Draw the captured terrain
+        ctx.drawImage(img, 0, 0);
 
-        // Rectangle size approximates hex bounds in pixels
-        const rectW = (hexWidth / worldW) * width;
-        const rectH = (hexDepth / worldD) * height;
+        // 3. Manually overlay Fog of War for unknown tiles
+        const viewW = maxX - minX;
+        const viewD = maxZ - minZ;
 
-        // Replicate Fog of War
-        if (useSettingsStore().engineSettings.enableFogOfWar) {
-          ctx.fillStyle = "#000";
-          for (let y = 0; y < this.size.y; y++) {
-            for (let x = 0; x < this.size.x; x++) {
-              const key = Tile.getKey(x, y);
-              if (!this.fogOfWar.knownKeys.has(key)) {
-                // Odd-r pointy-top layout center in world units
-                const wx = minX + hexWidth * (x + 0.5 * (y & 1));
-                const wz = minZ + hexDepth * y;
+        // Rectangle size slightly larger than a tile to prevent seams
+        const rectW = (hexWidth / viewW) * width * 1.1;
+        const rectH = (hexDepth / viewD) * height * 1.1;
 
-                // Map world -> pixel
-                const px = ((wx - minX) / worldW) * width;
-                const py = ((wz - minZ) / worldD) * height;
+        ctx.fillStyle = "#000";
+        for (let y = 0; y < this.size.y; y++) {
+          for (let x = 0; x < this.size.x; x++) {
+            const key = Tile.getKey(x, y);
+            if (!this.fogOfWar.knownKeys.has(key)) {
+              const center = tileCenter(this.size, { x, y });
 
-                // Cover with a simple rectangle (good enough for 512x256 minimap)
-                ctx.fillRect(px - rectW / 2, py - rectH / 2, rectW, rectH);
-              }
+              // Map world units to canvas pixels
+              const px = ((center.x - minX) / viewW) * width;
+              // Flip Y for canvas (0,0 is top-left)
+              const py = (1 - (center.z - minZ) / viewD) * height;
+
+              ctx.fillRect(px - rectW / 2, py - rectH / 2, rectW, rectH);
             }
           }
         }

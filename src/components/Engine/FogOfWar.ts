@@ -16,6 +16,7 @@ import type { Coords } from "@/helpers/mapTools";
 import { Tile } from "@/objects/game/Tile";
 import type { GameKey } from "@/objects/game/_GameObject";
 import { useSettingsStore } from "@/stores/settingsStore";
+import { useObjectsStore } from "@/stores/objectStore";
 
 export class FogOfWar {
   // === Fog of War tunables (kept internal; not user-adjustable) ===
@@ -36,9 +37,9 @@ export class FogOfWar {
   visibleKeys: Set<GameKey>;
 
   // GPU/CPU resources
-  private maskBuffer!: Uint8Array;
-  private maskTexture!: RawTexture;
-  private postProcess!: PostProcess;
+  maskBuffer!: Uint8Array;
+  maskTexture!: RawTexture;
+  postProcess!: PostProcess;
 
   private _initialized = false;
 
@@ -47,8 +48,6 @@ export class FogOfWar {
     scene: Scene,
     camera: ArcRotateCamera,
     tilesByKey: Record<string, Tile>,
-    knownTileKeys: GameKey[],
-    visibleTileKeys: GameKey[],
   ) {
     // Required fields initialized in constructor (no lazy nulls)
     this.scene = scene;
@@ -56,8 +55,8 @@ export class FogOfWar {
     this.tilesByKey = tilesByKey;
     this.camera = camera;
 
-    this.knownKeys = new Set(knownTileKeys);
-    this.visibleKeys = new Set(visibleTileKeys);
+    this.knownKeys = useObjectsStore().currentPlayer.knownTileKeys.value;
+    this.visibleKeys = useObjectsStore().currentPlayer.visibleTileKeys.value;
 
     // init resources and run once
     this.initResources();

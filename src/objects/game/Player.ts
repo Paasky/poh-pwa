@@ -19,6 +19,7 @@ import type { TradeRoute } from "@/objects/game/TradeRoute";
 import type { Unit } from "@/objects/game/Unit";
 import { Diplomacy } from "@/objects/player/Diplomacy";
 import { ObjKey, TypeKey } from "@/types/common";
+import { useObjectsStore } from "@/stores/objectStore";
 
 export class Player extends GameObject {
   constructor(
@@ -147,6 +148,10 @@ export class Player extends GameObject {
 
   visibleTileKeys = computed(() => {
     const keys = new Set<GameKey>(this.tileKeys.value);
+
+    // Prevent crash if store is not ready yet
+    if (!useObjectsStore().ready) return keys;
+
     this.units.value.forEach((u) => u.visibleTileKeys.value.forEach((k) => keys.add(k)));
     return keys;
   });

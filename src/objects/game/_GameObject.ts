@@ -89,6 +89,12 @@ export class GameObject {
         continue;
       }
 
+      // Special handling for Sets
+      if (value instanceof Set) {
+        out[attr.attrName] = Array.from(value);
+        continue;
+      }
+
       // Normal attribute
       out[attr.attrName] = value;
     }

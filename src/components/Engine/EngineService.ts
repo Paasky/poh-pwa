@@ -146,17 +146,7 @@ export class EngineService {
   }
 
   initFogOfWar(): this {
-    const storeKnown = useObjectsStore().currentPlayer.knownTileKeys.value as GameKey[];
-    const storeVisible = useObjectsStore().currentPlayer.visibleTileKeys.value as GameKey[];
-
-    this.fogOfWar = new FogOfWar(
-      this.size,
-      this.scene,
-      this.camera,
-      useObjectsStore().getTiles,
-      storeKnown,
-      storeVisible,
-    );
+    this.fogOfWar = new FogOfWar(this.size, this.scene, this.camera, useObjectsStore().getTiles);
     return this;
   }
 
@@ -250,7 +240,7 @@ export class EngineService {
   flyTo(coords: EngineCoords): EngineService {
     const targetPos = new Vector3(coords.x, 0, coords.z);
     const startPos = this.camera.target.clone();
-    const duration = 1.0; // 1 second
+    const duration = 0.5; // 1 second
     let elapsed = 0;
 
     // Remove any existing flyTo observer
@@ -259,12 +249,18 @@ export class EngineService {
     this.flyToObserver = this.scene.onBeforeRenderObservable.add(() => {
       const dt = this.engine.getDeltaTime() / 1000;
       elapsed += dt;
-      const t = Scalar.Clamp(elapsed / duration, 0, 1);
 
-      // Simple Lerp animation over 1s.
-      Vector3.LerpToRef(startPos, targetPos, t, this.camera.target);
+      // 1. Calculate linear completion (0 to 1)
+      const linearT = Scalar.Clamp(elapsed / duration, 0, 1);
 
-      if (t >= 1) {
+      // 2. Apply SmoothStep to get the "speed up, then speed down" effect
+      // This creates the organic acceleration/deceleration curve
+      const easedT = Scalar.SmoothStep(0, 1, linearT);
+
+      // 3. Use the eased value for position interpolation
+      Vector3.LerpToRef(startPos, targetPos, easedT, this.camera.target);
+
+      if (linearT >= 1) {
         this.stopFlying();
       }
     });
