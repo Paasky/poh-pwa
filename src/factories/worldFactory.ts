@@ -1,7 +1,7 @@
 import { ObjKey, yearsPerTurnConfig } from "@/types/common";
 import { useObjectsStore } from "@/stores/objectStore";
 import { TerraGenerator } from "@/factories/TerraGenerator/terra-generator";
-import { takeRandom } from "@/helpers/arrayTools";
+import { shuffle, takeRandom } from "@/helpers/arrayTools";
 import { Player } from "@/objects/game/Player";
 import { generateKey } from "@/objects/game/_GameObject";
 import { Culture } from "@/objects/game/Culture";
@@ -137,12 +137,12 @@ export const createWorld = (size: WorldSize): GameData => {
     }
   }
 
-  for (const continentData of Object.values(gen.continents)) {
+  for (const continentData of shuffle(Object.values(gen.continents))) {
     const continentStartCultures = cultureTypes.filter(
       (c) => !c.upgradesFrom.length && c.category!.includes(`:${continentData.type.id}`),
     );
 
-    for (const tile of continentData.majorStarts.game) {
+    for (const tile of shuffle(continentData.majorStarts.game)) {
       const cultureKey = generateKey("culture");
       const player = new Player(
         generateKey("player"),
