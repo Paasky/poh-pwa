@@ -83,6 +83,7 @@ export const useAppStore = defineStore("app", {
                 }
               } while (tries < 5);
             }
+            objStore.ready = true;
           },
           () => (objStore.getClassGameObjects("player") as Player[]).forEach((p) => p.warmUp()),
           () => (objStore.getClassGameObjects("tile") as Tile[]).forEach((t) => t.warmUp()),

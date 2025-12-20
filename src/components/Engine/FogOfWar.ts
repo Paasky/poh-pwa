@@ -1,21 +1,12 @@
 import type { Scene } from "@babylonjs/core";
-import {
-  ArcRotateCamera,
-  Effect,
-  Matrix,
-  PostProcess,
-  RawTexture,
-  Texture,
-  Vector2,
-  Vector3,
-  Vector4,
-} from "@babylonjs/core";
+import { Camera, Effect, Matrix, PostProcess, RawTexture, Texture, Vector2, Vector3, Vector4, } from "@babylonjs/core";
 import { watch } from "vue";
 import { getWorldDepth, getWorldMinX, getWorldMinZ, getWorldWidth } from "@/helpers/math";
 import type { Coords } from "@/helpers/mapTools";
 import { Tile } from "@/objects/game/Tile";
 import type { GameKey } from "@/objects/game/_GameObject";
 import { useSettingsStore } from "@/stores/settingsStore";
+import { useObjectsStore } from "@/stores/objectStore";
 
 export class FogOfWar {
   // === Fog of War tunables (kept internal; not user-adjustable) ===
@@ -29,56 +20,69 @@ export class FogOfWar {
   readonly scene: Scene;
   readonly size: Coords;
   readonly tilesByKey: Record<string, Tile>;
-  readonly camera: ArcRotateCamera;
 
   // Logical state
   knownKeys: Set<GameKey>;
   visibleKeys: Set<GameKey>;
 
   // GPU/CPU resources
-  private maskBuffer!: Uint8Array;
-  private maskTexture!: RawTexture;
-  private postProcess!: PostProcess;
+  maskBuffer!: Uint8Array;
+  maskTexture!: RawTexture;
+  private _postProcesses = new Map<Camera, PostProcess>();
 
   private _initialized = false;
+  private _pendingProcess = false;
 
-  constructor(
-    size: Coords,
-    scene: Scene,
-    camera: ArcRotateCamera,
-    tilesByKey: Record<string, Tile>,
-    knownTileKeys: GameKey[],
-    visibleTileKeys: GameKey[],
-  ) {
+  constructor(size: Coords, scene: Scene, tilesByKey: Record<string, Tile>) {
     // Required fields initialized in constructor (no lazy nulls)
     this.scene = scene;
     this.size = size;
     this.tilesByKey = tilesByKey;
-    this.camera = camera;
 
-    this.knownKeys = new Set(knownTileKeys);
-    this.visibleKeys = new Set(visibleTileKeys);
+    this.knownKeys = useObjectsStore().currentPlayer.knownTileKeys.value;
+    this.visibleKeys = useObjectsStore().currentPlayer.visibleTileKeys.value;
 
     // init resources and run once
     this.initResources();
     this.process();
-  }
 
-  // todo: wire up to unit movement/border growth/map trading
-  // noinspection JSUnusedGlobalSymbols
-  addAndSetTiles(addKnownKeys: GameKey[], setVisibleKeys?: GameKey[]): this {
-    addKnownKeys.forEach((k) => this.knownKeys.add(k));
-    if (setVisibleKeys) this.visibleKeys = new Set(setVisibleKeys);
-    this.process();
+    watch(
+      () => useObjectsStore().currentPlayer.knownTileKeys,
+      (newKeys) => {
+        this.knownKeys = newKeys.value;
+        this.triggerProcess();
+      },
+      { deep: true },
+    );
 
-    return this;
+    watch(
+      () => useObjectsStore().currentPlayer.visibleTileKeys,
+      (newKeys) => {
+        this.visibleKeys = newKeys.value;
+        this.triggerProcess();
+      },
+    );
   }
 
   dispose(): void {
     // dispose of all data created during my lifespan
-    if (this.postProcess) this.postProcess.dispose();
+    for (const pp of this._postProcesses.values()) {
+      pp.dispose();
+    }
+    this._postProcesses.clear();
     if (this.maskTexture) this.maskTexture.dispose();
     // buffer is GC-managed
+  }
+
+  private triggerProcess() {
+    if (this._pendingProcess) return;
+    this._pendingProcess = true;
+
+    // Coalesce updates in the same "tick"
+    Promise.resolve().then(() => {
+      this.process();
+      this._pendingProcess = false;
+    });
   }
 
   private process(): this {
@@ -123,34 +127,22 @@ export class FogOfWar {
     // Register shader once
     this.registerShader();
 
-    // Create the projector post-process and wire uniforms
-    this.createPostProcess();
-
-    watch(
-      () => useSettingsStore().engineSettings.enableFogOfWar,
-      (isEnabled, oldVal) => {
-        if (isEnabled !== oldVal) {
-          if (isEnabled) {
-            this.camera.attachPostProcess(this.postProcess);
-          } else {
-            this.camera.detachPostProcess(this.postProcess);
-          }
-        }
-      },
-    );
-
     this._initialized = true;
   }
 
-  private createPostProcess(): void {
-    const camera = this.camera;
+  public attachToCamera(camera: Camera): void {
+    if (this._postProcesses.has(camera)) return;
+    this.createPostProcess(camera);
+  }
+
+  private createPostProcess(camera: Camera): void {
     const size = this.size;
     const worldWidth = getWorldWidth(size.x);
     const worldDepth = getWorldDepth(size.y);
     const minX = getWorldMinX(worldWidth);
     const minZ = getWorldMinZ(worldDepth);
 
-    this.postProcess = new PostProcess(
+    const postProcess = new PostProcess(
       "FoW",
       "fowProjector",
       [
@@ -166,7 +158,7 @@ export class FogOfWar {
       camera,
     );
 
-    this.postProcess.onApply = (effect) => {
+    postProcess.onApply = (effect) => {
       const view = camera.getViewMatrix();
       const proj = camera.getProjectionMatrix();
       const invVP = Matrix.Invert(view.multiply(proj));
@@ -179,10 +171,24 @@ export class FogOfWar {
       effect.setTexture("maskTex", this.maskTexture);
     };
 
+    this._postProcesses.set(camera, postProcess);
+
     // Respect the current enabled flag
     if (!useSettingsStore().engineSettings.enableFogOfWar) {
-      camera.detachPostProcess(this.postProcess);
+      camera.detachPostProcess(postProcess);
     }
+
+    // Toggle post-process when settings change
+    watch(
+      () => useSettingsStore().engineSettings.enableFogOfWar,
+      (isEnabled) => {
+        if (isEnabled) {
+          camera.attachPostProcess(postProcess);
+        } else {
+          camera.detachPostProcess(postProcess);
+        }
+      },
+    );
   }
 
   private registerShader(): void {

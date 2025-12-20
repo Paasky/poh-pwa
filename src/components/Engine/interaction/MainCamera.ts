@@ -10,6 +10,7 @@ import { useSettingsStore } from "@/stores/settingsStore";
 import { Coords } from "@/helpers/mapTools";
 import { clamp, getWorldMaxX, getWorldMinX, getWorldWidth } from "@/helpers/math";
 import GridOverlay from "@/components/Engine/overlays/GridOverlay";
+import { FogOfWar } from "@/components/Engine/FogOfWar";
 
 export const rot30 = Math.PI / 6;
 export const rotNorth = -rot30 * 3;
@@ -19,6 +20,7 @@ export class MainCamera {
   readonly scene: Scene;
   readonly canvas: HTMLCanvasElement;
   readonly camera: ArcRotateCamera;
+  fogOfWar: FogOfWar;
   readonly gridOverlay: GridOverlay;
 
   private _rotationInput = new ArcRotateCameraPointersInput();
@@ -31,10 +33,17 @@ export class MainCamera {
   maxZoomIn: number = 10;
   maxZoomOut: number = 100;
 
-  constructor(size: Coords, scene: Scene, canvas: HTMLCanvasElement, gridOverlay: GridOverlay) {
+  constructor(
+    size: Coords,
+    scene: Scene,
+    canvas: HTMLCanvasElement,
+    fogOfWar: FogOfWar,
+    gridOverlay: GridOverlay,
+  ) {
     this.size = size;
     this.scene = scene;
     this.canvas = canvas;
+    this.fogOfWar = fogOfWar;
     this.gridOverlay = gridOverlay;
 
     // Create camera
@@ -46,6 +55,7 @@ export class MainCamera {
       new Vector3(0, 0, 0),
       this.scene,
     );
+    this.fogOfWar.attachToCamera(this.camera);
 
     // Controls
     this.camera.inputs.clear();
