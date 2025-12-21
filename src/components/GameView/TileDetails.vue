@@ -1,12 +1,9 @@
 <script setup lang="ts">
-import { Ref } from "vue";
-import { Tile, useHoveredTile } from "@/stores/hoveredTile";
+import { useCurrentTile } from "@/stores/currentTile";
 import UiObjectChip from "@/components/Ui/UiObjectChip.vue";
 import { useObjectsStore } from "@/stores/objectStore";
 
-// Force the output type so the IDE in <template> understands refs correctly
-// eslint-disable-next-line
-const { hoveredTile } = useHoveredTile() as any as { hoveredTile: Ref<Tile | null> };
+const { hoveredTile } = useCurrentTile();
 </script>
 
 <template>

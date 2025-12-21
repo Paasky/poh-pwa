@@ -11,7 +11,6 @@ import { TerrainMeshBuilder } from "@/factories/TerrainMeshBuilder/TerrainMeshBu
 import { useObjectsStore } from "@/stores/objectStore";
 import { EnvironmentService } from "@/components/Engine/EnvironmentService";
 import LogicMeshBuilder from "@/factories/LogicMeshBuilder";
-import { useHoveredTile } from "@/stores/hoveredTile";
 import { Minimap } from "@/components/Engine/interaction/Minimap";
 import { MainCamera } from "@/components/Engine/interaction/MainCamera";
 import FeatureInstancer from "@/components/Engine/features/FeatureInstancer";
@@ -23,6 +22,7 @@ import { Coords, getCoordsFromTileKey } from "@/helpers/mapTools";
 import { EngineCoords } from "@/factories/TerrainMeshBuilder/_terrainMeshTypes";
 import { useSettingsStore } from "@/stores/settingsStore";
 import { watch } from "vue";
+import { useCurrentTile } from "@/stores/currentTile";
 
 // noinspection JSUnusedGlobalSymbols
 export class EngineService {
@@ -51,8 +51,14 @@ export class EngineService {
 
     this.size = size;
     this.canvas = canvas;
+    this.canvas.addEventListener("pointerleave", this.onCanvasLeave);
+
     this.minimapCanvas = minimapCanvas;
   }
+
+  private onCanvasLeave = (): void => {
+    useCurrentTile().hoveredTile.value = undefined;
+  };
 
   initEngineAndScene(): this {
     const settings = useSettingsStore().engineSettings;
@@ -109,9 +115,14 @@ export class EngineService {
   initLogic(): this {
     this.logicMesh = new LogicMeshBuilder(this.scene, this.size, useObjectsStore().getTiles);
 
-    const hovered = useHoveredTile();
-    this.logicMesh.onTileHover((tile) => hovered.set(tile));
-    this.logicMesh.onTileExit(() => hovered.clear());
+    const { hoveredTile, selectedTile, contextTile } = useCurrentTile();
+    this.logicMesh.onTileHover((tile) => (hoveredTile.value = tile));
+    this.logicMesh.onTileExit(() => (hoveredTile.value = undefined));
+    this.logicMesh.onTilePick((tile) => {
+      selectedTile.value = tile;
+      contextTile.value = undefined;
+    });
+    this.logicMesh.onTileContextMenu((tile) => (contextTile.value = tile));
 
     return this;
   }
@@ -248,6 +259,7 @@ export class EngineService {
     this.terrainBuilder.dispose();
 
     // Finally, stop the scene & engine
+    this.canvas.removeEventListener("pointerleave", this.onCanvasLeave);
     this.scene.dispose();
     this.engine.dispose();
   }
