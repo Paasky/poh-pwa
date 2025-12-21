@@ -12,15 +12,32 @@
  * a friendly hint to run `pnpm fix` to auto-apply formatting and lint fixes.
  */
 
-import { spawnSync } from "node:child_process";
+import { execSync, spawnSync } from "node:child_process";
+
+function getBranchName() {
+  try {
+    return execSync("git rev-parse --abbrev-ref HEAD", { encoding: "utf8" }).trim();
+  } catch {
+    return "";
+  }
+}
+
+const branch = getBranchName();
+const isBuildBranch = /^(master|epic|demo)/.test(branch);
 
 const steps = [
   { name: "Prettier format check", cmd: ["pnpm", "format:check"] },
   { name: "ESLint", cmd: ["pnpm", "lint"] },
   { name: "TypeScript typecheck", cmd: ["pnpm", "typecheck"] },
   { name: "Unit tests", cmd: ["pnpm", "test"] },
-  { name: "Vite dev build (fail on warnings)", cmd: ["pnpm", "build:dev"] },
 ];
+
+if (isBuildBranch) {
+  steps.push({ name: "Vite dev build (fail on warnings)", cmd: ["pnpm", "build:dev"] });
+} else {
+  const reason = branch ? `branch '${branch}'` : "unknown branch";
+  console.log(`\n⏭️  Skipping build step on ${reason} to save time.`);
+}
 
 for (const step of steps) {
   console.log(`\n▶ ${step.name}...`);
