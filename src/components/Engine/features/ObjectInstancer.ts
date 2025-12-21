@@ -22,17 +22,10 @@ export class ObjectInstancer {
 
   constrBatches: Map<TypeKey, ConstructionBatch> = new Map();
 
-  constructor(
-    scene: Scene,
-    size: Coords,
-    parent: TransformNode,
-    constructions: Construction[],
-    units: Unit[],
-  ) {
+  constructor(scene: Scene, size: Coords, constructions: Construction[], units: Unit[]) {
     this.scene = scene;
     this.size = size;
     this.root = new TransformNode("objectsRoot", this.scene);
-    this.root.parent = parent;
 
     this.setConstruction(...constructions);
     this.setUnit(...units);
@@ -190,6 +183,16 @@ export class ObjectInstancer {
     const coords = tileCenter(this.size, tile);
     const height = tileHeight(tile, true);
     return new Vector3(coords.x, height, coords.z);
+  }
+
+  dispose(): void {
+    for (const lib of this.designLib.values()) {
+      lib.dispose(false, true);
+    }
+    for (const lib of this.typeLib.values()) {
+      lib.dispose(false, true);
+    }
+    this.root.dispose(false, true);
   }
 }
 

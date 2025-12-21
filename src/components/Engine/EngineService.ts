@@ -16,7 +16,10 @@ import { MainCamera } from "@/components/Engine/interaction/MainCamera";
 import FeatureInstancer from "@/components/Engine/features/FeatureInstancer";
 import { FogOfWar } from "@/components/Engine/FogOfWar";
 import GridOverlay from "@/components/Engine/overlays/GridOverlay";
+import { ObjectInstancer } from "@/components/Engine/features/ObjectInstancer";
 import type { Tile } from "@/objects/game/Tile";
+import type { Unit } from "@/objects/game/Unit";
+import type { Construction } from "@/objects/game/Construction";
 import type { GameKey } from "@/objects/game/_GameObject";
 import { Coords, getCoordsFromTileKey } from "@/helpers/mapTools";
 import { EngineCoords } from "@/factories/TerrainMeshBuilder/_terrainMeshTypes";
@@ -36,6 +39,7 @@ export class EngineService {
   terrainBuilder!: TerrainMeshBuilder;
   logicMesh!: LogicMeshBuilder;
   featureInstancer!: FeatureInstancer;
+  objectInstancer!: ObjectInstancer;
   fogOfWar!: FogOfWar;
   gridOverlay!: GridOverlay;
 
@@ -150,6 +154,18 @@ export class EngineService {
     return this;
   }
 
+  initObjectInstancer(): this {
+    const objStore = useObjectsStore();
+    this.objectInstancer = new ObjectInstancer(
+      this.scene,
+      this.size,
+      objStore.getClassGameObjects("construction") as Construction[],
+      objStore.getClassGameObjects("unit") as Unit[],
+    );
+
+    return this;
+  }
+
   initFogOfWar(): this {
     this.fogOfWar = new FogOfWar(this.size, this.scene);
 
@@ -208,6 +224,7 @@ export class EngineService {
       () => this.initFogOfWar(),
       () => this.initGridOverlay(),
       () => this.initLogic(),
+      () => this.initObjectInstancer(),
       () => this.initTerrain(),
 
       // Requires FogOfWar & GridOverlay
@@ -249,6 +266,7 @@ export class EngineService {
 
     // Stop requires terrain
     this.featureInstancer.dispose();
+    this.objectInstancer.dispose();
 
     // Stop requires GridOverlay
     this.mainCamera.camera.dispose();
