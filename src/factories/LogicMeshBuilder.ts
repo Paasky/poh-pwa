@@ -37,12 +37,10 @@ export class LogicMeshBuilder {
   private tileByInstanceIndex: Tile[] = [];
   private instanceIndexByTileKey: Record<GameKey, number> = {};
 
-  private hoverHandlers = new Set<(tile: Tile, details?: LogicPointerDetails) => void>();
-  private exitHandlers = new Set<(tile: Tile, details?: LogicPointerDetails) => void>();
-  private clickHandlers = new Set<
-    (tile: Tile, button: number, details?: LogicPointerDetails) => void
-  >();
   private contextHandlers = new Set<(tile: Tile, details?: LogicPointerDetails) => void>();
+  private hoverHandlers = new Set<(tile: Tile, details?: LogicPointerDetails) => void>();
+  private pickHandlers = new Set<(tile: Tile, details?: LogicPointerDetails) => void>();
+  private exitHandlers = new Set<() => void>();
 
   private pointerObserver: Nullable<ReturnType<Scene["onPointerObservable"]["add"]>> = null;
   private lastHoveredInstanceIndex: number | null = null;
@@ -90,10 +88,10 @@ export class LogicMeshBuilder {
       this.pointerObserver = null;
     }
 
-    this.hoverHandlers.clear();
-    this.exitHandlers.clear();
-    this.clickHandlers.clear();
     this.contextHandlers.clear();
+    this.hoverHandlers.clear();
+    this.pickHandlers.clear();
+    this.exitHandlers.clear();
 
     this.tileByInstanceIndex = [];
     this.instanceIndexByTileKey = {} as Record<GameKey, number>;
@@ -105,26 +103,24 @@ export class LogicMeshBuilder {
   }
 
   // Event subscriptions
+  onTileContextMenu(handler: (tile: Tile, details?: LogicPointerDetails) => void): () => void {
+    this.contextHandlers.add(handler);
+    return () => this.contextHandlers.delete(handler);
+  }
+
   onTileHover(handler: (tile: Tile, details?: LogicPointerDetails) => void): () => void {
     this.hoverHandlers.add(handler);
     return () => this.hoverHandlers.delete(handler);
   }
 
-  onTileExit(handler: (tile: Tile, details?: LogicPointerDetails) => void): () => void {
+  onTilePick(handler: (tile: Tile, details?: LogicPointerDetails) => void): () => void {
+    this.pickHandlers.add(handler);
+    return () => this.pickHandlers.delete(handler);
+  }
+
+  onTileExit(handler: () => void): () => void {
     this.exitHandlers.add(handler);
     return () => this.exitHandlers.delete(handler);
-  }
-
-  onTileClick(
-    handler: (tile: Tile, button: number, details?: LogicPointerDetails) => void,
-  ): () => void {
-    this.clickHandlers.add(handler);
-    return () => this.clickHandlers.delete(handler);
-  }
-
-  onTileContextMenu(handler: (tile: Tile, details?: LogicPointerDetails) => void): () => void {
-    this.contextHandlers.add(handler);
-    return () => this.contextHandlers.delete(handler);
   }
 
   // Internals
@@ -156,30 +152,32 @@ export class LogicMeshBuilder {
   }
 
   private handleHover(pick: Nullable<import("@babylonjs/core").PickingInfo>): void {
+    // Not hovering over a tile + used to hover over a tile -> trigger exit handlers
     if (!pick || !pick.hit || pick.thinInstanceIndex === undefined) {
       if (this.lastHoveredInstanceIndex !== null) {
         const tile = this.tileByInstanceIndex[this.lastHoveredInstanceIndex];
-        if (tile)
-          this.exitHandlers.forEach((h) => h(tile, this.buildDetails(undefined, undefined)));
+        if (tile) this.exitHandlers.forEach((h) => h());
         this.lastHoveredInstanceIndex = null;
       }
       return;
     }
 
     const currentIndex = pick.thinInstanceIndex;
+
+    // Hovering over a new tile -> trigger hover handlers
     if (this.lastHoveredInstanceIndex !== currentIndex) {
-      if (this.lastHoveredInstanceIndex !== null) {
-        const prevTile = this.tileByInstanceIndex[this.lastHoveredInstanceIndex];
-        if (prevTile)
-          this.exitHandlers.forEach((h) =>
-            h(prevTile, this.buildDetails(pick as PickingInfo, undefined)),
-          );
-      }
       const tile = this.tileByInstanceIndex[currentIndex];
-      if (tile)
+
+      if (tile) {
         this.hoverHandlers.forEach((h) =>
           h(tile, this.buildDetails(pick as PickingInfo, undefined)),
         );
+      } else if (this.lastHoveredInstanceIndex !== null) {
+        // tile should never be null, but fallback to exit handlers in case it somehow is
+        const prevTile = this.tileByInstanceIndex[this.lastHoveredInstanceIndex];
+        if (prevTile) this.exitHandlers.forEach((h) => h());
+      }
+
       this.lastHoveredInstanceIndex = currentIndex;
     }
   }
@@ -188,6 +186,7 @@ export class LogicMeshBuilder {
     pick: Nullable<import("@babylonjs/core").PickingInfo>,
     ev: PointerEvent,
   ): void {
+    // Didn't click on anything -> do nothing
     if (!pick || !pick.hit || pick.thinInstanceIndex === undefined) return;
     const tile = this.tileByInstanceIndex[pick.thinInstanceIndex];
     if (!tile) return;
@@ -198,7 +197,7 @@ export class LogicMeshBuilder {
       ev.preventDefault();
       this.contextHandlers.forEach((h) => h(tile, details));
     }
-    this.clickHandlers.forEach((h) => h(tile, button, details));
+    this.pickHandlers.forEach((h) => h(tile, details));
   }
 
   // -> reason: now as flat surfaces there are gaps between water 6 mountain for example, breaking tile picking
