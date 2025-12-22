@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import * as MathHelpers from "../../src/helpers/math";
 import { wrapInclusive } from "../../src/helpers/math";
 import { expectFloatsToBeClose } from "../_setup/testHelpers";
+import { Tile } from "../../src/objects/game/Tile";
 
 const {
   avg,
@@ -189,6 +190,50 @@ describe("math", () => {
     expectFloatsToBeClose(center02, {
       x: center00.x,
       z: center00.z - hexDepth * 2,
+    });
+  });
+
+  it("bounds and orthographic helpers", () => {
+    const size = { x: 10, y: 10 };
+    const bounds = MathHelpers.getMapBounds(size);
+    expect(bounds.worldWidth).toBe(getWorldWidth(size.x));
+    expect(bounds.worldDepth).toBe(getWorldDepth(size.y));
+
+    const ortho = MathHelpers.getFullWorldOrthoBounds(size);
+    expect(ortho.left).toBe(-bounds.worldWidth / 2);
+    expect(ortho.right).toBe(bounds.worldWidth / 2);
+
+    // calculateKnownBounds
+    const knownKeys = [Tile.getKey(0, 0), Tile.getKey(1, 1)];
+    const knownBounds = MathHelpers.calculateKnownBounds(size, knownKeys);
+    expect(knownBounds.left).toBeLessThan(knownBounds.right);
+    expect(knownBounds.bottom).toBeLessThan(knownBounds.top);
+
+    // calculateMinimapCameraBounds
+    const minimapBounds = MathHelpers.calculateMinimapCameraBounds(knownBounds, 100, 100);
+    expect(minimapBounds.left).toBeLessThan(minimapBounds.right);
+
+    // clampCoordsToBoundaries
+    const coords = { x: 100, z: 100 };
+    const clamped = MathHelpers.clampCoordsToBoundaries(coords, size, null);
+    expect(clamped.x).toBeLessThan(100);
+    expect(clamped.z).toBeLessThan(100);
+  });
+
+  it("getEngineCoordsFromPercent", () => {
+    const size = { x: 10, y: 10 };
+    const topLeft = MathHelpers.getEngineCoordsFromPercent(size, 0, 0);
+    const center = MathHelpers.getEngineCoordsFromPercent(size, 0.5, 0.5);
+    const bottomRight = MathHelpers.getEngineCoordsFromPercent(size, 1, 1);
+
+    expectFloatsToBeClose(topLeft, {
+      x: getWorldMinX(getWorldWidth(size.x)),
+      z: getWorldMinZ(getWorldDepth(size.y)),
+    });
+    expectFloatsToBeClose(center, { x: 0, z: 0 });
+    expectFloatsToBeClose(bottomRight, {
+      x: getWorldMaxX(getWorldWidth(size.x)),
+      z: getWorldMaxZ(getWorldDepth(size.y)),
     });
   });
 });

@@ -105,7 +105,7 @@ export class GridOverlay {
     lineSystem.isPickable = false;
     lineSystem.applyFog = true;
     // Rendering layer for overlays
-    lineSystem.renderingGroupId = 2; // 0: terrain, 1: features, 2: grid
+    lineSystem.renderingGroupId = 1; // 0: world, 1: grid, 2: static, 3: context, 4: dynamic, 5: current
 
     lineSystem.parent = this.root;
     this.chunks.push(lineSystem);

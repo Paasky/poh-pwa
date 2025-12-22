@@ -157,6 +157,7 @@ export class ObjectInstancer {
     if (!this.designLib.has(design.key)) {
       const baseMesh = objectBaseMesh(this.scene, design.platform.key);
       baseMesh.parent = this.root;
+      baseMesh.renderingGroupId = 4; // Dynamic Objects
 
       this.designLib.set(design.key, baseMesh);
 
@@ -170,6 +171,7 @@ export class ObjectInstancer {
     if (!this.typeLib.has(type.key)) {
       const baseMesh = objectBaseMesh(this.scene, type.key);
       baseMesh.parent = this.root;
+      baseMesh.renderingGroupId = 2; // Static Objects
 
       this.typeLib.set(type.key, baseMesh);
 

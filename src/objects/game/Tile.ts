@@ -120,9 +120,31 @@ export class Tile extends GameObject {
   unitKeys = ref([] as GameKey[]);
   units = hasMany<Unit>(this.unitKeys, `${this.key}.units`);
 
+  // Use direct array vs computed for peak-performance during Tile calc (especially A*)
+  private _neighborTiles: Tile[] = [];
+  neighborTiles(): Tile[] {
+    if (this._neighborTiles.length === 0) {
+      this._neighborTiles = getNeighbors(
+        useObjectsStore().world.size,
+        this,
+        useObjectsStore().getTiles,
+        "hex",
+      );
+    }
+    return this._neighborTiles;
+  }
+
   /*
    * Computed
    */
+  selectable = computed(() => {
+    const selectable = this.units.value.filter(
+      (u) => u.playerKey.value === useObjectsStore().currentPlayer.key,
+    ) as (City | Unit)[];
+    if (this.cityKey) selectable.push(this.city.value!);
+    return selectable;
+  });
+
   types = computed(() => {
     this._dynamicTypes.length = 0;
 
@@ -141,16 +163,6 @@ export class Tile extends GameObject {
       ]),
   );
 
-  getNeighbors(dist = 1): Tile[] {
-    return getNeighbors(
-      useObjectsStore().world.size,
-      this,
-      useObjectsStore().getTiles,
-      "hex",
-      dist,
-    );
-  }
-
   /*
    * Actions
    */
@@ -159,10 +171,13 @@ export class Tile extends GameObject {
     this.construction.value;
     this.player.value;
     this.river.value;
+    this.selectable.value;
     this.tradeRoutes.value;
     this.units.value;
     this.types.value;
     this.yields.value;
+
+    this.neighborTiles();
   }
 
   // Used all over to always generate standard tile ID

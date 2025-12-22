@@ -2,6 +2,7 @@
 import { createPinia, setActivePinia } from "pinia";
 import { useObjectsStore } from "../../src/stores/objectStore";
 import { StaticData } from "../../src/types/api";
+import staticData from "../../public/staticData.json";
 
 export function initTestPinia() {
   // Create a fresh pinia for each test file
@@ -11,5 +12,5 @@ export function initTestPinia() {
 }
 
 export function loadStaticData() {
-  useObjectsStore().initStatic(require("../../public/staticData.json") as StaticData);
+  useObjectsStore().initStatic(staticData as StaticData);
 }
