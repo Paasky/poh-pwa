@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { useCurrentContext } from "@/composables/useCurrentContext";
-import UiObjectChip from "@/components/Ui/UiObjectChip.vue";
+import UiTypeChip from "@/components/Ui/UiTypeChip.vue";
 import { useObjectsStore } from "@/stores/objectStore";
+import { Tile } from "@/objects/game/Tile";
 
-const { hover: hoveredTile } = useCurrentContext();
+const hoveredTile = useCurrentContext().hover as unknown as Tile;
 </script>
 
 <template>
@@ -13,15 +14,15 @@ const { hover: hoveredTile } = useCurrentContext();
       v-if="hoveredTile && useObjectsStore().currentPlayer.knownTileKeys.value.has(hoveredTile.key)"
     >
       <div class="d-flex ga-1">
-        <UiObjectChip :type="hoveredTile.elevation" />
-        <UiObjectChip :type="hoveredTile.terrain" />
+        <UiTypeChip :type="hoveredTile.elevation" />
+        <UiTypeChip :type="hoveredTile.terrain" />
       </div>
       <div
         class="d-flex ga-1"
         v-if="hoveredTile.feature.value || hoveredTile.isFresh || hoveredTile.isSalt"
       >
-        <UiObjectChip v-if="hoveredTile.feature.value" :type="hoveredTile.feature.value" />
-        <UiObjectChip v-if="hoveredTile.isFresh" type="conceptType:freshWater" />
+        <UiTypeChip v-if="hoveredTile.feature.value" :type="hoveredTile.feature.value" />
+        <UiTypeChip v-if="hoveredTile.isFresh" type="conceptType:freshWater" />
         <span v-if="hoveredTile.isSalt">(Salt Water)</span>
       </div>
       <div
@@ -30,22 +31,18 @@ const { hover: hoveredTile } = useCurrentContext();
           hoveredTile.resource.value || hoveredTile.naturalWonder || hoveredTile.pollution.value
         "
       >
-        <UiObjectChip v-if="hoveredTile.resource.value" :type="hoveredTile.resource.value.name" />
-        <UiObjectChip v-if="hoveredTile.naturalWonder" :type="hoveredTile.naturalWonder.name" />
-        <UiObjectChip v-if="hoveredTile.pollution.value" :type="hoveredTile.pollution.value.name" />
+        <UiTypeChip v-if="hoveredTile.resource.value" :type="hoveredTile.resource.value.name" />
+        <UiTypeChip v-if="hoveredTile.naturalWonder" :type="hoveredTile.naturalWonder.name" />
+        <UiTypeChip v-if="hoveredTile.pollution.value" :type="hoveredTile.pollution.value.name" />
       </div>
       <div v-if="hoveredTile.playerKey.value">Owner: ({{ hoveredTile.player.value!.name }})</div>
-      <div v-if="hoveredTile.unitKeys.value.length > 0" class="d-flex ga-1">
-        Units:
-        <span v-for="unit of hoveredTile.units.value" :key="unit.key"> ({{ unit.name }}) </span>
-      </div>
       <div class="d-flex ga-1">
-        <UiObjectChip :type="hoveredTile.climate" />
-        <UiObjectChip :type="hoveredTile.domain" />
+        <UiTypeChip :type="hoveredTile.climate" />
+        <UiTypeChip :type="hoveredTile.domain" />
       </div>
       <div class="d-flex ga-1">
         <span v-if="hoveredTile.riverKey">({{ hoveredTile.river.value!.name }})</span>
-        <UiObjectChip :type="hoveredTile.area" />
+        <UiTypeChip :type="hoveredTile.area" />
       </div>
     </div>
     <div v-else-if="hoveredTile">(Terra Incognita)</div>

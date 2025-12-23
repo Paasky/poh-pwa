@@ -14,6 +14,7 @@ import GameMenu from "@/components/GameView/GameMenu.vue";
 import UiUnitCard from "@/components/Ui/UiUnitCard.vue";
 import { useMovementInteraction } from "@/composables/useMovementInteraction";
 import { useCurrentContext } from "@/composables/useCurrentContext";
+import { Unit } from "@/objects/game/Unit";
 
 const app = useAppStore();
 const context = useCurrentContext();
@@ -145,7 +146,10 @@ function onBeforeUnload(e: BeforeUnloadEvent) {
       class="d-flex position-absolute bottom-0 left-0 rounded-tr-lg pt-1 pr-1"
     >
       <Minimap />
-      <UiUnitCard v-if="context.object.value?.class === 'unit'" :unit="context.object.value" />
+      <UiUnitCard
+        v-if="context.object.value?.class === 'unit'"
+        :unit="context.object.value as unknown as Unit"
+      />
       <TileDetails v-else-if="app.loaded" />
     </v-sheet>
 
