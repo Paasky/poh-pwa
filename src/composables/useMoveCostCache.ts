@@ -29,7 +29,7 @@ const getCacheKey = (design: UnitDesign, specialKeys: Set<TypeKey>): string => {
   );
 };
 
-// todo: use this when a tile is mutated (feature/pollution/route/etc changes)
+// TODO: Centralize tile mutations in a TileManager to trigger useMoveCostCache().resetCache([tile.key])
 const resetCache = (tileKeys?: GameKey[]): void => {
   if (tileKeys) {
     // Clear each given Tile.key from both from.key & to.key caches

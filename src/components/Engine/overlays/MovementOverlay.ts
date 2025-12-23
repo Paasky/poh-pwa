@@ -297,6 +297,25 @@ export class MovementOverlay {
     this.selectionMarker?.setEnabled(true);
   }
 
+  /** Clears all movement visuals */
+  clear(): void {
+    this.reachableCount = 0;
+    this.reachableMesh.thinInstanceCount = 0;
+
+    this.breadcrumbCount = 0;
+    this.breadcrumbs.thinInstanceCount = 0;
+
+    if (this.potentialPathLine) {
+      this.potentialPathLine.dispose();
+      this.potentialPathLine = null;
+    }
+    if (this.currentPathLine) {
+      this.currentPathLine.dispose();
+      this.currentPathLine = null;
+    }
+    this.clearTurnMarkers();
+  }
+
   /** Clears and disposes all engine resources */
   dispose(): void {
     this.clearTurnMarkers();

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useCurrentTile } from "@/stores/currentTile";
+import { useCurrentContext } from "@/composables/useCurrentContext";
 import UiObjectChip from "@/components/Ui/UiObjectChip.vue";
 import { useObjectsStore } from "@/stores/objectStore";
 
-const { hoveredTile } = useCurrentTile();
+const { hover: hoveredTile } = useCurrentContext();
 </script>
 
 <template>

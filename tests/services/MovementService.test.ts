@@ -505,22 +505,53 @@ describe("MovementService", () => {
   });
 
   describe("Path Walking (move)", () => {
-    it("should stop and return false if it starts in or enters a danger zone", () => {
+    it("should allow escaping danger but stop when entering a new danger zone (ZOC)", () => {
       const unit = world.unit;
-      const initialTileKey = unit.tileKey.value;
-      unit.movement.moves.value = 2;
-      const target = world.tiles[Tile.getKey(0, 0)];
-      unit.movement.path = [createPathStep(target, 1, 0, true)];
+      unit.movement.moves.value = 5;
 
-      // Enemy near current tile
-      const neighbor = unit.tile.value.neighborTiles()[0];
-      const context = createMovementContext({ enemyUnitTiles: new Set([neighbor.key]) });
+      // Start at (1,1)
+      const t11 = world.tiles[Tile.getKey(1, 1)];
+      const t01 = world.tiles[Tile.getKey(0, 1)]; // Escape route
+      const t21 = world.tiles[Tile.getKey(2, 1)]; // Hill, neighbors (2,2)
 
-      expect(unit.movement.move(context)).toBe(false);
-      expect(unit.tileKey.value).toBe(initialTileKey);
-      expect(unit.movement.moves.value).toBe(2);
-      expect(unit.movement.path.length).toBe(1);
-      expect(unit.movement.path[0].tile.key).toBe(target.key);
+      // Enemy near current tile (1,1) at (2,2)
+      const enemyTile = world.tiles[Tile.getKey(2, 2)];
+      const context = createMovementContext({ enemyUnitTiles: new Set([enemyTile.key]) });
+
+      // 1. ESCAPE: (1,1) -> (0,1). (0,1) is not neighbor of (2,2)
+      unit.movement.path = [createPathStep(t01, 4, 0, true)];
+      expect(unit.movement.move(context)).toBe(true);
+      expect(unit.tileKey.value).toBe(t01.key);
+
+      // Reset
+      unit.tileKey.value = t11.key;
+      unit.movement.moves.value = 5;
+
+      // 2. PINNED (Enter new ZOC): (1,1) -> (2,1). (2,1) IS neighbor of (2,2)
+      const t31 = world.tiles[Tile.getKey(3, 1)];
+      unit.movement.path = [createPathStep(t21, 3, 0, false), createPathStep(t31, 1, 0, true)];
+
+      expect(unit.movement.move(context)).toBe(false); // Should stop at (2,1)
+      expect(unit.tileKey.value).toBe(t21.key);
+      expect(unit.movement.moves.value).toBe(3);
+    });
+
+    it("should respect ignoreZoc policy", () => {
+      const unit = world.unit;
+      unit.movement.moves.value = 5;
+      const t21 = world.tiles[Tile.getKey(2, 1)];
+      const t20 = world.tiles[Tile.getKey(2, 0)];
+
+      const enemyAt22 = world.tiles[Tile.getKey(2, 2)];
+      const ignoreZocContext = createMovementContext({
+        enemyUnitTiles: new Set([enemyAt22.key]),
+        ignoreZoc: true,
+      });
+
+      unit.movement.path = [createPathStep(t21, 3, 0, false), createPathStep(t20, 0, 0, true)];
+
+      expect(unit.movement.move(ignoreZocContext)).toBe("turnEnd");
+      expect(unit.tileKey.value).toBe(t20.key);
     });
 
     it("should stop moving if moves are exhausted during the walk (with decimal moves check)", () => {

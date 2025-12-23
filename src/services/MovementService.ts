@@ -140,6 +140,7 @@ export class MovementService {
       friendlyUnitTiles,
       enemyUnitTiles,
       canEnterUnknownThisTurn: true,
+      ignoreZoc: false,
       isEmbarked:
         unit.design.value.domainKey() === "domainType:land" &&
         unit.tile.value.domain.key !== "domainType:land",
@@ -158,13 +159,6 @@ export class MovementService {
     let stopReason: "finished" | "outOfMoves" | "blocked" | "danger" = "finished";
 
     for (let i = 0; i < this.path.length; i++) {
-      if (
-        currentTile.neighborTiles().some((neighbor) => context.enemyUnitTiles.has(neighbor.key))
-      ) {
-        stopReason = "danger";
-        break;
-      }
-
       const step = this.path[i]!;
       const nextState = this.calculateNextState(0, currentMoves, step.tile, currentTile, context);
 
@@ -177,6 +171,15 @@ export class MovementService {
       const numericCost = nextState.turn > 0 ? currentMoves : nextState.cost;
       reachableSteps.push({ tile: step.tile, cost: numericCost });
       currentMoves = nextState.turn > 0 ? 0 : nextState.movesRemaining;
+
+      // Check for danger (ZOC) AFTER taking the step
+      if (
+        !context.ignoreZoc &&
+        step.tile.neighborTiles().some((neighbor) => context.enemyUnitTiles.has(neighbor.key))
+      ) {
+        stopReason = "danger";
+        break;
+      }
 
       if (currentMoves <= 0) {
         if (i < this.path.length - 1) stopReason = "outOfMoves";

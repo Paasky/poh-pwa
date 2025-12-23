@@ -23,9 +23,7 @@ import type { Construction } from "@/objects/game/Construction";
 import type { GameKey } from "@/objects/game/_GameObject";
 import { Coords, getCoordsFromTileKey } from "@/helpers/mapTools";
 import { EngineCoords } from "@/factories/TerrainMeshBuilder/_terrainMeshTypes";
-import { useSettingsStore } from "@/stores/settingsStore";
-import { watch } from "vue";
-import { useCurrentTile } from "@/stores/currentTile";
+import { useCurrentContext } from "@/composables/useCurrentContext";
 import { PathfinderService } from "@/services/PathfinderService";
 import { MovementOverlay } from "@/components/Engine/overlays/MovementOverlay";
 
@@ -65,7 +63,7 @@ export class EngineService {
   }
 
   private onCanvasLeave = (): void => {
-    useCurrentTile().hoveredTile.value = undefined;
+    useCurrentContext().hover.value = undefined;
   };
 
   initEngineAndScene(): this {

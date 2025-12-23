@@ -14,6 +14,7 @@ import type { TradeRoute } from "@/objects/game/TradeRoute";
 import type { Unit } from "@/objects/game/Unit";
 import { getNeighbors, tileKey } from "@/helpers/mapTools";
 
+// TODO: Centralize tile mutations in a TileManager to trigger useMoveCostCache().resetCache([tile.key])
 export class Tile extends GameObject {
   constructor(
     key: GameKey,
