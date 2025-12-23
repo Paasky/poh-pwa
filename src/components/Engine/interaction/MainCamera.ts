@@ -10,8 +10,9 @@ import { useSettingsStore } from "@/stores/settingsStore";
 import { Coords } from "@/helpers/mapTools";
 import { clamp, clampCoordsToBoundaries, type OrthoBounds } from "@/helpers/math";
 import GridOverlay from "@/components/Engine/overlays/GridOverlay";
-import { FogOfWar } from "@/components/Engine/FogOfWar";
-import { MovementOverlay } from "@/components/Engine/overlays/MovementOverlay";
+import { ContextOverlay } from "@/components/Engine/overlays/ContextOverlay";
+import { MarkerOverlay } from "@/components/Engine/overlays/MarkerOverlay";
+import { PathOverlay } from "@/components/Engine/overlays/PathOverlay";
 
 export const rot30 = Math.PI / 6;
 export const rotNorth = -rot30 * 3;
@@ -21,12 +22,13 @@ export class MainCamera {
   readonly scene: Scene;
   readonly canvas: HTMLCanvasElement;
   readonly camera: ArcRotateCamera;
-  fogOfWar: FogOfWar;
+  readonly contextOverlay: ContextOverlay;
   readonly gridOverlay: GridOverlay;
-  readonly movementOverlay?: MovementOverlay;
-  private getKnownBounds: () => OrthoBounds | null;
+  readonly markerOverlay: MarkerOverlay;
+  readonly pathOverlay: PathOverlay;
+  private readonly getKnownBounds: () => OrthoBounds | null;
 
-  private _rotationInput = new ArcRotateCameraPointersInput();
+  private readonly _rotationInput = new ArcRotateCameraPointersInput();
   private _manualTiltEnabled = false;
 
   panSpeed: number = 5;
@@ -40,18 +42,20 @@ export class MainCamera {
     size: Coords,
     scene: Scene,
     canvas: HTMLCanvasElement,
-    fogOfWar: FogOfWar,
-    gridOverlay: GridOverlay,
     getKnownBounds: () => OrthoBounds | null,
-    movementOverlay?: MovementOverlay,
+    contextOverlay: ContextOverlay,
+    gridOverlay: GridOverlay,
+    markerOverlay: MarkerOverlay,
+    pathOverlay: PathOverlay,
   ) {
     this.size = size;
     this.scene = scene;
     this.canvas = canvas;
-    this.fogOfWar = fogOfWar;
-    this.gridOverlay = gridOverlay;
     this.getKnownBounds = getKnownBounds;
-    this.movementOverlay = movementOverlay;
+    this.contextOverlay = contextOverlay;
+    this.gridOverlay = gridOverlay;
+    this.markerOverlay = markerOverlay;
+    this.pathOverlay = pathOverlay;
 
     // Create camera
     this.camera = new ArcRotateCamera(
@@ -62,7 +66,7 @@ export class MainCamera {
       new Vector3(0, 0, 0),
       this.scene,
     );
-    this.fogOfWar.attachToCamera(this.camera);
+    this.contextOverlay.attachToCamera(this.camera);
 
     // Controls
     this.camera.inputs.clear();
@@ -159,6 +163,7 @@ export class MainCamera {
     // Grid thickness scaling: 0.25x at max out -> 1.5x at max in
     const thicknessScale = 0.25 + norm * 1.25;
     if (this.gridOverlay) this.gridOverlay.setThicknessScale(thicknessScale);
-    if (this.movementOverlay) this.movementOverlay.setScaling(thicknessScale);
+    this.markerOverlay.setScaling(thicknessScale);
+    this.pathOverlay.setScaling(thicknessScale);
   }
 }

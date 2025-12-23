@@ -70,7 +70,7 @@ export class PathfinderService {
       }
       closedSet.set(stateKey, current.cumulativeCost);
 
-      for (const neighbor of current.tile.neighborTiles()) {
+      for (const neighbor of current.tile.neighborTiles) {
         const nextState = unit.movement.calculateNextState(
           current.turn,
           current.movesRemaining,
@@ -123,7 +123,7 @@ export class PathfinderService {
         reachable.add(current.tile.key);
       }
 
-      for (const neighbor of current.tile.neighborTiles()) {
+      for (const neighbor of current.tile.neighborTiles) {
         const nextState = unit.movement.calculateNextState(
           0,
           current.movesRemaining,

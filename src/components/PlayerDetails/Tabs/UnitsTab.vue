@@ -26,7 +26,7 @@ const unitHeaders = [
   { title: "Equipment", key: "equipment" },
   { title: "Status", key: "status", value: (u: Unit) => u.status.value },
   { title: "Health", key: "health", align: "end", value: (u: Unit) => u.health.value },
-  { title: "Moves", key: "moves", align: "end", value: (u: Unit) => u.moves.value },
+  { title: "Moves", key: "moves", align: "end", value: (u: Unit) => u.movement.moves.value },
   { title: "City", key: "city", value: (u: Unit) => (u.city.value ? u.city.value!.name : "-") },
   {
     title: "Tile",

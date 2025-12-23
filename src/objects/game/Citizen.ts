@@ -9,6 +9,7 @@ import type { Player } from "@/objects/game/Player";
 import type { Culture } from "@/objects/game/Culture";
 import type { Religion } from "@/objects/game/Religion";
 import type { Tile } from "@/objects/game/Tile";
+import { getNeighbors } from "@/helpers/mapTools";
 import { getRandom } from "@/helpers/arrayTools";
 import { useEventStore } from "@/stores/eventStore";
 import { CitizenGained, CitizenLost } from "@/events/Citizen";
@@ -176,9 +177,15 @@ export class Citizen extends GameObject {
     }
 
     // todo pick tile per city preferences
-    this.tileKey.value = getRandom(
-      this.city.value.tile.value.getNeighbors(3).filter((n) => n.playerKey === this.playerKey),
-    ).key;
+    const possibleTiles = getNeighbors(
+      useObjectsStore().world.size,
+      this.city.value.tile.value,
+      useObjectsStore().getTiles,
+      "hex",
+      3,
+    ).filter((n) => n.playerKey.value === this.playerKey.value);
+
+    this.tileKey.value = getRandom(possibleTiles).key;
 
     this.tile.value.citizenKeys.value.push(this.key);
   }

@@ -175,7 +175,7 @@ export class MovementService {
       // Check for danger (ZOC) AFTER taking the step
       if (
         !context.ignoreZoc &&
-        step.tile.neighborTiles().some((neighbor) => context.enemyUnitTiles.has(neighbor.key))
+        step.tile.neighborTiles.some((neighbor) => context.enemyUnitTiles.has(neighbor.key))
       ) {
         stopReason = "danger";
         break;

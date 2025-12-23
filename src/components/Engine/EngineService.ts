@@ -14,7 +14,6 @@ import LogicMeshBuilder from "@/factories/LogicMeshBuilder";
 import { Minimap } from "@/components/Engine/interaction/Minimap";
 import { MainCamera } from "@/components/Engine/interaction/MainCamera";
 import FeatureInstancer from "@/components/Engine/features/FeatureInstancer";
-import { FogOfWar } from "@/components/Engine/FogOfWar";
 import GridOverlay from "@/components/Engine/overlays/GridOverlay";
 import { ObjectInstancer } from "@/components/Engine/features/ObjectInstancer";
 import type { Tile } from "@/objects/game/Tile";
@@ -25,9 +24,11 @@ import { Coords, getCoordsFromTileKey } from "@/helpers/mapTools";
 import { EngineCoords } from "@/factories/TerrainMeshBuilder/_terrainMeshTypes";
 import { useCurrentContext } from "@/composables/useCurrentContext";
 import { PathfinderService } from "@/services/PathfinderService";
-import { MovementOverlay } from "@/components/Engine/overlays/MovementOverlay";
 import { useSettingsStore } from "@/stores/settingsStore";
 import { watch } from "vue";
+import { ContextOverlay } from "@/components/Engine/overlays/ContextOverlay";
+import { PathOverlay } from "@/components/Engine/overlays/PathOverlay";
+import { MarkerOverlay } from "@/components/Engine/overlays/MarkerOverlay";
 
 // noinspection JSUnusedGlobalSymbols
 export class EngineService {
@@ -42,10 +43,11 @@ export class EngineService {
   logicMesh!: LogicMeshBuilder;
   featureInstancer!: FeatureInstancer;
   objectInstancer!: ObjectInstancer;
-  fogOfWar!: FogOfWar;
+  contextOverlay!: ContextOverlay;
+  pathOverlay!: PathOverlay;
+  markerOverlay!: MarkerOverlay;
   gridOverlay!: GridOverlay;
   pathfinder!: PathfinderService;
-  movementOverlay!: MovementOverlay;
 
   minimapCanvas?: HTMLCanvasElement;
   minimap?: Minimap;
@@ -104,10 +106,11 @@ export class EngineService {
       this.size,
       this.scene,
       this.canvas,
-      this.fogOfWar,
-      this.gridOverlay,
       () => this.knownBounds,
-      this.movementOverlay,
+      this.contextOverlay,
+      this.gridOverlay,
+      this.markerOverlay,
+      this.pathOverlay,
     );
 
     this.flyToCurrentPlayer(true);
@@ -141,7 +144,8 @@ export class EngineService {
 
   initPathfinding(): this {
     this.pathfinder = new PathfinderService();
-    this.movementOverlay = new MovementOverlay(this.scene, this.size);
+    this.pathOverlay = new PathOverlay(this.scene, this.size);
+    this.markerOverlay = new MarkerOverlay(this.scene);
 
     return this;
   }
@@ -169,8 +173,8 @@ export class EngineService {
     return this;
   }
 
-  initFogOfWar(): this {
-    this.fogOfWar = new FogOfWar(this.size, this.scene);
+  initContextOverlay(): this {
+    this.contextOverlay = new ContextOverlay(this.scene, this.size);
 
     // Watch for known area changes to update clamping bounds
     const player = useObjectsStore().currentPlayer;
@@ -209,7 +213,7 @@ export class EngineService {
         this.size,
         this.minimapCanvas,
         this.engine,
-        this.fogOfWar,
+        this.contextOverlay,
         () => this.knownBounds,
       );
       this.minimap.capture();
@@ -224,14 +228,14 @@ export class EngineService {
       () => this.initEngineAndScene(),
 
       // No other requirements
-      () => this.initFogOfWar(),
+      () => this.initContextOverlay(),
       () => this.initGridOverlay(),
       () => this.initPathfinding(),
       () => this.initLogic(),
       () => this.initObjectInstancer(),
       () => this.initTerrain(),
 
-      // Requires FogOfWar & GridOverlay
+      // Requires ContextOverlay & GridOverlay
       () => this.initCamera(),
 
       // Requires Terrain
@@ -266,7 +270,7 @@ export class EngineService {
 
     // Stop requires camera
     this.environmentService.dispose();
-    this.fogOfWar.dispose();
+    this.contextOverlay.dispose();
 
     // Stop requires terrain
     this.featureInstancer.dispose();
@@ -276,7 +280,8 @@ export class EngineService {
     this.mainCamera.camera.dispose();
 
     // Stop others
-    this.movementOverlay.dispose();
+    this.pathOverlay.dispose();
+    this.markerOverlay.dispose();
     this.gridOverlay.dispose();
     this.logicMesh.dispose();
     this.terrainBuilder.dispose();

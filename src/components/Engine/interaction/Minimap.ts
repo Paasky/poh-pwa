@@ -14,7 +14,7 @@ import {
   getFullWorldOrthoBounds,
   type OrthoBounds,
 } from "@/helpers/math";
-import { FogOfWar } from "@/components/Engine/FogOfWar";
+import { ContextOverlay } from "@/components/Engine/overlays/ContextOverlay";
 import { Coords } from "@/helpers/mapTools";
 import { rotNorth } from "@/components/Engine/interaction/MainCamera";
 
@@ -29,7 +29,7 @@ export class Minimap {
   private readonly _camera: ArcRotateCamera;
   private readonly _light: HemisphericLight;
   private readonly _terrain: TerrainMeshBuilder;
-  private readonly _fogOfWar: FogOfWar;
+  private readonly _contextOverlay: ContextOverlay;
   private readonly _ctx: CanvasRenderingContext2D;
 
   private _captureTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -38,13 +38,13 @@ export class Minimap {
     size: Coords,
     canvas: HTMLCanvasElement,
     engine: BabylonEngine,
-    fogOfWar: FogOfWar,
+    contextOverlay: ContextOverlay,
     private getKnownBounds: () => OrthoBounds | null,
   ) {
     this._size = size;
     this._canvas = canvas;
     this._engine = engine;
-    this._fogOfWar = fogOfWar;
+    this._contextOverlay = contextOverlay;
 
     const context = this._canvas.getContext("2d");
     if (!context) throw new Error("Could not get 2D context from minimap canvas");
@@ -69,7 +69,7 @@ export class Minimap {
       this._scene,
     );
     this._camera.mode = Camera.ORTHOGRAPHIC_CAMERA;
-    this._fogOfWar.attachToCamera(this._camera);
+    this._contextOverlay.attachToCamera(this._camera);
 
     // Initial camera bounds (full world)
     this._applyCameraBounds(getFullWorldOrthoBounds(this._size));

@@ -13,7 +13,7 @@ import type { TradeRoute } from "@/objects/game/TradeRoute";
 import { type Tile } from "@/objects/game/Tile";
 import { useEventStore } from "@/stores/eventStore";
 import { UnitCreated, UnitHealed, UnitLost } from "@/events/Unit";
-import { getCoordsFromTileKey, getHexNeighborCoords, tileKey } from "@/helpers/mapTools";
+import { getCoordsFromTileKey, getHexNeighborCoords, getNeighbors, tileKey, } from "@/helpers/mapTools";
 import { MovementService } from "@/services/MovementService";
 
 // mercenary: +10% strength, +50% upkeep, 1/city/t;
@@ -179,7 +179,13 @@ export class Unit extends GameObject {
 
     const city =
       this.tile.value.city.value ??
-      this.tile.value.getNeighbors(3).find((t) => t.city.value)?.city.value;
+      getNeighbors(
+        useObjectsStore().world.size,
+        this.tile.value,
+        useObjectsStore().getTiles,
+        "hex",
+        3,
+      ).find((t) => t.city.value)?.city.value;
 
     if (this.health.value <= 0) {
       this.delete(reason, city);

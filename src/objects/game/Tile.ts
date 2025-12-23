@@ -12,7 +12,9 @@ import type { City } from "@/objects/game/City";
 import type { Player } from "@/objects/game/Player";
 import type { TradeRoute } from "@/objects/game/TradeRoute";
 import type { Unit } from "@/objects/game/Unit";
-import { getNeighbors, tileKey } from "@/helpers/mapTools";
+import { getNeighbors, tileHeight, tileKey } from "@/helpers/mapTools";
+import { Vector3 } from "@babylonjs/core";
+import { tileCenter } from "@/helpers/math";
 
 // TODO: Centralize tile mutations in a TileManager to trigger useMoveCostCache().resetCache([tile.key])
 export class Tile extends GameObject {
@@ -97,6 +99,30 @@ export class Tile extends GameObject {
   private _staticTypes: TypeObject[];
   private _staticYields: Yields;
 
+  // Use direct array vs computed for peak-performance during Tile calc (especially A*)
+  private _neighborTiles: Tile[] = [];
+  get neighborTiles(): Tile[] {
+    if (this._neighborTiles.length === 0) {
+      this._neighborTiles = getNeighbors(
+        useObjectsStore().world.size,
+        this,
+        useObjectsStore().getTiles,
+        "hex",
+      );
+    }
+    return this._neighborTiles;
+  }
+
+  private _worldPosition: Vector3 | null = null;
+  get worldPosition(): Vector3 {
+    if (!this._worldPosition) {
+      const center = tileCenter(useObjectsStore().world.size, this);
+      const height = tileHeight(this, true); // Logic height
+      this._worldPosition = new Vector3(center.x, height, center.z);
+    }
+    return this._worldPosition;
+  }
+
   /*
    * Relations
    */
@@ -120,20 +146,6 @@ export class Tile extends GameObject {
 
   unitKeys = ref([] as GameKey[]);
   units = hasMany<Unit>(this.unitKeys, `${this.key}.units`);
-
-  // Use direct array vs computed for peak-performance during Tile calc (especially A*)
-  private _neighborTiles: Tile[] = [];
-  neighborTiles(): Tile[] {
-    if (this._neighborTiles.length === 0) {
-      this._neighborTiles = getNeighbors(
-        useObjectsStore().world.size,
-        this,
-        useObjectsStore().getTiles,
-        "hex",
-      );
-    }
-    return this._neighborTiles;
-  }
 
   /*
    * Computed
@@ -178,7 +190,8 @@ export class Tile extends GameObject {
     this.types.value;
     this.yields.value;
 
-    this.neighborTiles();
+    this.neighborTiles;
+    this.worldPosition;
   }
 
   // Used all over to always generate standard tile ID

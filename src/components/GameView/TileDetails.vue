@@ -18,33 +18,31 @@ const { hover: hoveredTile } = useCurrentContext();
       </div>
       <div
         class="d-flex ga-1"
-        v-if="hoveredTile.feature.value || hoveredTile.isFresh || hoveredTile.isSalt"
+        v-if="hoveredTile.feature || hoveredTile.isFresh || hoveredTile.isSalt"
       >
-        <UiObjectChip v-if="hoveredTile.feature.value" :type="hoveredTile.feature.value" />
+        <UiObjectChip v-if="hoveredTile.feature" :type="hoveredTile.feature" />
         <UiObjectChip v-if="hoveredTile.isFresh" type="conceptType:freshWater" />
         <span v-if="hoveredTile.isSalt">(Salt Water)</span>
       </div>
       <div
         class="d-flex ga-1"
-        v-if="
-          hoveredTile.resource.value || hoveredTile.naturalWonder || hoveredTile.pollution.value
-        "
+        v-if="hoveredTile.resource || hoveredTile.naturalWonder || hoveredTile.pollution"
       >
-        <UiObjectChip v-if="hoveredTile.resource.value" :type="hoveredTile.resource.value.name" />
+        <UiObjectChip v-if="hoveredTile.resource" :type="hoveredTile.resource.name" />
         <UiObjectChip v-if="hoveredTile.naturalWonder" :type="hoveredTile.naturalWonder.name" />
-        <UiObjectChip v-if="hoveredTile.pollution.value" :type="hoveredTile.pollution.value.name" />
+        <UiObjectChip v-if="hoveredTile.pollution" :type="hoveredTile.pollution.name" />
       </div>
-      <div v-if="hoveredTile.playerKey.value">Owner: ({{ hoveredTile.player.value!.name }})</div>
-      <div v-if="hoveredTile.unitKeys.value.length > 0" class="d-flex ga-1">
+      <div v-if="hoveredTile.playerKey">Owner: ({{ hoveredTile.player!.name }})</div>
+      <div v-if="hoveredTile.unitKeys.length > 0" class="d-flex ga-1">
         Units:
-        <span v-for="unit of hoveredTile.units.value" :key="unit.key"> ({{ unit.name }}) </span>
+        <span v-for="unit of hoveredTile.units" :key="unit.key"> ({{ unit.name }}) </span>
       </div>
       <div class="d-flex ga-1">
         <UiObjectChip :type="hoveredTile.climate" />
         <UiObjectChip :type="hoveredTile.domain" />
       </div>
       <div class="d-flex ga-1">
-        <span v-if="hoveredTile.riverKey">({{ hoveredTile.river.value!.name }})</span>
+        <span v-if="hoveredTile.riverKey">({{ hoveredTile.river!.name }})</span>
         <UiObjectChip :type="hoveredTile.area" />
       </div>
     </div>
