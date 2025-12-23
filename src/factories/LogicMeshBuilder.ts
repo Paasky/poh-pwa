@@ -18,10 +18,8 @@ import {
 } from "@babylonjs/core";
 import { useSettingsStore } from "@/stores/settingsStore";
 import { watch } from "vue";
-import { PathfinderService } from "@/services/PathfinderService";
 import { useCurrentContext } from "@/composables/useCurrentContext";
 import { Unit } from "@/objects/game/Unit";
-import { MovementService } from "@/services/MovementService";
 
 /**
  * LogicMeshBuilder
@@ -174,6 +172,7 @@ export class LogicMeshBuilder {
       current.actionMode.value = undefined;
       current.tile.value = undefined;
       current.object.value = undefined;
+      return;
     }
 
     // Tile is already selected
@@ -202,24 +201,13 @@ export class LogicMeshBuilder {
 
   private onTileAction(tile: Tile): void {
     const current = useCurrentContext();
-    // todo: Paradrop, Rebase, Recon, etc action modes
-    // todo: Can Attack, Can Bombard, etc actions
-    // For now we just assume moving
-
     // Check it's a unit
     const object = current.object.value;
     if (object?.class !== "unit") return;
     // @ts-expect-error class === unit, it's a Unit
     const unit = object as Unit;
 
-    // Set path and auto-move immediately
-    const context = MovementService.getMoveContext(unit);
-    unit.movement.path = new PathfinderService().findPath(unit, tile, context);
-    unit.movement.move(context);
-
-    current.actionMode.value = undefined;
-    current.object.value = undefined;
-    current.tile.value = undefined;
+    MovementManager.moveTo(unit, tile);
   }
 
   // Fired on mouse moving on top

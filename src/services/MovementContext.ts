@@ -27,4 +27,7 @@ export type MovementContext = {
 
   /** Initial unit state override (e.g., if pathing starts from a hypothetical embarked state). */
   isEmbarked: boolean;
+
+  /** Policy flag: if true, unit can move through enemy Zone of Control without stopping. */
+  ignoreZoc: boolean;
 };

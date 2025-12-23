@@ -49,5 +49,6 @@ export const createMovementContext = (
   friendlyUnitTiles: new Set(),
   enemyUnitTiles: new Set(),
   isEmbarked: false,
+  ignoreZoc: false,
   ...overrides,
 });

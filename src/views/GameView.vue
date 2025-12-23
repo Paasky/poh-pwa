@@ -11,6 +11,7 @@ import NextAction from "@/components/GameView/NextAction.vue";
 import EventsList from "@/components/GameView/EventsList.vue";
 import OngoingList from "@/components/GameView/OngoingList.vue";
 import GameMenu from "@/components/GameView/GameMenu.vue";
+import { useMovementInteraction } from "@/composables/useMovementInteraction";
 
 const app = useAppStore();
 const gameRootEl = ref<HTMLElement | null>(null);
@@ -24,6 +25,9 @@ onMounted(async () => {
 
   // Bootstrap the app data once (types + gameData) before showing the game UI
   await app.init();
+
+  // Initialize movement interaction orchestrator
+  useMovementInteraction();
 
   // test data
   //cityTestData();
