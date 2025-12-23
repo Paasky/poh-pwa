@@ -57,6 +57,12 @@ export class Player extends GameObject {
         if (!known.has(key)) {
           known.add(key);
           changed = true;
+
+          // Heritage point trigger
+          if (this.culture.value.status.value !== "settled") {
+            const tile = useObjectsStore().get(key) as Tile;
+            if (tile) this.culture.value.onTileDiscovered(tile);
+          }
         }
       }
       if (changed) triggerRef(this.knownTileKeys);

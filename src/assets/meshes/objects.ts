@@ -24,7 +24,6 @@ export function objectBaseMesh(scene: Scene, typeKey: TypeKey): Mesh {
 function baseNaMesh(scene: Scene, typeKey: TypeKey): Mesh {
   const size = 1;
   const mesh = MeshBuilder.CreateBox(`baseNaMesh-${typeKey}`, { size }, scene);
-  mesh.position.y = size / 2; // keep bottom at Y=0
   mesh.material = colorMat(scene, 1, 0, 1); // bright pink
   return mesh;
 }

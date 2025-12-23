@@ -7,6 +7,7 @@ import { GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
 import { useObjectsStore } from "@/stores/objectStore";
 import type { Citizen } from "@/objects/game/Citizen";
 import type { Player } from "@/objects/game/Player";
+import type { Tile } from "@/objects/game/Tile";
 import { useEventStore } from "@/stores/eventStore";
 import {
   CultureCanSelect,
@@ -157,6 +158,21 @@ export class Culture extends GameObject {
   addHeritagePoints(catKey: CatKey, points: number) {
     this.heritageCategoryPoints.value[catKey] =
       (this.heritageCategoryPoints.value[catKey] ?? 0) + points;
+  }
+
+  onTileDiscovered(tile: Tile) {
+    if (this.status.value === "settled") return;
+
+    for (const type of tile.types.value) {
+      for (const allowedKey of type.allows) {
+        if (allowedKey.startsWith("heritageType:")) {
+          const heritage = useObjectsStore().getTypeObject(allowedKey as TypeKey);
+          if (heritage.category) {
+            this.addHeritagePoints(heritage.category, 1);
+          }
+        }
+      }
+    }
   }
 
   evolve() {

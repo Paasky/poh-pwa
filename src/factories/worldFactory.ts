@@ -94,25 +94,25 @@ export const createWorld = (size: WorldSize): GameData => {
     generateKey("unitDesign"),
     humanPlatform,
     spearEquipment,
-    spearEquipment.names![humanPlatform.name],
+    "Warband",
   );
   const hunterDesign = new UnitDesign(
     generateKey("unitDesign"),
     humanPlatform,
     javelinEquipment,
-    javelinEquipment.names![humanPlatform.name],
+    "Hunter",
   );
   const workerDesign = new UnitDesign(
     generateKey("unitDesign"),
     humanPlatform,
     workerEquipment,
-    workerEquipment.names![humanPlatform.name],
+    "Worker",
   );
   const tribeDesign = new UnitDesign(
     generateKey("unitDesign"),
     humanPlatform,
     tribeEquipment,
-    tribeEquipment.names![humanPlatform.name],
+    "Tribe",
   );
   objects.push(warbandDesign, hunterDesign, workerDesign, tribeDesign);
 
@@ -168,6 +168,7 @@ export const createWorld = (size: WorldSize): GameData => {
       const tribe = new Unit(generateKey("unit"), tribeDesign.key, player.key, tile.key);
       objects.push(hunter, tribe);
       player.unitKeys.value.push(hunter.key, tribe.key);
+      tile.unitKeys.value.push(hunter.key, tribe.key);
       hunterDesign.unitKeys.value.push(hunter.key);
       tribeDesign.unitKeys.value.push(tribe.key);
     }
