@@ -20,6 +20,7 @@ import { useSettingsStore } from "@/stores/settingsStore";
 import { watch } from "vue";
 import { useCurrentContext } from "@/composables/useCurrentContext";
 import { Unit } from "@/objects/game/Unit";
+import { MovementManager } from "@/services/MovementManager";
 
 /**
  * LogicMeshBuilder

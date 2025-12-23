@@ -248,6 +248,47 @@ describe("PathfinderService", () => {
     expect(path.length).toBe(1);
   });
 
+  it("should mark turn ends correctly for single-turn and multi-turn paths", () => {
+    const unit = world.unit;
+    const tiles = objectsStore.getTiles;
+    const context = createMovementContext({
+      known: new Set(Object.keys(tiles) as GameKey[]),
+    });
+
+    // 1. Single step reachable this turn
+    unit.movement.moves.value = 5;
+    const t21 = tiles[Tile.getKey(2, 1)]; // Hill, cost 2
+    let path = pathfinder.findPath(unit, t21, context);
+    expect(path.length).toBe(1);
+    expect(path[0].isTurnEnd).toBe(true);
+    expect(path[0].turn).toBe(0);
+
+    // 2. Single step NOT reachable this turn (ends turn)
+    unit.movement.moves.value = 1;
+    path = pathfinder.findPath(unit, t21, context);
+    expect(path.length).toBe(1);
+    expect(path[0].isTurnEnd).toBe(true);
+    expect(path[0].turn).toBe(1); // It takes another turn to arrive
+
+    // 3. Two steps, both reachable this turn
+    unit.movement.moves.value = 10;
+    const t30 = tiles[Tile.getKey(3, 0)]; // (1,1) -> (2,1) [2] -> (3,0) [1] = 3 total
+    path = pathfinder.findPath(unit, t30, context);
+    expect(path.length).toBe(2);
+    expect(path[0].isTurnEnd).toBe(false); // (2,1)
+    expect(path[1].isTurnEnd).toBe(true); // (3,0)
+    expect(path[1].turn).toBe(0);
+
+    // 4. Two steps, 1st ends turn
+    unit.movement.moves.value = 2; // (2,1) costs 2, so turn ends there
+    path = pathfinder.findPath(unit, t30, context);
+    expect(path.length).toBe(2);
+    expect(path[0].isTurnEnd).toBe(true); // (2,1) ends turn 0
+    expect(path[0].turn).toBe(0);
+    expect(path[1].isTurnEnd).toBe(true); // (3,0) ends turn 1
+    expect(path[1].turn).toBe(1);
+  });
+
   it("should return empty path for unreachable targets (islands)", () => {
     const unit = world.unit as Unit;
     // (3,2) is Ocean.

@@ -28,7 +28,19 @@ export function useMovementInteraction() {
         const pathfinder = new PathfinderService();
         const reachable = pathfinder.getReachableTiles(unit, context);
 
-        overlay.setReachableTiles(reachable, objStore.getTiles);
+        const blocked = new Set<GameKey>();
+        const allConsidered = new Set([unit.tile.value.key, ...reachable]);
+        for (const key of allConsidered) {
+          const tile = objStore.getTiles[key];
+          if (!tile) continue;
+          for (const neighbor of tile.neighborTiles()) {
+            if (!allConsidered.has(neighbor.key)) {
+              blocked.add(neighbor.key);
+            }
+          }
+        }
+
+        overlay.setReachableTiles(reachable, blocked, objStore.getTiles);
         overlay.setSelectionMarker(unit.tile.value);
         overlay.setCurrentPath(unit.movement.path, unit.tile.value);
       } else {

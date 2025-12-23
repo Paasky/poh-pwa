@@ -1,6 +1,7 @@
 import {
   AbstractMesh,
   Color3,
+  Color4,
   Curve3,
   LinesMesh,
   Matrix,
@@ -27,6 +28,7 @@ export class MovementOverlay {
   // Reachable highlight (Context Overlay)
   private reachableMesh: Mesh;
   private reachableMatrices: Float32Array;
+  private reachableColors: Float32Array;
   private reachableCount = 0;
 
   // Path visualization (Current/Potential Overlay)
@@ -39,6 +41,7 @@ export class MovementOverlay {
   // GUI for turn markers
   private guiTexture: AdvancedDynamicTexture;
   private turnMarkers: TextBlock[] = [];
+  private turnMarkerGhosts: AbstractMesh[] = [];
 
   // Selection marker
   private selectionMarker: Mesh | null = null;
@@ -61,7 +64,7 @@ export class MovementOverlay {
     this.reachableMesh.rotation.x = Math.PI / 2; // Flat
     this.reachableMesh.rotation.y = Math.PI / 6; // Pointy top
     const reachableMat = new StandardMaterial("reachableMat", scene);
-    reachableMat.diffuseColor = new Color3(0, 0.4, 0); // dark green
+    reachableMat.diffuseColor = new Color3(1, 1, 1); // Use vertex colors
     reachableMat.alpha = 0.3;
     reachableMat.disableLighting = true;
     reachableMat.zOffset = -1;
@@ -71,7 +74,9 @@ export class MovementOverlay {
     this.reachableMesh.isPickable = false;
 
     this.reachableMatrices = new Float32Array(16 * 2048);
+    this.reachableColors = new Float32Array(4 * 2048);
     this.reachableMesh.thinInstanceSetBuffer("matrix", this.reachableMatrices, 16, true);
+    this.reachableMesh.thinInstanceSetBuffer("color", this.reachableColors, 4, true);
     this.reachableMesh.thinInstanceCount = 0;
 
     // 2. Breadcrumbs (ThinInstance)
@@ -118,19 +123,33 @@ export class MovementOverlay {
   }
 
   /** Renders the reachable area highlight (Context Overlay) */
-  setReachableTiles(keys: Set<GameKey>, tilesByKey: Record<GameKey, Tile>): void {
+  setReachableTiles(
+    reachableKeys: Set<GameKey>,
+    blockedKeys: Set<GameKey>,
+    tilesByKey: Record<GameKey, Tile>,
+  ): void {
     this.reachableCount = 0;
-    for (const key of keys) {
+
+    const green = new Color4(0, 0.4, 0, 1);
+    const red = new Color4(0.5, 0, 0, 1);
+
+    const addInstance = (key: GameKey, color: Color4) => {
       const tile = tilesByKey[key];
-      if (!tile) continue;
+      if (!tile) return;
       const center = tileCenter(this.size, tile);
       const height = tileHeight(tile, true) + 0.05;
       const m = Matrix.Translation(center.x, height, center.z);
       m.copyToArray(this.reachableMatrices, this.reachableCount * 16);
+      color.toArray(this.reachableColors, this.reachableCount * 4);
       this.reachableCount++;
-    }
+    };
+
+    for (const key of reachableKeys) addInstance(key, green);
+    for (const key of blockedKeys) addInstance(key, red);
+
     this.reachableMesh.thinInstanceCount = this.reachableCount;
     this.reachableMesh.thinInstanceBufferUpdated("matrix");
+    this.reachableMesh.thinInstanceBufferUpdated("color");
   }
 
   /** Renders the potential path (curved dotted white line) */
@@ -162,12 +181,14 @@ export class MovementOverlay {
     }
 
     const points: Vector3[] = [];
+    const wrapWidth = Math.sqrt(3) * this.size.x;
+
+    let referenceX = 0;
     if (startTile) {
       const startCenter = tileCenter(this.size, startTile);
-      points.push(new Vector3(startCenter.x, tileHeight(startTile, true) + 0.1, startCenter.z));
-    } else {
-      // If no start tile provided, use the first tile of path as start of line?
-      // No, PathStep usually starts from the first move.
+      const p = new Vector3(startCenter.x, tileHeight(startTile, true) + 0.1, startCenter.z);
+      points.push(p);
+      referenceX = p.x;
     }
 
     if (!isCurrent) {
@@ -178,7 +199,18 @@ export class MovementOverlay {
     for (const step of path) {
       const center = tileCenter(this.size, step.tile);
       const height = tileHeight(step.tile, true) + 0.1;
-      const p = new Vector3(center.x, height, center.z);
+
+      // Unwrap X for visual continuity
+      let x = center.x;
+      if (points.length > 0) {
+        const dx = x - referenceX;
+        if (Math.abs(dx) > wrapWidth / 2) {
+          x -= Math.sign(dx) * wrapWidth;
+        }
+      }
+      referenceX = x;
+
+      const p = new Vector3(x, height, center.z);
       points.push(p);
 
       if (!isCurrent) {
@@ -201,13 +233,15 @@ export class MovementOverlay {
 
     if (points.length < 2) return;
 
-    // Curved line
-    const catmullRom = Curve3.CreateCatmullRomSpline(points, 10);
+    // Curved line - use catmull rom only for 3+ points to avoid potential 2-point glitches
+    const linePoints =
+      points.length > 2 ? Curve3.CreateCatmullRomSpline(points, 10).getPoints() : points;
+
     const line = isCurrent
       ? MeshBuilder.CreateLines(
           "currentPathLine",
           {
-            points: catmullRom.getPoints(),
+            points: linePoints,
             updatable: false,
           },
           this.scene,
@@ -215,7 +249,7 @@ export class MovementOverlay {
       : MeshBuilder.CreateDashedLines(
           "potentialPathLine",
           {
-            points: catmullRom.getPoints(),
+            points: linePoints,
             dashSize: 0.5,
             gapSize: 0.2,
             updatable: false,
@@ -249,29 +283,26 @@ export class MovementOverlay {
     text.outlineWidth = 3;
     text.outlineColor = "black";
     this.guiTexture.addControl(text);
-    text.linkWithMesh(this.createGhostMesh(position));
-    this.turnMarkers.push(text);
-  }
 
-  private createGhostMesh(pos: Vector3): AbstractMesh {
     const ghost = new AbstractMesh("turnMarkerGhost", this.scene);
-    ghost.position.copyFrom(pos);
+    ghost.position.copyFrom(position);
     ghost.parent = this.root;
-    return ghost;
+    text.linkWithMesh(ghost);
+
+    this.turnMarkers.push(text);
+    this.turnMarkerGhosts.push(ghost);
   }
 
   private clearTurnMarkers(): void {
     for (const marker of this.turnMarkers) {
-      const mesh = marker.getHost()?.rootContainer; // Not really how it works
-      // markers are linked to meshes, I should dispose them.
-      // Actually I should track the ghost meshes too.
       marker.dispose();
     }
     this.turnMarkers = [];
-    // Cleanup ghost meshes
-    for (const child of this.root.getChildMeshes()) {
-      if (child.name === "turnMarkerGhost") child.dispose();
+
+    for (const ghost of this.turnMarkerGhosts) {
+      ghost.dispose();
     }
+    this.turnMarkerGhosts = [];
   }
 
   /**
