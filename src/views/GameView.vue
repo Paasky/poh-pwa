@@ -11,9 +11,12 @@ import NextAction from "@/components/GameView/NextAction.vue";
 import EventsList from "@/components/GameView/EventsList.vue";
 import OngoingList from "@/components/GameView/OngoingList.vue";
 import GameMenu from "@/components/GameView/GameMenu.vue";
+import UiUnitCard from "@/components/Ui/UiUnitCard.vue";
 import { useMovementInteraction } from "@/composables/useMovementInteraction";
+import { useCurrentContext } from "@/composables/useCurrentContext";
 
 const app = useAppStore();
+const context = useCurrentContext();
 const gameRootEl = ref<HTMLElement | null>(null);
 
 onMounted(async () => {
@@ -142,7 +145,8 @@ function onBeforeUnload(e: BeforeUnloadEvent) {
       class="d-flex position-absolute bottom-0 left-0 rounded-tr-lg pt-1 pr-1"
     >
       <Minimap />
-      <TileDetails v-if="app.loaded" />
+      <UiUnitCard v-if="context.object.value?.class === 'unit'" :unit="context.object.value" />
+      <TileDetails v-else-if="app.loaded" />
     </v-sheet>
 
     <!-- Bottom-right -->

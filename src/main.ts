@@ -15,90 +15,16 @@ import "@fontsource/poiret-one/400.css";
 // Font Awesome setup
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { getYieldTypeFaIcons } from "@/types/icons";
-import {
-  faArrowUp,
-  faBars,
-  faBookOpen,
-  faBullseye,
-  faCaretDown,
-  faChevronDown,
-  faChevronLeft,
-  faChevronRight,
-  faChevronUp,
-  faCity,
-  faCoins,
-  faFlask,
-  faHandFist,
-  faHandsPraying,
-  faLandmark,
-  faLocationDot,
-  faMagnifyingGlass,
-  faMasksTheater,
-  faMinus,
-  faPause,
-  faPen,
-  faPlay,
-  faPlus,
-  faQuestion,
-  faRoute,
-  faScroll,
-  faShield,
-  faStar,
-  faStepBackward,
-  faStepForward,
-  faTimesCircle,
-  faUpRightAndDownLeftFromCenter,
-  faUser,
-  faUsers,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
+import { getAllIcons } from "@/types/icons";
+
 // PWA service worker registration (auto updates)
 import { registerSW } from "virtual:pwa-register";
 
 // App styles (import AFTER vuetify/styles so our overrides take precedence)
 import "./assets/main.css";
 
-library.add(
-  faBars,
-  faBookOpen,
-  faQuestion,
-  faMagnifyingGlass,
-  faUpRightAndDownLeftFromCenter,
-  faXmark,
-  faArrowUp,
-  faCoins,
-  faFlask,
-  faMasksTheater,
-  faHandsPraying,
-  faShield,
-  faScroll,
-  faRoute,
-  faUser,
-  faCity,
-  faLandmark,
-  faPlus,
-  faMinus,
-  faTimesCircle,
-  faPlay,
-  faPause,
-  faChevronLeft,
-  faChevronRight,
-  faChevronUp,
-  faChevronDown,
-  faCaretDown,
-  faStar,
-  faHandFist,
-  faBullseye,
-  faPen,
-  faUsers,
-  faLocationDot,
-  faStepBackward,
-  faStepForward,
-);
-
-// Ensure all yieldType icons from our central icons.ts are registered
-library.add(...getYieldTypeFaIcons());
+// Ensure all icons from our central icons.ts are registered
+library.add(...getAllIcons());
 
 registerSW({ immediate: true });
 

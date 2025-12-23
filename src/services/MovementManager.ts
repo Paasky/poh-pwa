@@ -24,8 +24,6 @@ export class MovementManager {
 
     const current = useCurrentContext();
     current.actionMode.value = undefined;
-    // Clearing selection as well to match existing LogicMeshBuilder behavior
-    current.object.value = undefined;
-    current.tile.value = undefined;
+    // Selection persists so player can see updated moves/status
   }
 }

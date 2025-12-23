@@ -3,11 +3,10 @@ import { computed } from "vue";
 import { ObjKey, PohObject } from "@/types/common";
 import { useObjectsStore } from "@/stores/objectStore";
 import { TypeObject } from "@/types/typeObjects";
-import { GameObject } from "@/objects/game/_GameObject";
 import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
 
 const props = defineProps<{
-  type: string | ObjKey | PohObject | GameObject;
+  type: string | ObjKey | PohObject;
   // optional visual size; defaults match previous behavior
   size?: string;
 }>();

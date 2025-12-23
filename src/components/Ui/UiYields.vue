@@ -1,12 +1,17 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import { Yields } from "@/objects/yield";
 import UiYield, { yieldProps } from "@/components/Ui/UiYield.vue";
 
-defineProps<{ yields: Yields } & yieldProps>();
+const props = defineProps<{ yields: Yields } & yieldProps>();
+
+const sortedYields = computed(() => {
+  return props.yields.all().sort((a, b) => a.type.localeCompare(b.type));
+});
 </script>
 
 <template>
-  <div v-for="y of yields.all()" :key="JSON.stringify(y)">
+  <div v-for="y of sortedYields" :key="JSON.stringify(y)">
     <UiYield :y="y" :opts="opts" />
   </div>
   <div v-if="yields.isEmpty" style="font-style: italic; opacity: 0.5">None</div>

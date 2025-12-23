@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ObjKey, PohObject } from "@/types/common";
+import { isGameObject, ObjKey, PohObject } from "@/types/common";
 import { GameObject } from "@/objects/game/_GameObject";
-import UiObjectChip from "@/components/Ui/UiObjectChip.vue";
+import UiTypeChip from "@/components/Ui/UiTypeChip.vue";
+import UiGameObjChip from "@/components/Ui/UiGameObjChip.vue";
 
 defineProps<{
   types: (string | ObjKey | PohObject | GameObject)[];
@@ -12,13 +13,15 @@ defineProps<{
 
 <template>
   <div :class="['d-flex', singleRow ? 'w-100 flex-nowrap ga-1' : 'flex-wrap ga-1']">
-    <UiObjectChip
-      v-for="type of types"
-      :key="JSON.stringify(type)"
-      :type="type"
-      :style="singleRow ? 'flex: 1 1 0' : undefined"
-      v-bind="$attrs"
-    />
+    <template v-for="type of types" :key="JSON.stringify(type)">
+      <UiGameObjChip v-if="isGameObject(type)" :obj="type" v-bind="$attrs" />
+      <UiTypeChip
+        v-else
+        :type="type"
+        :style="singleRow ? 'flex: 1 1 0' : undefined"
+        v-bind="$attrs"
+      />
+    </template>
   </div>
 </template>
 

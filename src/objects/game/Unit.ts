@@ -169,6 +169,28 @@ export class Unit extends GameObject {
     return keys;
   });
 
+  vitals = computed(
+    () =>
+      new Yields([
+        {
+          type: "yieldType:health",
+          amount: this.health.value,
+          method: "lump",
+          for: [],
+          vs: [],
+          max: 100,
+        },
+        {
+          type: "yieldType:moves",
+          amount: this.movement.moves.value,
+          method: "lump",
+          for: [],
+          vs: [],
+          max: this.movement.maxMoves.value,
+        },
+      ]),
+  );
+
   yields = computed(() => new Yields());
 
   /*

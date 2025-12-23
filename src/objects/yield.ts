@@ -9,6 +9,7 @@ export type Yield = {
   method: YieldMethod;
   for: ObjKey[];
   vs: ObjKey[];
+  max?: number;
 };
 
 // noinspection RedundantIfStatementJS

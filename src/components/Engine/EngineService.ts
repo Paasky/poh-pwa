@@ -1,5 +1,6 @@
 import { Color4, Engine as BabylonEngine, Observer, Scalar, Scene, Vector3 } from "@babylonjs/core";
 import "@babylonjs/core/Lights/Shadows/shadowGeneratorSceneComponent";
+import { watch } from "vue";
 import {
   calculateKnownBounds,
   clampCoordsToBoundaries,
@@ -9,6 +10,7 @@ import {
 } from "@/helpers/math";
 import { TerrainMeshBuilder } from "@/factories/TerrainMeshBuilder/TerrainMeshBuilder";
 import { useObjectsStore } from "@/stores/objectStore";
+import { useSettingsStore } from "@/stores/settingsStore";
 import { EnvironmentService } from "@/components/Engine/EnvironmentService";
 import LogicMeshBuilder from "@/factories/LogicMeshBuilder";
 import { Minimap } from "@/components/Engine/interaction/Minimap";
@@ -26,8 +28,6 @@ import { EngineCoords } from "@/factories/TerrainMeshBuilder/_terrainMeshTypes";
 import { useCurrentContext } from "@/composables/useCurrentContext";
 import { PathfinderService } from "@/services/PathfinderService";
 import { MovementOverlay } from "@/components/Engine/overlays/MovementOverlay";
-import { useSettingsStore } from "@/stores/settingsStore";
-import { watch } from "vue";
 
 // noinspection JSUnusedGlobalSymbols
 export class EngineService {

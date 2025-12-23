@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import UiButton from "@/components/Ui/UiButton.vue";
 import UiYields from "@/components/Ui/UiYields.vue";
-import UiObjectChip from "@/components/Ui/UiObjectChip.vue";
+import UiTypeChip from "@/components/Ui/UiTypeChip.vue";
 import UiObjectChips from "@/components/Ui/UiObjectChips.vue";
 import { TypeObject } from "@/types/typeObjects";
 
@@ -36,7 +36,7 @@ defineEmits(["select"]);
   >
     <!-- Header with Type & Select-btn -->
     <div class="d-flex ga-2 align-center">
-      <UiObjectChip
+      <UiTypeChip
         :type="type"
         size="small"
         color="secondary"

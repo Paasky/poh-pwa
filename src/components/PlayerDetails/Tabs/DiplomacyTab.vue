@@ -2,7 +2,7 @@
 import UiTable from "@/components/Ui/UiTable.vue";
 import type { Player } from "@/objects/game/Player";
 import { includes } from "@/helpers/textTools";
-import UiObjectChip from "@/components/Ui/UiObjectChip.vue";
+import UiTypeChip from "@/components/Ui/UiTypeChip.vue";
 import UiObjectChips from "@/components/Ui/UiObjectChips.vue";
 import UiYields from "@/components/Ui/UiYields.vue";
 import UiCols from "@/components/Ui/UiCols.vue";
@@ -53,7 +53,7 @@ function searchPlayer(p: Player, term: string): boolean {
           <div class="d-flex align-center ga-2" style="font-size: 1rem">
             <template v-for="(type, i) in store.leaderTimeline" :key="type.key">
               <v-icon v-if="i > 0" icon="fa-chevron-right" color="grey" size="x-small" />
-              <UiObjectChip
+              <UiTypeChip
                 :type="type"
                 :size="store.current.leader.key === type.key ? 'large' : 'x-small'"
                 color="secondary"
@@ -76,7 +76,7 @@ function searchPlayer(p: Player, term: string): boolean {
           <div class="d-flex align-center ga-2" style="font-size: 1rem">
             <template v-for="(type, i) in store.cultureTimeline" :key="type.key">
               <v-icon v-if="i > 0" icon="fa-chevron-right" color="grey" size="x-small" />
-              <UiObjectChip
+              <UiTypeChip
                 :type="type"
                 :size="store.current.culture.type.value.key === type.key ? 'large' : 'x-small'"
                 color="secondary"
@@ -88,12 +88,12 @@ function searchPlayer(p: Player, term: string): boolean {
           <div class="d-flex ga-2">
             <div class="flex-grow-1">
               <h3 class="mb-2">Region</h3>
-              <UiObjectChip
+              <UiTypeChip
                 :type="store.current.culture.region.value"
                 size="small"
                 color="secondary"
               />
-              <UiObjectChip
+              <UiTypeChip
                 :type="
                   // continent derived from culture category
                   store.current.culture.type.value
