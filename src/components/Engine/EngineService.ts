@@ -26,6 +26,8 @@ import { EngineCoords } from "@/factories/TerrainMeshBuilder/_terrainMeshTypes";
 import { useCurrentContext } from "@/composables/useCurrentContext";
 import { PathfinderService } from "@/services/PathfinderService";
 import { MovementOverlay } from "@/components/Engine/overlays/MovementOverlay";
+import { useSettingsStore } from "@/stores/settingsStore";
+import { watch } from "vue";
 
 // noinspection JSUnusedGlobalSymbols
 export class EngineService {
