@@ -155,7 +155,7 @@ export class City extends GameObject {
           this.playerKey.value,
           this.tileKey,
           this.player.value.religionKey.value,
-          getRandom(policies.length ? policies : [null]),
+          getRandom(policies.length ? policies : [null]) as TypeObject | null,
           // eslint-disable-next-line
         ) as any,
       );

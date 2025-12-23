@@ -14,6 +14,7 @@ import { type Tile } from "@/objects/game/Tile";
 import { useEventStore } from "@/stores/eventStore";
 import { UnitCreated, UnitHealed, UnitLost } from "@/events/Unit";
 import { getCoordsFromTileKey, getHexNeighborCoords, tileKey } from "@/helpers/mapTools";
+import { MovementService } from "@/services/MovementService";
 
 // mercenary: +10% strength, +50% upkeep, 1/city/t;
 // regular: no effects
@@ -30,19 +31,6 @@ export type UnitStatus =
   | "mobilizing1"
   | "mobilizing2"
   | "mobilized";
-
-export type MoveContext = {
-  // Visibility/knowledge policy
-  canEnterUnknownThisTurn?: boolean;
-  isCurrentTurnStep?: boolean;
-  // Board state
-  known: ReadonlySet<GameKey>;
-  visible: ReadonlySet<GameKey>;
-  hasFriendlyUnit: (tile: Tile) => boolean;
-  hasEnemyUnit: (tile: Tile) => boolean;
-  // Unit state
-  embarked?: boolean;
-};
 
 export class Unit extends GameObject {
   constructor(
@@ -63,8 +51,10 @@ export class Unit extends GameObject {
     if (action) this.action.value = action;
     this.canAttack.value = canAttack;
     this.health.value = health;
-    this.moves.value = moves;
-    if (name) this.name.value = name;
+    this.movement = new MovementService(this);
+    this.movement.moves.value = moves;
+
+    if (name) this.customName.value = name;
     this.status.value = status;
 
     if (cityKey) this.cityKey.value = cityKey;
@@ -99,7 +89,7 @@ export class Unit extends GameObject {
     { attrName: "action", isOptional: true, isTypeObj: true },
     { attrName: "canAttack", isOptional: true },
     { attrName: "health", isOptional: true },
-    { attrName: "moves", isOptional: true },
+    { attrName: "moves", isOptional: true, attrNotRef: true },
     { attrName: "status", isOptional: true },
     {
       attrName: "origPlayerKey",
@@ -114,9 +104,10 @@ export class Unit extends GameObject {
   action = ref<TypeObject | null>(null);
   canAttack = ref(false);
   health = ref(100);
-  moves = ref(0);
-  name = ref("");
+  movement: MovementService;
+  customName = ref("");
   status = ref("regular" as UnitStatus);
+  unwatchers: (() => void)[] = [];
 
   /*
    * Relations
@@ -125,7 +116,11 @@ export class Unit extends GameObject {
   city = canHaveOne<City>(this.cityKey, `${this.key}.city`);
 
   designKey: GameKey;
-  design = computed(() => useObjectsStore().get(this.designKey) as UnitDesign);
+  design = computed(
+    () =>
+      // asd
+      useObjectsStore().get(this.designKey) as UnitDesign,
+  );
 
   playerKey: Ref<GameKey>;
   player: ComputedRef<Player>;
@@ -147,6 +142,8 @@ export class Unit extends GameObject {
     this.design.value.platform,
     this.design.value.equipment,
   ]);
+
+  name = computed(() => this.customName.value || this.design.value.name);
 
   playerYields = computed(() =>
     this.player.value.yields.value.only(this.concept.inheritYieldTypes!, this.types.value),
@@ -195,98 +192,6 @@ export class Unit extends GameObject {
     }
   }
 
-  // Return null if can't, 99 if it will end the turn
-  moveCost(to: Tile, from?: Tile, context?: MoveContext): number | null {
-    const myDomainKey = this.design.value.domainKey();
-    from = from ?? this.tile.value;
-
-    /*
-     * Step 1) Check if the unit can move at all
-     */
-
-    // Air/Space units can't move
-    if (myDomainKey === "domainType:air" || myDomainKey === "domainType:space") return null;
-
-    // Can only enter unknown during the current turn
-    if (context && !context.known.has(to.key)) {
-      if (!context.isCurrentTurnStep) {
-        return null;
-      }
-    }
-
-    // Water units can enter land only if it has a canal or city
-    if (myDomainKey === "domainType:water" && to.domain.id !== "water") {
-      if (!to.cityKey && to.construction.value?.type.key !== "improvementType:canal") return null;
-    }
-
-    // Land units can enter water only if the player has that special
-    if (myDomainKey === "domainType:land" && to.domain.id === "water") {
-      if (!this.player.value.knownTypes.value.find((t) => t.key === "specialType:canEmbark")) {
-        return null;
-      }
-    }
-
-    // Tile specials check
-    if (to.terrain.key === "terrainType:sea") {
-      if (!this.player.value.knownTypes.value.find((t) => t.key === "specialType:canEnterSea")) {
-        return null;
-      }
-    }
-
-    if (to.terrain.key === "terrainType:ocean") {
-      if (!this.player.value.knownTypes.value.find((t) => t.key === "specialType:canEnterOcean")) {
-        return null;
-      }
-    }
-
-    if (to.terrain.key === "featureType:ice") {
-      if (!this.player.value.knownTypes.value.find((t) => t.key === "specialType:canEnterIce")) {
-        return null;
-      }
-    }
-
-    if (
-      to.terrain.key === "elevationType:mountain" ||
-      to.terrain.key === "elevationType:snowMountain"
-    ) {
-      if (
-        !this.player.value.knownTypes.value.find((t) => t.key === "specialType:canEnterMountains")
-      ) {
-        return null;
-      }
-    }
-
-    /*
-     * Step 2) Check if the move ends the turn
-     */
-
-    // Switching domains without a Route on both tiles
-    if (from.domain.key !== to.domain.key) {
-      // todo check route when it exists
-      return 99;
-      // if (!from.route && !to.route) {
-      //   return 99;
-      // }
-    }
-
-    // Land unit entering a new River without a Route
-    if (to.riverKey && from.riverKey !== to.riverKey) {
-      // todo check route when it exists
-      return 99;
-      // if (!from.route && !to.route) {
-      //   return 99;
-      // }
-    }
-
-    // todo Zone of Control check
-
-    // todo routes set a lower move cost
-
-    // todo get move cost from tile
-
-    return 1;
-  }
-
   complete() {
     if (this.city.value) {
       this.city.value.unitKeys.value.push(this.key);
@@ -303,6 +208,8 @@ export class Unit extends GameObject {
   }
 
   delete(reason: string, city?: City | null) {
+    this.unwatchers.forEach((u) => u());
+
     if (this.city.value) {
       this.city.value.unitKeys.value = this.city.value.unitKeys.value.filter((u) => u !== this.key);
     }
@@ -331,17 +238,12 @@ export class Unit extends GameObject {
 
   startTurn(): void {
     // Reset moves
-    this.moves.value = this.design.value.yields.getLumpAmount("yieldType:moves");
+    this.movement.moves.value = this.design.value.yields.getLumpAmount("yieldType:moves");
 
     // Heal
     if (this.health.value < 100 && this.action.value?.key === "actionType:heal") {
       this.modifyHealth(10, "healing");
     }
-  }
-
-  endTurn(): boolean {
-    // todo run automove / trade route move until out of moves/see danger
-    return true;
   }
 
   warmUp(): void {
@@ -352,11 +254,21 @@ export class Unit extends GameObject {
     this.tile.value;
     this.tradeRoute.value;
 
+    this.movement.isMobile.value;
+    this.movement.specialTypeKeys.value;
     this.myTypes.value;
+    this.name.value;
     this.playerYields.value;
     this.tileYields.value;
     this.types.value;
     this.visibleTileKeys.value;
     this.yields.value;
+  }
+
+  // moves is stored inside movement
+  toJSON(): Record<string, unknown> {
+    const json = super.toJSON();
+    json.moves = this.movement.moves.value;
+    return json;
   }
 }

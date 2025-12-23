@@ -20,6 +20,7 @@ import type { Unit } from "@/objects/game/Unit";
 import { Diplomacy } from "@/objects/player/Diplomacy";
 import { ObjKey, TypeKey } from "@/types/common";
 import { useObjectsStore } from "@/stores/objectStore";
+import { MovementService } from "@/services/MovementService";
 
 export class Player extends GameObject {
   constructor(
@@ -95,7 +96,6 @@ export class Player extends GameObject {
   government: Government;
   isCurrent = false;
   isMinor = false;
-  knownTypes = computed(() => [] as TypeObject[]);
   name: string;
   research: Research;
   storage = new TypeStorage();
@@ -140,16 +140,7 @@ export class Player extends GameObject {
    */
   activeDesigns = computed(() => this.designs.value.filter((d) => d.isActive.value));
 
-  commonTypes = computed(
-    (): TypeObject[] =>
-      [...this.government.policies.value, ...this.research.researched.value] as TypeObject[],
-  );
-
-  leader = computed(() => this.culture.value.leader.value);
-
-  ownedTypes = computed(() => this.cities.value.flatMap((city) => city.ownedTypes.value));
-
-  specialTypes = computed(
+  citizenTypes = computed(
     () =>
       [
         ...this.culture.value.heritages.value,
@@ -159,6 +150,27 @@ export class Player extends GameObject {
         ...(this.religion.value?.dogmas.value ?? []),
       ] as TypeObject[],
   );
+
+  commonTypes = computed(
+    (): TypeObject[] =>
+      [...this.government.policies.value, ...this.research.researched.value] as TypeObject[],
+  );
+
+  // All specials from all known types
+  knownSpecialKeys = computed(
+    (): Set<TypeKey> => new Set(this.knownTypes.value.flatMap((t) => t.specials)),
+  );
+
+  // All 3 types-arrays combined
+  knownTypes = computed(() => [
+    ...this.citizenTypes.value,
+    ...this.commonTypes.value,
+    ...this.ownedTypes.value,
+  ]);
+
+  leader = computed(() => this.culture.value.leader.value);
+
+  ownedTypes = computed(() => this.cities.value.flatMap((city) => city.ownedTypes.value));
 
   visibleTileKeys = computed(() => {
     const keys = new Set<GameKey>(this.tileKeys.value);
@@ -184,7 +196,7 @@ export class Player extends GameObject {
     }
 
     // Add any Culture/Religion Type yield that is for/vs AND NOT for Citizens
-    for (const type of this.specialTypes.value) {
+    for (const type of this.citizenTypes.value) {
       for (const y of type.yields.all()) {
         const forOthers = y.for.filter((forKey: ObjKey) => forKey !== "conceptType:citizen");
 
@@ -285,7 +297,7 @@ export class Player extends GameObject {
     // On refusal, return false
     // After all done, return true
     for (const unit of this.units.value) {
-      if (!unit.endTurn()) return false;
+      if (unit.movement.move(MovementService.getMoveContext(unit)) === false) return false;
     }
     return true;
   }
@@ -298,16 +310,18 @@ export class Player extends GameObject {
     this.deals.value;
     this.designs.value;
     this.knownTileKeys.value;
-    this.visibleTileKeys.value;
+    this.knownTypes.value;
     this.religion.value;
+    this.knownSpecialKeys.value;
     this.tiles.value;
     this.tradeRoutes.value;
     this.units.value;
+    this.visibleTileKeys.value;
 
     this.activeDesigns.value;
     this.leader.value;
     this.commonTypes.value;
-    this.specialTypes.value;
+    this.citizenTypes.value;
     this.ownedTypes.value;
     this.yieldMods.value;
     this.yields.value;

@@ -1,11 +1,10 @@
 // Imports are kept at the top of the file for clarity, tree‑shaking, and bundler friendliness.
 // If we ever need code‑splitting or optional dependencies, we will use dynamic imports in a
 // very targeted manner. This file does not require them.
-import { tileCenter } from "@/helpers/math";
+import { tileCenter, wrapExclusive } from "@/helpers/math";
 import { Coords } from "@/helpers/mapTools";
 import { Tile } from "@/objects/game/Tile";
 import type { GameKey } from "@/objects/game/_GameObject";
-import type { PickingInfo } from "@babylonjs/core";
 import {
   Color3,
   Mesh,
@@ -19,6 +18,10 @@ import {
 } from "@babylonjs/core";
 import { useSettingsStore } from "@/stores/settingsStore";
 import { watch } from "vue";
+import { PathfinderService } from "@/services/PathfinderService";
+import { useCurrentContext } from "@/composables/useCurrentContext";
+import { Unit } from "@/objects/game/Unit";
+import { MovementService } from "@/services/MovementService";
 
 /**
  * LogicMeshBuilder
@@ -37,12 +40,7 @@ export class LogicMeshBuilder {
   private tileByInstanceIndex: Tile[] = [];
   private instanceIndexByTileKey: Record<GameKey, number> = {};
 
-  private contextHandlers = new Set<(tile: Tile, details?: LogicPointerDetails) => void>();
-  private hoverHandlers = new Set<(tile: Tile, details?: LogicPointerDetails) => void>();
-  private pickHandlers = new Set<(tile: Tile, details?: LogicPointerDetails) => void>();
-  private exitHandlers = new Set<() => void>();
-
-  private pointerObserver: Nullable<ReturnType<Scene["onPointerObservable"]["add"]>> = null;
+  private pointerObserver!: ReturnType<Scene["onPointerObservable"]["add"]>;
   private lastHoveredInstanceIndex: number | null = null;
   private debugVisibleAlpha: number = 0.75;
 
@@ -85,13 +83,7 @@ export class LogicMeshBuilder {
   dispose(): void {
     if (this.pointerObserver) {
       this.scene.onPointerObservable.remove(this.pointerObserver);
-      this.pointerObserver = null;
     }
-
-    this.contextHandlers.clear();
-    this.hoverHandlers.clear();
-    this.pickHandlers.clear();
-    this.exitHandlers.clear();
 
     this.tileByInstanceIndex = [];
     this.instanceIndexByTileKey = {} as Record<GameKey, number>;
@@ -102,32 +94,9 @@ export class LogicMeshBuilder {
     this.root.getChildren().forEach((n) => n.dispose());
   }
 
-  // Event subscriptions
-  onTileContextMenu(handler: (tile: Tile, details?: LogicPointerDetails) => void): () => void {
-    this.contextHandlers.add(handler);
-    return () => this.contextHandlers.delete(handler);
-  }
-
-  onTileHover(handler: (tile: Tile, details?: LogicPointerDetails) => void): () => void {
-    this.hoverHandlers.add(handler);
-    return () => this.hoverHandlers.delete(handler);
-  }
-
-  onTilePick(handler: (tile: Tile, details?: LogicPointerDetails) => void): () => void {
-    this.pickHandlers.add(handler);
-    return () => this.pickHandlers.delete(handler);
-  }
-
-  onTileExit(handler: () => void): () => void {
-    this.exitHandlers.add(handler);
-    return () => this.exitHandlers.delete(handler);
-  }
-
   // Internals
   private attachPointerObservers(): void {
     this.pointerObserver = this.scene.onPointerObservable.add((pointerInfo) => {
-      if (!this.baseHexMesh) return;
-
       switch (pointerInfo.type) {
         case PointerEventTypes.POINTERMOVE: {
           const pick = this.scene.pick(
@@ -155,9 +124,8 @@ export class LogicMeshBuilder {
     // Not hovering over a tile + used to hover over a tile -> trigger exit handlers
     if (!pick || !pick.hit || pick.thinInstanceIndex === undefined) {
       if (this.lastHoveredInstanceIndex !== null) {
-        const tile = this.tileByInstanceIndex[this.lastHoveredInstanceIndex];
-        if (tile) this.exitHandlers.forEach((h) => h());
         this.lastHoveredInstanceIndex = null;
+        this.onTileExit();
       }
       return;
     }
@@ -169,13 +137,10 @@ export class LogicMeshBuilder {
       const tile = this.tileByInstanceIndex[currentIndex];
 
       if (tile) {
-        this.hoverHandlers.forEach((h) =>
-          h(tile, this.buildDetails(pick as PickingInfo, undefined)),
-        );
+        this.onTileHover(tile);
       } else if (this.lastHoveredInstanceIndex !== null) {
         // tile should never be null, but fallback to exit handlers in case it somehow is
-        const prevTile = this.tileByInstanceIndex[this.lastHoveredInstanceIndex];
-        if (prevTile) this.exitHandlers.forEach((h) => h());
+        this.onTileExit();
       }
 
       this.lastHoveredInstanceIndex = currentIndex;
@@ -192,15 +157,85 @@ export class LogicMeshBuilder {
     if (!tile) return;
 
     const button = ev.button; // 0 left, 1 middle, 2 right
-    const details = this.buildDetails(pick as PickingInfo, ev);
-    if (button === 2) {
-      ev.preventDefault();
-      this.contextHandlers.forEach((h) => h(tile, details));
+
+    if (button === 0) {
+      this.onTileSelect(tile);
     }
-    this.pickHandlers.forEach((h) => h(tile, details));
+
+    if (button === 2) {
+      this.onTileAction(tile);
+    }
   }
 
-  // -> reason: now as flat surfaces there are gaps between water 6 mountain for example, breaking tile picking
+  private onTileSelect(tile: Tile): void {
+    const current = useCurrentContext();
+    // Tile has nothing to select -> clear selection
+    if (!tile.selectable.value.length) {
+      current.actionMode.value = undefined;
+      current.tile.value = undefined;
+      current.object.value = undefined;
+    }
+
+    // Tile is already selected
+    if (current.tile.value?.key === tile.key) {
+      // If something is selected -> select the next item
+      if (current.object.value) {
+        // Don't trust indexOf as it does an exact obj check
+        for (const [i, item] of tile.selectable.value.entries()) {
+          if (item.key === current.object.value!.key) {
+            current.object.value =
+              tile.selectable.value[wrapExclusive(i + 1, 0, tile.selectable.value.length)];
+            return;
+          }
+        }
+      }
+
+      // Nothing is selected/selected item is not selectable anymore -> select the first item
+      current.object.value = tile.selectable.value[0];
+      return;
+    }
+
+    // Tile is not selected -> select the first item
+    current.tile.value = tile;
+    current.object.value = tile.selectable.value[0];
+  }
+
+  private onTileAction(tile: Tile): void {
+    const current = useCurrentContext();
+    // todo: Paradrop, Rebase, Recon, etc action modes
+    // todo: Can Attack, Can Bombard, etc actions
+    // For now we just assume moving
+
+    // Check it's a unit
+    const object = current.object.value;
+    if (object?.class !== "unit") return;
+    // @ts-expect-error class === unit, it's a Unit
+    const unit = object as Unit;
+
+    // Set path and auto-move immediately
+    const context = MovementService.getMoveContext(unit);
+    unit.movement.path = new PathfinderService().findPath(unit, tile, context);
+    unit.movement.move(context);
+
+    current.actionMode.value = undefined;
+    current.object.value = undefined;
+    current.tile.value = undefined;
+  }
+
+  // Fired on mouse moving on top
+  private onTileHover(tile: Tile): void {
+    useCurrentContext().hover.value = tile;
+  }
+
+  // Fired on mouse leaving (left canvas/left map tiles)
+  private onTileExit(): void {
+    useCurrentContext().hover.value = undefined;
+  }
+
+  ////////////////////////
+  // Mesh Building
+  ////////////////////////
+
   private buildInstanceMatricesAndMaps(): Float32Array {
     const matrices: number[] = [];
 
@@ -277,42 +312,6 @@ export class LogicMeshBuilder {
     // Column‑major 4x4 translation matrix
     return new Float32Array([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, x, y, z, 1]);
   }
-
-  private buildDetails(
-    pick: PickingInfo | undefined,
-    ev: PointerEvent | undefined,
-  ): LogicPointerDetails | undefined {
-    if (
-      !pick ||
-      pick.thinInstanceIndex === undefined ||
-      !useSettingsStore().engineSettings.enableDebug
-    )
-      return undefined;
-    return {
-      mesh: this.baseHexMesh,
-      pickInfo: pick,
-      pointerEvent: ev ?? null,
-      instanceIndex: pick.thinInstanceIndex,
-      pointer: { x: this.scene.pointerX, y: this.scene.pointerY },
-      tileKey: this.tileByInstanceIndex[pick.thinInstanceIndex]?.key ?? ("" as GameKey),
-      tileCoords: this.tileByInstanceIndex[pick.thinInstanceIndex]
-        ? {
-            x: this.tileByInstanceIndex[pick.thinInstanceIndex].x,
-            y: this.tileByInstanceIndex[pick.thinInstanceIndex].y,
-          }
-        : undefined,
-    };
-  }
 }
 
 export default LogicMeshBuilder;
-
-export type LogicPointerDetails = {
-  mesh: Mesh;
-  pickInfo: PickingInfo;
-  pointerEvent: PointerEvent | null;
-  instanceIndex: number;
-  pointer: { x: number; y: number };
-  tileKey: GameKey;
-  tileCoords?: { x: number; y: number };
-};

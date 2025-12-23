@@ -26,6 +26,8 @@ import { EngineCoords } from "@/factories/TerrainMeshBuilder/_terrainMeshTypes";
 import { useSettingsStore } from "@/stores/settingsStore";
 import { watch } from "vue";
 import { useCurrentTile } from "@/stores/currentTile";
+import { PathfinderService } from "@/services/PathfinderService";
+import { MovementOverlay } from "@/components/Engine/overlays/MovementOverlay";
 
 // noinspection JSUnusedGlobalSymbols
 export class EngineService {
@@ -42,6 +44,8 @@ export class EngineService {
   objectInstancer!: ObjectInstancer;
   fogOfWar!: FogOfWar;
   gridOverlay!: GridOverlay;
+  pathfinder!: PathfinderService;
+  movementOverlay!: MovementOverlay;
 
   minimapCanvas?: HTMLCanvasElement;
   minimap?: Minimap;
@@ -103,6 +107,7 @@ export class EngineService {
       this.fogOfWar,
       this.gridOverlay,
       () => this.knownBounds,
+      this.movementOverlay,
     );
 
     this.flyToCurrentPlayer(true);
@@ -119,15 +124,6 @@ export class EngineService {
   initLogic(): this {
     this.logicMesh = new LogicMeshBuilder(this.scene, this.size, useObjectsStore().getTiles);
 
-    const { hoveredTile, selectedTile, contextTile } = useCurrentTile();
-    this.logicMesh.onTileHover((tile) => (hoveredTile.value = tile));
-    this.logicMesh.onTileExit(() => (hoveredTile.value = undefined));
-    this.logicMesh.onTilePick((tile) => {
-      selectedTile.value = tile;
-      contextTile.value = undefined;
-    });
-    this.logicMesh.onTileContextMenu((tile) => (contextTile.value = tile));
-
     return this;
   }
 
@@ -139,6 +135,13 @@ export class EngineService {
 
   initGridOverlay(): this {
     this.gridOverlay = new GridOverlay(this.scene, this.size, useObjectsStore().getTiles);
+
+    return this;
+  }
+
+  initPathfinding(): this {
+    this.pathfinder = new PathfinderService();
+    this.movementOverlay = new MovementOverlay(this.scene, this.size);
 
     return this;
   }
@@ -223,6 +226,7 @@ export class EngineService {
       // No other requirements
       () => this.initFogOfWar(),
       () => this.initGridOverlay(),
+      () => this.initPathfinding(),
       () => this.initLogic(),
       () => this.initObjectInstancer(),
       () => this.initTerrain(),
@@ -272,6 +276,7 @@ export class EngineService {
     this.mainCamera.camera.dispose();
 
     // Stop others
+    this.movementOverlay.dispose();
     this.gridOverlay.dispose();
     this.logicMesh.dispose();
     this.terrainBuilder.dispose();

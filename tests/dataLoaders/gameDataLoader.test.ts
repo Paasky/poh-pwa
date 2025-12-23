@@ -4,6 +4,7 @@ import { initTestPinia, loadStaticData } from "../_setup/pinia";
 import { Tile } from "../../src/objects/game/Tile";
 import { GameData } from "../../src/types/api";
 import { Player } from "../../src/objects/game/Player";
+import { useObjectsStore } from "../../src/stores/objectStore";
 
 describe("gameDataLoader", () => {
   beforeEach(() => initTestPinia() && loadStaticData());
@@ -153,6 +154,8 @@ describe("gameDataLoader", () => {
       ],
     } as GameData);
 
+    useObjectsStore().bulkSet(Object.values(gameObjects));
+
     // output = input + defaults
     expect(JSON.parse(JSON.stringify(gameObjects))).toEqual({
       "agenda:1": agendaData,
@@ -176,7 +179,7 @@ describe("gameDataLoader", () => {
         canAttack: false,
         health: 100,
         moves: 0,
-        name: "",
+        name: "Axeman",
         status: "regular",
         origPlayerKey: "player:1",
       },

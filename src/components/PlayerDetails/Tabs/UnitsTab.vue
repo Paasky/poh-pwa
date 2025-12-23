@@ -15,7 +15,7 @@ const unitHeaders = [
   {
     title: "Name",
     key: "name",
-    value: (u) => u.name.value || u.design.value.name,
+    value: (u) => u.customName.value || u.design.value.name,
   },
   {
     title: "Design",
@@ -61,7 +61,7 @@ const designHeaders = [
 ] as TableColumn<UnitDesign>[];
 
 function searchUnit(unit: Unit, term: string): boolean {
-  return includes(unit.name.value, term) || searchDesign(unit.design.value, term);
+  return includes(unit.customName.value, term) || searchDesign(unit.design.value, term);
 }
 
 function searchDesign(design: UnitDesign, term: string): boolean {

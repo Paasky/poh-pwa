@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@babylonjs/core": "^8.41.2",
+    "@babylonjs/gui": "^8.42.0",
     "@babylonjs/materials": "^8.41.2",
     "@floating-ui/dom": "^1.7.4",
     "@fontsource/dm-sans": "^5.2.8",
@@ -42,6 +43,7 @@
     "indefinite": "^2.5.2",
     "pinia": "^3.0.4",
     "pluralize": "^8.0.0",
+    "tinyqueue": "^3.0.0",
     "vite-plugin-pwa": "^1.2.0",
     "vue": "^3.5.25",
     "vue-router": "^4.6.4",

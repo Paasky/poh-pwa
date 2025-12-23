@@ -85,12 +85,13 @@ export class UnitDesign extends GameObject {
   );
 
   domainKey(): TypeKey {
+    const cat = this.platform.category as string;
     if (
       [
         "platformCategory:sailHull",
         "platformCategory:poweredHull",
         "platformCategory:submersible",
-      ].includes(this.platform.key)
+      ].includes(cat)
     ) {
       return "domainType:water";
     }
@@ -100,12 +101,12 @@ export class UnitDesign extends GameObject {
         "platformCategory:aircraft",
         "platformCategory:helicopter",
         "platformCategory:missile",
-      ].includes(this.platform.key)
+      ].includes(cat)
     ) {
       return "domainType:air";
     }
 
-    if (["platformCategory:satellite"].includes(this.platform.key)) {
+    if (["platformCategory:satellite"].includes(cat)) {
       return "domainType:space";
     }
 

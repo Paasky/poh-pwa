@@ -14,7 +14,7 @@ export function theWord(word: string, count = 1): string {
 }
 
 export function aWord(word: string, count = 1): string {
-  if (count === 1) indefinite(word);
+  if (count === 1) return indefinite(word);
   return `${count} ${pluralize(word)}`;
 }
 

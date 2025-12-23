@@ -11,6 +11,7 @@ import { Coords } from "@/helpers/mapTools";
 import { clamp, clampCoordsToBoundaries, type OrthoBounds } from "@/helpers/math";
 import GridOverlay from "@/components/Engine/overlays/GridOverlay";
 import { FogOfWar } from "@/components/Engine/FogOfWar";
+import { MovementOverlay } from "@/components/Engine/overlays/MovementOverlay";
 
 export const rot30 = Math.PI / 6;
 export const rotNorth = -rot30 * 3;
@@ -22,6 +23,8 @@ export class MainCamera {
   readonly camera: ArcRotateCamera;
   fogOfWar: FogOfWar;
   readonly gridOverlay: GridOverlay;
+  readonly movementOverlay?: MovementOverlay;
+  private getKnownBounds: () => OrthoBounds | null;
 
   private _rotationInput = new ArcRotateCameraPointersInput();
   private _manualTiltEnabled = false;
@@ -39,13 +42,16 @@ export class MainCamera {
     canvas: HTMLCanvasElement,
     fogOfWar: FogOfWar,
     gridOverlay: GridOverlay,
-    private getKnownBounds: () => OrthoBounds | null,
+    getKnownBounds: () => OrthoBounds | null,
+    movementOverlay?: MovementOverlay,
   ) {
     this.size = size;
     this.scene = scene;
     this.canvas = canvas;
     this.fogOfWar = fogOfWar;
     this.gridOverlay = gridOverlay;
+    this.getKnownBounds = getKnownBounds;
+    this.movementOverlay = movementOverlay;
 
     // Create camera
     this.camera = new ArcRotateCamera(
@@ -153,5 +159,6 @@ export class MainCamera {
     // Grid thickness scaling: 0.25x at max out -> 1.5x at max in
     const thicknessScale = 0.25 + norm * 1.25;
     if (this.gridOverlay) this.gridOverlay.setThicknessScale(thicknessScale);
+    if (this.movementOverlay) this.movementOverlay.setScaling(thicknessScale);
   }
 }

@@ -18,7 +18,7 @@ export class River extends GameObject {
     {
       attrName: "tileKeys",
       attrNotRef: true,
-      related: { theirKeyAttr: "riverKey", isOne: true },
+      related: { theirKeyAttr: "riverKey", isOne: true, isManyToMany: true },
     },
   ];
 
