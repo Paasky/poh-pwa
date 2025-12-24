@@ -201,7 +201,7 @@ export class Unit extends GameObject {
 
     const city =
       this.tile.value.city.value ??
-      this.tile.value.neighborTiles().find((t) => t.city.value)?.city.value;
+      this.tile.value.neighborTiles.find((t) => t.city.value)?.city.value;
 
     if (this.health.value <= 0) {
       this.delete(reason, city);

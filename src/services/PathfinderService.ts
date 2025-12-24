@@ -4,6 +4,7 @@ import { Tile } from "@/objects/game/Tile";
 import { GameKey } from "@/objects/game/_GameObject";
 import { useObjectsStore } from "@/stores/objectStore";
 import { MovementContext } from "@/services/MovementContext";
+import { TurnEnd } from "@/services/MovementService";
 
 /** Data structure representing a single step in a calculated path */
 export type PathStep = {
@@ -105,48 +106,51 @@ export class PathfinderService {
   }
 
   /**
-   * Returns all tiles reachable within the current turn's remaining moves.
+   * Returns all tiles reachable within the current turn's remaining moves,
+   * plus blocked tiles and those just out of reach.
    */
-  getReachableTiles(unit: Unit, context: MovementContext): Set<GameKey> {
-    const reachable = new Set<GameKey>();
+  getTilesInRange(
+    unit: Unit,
+    context: MovementContext,
+  ): Map<GameKey, { tile: Tile; cost: number | TurnEnd | null }> {
+    const rangeData = new Map<GameKey, { tile: Tile; cost: number | TurnEnd | null }>();
     const startTile = unit.tile.value;
-    if (!startTile) return reachable;
+    if (!startTile || unit.movement.moves.value <= 0) return rangeData;
 
     const queue: { tile: Tile; movesRemaining: number }[] = [
       { tile: startTile, movesRemaining: unit.movement.moves.value },
     ];
     const visited = new Map<GameKey, number>();
+    visited.set(startTile.key, unit.movement.moves.value);
 
     while (queue.length > 0) {
       const current = queue.shift()!;
-      if (current.tile.key !== startTile.key) {
-        reachable.add(current.tile.key);
-      }
+
+      if (current.movesRemaining <= 0) continue;
 
       for (const neighbor of current.tile.neighborTiles) {
-        const nextState = unit.movement.calculateNextState(
-          0,
-          current.movesRemaining,
-          neighbor,
-          current.tile,
-          context,
-        );
+        if (neighbor.key === startTile.key) continue;
 
-        if (nextState === null || nextState.turn > 0) continue;
+        const cost = unit.movement.cost(neighbor, current.tile, context);
 
-        const previouslyVisitedMoves = visited.get(neighbor.key);
+        // Record neighbor data if not already present or if we found a valid cost for it
+        const existing = rangeData.get(neighbor.key);
+        if (!existing || (existing.cost === null && cost !== null)) {
+          rangeData.set(neighbor.key, { tile: neighbor, cost });
+        }
 
-        if (
-          previouslyVisitedMoves === undefined ||
-          previouslyVisitedMoves < nextState.movesRemaining
-        ) {
-          visited.set(neighbor.key, nextState.movesRemaining);
-          queue.push({ tile: neighbor, movesRemaining: nextState.movesRemaining });
+        // Continue BFS if reachable this turn
+        if (cost !== null && cost !== "turnEnd" && cost <= current.movesRemaining) {
+          const movesAfter = Math.round((current.movesRemaining - (cost as number)) * 10) / 10;
+          if (!visited.has(neighbor.key) || visited.get(neighbor.key)! < movesAfter) {
+            visited.set(neighbor.key, movesAfter);
+            queue.push({ tile: neighbor, movesRemaining: movesAfter });
+          }
         }
       }
     }
 
-    return reachable;
+    return rangeData;
   }
 
   private heuristic(tileA: Tile, tileB: Tile, mapSize: { x: number; y: number }): number {

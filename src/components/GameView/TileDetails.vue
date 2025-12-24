@@ -3,16 +3,24 @@ import { useCurrentContext } from "@/composables/useCurrentContext";
 import UiTypeChip from "@/components/Ui/UiTypeChip.vue";
 import { useObjectsStore } from "@/stores/objectStore";
 import { Tile } from "@/objects/game/Tile";
+import UiGameObjChip from "@/components/Ui/UiGameObjChip.vue";
 
 const hoveredTile = useCurrentContext().hover as unknown as Tile;
 </script>
 
 <template>
-  <v-sheet class="d-flex flex-column ga-1" color="secondary" style="width: 12rem; overflow: hidden">
+  <v-sheet class="d-flex flex-column ga-1" style="width: 12rem; overflow: hidden">
     <div
       class="d-flex flex-column ga-1"
       v-if="hoveredTile && useObjectsStore().currentPlayer.knownTileKeys.value.has(hoveredTile.key)"
     >
+      <div
+        v-if="hoveredTile.unitKeys.value.length"
+        class="d-flex ga-1 pb-1 mb-1"
+        style="border-bottom: 1px solid rgba(255, 255, 255, 0.25)"
+      >
+        <UiGameObjChip v-for="unit in hoveredTile.units.value" :key="unit.key" :obj="unit" />
+      </div>
       <div class="d-flex ga-1">
         <UiTypeChip :type="hoveredTile.elevation" />
         <UiTypeChip :type="hoveredTile.terrain" />

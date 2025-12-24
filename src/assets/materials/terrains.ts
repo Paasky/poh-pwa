@@ -1,19 +1,20 @@
 import { Color3, Color4, Scene, StandardMaterial, Texture } from "@babylonjs/core";
 import { TypeKey } from "@/types/common";
 import { Tile } from "@/objects/game/Tile";
+import { EngineColors, toColor4 } from "@/components/Engine/EngineStyles";
 
 export const terrainColorMap: Record<TypeKey, Color4> = {
-  "terrainType:coast": Color4.FromHexString("#3d73a5"),
-  "terrainType:desert": Color4.FromHexString("#d1d143"),
-  "terrainType:grass": Color4.FromHexString("#3f6212"),
-  "terrainType:lake": Color4.FromHexString("#505d67"),
-  "terrainType:majorRiver": Color4.FromHexString("#50675e"),
-  "terrainType:ocean": Color4.FromHexString("#172554"),
-  "terrainType:plains": Color4.FromHexString("#81791c"),
-  "terrainType:sea": Color4.FromHexString("#1e3a8a"),
-  "terrainType:snow": Color4.FromHexString("#ffffff"),
-  "terrainType:rocks": Color4.FromHexString("#484848"),
-  "terrainType:tundra": Color4.FromHexString("#3b5118"),
+  "terrainType:coast": toColor4(EngineColors.terrain.coast),
+  "terrainType:desert": toColor4(EngineColors.terrain.desert),
+  "terrainType:grass": toColor4(EngineColors.terrain.grass),
+  "terrainType:lake": toColor4(EngineColors.terrain.lake),
+  "terrainType:majorRiver": toColor4(EngineColors.terrain.majorRiver),
+  "terrainType:ocean": toColor4(EngineColors.terrain.ocean),
+  "terrainType:plains": toColor4(EngineColors.terrain.plains),
+  "terrainType:sea": toColor4(EngineColors.terrain.sea),
+  "terrainType:snow": toColor4(EngineColors.terrain.snow),
+  "terrainType:rocks": toColor4(EngineColors.terrain.rocks),
+  "terrainType:tundra": toColor4(EngineColors.terrain.tundra),
 };
 
 export const terrainBumpMap: Record<TypeKey, string> = {

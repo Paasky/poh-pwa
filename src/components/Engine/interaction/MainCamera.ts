@@ -11,8 +11,10 @@ import { Coords } from "@/helpers/mapTools";
 import { clamp, clampCoordsToBoundaries, type OrthoBounds } from "@/helpers/math";
 import GridOverlay from "@/components/Engine/overlays/GridOverlay";
 import { ContextOverlay } from "@/components/Engine/overlays/ContextOverlay";
-import { MarkerOverlay } from "@/components/Engine/overlays/MarkerOverlay";
 import { PathOverlay } from "@/components/Engine/overlays/PathOverlay";
+import { GuidanceOverlay } from "@/components/Engine/overlays/GuidanceOverlay";
+import { DetailOverlay } from "@/components/Engine/overlays/DetailOverlay";
+import { EngineLayers } from "@/components/Engine/EngineStyles";
 
 export const rot30 = Math.PI / 6;
 export const rotNorth = -rot30 * 3;
@@ -24,7 +26,8 @@ export class MainCamera {
   readonly camera: ArcRotateCamera;
   readonly contextOverlay: ContextOverlay;
   readonly gridOverlay: GridOverlay;
-  readonly markerOverlay: MarkerOverlay;
+  readonly guidanceOverlay: GuidanceOverlay;
+  readonly detailOverlay: DetailOverlay;
   readonly pathOverlay: PathOverlay;
   private readonly getKnownBounds: () => OrthoBounds | null;
 
@@ -45,7 +48,8 @@ export class MainCamera {
     getKnownBounds: () => OrthoBounds | null,
     contextOverlay: ContextOverlay,
     gridOverlay: GridOverlay,
-    markerOverlay: MarkerOverlay,
+    guidanceOverlay: GuidanceOverlay,
+    detailOverlay: DetailOverlay,
     pathOverlay: PathOverlay,
   ) {
     this.size = size;
@@ -54,7 +58,8 @@ export class MainCamera {
     this.getKnownBounds = getKnownBounds;
     this.contextOverlay = contextOverlay;
     this.gridOverlay = gridOverlay;
-    this.markerOverlay = markerOverlay;
+    this.guidanceOverlay = guidanceOverlay;
+    this.detailOverlay = detailOverlay;
     this.pathOverlay = pathOverlay;
 
     // Create camera
@@ -125,8 +130,10 @@ export class MainCamera {
     // Grid thickness scaling: 0.25x at max out -> 1.5x at max in
     const thicknessScale = 0.25 + norm * 1.25;
     this.gridOverlay.setThicknessScale(thicknessScale);
-    this.markerOverlay.setScaling(thicknessScale);
-    this.pathOverlay.setScaling(thicknessScale);
+
+    // Marker LOD: Hide small labels when zoomed out > 70%
+    const showDetailMarkers = norm > 0.3;
+    this.detailOverlay.showLayer(EngineLayers.movementCosts, showDetailMarkers);
   }
 
   private installPanning(): void {

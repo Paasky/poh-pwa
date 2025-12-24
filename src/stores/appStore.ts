@@ -21,6 +21,7 @@ import { asyncProcess } from "@/helpers/asyncProcess";
 import { Tile } from "@/objects/game/Tile";
 import { Player } from "@/objects/game/Player";
 import { Unit } from "@/objects/game/Unit";
+import { GameManager } from "@/managers/GameManager";
 
 export async function fetchJSON<T>(url: string): Promise<T> {
   const res = await fetch(url, { cache: "no-store" });
@@ -32,6 +33,7 @@ export const useAppStore = defineStore("app", {
   state: () => ({
     engineService: markRaw({}) as EngineService,
     loaded: false,
+    loadTitle: "",
     loadPercent: "",
     uiStateListeners: markRaw({}) as Record<string, UiStateConfig>,
     _router: markRaw({}) as Router,
@@ -57,51 +59,62 @@ export const useAppStore = defineStore("app", {
 
       this.engineService = markRaw(new EngineService(size, engineCanvas, minimapCanvas));
 
-      await asyncProcess(
+      await asyncProcess<{ title: string; fn: () => void }>(
         [
-          () => objStore.initStatic(staticData),
-          () => {
-            if (saveGameData) {
-              objStore.world = saveGameData.world;
-              const gameObjects = new GameDataLoader().initFromRaw(saveGameData);
-              objStore.bulkSet(Object.values(gameObjects));
-            } else {
-              let tries = 0;
-              do {
+          { title: "initStaticData", fn: () => objStore.initStatic(staticData) },
+          {
+            title: "initSaveOrCreateWorld",
+            fn: () => {
+              if (saveGameData) {
+                objStore.world = saveGameData.world;
+                const gameObjects = new GameDataLoader().initFromRaw(saveGameData);
+                objStore.bulkSet(Object.values(gameObjects));
+              } else {
                 try {
                   const gameData = createWorld(size as WorldSize);
                   objStore.world = gameData.world;
                   objStore.bulkSet(gameData.objects);
 
-                  break;
+                  new GameManager((step) => (this.loadTitle = `Init ${step}`)).startTurn();
                 } catch (e) {
-                  tries++;
-                  if (tries >= 5) throw e;
-
                   // eslint-disable-next-line
-                  console.warn("Failed to create world, retrying...", e);
+                  console.error("Failed to create world, retrying...", e);
+                  //document.location.reload();
                 }
-              } while (tries < 5);
-            }
-            objStore.ready = true;
+              }
+              objStore.ready = true;
+            },
           },
-          () => (objStore.getClassGameObjects("player") as Player[]).forEach((p) => p.warmUp()),
-          () => (objStore.getClassGameObjects("tile") as Tile[]).forEach((t) => t.warmUp()),
-          () => (objStore.getClassGameObjects("unit") as Unit[]).forEach((u) => u.warmUp()),
-          () => useEncyclopediaStore().init(),
-          () => settings.init(),
+          {
+            title: "initPlayers",
+            fn: () =>
+              (objStore.getClassGameObjects("player") as Player[]).forEach((p) => p.warmUp()),
+          },
+          {
+            title: "initTiles",
+            fn: () => (objStore.getClassGameObjects("tile") as Tile[]).forEach((t) => t.warmUp()),
+          },
+          {
+            title: "initUnits",
+            fn: () => (objStore.getClassGameObjects("unit") as Unit[]).forEach((u) => u.warmUp()),
+          },
+          { title: "initEncyclopedia", fn: () => useEncyclopediaStore().init() },
+          { title: "initSettings", fn: () => settings.init() },
           ...this.engineService.initOrder(),
-          () => useGovernmentTabStore().init(),
-          () => useCultureTabStore().init(),
-          () => useResearchTabStore().init(),
-          () => useReligionTabStore().init(),
-          () => useDiplomacyTabStore().init(),
-          () => useEconomyTabStore().init(),
-          () => useUnitsTabStore().init(),
-          () => useCitiesTabStore().init(),
-          () => useTradeTabStore().init(),
+          { title: "initGovernment", fn: () => useGovernmentTabStore().init() },
+          { title: "initCulture", fn: () => useCultureTabStore().init() },
+          { title: "initResearch", fn: () => useResearchTabStore().init() },
+          { title: "initReligion", fn: () => useReligionTabStore().init() },
+          { title: "initDiplomacy", fn: () => useDiplomacyTabStore().init() },
+          { title: "initEconomy", fn: () => useEconomyTabStore().init() },
+          { title: "initUnits", fn: () => useUnitsTabStore().init() },
+          { title: "initCities", fn: () => useCitiesTabStore().init() },
+          { title: "initTrade", fn: () => useTradeTabStore().init() },
         ],
-        (fn): void => fn(),
+        (process): void => {
+          this.loadTitle = process.title;
+          process.fn();
+        },
         (progress): void => {
           this.loadPercent = typeof progress === "number" ? progress + "%" : "Ready!";
         },

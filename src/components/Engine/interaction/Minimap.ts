@@ -69,7 +69,10 @@ export class Minimap {
       this._scene,
     );
     this._camera.mode = Camera.ORTHOGRAPHIC_CAMERA;
-    this._contextOverlay.attachToCamera(this._camera);
+    this._contextOverlay.attachToCamera(this._camera, {
+      enableHighlights: false,
+      alwaysEnable: true,
+    });
 
     // Initial camera bounds (full world)
     this._applyCameraBounds(getFullWorldOrthoBounds(this._size));
@@ -88,12 +91,14 @@ export class Minimap {
     this._camera.orthoTop = bounds.top;
   }
 
-  private triggerCapture() {
-    if (this._captureTimeout) return;
+  public triggerCapture() {
+    if (this._captureTimeout) {
+      clearTimeout(this._captureTimeout);
+    }
     this._captureTimeout = setTimeout(() => {
       this.capture();
       this._captureTimeout = null;
-    }, 150); // Delay by 150ms to catch "bursts" of movement
+    }, 150); // Delay by 150ms to catch "bursts" of movement and ensure other async updates (like mask texture) have finished
   }
 
   public capture(): void {

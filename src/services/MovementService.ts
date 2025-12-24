@@ -82,6 +82,9 @@ export class MovementService {
     fromTile: Tile,
     context: MovementContext,
   ): NextState | null {
+    // Centralized Rule: Cannot path into unknown territory on a future turn
+    if (currentTurn > 0 && !context.known.has(toTile.key)) return null;
+
     const moveCost = this.cost(toTile, fromTile, context);
     if (moveCost === null) return null;
 
@@ -90,12 +93,11 @@ export class MovementService {
     let numericCost: number;
 
     if (moveCost === "turnEnd") {
+      if (currentMoves <= 0) return null;
       nextMovesRemaining = 0;
       numericCost = currentMoves;
-    } else if (moveCost > currentMoves) {
+    } else if (moveCost > currentMoves && currentMoves <= 0) {
       nextTurn++;
-      // Centralized Rule: Cannot path into unknown territory on a future turn
-      if (currentTurn > 0 && !context.known.has(toTile.key)) return null;
       nextMovesRemaining = roundToTenth(this.maxMoves.value - moveCost);
       numericCost = moveCost;
     } else {
@@ -104,7 +106,7 @@ export class MovementService {
     }
 
     // Unified Turn-End friendly unit check (cannot end turn on them)
-    const endsTurn = moveCost === "turnEnd" || nextMovesRemaining === 0 || nextTurn > currentTurn;
+    const endsTurn = moveCost === "turnEnd" || nextMovesRemaining <= 0 || nextTurn > currentTurn;
     if (endsTurn && context.friendlyUnitTiles.has(toTile.key)) return null;
 
     return {
@@ -208,7 +210,13 @@ export class MovementService {
       totalSpent += reachableSteps[i].cost;
     }
 
+    // Remove from orig tile, add to new tiles
+    this.unit.tile.value.unitKeys.value = this.unit.tile.value.unitKeys.value.filter(
+      (key) => key !== this.unit.key,
+    );
     this.unit.tileKey.value = reachableSteps[actualStepCount - 1].tile.key;
+    this.unit.tile.value.unitKeys.value.push(this.unit.key);
+
     this.moves.value = Math.max(0, roundToTenth(this.moves.value - totalSpent));
 
     this.path = this.path.slice(actualStepCount);

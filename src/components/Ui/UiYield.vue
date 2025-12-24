@@ -134,7 +134,7 @@ const progressBg = computed(() => {
 
     <v-progress-linear
       v-if="opts?.showProgress && y.max"
-      :model-value="(y.amount / y.max) * 50"
+      :model-value="(y.amount / y.max) * 100"
       :color="progressBg"
       bg-opacity="1"
       height="18"
@@ -147,7 +147,7 @@ const progressBg = computed(() => {
             <div class="d-flex align-center ga-1 px-2 h-100" v-bind="tip">
               <v-icon :icon="icon.icon.iconName" :color="icon.color" size="x-small" />
               <span class="text-caption font-weight-bold" style="text-shadow: 0 0 2px black">
-                {{ amount(y) }} / {{ y.max }} = {{ (y.amount / y.max) * 50 }}
+                {{ amount(y) }} / {{ y.max }}
               </span>
               <v-spacer />
               <div v-if="opts?.showName" class="text-caption opacity-70">{{ type.name }}</div>

@@ -1,143 +1,178 @@
 import {
-  Color3,
+  CreateGreasedLine,
   Curve3,
-  LinesMesh,
-  MeshBuilder,
+  GreasedLineMesh,
   Scene,
-  StandardMaterial,
   TransformNode,
   Vector3,
 } from "@babylonjs/core";
+import { BaseOverlay } from "./BaseOverlay";
 import { Tile } from "@/objects/game/Tile";
-import type { Coords } from "@/helpers/mapTools";
-import { IOverlay } from "@/components/Engine/overlays/IOverlay";
-import { getOverlayAlpha, OVERLAY_COLORS } from "@/components/Engine/overlays/OverlayConstants";
+import {
+  EngineLayers,
+  EngineOverlayColors,
+  EngineOverlaySettings,
+} from "@/components/Engine/EngineStyles";
+import { Coords } from "@/helpers/mapTools";
+import { getMapBounds } from "@/helpers/math";
 
 export type PathStyle = {
   colorId: string;
   alpha: number;
-  dashed: boolean;
+  type: "line" | "dash" | "dotted";
+  curvature: number;
   width: number;
 };
+export type PathPayload = { items: { tile: Tile }[]; style: PathStyle };
 
-export type PathPayload = {
-  items: { tile: Tile }[];
-  style: PathStyle;
-};
-
-export class PathOverlay implements IOverlay<PathPayload> {
-  private readonly scene: Scene;
-  private readonly size: Coords;
+/**
+ * PathOverlay handles drawing tactical lines (paths) with rounded corners in the 'Guidance' group.
+ * Supports dashed/dotted styles via GreasedLine.
+ */
+export class PathOverlay extends BaseOverlay<PathPayload> {
   private readonly root: TransformNode;
-  private readonly paths: Map<string, { mesh: LinesMesh; style: PathStyle }> = new Map();
-  private readonly materialCache: Map<string, StandardMaterial> = new Map();
+  private readonly pathMeshes = new Map<string, GreasedLineMesh>();
 
-  constructor(scene: Scene, size: Coords) {
-    this.scene = scene;
-    this.size = size;
-    this.root = new TransformNode("pathOverlayRoot", scene);
+  constructor(
+    private readonly scene: Scene,
+    private readonly size: Coords,
+  ) {
+    super();
+    this.root = new TransformNode("pathRoot", this.scene);
   }
 
-  private getMaterial(colorId: string): StandardMaterial {
-    if (!this.materialCache.has(colorId)) {
-      const material = new StandardMaterial(`pathMat_${colorId}`, this.scene);
-      material.emissiveColor = OVERLAY_COLORS[colorId] || Color3.White();
-      material.disableLighting = true;
-      this.materialCache.set(colorId, material);
-    }
-    return this.materialCache.get(colorId)!;
+  protected onLayerRemoved(layerId: string): void {
+    this.disposeMesh(layerId);
   }
 
-  setLayer(id: string, payload: PathPayload | null): this {
-    const existing = this.paths.get(id);
-    if (existing) {
-      existing.mesh.dispose();
-      this.paths.delete(id);
+  protected onVisibilityChanged(layerId: string, isEnabled: boolean): void {
+    this.pathMeshes.get(layerId)?.setEnabled(isEnabled);
+  }
+
+  private disposeMesh(layerId: string): void {
+    const mesh = this.pathMeshes.get(layerId);
+    if (mesh) {
+      mesh.dispose();
+      this.pathMeshes.delete(layerId);
     }
+  }
 
-    if (!payload || payload.items.length < 2) return this;
+  protected onRefresh(): void {
+    const { worldWidth } = getMapBounds(this.size);
 
-    const points: Vector3[] = [];
-    const wrapWidth = Math.sqrt(3) * this.size.x;
-    let referenceX = 0;
+    for (const [layerId, payload] of this.layers) {
+      if (payload.items.length < 2) {
+        this.disposeMesh(layerId);
+        continue;
+      }
 
-    for (let i = 0; i < payload.items.length; i++) {
-      const tile = payload.items[i].tile;
-      const pos = tile.worldPosition.clone();
+      // Calculate path points with world wrapping support
+      const points = payload.items.map((item, index) => {
+        const worldPos = item.tile.worldPosition.clone();
+        worldPos.y = 0; // Overlays are always at y0
 
-      // Floating slightly above ground
-      pos.y += 0.1;
-
-      if (points.length > 0) {
-        const dx = pos.x - referenceX;
-        if (Math.abs(dx) > wrapWidth / 2) {
-          pos.x -= Math.sign(dx) * wrapWidth;
+        if (index > 0) {
+          const prevPos = payload.items[index - 1].tile.worldPosition;
+          // Shortest path wrapping logic for cylindrical maps
+          if (Math.abs(worldPos.x - prevPos.x) > worldWidth / 2) {
+            if (worldPos.x > prevPos.x) worldPos.x -= worldWidth;
+            else worldPos.x += worldWidth;
+          }
         }
+        return worldPos.add(new Vector3(0, EngineOverlaySettings.pathHeight, 0));
+      });
+
+      const linePoints = this.getRoundedPoints(points, payload.style.curvature);
+
+      let totalLength = 0;
+      for (let i = 0; i < linePoints.length - 1; i++) {
+        totalLength += Vector3.Distance(linePoints[i], linePoints[i + 1]);
       }
-      referenceX = pos.x;
-      points.push(pos);
-    }
 
-    const linePoints =
-      points.length > 2 ? Curve3.CreateCatmullRomSpline(points, 10).getPoints() : points;
+      // Recreate mesh to handle varying point counts.
+      // GreasedLineMesh.setPoints does not resize underlying buffers, which can cause WebGL warnings
+      // when the number of points increases (e.g., transitioning from straight to curved path).
+      this.disposeMesh(layerId);
+      const mesh = CreateGreasedLine(
+        `path_${layerId}`,
+        { points: linePoints },
+        {
+          width: payload.style.width * EngineOverlaySettings.pathWidthFactor,
+          color: EngineOverlayColors[payload.style.colorId as keyof typeof EngineOverlayColors],
+          useDash: payload.style.type !== "line",
+          dashCount: totalLength * (payload.style.type === "dotted" ? 8 : 2),
+          dashRatio: 0.5,
+          visibility: payload.style.alpha,
+        },
+        this.scene,
+      ) as GreasedLineMesh;
 
-    const mesh = payload.style.dashed
-      ? MeshBuilder.CreateDashedLines(
-          `path_${id}`,
-          {
-            points: linePoints,
-            dashSize: 0.5,
-            gapSize: 0.2,
-            updatable: false,
-          },
-          this.scene,
-        )
-      : MeshBuilder.CreateLines(
-          `path_${id}`,
-          {
-            points: linePoints,
-            updatable: false,
-          },
-          this.scene,
-        );
+      mesh.parent = this.root;
+      mesh.renderingGroupId = EngineLayers.guidance.group;
+      if (mesh.material) {
+        mesh.material.zOffset = EngineLayers.guidance.offset;
+      }
+      mesh.setEnabled(this.layerVisibility.get(layerId) ?? true);
 
-    mesh.parent = this.root;
-    mesh.isPickable = false;
-    mesh.renderingGroupId = 5;
-
-    const mat = this.getMaterial(payload.style.colorId);
-    mesh.material = mat;
-    // Note: alpha is shared across paths using the same material if we use mat.alpha.
-    // However, setScaling updates all path materials' alpha anyway.
-    // If different paths need different alphas, we'd need separate materials or use vertex colors.
-    // For now, keeping it simple as per KISS.
-    mat.alpha = payload.style.alpha;
-
-    this.paths.set(id, { mesh, style: payload.style });
-
-    return this;
-  }
-
-  showLayer(id: string, isEnabled: boolean): void {
-    const path = this.paths.get(id);
-    if (path) {
-      path.mesh.setEnabled(isEnabled);
+      this.pathMeshes.set(layerId, mesh);
     }
   }
 
-  setScaling(scale: number): void {
-    const alpha = getOverlayAlpha(scale);
-    for (const path of this.paths.values()) {
-      if (path.mesh.material) {
-        path.mesh.material.alpha = alpha;
+  private getRoundedPoints(points: Vector3[], radius: number): Vector3[] {
+    const pushPoint = (p: Vector3) => {
+      if (result.length === 0 || Vector3.Distance(result[result.length - 1], p) > 0.01) {
+        result.push(p);
       }
+    };
+
+    const uniquePoints = points.filter(
+      (p, i) => i === 0 || Vector3.Distance(p, points[i - 1]) > 0.01,
+    );
+    if (uniquePoints.length < 3 || radius <= 0) {
+      return uniquePoints;
     }
+
+    const result: Vector3[] = [];
+    pushPoint(uniquePoints[0]);
+
+    for (let i = 1; i < uniquePoints.length - 1; i++) {
+      const pPrev = uniquePoints[i - 1];
+      const pCurr = uniquePoints[i];
+      const pNext = uniquePoints[i + 1];
+
+      const v1 = pPrev.subtract(pCurr);
+      const v2 = pNext.subtract(pCurr);
+      const len1 = v1.length();
+      const len2 = v2.length();
+
+      // Effective radius cannot be more than half of either adjacent segment
+      const r = Math.min(radius, len1 / 2, len2 / 2);
+
+      if (r < 0.01) {
+        pushPoint(pCurr);
+        continue;
+      }
+
+      const pStart = pCurr.add(v1.normalize().scaleInPlace(r));
+      const pEnd = pCurr.add(v2.normalize().scaleInPlace(r));
+
+      const cornerPoints = Curve3.CreateQuadraticBezier(
+        pStart,
+        pCurr,
+        pEnd,
+        EngineOverlaySettings.pathSmoothingSteps,
+      ).getPoints();
+
+      cornerPoints.forEach(pushPoint);
+      pushPoint(pEnd);
+    }
+
+    pushPoint(uniquePoints[uniquePoints.length - 1]);
+    return result;
   }
 
   dispose(): void {
     this.root.dispose();
-    this.paths.clear();
-    this.materialCache.forEach((mat) => mat.dispose());
-    this.materialCache.clear();
+    this.pathMeshes.clear();
   }
 }

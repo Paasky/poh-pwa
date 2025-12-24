@@ -567,7 +567,7 @@ export default getIcon;
 // Helper: expose the set of Font Awesome icons used by all mappings
 export function getAllIcons(): IconDefinition[] {
   const set = new Set<IconDefinition>();
-  const collect = (obj: Record<string, any>) => {
+  const collect = (obj: Record<string, ObjectIcon>) => {
     for (const val of Object.values(obj)) {
       if (val && typeof val === "object" && "icon" in val) {
         set.add(val.icon as IconDefinition);

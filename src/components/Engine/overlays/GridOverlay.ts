@@ -1,44 +1,43 @@
 import type { Scene } from "@babylonjs/core";
 import {
   type AbstractMesh,
-  Color3,
   MeshBuilder,
   StandardMaterial,
   TransformNode,
   Vector3,
 } from "@babylonjs/core";
 import { Tile } from "@/objects/game/Tile";
-import type { GameKey } from "@/objects/game/_GameObject";
-import type { Coords } from "@/helpers/mapTools";
+import { GameKey } from "@/objects/game/_GameObject";
+import { Coords } from "@/helpers/mapTools";
 import { tileCenter } from "@/helpers/math";
-import { watch } from "vue";
+import {
+  EngineAlpha,
+  EngineColors,
+  EngineLayers,
+  toColor3,
+} from "@/components/Engine/EngineStyles";
 import { useSettingsStore } from "@/stores/settingsStore";
+import { BaseOverlay } from "./BaseOverlay";
 
 // ---- Tuning constants (adjust freely) ----
-export const GRID_COLOR = new Color3(1, 1, 1); // white
-export const GRID_ALPHA = 0.5; // 0..1
 export const GRID_CHUNK_SIZE = 32; // tiles per chunk (x and y)
 // Note: WebGL line width is platform-limited; kept for future shader-based thickness
 export const GRID_LINE_WIDTH = 1;
 
 /** Chunked hex grid overlay using Babylon LineSystem meshes. */
-export class GridOverlay {
-  private scene: Scene;
+export class GridOverlay extends BaseOverlay<void> {
   private root: TransformNode;
   private chunks: AbstractMesh[] = [];
 
-  private size: Coords;
-  private tilesByKey: Record<GameKey, Tile>;
-  private totalLinesCount = 0;
-
-  constructor(scene: Scene, size: Coords, tilesByKey: Record<GameKey, Tile>) {
-    this.scene = scene;
-    this.size = size;
-    this.tilesByKey = tilesByKey;
+  constructor(
+    private readonly scene: Scene,
+    private readonly size: Coords,
+    private readonly tilesByKey: Record<GameKey, Tile>,
+  ) {
+    super();
     this.root = new TransformNode("gridOverlayRoot", scene);
 
     // Build chunks covering the whole map
-    this.totalLinesCount = 0;
     for (let y0 = 0; y0 < this.size.y; y0 += GRID_CHUNK_SIZE) {
       for (let x0 = 0; x0 < this.size.x; x0 += GRID_CHUNK_SIZE) {
         const x1 = Math.min(this.size.x, x0 + GRID_CHUNK_SIZE);
@@ -47,16 +46,19 @@ export class GridOverlay {
       }
     }
 
-    const settings = useSettingsStore();
-    this.root.setEnabled(settings.engineSettings.showGrid);
-    watch(
-      () => settings.engineSettings.showGrid,
-      (visible) => this.root.setEnabled(visible),
-    );
+    this.showLayer("grid", useSettingsStore().engineSettings.showGrid);
   }
 
-  dispose(): void {
-    for (const c of this.chunks) c.dispose();
+  protected onVisibilityChanged(_layerId: string, isEnabled: boolean): void {
+    this.root.setEnabled(isEnabled);
+  }
+
+  protected onRefresh(): void {
+    // Static grid doesn't need batched refresh logic
+  }
+
+  public dispose(): void {
+    for (const chunk of this.chunks) chunk.dispose();
     this.root.dispose();
     this.chunks = [];
   }
@@ -94,22 +96,21 @@ export class GridOverlay {
     );
 
     // Material for consistent color/alpha and fog behavior
-    const mat = new StandardMaterial(`gridMat_${x0}_${y0}`, this.scene);
-    mat.disableLighting = true; // unlit overlay look
-    mat.emissiveColor = GRID_COLOR.clone();
-    mat.alpha = GRID_ALPHA;
+    const material = new StandardMaterial(`gridMat_${x0}_${y0}`, this.scene);
+    material.disableLighting = true; // unlit overlay look
+    material.emissiveColor = toColor3(EngineColors.grid);
+    material.alpha = EngineAlpha.grid;
     // Draw last without writing depth so it appears above terrain/features
-    mat.disableDepthWrite = true;
-    lineSystem.material = mat;
+    material.disableDepthWrite = true;
+    material.zOffset = EngineLayers.grid.offset;
+    lineSystem.renderingGroupId = EngineLayers.grid.group;
+    lineSystem.material = material;
 
     lineSystem.isPickable = false;
     lineSystem.applyFog = true;
-    // Rendering layer for overlays
-    lineSystem.renderingGroupId = 1; // 0: world, 1: grid, 2: static, 3: context, 4: dynamic, 5: current
 
     lineSystem.parent = this.root;
     this.chunks.push(lineSystem);
-    this.totalLinesCount += lines.length;
   }
 
   /**
@@ -122,9 +123,9 @@ export class GridOverlay {
     const scale = Math.max(0.5, Math.min(2.0, expectedScale));
     // Map 0.5..2.0 -> alpha 0.35..0.9 linearly
     const alpha = 0.35 + ((scale - 0.5) / 1.5) * (0.9 - 0.35);
-    for (const m of this.chunks) {
-      const mat = m.material as StandardMaterial | undefined;
-      if (mat) mat.alpha = alpha;
+    for (const chunk of this.chunks) {
+      const material = chunk.material as StandardMaterial | undefined;
+      if (material) material.alpha = alpha;
     }
   }
 

@@ -2,8 +2,8 @@ export async function asyncProcess<T>(
   objs: readonly T[],
   process: (obj: T, index: number) => void,
   onProgress?: (percent: number | true) => void,
-  batchSize: number = 100,
-  yieldEveryMs: number = 10,
+  batchSize: number = 1,
+  yieldEveryMs: number = 1,
 ): Promise<void> {
   const total = objs.length;
   let i = 0;

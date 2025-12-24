@@ -151,9 +151,9 @@ export class Tile extends GameObject {
    * Computed
    */
   selectable = computed(() => {
-    const selectable = this.units.value.filter(
+    const selectable: (City | Unit)[] = this.units.value.filter(
       (u) => u.playerKey.value === useObjectsStore().currentPlayer.key,
-    ) as (City | Unit)[];
+    );
     if (this.cityKey) selectable.push(this.city.value!);
     return selectable;
   });

@@ -14,6 +14,7 @@ import { pointsInRing } from "@/factories/TerrainMeshBuilder/pointsInRing";
 import { hexTrianglesFromPoints } from "@/factories/TerrainMeshBuilder/hexTrianglesFromPoints";
 import { colorOf, terrainColorMap } from "@/assets/materials/terrains";
 import { Color4, Mesh, Scene, TransformNode } from "@babylonjs/core";
+import { EngineLayers } from "@/components/Engine/EngineStyles";
 import { avg, clamp, tileCenter } from "@/helpers/math";
 import { buildHexGpuBuffer } from "@/factories/TerrainMeshBuilder/buildHexGpuBuffer";
 import {
@@ -103,12 +104,14 @@ export class TerrainMeshBuilder {
 
     // Step 3: Create the mesh
     this.mesh = meshFromWeld(this.scene, this.root, welded, opts?.lowDetail ?? false);
+    this.mesh.renderingGroupId = EngineLayers.terrain.group;
 
     // Simple world-sized water plane to denote global sea level
     if (opts?.lowDetail) return this;
 
     const water = createWaterMesh(this.scene, this.size, this.root);
     this.waterMesh = water.mesh;
+    this.waterMesh.renderingGroupId = EngineLayers.water.group;
     this.waterDispose = water.dispose;
 
     return this;

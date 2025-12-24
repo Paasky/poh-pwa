@@ -5,6 +5,7 @@ import type { Tile } from "@/objects/game/Tile";
 import { Matrix, Mesh, Quaternion, Scene, TransformNode, Vector3 } from "@babylonjs/core";
 import { FeatureGroup, featureMeshMap } from "@/assets/meshes/features";
 import { buildRandomPointsInHex } from "@/helpers/hexPointSampling";
+import { EngineLayers } from "@/components/Engine/EngineStyles";
 
 export default class FeatureInstancer {
   scene: Scene;
@@ -27,6 +28,7 @@ export default class FeatureInstancer {
       mesh.setEnabled(false);
       mesh.parent = this.root;
       mesh.isPickable = false;
+      mesh.renderingGroupId = EngineLayers.features.group;
 
       this.lib[featureGroup] = {
         mesh,

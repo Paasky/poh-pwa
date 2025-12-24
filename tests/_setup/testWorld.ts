@@ -226,6 +226,21 @@ export function createTestWorld() {
   const gameObjects = loader.initFromRaw(gameData);
   objectsStore.bulkSet(Object.values(gameObjects));
 
+  // Manually sync unit tile relations because loader doesn't know about our new Unit watch logic during load
+  Object.values(gameObjects).forEach((obj: any) => {
+    if (obj.class === "unit") {
+      const unit = obj as Unit;
+      try {
+        const tile = objectsStore.get(unit.tileKey.value) as Tile;
+        if (!tile.unitKeys.value.includes(unit.key)) {
+          tile.unitKeys.value.push(unit.key);
+        }
+      } catch (e) {
+        // Ignore
+      }
+    }
+  });
+
   // Warm up
   Object.values(gameObjects).forEach((obj: any) => {
     if (typeof obj.warmUp === "function") obj.warmUp();

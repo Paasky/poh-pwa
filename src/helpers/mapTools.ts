@@ -9,6 +9,43 @@ export type CompassSquare = "n" | "ne" | "e" | "se" | "s" | "sw" | "w" | "nw";
 export type Coords = { x: number; y: number };
 export type NeighborMethod = "chebyshev" | "manhattan" | "hex";
 
+export function crawlTiles<TContext>(
+  start: Tile,
+  isValid: (tile: Tile, fromTile: Tile) => boolean,
+  processTile?: (tile: Tile, fromTile: Tile, context?: TContext) => TContext | undefined,
+  startContext?: TContext,
+  seenTiles: Set<GameKey> = new Set(),
+  validTiles: Set<GameKey> = new Set(),
+): Set<GameKey> {
+  // Check if we've seen it before
+  if (seenTiles.has(start.key)) {
+    return validTiles;
+  }
+  seenTiles.add(start.key);
+
+  for (const neighbor of start.neighborTiles) {
+    // Check if we've seen it before
+    if (seenTiles.has(neighbor.key)) {
+      continue;
+    }
+    seenTiles.add(neighbor.key);
+
+    // Check if it's valid
+    if (!isValid(neighbor, start)) {
+      continue;
+    }
+    validTiles.add(neighbor.key);
+
+    // Process tile if provided
+    const tileContext = processTile ? processTile(neighbor, start, startContext) : undefined;
+
+    // Recursively crawl neighbors
+    crawlTiles(neighbor, isValid, processTile, tileContext, seenTiles, validTiles);
+  }
+
+  return validTiles;
+}
+
 export function getCoordsFromTileKey(tileKey: GameKey): Coords {
   // convert tile key (tile:x{num},y{num}) -> {x: num, y: num} and return
   const match = tileKey.match(/tile:x(-?\d+),y(-?\d+)/);
@@ -279,13 +316,13 @@ export function tileHeight(tile: Tile, forLogic: boolean = false): number {
     return forLogic ? waterLevel : getRandom([-0.38, -0.4, -0.42]);
   }
   if (tile.terrain.key === "terrainType:lake" || tile.terrain.key === "terrainType:majorRiver") {
-    return forLogic ? waterLevel : getRandom([-0.4]);
+    return forLogic ? waterLevel : -0.4;
   }
   if (tile.elevation.key === "elevationType:hill") {
-    return forLogic ? 0.25 : getRandom([0.3, 0.35, 0.4]);
+    return forLogic ? 0.45 : getRandom([0.4, 0.45, 0.5]);
   }
   if (tile.elevation.key === "elevationType:mountain") {
-    return forLogic ? 0.8 : getRandom([0.6, 0.8, 1, 1.2]);
+    return forLogic ? 0.9 : getRandom([0.6, 0.8, 1, 1.2]);
   }
   if (tile.elevation.key === "elevationType:snowMountain") {
     return forLogic ? 1.6 : getRandom([1.4, 1.6, 1.8, 2]);

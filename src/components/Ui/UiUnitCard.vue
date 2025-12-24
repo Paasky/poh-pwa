@@ -1,30 +1,14 @@
 <script setup lang="ts">
-import { computed } from "vue";
 import { Unit } from "@/objects/game/Unit";
 import { useCurrentContext } from "@/composables/useCurrentContext";
 import UiUnitIcon from "@/components/Ui/UiUnitIcon.vue";
 import UiYields from "@/components/Ui/UiYields.vue";
 import UiButton from "@/components/Ui/UiButton.vue";
-import { Yields } from "@/objects/yield";
+import UiTypeChip from "@/components/Ui/UiTypeChip.vue";
+import UiGameObjChip from "@/components/Ui/UiGameObjChip.vue";
 
-const props = defineProps<{
-  unit: Unit;
-}>();
-
+const unit = defineModel<Unit>({ required: true });
 const context = useCurrentContext();
-const unitObj = props.unit;
-
-const combatStats = computed(() => {
-  return new Yields(
-    unitObj.design.value.yields
-      .all()
-      .filter((y) =>
-        ["yieldType:strength", "yieldType:range", "yieldType:attack", "yieldType:defense"].includes(
-          y.type,
-        ),
-      ),
-  );
-});
 </script>
 
 <template>
@@ -33,7 +17,7 @@ const combatStats = computed(() => {
       <UiUnitIcon :unit="unit" :size="48" />
       <div class="d-flex flex-column flex-grow-1" style="min-width: 0">
         <v-text-field
-          v-model="unitObj.customName.value"
+          v-model="unit.customName.value"
           :placeholder="unit.design.value.name"
           variant="plain"
           density="compact"
@@ -44,7 +28,11 @@ const combatStats = computed(() => {
             <v-icon icon="fa-pen" size="x-small" class="opacity-50" />
           </template>
         </v-text-field>
-        <span class="text-caption opacity-70 px-1">{{ unit.player.value.name }}</span>
+        <div class="d-flex ga-1">
+          <UiTypeChip :type="unit.design.value.platform" />
+          <UiTypeChip :type="unit.design.value.equipment" />
+          <UiGameObjChip :obj="unit.player.value" />
+        </div>
       </div>
     </div>
 
@@ -56,7 +44,7 @@ const combatStats = computed(() => {
 
     <!-- Stats section -->
     <div class="d-flex ga-1 justify-end">
-      <UiYields :yields="combatStats" :opts="{ posLumpIsNeutral: true }" />
+      <UiYields :yields="unit.design.value.yields" :opts="{ posLumpIsNeutral: true }" />
     </div>
 
     <div class="d-flex ga-2 mt-1">

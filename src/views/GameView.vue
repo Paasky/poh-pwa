@@ -89,7 +89,8 @@ function onBeforeUnload(e: BeforeUnloadEvent) {
     >
       <div>
         <img src="/book.gif" alt="Book" width="480" height="480" decoding="async" />
-        <h1 class="opacity-50">Loading the Pages of History… {{ app.loadPercent }}</h1>
+        <h1 class="opacity-50">Loading the Pages of History…</h1>
+        <h2 class="opacity-50" v-if="app.loadTitle">{{ app.loadTitle }} - {{ app.loadPercent }}</h2>
       </div>
     </v-sheet>
   </Transition>
@@ -146,11 +147,11 @@ function onBeforeUnload(e: BeforeUnloadEvent) {
       class="d-flex position-absolute bottom-0 left-0 rounded-tr-lg pt-1 pr-1"
     >
       <Minimap />
+      <TileDetails v-if="app.loaded" />
       <UiUnitCard
         v-if="context.object.value?.class === 'unit'"
-        :unit="context.object.value as unknown as Unit"
+        v-model="context.object.value as unknown as Unit"
       />
-      <TileDetails v-else-if="app.loaded" />
     </v-sheet>
 
     <!-- Bottom-right -->

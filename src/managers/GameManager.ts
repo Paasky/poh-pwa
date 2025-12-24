@@ -4,6 +4,7 @@ import { useEventStore } from "@/stores/eventStore";
 import { getRandom } from "@/helpers/arrayTools";
 import { Construction } from "@/objects/game/Construction";
 import { Player } from "@/objects/game/Player";
+import { asyncProcess } from "@/helpers/asyncProcess";
 
 export class GameManager {
   eventStore: ReturnType<typeof useEventStore>;
@@ -24,17 +25,15 @@ export class GameManager {
     };
   }
 
-  startTurn(): this {
+  async startTurn(): Promise<this> {
     const players = this.objStore.getClassGameObjects("player") as Player[];
-
-    // 1 per player + wonders/citizens/construction/units
     const stepCount = players.length + 4;
-    let step = 1;
+    let step = 0;
 
-    players.forEach((player) => {
+    await asyncProcess(players, (player) => {
+      step++;
       this.turnProgress(player.name, Math.round((step / stepCount) * 100));
       player.startTurn();
-      step++;
     });
 
     // Per Wonder type, Select one random winner to complete the wonder (if completed on the same turn in multiple cities)

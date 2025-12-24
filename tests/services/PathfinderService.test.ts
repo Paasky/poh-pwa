@@ -58,7 +58,7 @@ describe("PathfinderService", () => {
     expect(path.length).toBe(0);
   });
 
-  it("should correctly identify reachable tiles", () => {
+  it("should correctly identify reachable tiles with strict validation", () => {
     const unit = world.unit;
     unit.movement.moves.value = 2;
     const tiles = objectsStore.getTiles;
@@ -68,17 +68,65 @@ describe("PathfinderService", () => {
       visible: new Set(Object.keys(tiles) as GameKey[]),
     });
 
-    const reachable = pathfinder.getReachableTiles(unit, context);
+    const rangeData = pathfinder.getTilesInRange(unit, context);
 
     // Unit at (1,1), moves=2.
-    // (2,1) is hill (cost 1) -> reachable
-    // (3,1) is mountain (blocked) -> NOT reachable
-    // (1,2) is water (blocked) -> NOT reachable
+    // Expected range neighbors (based on createTestWorld):
+    // (1,0) River, (2,0) River, (2,1) Hill (cost 2), (0,1) Forest (cost 2)
+    // Plus distance-2 tiles reachable via these...
 
-    expect(reachable.has(Tile.getKey(1, 1))).toBe(false); // Start tile not in reachable
-    expect(reachable.has(Tile.getKey(2, 1))).toBe(true); // Hill
-    expect(reachable.has(Tile.getKey(3, 1))).toBe(false); // Mountain
-    expect(reachable.has(Tile.getKey(1, 2))).toBe(false); // Water
+    // Reachable tiles (cost !== null)
+    expect(rangeData.get(Tile.getKey(1, 0))?.cost).not.toBeNull(); // River
+    expect(rangeData.get(Tile.getKey(2, 0))?.cost).not.toBeNull(); // River
+    expect(rangeData.get(Tile.getKey(2, 1))?.cost).not.toBeNull(); // Hill
+
+    // Blocked tiles (cost === null)
+    expect(rangeData.get(Tile.getKey(1, 2))?.cost).toBeNull(); // Water
+    expect(rangeData.get(Tile.getKey(2, 2))?.cost).toBeNull(); // Sea
+    // expect(rangeData.get(Tile.getKey(3, 1))?.cost).toBeNull(); // Removed because it's now out of range
+
+    // Verify it includes blocked tiles
+    expect(rangeData.has(Tile.getKey(3, 1))).toBe(false);
+  });
+
+  it("should not include tiles that are beyond reach when unit ends turn exactly on a tile", () => {
+    const unit = world.unit;
+    const tiles = objectsStore.getTiles;
+
+    // Setup: Unit at (1,1) with 1 move.
+    // Neighbor (0,1) is made flat grass (cost 1).
+    const targetNeighbor = tiles[Tile.getKey(0, 1)];
+    targetNeighbor.elevation = objectsStore.getTypeObject("elevationType:flat");
+    targetNeighbor.feature.value = null;
+
+    unit.movement.moves.value = 1;
+
+    const context = createMovementContext({
+      known: new Set(Object.keys(tiles) as GameKey[]),
+    });
+
+    const rangeData = pathfinder.getTilesInRange(unit, context);
+
+    // (0,1) is reachable and should be in range
+    expect(rangeData.has(targetNeighbor.key)).toBe(true);
+
+    // (0,0) is a neighbor of (0,1) but NOT of (1,1).
+    // It is 2 steps away from (1,1). With only 1 move, it should NOT be in rangeData.
+    expect(rangeData.has(Tile.getKey(0, 0))).toBe(false);
+  });
+
+  it("should return no tiles in range if unit has 0 moves", () => {
+    const unit = world.unit;
+    unit.movement.moves.value = 0;
+    const tiles = objectsStore.getTiles;
+
+    const context = createMovementContext({
+      known: new Set(Object.keys(tiles) as GameKey[]),
+      visible: new Set(Object.keys(tiles) as GameKey[]),
+    });
+
+    const rangeData = pathfinder.getTilesInRange(unit, context);
+    expect(rangeData.size).toBe(0); // Should be empty even if neighbors are rivers
   });
 
   it("should find path through multiple turns", () => {
@@ -134,7 +182,7 @@ describe("PathfinderService", () => {
     expect(path[0].tile.key).toBe(targetTile.key);
   });
 
-  it("should find reachable tiles more than 1 tile away when moves > 1", () => {
+  it("should find tiles in range more than 1 tile away when moves > 1", () => {
     const unit = world.unit as Unit;
     unit.movement.moves.value = 4; // Give 4 moves
     const tiles = objectsStore.getTiles;
@@ -144,15 +192,15 @@ describe("PathfinderService", () => {
       visible: new Set(Object.keys(tiles) as GameKey[]),
     });
 
-    const reachable = pathfinder.getReachableTiles(unit, context);
+    const rangeData = pathfinder.getTilesInRange(unit, context);
 
     // From (1,1), (3,0) is 2 steps away (via (2,1) Hill or (2,0) Flat)
     // Path: (1,1) -> (2,1) [cost 2] -> (3,0) [cost 1]. Total 3 moves.
-    expect(reachable.has(Tile.getKey(3, 0))).toBe(true);
+    expect(rangeData.has(Tile.getKey(3, 0))).toBe(true);
 
     // (4,0) is 3 steps away from (1,1)
     // (1,1) -> (2,1) -> (3,0) -> (4,0). Total 4 moves.
-    expect(reachable.has(Tile.getKey(4, 0))).toBe(true);
+    expect(rangeData.has(Tile.getKey(4, 0))).toBe(true);
   });
 
   it("should be blocked if turn would end on a friendly unit", () => {
@@ -263,12 +311,12 @@ describe("PathfinderService", () => {
     expect(path[0].isTurnEnd).toBe(true);
     expect(path[0].turn).toBe(0);
 
-    // 2. Single step NOT reachable this turn (ends turn)
+    // 2. Single step reachable this turn via overshoot (ends turn)
     unit.movement.moves.value = 1;
     path = pathfinder.findPath(unit, t21, context);
     expect(path.length).toBe(1);
     expect(path[0].isTurnEnd).toBe(true);
-    expect(path[0].turn).toBe(1); // It takes another turn to arrive
+    expect(path[0].turn).toBe(0); // Arrives this turn via overshoot
 
     // 3. Two steps, both reachable this turn
     unit.movement.moves.value = 10;
@@ -444,7 +492,7 @@ describe("PathfinderService", () => {
     expect(lastStep.movesRemaining).toBe(0);
   });
 
-  it("should include turn-ending moves in reachable tiles even if cost > movesRemaining", () => {
+  it("should include turn-ending moves in range even if cost > movesRemaining", () => {
     const unit = world.unit;
     unit.movement.moves.value = 2;
     // Give embarkation tech
@@ -464,9 +512,10 @@ describe("PathfinderService", () => {
       visible: new Set(Object.keys(tiles) as GameKey[]),
     });
 
-    const reachable = pathfinder.getReachableTiles(unit, context);
+    const rangeData = pathfinder.getTilesInRange(unit, context);
     // Since moveCost returns "turnEnd" and unit has some moves left, it IS reachable this turn
-    expect(reachable.has(waterTile.key)).toBe(true);
+    expect(rangeData.has(waterTile.key)).toBe(true);
+    expect(rangeData.get(waterTile.key)?.cost).toBe("turnEnd");
   });
 
   it("should choose a faster flat land path over a shorter but slower hill path", () => {

@@ -5,6 +5,7 @@ import { tileCenter, wrapExclusive } from "@/helpers/math";
 import { Coords } from "@/helpers/mapTools";
 import { Tile } from "@/objects/game/Tile";
 import type { GameKey } from "@/objects/game/_GameObject";
+import { EngineLayers } from "@/components/Engine/EngineStyles";
 import {
   Color3,
   Mesh,
@@ -205,7 +206,6 @@ export class LogicMeshBuilder {
     // Check it's a unit
     const object = current.object.value;
     if (object?.class !== "unit") return;
-    // @ts-expect-error class === unit, it's a Unit
     const unit = object as Unit;
 
     MovementManager.moveTo(unit, tile);
@@ -259,6 +259,7 @@ export class LogicMeshBuilder {
     mat.alpha = this.debugVisibleAlpha;
     mat.disableLighting = true;
     mesh.material = mat;
+    mesh.renderingGroupId = EngineLayers.terrain.group;
 
     return mesh;
   }

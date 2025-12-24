@@ -12,7 +12,7 @@ const baseMeshLib = {
 
 export function objectBaseMesh(scene: Scene, typeKey: TypeKey): Mesh {
   const mesh = baseMeshLib[typeKey] ? baseMeshLib[typeKey](scene) : baseNaMesh(scene, typeKey);
-  mesh.isVisible = false;
+  mesh.isVisible = true;
   mesh.isPickable = false;
   mesh.checkCollisions = false;
   mesh.receiveShadows = false;

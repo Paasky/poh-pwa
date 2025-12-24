@@ -29,7 +29,8 @@ const domainColor = computed(() => {
   return "gray";
 });
 
-const playerColor = computed(() => props.unit?.player.value.color || "#fff");
+const playerColor = "#fff";
+// const playerColor = computed(() => props.unit?.player.value.color);
 </script>
 
 <template>

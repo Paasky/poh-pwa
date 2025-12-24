@@ -9,6 +9,9 @@ import { Unit } from "@/objects/game/Unit";
 import { Construction } from "@/objects/game/Construction";
 import { tileCenter } from "@/helpers/math";
 import { Tile } from "@/objects/game/Tile";
+import { EngineLayers } from "@/components/Engine/EngineStyles";
+import { watch } from "vue";
+import { useObjectsStore } from "@/stores/objectStore";
 
 export class ObjectInstancer {
   scene: Scene;
@@ -72,6 +75,14 @@ export class ObjectInstancer {
 
     regUnit.instance.dispose();
     this.unitReg.delete(unitKey);
+
+    // Clean up unwatchers added in setUnit
+    const unit = useObjectsStore()._gameObjects[unitKey] as Unit;
+    if (unit) {
+      unit.unwatchers.forEach((u) => u());
+      unit.unwatchers = [];
+    }
+
     return this;
   }
 
@@ -145,9 +156,17 @@ export class ObjectInstancer {
       }
 
       const instance = this.getDesignMesh(unit.design.value).createInstance(unit.key);
+      instance.isVisible = true;
+      instance.renderingGroupId = EngineLayers.units.group;
       instance.position.copyFrom(this.getPos(unit.tile.value));
 
       this.unitReg.set(unit.key, { instance, designKey: unit.design.value.key });
+
+      unit.unwatchers.push(
+        watch(unit.tileKey, () => {
+          instance.position.copyFrom(this.getPos(unit.tile.value));
+        }),
+      );
     }
 
     return this;
@@ -157,7 +176,7 @@ export class ObjectInstancer {
     if (!this.designLib.has(design.key)) {
       const baseMesh = objectBaseMesh(this.scene, design.platform.key);
       baseMesh.parent = this.root;
-      baseMesh.renderingGroupId = 4; // Dynamic Objects
+      baseMesh.renderingGroupId = EngineLayers.units.group;
 
       this.designLib.set(design.key, baseMesh);
 
@@ -171,7 +190,7 @@ export class ObjectInstancer {
     if (!this.typeLib.has(type.key)) {
       const baseMesh = objectBaseMesh(this.scene, type.key);
       baseMesh.parent = this.root;
-      baseMesh.renderingGroupId = 2; // Static Objects
+      baseMesh.renderingGroupId = EngineLayers.constructions.group;
 
       this.typeLib.set(type.key, baseMesh);
 

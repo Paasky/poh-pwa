@@ -1,11 +1,10 @@
 import { ref } from "vue";
-import { Unit } from "@/objects/game/Unit";
 import { Tile } from "@/objects/game/Tile";
-import { City } from "@/objects/game/City";
+import { GameObject } from "@/objects/game/_GameObject";
 
 const actionMode = ref<"move" | undefined>(undefined);
 const hover = ref<Tile | undefined>(undefined);
-const object = ref<City | Unit | undefined>(undefined);
+const object = ref<GameObject | undefined>(undefined);
 const tile = ref<Tile | undefined>(undefined);
 
 // Context of what is the current Player doing right now

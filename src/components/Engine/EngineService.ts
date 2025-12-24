@@ -26,9 +26,11 @@ import { useCurrentContext } from "@/composables/useCurrentContext";
 import { PathfinderService } from "@/services/PathfinderService";
 import { useSettingsStore } from "@/stores/settingsStore";
 import { watch } from "vue";
+import { AdvancedDynamicTexture } from "@babylonjs/gui";
 import { ContextOverlay } from "@/components/Engine/overlays/ContextOverlay";
 import { PathOverlay } from "@/components/Engine/overlays/PathOverlay";
-import { MarkerOverlay } from "@/components/Engine/overlays/MarkerOverlay";
+import { GuidanceOverlay } from "@/components/Engine/overlays/GuidanceOverlay";
+import { DetailOverlay } from "@/components/Engine/overlays/DetailOverlay";
 
 // noinspection JSUnusedGlobalSymbols
 export class EngineService {
@@ -45,8 +47,10 @@ export class EngineService {
   objectInstancer!: ObjectInstancer;
   contextOverlay!: ContextOverlay;
   pathOverlay!: PathOverlay;
-  markerOverlay!: MarkerOverlay;
+  guidanceOverlay!: GuidanceOverlay;
+  detailOverlay!: DetailOverlay;
   gridOverlay!: GridOverlay;
+  guiTexture!: AdvancedDynamicTexture;
   pathfinder!: PathfinderService;
 
   minimapCanvas?: HTMLCanvasElement;
@@ -54,6 +58,7 @@ export class EngineService {
 
   private _knownBounds: OrthoBounds | null = null;
   private flyToObserver: Observer<Scene> | null = null;
+  private readonly _stopHandles: (() => void)[] = [];
 
   constructor(size: Coords, canvas: HTMLCanvasElement, minimapCanvas?: HTMLCanvasElement) {
     // Prevent strange bugs from happening
@@ -93,9 +98,11 @@ export class EngineService {
 
     // Watch for non-restart settings changes
     this.applyRenderScale(settings.renderScale);
-    watch(
-      () => settings.renderScale,
-      (newScale) => this.applyRenderScale(newScale),
+    this._stopHandles.push(
+      watch(
+        () => settings.renderScale,
+        (newScale) => this.applyRenderScale(newScale),
+      ),
     );
 
     return this;
@@ -109,7 +116,8 @@ export class EngineService {
       () => this.knownBounds,
       this.contextOverlay,
       this.gridOverlay,
-      this.markerOverlay,
+      this.guidanceOverlay,
+      this.detailOverlay,
       this.pathOverlay,
     );
 
@@ -139,13 +147,28 @@ export class EngineService {
   initGridOverlay(): this {
     this.gridOverlay = new GridOverlay(this.scene, this.size, useObjectsStore().getTiles);
 
+    const settings = useSettingsStore();
+    this._stopHandles.push(
+      watch(
+        () => settings.engineSettings.showGrid,
+        (show) => this.gridOverlay.showLayer("grid", show),
+        { immediate: true },
+      ),
+    );
+
     return this;
   }
 
   initPathfinding(): this {
     this.pathfinder = new PathfinderService();
     this.pathOverlay = new PathOverlay(this.scene, this.size);
-    this.markerOverlay = new MarkerOverlay(this.scene);
+
+    // Shared HUD layer for all GUI-based overlays
+    this.guiTexture = AdvancedDynamicTexture.CreateFullscreenUI("HUD", true, this.scene);
+    this.guiTexture.renderAtIdealSize = true;
+
+    this.guidanceOverlay = new GuidanceOverlay(this.scene);
+    this.detailOverlay = new DetailOverlay(this.scene, this.guiTexture);
 
     return this;
   }
@@ -176,16 +199,18 @@ export class EngineService {
   initContextOverlay(): this {
     this.contextOverlay = new ContextOverlay(this.scene, this.size);
 
-    // Watch for known area changes to update clamping bounds
+    // Watch for known/visible area changes to update minimap and clamping bounds
     const player = useObjectsStore().currentPlayer;
-    watch(
-      player.knownTileKeys,
-      (keys) => {
-        this._knownBounds = calculateKnownBounds(this.size, keys);
-        // Trigger minimap update if it exists
-        if (this.minimap) this.minimap.capture();
-      },
-      { immediate: true },
+    this._stopHandles.push(
+      watch(
+        [player.knownTileKeys, player.visibleTileKeys],
+        ([known]) => {
+          this._knownBounds = calculateKnownBounds(this.size, known);
+          // Trigger minimap update if it exists
+          if (this.minimap) this.minimap.triggerCapture();
+        },
+        { immediate: true },
+      ),
     );
 
     return this;
@@ -222,42 +247,46 @@ export class EngineService {
     return this;
   }
 
-  initOrder(): (() => void)[] {
+  initOrder(): { title: string; fn: () => void }[] {
     return [
       // All components require the engine/scene
-      () => this.initEngineAndScene(),
+      { title: "initEngineAndScene", fn: () => this.initEngineAndScene() },
 
       // No other requirements
-      () => this.initContextOverlay(),
-      () => this.initGridOverlay(),
-      () => this.initPathfinding(),
-      () => this.initLogic(),
-      () => this.initObjectInstancer(),
-      () => this.initTerrain(),
+      { title: "initContextOverlay", fn: () => this.initContextOverlay() },
+      { title: "initGridOverlay", fn: () => this.initGridOverlay() },
+      { title: "initPathfinding", fn: () => this.initPathfinding() },
+      { title: "initLogic", fn: () => this.initLogic() },
+      { title: "initObjects", fn: () => this.initObjectInstancer() },
+      { title: "initTerrain", fn: () => this.initTerrain() },
 
       // Requires ContextOverlay & GridOverlay
-      () => this.initCamera(),
+      { title: "initCamera", fn: () => this.initCamera() },
 
       // Requires Terrain
-      () => this.initFeatures(),
+      { title: "initFeatures", fn: () => this.initFeatures() },
 
       // Requires Camera
-      () => this.initEnvironment(),
+      { title: "initEnvironment", fn: () => this.initEnvironment() },
 
       // Start Rendering!
-      () => this.render(),
+      { title: "render", fn: () => this.render() },
 
       // Optional minimap (if canvas was given)
-      () => this.initMinimap(),
+      { title: "initMinimap", fn: () => this.initMinimap() },
     ];
   }
 
   init(): this {
-    this.initOrder().forEach((fn) => fn());
+    this.initOrder().forEach((process) => process.fn());
     return this;
   }
 
   dispose(): void {
+    // Stop all Vue watchers
+    this._stopHandles.forEach((stop) => stop());
+    this._stopHandles.length = 0;
+
     // Stop flying
     this.stopFlying();
 
@@ -281,7 +310,9 @@ export class EngineService {
 
     // Stop others
     this.pathOverlay.dispose();
-    this.markerOverlay.dispose();
+    this.guidanceOverlay.dispose();
+    this.detailOverlay.dispose();
+    this.guiTexture.dispose();
     this.gridOverlay.dispose();
     this.logicMesh.dispose();
     this.terrainBuilder.dispose();
