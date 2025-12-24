@@ -1,14 +1,4 @@
-import {
-  Camera,
-  Color3,
-  Effect,
-  PostProcess,
-  RawTexture,
-  Scene,
-  Texture,
-  Vector2,
-  Vector4,
-} from "@babylonjs/core";
+import { Camera, Color3, Effect, PostProcess, RawTexture, Scene, Texture, Vector2, Vector4, } from "@babylonjs/core";
 import { watchEffect } from "vue";
 import { getMapBounds } from "@/helpers/math";
 import type { Coords } from "@/helpers/mapTools";
@@ -24,8 +14,8 @@ export type ContextPayload = { items: ContextHighlight[] };
 
 export class ContextOverlay implements IOverlay<ContextPayload> {
   // FoW Tunables
-  private readonly exploredDim = 0.33;
-  private readonly unknownDim = 1.0;
+  exploredDim = 0.33;
+  unknownDim = 1.0;
 
   private readonly scene: Scene;
   private readonly size: Coords;
@@ -41,131 +31,18 @@ export class ContextOverlay implements IOverlay<ContextPayload> {
   private visibleKeys: Set<GameKey> = new Set();
 
   // GPU/CPU resources
-  private maskBuffer!: Uint8Array;
-  private maskTexture!: RawTexture;
+  private readonly maskBuffer!: Uint8Array;
+  private readonly maskTexture!: RawTexture;
   private readonly _keyToIndex = new Map<GameKey, number>();
   private readonly _postProcesses = new Map<Camera, PostProcess>();
   private readonly _ppStopHandles = new Map<Camera, () => void>();
   private readonly _stopHandles: (() => void)[] = [];
 
-  private _initialized = false;
   private _pendingUpdate = false;
 
   constructor(scene: Scene, size: Coords) {
     this.scene = scene;
     this.size = size;
-
-    this.initResources();
-
-    // Default Palette
-    this.setPalette({
-      [OverlayColorId.VALID]: OVERLAY_COLORS[OverlayColorId.VALID],
-      [OverlayColorId.DANGER]: OVERLAY_COLORS[OverlayColorId.DANGER],
-      [OverlayColorId.INTEREST]: OVERLAY_COLORS[OverlayColorId.INTEREST],
-      [OverlayColorId.MOVE]: OVERLAY_COLORS[OverlayColorId.MOVE],
-      [OverlayColorId.RECOMMEND]: OVERLAY_COLORS[OverlayColorId.RECOMMEND],
-    });
-
-    // Reactive FoW link (from original FogOfWar.ts logic)
-    const player = useObjectsStore().currentPlayer;
-    this._stopHandles.push(
-      watchEffect(() => {
-        this.knownKeys = player.knownTileKeys.value;
-        this.visibleKeys = player.visibleTileKeys.value;
-        this.triggerUpdate();
-      }),
-    );
-  }
-
-  setPalette(palette: Record<string, Color3>): void {
-    this.palette.clear();
-    let index = 1; // 0 is reserved for "no highlight"
-    for (const [id, color] of Object.entries(palette)) {
-      this.palette.set(id, { color, index });
-      this.paletteArray[index * 3] = color.r;
-      this.paletteArray[index * 3 + 1] = color.g;
-      this.paletteArray[index * 3 + 2] = color.b;
-      index++;
-      if (index >= 16) break;
-    }
-    this.triggerUpdate();
-  }
-
-  setLayer(id: string, payload: ContextPayload | null): this {
-    if (!payload) {
-      this.layers.delete(id);
-    } else {
-      const itemsMap = new Map<GameKey, ContextHighlight>();
-      for (const item of payload.items) {
-        itemsMap.set(item.tile.key, item);
-      }
-      this.layers.set(id, itemsMap);
-      if (!this.layerVisibility.has(id)) {
-        this.layerVisibility.set(id, true);
-      }
-    }
-    this.triggerUpdate();
-    return this;
-  }
-
-  showLayer(id: string, isEnabled: boolean): void {
-    this.layerVisibility.set(id, isEnabled);
-    this.triggerUpdate();
-  }
-
-  private triggerUpdate() {
-    if (this._pendingUpdate) return;
-    this._pendingUpdate = true;
-    Promise.resolve().then(() => {
-      this.updateMask();
-      this._pendingUpdate = false;
-    });
-  }
-
-  private updateMask(): void {
-    if (!this._initialized) return;
-
-    // Channels:
-    // R: Known (255 = known)
-    // G: Visible (255 = visible)
-    // B: Highlight Alpha (0..255)
-    // A: Palette Index (0..255)
-
-    this.maskBuffer.fill(0);
-
-    // 1. Fill FoW (R, G)
-    for (const key of this.knownKeys) {
-      const index = this._keyToIndex.get(key);
-      if (index !== undefined) this.maskBuffer[index * 4] = 255;
-    }
-    for (const key of this.visibleKeys) {
-      const index = this._keyToIndex.get(key);
-      if (index !== undefined) this.maskBuffer[index * 4 + 1] = 255;
-    }
-
-    // 2. Fill Highlights (B, A)
-    // Layers are applied in order. Last one wins if they overlap (KISS).
-    for (const [layerId, items] of this.layers) {
-      if (!this.layerVisibility.get(layerId)) continue;
-
-      for (const [key, highlight] of items) {
-        const index = this._keyToIndex.get(key);
-        if (index === undefined) continue;
-
-        const paletteInfo = this.palette.get(highlight.colorId);
-        if (!paletteInfo) continue;
-
-        const offset = index * 4;
-        this.maskBuffer[offset + 2] = Math.floor(highlight.alpha * 255);
-        this.maskBuffer[offset + 3] = paletteInfo.index;
-      }
-    }
-
-    this.maskTexture.update(this.maskBuffer);
-  }
-
-  private initResources(): void {
-    if (this._initialized) return;
 
     const width = this.size.x;
     const height = this.size.y;
@@ -191,10 +68,28 @@ export class ContextOverlay implements IOverlay<ContextPayload> {
     this.maskTexture.wrapV = Texture.CLAMP_ADDRESSMODE;
 
     this.registerShader();
-    this._initialized = true;
+
+    // Default Palette
+    this.setPalette({
+      [OverlayColorId.VALID]: OVERLAY_COLORS[OverlayColorId.VALID],
+      [OverlayColorId.DANGER]: OVERLAY_COLORS[OverlayColorId.DANGER],
+      [OverlayColorId.INTEREST]: OVERLAY_COLORS[OverlayColorId.INTEREST],
+      [OverlayColorId.MOVE]: OVERLAY_COLORS[OverlayColorId.MOVE],
+      [OverlayColorId.RECOMMEND]: OVERLAY_COLORS[OverlayColorId.RECOMMEND],
+    });
+
+    // Reactive FoW link (from original FogOfWar.ts logic)
+    const player = useObjectsStore().currentPlayer;
+    this._stopHandles.push(
+      watchEffect(() => {
+        this.knownKeys = player.knownTileKeys.value;
+        this.visibleKeys = player.visibleTileKeys.value;
+        this.triggerUpdate();
+      }),
+    );
   }
 
-  public attachToCamera(camera: Camera): void {
+  attachToCamera(camera: Camera): void {
     if (this._postProcesses.has(camera)) return;
 
     const { minX, topZ, worldWidth, worldDepth } = getMapBounds(this.size);
@@ -242,6 +137,49 @@ export class ContextOverlay implements IOverlay<ContextPayload> {
     });
 
     this._ppStopHandles.set(camera, stopHandle);
+  }
+
+  dispose(): void {
+    this._stopHandles.forEach((handle) => handle());
+    this._ppStopHandles.forEach((handle) => handle());
+    for (const postProcess of this._postProcesses.values()) postProcess.dispose();
+    if (this.maskTexture) this.maskTexture.dispose();
+  }
+
+  setLayer(id: string, payload: ContextPayload | null): this {
+    if (!payload) {
+      this.layers.delete(id);
+    } else {
+      const itemsMap = new Map<GameKey, ContextHighlight>();
+      for (const item of payload.items) {
+        itemsMap.set(item.tile.key, item);
+      }
+      this.layers.set(id, itemsMap);
+      if (!this.layerVisibility.has(id)) {
+        this.layerVisibility.set(id, true);
+      }
+    }
+    this.triggerUpdate();
+    return this;
+  }
+
+  setPalette(palette: Record<string, Color3>): void {
+    this.palette.clear();
+    let index = 1; // 0 is reserved for "no highlight"
+    for (const [id, color] of Object.entries(palette)) {
+      this.palette.set(id, { color, index });
+      this.paletteArray[index * 3] = color.r;
+      this.paletteArray[index * 3 + 1] = color.g;
+      this.paletteArray[index * 3 + 2] = color.b;
+      index++;
+      if (index >= 16) break;
+    }
+    this.triggerUpdate();
+  }
+
+  showLayer(id: string, isEnabled: boolean): void {
+    this.layerVisibility.set(id, isEnabled);
+    this.triggerUpdate();
   }
 
   private registerShader(): void {
@@ -352,10 +290,52 @@ export class ContextOverlay implements IOverlay<ContextPayload> {
     `;
   }
 
-  dispose(): void {
-    this._stopHandles.forEach((handle) => handle());
-    this._ppStopHandles.forEach((handle) => handle());
-    for (const postProcess of this._postProcesses.values()) postProcess.dispose();
-    if (this.maskTexture) this.maskTexture.dispose();
+  private triggerUpdate() {
+    if (this._pendingUpdate) return;
+    this._pendingUpdate = true;
+    Promise.resolve().then(() => {
+      this.updateMask();
+      this._pendingUpdate = false;
+    });
+  }
+
+  private updateMask(): void {
+    // Channels:
+    // R: Known (255 = known)
+    // G: Visible (255 = visible)
+    // B: Highlight Alpha (0..255)
+    // A: Palette Index (0..255)
+
+    this.maskBuffer.fill(0);
+
+    // 1. Fill FoW (R, G)
+    for (const key of this.knownKeys) {
+      const index = this._keyToIndex.get(key);
+      if (index !== undefined) this.maskBuffer[index * 4] = 255;
+    }
+    for (const key of this.visibleKeys) {
+      const index = this._keyToIndex.get(key);
+      if (index !== undefined) this.maskBuffer[index * 4 + 1] = 255;
+    }
+
+    // 2. Fill Highlights (B, A)
+    // Layers are applied in order. Last one wins if they overlap (KISS).
+    for (const [layerId, items] of this.layers) {
+      if (!this.layerVisibility.get(layerId)) continue;
+
+      for (const [key, highlight] of items) {
+        const index = this._keyToIndex.get(key);
+        if (index === undefined) continue;
+
+        const paletteInfo = this.palette.get(highlight.colorId);
+        if (!paletteInfo) continue;
+
+        const offset = index * 4;
+        this.maskBuffer[offset + 2] = Math.floor(highlight.alpha * 255);
+        this.maskBuffer[offset + 3] = paletteInfo.index;
+      }
+    }
+
+    this.maskTexture.update(this.maskBuffer);
   }
 }

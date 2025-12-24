@@ -110,6 +110,25 @@ export class MainCamera {
     }
   }
 
+  private applyZoomEffects(): void {
+    const lower = this.camera.lowerRadiusLimit ?? 10;
+    const upper = this.camera.upperRadiusLimit ?? 100;
+    const denom = Math.max(0.0001, upper - lower);
+    const r = this.camera.radius;
+    const norm = clamp((upper - r) / denom, 0, 1);
+
+    // Auto-tilt if manual tilt disabled
+    if (!this._manualTiltEnabled) {
+      this.camera.beta = this.maxTilt - (1 - norm) * (this.maxTilt - this.minTilt);
+    }
+
+    // Grid thickness scaling: 0.25x at max out -> 1.5x at max in
+    const thicknessScale = 0.25 + norm * 1.25;
+    this.gridOverlay.setThicknessScale(thicknessScale);
+    this.markerOverlay.setScaling(thicknessScale);
+    this.pathOverlay.setScaling(thicknessScale);
+  }
+
   private installPanning(): void {
     let dragging = false;
     let lastX = 0;
@@ -146,24 +165,5 @@ export class MainCamera {
 
       this.applyZoomEffects();
     });
-  }
-
-  private applyZoomEffects(): void {
-    const lower = this.camera.lowerRadiusLimit ?? 10;
-    const upper = this.camera.upperRadiusLimit ?? 100;
-    const denom = Math.max(0.0001, upper - lower);
-    const r = this.camera.radius;
-    const norm = clamp((upper - r) / denom, 0, 1);
-
-    // Auto-tilt if manual tilt disabled
-    if (!this._manualTiltEnabled) {
-      this.camera.beta = this.maxTilt - (1 - norm) * (this.maxTilt - this.minTilt);
-    }
-
-    // Grid thickness scaling: 0.25x at max out -> 1.5x at max in
-    const thicknessScale = 0.25 + norm * 1.25;
-    if (this.gridOverlay) this.gridOverlay.setThicknessScale(thicknessScale);
-    this.markerOverlay.setScaling(thicknessScale);
-    this.pathOverlay.setScaling(thicknessScale);
   }
 }

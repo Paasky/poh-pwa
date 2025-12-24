@@ -41,10 +41,6 @@ export class MarkerOverlay implements IOverlay<MarkerPayload> {
     this.root = new TransformNode("markerOverlayRoot", scene);
     this.guiTexture = AdvancedDynamicTexture.CreateFullscreenUI("MarkerGUI", true, scene);
 
-    this.initMarkerMeshes();
-  }
-
-  private initMarkerMeshes(): void {
     // 1. Selection Ring
     const selection = MeshBuilder.CreateDisc(
       "marker_selection",
@@ -102,6 +98,14 @@ export class MarkerOverlay implements IOverlay<MarkerPayload> {
     this.markerMeshes.set("target", target);
   }
 
+  dispose(): void {
+    this.guiTexture.dispose();
+    this.root.dispose();
+    this.markerMeshes.clear();
+    this.labels.clear();
+    this.labelGhosts.clear();
+  }
+
   setLayer(id: string, payload: MarkerPayload | null): this {
     this.clearLabels(id);
 
@@ -121,6 +125,13 @@ export class MarkerOverlay implements IOverlay<MarkerPayload> {
     return this;
   }
 
+  setScaling(scale: number): void {
+    const alpha = getOverlayAlpha(scale);
+    for (const mesh of this.markerMeshes.values()) {
+      if (mesh.material) mesh.material.alpha = alpha;
+    }
+  }
+
   showLayer(id: string, isEnabled: boolean): void {
     this.layerVisibility.set(id, isEnabled);
 
@@ -132,37 +143,16 @@ export class MarkerOverlay implements IOverlay<MarkerPayload> {
     this.updateThinInstances();
   }
 
-  private updateThinInstances(): void {
-    const typeGroups: Map<MarkerType, Matrix[]> = new Map();
-
-    for (const [layerId, payload] of this.layers) {
-      if (!this.layerVisibility.get(layerId)) continue;
-
-      for (const item of payload.items) {
-        if (item.type === "turnMarker") continue; // Handled by GUI
-
-        if (!typeGroups.has(item.type)) typeGroups.set(item.type, []);
-
-        const pos = item.tile.worldPosition;
-        const matrix = Matrix.Translation(pos.x, pos.y + 0.12, pos.z);
-        typeGroups.get(item.type)!.push(matrix);
-      }
+  private clearLabels(id: string): void {
+    const labels = this.labels.get(id);
+    if (labels) {
+      for (const label of labels) label.dispose();
+      this.labels.delete(id);
     }
-
-    for (const [type, mesh] of this.markerMeshes) {
-      const matrices = typeGroups.get(type) || [];
-      if (matrices.length === 0) {
-        mesh.thinInstanceCount = 0;
-        mesh.isVisible = false;
-      } else {
-        const buffer = new Float32Array(matrices.length * 16);
-        for (let i = 0; i < matrices.length; i++) {
-          matrices[i].copyToArray(buffer, i * 16);
-        }
-        mesh.thinInstanceSetBuffer("matrix", buffer, 16, true);
-        mesh.thinInstanceCount = matrices.length;
-        mesh.isVisible = true;
-      }
+    const ghosts = this.labelGhosts.get(id);
+    if (ghosts) {
+      for (const ghost of ghosts) ghost.dispose();
+      this.labelGhosts.delete(id);
     }
   }
 
@@ -198,31 +188,37 @@ export class MarkerOverlay implements IOverlay<MarkerPayload> {
     }
   }
 
-  private clearLabels(id: string): void {
-    const labels = this.labels.get(id);
-    if (labels) {
-      for (const label of labels) label.dispose();
-      this.labels.delete(id);
-    }
-    const ghosts = this.labelGhosts.get(id);
-    if (ghosts) {
-      for (const ghost of ghosts) ghost.dispose();
-      this.labelGhosts.delete(id);
-    }
-  }
+  private updateThinInstances(): void {
+    const typeGroups: Map<MarkerType, Matrix[]> = new Map();
 
-  setScaling(scale: number): void {
-    const alpha = getOverlayAlpha(scale);
-    for (const mesh of this.markerMeshes.values()) {
-      if (mesh.material) mesh.material.alpha = alpha;
-    }
-  }
+    for (const [layerId, payload] of this.layers) {
+      if (!this.layerVisibility.get(layerId)) continue;
 
-  dispose(): void {
-    this.guiTexture.dispose();
-    this.root.dispose();
-    this.markerMeshes.clear();
-    this.labels.clear();
-    this.labelGhosts.clear();
+      for (const item of payload.items) {
+        if (item.type === "turnMarker") continue; // Handled by GUI
+
+        if (!typeGroups.has(item.type)) typeGroups.set(item.type, []);
+
+        const pos = item.tile.worldPosition;
+        const matrix = Matrix.Translation(pos.x, pos.y + 0.12, pos.z);
+        typeGroups.get(item.type)!.push(matrix);
+      }
+    }
+
+    for (const [type, mesh] of this.markerMeshes) {
+      const matrices = typeGroups.get(type) || [];
+      if (matrices.length === 0) {
+        mesh.thinInstanceCount = 0;
+        mesh.isVisible = false;
+      } else {
+        const buffer = new Float32Array(matrices.length * 16);
+        for (let i = 0; i < matrices.length; i++) {
+          matrices[i].copyToArray(buffer, i * 16);
+        }
+        mesh.thinInstanceSetBuffer("matrix", buffer, 16, true);
+        mesh.thinInstanceCount = matrices.length;
+        mesh.isVisible = true;
+      }
+    }
   }
 }
