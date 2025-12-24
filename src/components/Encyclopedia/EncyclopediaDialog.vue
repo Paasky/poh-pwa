@@ -3,7 +3,7 @@ import { onBeforeUnmount } from "vue";
 import EncyclopediaMenuItem from "@/components/Encyclopedia/EncyclopediaMenuItem.vue";
 import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
 import UiObjectChips from "@/components/Ui/UiObjectChips.vue";
-import UiObjectChip from "@/components/Ui/UiObjectChip.vue";
+import UiTypeChip from "@/components/Ui/UiTypeChip.vue";
 import { useObjectsStore } from "@/stores/objectStore";
 import { useAudioStore } from "@/stores/audioStore";
 import { CategoryObject, TypeObject } from "@/types/typeObjects";
@@ -264,7 +264,7 @@ onBeforeUnmount(() => audio.stopQuote());
                   >
                     <span v-for="(req, i) of reqAny" :key="req">
                       <span v-if="i > 0"> or </span>
-                      <UiObjectChip :type="req" />
+                      <UiTypeChip :type="req" />
                     </span>
                   </div>
                 </div>

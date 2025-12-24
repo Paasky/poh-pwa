@@ -9,6 +9,8 @@ export type yieldProps = {
   opts?: {
     posLumpIsNeutral?: boolean;
     showName?: boolean;
+    showProgress?: boolean;
+    showProgressText?: boolean;
   };
 };
 
@@ -97,23 +99,64 @@ function color(y: Yield): string {
   if (isPositive) return "#00ff00";
   return "#ff0000";
 }
+const progressBg = computed(() => {
+  // Health special thresholds
+  if (props.y.type === "yieldType:health") {
+    if (props.y.amount < 35) return "#881111";
+    if (props.y.amount < 75) return "#f97316";
+  }
+  return "#082c00";
+});
 </script>
 
 <template>
-  <div class="d-flex align-center ga-1" style="user-select: none">
-    <div :style="{ color: color(y) }">{{ amount(y) }}</div>
-    <v-tooltip :text="type.name" content-class="text-grey bg-grey-darken-4" location="bottom">
-      <template #activator="{ props: tip }">
-        <v-icon
-          v-bind="tip"
-          :icon="icon.icon.iconName"
-          :color="icon.color"
-          size="x-small"
-          class="mx-1"
-        />
-        <div v-if="opts?.showName">{{ type.name }}</div>
+  <div
+    :class="['d-flex', opts?.showProgress ? 'flex-column ga-0' : 'align-center ga-1']"
+    style="user-select: none"
+  >
+    <div v-if="!opts?.showProgress" class="d-flex align-center ga-1">
+      <div :style="{ color: color(y) }">
+        {{ amount(y) }}<span v-if="y.max" class="opacity-70"> / {{ y.max }}</span>
+      </div>
+      <v-tooltip :text="type.name" content-class="text-grey bg-grey-darken-4" location="bottom">
+        <template #activator="{ props: tip }">
+          <v-icon
+            v-bind="tip"
+            :icon="icon.icon.iconName"
+            :color="icon.color"
+            size="x-small"
+            class="mx-1"
+          />
+          <div v-if="opts?.showName">{{ type.name }}</div>
+        </template>
+      </v-tooltip>
+    </div>
+
+    <v-progress-linear
+      v-if="opts?.showProgress && y.max"
+      :model-value="(y.amount / y.max) * 50"
+      :color="progressBg"
+      bg-opacity="1"
+      height="18"
+      rounded
+      class="mt-1"
+    >
+      <template #default>
+        <v-tooltip :text="type.name" content-class="text-grey bg-grey-darken-4" location="bottom">
+          <template #activator="{ props: tip }">
+            <div class="d-flex align-center ga-1 px-2 h-100" v-bind="tip">
+              <v-icon :icon="icon.icon.iconName" :color="icon.color" size="x-small" />
+              <span class="text-caption font-weight-bold" style="text-shadow: 0 0 2px black">
+                {{ amount(y) }} / {{ y.max }} = {{ (y.amount / y.max) * 50 }}
+              </span>
+              <v-spacer />
+              <div v-if="opts?.showName" class="text-caption opacity-70">{{ type.name }}</div>
+            </div>
+          </template>
+        </v-tooltip>
       </template>
-    </v-tooltip>
+    </v-progress-linear>
+
     <div v-if="y.for.length" class="d-flex align-center ga-1">
       for
       <UiObjectChips :types="y.for" />

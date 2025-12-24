@@ -564,6 +564,23 @@ function getIcon(
 export default getIcon;
 
 // Helper: expose the set of Font Awesome icons used by yieldType mappings
+// Helper: expose the set of Font Awesome icons used by all mappings
+export function getAllIcons(): IconDefinition[] {
+  const set = new Set<IconDefinition>();
+  const collect = (obj: Record<string, any>) => {
+    for (const val of Object.values(obj)) {
+      if (val && typeof val === "object" && "icon" in val) {
+        set.add(val.icon as IconDefinition);
+      }
+    }
+  };
+  collect(icons);
+  collect(categoryKeys);
+  collect(conceptKeys);
+  collect(keys);
+  return Array.from(set.values());
+}
+
 export function getYieldTypeFaIcons(): IconDefinition[] {
   const set = new Set<IconDefinition>();
   for (const [key, val] of Object.entries(keys)) {

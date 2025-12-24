@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import UiObjectChip from "@/components/Ui/UiObjectChip.vue";
+import UiTypeChip from "@/components/Ui/UiTypeChip.vue";
 import UiYields from "@/components/Ui/UiYields.vue";
 import type { Unit } from "@/objects/game/Unit";
 import type { UnitDesign } from "@/objects/game/UnitDesign";
@@ -85,10 +85,10 @@ function searchDesign(design: UnitDesign, term: string): boolean {
         :search="searchDesign"
       >
         <template #[`item.platform`]="{ item }">
-          <UiObjectChip :type="(item as UnitDesign).platform" />
+          <UiTypeChip :type="(item as UnitDesign).platform" />
         </template>
         <template #[`item.equipment`]="{ item }">
-          <UiObjectChip :type="(item as UnitDesign).equipment" />
+          <UiTypeChip :type="(item as UnitDesign).equipment" />
         </template>
         <template #[`item.prodCostYield`]="{ item }">
           <UiYield :y="(item as UnitDesign).prodCostYield.value" />
@@ -111,10 +111,10 @@ function searchDesign(design: UnitDesign, term: string): boolean {
     <template #right>
       <UiTable title="Units" :columns="unitHeaders" :items="store.units" :search="searchUnit">
         <template #[`item.platform`]="{ item }">
-          <UiObjectChip :type="(item as Unit).design.value.platform" />
+          <UiTypeChip :type="(item as Unit).design.value.platform" />
         </template>
         <template #[`item.equipment`]="{ item }">
-          <UiObjectChip :type="(item as Unit).design.value.equipment" />
+          <UiTypeChip :type="(item as Unit).design.value.equipment" />
         </template>
       </UiTable>
     </template>

@@ -48,8 +48,10 @@ export function isTypeObject(o: GameObject | PohObject): o is TypeObject {
   return o.objType === "TypeObject";
 }
 
-export function isGameObject(o: GameObject | PohObject): o is GameObject {
-  return o.objType === "GameObject";
+export function isGameObject(o: string | ObjKey | PohObject | GameObject): o is GameObject {
+  return typeof o === "string"
+    ? !o.includes("Category:") && !o.includes("Type:")
+    : o.objType === "GameObject";
 }
 
 export type WorldState = {
