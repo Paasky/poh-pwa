@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { isRef } from "vue";
-import { GameClass, GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
-import { GameData } from "@/types/api";
+import { GameClass, GameKey, GameObjAttr, GameObject, IRawGameObject, } from "@/objects/game/_GameObject";
 import { Agenda } from "@/objects/game/Agenda";
 import { Citizen } from "@/objects/game/Citizen";
 import { City } from "@/objects/game/City";
@@ -41,11 +40,11 @@ const classConf = {
 } as Record<GameClass, Ctor>;
 
 export class GameDataLoader {
-  initFromRaw(gameData: GameData): Record<GameKey, GameObject> {
-    const objs = {} as Record<GameKey, GameObject>;
+  initFromRaw(rawObjects: IRawGameObject[], bucketObjects: Map<GameKey, GameObject>): GameObject[] {
+    const newObjects = [] as GameObject[];
 
     // Init each object
-    for (const rawObjData of gameData.objects) {
+    for (const rawObjData of rawObjects) {
       if (!rawObjData.key) {
         throw new Error(`Invalid game obj data: key is missing from ${JSON.stringify(rawObjData)}`);
       }
@@ -63,16 +62,15 @@ export class GameDataLoader {
       }
 
       // Sanity checks pass, init the object
-      const gameObj = this._initObj(rawObjData, config);
-      objs[gameObj.key] = gameObj;
+      const object = this._initObj(rawObjData, config);
+      bucketObjects.set(object.key, object);
+      newObjects.push(object);
     }
 
-    // Build backward-relations
-    for (const obj of Object.values(objs)) {
-      this._buildBackRelations(obj, objs);
-    }
+    // Build backward-relations into bucketObjects
+    newObjects.forEach((obj) => this._buildBackRelations(obj, bucketObjects));
 
-    return objs;
+    return newObjects;
   }
 
   private _initObj(rawObjData: any, ctor: Ctor): GameObject {
@@ -115,7 +113,7 @@ export class GameDataLoader {
     return value;
   }
 
-  private _buildBackRelations(obj: GameObject, objects: Record<string, GameObject>): void {
+  private _buildBackRelations(obj: GameObject, objects: Map<GameKey, GameObject>): void {
     const ctor = obj.constructor as unknown as { attrsConf: GameObjAttr[] };
     for (const attrConf of ctor.attrsConf) {
       try {
@@ -154,7 +152,7 @@ export class GameDataLoader {
     obj: GameObject,
     relatedKey: GameKey | object,
     attrConf: GameObjAttr,
-    objects: Record<GameKey, GameObject>,
+    objects: Map<GameKey, GameObject>,
   ): void {
     // The key of the related must be a string
     // noinspection SuspiciousTypeOfGuard
@@ -164,7 +162,7 @@ export class GameDataLoader {
       );
     }
 
-    const relatedObj = objects[relatedKey];
+    const relatedObj = objects.get(relatedKey);
     if (!relatedObj) {
       throw new Error(
         `Related object '${relatedKey}' does not exist. Raw data: ${JSON.stringify(obj)}`,

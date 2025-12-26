@@ -35,6 +35,10 @@ export type GameObjAttr = {
   };
 };
 
+export interface IRawGameObject {
+  key: GameKey;
+}
+
 export class GameObject {
   // noinspection JSUnusedGlobalSymbols
   objType: ObjType = "GameObject";
