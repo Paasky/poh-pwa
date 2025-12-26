@@ -450,7 +450,7 @@ describe("MovementService", () => {
       expect(unit.movement.cost(snowMountainTile)).toBe(2); // 1 base + 1 elevation
     });
 
-    it("should add +1 for dense features (Forest, Pine Forest, Jungle, Kelp, Atoll, Lagoon)", () => {
+    it("should add +1 for dense instancers (Forest, Pine Forest, Jungle, Kelp, Atoll, Lagoon)", () => {
       const unit = world.unit;
       const target = world.tiles[Tile.getKey(0, 0)];
 
@@ -469,7 +469,7 @@ describe("MovementService", () => {
       });
     });
 
-    it("should not add cost for light features (Shrubs, Oasis, FloodPlain)", () => {
+    it("should not add cost for light instancers (Shrubs, Oasis, FloodPlain)", () => {
       const unit = world.unit;
       const target = world.tiles[Tile.getKey(0, 0)];
 

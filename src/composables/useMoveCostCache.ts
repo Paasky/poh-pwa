@@ -1,5 +1,5 @@
 import type { GameKey } from "@/objects/game/_GameObject";
-import type { TurnEnd } from "@/services/MovementService";
+import type { TurnEnd } from "@/movement/UnitMovement";
 import type { UnitDesign } from "@/objects/game/UnitDesign";
 import type { TypeKey } from "@/types/common";
 

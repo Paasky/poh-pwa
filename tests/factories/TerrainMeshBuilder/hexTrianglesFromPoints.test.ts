@@ -1,48 +1,21 @@
 import { describe, expect, it } from "vitest";
-import { hexTrianglesFromPoints } from "../../../src/factories/TerrainMeshBuilder/hexTrianglesFromPoints";
-import {
-  validCenterData,
-  validK1Data,
-  validK2Data,
-  validK3Data,
-  validK4Data,
-} from "./pointsInHexRing.test";
+import { hexTrianglesFromPoints } from "../../../src/engine/TerrainMesh/hexTrianglesFromPoints";
 
 describe("hexTrianglesFromPoints", () => {
   it("K1 output", () => {
-    expect(hexTrianglesFromPoints([...validCenterData, ...validK1Data.ring1], 1)).toEqual(
-      validK1Triangles,
-    );
+    expect(hexTrianglesFromPoints(1)).toEqual(validK1Triangles);
   });
 
   it("K2 output", () => {
-    expect(
-      hexTrianglesFromPoints([...validCenterData, ...validK2Data.ring1, ...validK2Data.ring2], 2),
-    ).toEqual(validK2Triangles);
+    expect(hexTrianglesFromPoints(2)).toEqual(validK2Triangles);
   });
 
   it("K3 output", () => {
-    expect(
-      hexTrianglesFromPoints(
-        [...validCenterData, ...validK3Data.ring1, ...validK3Data.ring2, ...validK3Data.ring3],
-        3,
-      ),
-    ).toEqual(validK3Triangles);
+    expect(hexTrianglesFromPoints(3)).toEqual(validK3Triangles);
   });
 
   it("K4 output", () => {
-    expect(
-      hexTrianglesFromPoints(
-        [
-          ...validCenterData,
-          ...validK4Data.ring1,
-          ...validK4Data.ring2,
-          ...validK4Data.ring3,
-          ...validK4Data.ring4,
-        ],
-        4,
-      ),
-    ).toEqual(validK4Triangles);
+    expect(hexTrianglesFromPoints(4)).toEqual(validK4Triangles);
   });
 });
 

@@ -9,7 +9,7 @@ import { initTestPinia, loadStaticData } from "../_setup/pinia";
 import { useMoveCostCache } from "../../src/composables/useMoveCostCache";
 import { createTestDesign } from "../_setup/gameHelpers";
 import type { TypeKey } from "../../src/types/common";
-import type { TurnEnd } from "../../src/services/MovementService";
+import type { TurnEnd } from "../../src/movement/UnitMovement";
 import type { GameKey } from "../../src/objects/game/_GameObject";
 
 describe("useMoveCostCache", () => {

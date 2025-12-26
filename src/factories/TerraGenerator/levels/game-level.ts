@@ -272,13 +272,13 @@ export class GameLevel {
 
   private fixInvalidTiles(): GameLevel {
     for (const tile of Object.values(this.gen.gameTiles)) {
-      // Fix invalid features
+      // Fix invalid instancers
       if (tile.feature.value) {
         if (tile.elevation.id === "mountain" || tile.elevation.id === "snowMountain") {
-          // Mountains cannot have features
+          // Mountains cannot have instancers
           tile.feature.value = null;
         } else if (tile.elevation.id === "hill") {
-          // Hills cannot have flat features
+          // Hills cannot have flat instancers
           const flatFeatures = ["oasis", "floodPlain", "swamp"];
           if (flatFeatures.includes(tile.feature.value.id)) {
             tile.feature.value = null;
@@ -292,12 +292,12 @@ export class GameLevel {
         } else {
           const waterFeatures = ["ice", "kelp", "lagoon", "atoll", "tradeWind"];
           if (tile.domain.id === "water") {
-            // Water can only have water features
+            // Water can only have water instancers
             if (!waterFeatures.includes(tile.feature.value.id)) {
               tile.feature.value = null;
             }
           } else {
-            // Land can only have land features
+            // Land can only have land instancers
             if (waterFeatures.includes(tile.feature.value.id)) {
               tile.feature.value = null;
             }

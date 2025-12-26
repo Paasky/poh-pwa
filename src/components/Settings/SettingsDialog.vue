@@ -6,8 +6,8 @@ import {
   engineSettingPresets,
   type EngineSettings,
   restartRequiredSettingKeys,
-} from "@/components/Engine/engineSettings";
-import { WeatherType } from "@/components/Engine/environments/weather";
+} from "@/engine/EngineSettings";
+import { WeatherType } from "@/engine/environment/weather";
 
 // Use modern defineModel for v-model binding (no local mirror ref needed)
 const open = defineModel<boolean>({ required: true });

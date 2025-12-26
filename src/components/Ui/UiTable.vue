@@ -1,14 +1,7 @@
 <script setup lang="ts">
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { computed, ref, useAttrs } from "vue";
-
-export type TableAlign = "start" | "center" | "end";
-export type TableColumn<T> = {
-  title: string;
-  key: string; // VDataTable column key
-  align?: TableAlign; // affects header title alignment
-  value?: (item: T) => any; // optional cell extractor for simple cells
-};
+import { TableColumn } from "@/types/uiComponents";
 
 const props = withDefaults(
   defineProps<{

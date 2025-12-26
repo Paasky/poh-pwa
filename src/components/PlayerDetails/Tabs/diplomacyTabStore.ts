@@ -5,8 +5,8 @@ import { useObjectsStore } from "@/stores/objectStore";
 import type { Player } from "@/objects/game/Player";
 import { TypeKey } from "@/types/common";
 import { TypeObject } from "@/types/typeObjects";
-import type { TableColumn } from "@/components/Ui/UiTable.vue";
 import { typeTimeline } from "@/helpers/types";
+import { TableColumn } from "@/types/uiComponents";
 
 export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
   const objStore = useObjectsStore();

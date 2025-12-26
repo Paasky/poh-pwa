@@ -30,7 +30,7 @@ onMounted(async () => {
   // Bootstrap the app data once (types + gameData) before showing the game UI
   await app.init();
 
-  // Initialize movement interaction orchestrator
+  // Initialize movement cameras orchestrator
   useMovementInteraction();
 
   // test data

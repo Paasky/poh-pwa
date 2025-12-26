@@ -14,7 +14,7 @@ import { type Tile } from "@/objects/game/Tile";
 import { useEventStore } from "@/stores/eventStore";
 import { UnitCreated, UnitHealed, UnitLost } from "@/events/Unit";
 import { getCoordsFromTileKey, getHexNeighborCoords, tileKey } from "@/helpers/mapTools";
-import { MovementService } from "@/services/MovementService";
+import { UnitMovement } from "@/movement/UnitMovement";
 
 // mercenary: +10% strength, +50% upkeep, 1/city/t;
 // regular: no effects
@@ -51,7 +51,7 @@ export class Unit extends GameObject {
     if (action) this.action.value = action;
     this.canAttack.value = canAttack;
     this.health.value = health;
-    this.movement = new MovementService(this);
+    this.movement = new UnitMovement(this);
     this.movement.moves.value = moves;
 
     if (name) this.customName.value = name;
@@ -104,7 +104,7 @@ export class Unit extends GameObject {
   action = ref<TypeObject | null>(null);
   canAttack = ref(false);
   health = ref(100);
-  movement: MovementService;
+  movement: UnitMovement;
   customName = ref("");
   status = ref("regular" as UnitStatus);
   unwatchers: (() => void)[] = [];

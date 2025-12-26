@@ -1,4 +1,4 @@
-import { EngineCoords } from "@/factories/TerrainMeshBuilder/_terrainMeshTypes";
+import { EngineCoords } from "@/engine/TerrainMesh/_terrainMeshTypes";
 
 // Pointy-top hexagon with circumradius fixed to 1.0
 // Project uses hard-coded hexWidth = sqrt(3) and hexDepth = 1.5 in math.ts, which

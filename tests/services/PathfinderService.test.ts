@@ -1,5 +1,4 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { PathfinderService } from "@/services/PathfinderService";
 import { Unit } from "@/objects/game/Unit";
 import { Tile } from "@/objects/game/Tile";
 import { useObjectsStore } from "@/stores/objectStore";
@@ -9,16 +8,17 @@ import { createMovementContext, createPathStep } from "../_setup/gameHelpers";
 import { GameKey } from "../../src/objects/game/_GameObject";
 import { initTypeObject } from "@/types/typeObjects";
 import { useMoveCostCache } from "@/composables/useMoveCostCache";
+import { Pathfinder } from "../../src/movement/Pathfinder";
 
-describe("PathfinderService", () => {
-  let pathfinder: PathfinderService;
+describe("Pathfinder", () => {
+  let pathfinder: Pathfinder;
   let world: ReturnType<typeof createTestWorld>;
   let objectsStore: ReturnType<typeof useObjectsStore>;
 
   beforeEach(() => {
     initTestPinia();
     loadStaticData();
-    pathfinder = new PathfinderService();
+    pathfinder = new Pathfinder();
     world = createTestWorld();
     objectsStore = useObjectsStore();
     useMoveCostCache().resetCache();

@@ -4,10 +4,11 @@ import UiYields from "@/components/Ui/UiYields.vue";
 import type { Unit } from "@/objects/game/Unit";
 import type { UnitDesign } from "@/objects/game/UnitDesign";
 import UiYield from "@/components/Ui/UiYield.vue";
-import UiTable, { TableColumn } from "@/components/Ui/UiTable.vue";
+import UiTable from "@/components/Ui/UiTable.vue";
 import { includes } from "@/helpers/textTools";
 import UiCols from "@/components/Ui/UiCols.vue";
 import { useUnitsTabStore } from "@/components/PlayerDetails/Tabs/unitsTabStore";
+import { TableColumn } from "@/types/uiComponents";
 
 const store = useUnitsTabStore();
 

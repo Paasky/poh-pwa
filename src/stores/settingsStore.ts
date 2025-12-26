@@ -1,10 +1,6 @@
 import { defineStore } from "pinia";
 import { loadFromBrowser, saveToBrowser } from "@/utils/persistentStorage";
-import {
-  defaultEngineSettings,
-  EngineSettings,
-  gameSettingKeys,
-} from "@/components/Engine/engineSettings";
+import { defaultEngineSettings, EngineSettings, gameSettingKeys } from "@/engine/EngineSettings";
 
 const STORAGE_KEY = "poh.settings";
 const STORAGE_VERSION = 1;

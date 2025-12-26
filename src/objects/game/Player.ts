@@ -20,7 +20,7 @@ import type { Unit } from "@/objects/game/Unit";
 import { Diplomacy } from "@/objects/player/Diplomacy";
 import { ObjKey, TypeKey } from "@/types/common";
 import { useObjectsStore } from "@/stores/objectStore";
-import { MovementService } from "@/services/MovementService";
+import { UnitMovement } from "@/movement/UnitMovement";
 
 export class Player extends GameObject {
   constructor(
@@ -297,7 +297,7 @@ export class Player extends GameObject {
     // On refusal, return false
     // After all done, return true
     for (const unit of this.units.value) {
-      if (unit.movement.move(MovementService.getMoveContext(unit)) === false) return false;
+      if (unit.movement.move(UnitMovement.getMoveContext(unit)) === false) return false;
     }
     return true;
   }

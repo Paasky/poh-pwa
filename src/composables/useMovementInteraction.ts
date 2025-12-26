@@ -1,11 +1,11 @@
 import { watch } from "vue";
 import { useCurrentContext } from "@/composables/useCurrentContext";
 import { useAppStore } from "@/stores/appStore";
-import { MovementManager } from "@/services/MovementManager";
-import { MovementService } from "@/services/MovementService";
-import { PathfinderService } from "@/services/PathfinderService";
+import { MovementManager } from "@/movement/MovementManager";
+import { UnitMovement } from "@/movement/UnitMovement";
+import { Pathfinder } from "@/movement/Pathfinder";
 import { Tile } from "@/objects/game/Tile";
-import { EngineAlpha, EngineLayers, EnginePathStyles } from "@/components/Engine/EngineStyles";
+import { EngineAlpha, EngineLayers, EnginePathStyles } from "@/engine/EngineStyles";
 import { Unit } from "@/objects/game/Unit";
 
 /**
@@ -37,8 +37,8 @@ export function useMovementInteraction() {
     const selectedObject = current.object.value;
     if (selectedObject?.class === "unit" && hoverTile) {
       const unit = selectedObject as unknown as Unit;
-      const context = MovementService.getMoveContext(unit);
-      const pathfinder = new PathfinderService();
+      const context = UnitMovement.getMoveContext(unit);
+      const pathfinder = new Pathfinder();
       const path = pathfinder.findPath(unit, hoverTile as unknown as Tile, context);
 
       pathOverlay.setLayer(EngineLayers.movementPreview, {

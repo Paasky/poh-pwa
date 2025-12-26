@@ -2,8 +2,8 @@ import { UnitDesign } from "../../src/objects/game/UnitDesign";
 import { initTypeObject } from "../../src/types/typeObjects";
 import { GameKey } from "../../src/objects/game/_GameObject";
 import { Tile } from "../../src/objects/game/Tile";
-import { PathStep } from "../../src/services/PathfinderService";
-import { MovementContext } from "../../src/services/MovementContext";
+import { PathStep } from "../../src/movement/Pathfinder";
+import { MoveContext } from "../../src/movement/MoveContext";
 
 /**
  * Factory for creating a real UnitDesign instance without mocking.
@@ -38,11 +38,9 @@ export const createPathStep = (
 });
 
 /**
- * Factory for creating a MovementContext object with default values.
+ * Factory for creating a MoveContext object with default values.
  */
-export const createMovementContext = (
-  overrides: Partial<MovementContext> = {},
-): MovementContext => ({
+export const createMovementContext = (overrides: Partial<MoveContext> = {}): MoveContext => ({
   known: new Set(),
   visible: new Set(),
   canEnterUnknownThisTurn: true,

@@ -1,7 +1,7 @@
 import { Color3, Color4, Scene, StandardMaterial, Texture } from "@babylonjs/core";
 import { TypeKey } from "@/types/common";
 import { Tile } from "@/objects/game/Tile";
-import { EngineColors, toColor4 } from "@/components/Engine/EngineStyles";
+import { EngineColors, toColor4 } from "@/engine/EngineStyles";
 
 export const terrainColorMap: Record<TypeKey, Color4> = {
   "terrainType:coast": toColor4(EngineColors.terrain.coast),

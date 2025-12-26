@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 import { useObjectsStore } from "@/stores/objectStore";
 import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
 import { GameData, StaticData } from "@/types/api";
-import { EngineService } from "@/components/Engine/EngineService";
+import { Engine } from "@/engine/Engine";
 import { createWorld, WorldSize, worldSizes } from "@/factories/worldFactory";
 import { GameDataLoader } from "@/dataLoaders/GameDataLoader";
 import type { Router } from "vue-router";
@@ -31,7 +31,7 @@ export async function fetchJSON<T>(url: string): Promise<T> {
 
 export const useAppStore = defineStore("app", {
   state: () => ({
-    engineService: markRaw({}) as EngineService,
+    engineService: markRaw({}) as Engine,
     loaded: false,
     loadTitle: "",
     loadPercent: "",
@@ -57,7 +57,7 @@ export const useAppStore = defineStore("app", {
       const minimapCanvas = document.getElementById("minimap-canvas") as HTMLCanvasElement | null;
       if (!minimapCanvas) throw new Error("Minimap canvas `#minimap-canvas` not found");
 
-      this.engineService = markRaw(new EngineService(size, engineCanvas, minimapCanvas));
+      this.engineService = markRaw(new Engine(size, engineCanvas, minimapCanvas));
 
       await asyncProcess<{ title: string; fn: () => void }>(
         [

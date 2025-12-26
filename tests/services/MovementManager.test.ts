@@ -3,11 +3,11 @@ import { nextTick } from "vue";
 import { initTestPinia, loadStaticData } from "../_setup/pinia";
 import { createTestWorld } from "../_setup/testWorld";
 import { Tile } from "../../src/objects/game/Tile";
-import { MovementManager } from "../../src/services/MovementManager";
+import { MovementManager } from "../../src/movement/MovementManager";
 import { useCurrentContext } from "../../src/composables/useCurrentContext";
 import { useAppStore } from "../../src/stores/appStore";
-import { EngineLayers } from "../../src/components/Engine/EngineStyles";
-import { EngineService } from "../../src/components/Engine/EngineService";
+import { EngineLayers } from "../../src/engine/EngineStyles";
+import { Engine } from "../../src/engine/Engine";
 
 describe("MovementManager", () => {
   let world: ReturnType<typeof createTestWorld>;
@@ -101,7 +101,7 @@ describe("MovementManager", () => {
       guidanceOverlay: { setLayer: setLayerSpy },
       detailOverlay: { setLayer: setLayerSpy },
       pathOverlay: { setLayer: setLayerSpy },
-    } as unknown as EngineService;
+    } as unknown as Engine;
 
     MovementManager.refreshMovementOverlays(unit);
 

@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import UiTable, { TableColumn } from "@/components/Ui/UiTable.vue";
+import UiTable from "@/components/Ui/UiTable.vue";
 import UiYields from "@/components/Ui/UiYields.vue";
 import { City } from "@/objects/game/City";
 import { usePlayerDetailsStore } from "@/components/PlayerDetails/playerDetailsStore";
 import { includes } from "@/helpers/textTools";
 import UiCols from "@/components/Ui/UiCols.vue";
 import { useCitiesTabStore } from "@/components/PlayerDetails/Tabs/citiesTabStore";
+import { TableColumn } from "@/types/uiComponents";
 
 const detailsStore = usePlayerDetailsStore();
 const store = useCitiesTabStore();
