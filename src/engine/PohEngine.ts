@@ -33,7 +33,7 @@ import { GuidanceOverlay } from "@/engine/overlays/GuidanceOverlay";
 import { DetailOverlay } from "@/engine/overlays/DetailOverlay";
 
 // noinspection JSUnusedGlobalSymbols
-export class Engine {
+export class PohEngine {
   size: Coords;
   canvas: HTMLCanvasElement;
   engine!: BabylonEngine;
@@ -133,7 +133,7 @@ export class Engine {
   }
 
   initLogic(): this {
-    this.logicMesh = new LogicMesh(this.scene, this.size, useObjectsStore().getTiles);
+    this.logicMesh = new LogicMesh(this, useObjectsStore().getTiles);
 
     return this;
   }
@@ -323,7 +323,7 @@ export class Engine {
     this.engine.dispose();
   }
 
-  flyTo(coords: EngineCoords, teleport = false): Engine {
+  flyTo(coords: EngineCoords, teleport = false): PohEngine {
     const clamped = clampCoordsToBoundaries(coords, this.size, this._knownBounds);
     const targetPos = new Vector3(clamped.x, 0, clamped.z);
 
@@ -380,11 +380,11 @@ export class Engine {
   }
 
   // Public: move instantly to a percentage of world width/depth (0..1 each)
-  flyToPercent(xPercent: number, yPercent: number, teleport = false): Engine {
+  flyToPercent(xPercent: number, yPercent: number, teleport = false): PohEngine {
     return this.flyTo(getEngineCoordsFromPercent(this.size, xPercent, yPercent), teleport);
   }
 
-  flyToTile(tile: GameKey | string | Tile, teleport = false): Engine {
+  flyToTile(tile: GameKey | string | Tile, teleport = false): PohEngine {
     if (typeof tile === "string") {
       const coords = getCoordsFromTileKey(tile as GameKey);
       return this.flyTo(tileCenter(this.size, coords), teleport);

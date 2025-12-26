@@ -1,10 +1,10 @@
 import { Unit } from "@/objects/game/Unit";
 import { Tile } from "@/objects/game/Tile";
 import { UnitMovement } from "@/movement/UnitMovement";
-import { Pathfinder } from "@/movement/Pathfinder";
+import { Pathfinder, PathStep } from "@/movement/Pathfinder";
 import { useCurrentContext } from "@/composables/useCurrentContext";
-import { useAppStore } from "@/stores/appStore";
 import { EngineAlpha, EngineLayers, EnginePathStyles } from "@/engine/EngineStyles";
+import { PohEngine } from "@/engine/PohEngine";
 
 /**
  * MovementManager handles high-level movement execution for both Players and AI.
@@ -14,15 +14,21 @@ export class MovementManager {
   /**
    * Generates a path and executes movement for a unit towards a target tile.
    */
-  static moveTo(unit: Unit, target: Tile): void {
+  static moveTo(unit: Unit, target: Tile, path?: PathStep[], engine?: PohEngine): void {
     const context = UnitMovement.getMoveContext(unit);
-    const pathfinder = new Pathfinder();
-    const path = pathfinder.findPath(unit, target, context);
+    if (!path) {
+      path = new Pathfinder().findPath(unit, target, context);
+    }
 
     if (path.length > 0) {
       unit.movement.path = path;
       unit.movement.move(context);
+
+      // todo: if engine, animate movement
     }
+
+    // No engine provided: it's an AI move
+    if (!engine) return;
 
     const current = useCurrentContext();
     if (current.object.value?.key === unit.key) {
@@ -38,9 +44,9 @@ export class MovementManager {
 
       // Refresh or clear visuals
       if (unit.movement.moves.value <= 0) {
-        this.clearMovementOverlays();
+        this.clearMovementOverlays(engine);
       } else {
-        this.refreshMovementOverlays(unit);
+        this.refreshMovementOverlays(engine, unit);
       }
     }
   }
@@ -48,11 +54,8 @@ export class MovementManager {
   /**
    * Refreshes the movement range, selection marker, and current path overlays.
    */
-  static refreshMovementOverlays(unit: Unit): void {
-    const app = useAppStore();
-    if (!Object.keys(app.engineService ?? {}).length) return;
-
-    const { contextOverlay, guidanceOverlay, detailOverlay, pathOverlay } = app.engineService;
+  static refreshMovementOverlays(engine: PohEngine, unit: Unit): void {
+    const { contextOverlay, guidanceOverlay, detailOverlay, pathOverlay } = engine;
     const context = UnitMovement.getMoveContext(unit);
     const pathfinder = new Pathfinder();
 
@@ -99,11 +102,8 @@ export class MovementManager {
   /**
    * Clears all movement-related overlays.
    */
-  static clearMovementOverlays(): void {
-    const app = useAppStore();
-    if (!Object.keys(app.engineService ?? {}).length) return;
-
-    const { contextOverlay, guidanceOverlay, detailOverlay, pathOverlay } = app.engineService;
+  static clearMovementOverlays(engine: PohEngine): void {
+    const { contextOverlay, guidanceOverlay, detailOverlay, pathOverlay } = engine;
 
     contextOverlay.setLayer(EngineLayers.movementRange, null);
     guidanceOverlay.setLayer(EngineLayers.selection, null);

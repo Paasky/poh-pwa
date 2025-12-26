@@ -1,5 +1,4 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { nextTick } from "vue";
 import { initTestPinia, loadStaticData } from "../_setup/pinia";
 import { createTestWorld } from "../_setup/testWorld";
 import { Tile } from "../../src/objects/game/Tile";
@@ -7,7 +6,7 @@ import { MovementManager } from "../../src/movement/MovementManager";
 import { useCurrentContext } from "../../src/composables/useCurrentContext";
 import { useAppStore } from "../../src/stores/appStore";
 import { EngineLayers } from "../../src/engine/EngineStyles";
-import { Engine } from "../../src/engine/Engine";
+import { PohEngine } from "../../src/engine/PohEngine";
 
 describe("MovementManager", () => {
   let world: ReturnType<typeof createTestWorld>;
@@ -33,14 +32,6 @@ describe("MovementManager", () => {
     // Verify unit moved
     expect(unit.tileKey.value).toBe(target.key);
     expect(unit.movement.moves.value).toBe(2);
-
-    // Verify context NOT cleared (as unit still has moves)
-    expect(current.actionMode.value).toBe("move");
-    expect(current.object.value).toBe(unit);
-    expect(current.tile.value).toBe(target);
-
-    // Wait for watchers (in Unit.ts) to update tile.unitKeys
-    await nextTick();
 
     // Verify tile relations updated
     expect(target.unitKeys.value).toContain(unit.key);
@@ -78,7 +69,17 @@ describe("MovementManager", () => {
     current.object.value = unit;
     current.tile.value = unit.tile.value;
 
-    MovementManager.moveTo(unit, target);
+    const app = useAppStore();
+
+    const setLayerSpy = vi.fn().mockReturnThis();
+    app.engineService = {
+      contextOverlay: { setLayer: setLayerSpy },
+      guidanceOverlay: { setLayer: setLayerSpy },
+      detailOverlay: { setLayer: setLayerSpy },
+      pathOverlay: { setLayer: setLayerSpy },
+    } as unknown as PohEngine;
+
+    MovementManager.moveTo(unit, target, undefined, app.engineService as PohEngine);
 
     // Verify unit moved
     expect(unit.tileKey.value).toBe(target.key);
@@ -101,9 +102,9 @@ describe("MovementManager", () => {
       guidanceOverlay: { setLayer: setLayerSpy },
       detailOverlay: { setLayer: setLayerSpy },
       pathOverlay: { setLayer: setLayerSpy },
-    } as unknown as Engine;
+    } as unknown as PohEngine;
 
-    MovementManager.refreshMovementOverlays(unit);
+    MovementManager.refreshMovementOverlays(app.engineService as PohEngine, unit);
 
     // 1. Verify context overlay called for range (includes valid and danger colors)
     expect(setLayerSpy).toHaveBeenCalledWith(

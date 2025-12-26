@@ -72,7 +72,7 @@ const INVERT_NORMAL_Y = false;
 
 // Lighting strength scalars (relative multipliers applied on top of Babylon light intensities)
 // Tweak these to balance the custom terrain shader with the rest of the scene without
-// changing global light settings in Engine.
+// changing global light settings in PohEngine.
 // Increase directional light impact and reduce ambient to help bump/normal details read better.
 const DIR_LIGHT_STRENGTH = 1.35; // directional (sun) contribution multiplier
 const AMBIENT_STRENGTH = 0.12; // hemispheric (ambient) contribution multiplier

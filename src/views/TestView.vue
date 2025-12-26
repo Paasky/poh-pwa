@@ -6,14 +6,14 @@ import { useObjectsStore } from "@/stores/objectStore";
 import { StaticData } from "@/types/api";
 import { fetchJSON, useAppStore } from "@/stores/appStore";
 import { TypeObject } from "@/types/typeObjects";
-import { Engine } from "@/engine/Engine";
+import { PohEngine } from "@/engine/PohEngine";
 import GameMenu from "@/components/GameView/GameMenu.vue";
 
 // Init static data
 const objStore = useObjectsStore();
 
 // Init engine
-let engine: Engine | null = null;
+let engine: PohEngine | null = null;
 const appStore = useAppStore();
 onMounted(async () => {
   objStore.initStatic(await fetchJSON<StaticData>("/staticData.json"));
@@ -236,8 +236,8 @@ onMounted(async () => {
   };
 
   const engineCanvas = document.getElementById("engine-canvas") as HTMLCanvasElement | null;
-  if (!engineCanvas) throw new Error("Engine canvas `#engine-canvas` not found");
-  engine = new Engine(objStore.world.size, engineCanvas);
+  if (!engineCanvas) throw new Error("PohEngine canvas `#engine-canvas` not found");
+  engine = new PohEngine(objStore.world.size, engineCanvas);
   // Expose the engine to the GameMenu via the app store so options can be applied in TestView
   appStore.engineService = engine;
 });

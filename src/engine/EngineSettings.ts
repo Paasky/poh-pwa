@@ -20,7 +20,7 @@ export type EngineSettings = {
   renderScale: number; // 1 = native CSS resolution, 0.5 = half res, 1.25 = super-sample
   adaptToDeviceRatio: boolean; // Use devicePixelRatio for base resolution (restart required)
 
-  // Engine/GPU flags (restart required)
+  // PohEngine/GPU flags (restart required)
   antialias: boolean; // Multi-sample antialias at context level (restart required)
   preserveDrawingBuffer: boolean;
   stencil: boolean;

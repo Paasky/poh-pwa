@@ -2,7 +2,7 @@
 // If we ever need code‑splitting or optional dependencies, we will use dynamic imports in a
 // very targeted manner. This file does not require them.
 import { tileCenter, wrapExclusive } from "@/helpers/math";
-import { Coords } from "@/helpers/mapTools";
+import type { Coords } from "@/helpers/mapTools";
 import { Tile } from "@/objects/game/Tile";
 import type { GameKey } from "@/objects/game/_GameObject";
 import { EngineLayers } from "@/engine/EngineStyles";
@@ -20,8 +20,9 @@ import {
 import { useSettingsStore } from "@/stores/settingsStore";
 import { watch } from "vue";
 import { useCurrentContext } from "@/composables/useCurrentContext";
-import { Unit } from "@/objects/game/Unit";
+import type { Unit } from "@/objects/game/Unit";
 import { MovementManager } from "@/movement/MovementManager";
+import type { PohEngine } from "@/engine/PohEngine";
 
 /**
  * LogicMesh
@@ -30,12 +31,13 @@ import { MovementManager } from "@/movement/MovementManager";
  * Minimal inputs, clear API, Babylon 8 built‑ins first.
  */
 export class LogicMesh {
+  readonly engine: PohEngine;
   readonly scene: Scene;
   readonly size: Coords;
   readonly tilesByKey: Record<GameKey, Tile>;
 
-  readonly root: TransformNode;
-  private baseHexMesh: Mesh;
+  private readonly root: TransformNode;
+  private readonly baseHexMesh: Mesh;
 
   private tileByInstanceIndex: Tile[] = [];
   private instanceIndexByTileKey: Record<GameKey, number> = {};
@@ -44,9 +46,10 @@ export class LogicMesh {
   private lastHoveredInstanceIndex: number | null = null;
   private debugVisibleAlpha: number = 0.75;
 
-  constructor(scene: Scene, size: Coords, tilesByKey: Record<GameKey, Tile>) {
-    this.scene = scene;
-    this.size = size;
+  constructor(engine: PohEngine, tilesByKey: Record<GameKey, Tile>) {
+    this.engine = engine;
+    this.scene = engine.scene;
+    this.size = engine.size;
     this.tilesByKey = tilesByKey;
     this.root = new TransformNode("logicRoot", this.scene);
 
@@ -208,7 +211,7 @@ export class LogicMesh {
     if (object?.class !== "unit") return;
     const unit = object as Unit;
 
-    MovementManager.moveTo(unit, tile);
+    MovementManager.moveTo(unit, tile, undefined, this.engine);
   }
 
   // Fired on mouse moving on top

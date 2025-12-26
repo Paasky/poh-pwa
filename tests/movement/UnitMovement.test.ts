@@ -12,7 +12,7 @@ import { Construction } from "../../src/objects/game/Construction";
 import { GameKey } from "../../src/objects/game/_GameObject";
 import { TypeKey } from "../../src/types/common";
 
-describe("MovementService", () => {
+describe("UnitMovement", () => {
   let world: ReturnType<typeof createTestWorld>;
   let objectsStore: ReturnType<typeof useObjectsStore>;
   let cache: ReturnType<typeof useMoveCostCache>;

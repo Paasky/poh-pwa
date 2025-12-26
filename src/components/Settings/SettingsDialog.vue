@@ -203,7 +203,7 @@ function fmtHour(h: number): string {
                 </div>
               </div>
 
-              <!-- Engine / GPU Context (restart) -->
+              <!-- PohEngine / GPU Context (restart) -->
               <div>
                 <div class="text-subtitle-2 mb-2">GPU Context</div>
                 <div class="d-flex flex-wrap ga-4">

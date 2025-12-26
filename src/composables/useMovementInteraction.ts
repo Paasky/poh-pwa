@@ -7,6 +7,7 @@ import { Pathfinder } from "@/movement/Pathfinder";
 import { Tile } from "@/objects/game/Tile";
 import { EngineAlpha, EngineLayers, EnginePathStyles } from "@/engine/EngineStyles";
 import { Unit } from "@/objects/game/Unit";
+import { PohEngine } from "@/engine/PohEngine";
 
 /**
  * useMovementInteraction is an orchestrator that bridges player intent
@@ -21,10 +22,13 @@ export function useMovementInteraction() {
     current.object,
     (obj) => {
       if (obj?.class === "unit") {
-        MovementManager.refreshMovementOverlays(obj as unknown as Unit);
+        MovementManager.refreshMovementOverlays(
+          app.engineService as PohEngine,
+          obj as unknown as Unit,
+        );
       } else {
         // Clear all movement visuals when no unit is selected
-        MovementManager.clearMovementOverlays();
+        MovementManager.clearMovementOverlays(app.engineService as PohEngine);
       }
     },
     { immediate: true },

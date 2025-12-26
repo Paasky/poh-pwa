@@ -41,7 +41,7 @@ export abstract class Queue {
   }
 
   get queue(): QueueItem[] {
-    // Vue Template Engine can erase .value, so defend against it
+    // Vue Template PohEngine can erase .value, so defend against it
     return "value" in this._queue
       ? // eslint-disable-next-line
         (this._queue.value as any).slice()

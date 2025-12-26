@@ -6,7 +6,7 @@ import { GameData } from "../../src/types/api";
 import { Player } from "../../src/objects/game/Player";
 import { useObjectsStore } from "../../src/stores/objectStore";
 
-describe("gameDataLoader", () => {
+describe("GameDataLoader", () => {
   beforeEach(() => initTestPinia() && loadStaticData());
 
   it("Throws on missing/invalid key/data", () => {

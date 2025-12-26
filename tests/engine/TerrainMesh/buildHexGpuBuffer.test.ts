@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { Color4 } from "@babylonjs/core";
 import { buildHexGpuBuffer } from "../../../src/engine/TerrainMesh/buildHexGpuBuffer";
 import { TerrainTileBuffers } from "../../../src/engine/TerrainMesh/_terrainMeshTypes";
-import { validCenterData, validK1Data, validK2Data } from "./pointsInHexRing.test";
+import { validCenterData, validK1Data, validK2Data } from "./pointsInRing.test";
 import { expectFloatsToBeClose } from "../../_setup/testHelpers";
 
 describe("buildHexGpuBuffer", () => {
