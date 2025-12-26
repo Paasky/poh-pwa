@@ -7,17 +7,20 @@ import { IOverlay } from "./IOverlay";
 export abstract class BaseOverlay<T> implements IOverlay<T> {
   protected readonly layers = new Map<string, T>();
   protected readonly layerVisibility = new Map<string, boolean>();
+  protected readonly dirtyLayers = new Set<string>();
   private _refreshPending = false;
 
   public setLayer(id: string, payload: T | null): this {
     if (!payload) {
       if (this.layers.has(id)) {
         this.layers.delete(id);
+        this.dirtyLayers.add(id);
         this.onLayerRemoved(id);
         this.triggerRefresh();
       }
     } else {
       this.layers.set(id, payload);
+      this.dirtyLayers.add(id);
       if (!this.layerVisibility.has(id)) {
         this.layerVisibility.set(id, true);
       }
@@ -30,6 +33,7 @@ export abstract class BaseOverlay<T> implements IOverlay<T> {
   public showLayer(id: string, isEnabled: boolean): void {
     if (this.layerVisibility.get(id) === isEnabled) return;
     this.layerVisibility.set(id, isEnabled);
+    this.dirtyLayers.add(id);
     this.onVisibilityChanged(id, isEnabled);
     this.triggerRefresh();
   }
@@ -46,6 +50,7 @@ export abstract class BaseOverlay<T> implements IOverlay<T> {
         console.error(`Error in ${this.constructor.name}.onRefresh:`, e);
       } finally {
         this._refreshPending = false;
+        this.dirtyLayers.clear();
       }
     });
   }

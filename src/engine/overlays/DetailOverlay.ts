@@ -24,7 +24,6 @@ export class DetailOverlay extends BaseOverlay<DetailPayload> {
     string,
     { container: Control; ghost: TransformNode }[]
   >();
-  private readonly dirtyLayers = new Set<string>();
 
   constructor(
     private readonly scene: Scene,
@@ -34,14 +33,8 @@ export class DetailOverlay extends BaseOverlay<DetailPayload> {
     this.root = new TransformNode("detailRoot", scene);
   }
 
-  protected onLayerUpdated(layerId: string): void {
-    // Mark layer as dirty to be rebuilt on the next refresh cycle
-    this.dirtyLayers.add(layerId);
-  }
-
   protected onLayerRemoved(layerId: string): void {
     this.disposeLayerControls(layerId);
-    this.dirtyLayers.delete(layerId);
   }
 
   protected onVisibilityChanged(layerId: string, isEnabled: boolean): void {
@@ -132,8 +125,6 @@ export class DetailOverlay extends BaseOverlay<DetailPayload> {
       }
       this.layerControls.set(layerId, controls);
     }
-
-    this.dirtyLayers.clear();
   }
 
   dispose(): void {

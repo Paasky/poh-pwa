@@ -88,9 +88,11 @@ export class GuidanceOverlay extends BaseOverlay<GuidancePayload> {
   }
 
   protected onRefresh(): void {
+    if (this.dirtyLayers.size === 0) return;
+
     const typeGroups = new Map<string, Matrix[]>();
 
-    // Sort items by type and calculate world matrices
+    // Recalculate all active layers
     for (const [layerId, payload] of this.layers) {
       if (!this.layerVisibility.get(layerId)) continue;
       for (const item of payload.items) {
@@ -136,6 +138,8 @@ export class GuidanceOverlay extends BaseOverlay<GuidancePayload> {
 
         mesh.thinInstanceSetBuffer("matrix", uploadBuffer, 16, true);
         mesh.thinInstanceCount = matrices.length;
+      } else {
+        mesh.thinInstanceCount = 0;
       }
     }
   }

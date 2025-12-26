@@ -29,6 +29,10 @@ export class PathOverlay extends BaseOverlay<PathPayload> {
   private readonly root: TransformNode;
   private readonly pathMeshes = new Map<string, GreasedLineMesh>();
 
+  private readonly _vTmp1 = new Vector3();
+  private readonly _vTmp2 = new Vector3();
+  private readonly _vTmp3 = new Vector3();
+
   constructor(
     private readonly scene: Scene,
     private readonly size: Coords,
@@ -54,10 +58,13 @@ export class PathOverlay extends BaseOverlay<PathPayload> {
   }
 
   protected onRefresh(): void {
+    if (this.dirtyLayers.size === 0) return;
+
     const { worldWidth } = getMapBounds(this.size);
 
-    for (const [layerId, payload] of this.layers) {
-      if (payload.items.length < 2) {
+    for (const layerId of this.dirtyLayers) {
+      const payload = this.layers.get(layerId);
+      if (!payload || payload.items.length < 2) {
         this.disposeMesh(layerId);
         continue;
       }
@@ -65,7 +72,7 @@ export class PathOverlay extends BaseOverlay<PathPayload> {
       // Calculate path points with world wrapping support
       const points = payload.items.map((item, index) => {
         const worldPos = item.tile.worldPosition.clone();
-        worldPos.y = 0; // Overlays are always at y0
+        worldPos.y = EngineOverlaySettings.pathHeight;
 
         if (index > 0) {
           const prevPos = payload.items[index - 1].tile.worldPosition;
@@ -75,7 +82,7 @@ export class PathOverlay extends BaseOverlay<PathPayload> {
             else worldPos.x += worldWidth;
           }
         }
-        return worldPos.add(new Vector3(0, EngineOverlaySettings.pathHeight, 0));
+        return worldPos;
       });
 
       const linePoints = this.getRoundedPoints(points, payload.style.curvature);
@@ -136,8 +143,8 @@ export class PathOverlay extends BaseOverlay<PathPayload> {
       const pCurr = uniquePoints[i];
       const pNext = uniquePoints[i + 1];
 
-      const v1 = pPrev.subtract(pCurr);
-      const v2 = pNext.subtract(pCurr);
+      const v1 = pPrev.subtractToRef(pCurr, this._vTmp1);
+      const v2 = pNext.subtractToRef(pCurr, this._vTmp2);
       const len1 = v1.length();
       const len2 = v2.length();
 
@@ -149,8 +156,8 @@ export class PathOverlay extends BaseOverlay<PathPayload> {
         continue;
       }
 
-      const pStart = pCurr.add(v1.normalize().scaleInPlace(r));
-      const pEnd = pCurr.add(v2.normalize().scaleInPlace(r));
+      const pStart = pCurr.addToRef(v1.normalize().scaleInPlace(r), this._vTmp3).clone();
+      const pEnd = pCurr.addToRef(v2.normalize().scaleInPlace(r), this._vTmp3).clone();
 
       const cornerPoints = Curve3.CreateQuadraticBezier(
         pStart,
