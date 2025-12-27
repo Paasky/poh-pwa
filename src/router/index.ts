@@ -33,10 +33,9 @@ const injectIt = () => {
     // Validate that the router is injected properly (IDE thinks it's lost .value - it is still there)
     if (
       // eslint-disable-next-line
-      (appStore._router?.currentRoute as any)?.value?.fullPath ==
-        router.currentRoute.value.fullPath &&
+      (appStore._router?.currentRoute as any)?.value?.fullPath == router.currentRoute.fullPath &&
       // eslint-disable-next-line
-      (appStore._router?.currentRoute as any)?.value?.query == router.currentRoute.value.query
+      (appStore._router?.currentRoute as any)?.value?.query == router.currentRoute.query
     ) {
       const encStore = useEncyclopediaStore();
       const pdStore = usePlayerDetailsStore();
@@ -63,7 +62,7 @@ const injectIt = () => {
       // Run initial sync between UI state <-> URL before turning on the watcher
       appStore.syncUiStateFromNav();
       watch(
-        () => router.currentRoute.value.fullPath,
+        () => router.currentRoute.fullPath,
         () => useAppStore().syncUiStateFromNav(),
       );
       return;

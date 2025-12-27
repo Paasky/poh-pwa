@@ -1,4 +1,3 @@
-import { computed, ref } from "vue";
 import { GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
 import { Yield, Yields } from "@/objects/yield";
 import { TypeObject } from "@/types/typeObjects";
@@ -10,20 +9,15 @@ import { TypeKey } from "@/types/common";
 export class UnitDesign extends GameObject {
   constructor(
     key: GameKey,
-    platform: TypeObject,
-    equipment: TypeObject,
-    name: string,
-    playerKey?: GameKey,
-    isElite?: boolean,
-    isActive?: boolean,
+    public platform: TypeObject,
+    public equipment: TypeObject,
+    public name: string,
+    public playerKey: GameKey | null = null,
+    public isElite = false,
+    public isActive = true,
   ) {
     super(key);
 
-    this.isActive.value = isActive ?? true;
-    this.isElite = !!isElite;
-    this.equipment = equipment;
-    this.name = name;
-    this.platform = platform;
     this.types = [this.platform, this.equipment];
 
     const allYields = new Yields(this.types.flatMap((t) => t.yields.all()));
@@ -33,31 +27,28 @@ export class UnitDesign extends GameObject {
       .applyMods()
       .getLumpAmount("yieldType:productionCost");
 
-    if (playerKey) this.playerKey = playerKey;
+    canHaveOne<Player>(this, "playerKey");
+
+    this.unitKeys = [];
+    hasMany<Unit>(this, "unitKeys");
   }
 
   static attrsConf: GameObjAttr[] = [
-    { attrName: "platform", attrNotRef: true, isTypeObj: true },
-    { attrName: "equipment", attrNotRef: true, isTypeObj: true },
-    { attrName: "name", attrNotRef: true },
+    { attrName: "platform", isTypeObj: true },
+    { attrName: "equipment", isTypeObj: true },
+    { attrName: "name" },
     {
       attrName: "playerKey",
       isOptional: true,
-      attrNotRef: true,
       related: { theirKeyAttr: "designKeys" },
     },
-    { attrName: "isElite", attrNotRef: true, isOptional: true },
+    { attrName: "isElite", isOptional: true },
     { attrName: "isActive", isOptional: true },
   ];
 
   /*
    * Attributes
    */
-  equipment: TypeObject;
-  isActive = ref(true);
-  isElite: boolean;
-  name: string;
-  platform: TypeObject;
   productionCost: number;
   types: TypeObject[];
   yields: Yields;
@@ -65,24 +56,23 @@ export class UnitDesign extends GameObject {
   /*
    * Relations
    */
-  playerKey: GameKey | null = null;
-  player = canHaveOne<Player>(this.playerKey, `${this.key}.player`);
+  declare player: Player | null;
 
-  unitKeys = ref([] as GameKey[]);
-  units = hasMany<Unit[]>(this.unitKeys, `${this.key}.units`);
+  unitKeys: GameKey[];
+  declare units: Unit[];
 
   /*
    * Computed
    */
-  prodCostYield = computed(
-    (): Yield => ({
+  get prodCostYield(): Yield {
+    return {
       type: "yieldType:productionCost",
       amount: this.productionCost,
       method: "lump",
       for: [],
       vs: [],
-    }),
-  );
+    };
+  }
 
   domainKey(): TypeKey {
     const cat = this.platform.category as string;

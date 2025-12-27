@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any,@typescript-eslint/no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { canHaveOne, hasOne } from "@/objects/game/_relations";
 import { TypeObject } from "@/types/typeObjects";
-import { computed, ComputedRef, Ref, ref } from "vue";
 import { Yields } from "@/objects/yield";
 import { roundToTenth } from "@/types/common";
 import { GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
@@ -35,47 +34,36 @@ export type UnitStatus =
 export class Unit extends GameObject {
   constructor(
     key: GameKey,
-    designKey: GameKey,
-    playerKey: GameKey,
-    tileKey: GameKey,
-    cityKey?: GameKey,
-    name?: string,
-    action?: TypeObject,
-    canAttack = false,
-    health = 100,
+    public designKey: GameKey,
+    public playerKey: GameKey,
+    public tileKey: GameKey,
+    public cityKey: GameKey | null = null,
+    public customName = "",
+    public action: TypeObject | null = null,
+    public canAttack = false,
+    public health = 100,
     moves = 0,
-    status: UnitStatus = "regular",
-    origPlayerKey?: GameKey,
+    public status: UnitStatus = "regular",
+    public origPlayerKey: GameKey = playerKey,
   ) {
     super(key);
-    if (action) this.action.value = action;
-    this.canAttack.value = canAttack;
-    this.health.value = health;
     this.movement = new UnitMovement(this);
-    this.movement.moves.value = moves;
+    this.movement.moves = moves;
 
-    if (name) this.customName.value = name;
-    this.status.value = status;
+    hasOne<UnitDesign>(this, "designKey");
 
-    if (cityKey) this.cityKey.value = cityKey;
+    hasOne<Player>(this, "origPlayerKey");
+    hasOne<Player>(this, "playerKey");
+    hasOne<Tile>(this, "tileKey");
 
-    this.designKey = designKey;
-
-    // noinspection DuplicatedCode
-    this.origPlayerKey = origPlayerKey ?? playerKey;
-    this.origPlayer = hasOne<Player>(this.origPlayerKey, `${this.key}.origPlayer`);
-
-    this.playerKey = ref(playerKey);
-    this.player = hasOne<Player>(this.playerKey, `${this.key}.player`);
-
-    this.tileKey = ref(tileKey);
-    this.tile = hasOne<Tile>(this.tileKey, `${this.key}.tile`);
+    this.tradeRouteKey = null;
+    canHaveOne<City>(this, "cityKey");
+    canHaveOne<TradeRoute>(this, "tradeRouteKey");
   }
 
   static attrsConf: GameObjAttr[] = [
     {
       attrName: "designKey",
-      attrNotRef: true,
       related: { theirKeyAttr: "unitKeys" },
     },
     { attrName: "playerKey", related: { theirKeyAttr: "unitKeys" } },
@@ -85,212 +73,188 @@ export class Unit extends GameObject {
       isOptional: true,
       related: { theirKeyAttr: "unitKeys" },
     },
-    { attrName: "name", isOptional: true },
+    { attrName: "customName", isOptional: true },
     { attrName: "action", isOptional: true, isTypeObj: true },
     { attrName: "canAttack", isOptional: true },
     { attrName: "health", isOptional: true },
-    { attrName: "moves", isOptional: true, attrNotRef: true },
+    { attrName: "moves", isOptional: true },
     { attrName: "status", isOptional: true },
     {
       attrName: "origPlayerKey",
       isOptional: true,
-      attrNotRef: true,
     },
   ];
 
   /*
    * Attributes
    */
-  action = ref<TypeObject | null>(null);
-  canAttack = ref(false);
-  health = ref(100);
   movement: UnitMovement;
-  customName = ref("");
-  status = ref("regular" as UnitStatus);
   unwatchers: (() => void)[] = [];
 
   /*
    * Relations
    */
-  cityKey = ref(null as GameKey | null);
-  city = canHaveOne<City>(this.cityKey, `${this.key}.city`);
+  declare city: City | null;
 
-  designKey: GameKey;
-  design = computed(
-    () =>
-      // asd
-      useObjectsStore().get(this.designKey) as UnitDesign,
-  );
+  declare design: UnitDesign;
 
-  playerKey: Ref<GameKey>;
-  player: ComputedRef<Player>;
+  declare player: Player;
 
-  origPlayerKey: GameKey;
-  origPlayer: ComputedRef<Player>;
+  declare origPlayer: Player;
 
-  tileKey: Ref<GameKey>;
-  tile: ComputedRef<Tile>;
+  declare tile: Tile;
 
-  tradeRouteKey = ref<GameKey | null>(null);
-  tradeRoute = canHaveOne<TradeRoute>(this.tradeRouteKey, `${this.key}.tradeRoute`);
+  tradeRouteKey: GameKey | null;
+  declare tradeRoute: TradeRoute | null;
 
   /*
    * Computed
    */
-  myTypes = computed((): TypeObject[] => [
-    this.concept,
-    this.design.value.platform,
-    this.design.value.equipment,
-  ]);
+  get myTypes(): TypeObject[] {
+    return [this.concept, this.design.platform, this.design.equipment];
+  }
 
-  name = computed(() => this.customName.value || this.design.value.name);
+  get name(): string {
+    return this.customName || this.design.name;
+  }
 
-  playerYields = computed(() =>
-    this.player.value.yields.value.only(this.concept.inheritYieldTypes!, this.types.value),
-  );
+  get playerYields(): Yields {
+    return this.player.yields.only(this.concept.inheritYieldTypes!, this.types);
+  }
 
-  tileYields = computed(() =>
-    this.tile.value.yields.value.only(this.concept.inheritYieldTypes!, this.types.value),
-  );
+  get tileYields(): Yields {
+    return this.tile.yields.only(this.concept.inheritYieldTypes!, this.types);
+  }
 
-  types = computed((): TypeObject[] => {
-    return this.myTypes.value.concat(this.tile.value.types.value);
-  });
+  get types(): TypeObject[] {
+    return this.myTypes.concat(this.tile.types);
+  }
 
-  visibleTileKeys = computed(() => {
+  get visibleTileKeys(): Set<GameKey> {
     const store = useObjectsStore();
-    const center = getCoordsFromTileKey(this.tileKey.value);
+    const center = getCoordsFromTileKey(this.tileKey);
     const neighbors = getHexNeighborCoords(store.world.size, center, 2);
     const keys = new Set<GameKey>();
-    keys.add(this.tileKey.value);
+    keys.add(this.tileKey);
     for (const c of neighbors) {
       keys.add(tileKey(c.x, c.y));
     }
     return keys;
-  });
+  }
 
-  vitals = computed(
-    () =>
-      new Yields([
-        {
-          type: "yieldType:health",
-          amount: this.health.value,
-          method: "lump",
-          for: [],
-          vs: [],
-          max: 100,
-        },
-        {
-          type: "yieldType:moves",
-          amount: this.movement.moves.value,
-          method: "lump",
-          for: [],
-          vs: [],
-          max: this.movement.maxMoves.value,
-        },
-      ]),
-  );
+  get vitals(): Yields {
+    return new Yields([
+      {
+        type: "yieldType:health",
+        amount: this.health,
+        method: "lump",
+        for: [],
+        vs: [],
+        max: 100,
+      },
+      {
+        type: "yieldType:moves",
+        amount: this.movement.moves,
+        method: "lump",
+        for: [],
+        vs: [],
+        max: this.movement.maxMoves,
+      },
+    ]);
+  }
 
-  yields = computed(() => new Yields());
+  get yields(): Yields {
+    return new Yields();
+  }
 
   /*
    * Actions
    */
   modifyHealth(amount: number, reason: string) {
-    this.health.value = Math.max(0, Math.min(100, roundToTenth(this.health.value + amount)));
+    this.health = Math.max(0, Math.min(100, roundToTenth(this.health + amount)));
 
-    const city =
-      this.tile.value.city.value ??
-      this.tile.value.neighborTiles.find((t) => t.city.value)?.city.value;
+    const city = this.tile.city ?? this.tile.neighborTiles.find((t) => t.city)?.city;
 
-    if (this.health.value <= 0) {
+    if (this.health <= 0) {
       this.delete(reason, city);
       return;
     }
 
-    if (this.health.value >= 100 && this.action.value?.key === "actionType:heal") {
-      useEventStore().turnEvents.push(new UnitHealed(this) as any);
-      this.action.value = null;
+    if (this.health >= 100 && this.action?.key === "actionType:heal") {
+      useEventStore().turnEvents.push(new UnitHealed(this));
+      this.action = null;
     }
   }
 
   complete() {
-    if (this.city.value) {
-      this.city.value.unitKeys.value.push(this.key);
+    if (this.city) {
+      this.city.unitKeys.push(this.key);
     }
 
-    this.design.value.unitKeys.value.push(this.key);
+    this.design.unitKeys.push(this.key);
 
-    this.player.value.unitKeys.value.push(this.key);
+    this.player.unitKeys.push(this.key);
 
-    this.tile.value.unitKeys.value.push(this.key);
+    this.tile.unitKeys.push(this.key);
 
-    // Use any as IDE has a Ref value mismatch
-    useEventStore().turnEvents.push(new UnitCreated(this) as any);
+    useEventStore().turnEvents.push(new UnitCreated(this));
   }
 
   delete(reason: string, city?: City | null) {
     this.unwatchers.forEach((u) => u());
 
-    if (this.city.value) {
-      this.city.value.unitKeys.value = this.city.value.unitKeys.value.filter((u) => u !== this.key);
+    if (this.city) {
+      this.city.unitKeys = this.city.unitKeys.filter((u) => u !== this.key);
     }
 
-    this.design.value.unitKeys.value = this.design.value.unitKeys.value.filter(
-      (k) => k !== this.key,
-    );
+    this.design.unitKeys = this.design.unitKeys.filter((k) => k !== this.key);
 
-    this.player.value.unitKeys.value = this.player.value.unitKeys.value.filter(
-      (k) => k !== this.key,
-    );
+    this.player.unitKeys = this.player.unitKeys.filter((k) => k !== this.key);
 
-    this.tile.value.unitKeys.value = this.tile.value.unitKeys.value.filter((k) => k !== this.key);
+    this.tile.unitKeys = this.tile.unitKeys.filter((k) => k !== this.key);
 
-    if (this.tradeRoute.value) {
-      this.tradeRoute.value.delete(true);
+    if (this.tradeRoute) {
+      this.tradeRoute.delete(true);
     }
 
     delete useObjectsStore()._gameObjects[this.key];
 
-    useEventStore().turnEvents.push(
-      // Use any as IDE has a Ref value mismatch
-      new UnitLost(this.name.value, this.player.value, this.tile.value, reason, city) as any,
-    );
+    useEventStore().turnEvents.push(new UnitLost(this.name, this.player, this.tile, reason, city));
   }
 
   startTurn(): void {
     // Reset moves
-    this.movement.moves.value = this.design.value.yields.getLumpAmount("yieldType:moves");
+    this.movement.moves = this.design.yields.getLumpAmount("yieldType:moves");
 
     // Heal
-    if (this.health.value < 100 && this.action.value?.key === "actionType:heal") {
+    if (this.health < 100 && this.action?.key === "actionType:heal") {
       this.modifyHealth(10, "healing");
     }
   }
 
   warmUp(): void {
-    this.city.value;
-    this.design.value;
-    this.player.value;
-    this.origPlayer.value;
-    this.tile.value;
-    this.tradeRoute.value;
+    this.city;
+    this.design;
+    this.player;
+    this.origPlayer;
+    this.tile;
+    this.tradeRoute;
 
-    this.movement.isMobile.value;
-    this.movement.specialTypeKeys.value;
-    this.myTypes.value;
-    this.name.value;
-    this.playerYields.value;
-    this.tileYields.value;
-    this.types.value;
-    this.visibleTileKeys.value;
-    this.yields.value;
+    this.movement.isMobile;
+    this.movement.specialTypeKeys;
+    this.myTypes;
+    this.name;
+    this.playerYields;
+    this.tileYields;
+    this.types;
+    this.visibleTileKeys;
+    this.yields;
   }
 
   // moves is stored inside movement
   toJSON(): Record<string, unknown> {
     const json = super.toJSON();
-    json.moves = this.movement.moves.value;
+    json.moves = this.movement.moves;
     return json;
   }
 }

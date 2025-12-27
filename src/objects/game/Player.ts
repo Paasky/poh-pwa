@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { canHaveOne, hasMany, hasOne } from "@/objects/game/_relations";
-import { computed, ComputedRef, ref, shallowRef, triggerRef, watch } from "vue";
 import { TypeObject } from "@/types/typeObjects";
 import { TypeStorage } from "@/objects/storage";
 import { Yield, Yields } from "@/objects/yield";
@@ -21,63 +19,60 @@ import { Diplomacy } from "@/objects/player/Diplomacy";
 import { ObjKey, TypeKey } from "@/types/common";
 import { useObjectsStore } from "@/stores/objectStore";
 import { UnitMovement } from "@/movement/UnitMovement";
+import { Construction } from "@/objects/game/Construction";
 
 export class Player extends GameObject {
   constructor(
     key: GameKey,
-    cultureKey: GameKey,
-    name: string,
-    isCurrent = false,
-    isMinor = false,
-    religionKey?: GameKey,
-    knownTileKeys?: GameKey[],
+    public cultureKey: GameKey,
+    public name: string,
+    public isCurrent = false,
+    public isMinor = false,
+    public religionKey: GameKey | null = null,
+    public knownPlayerKeys = new Set<GameKey>(),
+    public knownReligionKeys = new Set<GameKey>(),
+    public knownTileKeys = new Set<GameKey>(),
   ) {
     super(key);
 
     this.diplomacy = new Diplomacy(key);
-    this.isCurrent = isCurrent;
-    this.isMinor = isMinor;
     this.government = new Government(key);
-    this.name = name;
     this.research = new Research(key);
 
-    // Culture is special:
-    this.cultureKey = cultureKey;
-    this.culture = hasOne<Culture>(this.cultureKey, `${this.key}.culture`);
+    hasOne<Culture>(this, "cultureKey");
+    canHaveOne<Religion>(this, "religionKey");
+    hasMany<Player>(this, "knownPlayerKeys");
+    hasMany<Religion>(this, "knownReligionKeys");
+    hasMany<Tile>(this, "knownTileKeys");
 
-    if (religionKey) this.religionKey.value = religionKey;
-
-    if (knownTileKeys) this.knownTileKeys.value = new Set(knownTileKeys);
-
-    // Always include visible tiles in known keys
-    watch(this.visibleTileKeys, (keys) => {
-      let changed = false;
-      const known = this.knownTileKeys.value;
-      for (const key of keys) {
-        if (!known.has(key)) {
-          known.add(key);
-          changed = true;
-
-          // Heritage point trigger
-          if (this.culture.value.status.value !== "settled") {
-            const tile = useObjectsStore().get(key) as Tile;
-            if (tile) this.culture.value.onTileDiscovered(tile);
-          }
-        }
-      }
-      if (changed) triggerRef(this.knownTileKeys);
-    });
+    this.agendaKeys = [];
+    hasMany<Agenda>(this, "agendaKeys");
+    this.citizenKeys = [];
+    hasMany<Citizen>(this, "citizenKeys");
+    this.cityKeys = [];
+    hasMany<City>(this, "cityKeys");
+    this.constructionKeys = [];
+    hasMany<Construction>(this, "constructionKeys");
+    this.dealKeys = [];
+    hasMany<Deal>(this, "dealKeys");
+    this.tileKeys = [];
+    hasMany<Tile>(this, "tileKeys");
+    this.tradeRouteKeys = [];
+    hasMany<TradeRoute>(this, "tradeRouteKeys");
+    this.unitKeys = [];
+    hasMany<Unit>(this, "unitKeys");
+    this.designKeys = [];
+    hasMany<UnitDesign>(this, "designKeys");
   }
 
   static attrsConf: GameObjAttr[] = [
     {
       attrName: "cultureKey",
-      attrNotRef: true,
       related: { theirKeyAttr: "playerKey", isOne: true },
     },
-    { attrName: "name", attrNotRef: true },
-    { attrName: "isCurrent", attrNotRef: true, isOptional: true },
-    { attrName: "isMinor", attrNotRef: true, isOptional: true },
+    { attrName: "name" },
+    { attrName: "isCurrent", isOptional: true },
+    { attrName: "isMinor", isOptional: true },
     {
       attrName: "religionKey",
       isOptional: true,
@@ -94,100 +89,98 @@ export class Player extends GameObject {
    */
   diplomacy: Diplomacy;
   government: Government;
-  isCurrent = false;
-  isMinor = false;
-  name: string;
   research: Research;
   storage = new TypeStorage();
 
   /*
    * Relations
    */
-  agendaKeys = ref([] as GameKey[]);
-  agendas = hasMany<Agenda>(this.agendaKeys, `${this.key}.agendas`);
+  agendaKeys: GameKey[];
+  declare agendas: Agenda[];
 
-  citizenKeys = ref([] as GameKey[]);
-  citizens = hasMany<Citizen>(this.citizenKeys, `${this.key}.citizens`);
+  citizenKeys: GameKey[];
+  declare citizens: Citizen[];
 
-  cultureKey: GameKey;
-  culture: ComputedRef<Culture>;
+  cityKeys: GameKey[];
+  declare cities: City[];
 
-  cityKeys = ref([] as GameKey[]);
-  cities = hasMany<City>(this.cityKeys, `${this.key}.cities`);
+  constructionKeys: GameKey[];
+  declare constructions: Construction[];
 
-  dealKeys = ref([] as GameKey[]);
-  deals = hasMany<Deal>(this.dealKeys, `${this.key}.deals`);
+  declare culture: Culture;
 
-  designKeys = ref([] as GameKey[]);
-  designs = hasMany<UnitDesign>(this.designKeys, `${this.key}.designs`);
+  dealKeys: GameKey[];
+  declare deals: Deal[];
 
-  knownTileKeys = shallowRef(new Set<GameKey>());
+  declare religion: Religion | null;
 
-  religionKey = ref(null as GameKey | null);
-  religion = canHaveOne<Religion>(this.religionKey, `${this.key}.religion`);
+  tileKeys: GameKey[];
+  declare tiles: Tile[];
 
-  tileKeys = ref([] as GameKey[]);
-  tiles = hasMany<Tile>(this.tileKeys, `${this.key}.tiles`);
+  tradeRouteKeys: GameKey[];
+  declare tradeRoutes: TradeRoute[];
 
-  tradeRouteKeys = ref([] as GameKey[]);
-  tradeRoutes = hasMany<TradeRoute>(this.tradeRouteKeys, `${this.key}.tradeRoutes`);
+  unitKeys: GameKey[];
+  declare units: Unit[];
 
-  unitKeys = ref([] as GameKey[]);
-  units = hasMany<Unit>(this.unitKeys, `${this.key}.units`);
+  designKeys: GameKey[];
+  declare designs: UnitDesign[];
 
   /*
    * Computed
    */
-  activeDesigns = computed(() => this.designs.value.filter((d) => d.isActive.value));
+  get activeDesigns(): UnitDesign[] {
+    return this.designs.filter((d) => d.isActive);
+  }
 
-  citizenTypes = computed(
-    () =>
-      [
-        ...this.culture.value.heritages.value,
-        ...this.culture.value.traits.value,
-        ...(this.religion.value?.myths.value ?? []),
-        ...(this.religion.value?.gods.value ?? []),
-        ...(this.religion.value?.dogmas.value ?? []),
-      ] as TypeObject[],
-  );
+  get citizenTypes(): TypeObject[] {
+    return [
+      ...this.culture.heritages,
+      ...this.culture.traits,
+      ...(this.religion?.myths ?? []),
+      ...(this.religion?.gods ?? []),
+      ...(this.religion?.dogmas ?? []),
+    ] as TypeObject[];
+  }
 
-  commonTypes = computed(
-    (): TypeObject[] =>
-      [...this.government.policies.value, ...this.research.researched.value] as TypeObject[],
-  );
+  get commonTypes(): TypeObject[] {
+    return [...this.government.policies, ...this.research.researched] as TypeObject[];
+  }
 
   // All specials from all known types
-  knownSpecialKeys = computed(
-    (): Set<TypeKey> => new Set(this.knownTypes.value.flatMap((t) => t.specials)),
-  );
+  get knownSpecialKeys(): Set<TypeKey> {
+    return new Set(this.knownTypes.flatMap((t) => t.specials));
+  }
 
   // All 3 types-arrays combined
-  knownTypes = computed(() => [
-    ...this.citizenTypes.value,
-    ...this.commonTypes.value,
-    ...this.ownedTypes.value,
-  ]);
+  get knownTypes(): TypeObject[] {
+    return [...this.citizenTypes, ...this.commonTypes, ...this.ownedTypes];
+  }
 
-  leader = computed(() => this.culture.value.leader.value);
+  get leader(): TypeObject {
+    return this.culture.leader;
+  }
 
-  ownedTypes = computed(() => this.cities.value.flatMap((city) => city.ownedTypes.value));
+  get ownedTypes(): TypeObject[] {
+    return this.cities.flatMap((city) => city.ownedTypes);
+  }
 
-  visibleTileKeys = computed(() => {
-    const keys = new Set<GameKey>(this.tileKeys.value);
+  get visibleTileKeys(): Set<GameKey> {
+    const keys = new Set<GameKey>(this.tileKeys);
 
     // Prevent crash if store is not ready yet
     if (!useObjectsStore().ready) return keys;
 
-    this.units.value.forEach((u) => u.visibleTileKeys.value.forEach((k) => keys.add(k)));
+    this.units.forEach((u) => u.visibleTileKeys.forEach((k) => keys.add(k)));
     return keys;
-  });
+  }
 
   // Player yield mods are the combined nation-wide yield for/vs
-  yieldMods = computed(() => {
+  get yieldMods(): Yields {
     const yieldMods = new Yields();
 
     // Add any Common Type yield that is for/vs (aka is a yield mod)
-    for (const type of this.commonTypes.value) {
+    for (const type of this.commonTypes) {
       for (const y of type.yields.all()) {
         if (y.for.length + y.vs.length > 0) {
           yieldMods.add(y);
@@ -196,7 +189,7 @@ export class Player extends GameObject {
     }
 
     // Add any Culture/Religion Type yield that is for/vs AND NOT for Citizens
-    for (const type of this.citizenTypes.value) {
+    for (const type of this.citizenTypes) {
       for (const y of type.yields.all()) {
         const forOthers = y.for.filter((forKey: ObjKey) => forKey !== "conceptType:citizen");
 
@@ -214,7 +207,7 @@ export class Player extends GameObject {
     }
 
     // Add any Owned Type yields that is for/vs a specialType
-    for (const type of this.ownedTypes.value) {
+    for (const type of this.ownedTypes) {
       for (const y of type.yields.all()) {
         const forSpecials = y.for.filter((forKey: ObjKey) => forKey.startsWith("specialType:"));
         const vsSpecials = y.for.filter((forKey: ObjKey) => forKey.startsWith("specialType:"));
@@ -233,10 +226,10 @@ export class Player extends GameObject {
     }
 
     return yieldMods;
-  });
+  }
 
   // Player yields is the total lump output (+/-) of all Cities, Deals and Units
-  yields = computed(() => {
+  get yields(): Yields {
     const yields = new Yields();
     const inheritYieldTypes = [
       "yieldType:culture",
@@ -247,14 +240,14 @@ export class Player extends GameObject {
       "yieldType:upkeep",
     ] as TypeKey[];
 
-    const inheritFromGameObjs = [
-      ...this.cities.value,
-      ...this.deals.value,
-      ...this.units.value,
-    ] as (City | Deal | Unit)[];
+    const inheritFromGameObjs = [...this.cities, ...this.deals, ...this.units] as (
+      | City
+      | Deal
+      | Unit
+    )[];
 
     for (const gameObj of inheritFromGameObjs) {
-      for (const y of gameObj.yields.value.applyMods().all()) {
+      for (const y of gameObj.yields.applyMods().all()) {
         if (
           y.amount &&
           y.method === "lump" &&
@@ -273,22 +266,22 @@ export class Player extends GameObject {
     }
 
     return yields;
-  });
+  }
 
   /*
    * Actions
    */
   startTurn(): void {
     // Load the yields from the end of the prev turn into storage
-    this.storage.load(this.yields.value.toStorage().all());
+    this.storage.load(this.yields.toStorage().all());
 
-    this.cities.value.forEach((c) => c.startTurn());
-    this.units.value.forEach((u) => u.startTurn());
+    this.cities.forEach((c) => c.startTurn());
+    this.units.forEach((u) => u.startTurn());
 
-    this.culture.value.startTurn();
+    this.culture.startTurn();
     this.diplomacy.startTurn();
     this.government.startTurn();
-    this.religion.value?.startTurn();
+    this.religion?.startTurn();
     this.research.startTurn();
   }
 
@@ -296,34 +289,34 @@ export class Player extends GameObject {
     // Try to move remaining auto-moves (units on multi-turn move + units on trade routes)
     // On refusal, return false
     // After all done, return true
-    for (const unit of this.units.value) {
+    for (const unit of this.units) {
       if (unit.movement.move(UnitMovement.getMoveContext(unit)) === false) return false;
     }
     return true;
   }
 
   warmUp(): void {
-    this.agendas.value;
-    this.citizens.value;
-    this.culture.value;
-    this.cities.value;
-    this.deals.value;
-    this.designs.value;
-    this.knownTileKeys.value;
-    this.knownTypes.value;
-    this.religion.value;
-    this.knownSpecialKeys.value;
-    this.tiles.value;
-    this.tradeRoutes.value;
-    this.units.value;
-    this.visibleTileKeys.value;
+    this.agendas;
+    this.citizens;
+    this.culture;
+    this.cities;
+    this.deals;
+    this.designs;
+    this.knownTileKeys;
+    this.knownTypes;
+    this.religion;
+    this.knownSpecialKeys;
+    // this.tiles; // Player doesn't have tiles relation anymore it seems
+    this.tradeRoutes;
+    this.units;
+    this.visibleTileKeys;
 
-    this.activeDesigns.value;
-    this.leader.value;
-    this.commonTypes.value;
-    this.citizenTypes.value;
-    this.ownedTypes.value;
-    this.yieldMods.value;
-    this.yields.value;
+    this.activeDesigns;
+    this.leader;
+    this.commonTypes;
+    this.citizenTypes;
+    this.ownedTypes;
+    this.yieldMods;
+    this.yields;
   }
 }

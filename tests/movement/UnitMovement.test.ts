@@ -127,7 +127,7 @@ describe("UnitMovement", () => {
     it("should block turn end movement if the tile is occupied by a friendly unit (and allow walking through)", () => {
       const unit = world.unit;
       const waterTile = world.tiles[Tile.getKey(1, 2)]; // Coast
-      world.player.research.researched.value.push(
+      world.player.research.researched.push(
         initTypeObject({
           key: "tech:sailing",
           specials: ["specialType:canEmbark"],
@@ -166,15 +166,15 @@ describe("UnitMovement", () => {
     const unit = new Unit("unit:custom", shipDesign.key, world.player.key, Tile.getKey(1, 1));
 
     // Design special
-    expect(unit.movement.specialTypeKeys.value.has("specialType:canEnterMountains")).toBe(true);
+    expect(unit.movement.specialTypeKeys.has("specialType:canEnterMountains")).toBe(true);
 
     // Player research special
-    world.player.research.researched.value.push(
+    world.player.research.researched.push(
       initTypeObject({ key: "tech:1", specials: ["specialType:canEmbark"] }),
     );
-    expect(unit.movement.specialTypeKeys.value.has("specialType:canEmbark")).toBe(true);
+    expect(unit.movement.specialTypeKeys.has("specialType:canEmbark")).toBe(true);
     // Still has design special
-    expect(unit.movement.specialTypeKeys.value.has("specialType:canEnterMountains")).toBe(true);
+    expect(unit.movement.specialTypeKeys.has("specialType:canEnterMountains")).toBe(true);
   });
 
   describe("Domain & Special Permissions", () => {
@@ -190,7 +190,7 @@ describe("UnitMovement", () => {
       const waterTile = world.tiles[Tile.getKey(1, 2)]; // Coast
 
       // Give special
-      world.player.research.researched.value.push(
+      world.player.research.researched.push(
         initTypeObject({
           key: "tech:sailing",
           specials: ["specialType:canEmbark"],
@@ -300,17 +300,17 @@ describe("UnitMovement", () => {
       expect(ship.movement.cost(iceTile)).toBe(null);
 
       // Give permissions
-      world.player.research.researched.value.push(
+      world.player.research.researched.push(
         initTypeObject({ key: "t1", specials: ["specialType:canEnterSea"] }),
       );
       expect(ship.movement.cost(seaTile)).toBe(1);
 
-      world.player.research.researched.value.push(
+      world.player.research.researched.push(
         initTypeObject({ key: "t2", specials: ["specialType:canEnterOcean"] }),
       );
       expect(ship.movement.cost(oceanTile)).toBe(1);
 
-      world.player.research.researched.value.push(
+      world.player.research.researched.push(
         initTypeObject({ key: "t3", specials: ["specialType:canEnterIce"] }),
       );
       expect(ship.movement.cost(iceTile)).toBe(1);
@@ -325,7 +325,7 @@ describe("UnitMovement", () => {
       const snowMountainTile = world.tiles[Tile.getKey(4, 1)];
 
       // Need embark first
-      world.player.research.researched.value.push(
+      world.player.research.researched.push(
         initTypeObject({
           key: "tech:sailing",
           specials: ["specialType:canEmbark"],
@@ -339,22 +339,22 @@ describe("UnitMovement", () => {
       expect(unit.movement.cost(snowMountainTile)).toBe(null);
 
       // Add specials one by one
-      world.player.research.researched.value.push(
+      world.player.research.researched.push(
         initTypeObject({ key: "t1", specials: ["specialType:canEnterSea"] }),
       );
       expect(unit.movement.cost(seaTile)).toBe("turnEnd");
 
-      world.player.research.researched.value.push(
+      world.player.research.researched.push(
         initTypeObject({ key: "t2", specials: ["specialType:canEnterOcean"] }),
       );
       expect(unit.movement.cost(oceanTile)).toBe("turnEnd");
 
-      world.player.research.researched.value.push(
+      world.player.research.researched.push(
         initTypeObject({ key: "t3", specials: ["specialType:canEnterIce"] }),
       );
       expect(unit.movement.cost(iceTile)).toBe("turnEnd");
 
-      world.player.research.researched.value.push(
+      world.player.research.researched.push(
         initTypeObject({ key: "t4", specials: ["specialType:canEnterMountains"] }),
       );
       expect(unit.movement.cost(mountainTile)).toBe(2);
@@ -367,7 +367,7 @@ describe("UnitMovement", () => {
       // todo: test with bridges
       const unit = world.unit;
       const waterTile = world.tiles[Tile.getKey(1, 2)]; // Coast
-      world.player.research.researched.value.push(
+      world.player.research.researched.push(
         initTypeObject({
           key: "tech:sailing",
           specials: ["specialType:canEmbark"],
@@ -439,7 +439,7 @@ describe("UnitMovement", () => {
       expect(unit.movement.cost(hillTile)).toBe(2); // 1 base + 1 hill
 
       // Mountains and Snow Mountains need specials to even have a cost
-      world.player.research.researched.value.push(
+      world.player.research.researched.push(
         initTypeObject({ key: "t4", specials: ["specialType:canEnterMountains"] }),
       );
 
@@ -599,7 +599,7 @@ describe("UnitMovement", () => {
       const unit = world.unit;
       unit.movement.moves.value = 5;
       const waterTile = world.tiles[Tile.getKey(1, 2)];
-      world.player.research.researched.value.push(
+      world.player.research.researched.push(
         initTypeObject({
           key: "tech:sailing",
           specials: ["specialType:canEmbark"],
@@ -618,7 +618,7 @@ describe("UnitMovement", () => {
     it("should allow passing through friendly units but refuse to stop on them", () => {
       const unit = world.unit;
       unit.movement.moves.value = 4;
-      const initialTileKey = unit.tileKey.value;
+      const initialTileKey = unit.tileKey;
       const t1 = world.tiles[Tile.getKey(0, 0)]; // Occupied
       const t2 = world.tiles[Tile.getKey(0, 1)]; // Free
 
@@ -656,7 +656,7 @@ describe("UnitMovement", () => {
     it("should refuse to enter a chain of occupied tiles if no free tile is reachable", () => {
       const unit = world.unit;
       unit.movement.moves.value = 5;
-      const initialTileKey = unit.tileKey.value;
+      const initialTileKey = unit.tileKey;
       const t1 = world.tiles[Tile.getKey(0, 0)]; // Occupied
       const t2 = world.tiles[Tile.getKey(0, 1)]; // Occupied
       const t3 = world.tiles[Tile.getKey(0, 2)]; // Occupied
@@ -688,12 +688,12 @@ describe("UnitMovement", () => {
       expect(firstCost).toBe(1);
 
       // Verify it's in cache
-      const design = unit.design.value;
+      const design = unit.design;
       const cacheKey = cache.getCacheKey(design, unit.movement.specialTypeKeys.value);
-      expect(cache.getMoveCost(cacheKey, unit.tile.value.key, target.key)).toBe(1);
+      expect(cache.getMoveCost(cacheKey, unit.tile.key, target.key)).toBe(1);
 
       // Force update the cache with a fake value
-      cache.setMoveCost(cacheKey, unit.tile.value.key, target.key, 5);
+      cache.setMoveCost(cacheKey, unit.tile.key, target.key, 5);
 
       // Second call should return the fake cached value
       expect(unit.movement.cost(target)).toBe(5);

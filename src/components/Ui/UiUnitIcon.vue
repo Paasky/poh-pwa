@@ -16,7 +16,7 @@ const props = withDefaults(
   },
 );
 
-const d = computed(() => props.unit?.design.value ?? props.design);
+const d = computed(() => props.unit?.design ?? props.design);
 
 const platformIcon = computed(() => d.value?.platform.icon.icon.iconName);
 const equipmentIcon = computed(() => d.value?.equipment.icon.icon.iconName);
@@ -30,7 +30,7 @@ const domainColor = computed(() => {
 });
 
 const playerColor = "#fff";
-// const playerColor = computed(() => props.unit?.player.value.color);
+// const playerColor = computed(() => props.unit?.player.color);
 </script>
 
 <template>

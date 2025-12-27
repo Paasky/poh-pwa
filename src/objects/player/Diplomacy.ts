@@ -1,15 +1,13 @@
-import { computed } from "vue";
 import { GameKey } from "@/objects/game/_GameObject";
-import { useObjectsStore } from "@/stores/objectStore";
 import { Player } from "@/objects/game/Player";
+import { hasOne } from "@/objects/game/_relations";
 
 export class Diplomacy {
-  constructor(playerKey: GameKey) {
-    this.playerKey = playerKey;
+  constructor(public playerKey: GameKey) {
+    hasOne<Player>(this, "playerKey");
   }
 
-  playerKey: GameKey;
-  player = computed(() => useObjectsStore().get(this.playerKey) as Player);
+  declare player: Player;
 
   startTurn(): void {
     //

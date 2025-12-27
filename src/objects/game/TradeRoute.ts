@@ -1,4 +1,3 @@
-import { ComputedRef, ref } from "vue";
 import { hasMany, hasOne } from "@/objects/game/_relations";
 import { GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
 import type { City } from "@/objects/game/City";
@@ -8,34 +7,26 @@ import type { Tile } from "@/objects/game/Tile";
 export class TradeRoute extends GameObject {
   constructor(
     key: GameKey,
-    city1Key: GameKey,
-    city2Key: GameKey,
-    tileKeys: GameKey[],
-    unitKey: GameKey,
+    public city1Key: GameKey,
+    public city2Key: GameKey,
+    public tileKeys: GameKey[],
+    public unitKey: GameKey,
   ) {
     super(key);
 
-    this.city1Key = city1Key;
-    this.city1 = hasOne<City>(this.city1Key, `${this.key}.city1`);
-
-    this.city2Key = city2Key;
-    this.city2 = hasOne<City>(this.city2Key, `${this.key}.city2`);
-
-    this.tileKeys.value = tileKeys;
-
-    this.unitKey = unitKey;
-    this.unit = hasOne<Unit>(this.unitKey, `${this.key}.unit`);
+    hasOne<City>(this, "city1Key");
+    hasOne<City>(this, "city2Key");
+    hasMany<Tile>(this, "tileKeys");
+    hasOne<Unit>(this, "unitKey");
   }
 
   static attrsConf: GameObjAttr[] = [
     {
       attrName: "city1Key",
-      attrNotRef: true,
       related: { theirKeyAttr: "tradeRouteKeys" },
     },
     {
       attrName: "city2Key",
-      attrNotRef: true,
       related: { theirKeyAttr: "tradeRouteKeys" },
     },
     {
@@ -44,7 +35,6 @@ export class TradeRoute extends GameObject {
     },
     {
       attrName: "unitKey",
-      attrNotRef: true,
       related: { theirKeyAttr: "tradeRouteKey", isOne: true },
     },
   ];
@@ -57,17 +47,13 @@ export class TradeRoute extends GameObject {
   /*
    * Relations
    */
-  city1Key: GameKey;
-  city1: ComputedRef<City>;
+  declare city1: City;
 
-  city2Key: GameKey;
-  city2: ComputedRef<City>;
+  declare city2: City;
 
-  tileKeys = ref([] as GameKey[]);
-  tiles = hasMany<Tile>(this.tileKeys, `${this.key}.tiles`);
+  declare tiles: Tile[];
 
-  unitKey: GameKey;
-  unit: ComputedRef<Unit>;
+  declare unit: Unit;
 
   /*
    * Computed
@@ -78,18 +64,14 @@ export class TradeRoute extends GameObject {
    * Actions
    */
   delete(unitIsDead = false) {
-    this.city1.value.tradeRouteKeys.value = this.city1.value.tradeRouteKeys.value.filter(
-      (k) => k !== this.key,
-    );
+    this.city1.tradeRouteKeys = this.city1.tradeRouteKeys.filter((k) => k !== this.key);
 
-    this.city2.value.tradeRouteKeys.value = this.city2.value.tradeRouteKeys.value.filter(
-      (k) => k !== this.key,
-    );
+    this.city2.tradeRouteKeys = this.city2.tradeRouteKeys.filter((k) => k !== this.key);
 
-    for (const tile of this.tiles.value) {
-      tile.tradeRouteKeys.value = tile.tradeRouteKeys.value.filter((k) => k !== this.key);
+    for (const tile of this.tiles) {
+      tile.tradeRouteKeys = tile.tradeRouteKeys.filter((k) => k !== this.key);
     }
 
-    if (!unitIsDead) this.unit.value.tradeRouteKey.value = null;
+    if (!unitIsDead) this.unit.tradeRouteKey = null;
   }
 }

@@ -74,9 +74,9 @@ const cityColumns = store.columns as unknown as TableColumn<City>[];
         <template #[`item.health`]="{ item }">
           <span
             :class="[
-              (item as City).health.value < 75
+              (item as City).health < 75
                 ? 'text-red'
-                : (item as City).health.value < 100
+                : (item as City).health < 100
                   ? 'text-orange font-weight-bold'
                   : '',
             ]"
@@ -86,7 +86,7 @@ const cityColumns = store.columns as unknown as TableColumn<City>[];
           </span>
         </template>
         <template #[`item.yields`]="{ item }">
-          <UiYields :yields="(item as City).yields.value" :opts="{ posLumpIsNeutral: true }" />
+          <UiYields :yields="(item as City).yields" :opts="{ posLumpIsNeutral: true }" />
         </template>
         <template #[`item.constructing`]="{ item }">
           <span>
@@ -120,20 +120,20 @@ const cityColumns = store.columns as unknown as TableColumn<City>[];
           <div class="d-flex align-center ga-4">
             <!-- Citizens count -->
             <v-tooltip
-              :text="`${(item as City).citizens.value.length} Citizens (pop. ${(item as City).pop.value})`"
+              :text="`${(item as City).citizens.length} Citizens (pop. ${(item as City).pop.value})`"
               location="bottom"
               content-class="text-grey bg-grey-darken-4"
             >
               <template #activator="{ props }">
                 <span class="d-inline-flex align-center ga-1" v-bind="props">
                   <v-icon icon="fa-users" color="white" size="small" />
-                  {{ (item as City).citizens.value.length }}
+                  {{ (item as City).citizens.length }}
                 </span>
               </template>
             </v-tooltip>
 
             <!-- Holy city for religions -->
-            <template v-for="religion in (item as City).holyCityFor.value" :key="religion.key">
+            <template v-for="religion in (item as City).holyCityFors" :key="religion.key">
               <v-tooltip
                 :text="religion.name"
                 location="bottom"
@@ -153,8 +153,8 @@ const cityColumns = store.columns as unknown as TableColumn<City>[];
 
             <!-- Original founder different than current owner -->
             <v-tooltip
-              v-if="(item as City).origPlayerKey !== (item as City).playerKey.value"
-              :text="`Founded by ${(item as City).origPlayer.value.name}`"
+              v-if="(item as City).origPlayerKey !== (item as City).playerKey"
+              :text="`Founded by ${(item as City).origPlayer.name}`"
               location="bottom"
               content-class="text-grey bg-grey-darken-4"
             >
@@ -171,7 +171,7 @@ const cityColumns = store.columns as unknown as TableColumn<City>[];
 
             <!-- Can attack -->
             <v-tooltip
-              v-if="(item as City).canAttack.value"
+              v-if="(item as City).canAttack"
               text="Can attack"
               location="bottom"
               content-class="text-grey bg-grey-darken-4"
@@ -281,14 +281,14 @@ const cityColumns = store.columns as unknown as TableColumn<City>[];
             </thead>
             <tbody>
               <tr v-for="citizen in current.citizens" :key="citizen.key">
-                <td class="border-e border-b-0">{{ citizen.culture.value.type.value.name }}</td>
+                <td class="border-e border-b-0">{{ citizen.culture.type.name }}</td>
                 <td class="border-e border-b-0">{{ citizen.religion.value?.name ?? "-" }}</td>
                 <td class="border-e border-b-0">{{ citizen.policy.value?.name ?? "-" }}</td>
                 <td class="border-e border-b-0">
                   {{ citizen.work.value?.name ?? (citizen as any).tile.construction?.name ?? "-" }}
                 </td>
                 <td class="border-e border-b-0">
-                  <UiYields :yields="citizen.yields.value" :opts="{ posLumpIsNeutral: true }" />
+                  <UiYields :yields="citizen.yields" :opts="{ posLumpIsNeutral: true }" />
                 </td>
               </tr>
             </tbody>

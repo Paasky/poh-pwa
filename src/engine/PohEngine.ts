@@ -372,7 +372,7 @@ export class PohEngine {
     }
 
     // Then capital
-    const capital = currentPlayer.cities.value.find((city) => city.isCapital);
+    const capital = currentPlayer.cities.find((city) => city.isCapital);
     if (capital) {
       this.flyToTile(capital.tileKey, teleport);
       return;

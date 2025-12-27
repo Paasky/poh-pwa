@@ -36,9 +36,7 @@ function buildPyramid(pyramid: CatKey[][], selectedTypes: TypeObject[]): CatData
   );
 }
 
-const pyramid = computed(() =>
-  buildPyramid(props.catPyramid, props.current.myths.value as TypeObject[]),
-);
+const pyramid = computed(() => buildPyramid(props.catPyramid, props.current.myths as TypeObject[]));
 </script>
 
 <template>
@@ -50,8 +48,8 @@ const pyramid = computed(() =>
         :key="catData.cat.key"
         :title="catData.cat.name"
         :types="catData.types"
-        :selected="current.myths.value as TypeObject[]"
-        :selectable="current.selectableMyths.value"
+        :selected="current.myths as TypeObject[]"
+        :selectable="current.selectableMyths"
         :select-pos="'bottom'"
         :with-spacer="false"
         :show-or-between="true"

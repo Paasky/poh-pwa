@@ -15,9 +15,9 @@ export class CitizenGained extends PohEvent {
     super("gained a new citizen");
 
     this.subject = citizen;
-    this.city = citizen.city.value;
-    this.player = citizen.city.value.player.value;
-    this.tile = citizen.tile.value;
+    this.city = citizen.city;
+    this.player = citizen.city.player;
+    this.tile = citizen.tile;
     this.reason = reason;
   }
 }
@@ -32,7 +32,7 @@ export class CitizenLost extends PohEvent {
     super("lost a citizen");
 
     this.city = city;
-    this.player = city.player.value;
+    this.player = city.player;
     this.tile = tile;
     this.reason = reason;
     this.subject = subject;

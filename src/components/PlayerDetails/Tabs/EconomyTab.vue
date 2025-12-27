@@ -21,11 +21,11 @@ function toggleExpand(cityKey: string) {
 }
 
 function citizensOf(city: City): Citizen[] {
-  return city.citizens.value as Citizen[];
+  return city.citizens as Citizen[];
 }
 
 function onRowClick(_e: unknown, payload: { item: { value: unknown } }) {
-  toggleExpand(payload.item.value as string);
+  toggleExpand(payload.item as string);
 }
 </script>
 

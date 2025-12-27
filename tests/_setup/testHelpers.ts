@@ -1,5 +1,6 @@
 import { expect } from "vitest";
 import { crawl } from "../../src/helpers/arrayTools";
+import { GameObject } from "../../src/objects/game/_GameObject";
 
 export const mockRandom = (...values: number[]) => {
   const originalRandom = Math.random;
@@ -31,3 +32,63 @@ export const expectFloatsToBeClose = (expected: any, toBe: any, tolerance = 0.00
     });
   }
 };
+
+/**
+ * Relation test helper
+ */
+export function testOneToOneRelation<T extends GameObject, R extends GameObject>(
+  instance: T,
+  relationName: keyof T,
+  relatedInstance: R,
+  relatedInstanceRelationName: keyof R,
+) {
+  expect(instance[relationName]).toBe(relatedInstance);
+  expect(relatedInstance[relatedInstanceRelationName]).toBe(instance);
+}
+
+export function testManyToOneRelation<T extends GameObject, R extends GameObject>(
+  instance: T,
+  relationName: keyof T,
+  relatedInstance: R,
+  relatedInstanceRelationName: keyof R,
+) {
+  expect(instance[relationName]).toBe(relatedInstance);
+  expect(relatedInstance[relatedInstanceRelationName]).toContain(instance);
+}
+
+export function testOneToManyRelation<T extends GameObject, R extends GameObject>(
+  instance: T,
+  relationName: keyof T,
+  relatedInstance: R,
+  relatedInstanceRelationKey: keyof R,
+) {
+  expect(instance[relationName]).toContain(relatedInstance);
+  expect(relatedInstance[relatedInstanceRelationKey]).toBe(instance);
+}
+
+export function testManyToManyRelation<T extends GameObject, R extends GameObject>(
+  instance: T,
+  relationName: keyof T,
+  relatedInstance: R,
+  relatedInstanceRelationName: keyof R,
+) {
+  expect(instance[relationName]).toContain(relatedInstance);
+  expect(relatedInstance[relatedInstanceRelationName]).toContain(instance);
+}
+
+/**
+ * Common relation error expectations
+ */
+export function expectRelationToThrowEmpty(instance: any, relationName: string, keyAttr: string) {
+  expect(() => instance[relationName]).toThrow(
+    `Empty relation key '${keyAttr}' (in ${instance.key})`,
+  );
+}
+
+export function expectRelationToThrowMissing(instance: any, relationName: string, key: string) {
+  expect(() => instance[relationName]).toThrow(`DataBucket.getObject(${key}) does not exist!`);
+}
+
+export function expectTypeToThrowMissing(instance: any, attrName: string, key: string) {
+  expect(() => instance[attrName]).toThrow(`DataBucket.getType(${key}) does not exist!`);
+}

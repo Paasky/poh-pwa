@@ -21,20 +21,20 @@ export class UnitDesignManager {
         throw new Error("Not enough design points to create a unit design");
       }
     }
-    if (!prototype.platform.value || !prototype.equipment.value)
+    if (!prototype.platform || !prototype.equipment.value)
       throw new Error("platform and equipment required for new Unit Design");
 
     const design = new UnitDesign(
       generateKey("unitDesign"),
-      prototype.platform.value as TypeObject,
-      prototype.equipment.value as TypeObject,
+      prototype.platform as TypeObject,
+      prototype.equipment as TypeObject,
       prototype.name.value,
       player?.key,
       prototype.isElite.value,
     );
 
     if (player) {
-      player.designKeys.value.push(design.key);
+      player.designKeys.push(design.key);
       if (!isFree) {
         player.storage.take("yieldType:designPoints", prototype.pointCost.value);
       }

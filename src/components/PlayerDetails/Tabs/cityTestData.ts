@@ -31,8 +31,8 @@ export function cityTestData(): void {
       isHelsinki ? undefined : otherPlayer.key, // orig player key
     );
     objStore.set(city);
-    objStore.currentPlayer.cityKeys.value.push(city.key);
-    city.tile.value.cityKey.value = city.key;
+    objStore.currentPlayer.cityKeys.push(city.key);
+    city.tile.cityKey = city.key;
 
     // 2) Citizens: create N citizens per city, set relations, and push into `objects`
     //    - Helsinki -> 3 citizens; Paris -> 2 citizens
@@ -48,21 +48,21 @@ export function cityTestData(): void {
       // Track created object
       objStore.set(cz);
       // Set relation keys
-      city.citizenKeys.value.push(cz.key);
-      cz.culture.value.citizenKeys.value.push(cz.key);
-      objStore.currentPlayer.citizenKeys.value.push(cz.key);
-      city.tile.value.citizenKeys.value.push(cz.key);
+      city.citizenKeys.push(cz.key);
+      cz.culture.citizenKeys.push(cz.key);
+      objStore.currentPlayer.citizenKeys.push(cz.key);
+      city.tile.citizenKeys.push(cz.key);
     }
 
     // 3) Units: link some existing player units to this city (set cityKey etc.)
     //    - Per prior tests: Helsinki gets 2 units; Paris gets 0
     if (isHelsinki) {
-      const units = objStore.currentPlayer.units.value as Unit[];
+      const units = objStore.currentPlayer.units as Unit[];
       const toAssign = Math.min(2, units.length);
       for (let i = 0; i < toAssign; i++) {
         const u = units[i]!;
-        u.cityKey.value = city.key;
-        city.unitKeys.value.push(u.key);
+        u.cityKey = city.key;
+        city.unitKeys.push(u.key);
       }
     }
 
@@ -77,18 +77,18 @@ export function cityTestData(): void {
         10,
       );
       objStore.set(cons);
-      city.tile.value.constructionKey.value = cons.key;
+      city.tile.constructionKey = cons.key;
       city.constructionQueue.add(cons);
-      city.constructionQueue.queue[0]!.progress.value = 10;
+      city.constructionQueue.queue[0]!.progress = 10;
     }
 
     // 5) Training: add all current player's designs to Paris training queue with progress (5, 10, rest 0)
     if (!isHelsinki) {
-      const designs = objStore.currentPlayer.designs.value;
+      const designs = objStore.currentPlayer.designs;
       designs.forEach((d, idx) => {
         city.trainingQueue.add(d);
-        if (idx === 0) city.trainingQueue.queue[0]!.progress.value = 5;
-        else if (idx === 1) city.trainingQueue.queue[1]!.progress.value = 10;
+        if (idx === 0) city.trainingQueue.queue[0]!.progress = 5;
+        else if (idx === 1) city.trainingQueue.queue[1]!.progress = 10;
       });
     }
   }

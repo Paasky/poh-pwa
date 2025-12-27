@@ -7,6 +7,18 @@ export function subscribe(playerKey: GameKey, callback: (events: IEvent[]) => vo
   listeners.set(playerKey, callback);
 }
 
-export function publishEvents(toPlayers: Set<GameKey>, events: IEvent[]) {
-  toPlayers.forEach((playerKey) => listeners.get(playerKey)?.(events));
+export function publishEvents(events: IEvent[]) {
+  // Group by PlayerKey so we only publish once to each player
+  const eventsPerPlayerKey = new Map<GameKey, IEvent[]>();
+  events.forEach((event) => {
+    event.playerKeys.forEach((playerKey) => {
+      const playerEvents = eventsPerPlayerKey.get(playerKey);
+      if (playerEvents) {
+        playerEvents.push(event);
+      } else {
+        eventsPerPlayerKey.set(playerKey, [event]);
+      }
+    });
+  });
+  eventsPerPlayerKey.forEach((playerEvents, playerKey) => listeners.get(playerKey)?.(playerEvents));
 }

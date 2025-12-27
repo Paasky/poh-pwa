@@ -7,7 +7,7 @@ export class CityAttacked extends PohEvent {
     super(`attacked ${city.name}`);
 
     this.subject = city;
-    this.tile = city.tile.value;
+    this.tile = city.tile;
     this.player = player;
   }
 }
@@ -17,7 +17,7 @@ export class CityCaptured extends PohEvent {
     super(`captured ${city.name}`);
 
     this.subject = city;
-    this.tile = city.tile.value;
+    this.tile = city.tile;
     this.player = player;
   }
 }
@@ -27,7 +27,7 @@ export class CityLiberated extends PohEvent {
     super(`captured ${city.name}`);
 
     this.subject = city;
-    this.tile = city.tile.value;
+    this.tile = city.tile;
     this.player = player;
   }
 }
@@ -37,7 +37,7 @@ export class CitySettled extends PohEvent {
     super(`settled ${city.name}`);
 
     this.subject = city;
-    this.tile = city.tile.value;
+    this.tile = city.tile;
     this.player = player;
   }
 }

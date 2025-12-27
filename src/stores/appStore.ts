@@ -138,7 +138,7 @@ export const useAppStore = defineStore("app", {
     // -> I trigger _openFromUiState(key) / _closeFromUiState() for relevant state listeners (as confed in router)
     pushUiState(id: string, value: string | undefined) {
       // Modify current query params to reflect the new UI state
-      const query = { ...this.router.currentRoute.value.query } as Record<string, string>;
+      const query = { ...this.router.currentRoute.query } as Record<string, string>;
 
       if (value === undefined) {
         // Remove from the query (if exists)
@@ -175,7 +175,7 @@ export const useAppStore = defineStore("app", {
     // UI state listeners are configured in router/index.ts
     syncUiStateFromNav() {
       try {
-        const query = this.router.currentRoute.value.query;
+        const query = this.router.currentRoute.query;
         // Update each registered UI state
         for (const cfg of Object.values(this.uiStateListeners)) {
           if (query[cfg.id] === undefined) {
@@ -200,7 +200,7 @@ export const useAppStore = defineStore("app", {
         throw new Error("Router.currentRoute does not exist");
       }
       if (!router.currentRoute.value) {
-        throw new Error("Router.currentRoute.value does not exist");
+        throw new Error("Router.currentRoute does not exist");
       }
       // eslint-disable-next-line
       this._router = markRaw(router) as any; // this is where .value magically disappears

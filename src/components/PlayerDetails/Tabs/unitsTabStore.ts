@@ -10,7 +10,7 @@ export const useUnitsTabStore = defineStore("unitsTabStore", () => {
   const initialized = ref(false);
 
   const player = computed(() => objStore.currentPlayer);
-  const units = computed<Unit[]>(() => player.value.units.value as Unit[]);
+  const units = computed<Unit[]>(() => player.value.units as Unit[]);
   const designs = computed<UnitDesign[]>(() => player.value.designs.value as UnitDesign[]);
 
   // Column definitions live in component; expose data only per requirement
@@ -18,9 +18,9 @@ export const useUnitsTabStore = defineStore("unitsTabStore", () => {
   function init() {
     if (initialized.value) return;
 
-    player.value;
-    units.value;
-    designs.value;
+    player;
+    units;
+    designs;
 
     initialized.value = true;
   }

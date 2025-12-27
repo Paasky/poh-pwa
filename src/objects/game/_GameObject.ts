@@ -1,6 +1,7 @@
-import { useObjectsStore } from "@/stores/objectStore";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TypeObject } from "@/types/typeObjects";
 import { ObjType } from "@/types/common";
+import { useDataBucket } from "@/Store/useDataBucket";
 
 export type GameClass =
   | "agenda"
@@ -26,7 +27,6 @@ export type GameObjAttr = {
   isTypeObj?: boolean;
   isTypeObjArray?: boolean;
   attrName: string;
-  attrNotRef?: boolean;
   isOptional?: boolean;
   related?: {
     theirKeyAttr: string;
@@ -52,8 +52,35 @@ export class GameObject {
     this.key = key;
     const classAndId = key.split(":");
     this.class = classAndId[0] as GameClass;
-    this.concept = useObjectsStore().getTypeObject(`conceptType:${this.class}`);
+    this.concept = useDataBucket().getType(`conceptType:${this.class}`);
     this.id = classAndId[1];
+  }
+
+  /**
+   * Called by DataStore after the object is first instantiated and added to the bucket.
+   * Use this for initial side-effects (e.g. emitting "UnitCreated" events).
+   */
+  onCreated(): void {}
+
+  /**
+   * Called by DataStore after an Object.assign(this, rawPayload) has occurred.
+   * Use this to invalidate internal caches or trigger logic that depends on changed data.
+   */
+  onUpdate(_changes: Partial<IRawGameObject>): void {
+    this.refresh();
+  }
+
+  /**
+   * Internal refresh logic to clear lazy-loading caches.
+   * Extended by subclasses to clear specific computed caches.
+   */
+  refresh(): void {
+    // Clear relation caches (e.g., _player, _tile) and custom caches
+    Object.keys(this).forEach((key) => {
+      if (key.startsWith("_")) {
+        (this as any)[key] = undefined;
+      }
+    });
   }
 
   toJSON() {
@@ -62,18 +89,7 @@ export class GameObject {
     } as Record<string, unknown>;
 
     for (const attr of (this.constructor as typeof GameObject).attrsConf) {
-      // Most data is actually a ref(data) so extract the .value
-      // eslint-disable-next-line
-      const directValue = (this as any)[attr.attrName];
-
-      // Quick data integrity check
-      if (
-        !attr.attrNotRef &&
-        (!directValue || !(typeof directValue === "object" && "value" in directValue))
-      ) {
-        throw new Error(`Expected ${attr.attrName} to be a ref`);
-      }
-      const value = attr.attrNotRef ? directValue : directValue.value;
+      const value = (this as any)[attr.attrName];
 
       // Empty data: only add if not optional
       if (value === undefined || value === null) {

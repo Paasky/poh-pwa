@@ -9,14 +9,14 @@ export const useEconomyTabStore = defineStore("economyTabStore", () => {
 
   const headers = ref([{ title: "Source", key: "source" }]);
 
-  const cities = computed<City[]>(() => objStore.currentPlayer.cities.value as City[]);
+  const cities = computed<City[]>(() => objStore.currentPlayer.cities as City[]);
 
   function init() {
     if (initialized.value) return;
 
     // Warm up computed values
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    cities.value;
+    cities;
 
     initialized.value = true;
   }

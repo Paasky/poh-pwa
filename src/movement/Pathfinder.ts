@@ -39,7 +39,7 @@ export class Pathfinder {
   findPath(unit: Unit, target: Tile, context: MoveContext): PathStep[] {
     const mapSize = useObjectsStore().world.size;
 
-    const startTile = unit.tile.value;
+    const startTile = unit.tile;
     if (startTile.key === target.key) return [];
 
     const openSet = new TinyQueue<Node>([], (a, b) => a.totalEstimatedCost - b.totalEstimatedCost);
@@ -114,7 +114,7 @@ export class Pathfinder {
     context: MoveContext,
   ): Map<GameKey, { tile: Tile; cost: number | TurnEnd | null }> {
     const rangeData = new Map<GameKey, { tile: Tile; cost: number | TurnEnd | null }>();
-    const startTile = unit.tile.value;
+    const startTile = unit.tile;
     if (!startTile || unit.movement.moves.value <= 0) return rangeData;
 
     const queue: { tile: Tile; movesRemaining: number }[] = [

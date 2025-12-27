@@ -10,8 +10,8 @@ export class UnitAttacked extends PohEvent {
     super(`attacked ${aWord(unit.name.value)}`);
 
     this.subject = unit;
-    this.player = unit.player.value;
-    this.tile = unit.tile.value;
+    this.player = unit.player;
+    this.tile = unit.tile;
   }
 }
 
@@ -20,9 +20,9 @@ export class UnitCreated extends PohEvent {
     super(`gained ${aWord(unit.name.value)}`);
 
     this.subject = unit;
-    this.city = unit.city.value;
-    this.player = unit.player.value;
-    this.tile = unit.tile.value;
+    this.city = unit.city;
+    this.player = unit.player;
+    this.tile = unit.tile;
   }
 }
 
@@ -31,8 +31,8 @@ export class UnitHealed extends PohEvent {
     super(`healed ${aWord(unit.name.value)}`);
 
     this.subject = unit;
-    this.player = unit.player.value;
-    this.tile = unit.tile.value;
+    this.player = unit.player;
+    this.tile = unit.tile;
   }
 }
 
@@ -41,8 +41,8 @@ export class UnitInDanger extends PohEvent {
     super(`${aWord(unit.name.value)} in danger`);
 
     this.subject = unit;
-    this.player = unit.player.value;
-    this.tile = unit.tile.value;
+    this.player = unit.player;
+    this.tile = unit.tile;
   }
 }
 

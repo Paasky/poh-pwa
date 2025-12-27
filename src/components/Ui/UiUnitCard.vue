@@ -17,8 +17,8 @@ const context = useCurrentContext();
       <UiUnitIcon :unit="unit" :size="48" />
       <div class="d-flex flex-column flex-grow-1" style="min-width: 0">
         <v-text-field
-          v-model="unit.customName.value"
-          :placeholder="unit.design.value.name"
+          v-model="unit.customName"
+          :placeholder="unit.design.name"
           variant="plain"
           density="compact"
           hide-details
@@ -29,22 +29,22 @@ const context = useCurrentContext();
           </template>
         </v-text-field>
         <div class="d-flex ga-1">
-          <UiTypeChip :type="unit.design.value.platform" />
-          <UiTypeChip :type="unit.design.value.equipment" />
-          <UiGameObjChip :obj="unit.player.value" />
+          <UiTypeChip :type="unit.design.platform" />
+          <UiTypeChip :type="unit.design.equipment" />
+          <UiGameObjChip :obj="unit.player" />
         </div>
       </div>
     </div>
 
     <!-- Vitals section -->
     <UiYields
-      :yields="unit.vitals.value"
+      :yields="unit.vitals"
       :opts="{ showProgress: true, showProgressText: true, posLumpIsNeutral: true }"
     />
 
     <!-- Stats section -->
     <div class="d-flex ga-1 justify-end">
-      <UiYields :yields="unit.design.value.yields" :opts="{ posLumpIsNeutral: true }" />
+      <UiYields :yields="unit.design.yields" :opts="{ posLumpIsNeutral: true }" />
     </div>
 
     <div class="d-flex ga-2 mt-1">

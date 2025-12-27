@@ -12,8 +12,8 @@ export class ConstructionAbandoned extends PohEvent {
 
     this.typeObj = construction.type;
     this.subject = construction;
-    this.city = construction.city.value;
-    this.tile = construction.tile.value;
+    this.city = construction.city;
+    this.tile = construction.tile;
     this.reason = reason;
   }
 }
@@ -36,8 +36,8 @@ export class ConstructionCompleted extends PohEvent {
     this.typeObj = construction.type;
     this.subject = construction;
     this.player = player;
-    this.tile = construction.tile.value;
-    this.city = construction.city.value;
+    this.tile = construction.tile;
+    this.city = construction.city;
   }
 }
 

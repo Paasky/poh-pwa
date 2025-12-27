@@ -23,10 +23,10 @@ export const useResearchTabStore = defineStore("researchTabStore", () => {
     eras.value = objStore.getClassTypes("eraType");
 
     // Warm up computed values
-    player.value;
-    research.value;
-    maxX.value;
-    maxY.value;
+    player;
+    research;
+    maxX;
+    maxY;
 
     initialized.value = true;
   }

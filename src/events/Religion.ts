@@ -7,7 +7,7 @@ export class ReligionCanSelect extends PohEvent {
     super(`select new ${religion.status} for ${religion.name}`);
 
     this.subject = religion;
-    this.player = religion.city.value.player.value;
+    this.player = religion.city.player;
   }
 }
 
@@ -16,7 +16,7 @@ export class ReligionHasEvolved extends PohEvent {
     super(`evolved ${religion.name} to ${religion.status}`);
 
     this.subject = religion;
-    this.player = religion.city.value.player.value;
+    this.player = religion.city.player;
   }
 }
 
@@ -26,6 +26,6 @@ export class ReligionHasNewType extends PohEvent {
 
     this.subject = religion;
     this.typeObj = type;
-    this.player = religion.city.value.player.value;
+    this.player = religion.city.player;
   }
 }

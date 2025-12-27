@@ -10,7 +10,7 @@ export class DealAccepted extends PohEvent {
     super("accepted a deal");
 
     this.subject = deal;
-    this.player = deal.toPlayer.value;
+    this.player = deal.toPlayer;
   }
 }
 
@@ -22,7 +22,7 @@ export class DealCancelled extends PohEvent {
     super("cancelled a deal");
 
     this.subject = deal;
-    this.player = deal.toPlayer.value;
+    this.player = deal.toPlayer;
   }
 }
 
@@ -34,7 +34,7 @@ export class DealDeclined extends PohEvent {
     super("declined a deal");
 
     this.subject = deal;
-    this.player = deal.toPlayer.value;
+    this.player = deal.toPlayer;
   }
 }
 
@@ -46,7 +46,7 @@ export class DealEnded extends PohEvent {
     super("deal ended");
 
     this.subject = deal;
-    this.player = deal.fromPlayer.value;
+    this.player = deal.fromPlayer;
   }
 }
 
@@ -58,7 +58,7 @@ export class DealEnding extends PohEvent {
     super("a deal about to end");
 
     this.subject = deal;
-    this.player = deal.fromPlayer.value;
+    this.player = deal.fromPlayer;
   }
 }
 
@@ -70,7 +70,7 @@ export class DealProposed extends PohEvent {
     super("proposed a deal");
 
     this.subject = deal;
-    this.player = deal.fromPlayer.value;
+    this.player = deal.fromPlayer;
   }
 }
 
@@ -82,6 +82,6 @@ export class DealRefused extends PohEvent {
     super("refused a deal");
 
     this.subject = deal;
-    this.player = deal.toPlayer.value;
+    this.player = deal.toPlayer;
   }
 }

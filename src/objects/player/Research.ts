@@ -1,26 +1,26 @@
-import { computed, ref } from "vue";
 import { TypeObject } from "@/types/typeObjects";
 import { TypeKey } from "@/types/common";
 import { GameKey } from "@/objects/game/_GameObject";
-import { useObjectsStore } from "@/stores/objectStore";
 import { Player } from "@/objects/game/Player";
+import { useDataBucket } from "@/Store/useDataBucket";
+import { hasOne } from "@/objects/game/_relations";
 
 export class Research {
-  constructor(playerKey: GameKey) {
-    this.playerKey = playerKey;
+  constructor(public playerKey: GameKey) {
+    hasOne<Player>(this, "playerKey");
   }
 
-  playerKey: GameKey;
-  player = computed(() => useObjectsStore().get(this.playerKey) as Player);
+  declare player: Player;
 
-  researched = ref<TypeObject[]>([]);
-  researching = ref<Record<TypeKey, { progress: number; target: TypeObject }>>({});
-  current = ref<TypeObject | null>(null);
-  queue = ref<TypeObject[]>([]);
-  era = computed((): TypeObject | null => {
-    if (!this.researched.value.length) return null;
+  researched: TypeObject[] = [];
+  researching: Record<TypeKey, { progress: number; target: TypeObject }> = {};
+  current: TypeObject | null = null;
+  queue: TypeObject[] = [];
 
-    const highestYTech = this.researched.value.reduce<TypeObject | null>((highest, current) => {
+  get era(): TypeObject | null {
+    if (!this.researched.length) return null;
+
+    const highestYTech = this.researched.reduce<TypeObject | null>((highest, current) => {
       if (!highest) return current as TypeObject;
       const curY = current.y!;
       const hiY = highest.y!;
@@ -28,15 +28,15 @@ export class Research {
     }, null) as TypeObject;
 
     return this.getEra(highestYTech);
-  });
+  }
 
   addToQueue(tech: TypeObject, reset = true) {
-    if (this.researched.value.includes(tech)) return;
+    if (this.researched.includes(tech)) return;
 
-    if (reset) this.queue.value = [];
+    if (reset) this.queue = [];
 
     // Anything already in the queue is "in the chain"
-    const chain = [...this.queue.value] as TypeObject[];
+    const chain = [...this.queue] as TypeObject[];
     this.collectRequired(tech, chain);
 
     // Finally, add requested tech to the chain
@@ -47,61 +47,63 @@ export class Research {
 
     // Sort top-to-bottom then left-to-right (fallback if y equal)
     unique.sort((a, b) => a.y! - b.y! || a.x! - b.x!);
-    this.queue.value.push(...unique);
-    if (!this.current.value) this.current.value = unique[0];
+    this.queue.push(...unique);
+    if (!this.current) this.current = unique[0];
   }
 
   complete(tech: TypeObject) {
-    if (this.researched.value.includes(tech)) return;
+    if (this.researched.includes(tech)) return;
 
     // It's now researched
-    this.researched.value.push(tech);
-    delete this.researching.value[tech.key];
+    this.researched.push(tech);
+    delete this.researching[tech.key];
 
     // Remove from current and queue if it was in either
-    if (this.current.value === tech) this.current.value = null;
-    this.queue.value = this.queue.value.filter((t) => t !== tech);
+    if (this.current === tech) this.current = null;
+    this.queue = this.queue.filter((t) => t !== tech);
 
     // Not researching anything anymore, and there is something in the queue: start next in the queue
-    if (!this.current.value && this.queue.value.length) this.current.value = this.queue.value[0];
+    if (!this.current && this.queue.length) this.current = this.queue[0];
   }
 
   getEra(tech: TypeObject): TypeObject {
-    return useObjectsStore().getTypeObject(tech.category as TypeKey);
+    return useDataBucket().getType(tech.category as TypeKey);
   }
 
   getProgress(tech: TypeObject) {
-    return this.researching.value[tech.key]?.progress ?? 0;
+    return this.researching[tech.key]?.progress ?? 0;
   }
 
   addProgress(tech: TypeObject, amount: number) {
-    if (!this.researching.value[tech.key]) {
-      this.researching.value[tech.key] = { progress: 0, target: tech };
+    if (!this.researching[tech.key]) {
+      this.researching[tech.key] = { progress: 0, target: tech };
     }
-    const progress = this.researching.value[tech.key].progress;
-    this.researching.value[tech.key].progress = Math.round(progress + amount);
+    const progress = this.researching[tech.key].progress;
+    this.researching[tech.key].progress = Math.round(progress + amount);
 
     // Did it complete?
     if (progress >= tech.scienceCost!) {
       this.complete(tech);
 
       // Add overflow to player storage
-      this.player.value.storage.add("yieldType:science", progress - tech.scienceCost!);
+      this.player.storage.add("yieldType:science", progress - tech.scienceCost!);
     }
   }
 
   isLaterEra(from: TypeObject, to: TypeObject): boolean {
-    const eras = useObjectsStore().getClassTypes("eraType");
+    const eras = useDataBucket()
+      .getTypes()
+      .filter((t) => t.class === "eraType");
     return eras.indexOf(from) < eras.indexOf(to);
   }
 
   private collectRequired(target: TypeObject, acc: TypeObject[]): void {
     // Crawl up the required-chain
     target.requires.requireAll.forEach((reqKey) => {
-      const required = useObjectsStore().getTypeObject(reqKey as TypeKey);
+      const required = useDataBucket().getType(reqKey as TypeKey);
       if (
         required.class !== "technologyType" ||
-        this.researched.value.includes(required) ||
+        this.researched.includes(required) ||
         acc.includes(required)
       )
         return;
@@ -114,9 +116,9 @@ export class Research {
       let cheapest: TypeObject | false | null = null;
       anyKeys.forEach((orReqKey) => {
         if (cheapest === false) return;
-        const required = useObjectsStore().getTypeObject(orReqKey as TypeKey);
+        const required = useDataBucket().getType(orReqKey as TypeKey);
         if (required.class !== "technologyType" || acc.includes(required)) return;
-        if (this.researched.value.includes(required)) {
+        if (this.researched.includes(required)) {
           cheapest = false;
           return;
         }
@@ -135,25 +137,21 @@ export class Research {
     });
   }
 
-  turnsLeft = computed((): number => {
-    if (!this.current.value) return 0;
+  get turnsLeft(): number {
+    if (!this.current) return 0;
 
-    const sciencePerTurn = this.player.value.yields.value.getLumpAmount("yieldType:science");
+    const sciencePerTurn = this.player.yields.getLumpAmount("yieldType:science");
 
     if (sciencePerTurn <= 0) return Infinity;
 
-    const costLeft =
-      this.current.value.scienceCost! - this.getProgress(this.current.value as TypeObject);
+    const costLeft = this.current.scienceCost! - this.getProgress(this.current as TypeObject);
 
     return Math.ceil(costLeft / sciencePerTurn);
-  });
+  }
 
   startTurn() {
-    if (!this.current.value) return;
+    if (!this.current) return;
 
-    this.addProgress(
-      this.current.value as TypeObject,
-      this.player.value.storage.takeAll("yieldType:science"),
-    );
+    this.addProgress(this.current as TypeObject, this.player.storage.takeAll("yieldType:science"));
   }
 }

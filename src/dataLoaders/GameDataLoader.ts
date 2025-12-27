@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { isRef } from "vue";
 import { GameClass, GameKey, GameObjAttr, GameObject, IRawGameObject, } from "@/objects/game/_GameObject";
 import { Agenda } from "@/objects/game/Agenda";
 import { Citizen } from "@/objects/game/Citizen";
@@ -14,8 +13,8 @@ import { Tile } from "@/objects/game/Tile";
 import { TradeRoute } from "@/objects/game/TradeRoute";
 import { Unit } from "@/objects/game/Unit";
 import { UnitDesign } from "@/objects/game/UnitDesign";
-import { useObjectsStore } from "@/stores/objectStore";
 import { TypeKey } from "@/types/common";
+import { useDataBucket } from "@/Store/useDataBucket"; // Constructor type that also exposes the static attrsConf declared on each GameObject subclass
 
 // Constructor type that also exposes the static attrsConf declared on each GameObject subclass
 type Ctor<T = GameObject> = {
@@ -89,7 +88,7 @@ export class GameDataLoader {
     const value = rawObjData[config.attrName];
 
     // Check if empty but required -> invalid data
-    if (value === undefined || null) {
+    if (value === undefined || value === null) {
       if (!config.isOptional)
         throw new Error(
           `Required attribute '${config.attrName}' missing from ${JSON.stringify(rawObjData)}`,
@@ -101,12 +100,12 @@ export class GameDataLoader {
 
     // Convert TypeKey to TypeObject
     if (config.isTypeObj) {
-      return useObjectsStore().getTypeObject(value);
+      return useDataBucket().getType(value);
     }
 
     // Convert TypeKeys to TypeObjects
     if (config.isTypeObjArray) {
-      return value.map((d: TypeKey) => useObjectsStore().getTypeObject(d));
+      return value.map((d: TypeKey) => useDataBucket().getType(d));
     }
 
     // Normal attribute
@@ -116,34 +115,27 @@ export class GameDataLoader {
   private _buildBackRelations(obj: GameObject, objects: Map<GameKey, GameObject>): void {
     const ctor = obj.constructor as unknown as { attrsConf: GameObjAttr[] };
     for (const attrConf of ctor.attrsConf) {
-      try {
-        if (!attrConf.related) {
-          continue;
-        }
+      if (!attrConf.related) {
+        continue;
+      }
 
-        // Most data is actually a ref(data) so extract the .value
-        const directValue = (obj as any)[attrConf.attrName];
-        const relatedKey = attrConf.attrNotRef ? directValue : directValue.value;
+      const relatedKey = (obj as any)[attrConf.attrName];
 
-        if (relatedKey === undefined || relatedKey === null) {
-          if (!attrConf.isOptional) {
-            // noinspection ExceptionCaughtLocallyJS
-            throw new Error(
-              `Required attribute for ${JSON.stringify(attrConf)} missing in raw data: ${JSON.stringify(obj)}`,
-            );
-          }
-          continue;
+      if (relatedKey === undefined || relatedKey === null) {
+        if (!attrConf.isOptional) {
+          // noinspection ExceptionCaughtLocallyJS
+          throw new Error(
+            `Required attribute for ${JSON.stringify(attrConf)} missing in raw data: ${JSON.stringify(obj)}`,
+          );
         }
-        if (attrConf.related.isManyToMany) {
-          for (const relatedSingleKey of relatedKey) {
-            this._setToRelatedObj(obj, relatedSingleKey as GameKey, attrConf, objects);
-          }
-        } else {
-          this._setToRelatedObj(obj, relatedKey as GameKey, attrConf, objects);
+        continue;
+      }
+      if (attrConf.related.isManyToMany) {
+        for (const relatedSingleKey of relatedKey) {
+          this._setToRelatedObj(obj, relatedSingleKey as GameKey, attrConf, objects);
         }
-      } catch (e) {
-        const msg = `GameObject.key: '${obj.key}', Attribute: ${JSON.stringify(attrConf)}, Message: ${(e as any).message}`;
-        throw new Error(msg);
+      } else {
+        this._setToRelatedObj(obj, relatedKey as GameKey, attrConf, objects);
       }
     }
   }
@@ -172,13 +164,9 @@ export class GameDataLoader {
     // Load the related obj.attr
     const relatedAttr = (relatedObj as any)[attrConf.related!.theirKeyAttr];
     if (attrConf.related!.isOne) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      isRef(relatedAttr)
-        ? (relatedAttr.value = obj.key)
-        : ((relatedObj as any)[attrConf.related!.theirKeyAttr] = obj.key);
+      (relatedObj as any)[attrConf.related!.theirKeyAttr] = obj.key;
     } else {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      isRef(relatedAttr) ? (relatedAttr as any).value.push(obj.key) : relatedAttr.push(obj.key);
+      relatedAttr.push(obj.key);
     }
   }
 }

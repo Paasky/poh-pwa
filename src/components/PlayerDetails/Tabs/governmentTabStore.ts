@@ -18,7 +18,7 @@ export const useGovernmentTabStore = defineStore("governmentTabStore", () => {
 
     // Warm up computed values
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    government.value;
+    government;
 
     initialized.value = true;
   }

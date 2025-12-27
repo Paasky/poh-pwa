@@ -127,7 +127,7 @@ export const createWorld = (size: WorldSize): GameData => {
         throw new Error(`Tile (x${x},y${y}) not found in generated tiles`);
       }
       if (tile.riverKey) {
-        const river = gen.rivers[tile.riverKey];
+        const river = gen.rivers[tile.riverKey as any];
         if (!river) {
           throw new Error(
             `River ${tile.riverKey} not found in generated rivers: ${JSON.stringify(Object.keys(gen.rivers))}`,
@@ -162,15 +162,15 @@ export const createWorld = (size: WorldSize): GameData => {
       objects.push(culture);
       player.cultureKey = culture.key;
 
-      player.designKeys.value.push(warbandDesign.key, hunterDesign.key, workerDesign.key);
+      player.designKeys.push(warbandDesign.key, hunterDesign.key, workerDesign.key);
 
       const hunter = new Unit(generateKey("unit"), hunterDesign.key, player.key, tile.key);
       const tribe = new Unit(generateKey("unit"), tribeDesign.key, player.key, tile.key);
       objects.push(hunter, tribe);
-      player.unitKeys.value.push(hunter.key, tribe.key);
-      tile.unitKeys.value.push(hunter.key, tribe.key);
-      hunterDesign.unitKeys.value.push(hunter.key);
-      tribeDesign.unitKeys.value.push(tribe.key);
+      player.unitKeys.push(hunter.key, tribe.key);
+      tile.unitKeys.push(hunter.key, tribe.key);
+      hunterDesign.unitKeys.push(hunter.key);
+      tribeDesign.unitKeys.push(tribe.key);
     }
   }
 
@@ -182,10 +182,10 @@ export const createWorld = (size: WorldSize): GameData => {
     if (!player.cultureKey) {
       throw new Error(`Player ${player.key} has no culture`);
     }
-    if (player.designKeys.value.length < 3) {
+    if (player.designKeys.length < 3) {
       throw new Error(`Player ${player.key} has less than 3 designs`);
     }
-    if (player.unitKeys.value.length < 2) {
+    if (player.unitKeys.length < 2) {
       throw new Error(`Player ${player.key} has less than 2 units`);
     }
   }

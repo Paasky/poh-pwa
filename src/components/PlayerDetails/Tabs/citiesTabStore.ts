@@ -7,12 +7,12 @@ export const useCitiesTabStore = defineStore("citiesTabStore", () => {
   const objStore = useObjectsStore();
   const initialized = ref(false);
 
-  const cities = computed<City[]>(() => objStore.currentPlayer.cities.value as City[]);
+  const cities = computed<City[]>(() => objStore.currentPlayer.cities as City[]);
 
   // Column definitions are fairly UI-specific; keep data here per requirement
   const columns = ref([
-    { title: "Name", key: "name", value: (c: City) => c.name.value },
-    { title: "Health", key: "health", align: "end", value: (c: City) => c.health.value },
+    { title: "Name", key: "name", value: (c: City) => c.name },
+    { title: "Health", key: "health", align: "end", value: (c: City) => c.health },
     { title: "Yields", key: "yields" },
     { title: "Constructing", key: "constructing" },
     { title: "Training", key: "training" },
@@ -24,7 +24,7 @@ export const useCitiesTabStore = defineStore("citiesTabStore", () => {
 
     // Warm up computed values
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    cities.value;
+    cities;
 
     initialized.value = true;
   }

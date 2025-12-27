@@ -38,7 +38,7 @@ export function useMovementInteraction() {
   watch(current.hover, (hoverTile) => {
     const { pathOverlay } = app.engineService;
 
-    const selectedObject = current.object.value;
+    const selectedObject = current.object;
     if (selectedObject?.class === "unit" && hoverTile) {
       const unit = selectedObject as unknown as Unit;
       const context = UnitMovement.getMoveContext(unit);

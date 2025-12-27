@@ -43,7 +43,7 @@ export class RegLevel {
 
         // Set terrain based on distance from pole (allow for polar ice)
         const distToPole = this.gen.getDistToPole(y, this.gen.regSize.y);
-        tile.feature.value = this.gen.getFeatureForTile(tile, distToPole);
+        tile.feature = this.gen.getFeatureForTile(tile, distToPole);
         this.gen.regTiles[Tile.getKey(x, y)] = tile;
       }
     }

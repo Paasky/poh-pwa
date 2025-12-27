@@ -25,7 +25,7 @@ describe("MovementManager", () => {
     const current = useCurrentContext();
     current.actionMode.value = "move";
     current.object.value = unit;
-    current.tile.value = unit.tile.value;
+    current.tile.value = unit.tile;
 
     MovementManager.moveTo(unit, target);
 
@@ -46,7 +46,7 @@ describe("MovementManager", () => {
     current.actionMode.value = "move";
     current.object.value = unit;
 
-    const initialTileKey = unit.tileKey.value;
+    const initialTileKey = unit.tileKey;
 
     MovementManager.moveTo(unit, waterTile);
 
@@ -67,7 +67,7 @@ describe("MovementManager", () => {
     const current = useCurrentContext();
     current.actionMode.value = "move";
     current.object.value = unit;
-    current.tile.value = unit.tile.value;
+    current.tile.value = unit.tile;
 
     const app = useAppStore();
 

@@ -1,16 +1,18 @@
 import { TypeClass } from "@/types/typeObjects";
 import { Yield, Yields } from "@/objects/yield";
 import { CatKey, roundToTenth, TypeKey } from "@/types/common";
-import { computed, ref } from "vue";
 import { TypeStorage } from "@/objects/storage";
 import { Construction } from "@/objects/game/Construction";
 import { UnitDesign } from "@/objects/game/UnitDesign";
 
 export abstract class QueueItem {
   item: Construction | UnitDesign;
-  progress = ref(0);
+  progress = 0;
   cost: number;
-  remaining = computed(() => this.cost - this.progress.value);
+
+  get remaining(): number {
+    return this.cost - this.progress;
+  }
 
   protected constructor(item: Construction | UnitDesign, cost: number) {
     this.item = item;
@@ -31,7 +33,7 @@ export class TrainingQueueItem extends QueueItem {
 }
 
 export abstract class Queue {
-  protected _queue = ref<QueueItem[]>([]);
+  protected _queue: QueueItem[] = [];
   primaryYieldKey: TypeKey;
   secondaryYieldKey: TypeKey;
 
@@ -41,38 +43,32 @@ export abstract class Queue {
   }
 
   get queue(): QueueItem[] {
-    // Vue Template PohEngine can erase .value, so defend against it
-    return "value" in this._queue
-      ? // eslint-disable-next-line
-        (this._queue.value as any).slice()
-      : // eslint-disable-next-line
-        (this._queue as any).slice();
+    return this._queue.slice();
   }
 
   // Returns overflow, if any
   addProgress(amount: number): number {
-    const queueItem = this._queue.value[0] as unknown as QueueItem | undefined;
+    const queueItem = this._queue[0];
     if (!queueItem) throw new Error("Nothing in the queue to add progress to.");
 
     // If progress + amount < cost, just add progress and return 0
-    if (queueItem.progress.value + amount < queueItem.cost) {
-      queueItem.progress.value = roundToTenth(queueItem.progress.value + amount);
+    if (queueItem.progress + amount < queueItem.cost) {
+      queueItem.progress = roundToTenth(queueItem.progress + amount);
       return 0;
     }
 
     // Otherwise, set progress to cost and return overflow
-    const overflow = roundToTenth(queueItem.progress.value + amount - queueItem.cost);
-    queueItem.progress.value = queueItem.cost;
+    const overflow = roundToTenth(queueItem.progress + amount - queueItem.cost);
+    queueItem.progress = queueItem.cost;
     return overflow;
   }
 
   remove(index: number) {
-    this._queue.value.splice(index, 1);
+    this._queue.splice(index, 1);
   }
 
   reorder(index: number, newIndex: number) {
-    // todo throw if invalid indexes given
-    this._queue.value.splice(newIndex, 0, this._queue.value.splice(index, 1)[0]);
+    this._queue.splice(newIndex, 0, this._queue.splice(index, 1)[0]);
   }
 
   /**
@@ -86,7 +82,7 @@ export abstract class Queue {
     cityYields: TypeStorage,
     cityYieldMods: Yields,
   ): Construction | UnitDesign | null {
-    const queueItem = this._queue.value[0] as unknown as QueueItem | undefined;
+    const queueItem = this._queue[0];
 
     // Nothing to construct: Convert my prod to primary/secondary yields and return null
     if (!queueItem) {
@@ -127,7 +123,7 @@ export abstract class Queue {
 
     // Only allow the current item to complete, all else goes to overflow
     const overflow = this.addProgress(total);
-    if (queueItem.remaining.value <= 0) {
+    if (queueItem.remaining <= 0) {
       if (overflow > 0) cityYields.add("yieldType:production", overflow);
       this.remove(0);
       return queueItem.item;
@@ -142,16 +138,13 @@ export class ConstructionQueue extends Queue {
   }
 
   add(item: Construction) {
-    // IDE mixes up ref contents
-    // eslint-disable-next-line
-    this._queue.value.push(new ConstructionQueueItem(item) as any);
+    this._queue.push(new ConstructionQueueItem(item));
   }
 
-  purchaseCost = computed((): Yield | null => {
-    if (this._queue.value.length === 0) return null;
+  get purchaseCost(): Yield | null {
+    if (this._queue.length === 0) return null;
 
-    // IDE mixes up ref contents
-    const queueItem = this._queue.value[0] as unknown as ConstructionQueueItem;
+    const queueItem = this._queue[0] as ConstructionQueueItem;
     const typeClass = (queueItem.item as unknown as Construction).type.class! as TypeClass;
 
     // National or WorldState Wonder -> null
@@ -160,12 +153,12 @@ export class ConstructionQueue extends Queue {
     // Buildings -> remaining productionCost in Gold * 2
     return {
       type: "yieldType:gold",
-      amount: roundToTenth(queueItem.remaining.value * 2),
+      amount: roundToTenth(queueItem.remaining * 2),
       method: "lump",
       for: [],
       vs: [],
     };
-  });
+  }
 }
 
 export class TrainingQueue extends Queue {
@@ -174,16 +167,13 @@ export class TrainingQueue extends Queue {
   }
 
   add(design: UnitDesign) {
-    // IDE mixes up ref contents
-    // eslint-disable-next-line
-    this._queue.value.push(new TrainingQueueItem(design) as any);
+    this._queue.push(new TrainingQueueItem(design));
   }
 
-  purchaseCost = computed((): Yield | null => {
-    if (this._queue.value.length === 0) return null;
+  get purchaseCost(): Yield | null {
+    if (this._queue.length === 0) return null;
 
-    // IDE mixes up ref contents
-    const queueItem = this._queue.value[0] as unknown as TrainingQueueItem;
+    const queueItem = this._queue[0] as TrainingQueueItem;
     const equipmentCategory = (queueItem.item as unknown as UnitDesign).equipment
       .category! as CatKey;
 
@@ -191,7 +181,7 @@ export class TrainingQueue extends Queue {
     if (equipmentCategory === "equipmentCategory:missionary") {
       return {
         type: "yieldType:faith",
-        amount: roundToTenth(queueItem.remaining.value * 2),
+        amount: roundToTenth(queueItem.remaining * 2),
         method: "lump",
         for: [],
         vs: [],
@@ -205,7 +195,7 @@ export class TrainingQueue extends Queue {
     ) {
       return {
         type: "yieldType:influence",
-        amount: roundToTenth(queueItem.remaining.value * 2),
+        amount: roundToTenth(queueItem.remaining * 2),
         method: "lump",
         for: [],
         vs: [],
@@ -219,7 +209,7 @@ export class TrainingQueue extends Queue {
     ) {
       return {
         type: "yieldType:culture",
-        amount: roundToTenth(queueItem.remaining.value * 2),
+        amount: roundToTenth(queueItem.remaining * 2),
         method: "lump",
         for: [],
         vs: [],
@@ -229,10 +219,10 @@ export class TrainingQueue extends Queue {
     // Other -> remaining productionCost * 2 in Gold
     return {
       type: "yieldType:gold",
-      amount: roundToTenth(queueItem.remaining.value * 2),
+      amount: roundToTenth(queueItem.remaining * 2),
       method: "lump",
       for: [],
       vs: [],
     };
-  });
+  }
 }

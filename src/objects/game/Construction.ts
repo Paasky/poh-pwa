@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { canHaveOne, hasMany, hasOne } from "@/objects/game/_relations";
 import { TypeObject } from "@/types/typeObjects";
-import { computed, ComputedRef, ref } from "vue";
 import { Yield, Yields } from "@/objects/yield";
 import { GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
 import type { Citizen } from "@/objects/game/Citizen";
@@ -20,36 +18,31 @@ import { Player } from "@/objects/game/Player";
 export class Construction extends GameObject {
   constructor(
     key: GameKey,
-    type: TypeObject,
-    tileKey: GameKey,
-    cityKey?: GameKey,
-    health = 100,
-    progress = 0,
+    public type: TypeObject,
+    public tileKey: GameKey,
+    public cityKey: GameKey | null = null,
+    public health = 100,
+    public progress = 0,
   ) {
     super(key);
-    this.health.value = health;
-    this.name = type.name;
-    this.progress.value = progress;
-    this.type = type;
+    this.name = this.type.name;
 
-    this.cityKey = cityKey ?? null;
-    this.city = canHaveOne<City>(this.cityKey, `${this.key}.city`);
+    canHaveOne<City>(this, "cityKey");
+    hasOne<Tile>(this, "tileKey");
 
-    this.tileKey = tileKey;
-    this.tile = hasOne<Tile>(this.tileKey, `${this.key}.tile`);
+    this.citizenKeys = [];
+    hasMany<Citizen>(this, "citizenKeys");
   }
 
   static attrsConf: GameObjAttr[] = [
-    { attrName: "type", attrNotRef: true, isTypeObj: true },
+    { attrName: "type", isTypeObj: true },
     {
       attrName: "tileKey",
-      attrNotRef: true,
       related: { theirKeyAttr: "constructionKey", isOne: true },
     },
     {
       isOptional: true,
       attrName: "cityKey",
-      attrNotRef: true,
       related: { theirKeyAttr: "constructionKeys" },
     },
     { attrName: "health", isOptional: true },
@@ -59,35 +52,32 @@ export class Construction extends GameObject {
   /*
    * Attributes
    */
-  completedAtTurn = ref(null as number | null);
-  health = ref(100);
+  completedAtTurn: number | null = null;
   name: string;
-  progress = ref(0);
-  type: TypeObject; // buildingType/improvementType/nationalWonderType/worldWonderType
 
   /*
    * Relations
    */
-  citizenKeys = ref([] as GameKey[]);
-  citizens = hasMany<Citizen>(this.citizenKeys, `${this.key}.citizens`);
+  citizenKeys: GameKey[];
+  declare citizens: Citizen[];
 
-  cityKey: GameKey | null;
-  city: ComputedRef<City | null>;
+  declare city: City | null;
 
-  tileKey: GameKey;
-  tile: ComputedRef<Tile>;
+  declare tile: Tile;
 
   /*
    * Computed
    */
-  isActive = computed(() => this.progress.value === 100 && this.health.value > 0);
+  get isActive(): boolean {
+    return this.progress === 100 && this.health > 0;
+  }
 
-  yields = computed(() => {
+  get yields(): Yields {
     // Is a Wonder or full health -> no yield changes
     if (
       this.type.class === "nationalWonderType" ||
       this.type.class === "worldWonderType" ||
-      this.health.value >= 100
+      this.health >= 100
     ) {
       return this.type.yields;
     }
@@ -102,51 +92,45 @@ export class Construction extends GameObject {
         yields.push({
           ...y,
           method: "percent",
-          amount: this.health.value - 100,
+          amount: this.health - 100,
         });
       }
     }
     return new Yields(yields);
-  });
+  }
 
   /*
    * Actions
    */
   abandon(reason: string): void {
-    this.health.value = 0;
-    this.tile.value.citizens.value.forEach((c) => c.pickTile());
+    this.health = 0;
+    this.tile.citizens.forEach((c) => c.pickTile());
 
-    // Use any as IDE has a Ref value mismatch
-    useEventStore().turnEvents.push(new ConstructionAbandoned(this, reason) as any);
+    useEventStore().turnEvents.push(new ConstructionAbandoned(this, reason));
   }
 
   complete(player: Player): void {
-    this.completedAtTurn.value = useObjectsStore().world.turn;
-    this.progress.value = 100;
+    this.completedAtTurn = useObjectsStore().world.turn;
+    this.progress = 100;
 
-    // Use any as IDE has a Ref value mismatch
-    useEventStore().turnEvents.push(new ConstructionCompleted(this, player) as any);
+    useEventStore().turnEvents.push(new ConstructionCompleted(this, player));
   }
 
   cancel(player: Player, wasLost: boolean): void {
-    if (this.city.value) {
-      this.city.value.constructionKeys.value = this.city.value.constructionKeys.value.filter(
-        (k) => k !== this.key,
-      );
+    if (this.city) {
+      this.city.constructionKeys = this.city.constructionKeys.filter((k) => k !== this.key);
     }
-    this.tile.value.constructionKey.value = null;
+    this.tile.constructionKey = null;
 
     delete useObjectsStore()._gameObjects[this.key];
 
     if (wasLost) {
-      // Use any as IDE has a Ref value mismatch
       useEventStore().turnEvents.push(
-        new ConstructionLost(this.type, player, this.tile.value, this.city.value) as any,
+        new ConstructionLost(this.type, player, this.tile, this.city),
       );
     } else {
-      // Use any as IDE has a Ref value mismatch
       useEventStore().turnEvents.push(
-        new ConstructionCancelled(this.type, player, this.tile.value, this.city.value) as any,
+        new ConstructionCancelled(this.type, player, this.tile, this.city),
       );
     }
   }

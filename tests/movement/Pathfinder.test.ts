@@ -46,7 +46,7 @@ describe("Pathfinder", () => {
 
   it("should return empty path if target is same as start", () => {
     const unit = world.unit;
-    const targetTile = unit.tile.value;
+    const targetTile = unit.tile;
     const tiles = objectsStore.getTiles;
 
     const context = createMovementContext({
@@ -371,7 +371,7 @@ describe("Pathfinder", () => {
     expect(pathfinder.findPath(unit, waterTile, context).length).toBe(0);
 
     // Give embarkation tech
-    world.player.research.researched.value.push(
+    world.player.research.researched.push(
       initTypeObject({
         key: "tech:sailing",
         specials: ["specialType:canEmbark"],
@@ -385,7 +385,7 @@ describe("Pathfinder", () => {
     expect(pathfinder.findPath(unit, mountainTile, context).length).toBe(0);
 
     // Give mountain climbing tech
-    world.player.research.researched.value.push(
+    world.player.research.researched.push(
       initTypeObject({
         key: "tech:mountaineering",
         specials: ["specialType:canEnterMountains"],
@@ -443,7 +443,7 @@ describe("Pathfinder", () => {
   it("should block embarking if target is occupied by a friendly unit", () => {
     const unit = world.unit;
     // Give embarkation tech
-    world.player.research.researched.value.push(
+    world.player.research.researched.push(
       initTypeObject({
         key: "tech:sailing",
         specials: ["specialType:canEmbark"],
@@ -469,7 +469,7 @@ describe("Pathfinder", () => {
     const unit = world.unit;
     unit.movement.moves.value = 2;
     // Give embarkation tech
-    world.player.research.researched.value.push(
+    world.player.research.researched.push(
       initTypeObject({
         key: "tech:sailing",
         specials: ["specialType:canEmbark"],
@@ -496,7 +496,7 @@ describe("Pathfinder", () => {
     const unit = world.unit;
     unit.movement.moves.value = 2;
     // Give embarkation tech
-    world.player.research.researched.value.push(
+    world.player.research.researched.push(
       initTypeObject({
         key: "tech:sailing",
         specials: ["specialType:canEmbark"],

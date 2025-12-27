@@ -18,7 +18,7 @@ function select() {
   current.object.value = props.obj as any;
   if ("tile" in props.obj) {
     // If it has a tile (like Unit or City), select it too
-    current.tile.value = (props.obj as any).tile.value;
+    current.tile.value = (props.obj as any).tile;
   }
 }
 </script>

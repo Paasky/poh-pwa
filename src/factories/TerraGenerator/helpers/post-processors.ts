@@ -217,7 +217,7 @@ export const makeRiver = (
         tile.isMajorRiver = true;
         if (tile.domain.id === "land") {
           tile.terrain = useObjectsStore().getTypeObject("terrainType:majorRiver");
-          tile.feature.value = null;
+          tile.feature = null;
         }
       }
 
@@ -231,8 +231,8 @@ export const makeRiver = (
         }
 
         // Spread Flood Plains to empty desert neighbors
-        if (neighbor.terrain.id === "desert" && !neighbor.feature.value) {
-          neighbor.feature.value = floodPlain;
+        if (neighbor.terrain.id === "desert" && !neighbor.feature) {
+          neighbor.feature = floodPlain;
         }
 
         // If we're next to a lake, turn on major mode
@@ -244,7 +244,7 @@ export const makeRiver = (
             tile.domain = neighbor.domain;
             tile.terrain = neighbor.terrain;
             tile.elevation = neighbor.elevation;
-            tile.feature.value = null;
+            tile.feature = null;
           }
         }
       }
@@ -300,7 +300,7 @@ export const makeRiver = (
         tiles[tileKey].isMajorRiver = true;
         if (tiles[tileKey].domain.id === "land") {
           tiles[tileKey].terrain = useObjectsStore().getTypeObject("terrainType:majorRiver");
-          tiles[tileKey].feature.value = null;
+          tiles[tileKey].feature = null;
         }
       }
     }

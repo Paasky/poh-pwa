@@ -16,12 +16,12 @@ const unitHeaders = [
   {
     title: "Name",
     key: "name",
-    value: (u) => u.customName.value || u.design.value.name,
+    value: (u) => u.customName.value || u.design.name,
   },
   {
     title: "Design",
     key: "design",
-    value: (u: Unit) => u.design.value.name,
+    value: (u: Unit) => u.design.name,
   },
   { title: "Platform", key: "platform" },
   { title: "Equipment", key: "equipment" },
@@ -32,7 +32,7 @@ const unitHeaders = [
   {
     title: "Tile",
     key: "tile",
-    value: (u: Unit) => `(${u.tile.value.x}, ${u.tile.value.y})`,
+    value: (u: Unit) => `(${u.tile.x}, ${u.tile.y})`,
   },
   {
     title: "Action",
@@ -57,7 +57,7 @@ const designHeaders = [
     title: "Units",
     key: "unitsCount",
     align: "end",
-    value: (d: UnitDesign) => d.units.value.length,
+    value: (d: UnitDesign) => d.units.length,
   },
 ] as TableColumn<UnitDesign>[];
 
@@ -92,7 +92,7 @@ function searchDesign(design: UnitDesign, term: string): boolean {
           <UiTypeChip :type="(item as UnitDesign).equipment" />
         </template>
         <template #[`item.prodCostYield`]="{ item }">
-          <UiYield :y="(item as UnitDesign).prodCostYield.value" />
+          <UiYield :y="(item as UnitDesign).prodCostYield" />
         </template>
         <template #[`item.yields`]="{ item }">
           <UiYields :yields="(item as UnitDesign).yields" :opts="{ posLumpIsNeutral: true }" />
@@ -112,10 +112,10 @@ function searchDesign(design: UnitDesign, term: string): boolean {
     <template #right>
       <UiTable title="Units" :columns="unitHeaders" :items="store.units" :search="searchUnit">
         <template #[`item.platform`]="{ item }">
-          <UiTypeChip :type="(item as Unit).design.value.platform" />
+          <UiTypeChip :type="(item as Unit).design.platform" />
         </template>
         <template #[`item.equipment`]="{ item }">
-          <UiTypeChip :type="(item as Unit).design.value.equipment" />
+          <UiTypeChip :type="(item as Unit).design.equipment" />
         </template>
       </UiTable>
     </template>

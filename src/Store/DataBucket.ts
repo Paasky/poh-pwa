@@ -1,16 +1,20 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { CatKey, TypeKey, WorldState } from "@/types/common";
+// noinspection JSUnusedGlobalSymbols
+
+import type { CatKey, TypeKey, WorldState } from "@/types/common";
 import {
-  CategoryClass,
-  CategoryObject,
+  type CategoryClass,
+  type CategoryObject,
   initCategoryObject,
   initTypeObject,
-  TypeClass,
-  TypeObject,
+  type TypeClass,
+  type TypeObject,
 } from "@/types/typeObjects";
-import { GameClass, GameKey, GameObject, IRawGameObject } from "@/objects/game/_GameObject";
+import type { GameClass, GameKey, GameObject, IRawGameObject } from "@/objects/game/_GameObject";
 import { GameDataLoader } from "@/dataLoaders/GameDataLoader";
+import type { Tile } from "@/objects/game/Tile";
 
+// todo create a IRawType & IRawCategory
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type RawStaticData = { categories: any[]; types: any[] };
 export type RawSaveData = { objects: IRawGameObject[]; world: WorldState };
 
@@ -29,14 +33,15 @@ export class DataBucket {
     private readonly types: Map<TypeKey, TypeObject>,
     private readonly categories: Map<CatKey, CategoryObject>,
     private readonly objects: Map<GameKey, GameObject>,
-    private readonly world: WorldState,
+    readonly world: WorldState,
     dataLoader?: GameDataLoader,
   ) {
-    // Build indexes
-    this.types.forEach(this.buildTypeIndex);
-    this.categories.forEach(this.buildCategoryIndex);
-    this.objects.forEach(this.buildObjectIndex);
     this.dataLoader = dataLoader ?? new GameDataLoader();
+
+    // Build indexes
+    this.types.forEach((t) => this.buildTypeIndex(t));
+    this.categories.forEach((c) => this.buildCategoryIndex(c));
+    this.objects.forEach((o) => this.buildObjectIndex(o));
   }
 
   static fromRaw(rawStaticData: RawStaticData, rawSaveData: RawSaveData): DataBucket {
@@ -124,6 +129,14 @@ export class DataBucket {
     return [...this.objects.values()];
   }
 
+  getTiles(): Record<GameKey, Tile> {
+    const out = {} as Record<GameKey, Tile>;
+    this.getClassObjects<Tile>("tile").forEach((tile) => {
+      out[tile.key] = tile;
+    });
+    return out;
+  }
+
   removeObject(key: GameKey): void {
     this.classObjectsIndex.get(this.getObject(key).class)?.delete(key);
     this.objects.delete(key);
@@ -134,25 +147,35 @@ export class DataBucket {
     this.buildObjectIndex(object);
   }
 
-  setRawObjects(objects: IRawGameObject[]): void {
+  setRawObjects(objects: IRawGameObject[]): GameObject[] {
     const newRawObjects = [] as IRawGameObject[];
+    const updatedObjects = [] as GameObject[];
 
     objects.forEach((obj) => {
       const existing = this.objects.get(obj.key);
       if (existing) {
+        //todo we must use attrConf of the model; currently this allows invalid data to go in
         Object.assign(existing, obj);
+        existing.onUpdate(obj);
+        updatedObjects.push(existing);
       } else {
         newRawObjects.push(obj);
       }
     });
 
     const newObjects = this.dataLoader.initFromRaw(newRawObjects, this.objects);
-    newObjects.forEach(this.buildObjectIndex);
+    newObjects.forEach((obj) => {
+      this.buildObjectIndex(obj);
+      obj.onCreated();
+    });
+
+    return [...updatedObjects, ...newObjects];
   }
 
   toSaveData(): RawSaveData {
-    const out = { objects: [] as any[], world: this.world };
-    this.objects.forEach((o) => out.objects.push(o.toJSON()));
+    const out = { objects: [] as IRawGameObject[], world: this.world };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.objects.forEach((o) => out.objects.push(o.toJSON() as any as IRawGameObject));
     return out;
   }
 

@@ -18,8 +18,8 @@ const store = useCultureTabStore();
             <UiObjectCards
               :title="(catData as CatData).category.name"
               :types="(catData as CatData).types"
-              :selectable="store.culture.selectableTraits.value"
-              :selected="store.culture.traits.value as TypeObject[]"
+              :selectable="store.culture.selectableTraits"
+              :selected="store.culture.traits as TypeObject[]"
               :select-pos="'right'"
               :with-spacer="false"
               :show-or-between="true"
@@ -31,8 +31,8 @@ const store = useCultureTabStore();
             <UiObjectCards
               :title="(catData as CatData).category.name"
               :types="(catData as CatData).types"
-              :selectable="store.culture.selectableTraits.value"
-              :selected="store.culture.traits.value as TypeObject[]"
+              :selectable="store.culture.selectableTraits"
+              :selected="store.culture.traits as TypeObject[]"
               :select-pos="'right'"
               :with-spacer="false"
               :show-or-between="true"

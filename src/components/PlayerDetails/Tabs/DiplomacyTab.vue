@@ -19,8 +19,8 @@ function onRowClick(_e: unknown, payload: { item: { raw: Player } }) {
 function searchPlayer(p: Player, term: string): boolean {
   return (
     includes(p.name, term) ||
-    includes(p.culture.value.type.value.name, term) ||
-    includes(p.leader.value.name, term) ||
+    includes(p.culture.type.name, term) ||
+    includes(p.leader.name, term) ||
     includes(p.religion.value?.name ?? "", term)
   );
 }
@@ -78,7 +78,7 @@ function searchPlayer(p: Player, term: string): boolean {
               <v-icon v-if="i > 0" icon="fa-chevron-right" color="grey" size="x-small" />
               <UiTypeChip
                 :type="type"
-                :size="store.current.culture.type.value.key === type.key ? 'large' : 'x-small'"
+                :size="store.current.culture.type.key === type.key ? 'large' : 'x-small'"
                 color="secondary"
               />
             </template>
@@ -88,11 +88,7 @@ function searchPlayer(p: Player, term: string): boolean {
           <div class="d-flex ga-2">
             <div class="flex-grow-1">
               <h3 class="mb-2">Region</h3>
-              <UiTypeChip
-                :type="store.current.culture.region.value"
-                size="small"
-                color="secondary"
-              />
+              <UiTypeChip :type="store.current.culture.region" size="small" color="secondary" />
               <UiTypeChip
                 :type="
                   // continent derived from culture category
@@ -105,7 +101,7 @@ function searchPlayer(p: Player, term: string): boolean {
             <div class="flex-grow-1">
               <h3 class="mb-2">Era</h3>
               <div
-                v-if="store.current.culture.status.value !== 'settled'"
+                v-if="store.current.culture.status !== 'settled'"
                 style="font-style: italic; opacity: 0.5"
               >
                 Hunter-Gatherer
@@ -113,9 +109,9 @@ function searchPlayer(p: Player, term: string): boolean {
             </div>
             <div class="flex-grow-1">
               <h3 class="mb-2">Heritage</h3>
-              <UiObjectChips :types="store.current.culture.heritages.value" size="large" />
+              <UiObjectChips :types="store.current.culture.heritages" size="large" />
               <div
-                v-if="store.current.culture.heritages.value.length === 0"
+                v-if="store.current.culture.heritages.length === 0"
                 style="font-style: italic; opacity: 0.5"
               >
                 None selected
@@ -123,9 +119,9 @@ function searchPlayer(p: Player, term: string): boolean {
             </div>
             <div class="flex-grow-1">
               <h3 class="mb-2">Traits</h3>
-              <UiObjectChips :types="store.current.culture.traits.value" size="large" />
+              <UiObjectChips :types="store.current.culture.traits" size="large" />
               <div
-                v-if="store.current.culture.traits.value.length === 0"
+                v-if="store.current.culture.traits.length === 0"
                 style="font-style: italic; opacity: 0.5"
               >
                 None selected
@@ -136,7 +132,7 @@ function searchPlayer(p: Player, term: string): boolean {
           <!-- Yields -->
           <div>
             <h3>Yields</h3>
-            <UiYields :yields="store.current.culture.yields.value" />
+            <UiYields :yields="store.current.culture.yields" />
           </div>
         </div>
       </div>

@@ -17,8 +17,8 @@ export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
 
   const columns = ref<TableColumn<Player>[]>([
     { title: "Name", key: "name", value: (p: Player) => p.name },
-    { title: "Culture", key: "culture", value: (p: Player) => p.culture.value.type.value.name },
-    { title: "Leader", key: "leader", value: (p: Player) => p.leader.value.name },
+    { title: "Culture", key: "culture", value: (p: Player) => p.culture.type.name },
+    { title: "Leader", key: "leader", value: (p: Player) => p.leader.name },
     {
       title: "State Religion",
       key: "religion",
@@ -28,22 +28,22 @@ export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
       title: "Agendas",
       key: "agendas",
       align: "end",
-      value: (p: Player) => p.agendaKeys.value.length,
+      value: (p: Player) => p.agendaKeys.length,
     },
-    { title: "Deals", key: "deals", align: "end", value: (p: Player) => p.dealKeys.value.length },
+    { title: "Deals", key: "deals", align: "end", value: (p: Player) => p.dealKeys.length },
     {
       title: "Trade Routes",
       key: "tradeRoutes",
       align: "end",
-      value: (p: Player) => p.tradeRouteKeys.value.length,
+      value: (p: Player) => p.tradeRouteKeys.length,
     },
-    { title: "Cities", key: "cities", align: "end", value: (p: Player) => p.cityKeys.value.length },
-    { title: "Units", key: "units", align: "end", value: (p: Player) => p.unitKeys.value.length },
+    { title: "Cities", key: "cities", align: "end", value: (p: Player) => p.cityKeys.length },
+    { title: "Units", key: "units", align: "end", value: (p: Player) => p.unitKeys.length },
   ]);
 
   const cultureTimeline = computed(() => {
     if (!current.value?.culture.type?.value) return [];
-    return typeTimeline(current.value.culture.type.value as TypeObject);
+    return typeTimeline(current.value.culture.type as TypeObject);
   });
 
   const leaderTimeline = computed(() => {
@@ -59,9 +59,9 @@ export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
     current.value = objStore.currentPlayer as Player;
 
     // Warm up computed values
-    players.value;
-    cultureTimeline.value;
-    leaderTimeline.value;
+    players;
+    cultureTimeline;
+    leaderTimeline;
 
     initialized.value = true;
   }

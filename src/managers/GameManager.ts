@@ -64,8 +64,7 @@ export class GameManager {
     this.turnProgress("Construction", Math.round((step / stepCount) * 100));
     this.eventStore.readyConstructions.forEach((construction) => {
       // Must have either a city or a unit to complete it
-      const player =
-        construction.city?.player.value ?? construction.tile.units.value[0]!.player.value;
+      const player = construction.city?.player.value ?? construction.tile.units.value[0]!.player;
 
       construction.complete(player);
     });

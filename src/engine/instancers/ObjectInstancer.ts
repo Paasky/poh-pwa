@@ -148,7 +148,7 @@ export class ObjectInstancer {
     for (const unit of units) {
       const regUnit = this.unitReg.get(unit.key);
       if (regUnit) {
-        if (regUnit.designKey !== unit.design.value.key) {
+        if (regUnit.designKey !== unit.design.key) {
           this.deleteUnit(unit.key);
         } else {
           throw new Error(`Unit ${unit.key} already exists`);
@@ -160,7 +160,7 @@ export class ObjectInstancer {
       instance.renderingGroupId = EngineLayers.units.group;
       instance.position.copyFrom(this.getPos(unit.tile.value));
 
-      this.unitReg.set(unit.key, { instance, designKey: unit.design.value.key });
+      this.unitReg.set(unit.key, { instance, designKey: unit.design.key });
 
       unit.unwatchers.push(
         watch(unit.tileKey, () => {

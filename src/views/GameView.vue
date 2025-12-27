@@ -150,7 +150,7 @@ function onBeforeUnload(e: BeforeUnloadEvent) {
       <TileDetails v-if="app.loaded" />
       <UiUnitCard
         v-if="context.object.value?.class === 'unit'"
-        v-model="context.object.value as unknown as Unit"
+        v-model="context.object as unknown as Unit"
       />
     </v-sheet>
 

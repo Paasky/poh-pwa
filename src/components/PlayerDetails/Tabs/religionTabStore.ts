@@ -64,9 +64,9 @@ export const useReligionTabStore = defineStore("religionTabStore", () => {
     if (initialized.value) return;
 
     // Warm up computed values
-    religions.value;
-    citizensCount.value;
-    defaultCurrent.value;
+    religions;
+    citizensCount;
+    defaultCurrent;
 
     initialized.value = true;
   }

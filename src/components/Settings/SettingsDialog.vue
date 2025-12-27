@@ -343,7 +343,7 @@ function fmtHour(h: number): string {
   </v-dialog>
 
   <!-- Restart confirmation dialog -->
-  <v-dialog v-model="dialog.showRestartConfirm.value" max-width="520" persistent>
+  <v-dialog v-model="dialog.showRestartConfirm" max-width="520" persistent>
     <v-card rounded="lg">
       <v-card-title class="text-h6">Restart Required</v-card-title>
       <v-card-text>

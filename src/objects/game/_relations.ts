@@ -1,60 +1,71 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // noinspection JSUnusedLocalSymbols
 
-import { computed, isRef, Ref } from "vue";
-import { useObjectsStore } from "@/stores/objectStore";
-import { GameKey } from "@/objects/game/_GameObject";
-import { withCallerContext } from "@/utils/stack";
+import { GameKey, GameObject } from "@/objects/game/_GameObject";
+import { useDataBucket } from "@/Store/useDataBucket";
 
-export function hasMany<T>(keysValue: GameKey[] | Ref<GameKey[]>, debug: `${GameKey}.${string}`) {
-  const out: T[] = [];
+export function hasMany<T extends GameObject>(instance: any, relationKey: string) {
+  const getterName = relationKey.replace("Keys", "s").replace("ys", "ies");
+  const privateProp = `_${getterName}`;
 
-  return computed<T[]>(() => {
-    const keys = isRef(keysValue) ? keysValue.value : keysValue;
-    // Resize output to match
-    if (out.length !== keys.length) out.length = keys.length;
+  // Initialize the private cache property
+  instance[privateProp] = undefined;
 
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i];
-      // Always read – creates a dependency on the store entry for this key
-      try {
-        const obj = useObjectsStore().get(key) as T;
-        if (out[i] !== obj) out[i] = obj;
-      } catch (e) {
-        throw withCallerContext(`${debug}: ${e}`);
+  Object.defineProperty(instance, getterName, {
+    get() {
+      if (this[privateProp] === undefined) {
+        const keys = this[relationKey] as GameKey[] | Set<GameKey>;
+        const keysArray = Array.isArray(keys) ? keys : Array.from(keys);
+        this[privateProp] = keysArray.map((key) => useDataBucket().getObject<T>(key));
       }
-    }
-
-    return out.slice();
+      return this[privateProp];
+    },
+    enumerable: true,
+    configurable: true,
   });
 }
 
-export function hasOne<T>(keyValue: GameKey | Ref<GameKey>, debug: `${GameKey}.${string}`) {
-  return computed(() => {
-    const key = isRef(keyValue) ? keyValue.value : keyValue;
-    if (!key) {
-      throw withCallerContext(`${debug}: Empty relation value`);
-    }
-    try {
-      return useObjectsStore().get(key) as T;
-    } catch (e) {
-      throw withCallerContext(`${debug}: ${e}`);
-    }
+export function hasOne<T extends GameObject>(instance: any, relationKey: string) {
+  const getterName = relationKey.replace("Key", "");
+  const privateProp = `_${getterName}`;
+
+  // Initialize the private cache property
+  instance[privateProp] = undefined;
+
+  Object.defineProperty(instance, getterName, {
+    get() {
+      if (this[privateProp] === undefined) {
+        const key = this[relationKey] as GameKey;
+        if (!key) {
+          throw new Error(
+            `Empty relation key '${relationKey}' (in ${instance.key || "[empty key]"})`,
+          );
+        }
+        this[privateProp] = useDataBucket().getObject<T>(key);
+      }
+      return this[privateProp];
+    },
+    enumerable: true,
+    configurable: true,
   });
 }
 
-export function canHaveOne<T>(
-  keyValue: GameKey | null | Ref<GameKey | null>,
-  debug: `${GameKey}.${string}`,
-) {
-  return computed(() => {
-    const key = isRef(keyValue) ? keyValue.value : keyValue;
-    if (!key) {
-      return null;
-    }
-    try {
-      return useObjectsStore().get(key) as T;
-    } catch (e) {
-      throw withCallerContext(`${debug}: ${e}`);
-    }
+export function canHaveOne<T extends GameObject>(instance: any, relationKey: string) {
+  const getterName = relationKey.replace("Key", "");
+  const privateProp = `_${getterName}`;
+
+  // Initialize the private cache property
+  instance[privateProp] = undefined;
+
+  Object.defineProperty(instance, getterName, {
+    get() {
+      if (this[privateProp] === undefined) {
+        const key = this[relationKey] as GameKey | null;
+        this[privateProp] = key ? useDataBucket().getObject<T>(key) : null;
+      }
+      return this[privateProp];
+    },
+    enumerable: true,
+    configurable: true,
   });
 }

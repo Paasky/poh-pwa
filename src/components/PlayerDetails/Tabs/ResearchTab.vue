@@ -26,7 +26,7 @@ function eraY(era: TypeObject): number {
 }
 
 function onTechClick(tech: TypeObject, e: MouseEvent) {
-  if (!store.research.researched.value.includes(tech) && store.research.current.value !== tech) {
+  if (!store.research.researched.includes(tech) && store.research.current !== tech) {
     // Reset the queue unless Shift is held while clicking
     store.research.addToQueue(tech as TypeObject, !e.shiftKey);
   }
@@ -82,7 +82,7 @@ function onTechClick(tech: TypeObject, e: MouseEvent) {
         width: `${cardWidthRem}rem`,
         height: `${cardHeightRem}rem`,
         cursor:
-          !store.research.researched.value.includes(tech) && store.research.current.value !== tech
+          !store.research.researched.includes(tech) && store.research.current.value !== tech
             ? 'pointer'
             : 'default',
       }"
@@ -91,10 +91,8 @@ function onTechClick(tech: TypeObject, e: MouseEvent) {
       <UiObjectCard
         class="h-100"
         :type="tech as TypeObject"
-        :canSelect="!store.research.researched.value.includes(tech)"
-        :isSelected="
-          store.research.queue.value.includes(tech) || store.research.current.value === tech
-        "
+        :canSelect="!store.research.researched.includes(tech)"
+        :isSelected="store.research.queue.includes(tech) || store.research.current.value === tech"
       />
     </div>
   </div>

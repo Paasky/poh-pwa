@@ -1,4 +1,3 @@
-import { computed, ref } from "vue";
 import { Unit } from "@/objects/game/Unit";
 import { Tile } from "@/objects/game/Tile";
 import { roundToTenth, TypeKey } from "@/types/common";
@@ -17,28 +16,30 @@ export class UnitMovement {
   unit: Unit;
 
   // Pre-calculated mobility (depends on design domain)
-  isMobile = computed(
-    () => !["domainType:air", "domainType:space"].includes(this.unit.design.value.domainKey()),
-  );
+  get isMobile(): boolean {
+    return !["domainType:air", "domainType:space"].includes(this.unit.design.domainKey());
+  }
 
   // Use computed to not need any expensive watchers or type reset
-  specialTypeKeys = computed((): Set<TypeKey> => {
+  get specialTypeKeys(): Set<TypeKey> {
     const specialKeys = new Set<TypeKey>();
 
     // Unit.myTypes only change when Design upgrades (once every 50-100 turns)
-    this.unit.myTypes.value.forEach((t) => t.specials.forEach((s) => specialKeys.add(s)));
+    this.unit.myTypes.forEach((t) => t.specials.forEach((s) => specialKeys.add(s)));
 
-    this.unit.player.value.knownSpecialKeys.value.forEach((s) => specialKeys.add(s));
+    this.unit.player.knownSpecialKeys.forEach((s) => specialKeys.add(s));
 
     return specialKeys;
-  });
+  }
 
   // Data use to walk the path
   // Set from design
-  maxMoves = computed(() => this.unit.design.value.yields.getLumpAmount("yieldType:moves"));
+  get maxMoves(): number {
+    return this.unit.design.yields.getLumpAmount("yieldType:moves");
+  }
 
   // Set by Unit on init/new turn
-  moves = ref(0);
+  moves = 0;
 
   // Set by Pathfinder
   path: PathStep[] = [];
@@ -46,18 +47,18 @@ export class UnitMovement {
   // Use global base cost cache to avoid recalculating expensive costs on every move
   // Cache key is based on unit design and player specials
   private costCache = useMoveCostCache();
-  private cacheKey = computed(() =>
-    this.costCache.getCacheKey(this.unit.design.value, this.specialTypeKeys.value),
-  );
+  private get cacheKey(): string {
+    return this.costCache.getCacheKey(this.unit.design, this.specialTypeKeys);
+  }
 
   constructor(unit: Unit) {
     this.unit = unit;
   }
 
   cost(toTile: Tile, from?: Tile, context?: MoveContext): number | TurnEnd | null {
-    if (!this.isMobile.value) return null;
+    if (!this.isMobile) return null;
 
-    const fromTile = from ?? this.unit.tile.value;
+    const fromTile = from ?? this.unit.tile;
 
     if (context) {
       // 1. Hard Barriers (Enemy units)
@@ -98,7 +99,7 @@ export class UnitMovement {
       numericCost = currentMoves;
     } else if (moveCost > currentMoves && currentMoves <= 0) {
       nextTurn++;
-      nextMovesRemaining = roundToTenth(this.maxMoves.value - moveCost);
+      nextMovesRemaining = roundToTenth(this.maxMoves - moveCost);
       numericCost = moveCost;
     } else {
       nextMovesRemaining = roundToTenth(currentMoves - moveCost);
@@ -118,16 +119,16 @@ export class UnitMovement {
 
   static getMoveContext(unit: Unit): MoveContext {
     const objectStore = useObjectsStore();
-    const player = unit.player.value;
+    const player = unit.player;
 
-    const known = player.knownTileKeys.value;
-    const visible = player.visibleTileKeys.value;
+    const known = player.knownTileKeys;
+    const visible = player.visibleTileKeys;
 
     const friendlyUnitTiles = new Set<GameKey>();
     const enemyUnitTiles = new Set<GameKey>();
 
     for (const u of objectStore.getClassGameObjects("unit") as Unit[]) {
-      if (player.visibleTileKeys.value.has(u.tileKey.value)) {
+      if (player.visibleTileKeys.has(u.tileKey.value)) {
         if (u.playerKey.value === player.key) {
           friendlyUnitTiles.add(u.tileKey.value);
         } else {
@@ -144,8 +145,7 @@ export class UnitMovement {
       canEnterUnknownThisTurn: true,
       ignoreZoc: false,
       isEmbarked:
-        unit.design.value.domainKey() === "domainType:land" &&
-        unit.tile.value.domain.key !== "domainType:land",
+        unit.design.domainKey() === "domainType:land" && unit.tile.domain.key !== "domainType:land",
     };
   }
 
@@ -156,8 +156,8 @@ export class UnitMovement {
 
     // 1. Pre-calculate reachable steps
     const reachableSteps: { tile: Tile; cost: number }[] = [];
-    let currentMoves = this.moves.value;
-    let currentTile = this.unit.tile.value;
+    let currentMoves = this.moves;
+    let currentTile = this.unit.tile;
     let stopReason: "finished" | "outOfMoves" | "blocked" | "danger" = "finished";
 
     for (let i = 0; i < this.path.length; i++) {
@@ -211,11 +211,9 @@ export class UnitMovement {
     }
 
     // Remove from orig tile, add to new tiles
-    this.unit.tile.value.unitKeys.value = this.unit.tile.value.unitKeys.value.filter(
-      (key) => key !== this.unit.key,
-    );
+    this.unit.tile.unitKeys.value = this.unit.tile.unitKeys.filter((key) => key !== this.unit.key);
     this.unit.tileKey.value = reachableSteps[actualStepCount - 1].tile.key;
-    this.unit.tile.value.unitKeys.value.push(this.unit.key);
+    this.unit.tile.unitKeys.push(this.unit.key);
 
     this.moves.value = Math.max(0, roundToTenth(this.moves.value - totalSpent));
 
@@ -231,7 +229,7 @@ export class UnitMovement {
     const cached = this.getCachedCost(to, from);
     if (cached !== undefined) return cached;
 
-    const myDomainKey = this.unit.design.value.domainKey();
+    const myDomainKey = this.unit.design.domainKey();
     const toFeatureKey = to.feature.value?.key;
 
     // 1. Domain Constraints
@@ -244,26 +242,26 @@ export class UnitMovement {
 
     // Land units in water: needs "Embark" special
     if (myDomainKey === "domainType:land" && to.domain.id === "water") {
-      if (!this.specialTypeKeys.value.has("specialType:canEmbark")) {
+      if (!this.specialTypeKeys.has("specialType:canEmbark")) {
         return null;
       }
     }
 
     // 2. Terrain / Feature / Elevation Specials
     if (to.terrain.key === "terrainType:sea") {
-      if (!this.specialTypeKeys.value.has("specialType:canEnterSea")) return null;
+      if (!this.specialTypeKeys.has("specialType:canEnterSea")) return null;
     }
     if (to.terrain.key === "terrainType:ocean") {
-      if (!this.specialTypeKeys.value.has("specialType:canEnterOcean")) return null;
+      if (!this.specialTypeKeys.has("specialType:canEnterOcean")) return null;
     }
     if (toFeatureKey === "featureType:ice") {
-      if (!this.specialTypeKeys.value.has("specialType:canEnterIce")) return null;
+      if (!this.specialTypeKeys.has("specialType:canEnterIce")) return null;
     }
     if (
       to.elevation.key === "elevationType:mountain" ||
       to.elevation.key === "elevationType:snowMountain"
     ) {
-      if (!this.specialTypeKeys.value.has("specialType:canEnterMountains")) return null;
+      if (!this.specialTypeKeys.has("specialType:canEnterMountains")) return null;
     }
 
     // 3. Turn-ending Moves

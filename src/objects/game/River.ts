@@ -1,23 +1,22 @@
 import { GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
-import { ComputedRef } from "vue";
 import type { Tile } from "@/objects/game/Tile";
 import { hasMany } from "@/objects/game/_relations";
 
 export class River extends GameObject {
-  constructor(key: GameKey, name: string, tileKeys: GameKey[]) {
+  constructor(
+    key: GameKey,
+    public name: string,
+    public tileKeys: GameKey[],
+  ) {
     super(key);
 
-    this.name = name;
-
-    this.tileKeys = tileKeys;
-    this.tiles = hasMany<Tile>(this.tileKeys, `${this.key}.tiles`);
+    hasMany<Tile>(this, "tileKeys");
   }
 
   static attrsConf: GameObjAttr[] = [
-    { attrName: "name", attrNotRef: true },
+    { attrName: "name" },
     {
       attrName: "tileKeys",
-      attrNotRef: true,
       related: { theirKeyAttr: "riverKey", isOne: true, isManyToMany: true },
     },
   ];
@@ -25,13 +24,11 @@ export class River extends GameObject {
   /*
    * Attributes
    */
-  name: string;
 
   /*
    * Relations
    */
-  tileKeys: GameKey[];
-  tiles: ComputedRef<Tile[]>;
+  declare tiles: Tile[];
 
   /*
    * Computed

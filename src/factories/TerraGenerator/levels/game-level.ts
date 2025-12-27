@@ -58,7 +58,7 @@ export class GameLevel {
           regTile.feature.value?.id === "oasis" || regTile.feature.value?.id == "atoll";
         if (!setFeatureLater) {
           // Allow a 25% chance for feature swap for extra variety
-          tile.feature.value =
+          tile.feature =
             Math.random() < 0.25
               ? regTile.feature.value
                 ? // Had a feature -> swap to empty
@@ -66,7 +66,7 @@ export class GameLevel {
                 : // Didn't have a feature -> add one
                   this.gen.getFeatureForTile(tile, this.gen.getDistToPole(y, this.gen.size.y))
               : // No feature swap -> use existing feature
-                regTile.feature.value;
+                regTile.feature;
         }
 
         this.gen.gameTiles[tile.key] = tile;
@@ -123,7 +123,7 @@ export class GameLevel {
 
         // Region is an oasis: add to a random game tile in the 3x3 group
         if (regTile.feature.value?.key === "featureType:oasis") {
-          getRandom(neighbors).feature.value = regTile.feature.value;
+          getRandom(neighbors).feature = regTile.feature;
           return;
         }
 
@@ -276,30 +276,27 @@ export class GameLevel {
       if (tile.feature.value) {
         if (tile.elevation.id === "mountain" || tile.elevation.id === "snowMountain") {
           // Mountains cannot have instancers
-          tile.feature.value = null;
+          tile.feature = null;
         } else if (tile.elevation.id === "hill") {
           // Hills cannot have flat instancers
           const flatFeatures = ["oasis", "floodPlain", "swamp"];
-          if (flatFeatures.includes(tile.feature.value.id)) {
-            tile.feature.value = null;
+          if (flatFeatures.includes(tile.feature.id)) {
+            tile.feature = null;
           }
-        } else if (
-          tile.terrain.id === "ocean" &&
-          !["tradeWind", "ice"].includes(tile.feature.value.id)
-        ) {
+        } else if (tile.terrain.id === "ocean" && !["tradeWind", "ice"].includes(tile.feature.id)) {
           // Ocean can ony have trade wind/ice
-          tile.feature.value = null;
+          tile.feature = null;
         } else {
           const waterFeatures = ["ice", "kelp", "lagoon", "atoll", "tradeWind"];
           if (tile.domain.id === "water") {
             // Water can only have water instancers
-            if (!waterFeatures.includes(tile.feature.value.id)) {
-              tile.feature.value = null;
+            if (!waterFeatures.includes(tile.feature.id)) {
+              tile.feature = null;
             }
           } else {
             // Land can only have land instancers
-            if (waterFeatures.includes(tile.feature.value.id)) {
-              tile.feature.value = null;
+            if (waterFeatures.includes(tile.feature.id)) {
+              tile.feature = null;
             }
           }
         }

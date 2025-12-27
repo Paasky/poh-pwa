@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { canHaveOne, hasOne } from "@/objects/game/_relations";
 import { TypeObject } from "@/types/typeObjects";
-import { computed, ComputedRef, Ref, ref } from "vue";
 import { Yields } from "@/objects/yield";
 import { GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
 import type { City } from "@/objects/game/City";
@@ -14,39 +12,30 @@ import { getRandom } from "@/helpers/arrayTools";
 import { useEventStore } from "@/stores/eventStore";
 import { CitizenGained, CitizenLost } from "@/events/Citizen";
 import { useObjectsStore } from "@/stores/objectStore";
+import { Construction } from "@/objects/game/Construction";
+import { useDataBucket } from "@/Store/useDataBucket";
 
 export class Citizen extends GameObject {
   constructor(
     key: GameKey,
-    cityKey: GameKey,
-    cultureKey: GameKey,
-    playerKey: GameKey,
-    tileKey: GameKey,
-    religionKey: GameKey | null = null,
-    policy: TypeObject | null = null,
+    public cityKey: GameKey,
+    public cultureKey: GameKey,
+    public playerKey: GameKey,
+    public tileKey: GameKey,
+    public religionKey: GameKey | null = null,
+    public policy: TypeObject | null = null,
   ) {
     super(key);
 
-    if (policy) this.policy.value = policy;
-
-    this.cityKey = cityKey;
-
-    this.city = hasOne<City>(this.cityKey, `${this.key}.city`);
-    this.cultureKey = ref(cultureKey);
-
-    this.culture = hasOne<Culture>(this.cultureKey, `${this.key}.culture`);
-
-    this.playerKey = ref(playerKey);
-    this.player = hasOne<Player>(this.playerKey, `${this.key}.player`);
-
-    if (religionKey) this.religionKey.value = religionKey;
-
-    this.tileKey = ref(tileKey);
-    this.tile = hasOne<Tile>(this.tileKey, `${this.key}.tile`);
+    hasOne<City>(this, "cityKey");
+    hasOne<Culture>(this, "cultureKey");
+    hasOne<Player>(this, "playerKey");
+    canHaveOne<Religion>(this, "religionKey");
+    hasOne<Tile>(this, "tileKey");
   }
 
   static attrsConf: GameObjAttr[] = [
-    { attrName: "cityKey", attrNotRef: true, related: { theirKeyAttr: "citizenKeys" } },
+    { attrName: "cityKey", related: { theirKeyAttr: "citizenKeys" } },
     { attrName: "cultureKey", related: { theirKeyAttr: "citizenKeys" } },
     { attrName: "playerKey", related: { theirKeyAttr: "citizenKeys" } },
     { attrName: "tileKey", related: { theirKeyAttr: "citizenKeys" } },
@@ -61,132 +50,100 @@ export class Citizen extends GameObject {
   /*
    * Attributes
    */
-  policy = ref<TypeObject | null>(null);
 
   /*
    * Relations
    */
-  cityKey: GameKey;
-  city: ComputedRef<City>;
-
-  cultureKey: Ref<GameKey>;
-  culture: ComputedRef<Culture>;
-
-  playerKey: Ref<GameKey>;
-  player: ComputedRef<Player>;
-
-  religionKey = ref<GameKey | null>(null);
-  religion = canHaveOne<Religion>(this.religionKey, `${this.key}.religion`);
-
-  tileKey: Ref<GameKey>;
-  tile: ComputedRef<Tile>;
+  declare city: City;
+  declare culture: Culture;
+  declare player: Player;
+  declare religion: Religion | null;
+  declare tile: Tile;
 
   /*
    * Computed
    */
-  tileYields = computed(() =>
-    this.tile.value.yields.value.only(this.concept.inheritYieldTypes!, [this.concept]),
-  );
+  get tileYields(): Yields {
+    return this.tile.yields.only(this.concept.inheritYieldTypes!, [this.concept]);
+  }
 
-  work = computed(() => this.tile.value.construction.value);
+  get work(): Construction | null {
+    return this.tile.construction;
+  }
 
-  workYields = computed(
-    (): Yields | null =>
-      this.work.value?.yields.value.only(this.concept.inheritYieldTypes!, [this.concept]) ?? null,
-  );
+  get workYields(): Yields | null {
+    return this.work?.yields.only(this.concept.inheritYieldTypes!, [this.concept]) ?? null;
+  }
 
-  yields = computed(
-    () => new Yields([...this.tileYields.value.all(), ...(this.workYields.value?.all() ?? [])]),
-  );
+  get yields(): Yields {
+    return new Yields([...this.tileYields.all(), ...(this.workYields?.all() ?? [])]);
+  }
 
   /*
    * Actions
    */
   complete() {
-    this.city.value.citizenKeys.value.push(this.key);
+    this.city.citizenKeys.push(this.key);
 
     this.pickTile();
 
-    // Use any as IDE has a Ref value mismatch
-    useEventStore().turnEvents.push(new CitizenGained(this, "growth") as any);
+    useEventStore().turnEvents.push(new CitizenGained(this, "growth"));
   }
 
   delete(reason: string) {
-    this.city.value.citizenKeys.value = this.city.value.citizenKeys.value.filter(
-      (k) => k !== this.key,
-    );
-    this.culture.value.citizenKeys.value = this.culture.value.citizenKeys.value.filter(
-      (k) => k !== this.key,
-    );
-    this.player.value.citizenKeys.value = this.player.value.citizenKeys.value.filter(
-      (k) => k !== this.key,
-    );
-    if (this.religion.value) {
-      this.religion.value.citizenKeys.value = this.religion.value.citizenKeys.value.filter(
-        (k) => k !== this.key,
-      );
+    this.city.citizenKeys = this.city.citizenKeys.filter((k) => k !== this.key);
+    this.culture.citizenKeys = this.culture.citizenKeys.filter((k) => k !== this.key);
+    this.player.citizenKeys = this.player.citizenKeys.filter((k) => k !== this.key);
+    if (this.religion) {
+      this.religion.citizenKeys = this.religion.citizenKeys.filter((k) => k !== this.key);
     }
-    this.tile.value.citizenKeys.value = this.tile.value.citizenKeys.value.filter(
-      (k) => k !== this.key,
-    );
+    this.tile.citizenKeys = this.tile.citizenKeys.filter((k) => k !== this.key);
 
     delete useObjectsStore()._gameObjects[this.key];
 
-    useEventStore().turnEvents.push(
-      // Use any as IDE has a Ref value mismatch
-      new CitizenLost(this.city.value, this.tile.value, reason) as any,
-    );
+    useEventStore().turnEvents.push(new CitizenLost(this.city, this.tile, reason));
   }
 
   migrate(toCity: City) {
-    const fromCity = this.city.value;
+    const fromCity = this.city;
 
-    fromCity.citizenKeys.value = fromCity.citizenKeys.value.filter((k) => k !== this.key);
-    this.player.value.citizenKeys.value = this.player.value.citizenKeys.value.filter(
-      (k) => k !== this.key,
-    );
+    fromCity.citizenKeys = fromCity.citizenKeys.filter((k) => k !== this.key);
+    this.player.citizenKeys = this.player.citizenKeys.filter((k) => k !== this.key);
 
     useEventStore().turnEvents.push(
       new CitizenLost(
         fromCity,
-        this.tile.value,
-        `migration to ${toCity.name} (${toCity.player.value.name})`,
+        this.tile,
+        `migration to ${toCity.name} (${toCity.player.name})`,
         this,
-        // Use any as IDE has a Ref value mismatch
-      ) as any,
+      ),
     );
 
     this.cityKey = toCity.key;
-    toCity.citizenKeys.value.push(this.key);
+    toCity.citizenKeys.push(this.key);
     this.pickTile();
 
     useEventStore().turnEvents.push(
-      new CitizenGained(
-        this,
-        `immigrated from ${fromCity.name} (${fromCity.player.value.name})`,
-        // Use any as IDE has a Ref value mismatch
-      ) as any,
+      new CitizenGained(this, `immigrated from ${fromCity.name} (${fromCity.player.name})`),
     );
   }
 
   pickTile() {
     if (this.tileKey) {
-      this.tile.value.citizenKeys.value = this.tile.value.citizenKeys.value.filter(
-        (k) => k !== this.key,
-      );
+      this.tile.citizenKeys = this.tile.citizenKeys.filter((k) => k !== this.key);
     }
 
     // todo pick tile per city preferences
     const possibleTiles = getNeighbors(
-      useObjectsStore().world.size,
-      this.city.value.tile.value,
-      useObjectsStore().getTiles,
+      useDataBucket().world.size,
+      this.city.tile,
+      useDataBucket().getTiles(),
       "hex",
       3,
-    ).filter((n) => n.playerKey.value === this.playerKey.value);
+    ).filter((n) => n.playerKey === this.playerKey);
 
-    this.tileKey.value = getRandom(possibleTiles).key;
+    this.tileKey = getRandom(possibleTiles).key;
 
-    this.tile.value.citizenKeys.value.push(this.key);
+    this.tile.citizenKeys.push(this.key);
   }
 }

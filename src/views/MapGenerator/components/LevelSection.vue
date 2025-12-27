@@ -61,8 +61,8 @@ const tiles = computed(() => {
         <div v-if="tile.elevation.id !== 'flat'" class="e-i">
           <UiIcon :icon="tile.elevation.icon" />
         </div>
-        <div v-if="tile.feature.value" class="f-i">
-          <UiIcon :icon="tile.feature.value.icon" />
+        <div v-if="tile.feature" class="f-i">
+          <UiIcon :icon="tile.feature.icon" />
         </div>
         <div v-if="tile.isFresh || tile.isSalt" class="fr-sa">
           {{ tile.isFresh ? "F" : "s" }}

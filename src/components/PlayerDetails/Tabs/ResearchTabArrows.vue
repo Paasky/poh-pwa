@@ -39,15 +39,15 @@ function pathBetween(fromKey: TypeKey, toKey: TypeKey): string | null {
   }
 
   // L-shaped path with rounded 90-degree corners
-  const r = cornerSizeRem.value;
-  const midY = Math.max(startY + r, endY - r);
+  const r = cornerSizeRem;
+  const midY = Math.max(startY + r.value, endY - r.value);
   const dirX = endX > startX ? 0.5 : -0.5;
 
   // Segments with rounded corners (quadratic Bezier)
-  const p1y = midY - r / 2;
-  const p2x = startX + dirX * r;
-  const p3x = endX - dirX * r;
-  const p4y = midY + r / 2;
+  const p1y = midY - r.value / 2;
+  const p2x = startX + dirX * r.value;
+  const p3x = endX - dirX * r.value;
+  const p4y = midY + r.value / 2;
 
   return [
     `M ${startX} ${startY}`,

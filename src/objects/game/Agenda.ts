@@ -1,18 +1,19 @@
 import { GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
 import type { Player } from "@/objects/game/Player";
 import { hasOne } from "@/objects/game/_relations";
-import { ComputedRef } from "vue";
 
 export class Agenda extends GameObject {
-  constructor(key: GameKey, playerKey: GameKey) {
+  constructor(
+    key: GameKey,
+    public playerKey: GameKey,
+  ) {
     super(key);
 
-    this.playerKey = playerKey;
-    this.player = hasOne<Player>(this.playerKey, `${this.key}.player`);
+    hasOne<Player>(this, "playerKey");
   }
 
   static attrsConf: GameObjAttr[] = [
-    { attrName: "playerKey", attrNotRef: true, related: { theirKeyAttr: "agendaKeys" } },
+    { attrName: "playerKey", related: { theirKeyAttr: "agendaKeys" } },
   ];
 
   /*
@@ -23,8 +24,7 @@ export class Agenda extends GameObject {
   /*
    * Relations
    */
-  playerKey: GameKey;
-  player: ComputedRef<Player>;
+  declare player: Player;
 
   /*
    * Computed

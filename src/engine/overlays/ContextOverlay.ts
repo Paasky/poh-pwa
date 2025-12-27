@@ -100,9 +100,9 @@ export class ContextOverlay extends BaseOverlay<ContextPayload> {
         const player = useObjectsStore().currentPlayer;
         // Explicitly access values synchronously to register Vue dependencies
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        player.knownTileKeys.value;
+        player.knownTileKeys;
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        player.visibleTileKeys.value;
+        player.visibleTileKeys;
 
         // Direct trigger of refresh when visibility state changes
         this.triggerRefresh();

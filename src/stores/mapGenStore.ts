@@ -293,8 +293,7 @@ export const useMapGenStore = defineStore("mapGen", () => {
 
     const ax = alignment.value.mirrorX === null ? Math.random() < 0.5 : alignment.value.mirrorX;
     const ay = alignment.value.mirrorY === null ? Math.random() < 0.5 : alignment.value.mirrorY;
-    const ac =
-      alignment.value.mirrorClimate === null ? Math.random() < 0.5 : alignment.value.mirrorClimate;
+    const ac = alignment.value.mirrorClimate === null ? Math.random() < 0.5 : alignment.value.mirrorClimate;
     gen.value = markRaw(
       new TerraGenerator(worldValues.value, ax, ay, ac)
         .generateStratLevel()

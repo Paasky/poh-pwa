@@ -6,6 +6,15 @@ import { GameKey, GameObject } from "../../src/objects/game/_GameObject";
 import { Player } from "../../src/objects/game/Player";
 import { Unit } from "../../src/objects/game/Unit";
 import { City } from "../../src/objects/game/City";
+import { WorldState } from "../../src/types/common";
+
+export const TestWorldState = {
+  id: "test-world",
+  size: { x: 5, y: 5 },
+  turn: 0,
+  year: -10000,
+  currentPlayer: "player:1",
+} as WorldState;
 
 export function createTestWorld() {
   const loader = new GameDataLoader();
@@ -232,8 +241,8 @@ export function createTestWorld() {
       const unit = obj as Unit;
       try {
         const tile = objectsStore.get(unit.tileKey.value) as Tile;
-        if (!tile.unitKeys.value.includes(unit.key)) {
-          tile.unitKeys.value.push(unit.key);
+        if (!tile.unitKeys.includes(unit.key)) {
+          tile.unitKeys.push(unit.key);
         }
       } catch (e) {
         // Ignore

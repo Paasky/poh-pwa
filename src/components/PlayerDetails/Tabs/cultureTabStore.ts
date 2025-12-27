@@ -18,7 +18,7 @@ export const useCultureTabStore = defineStore("cultureTabStore", () => {
 
     // Warm up computed values
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    culture.value;
+    culture;
 
     initialized.value = true;
   }
