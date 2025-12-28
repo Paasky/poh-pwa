@@ -1,9 +1,18 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { cityRawData, initTestDataBucket, playerRawData, tileRawData, } from "../../_setup/dataHelpers";
+import {
+  cityRawData,
+  initTestDataBucket,
+  playerRawData,
+  tileRawData,
+} from "../../_setup/dataHelpers";
 import { destroyDataBucket, useDataBucket } from "../../../src/Store/useDataBucket";
 import { City } from "../../../src/objects/game/City";
 import { generateKey } from "../../../src/objects/game/_GameObject";
-import { expectRelationToThrowMissing, testManyToOneRelation, testOneToOneRelation, } from "../../_setup/testHelpers";
+import {
+  expectRelationToThrowMissing,
+  testManyToOneRelation,
+  testOneToOneRelation,
+} from "../../_setup/testHelpers";
 import { Player } from "../../../src/objects/game/Player";
 import { Tile } from "../../../src/objects/game/Tile";
 
