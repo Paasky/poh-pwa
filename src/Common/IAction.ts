@@ -88,13 +88,18 @@ export const ActionHotkey = {
 
 export interface IAction {
   type: ActionType;
-}
 
-export type Move = IAction & {
-  type: "move";
-  unitKey: GameKey;
-  tileKey: GameKey;
-};
+  /**
+   * The world tick/version this action was based on.
+   * Used for optimistic locking/conflict resolution in multiplayer.
+   */
+  turn: number;
+
+  /**
+   * Client-side timestamp when the action was created.
+   */
+  timestamp: number;
+}
 
 // Units
 export type Alert = IAction & { type: "alert"; unitKey: GameKey };
@@ -107,8 +112,14 @@ export type EndTurn = IAction & { type: "endTurn" };
 export type Explore = IAction & { type: "explore"; unitKey: GameKey };
 export type Fortify = IAction & { type: "fortify"; unitKey: GameKey };
 export type Heal = IAction & { type: "heal"; unitKey: GameKey };
-export type Mission = IAction & { type: "mission"; unitKey: GameKey; typeKey: GameKey }; // religious or spy missions?
+export type Mission = IAction & {
+  type: "mission";
+  unitKey: GameKey;
+  typeKey: TypeKey;
+  targetKey: GameKey;
+};
 export type Mobilize = IAction & { type: "mobilize"; unitKey: GameKey };
+export type Move = IAction & { type: "move"; unitKey: GameKey; tileKey: GameKey };
 export type Pillage = IAction & { type: "pillage"; unitKey: GameKey };
 export type Rebase = IAction & { type: "rebase"; unitKey: GameKey; cityKey: GameKey };
 export type Recon = IAction & { type: "recon"; unitKey: GameKey; tileKey: GameKey };
@@ -182,3 +193,57 @@ export type SelectTechnology = IAction & { type: "selectTechnology"; typeKey: Ty
 export type KeepStatusQuo = IAction & { type: "keepStatusQuo" };
 export type EnactReforms = IAction & { type: "enactReforms" };
 export type JoinRevolution = IAction & { type: "joinRevolution" };
+
+export type Action =
+  | Alert
+  | Attack
+  | Bombard
+  | Build
+  | Demobilize
+  | Disband
+  | EndTurn
+  | Explore
+  | Fortify
+  | Heal
+  | Mission
+  | Mobilize
+  | Move
+  | Pillage
+  | Rebase
+  | Recon
+  | Rename
+  | Skip
+  | Settle
+  | Stop
+  | Trade
+  | Upgrade
+  | CreateDesign
+  | DeactivateDesign
+  | UpgradeDesign
+  | StartBuilding
+  | HurryBuilding
+  | CancelBuilding
+  | StartTraining
+  | HurryTraining
+  | CancelTraining
+  | MoveCitizen
+  | PurchaseTile
+  | RenameCity
+  | StartAgenda
+  | OpposeAgenda
+  | SupportAgenda
+  | CancelAgenda
+  | ProposeDeal
+  | ApproveDeal
+  | NegotiateDeal
+  | RejectDeal
+  | SelectHeritage
+  | SelectTrait
+  | SelectMyth
+  | SelectGod
+  | SelectDogma
+  | SelectPolicy
+  | SelectTechnology
+  | KeepStatusQuo
+  | EnactReforms
+  | JoinRevolution;

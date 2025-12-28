@@ -21,7 +21,7 @@ import type { UnitDesign } from "@/objects/game/UnitDesign";
 import { useDataBucket } from "@/Data/useDataBucket";
 
 export class DataStore {
-  private readonly dataBucket: DataBucket;
+  readonly dataBucket: DataBucket;
 
   constructor() {
     this.dataBucket = useDataBucket();

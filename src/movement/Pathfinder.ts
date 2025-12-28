@@ -14,7 +14,7 @@ export type PathStep = {
   turn: number;
   /** Flag indicating a turn ends on this tile; used to render Turn Markers */
   isTurnEnd: boolean;
-  /** Movement points remaining after reaching this tile */
+  /** Unit points remaining after reaching this tile */
   movesRemaining: number;
 };
 

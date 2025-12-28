@@ -149,7 +149,9 @@ export class UnitMovement {
     };
   }
 
-  move(context: MoveContext): boolean | TurnEnd {
+  move(context?: MoveContext): boolean | TurnEnd {
+    if (!context) context = UnitMovement.getMoveContext(this.unit);
+
     if (!this.isMobile.value) return false;
     if (this.path.length === 0) return this.moves.value <= 0 ? "turnEnd" : true;
     if (this.moves.value <= 0) return "turnEnd";
@@ -328,6 +330,13 @@ export class UnitMovement {
 
   private setCachedCost(to: Tile, from: Tile, cost: number | TurnEnd | null) {
     return this.costCache.setMoveCost(this.cacheKey.value, from.key, to.key, cost);
+  }
+
+  toJSON(): unknown {
+    return {
+      pathTileKeys: this.path.map((step) => step.tile.key),
+      moves: this.moves,
+    };
   }
 }
 

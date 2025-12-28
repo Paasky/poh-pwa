@@ -14,6 +14,7 @@ import { useEventStore } from "@/stores/eventStore";
 import { UnitCreated, UnitHealed, UnitLost } from "@/events/Unit";
 import { getCoordsFromTileKey, getHexNeighborCoords, tileKey } from "@/helpers/mapTools";
 import { UnitMovement } from "@/movement/UnitMovement";
+import { ActionType } from "@/Common/IAction";
 
 // mercenary: +10% strength, +50% upkeep, 1/city/t;
 // regular: no effects
@@ -39,7 +40,7 @@ export class Unit extends GameObject {
     public tileKey: GameKey,
     public cityKey: GameKey | null = null,
     public customName = "",
-    public action: TypeObject | null = null,
+    public action: { type: ActionType; target: null | GameKey } | null = null,
     public canAttack = false,
     public health = 100,
     moves = 0,
@@ -180,7 +181,7 @@ export class Unit extends GameObject {
       return;
     }
 
-    if (this.health >= 100 && this.action?.key === "actionType:heal") {
+    if (this.health >= 100 && this.action?.type === "heal") {
       useEventStore().turnEvents.push(new UnitHealed(this));
       this.action = null;
     }
@@ -227,7 +228,7 @@ export class Unit extends GameObject {
     this.movement.moves = this.design.yields.getLumpAmount("yieldType:moves");
 
     // Heal
-    if (this.health < 100 && this.action?.key === "actionType:heal") {
+    if (this.health < 100 && this.action?.type === "heal") {
       this.modifyHealth(10, "healing");
     }
   }
