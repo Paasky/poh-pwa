@@ -1,20 +1,10 @@
 import staticData from "../../public/staticData.json";
-import { GameKey, IRawGameObject } from "../../src/objects/game/_GameObject";
+import { GameKey, IRawGameObject } from "../../src/objects/game/_keys";
 import { WorldState } from "../../src/types/common";
-import { setDataBucket } from "../../src/Store/useDataBucket";
-import { DataBucket, RawStaticData } from "../../src/Store/DataBucket";
+import { setDataBucket } from "../../src/Data/useDataBucket";
+import { DataBucket, RawStaticData } from "../../src/Data/DataBucket";
 import { TestWorldState } from "./testWorld";
-import { Culture } from "../../src/objects/game/Culture";
-import { Player } from "../../src/objects/game/Player";
-import { Tile } from "../../src/objects/game/Tile";
-import { City } from "../../src/objects/game/City";
-import { Citizen } from "../../src/objects/game/Citizen";
-import { UnitDesign } from "../../src/objects/game/UnitDesign";
-import { Unit } from "../../src/objects/game/Unit";
-import { Construction } from "../../src/objects/game/Construction";
-import { Religion } from "../../src/objects/game/Religion";
-import { River } from "../../src/objects/game/River";
-import { TradeRoute } from "../../src/objects/game/TradeRoute";
+import { tileKey } from "../../src/helpers/mapTools";
 
 export function initTestDataBucket(gameData?: IRawGameObject[], world?: WorldState): DataBucket {
   const rawStaticData = staticData as RawStaticData;
@@ -24,10 +14,7 @@ export function initTestDataBucket(gameData?: IRawGameObject[], world?: WorldSta
 }
 
 // NOTE: using any is allowed here as otherwise TS will complain about nonexistent properties
-export function cultureRawData(
-  key: GameKey = "culture:1",
-  overrides: Partial<Culture> = {},
-): IRawGameObject[] {
+export function cultureRawData(key: GameKey = "culture:1", overrides: any = {}): IRawGameObject[] {
   return [
     {
       key,
@@ -38,11 +25,9 @@ export function cultureRawData(
   ];
 }
 
-export function playerRawData(
-  key: GameKey = "player:1",
-  overrides: Partial<Player> = {},
-): IRawGameObject[] {
-  const cultureKey = overrides.cultureKey ?? "culture:1";
+export function playerRawData(key: GameKey = "player:1", overrides: any = {}): IRawGameObject[] {
+  // Use player ID as culture ID by default
+  const cultureKey = (overrides.cultureKey ?? `culture:${key.split(":")[1]}`) as GameKey;
   const data = {
     key,
     cultureKey,
@@ -50,18 +35,18 @@ export function playerRawData(
     isCurrent: false,
     isMinor: false,
     religionKey: null,
+    knownPlayerKeys: [],
+    knownReligionKeys: [],
+    knownTileKeys: [],
     ...overrides,
   } as any;
 
   if (data.religionKey === null) delete data.religionKey;
 
-  return [...cultureRawData(cultureKey as GameKey, { playerKey: key }), data];
+  return [...cultureRawData(cultureKey, { playerKey: key }), data];
 }
 
-export function tileRawData(
-  key: GameKey = "tile:0:0",
-  overrides: Partial<Tile> = {},
-): IRawGameObject[] {
+export function tileRawData(key: GameKey = tileKey(0, 0), overrides: any = {}): IRawGameObject[] {
   return [
     {
       key,
@@ -77,15 +62,12 @@ export function tileRawData(
   ];
 }
 
-export function cityRawData(
-  key: GameKey = "city:1",
-  overrides: Partial<City> = {},
-): IRawGameObject[] {
+export function cityRawData(key: GameKey = "city:1", overrides: any = {}): IRawGameObject[] {
   return [
     {
       key,
       playerKey: "player:1",
-      tileKey: "tile:0:0",
+      tileKey: tileKey(0, 0),
       name: "Test City",
       canAttack: false,
       health: 100,
@@ -95,16 +77,13 @@ export function cityRawData(
   ];
 }
 
-export function citizenRawData(
-  key: GameKey = "citizen:1",
-  overrides: Partial<Citizen> = {},
-): IRawGameObject[] {
+export function citizenRawData(key: GameKey = "citizen:1", overrides: any = {}): IRawGameObject[] {
   const data = {
     key,
     cityKey: "city:1",
     cultureKey: "culture:1",
     playerKey: "player:1",
-    tileKey: "tile:0:0",
+    tileKey: tileKey(0, 0),
     ...overrides,
   } as any;
 
@@ -117,7 +96,7 @@ export function citizenRawData(
 
 export function unitDesignRawData(
   key: GameKey = "unitDesign:1",
-  overrides: Partial<UnitDesign> = {},
+  overrides: any = {},
 ): IRawGameObject[] {
   return [
     {
@@ -133,15 +112,12 @@ export function unitDesignRawData(
   ];
 }
 
-export function unitRawData(
-  key: GameKey = "unit:1",
-  overrides: Partial<Unit> = {},
-): IRawGameObject[] {
+export function unitRawData(key: GameKey = "unit:1", overrides: any = {}): IRawGameObject[] {
   const data = {
     key,
     designKey: "unitDesign:1",
     playerKey: "player:1",
-    tileKey: "tile:0:0",
+    tileKey: tileKey(0, 0),
     cityKey: null,
     customName: "",
     action: null,
@@ -159,12 +135,12 @@ export function unitRawData(
 
 export function constructionRawData(
   key: GameKey = "construction:1",
-  overrides: Partial<Construction> = {},
+  overrides: any = {},
 ): IRawGameObject[] {
   const data = {
     key,
     type: "buildingType:granary",
-    tileKey: "tile:0:0",
+    tileKey: tileKey(0, 0),
     cityKey: null,
     health: 100,
     progress: 0,
@@ -178,7 +154,7 @@ export function constructionRawData(
 
 export function religionRawData(
   key: GameKey = "religion:1",
-  overrides: Partial<Religion> = {},
+  overrides: any = {},
 ): IRawGameObject[] {
   return [
     {
@@ -195,10 +171,7 @@ export function religionRawData(
   ];
 }
 
-export function riverRawData(
-  key: GameKey = "river:1",
-  overrides: Partial<River> = {},
-): IRawGameObject[] {
+export function riverRawData(key: GameKey = "river:1", overrides: any = {}): IRawGameObject[] {
   return [
     {
       key,
@@ -211,7 +184,7 @@ export function riverRawData(
 
 export function tradeRouteRawData(
   key: GameKey = "tradeRoute:1",
-  overrides: Partial<TradeRoute> = {},
+  overrides: any = {},
 ): IRawGameObject[] {
   return [
     {

@@ -1,4 +1,4 @@
-import { DataBucket } from "@/Store/DataBucket";
+import { DataBucket } from "@/Data/DataBucket";
 
 let dataBucket: undefined | DataBucket = undefined;
 

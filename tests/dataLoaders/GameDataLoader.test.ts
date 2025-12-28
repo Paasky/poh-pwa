@@ -1,215 +1,236 @@
-import { beforeEach, describe, expect, it } from "vitest";
-import { GameDataLoader } from "../../src/dataLoaders/GameDataLoader";
-import { initTestPinia, loadStaticData } from "../_setup/pinia";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import {
+  cityRawData,
+  initTestDataBucket,
+  playerRawData,
+  tileRawData,
+  unitDesignRawData,
+  unitRawData,
+} from "../_setup/dataHelpers";
+import { tileKey } from "../../src/helpers/mapTools";
+import { destroyDataBucket, useDataBucket } from "../../src/Data/useDataBucket";
 import { Tile } from "../../src/objects/game/Tile";
-import { GameData } from "../../src/types/api";
-import { Player } from "../../src/objects/game/Player";
-import { useObjectsStore } from "../../src/stores/objectStore";
+import { City } from "../../src/objects/game/City";
+import { Unit } from "../../src/objects/game/Unit";
 
 describe("GameDataLoader", () => {
-  beforeEach(() => initTestPinia() && loadStaticData());
+  beforeEach(() => {
+    initTestDataBucket();
+  });
 
-  it("Throws on missing/invalid key/data", () => {
-    const loader = new GameDataLoader();
+  afterEach(() => {
+    destroyDataBucket();
+  });
 
-    const missingKey = {};
-    expect(() => loader.initFromRaw({ objects: [missingKey] } as GameData)).toThrow(
-      `Invalid game obj data: key is missing from ${JSON.stringify(missingKey)}`,
-    );
+  it("should create objects with only required inputs and init correctly", () => {
+    const bucket = useDataBucket();
 
-    const invalidKey = { key: "test" };
-    expect(() => loader.initFromRaw({ objects: [invalidKey] } as GameData)).toThrow(
-      `Invalid game obj data: key 'test' must be format '{class}:{id}'`,
-    );
+    // Tile
+    bucket.setRawObjects(tileRawData(tileKey(0, 0)));
+    const tile = bucket.getObject<Tile>(tileKey(0, 0));
+    expect(tile).toBeInstanceOf(Tile);
+    expect(tile.x).toBe(0);
+    expect(tile.y).toBe(0);
+    expect(tile.feature).toBeNull();
 
-    const invalidClass = { key: "test:1" };
-    expect(() => loader.initFromRaw({ objects: [invalidClass] } as GameData)).toThrow(
-      `Invalid game obj class: undefined in config for class 'test'`,
-    );
+    // City (needs a player and a tile)
+    bucket.setRawObjects([
+      ...playerRawData("player:1"),
+      ...cityRawData("city:1", { playerKey: "player:1", tileKey: tileKey(0, 0) }),
+    ]);
+    const city = bucket.getObject<City>("city:1");
+    expect(city).toBeInstanceOf(City);
+    expect(city.name).toBe("Test City");
+    expect(city.health).toBe(100);
+    expect(city.canAttack).toBe(false);
 
-    const withoutCultureKey = {
-      key: "player:1",
-    };
-    expect(() => loader.initFromRaw({ objects: [withoutCultureKey] } as GameData)).toThrow(
-      `Required attribute 'cultureKey' missing from ${JSON.stringify(withoutCultureKey)}`,
-    );
+    // Unit (needs a design, player and a tile)
+    bucket.setRawObjects([
+      ...unitDesignRawData("unitDesign:1"),
+      ...unitRawData("unit:1", {
+        designKey: "unitDesign:1",
+        playerKey: "player:1",
+        tileKey: tileKey(0, 0),
+      }),
+    ]);
+    const unit = bucket.getObject<Unit>("unit:1");
+    expect(unit).toBeInstanceOf(Unit);
+    expect(unit.health).toBe(100);
+    expect(unit.movement.moves).toBe(0);
+  });
 
-    const invalidTypeKey = {
-      key: "culture:1",
-      type: "majorCultureType:test",
-      playerKey: "player:1",
-    };
-    expect(() => loader.initFromRaw({ objects: [invalidTypeKey] } as GameData)).toThrow(
-      `[objStore] Tried to getTypeObject(majorCultureType:test), key does not exist in store`,
-    );
+  it("should create objects with all inputs and init correctly", () => {
+    const bucket = useDataBucket();
 
-    const playerData = {
-      key: "player:1",
-      cultureKey: "culture:1",
-      name: "test player",
-    };
-    expect(() => loader.initFromRaw({ objects: [playerData] } as GameData)).toThrow(
-      `GameObject.key: 'player:1', Attribute: ${JSON.stringify(Player.attrsConf[0])}, Message: Related object 'culture:1' does not exist. Raw data: ${JSON.stringify({ ...playerData, isCurrent: false, isMinor: false, knownTileKeys: [] })}`,
+    bucket.setRawObjects([
+      ...playerRawData("player:1"),
+      ...tileRawData(tileKey(0, 0)),
+      ...cityRawData("city:1", {
+        playerKey: "player:1",
+        tileKey: tileKey(0, 0),
+        name: "Capital City",
+        canAttack: true,
+        health: 50,
+        isCapital: true,
+        origPlayerKey: "player:1",
+      }),
+    ]);
+
+    const city = bucket.getObject<City>("city:1");
+    expect(city.name).toBe("Capital City");
+    expect(city.canAttack).toBe(true);
+    expect(city.health).toBe(50);
+    expect(city.isCapital).toBe(true);
+    expect(city.origPlayerKey).toBe("player:1");
+  });
+
+  it("should update single property correctly", () => {
+    const bucket = useDataBucket();
+
+    bucket.setRawObjects([
+      ...playerRawData("player:1"),
+      ...tileRawData(tileKey(0, 0)),
+      ...cityRawData("city:1", { health: 100 }),
+    ]);
+
+    const city = bucket.getObject<City>("city:1");
+    expect(city.health).toBe(100);
+
+    // Update health
+    bucket.setRawObjects([{ key: "city:1", health: 50 } as any]);
+    expect(city.health).toBe(50);
+  });
+
+  it("should add single relation correctly (City -> Player)", () => {
+    const bucket = useDataBucket();
+
+    bucket.setRawObjects([...playerRawData("player:1"), ...tileRawData(tileKey(0, 0))]);
+    const player = bucket.getObject("player:1") as any;
+    expect(player.cityKeys.size).toBe(0);
+
+    bucket.setRawObjects([
+      ...cityRawData("city:1", { playerKey: "player:1", tileKey: tileKey(0, 0) }),
+    ]);
+
+    expect(player.cityKeys.has("city:1")).toBe(true);
+    expect(player.cities).toContain(bucket.getObject("city:1"));
+  });
+
+  it("should update single relation correctly (Unit -> Tile)", () => {
+    const bucket = useDataBucket();
+
+    bucket.setRawObjects([
+      ...playerRawData("player:1"),
+      ...tileRawData(tileKey(0, 0)),
+      ...tileRawData(tileKey(1, 1), { x: 1, y: 1 }),
+      ...unitDesignRawData("unitDesign:1"),
+      ...unitRawData("unit:1", { tileKey: tileKey(0, 0) }),
+    ]);
+
+    const unit = bucket.getObject<Unit>("unit:1");
+    const tile0 = bucket.getObject<Tile>(tileKey(0, 0));
+    const tile1 = bucket.getObject<Tile>(tileKey(1, 1));
+
+    expect(unit.tile).toBe(tile0);
+    expect(tile0.unitKeys.has("unit:1")).toBe(true);
+    expect(tile1.unitKeys.has("unit:1")).toBe(false);
+
+    // Move unit to tile:1:1
+    bucket.setRawObjects([{ key: "unit:1", tileKey: tileKey(1, 1) } as any]);
+
+    expect(unit.tileKey).toBe(tileKey(1, 1));
+    expect(unit.tile).toBe(tile1);
+    expect(tile0.unitKeys.has("unit:1")).toBe(false);
+    expect(tile1.unitKeys.has("unit:1")).toBe(true);
+  });
+
+  it("should remove single relation correctly (Unit -> City)", () => {
+    const bucket = useDataBucket();
+
+    bucket.setRawObjects([
+      ...playerRawData("player:1"),
+      ...tileRawData(tileKey(0, 0)),
+      ...cityRawData("city:1"),
+      ...unitDesignRawData("unitDesign:1"),
+      ...unitRawData("unit:1", { cityKey: "city:1" }),
+    ]);
+
+    const unit = bucket.getObject<Unit>("unit:1");
+    const city = bucket.getObject<City>("city:1");
+
+    expect(unit.cityKey).toBe("city:1");
+    expect(city.unitKeys.has("unit:1")).toBe(true);
+
+    // Remove city relation from unit
+    bucket.setRawObjects([{ key: "unit:1", cityKey: null } as any]);
+
+    expect(unit.cityKey).toBeNull();
+    expect(city.unitKeys.has("unit:1")).toBe(false);
+  });
+
+  it("should remove an object and update relations correctly (City)", () => {
+    const bucket = useDataBucket();
+
+    bucket.setRawObjects([
+      ...playerRawData("player:1"),
+      ...tileRawData(tileKey(0, 0)),
+      ...cityRawData("city:1", { playerKey: "player:1", tileKey: tileKey(0, 0) }),
+    ]);
+
+    const player = bucket.getObject("player:1") as any;
+    const tile = bucket.getObject<Tile>(tileKey(0, 0));
+
+    expect(player.cityKeys.has("city:1")).toBe(true);
+    expect(tile.cityKey).toBe("city:1");
+
+    bucket.removeObject("city:1");
+
+    expect(player.cityKeys.has("city:1")).toBe(false);
+    expect(tile.cityKey).toBeNull();
+    expect(() => bucket.getObject("city:1")).toThrow(
+      "DataBucket.getObject(city:1) does not exist!",
     );
   });
 
-  it("Build game objects and returns correct JSON, without optional", () => {
-    const loader = new GameDataLoader();
-
-    const tileCoords = { x: 12, y: 23 };
-    const tileKey = Tile.getKey(tileCoords.x, tileCoords.y);
-
-    const agendaData = {
-      key: "agenda:1",
-      playerKey: "player:1",
-    };
-    const citizenData = {
-      key: "citizen:1",
-      cityKey: "city:1",
-      cultureKey: "culture:1",
-      playerKey: "player:1",
-      tileKey: tileKey,
-    };
-    const cityData = {
-      key: "city:1",
-      playerKey: "player:1",
-      tileKey: tileKey,
-      name: "test city",
-    };
-    const constructionData = {
-      key: "construction:1",
-      tileKey: tileKey,
-      type: "buildingType:palisades",
-    };
-    const cultureData = {
-      key: "culture:1",
-      type: "majorCultureType:viking",
-      playerKey: "player:1",
-    };
-    const dealData = {
-      key: "deal:1",
-      fromPlayerKey: "player:1",
-      toPlayerKey: "player:1",
-    };
-    const playerData = {
-      key: "player:1",
-      cultureKey: "culture:1",
-      name: "test player",
-    };
-    const religionData = {
-      key: "religion:1",
-      name: "test religion",
-      myths: ["mythType:godMother"],
-      gods: ["godType:godOfTrade"],
-      dogmas: ["dogmaType:clergy"],
-      cityKey: "city:1",
-      foundedTurn: 1,
-    };
-    const tileData = {
-      key: tileKey,
-      x: tileCoords.x,
-      y: tileCoords.y,
-      domain: "domainType:land",
-      area: "continentType:taiga",
-      climate: "climateType:cold",
-      terrain: "terrainType:tundra",
-      elevation: "elevationType:hill",
-    };
-    const tradeRouteData = {
-      key: "tradeRoute:1",
-      unitKey: "unit:1",
-      tileKeys: [tileKey],
-      city1Key: "city:1",
-      city2Key: "city:1",
-    };
-    const unitData = {
-      key: "unit:1",
-      cityKey: "city:1",
-      designKey: "unitDesign:1",
-      playerKey: "player:1",
-      tileKey: tileKey,
-    };
-    const unitDesignData = {
-      key: "unitDesign:1",
-      platform: "platformType:human",
-      equipment: "equipmentType:axe",
-      name: "Axeman",
-      playerKey: "player:1",
-    };
-
-    const gameObjects = loader.initFromRaw({
-      objects: [
-        agendaData,
-        citizenData,
-        cityData,
-        constructionData,
-        cultureData,
-        dealData,
-        playerData,
-        religionData,
-        tileData,
-        tradeRouteData,
-        unitData,
-        unitDesignData,
-      ],
-    } as GameData);
-
-    useObjectsStore().bulkSet(Object.values(gameObjects));
-
-    // output = input + defaults
-    expect(JSON.parse(JSON.stringify(gameObjects))).toEqual({
-      "agenda:1": agendaData,
-      "citizen:1": citizenData,
-      "city:1": {
-        ...cityData,
-        canAttack: false,
-        health: 100,
-        isCapital: false,
-        origPlayerKey: "player:1",
-      },
-      "construction:1": { ...constructionData, health: 100, progress: 0 },
-      "culture:1": cultureData,
-      "deal:1": dealData,
-      "player:1": { ...playerData, isCurrent: false, isMinor: false, knownTileKeys: [] },
-      "religion:1": { ...religionData, status: "myths" },
-      "tile:x12,y23": tileData,
-      "tradeRoute:1": tradeRouteData,
-      "unit:1": {
-        ...unitData,
-        canAttack: false,
-        health: 100,
-        moves: 0,
-        name: "Axeman",
-        status: "regular",
-        origPlayerKey: "player:1",
-      },
-      "unitDesign:1": { ...unitDesignData, isActive: true, isElite: false },
+  describe("Error Handling", () => {
+    it("throws when required attribute is missing", () => {
+      const bucket = useDataBucket();
+      expect(() =>
+        bucket.setRawObjects([
+          {
+            key: tileKey(0, 0),
+            y: 0,
+            domain: "domainType:land",
+            area: "continentType:europe",
+            climate: "climateType:temperate",
+            terrain: "terrainType:grass",
+            elevation: "elevationType:flat",
+          } as any,
+        ]),
+      ).toThrow("Required attribute 'x' missing");
     });
-  });
 
-  it("Build game objects and returns correct JSON, with optional", () => {
-    const loader = new GameDataLoader();
+    it("throws when key format is invalid", () => {
+      const bucket = useDataBucket();
+      expect(() => bucket.setRawObjects([{ key: "invalid-key" } as any])).toThrow(
+        "key 'invalid-key' must be format '{class}:{id}'",
+      );
+    });
 
-    const playerData = {
-      key: "player:1",
-      name: "test player",
-      cultureKey: "culture:1",
-      isCurrent: true,
-      isMinor: true,
-      knownTileKeys: ["tile:x12,y23"],
-    };
+    it("throws when game object class is unknown", () => {
+      const bucket = useDataBucket();
+      expect(() => bucket.setRawObjects([{ key: "unknown:1" } as any])).toThrow(
+        "Invalid game obj class: undefined in config for class 'unknown'",
+      );
+    });
 
-    const cultureData = {
-      key: "culture:1",
-      type: "majorCultureType:viking",
-      playerKey: "player:1",
-    };
-
-    const gameObjects = loader.initFromRaw({ objects: [playerData, cultureData] } as GameData);
-
-    expect(JSON.parse(JSON.stringify(gameObjects))).toEqual({
-      "player:1": playerData,
-      "culture:1": cultureData,
+    it("throws when related object does not exist", () => {
+      const bucket = useDataBucket();
+      expect(() =>
+        bucket.setRawObjects([
+          ...cityRawData("city:1", { playerKey: "player:99", tileKey: tileKey(0, 0) }),
+        ]),
+      ).toThrow("Related object 'player:99' does not exist");
     });
   });
 });

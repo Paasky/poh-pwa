@@ -1,18 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import {
-  cityRawData,
-  initTestDataBucket,
-  playerRawData,
-  tileRawData,
-} from "../../_setup/dataHelpers";
-import { destroyDataBucket, useDataBucket } from "../../../src/Store/useDataBucket";
+import { cityRawData, initTestDataBucket, playerRawData, tileRawData, } from "../../_setup/dataHelpers";
+import { tileKey } from "../../../src/helpers/mapTools";
+import { destroyDataBucket, useDataBucket } from "../../../src/Data/useDataBucket";
 import { City } from "../../../src/objects/game/City";
-import { generateKey } from "../../../src/objects/game/_GameObject";
-import {
-  expectRelationToThrowMissing,
-  testManyToOneRelation,
-  testOneToOneRelation,
-} from "../../_setup/testHelpers";
+import { generateKey } from "../../../src/objects/game/_keys";
+import { expectRelationToThrowMissing, testManyToOneRelation, testOneToOneRelation, } from "../../_setup/testHelpers";
 import { Player } from "../../../src/objects/game/Player";
 import { Tile } from "../../../src/objects/game/Tile";
 
@@ -30,28 +22,28 @@ describe("City", () => {
     const cityKey2 = generateKey("city");
     const playerKey1 = "player:1";
     const playerKey2 = "player:2";
-    const tileKey1 = "tile:0:0";
-    const tileKey2 = "tile:1:1";
+    const tileKey1 = tileKey(0, 0);
+    const tileKey2 = tileKey(1, 1);
 
     useDataBucket().setRawObjects([
-      ...playerRawData(playerKey1),
-      ...playerRawData(playerKey2),
+      ...playerRawData("player:1"),
+      ...playerRawData("player:2"),
       ...tileRawData(tileKey1),
       ...tileRawData(tileKey2),
       ...cityRawData(cityKey1, {
-        playerKey: playerKey1,
+        playerKey: "player:1",
         tileKey: tileKey1,
         name: "City 1",
         health: 100,
         isCapital: true,
       }),
       ...cityRawData(cityKey2, {
-        playerKey: playerKey2,
+        playerKey: "player:2",
         tileKey: tileKey2,
         name: "City 2",
         health: 50,
         isCapital: false,
-        origPlayerKey: playerKey1,
+        origPlayerKey: "player:1",
       }),
     ]);
 
@@ -77,7 +69,7 @@ describe("City", () => {
     const cityKey = generateKey("city");
 
     // Player missing
-    const cityPlayerMissing = new City(cityKey, "player:99", "tile:0:0", "Test");
+    const cityPlayerMissing = new City(cityKey, "player:99", tileKey(0, 0), "Test");
     useDataBucket().setObject(cityPlayerMissing);
     expectRelationToThrowMissing(cityPlayerMissing, "player", "player:99");
 
@@ -90,7 +82,7 @@ describe("City", () => {
     const cityOrigPlayerMissing = new City(
       cityKey,
       "player:1",
-      "tile:0:0",
+      tileKey(0, 0),
       "Test",
       false,
       100,

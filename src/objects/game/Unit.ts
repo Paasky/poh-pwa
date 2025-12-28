@@ -188,14 +188,14 @@ export class Unit extends GameObject {
 
   complete() {
     if (this.city) {
-      this.city.unitKeys.push(this.key);
+      this.city.unitKeys.add(this.key);
     }
 
-    this.design.unitKeys.push(this.key);
+    this.design.unitKeys.add(this.key);
 
-    this.player.unitKeys.push(this.key);
+    this.player.unitKeys.add(this.key);
 
-    this.tile.unitKeys.push(this.key);
+    this.tile.unitKeys.add(this.key);
 
     useEventStore().turnEvents.push(new UnitCreated(this));
   }
@@ -204,14 +204,14 @@ export class Unit extends GameObject {
     this.unwatchers.forEach((u) => u());
 
     if (this.city) {
-      this.city.unitKeys = this.city.unitKeys.filter((u) => u !== this.key);
+      this.city.unitKeys.delete(this.key);
     }
 
-    this.design.unitKeys = this.design.unitKeys.filter((k) => k !== this.key);
+    this.design.unitKeys.delete(this.key);
 
-    this.player.unitKeys = this.player.unitKeys.filter((k) => k !== this.key);
+    this.player.unitKeys.delete(this.key);
 
-    this.tile.unitKeys = this.tile.unitKeys.filter((k) => k !== this.key);
+    this.tile.unitKeys.delete(this.key);
 
     if (this.tradeRoute) {
       this.tradeRoute.delete(true);

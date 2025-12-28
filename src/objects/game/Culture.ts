@@ -23,7 +23,6 @@ export class Culture extends GameObject {
 
     hasOne<Player>(this, "playerKey");
 
-    this.citizenKeys = [];
     hasMany<Citizen>(this, "citizenKeys");
   }
 
@@ -51,7 +50,7 @@ export class Culture extends GameObject {
   /*
    * Relations
    */
-  citizenKeys: GameKey[];
+  citizenKeys = new Set<GameKey>();
   declare citizens: Citizen[];
 
   declare player: Player;

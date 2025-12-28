@@ -217,7 +217,7 @@ export class Environment {
 
   /** Dispose all Babylon resources created by this service. */
   // todo: double-check all hooks, listeners, etc are also removed.
-  // Shutting the engine process: app.Store.engine.dispose(); appStore.engine = undefined;
+  // Shutting the engine process: app.Data.engine.dispose(); appStore.engine = undefined;
   // So each dispose down the chain doesn't set internals to undefined/null BUT has to make sure everything is decoupled for auto-garbage-collection
   public dispose(): void {
     this.stopClockInterval();
@@ -358,7 +358,7 @@ export class Environment {
       scene.fogColor = fogColor;
     }
 
-    // Store the weather multiplier and re-apply sun intensity using current time-of-day
+    // Data the weather multiplier and re-apply sun intensity using current time-of-day
     this.weatherSunIntensityScale = preset.sunIntensityScale;
 
     // Use the reactive clock refs for the effective time when running; otherwise use target

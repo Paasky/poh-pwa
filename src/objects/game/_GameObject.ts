@@ -1,27 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TypeObject } from "@/types/typeObjects";
 import { ObjType } from "@/types/common";
-import { useDataBucket } from "@/Store/useDataBucket";
+import { useDataBucket } from "@/Data/useDataBucket";
+import { GameClass, GameKey, IRawGameObject, parseKey } from "@/objects/game/_keys";
 
-export type GameClass =
-  | "agenda"
-  | "citizen"
-  | "city"
-  | "construction"
-  | "culture"
-  | "deal"
-  | "river"
-  | "player"
-  | "religion"
-  | "tile"
-  | "tradeRoute"
-  | "unit"
-  | "unitDesign";
-
-export type GameKey = `${GameClass}:${string}`;
-
-export const generateKey = (cls: GameClass) => getKey(cls, crypto.randomUUID());
-export const getKey = (cls: GameClass, id: string): GameKey => `${cls}:${id}`;
+export * from "@/objects/game/_keys";
 
 export type GameObjAttr = {
   isTypeObj?: boolean;
@@ -35,10 +18,6 @@ export type GameObjAttr = {
   };
 };
 
-export interface IRawGameObject {
-  key: GameKey;
-}
-
 export class GameObject {
   // noinspection JSUnusedGlobalSymbols
   objType: ObjType = "GameObject";
@@ -50,10 +29,10 @@ export class GameObject {
 
   constructor(key: GameKey) {
     this.key = key;
-    const classAndId = key.split(":");
-    this.class = classAndId[0] as GameClass;
+    const { cls, id } = parseKey(key);
+    this.class = cls;
     this.concept = useDataBucket().getType(`conceptType:${this.class}`);
-    this.id = classAndId[1];
+    this.id = id;
   }
 
   /**

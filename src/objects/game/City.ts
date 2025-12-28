@@ -33,19 +33,10 @@ export class City extends GameObject {
     hasOne<Player>(this, "playerKey");
     hasOne<Tile>(this, "tileKey");
 
-    this.citizenKeys = [];
     hasMany<Citizen>(this, "citizenKeys");
-
-    this.constructionKeys = [];
     hasMany<Construction>(this, "constructionKeys");
-
-    this.holyCityForKeys = [];
     hasMany<Religion>(this, "holyCityForKeys");
-
-    this.tradeRouteKeys = [];
     hasMany<TradeRoute>(this, "tradeRouteKeys");
-
-    this.unitKeys = [];
     hasMany<Unit>(this, "unitKeys");
   }
 
@@ -69,13 +60,13 @@ export class City extends GameObject {
   /*
    * Relations
    */
-  citizenKeys: GameKey[];
+  citizenKeys = new Set<GameKey>();
   declare citizens: Citizen[];
 
-  constructionKeys: GameKey[];
+  constructionKeys = new Set<GameKey>();
   declare constructions: Construction[];
 
-  holyCityForKeys: GameKey[];
+  holyCityForKeys = new Set<GameKey>();
   declare holyCityFors: Religion[];
 
   declare origPlayer: Player;
@@ -84,10 +75,10 @@ export class City extends GameObject {
 
   declare tile: Tile;
 
-  tradeRouteKeys: GameKey[];
+  tradeRouteKeys = new Set<GameKey>();
   declare tradeRoutes: TradeRoute[];
 
-  unitKeys: GameKey[];
+  unitKeys = new Set<GameKey>();
   declare units: Unit[];
 
   /*
@@ -139,7 +130,7 @@ export class City extends GameObject {
   }
 
   get foodToGrow(): number {
-    return Math.round((this.citizenKeys.length * 7) ** 1.2);
+    return Math.round((this.citizenKeys.size * 7) ** 1.2);
   }
 
   /*

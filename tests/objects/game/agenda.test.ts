@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { initTestDataBucket, playerRawData } from "../../_setup/dataHelpers";
-import { destroyDataBucket, useDataBucket } from "../../../src/Store/useDataBucket";
+import { destroyDataBucket, useDataBucket } from "../../../src/Data/useDataBucket";
 import { Agenda } from "../../../src/objects/game/Agenda";
 import { Player } from "../../../src/objects/game/Player";
 import { generateKey } from "../../../src/objects/game/_GameObject";

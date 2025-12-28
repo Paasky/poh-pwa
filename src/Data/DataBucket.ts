@@ -10,7 +10,7 @@ import {
   type TypeObject,
 } from "@/types/typeObjects";
 import type { GameClass, GameKey, GameObject, IRawGameObject } from "@/objects/game/_GameObject";
-import { GameDataLoader } from "@/dataLoaders/GameDataLoader";
+import { GameDataLoader } from "@/Data/GameDataLoader";
 import type { Tile } from "@/objects/game/Tile";
 
 // todo create a IRawType & IRawCategory
@@ -32,11 +32,11 @@ export class DataBucket {
   constructor(
     private readonly types: Map<TypeKey, TypeObject>,
     private readonly categories: Map<CatKey, CategoryObject>,
-    private readonly objects: Map<GameKey, GameObject>,
     readonly world: WorldState,
+    private readonly objects: Map<GameKey, GameObject> = new Map(),
     dataLoader?: GameDataLoader,
   ) {
-    this.dataLoader = dataLoader ?? new GameDataLoader();
+    this.dataLoader = dataLoader ?? new GameDataLoader(this);
 
     // Build indexes
     this.types.forEach((t) => this.buildTypeIndex(t));
@@ -47,7 +47,6 @@ export class DataBucket {
   static fromRaw(rawStaticData: RawStaticData, rawSaveData: RawSaveData): DataBucket {
     const types = new Map<TypeKey, TypeObject>();
     const categories = new Map<CatKey, CategoryObject>();
-    const objects = new Map<GameKey, GameObject>();
 
     for (const data of rawStaticData.types) {
       types.set(data.key as TypeKey, Object.freeze(initTypeObject(data)) as TypeObject);
@@ -57,10 +56,13 @@ export class DataBucket {
       categories.set(data.key as CatKey, Object.freeze(initCategoryObject(data)) as CategoryObject);
     }
 
-    const dataLoader = new GameDataLoader();
-    dataLoader.initFromRaw(rawSaveData.objects, objects);
+    // All static data initialized, now create the DataBucket instance
+    const instance = new DataBucket(types, categories, rawSaveData.world);
 
-    return new DataBucket(types, categories, objects, rawSaveData.world, dataLoader);
+    // Finally, initialize the raw objects
+    instance.setRawObjects(rawSaveData.objects);
+
+    return instance;
   }
 
   getType(key: TypeKey): TypeObject {
@@ -138,7 +140,10 @@ export class DataBucket {
   }
 
   removeObject(key: GameKey): void {
-    this.classObjectsIndex.get(this.getObject(key).class)?.delete(key);
+    const object = this.getObject(key);
+    this.dataLoader.removeRelations(object, this.objects);
+
+    this.classObjectsIndex.get(object.class)?.delete(key);
     this.objects.delete(key);
   }
 
@@ -148,28 +153,25 @@ export class DataBucket {
   }
 
   setRawObjects(objects: IRawGameObject[]): GameObject[] {
-    const newRawObjects = [] as IRawGameObject[];
-    const updatedObjects = [] as GameObject[];
+    const updates = new Map<GameKey, IRawGameObject>();
 
     objects.forEach((obj) => {
-      const existing = this.objects.get(obj.key);
-      if (existing) {
-        //todo we must use attrConf of the model; currently this allows invalid data to go in
-        Object.assign(existing, obj);
-        existing.onUpdate(obj);
-        updatedObjects.push(existing);
-      } else {
-        newRawObjects.push(obj);
+      if (this.objects.has(obj.key)) {
+        updates.set(obj.key, obj);
       }
     });
 
-    const newObjects = this.dataLoader.initFromRaw(newRawObjects, this.objects);
-    newObjects.forEach((obj) => {
+    const { created, updated } = this.dataLoader.setFromRaw(objects, this.objects);
+    created.forEach((obj) => {
       this.buildObjectIndex(obj);
       obj.onCreated();
     });
+    updated.forEach((obj) => {
+      this.buildObjectIndex(obj);
+      obj.onUpdate(updates.get(obj.key)!);
+    });
 
-    return [...updatedObjects, ...newObjects];
+    return [...created, ...updated];
   }
 
   toSaveData(): RawSaveData {

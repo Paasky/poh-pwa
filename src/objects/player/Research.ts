@@ -2,7 +2,7 @@ import { TypeObject } from "@/types/typeObjects";
 import { TypeKey } from "@/types/common";
 import { GameKey } from "@/objects/game/_GameObject";
 import { Player } from "@/objects/game/Player";
-import { useDataBucket } from "@/Store/useDataBucket";
+import { useDataBucket } from "@/Data/useDataBucket";
 import { hasOne } from "@/objects/game/_relations";
 
 export class Research {

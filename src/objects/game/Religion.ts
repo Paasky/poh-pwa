@@ -20,15 +20,14 @@ export class Religion extends GameObject {
     public myths: TypeObject[] = [],
     public gods: TypeObject[] = [],
     public dogmas: TypeObject[] = [],
+    public knownByPlayerKeys = new Set<GameKey>(),
   ) {
     super(key);
 
     hasOne<City>(this, "cityKey");
-
-    this.citizenKeys = [];
     hasMany<Citizen>(this, "citizenKeys");
-    this.playerKeys = [];
     hasMany<Player>(this, "playerKeys");
+    hasMany<Player>(this, "knownByPlayerKeys");
   }
 
   static attrsConf: GameObjAttr[] = [
@@ -42,6 +41,11 @@ export class Religion extends GameObject {
     { attrName: "myths", isOptional: true, isTypeObjArray: true },
     { attrName: "gods", isOptional: true, isTypeObjArray: true },
     { attrName: "dogmas", isOptional: true, isTypeObjArray: true },
+    {
+      attrName: "knownByPlayerKeys",
+      isOptional: true,
+      related: { theirKeyAttr: "knownReligionKeys", isManyToMany: true },
+    },
   ];
 
   /*
@@ -51,13 +55,15 @@ export class Religion extends GameObject {
   /*
    * Relations
    */
-  citizenKeys: GameKey[];
+  citizenKeys = new Set<GameKey>();
   declare citizens: Citizen[];
 
   declare city: City;
 
-  playerKeys: GameKey[];
+  playerKeys = new Set<GameKey>();
   declare players: Player[];
+
+  declare knownByPlayers: Player[];
 
   /*
    * Computed

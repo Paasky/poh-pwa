@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { initTestDataBucket, playerRawData } from "../../_setup/dataHelpers";
-import { destroyDataBucket, useDataBucket } from "../../../src/Store/useDataBucket";
+import { destroyDataBucket, useDataBucket } from "../../../src/Data/useDataBucket";
 import { Culture } from "../../../src/objects/game/Culture";
 import { generateKey } from "../../../src/objects/game/_GameObject";
 import { expectRelationToThrowMissing, testOneToOneRelation } from "../../_setup/testHelpers";

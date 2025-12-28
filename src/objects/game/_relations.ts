@@ -2,7 +2,7 @@
 // noinspection JSUnusedLocalSymbols
 
 import { GameKey, GameObject } from "@/objects/game/_GameObject";
-import { useDataBucket } from "@/Store/useDataBucket";
+import { useDataBucket } from "@/Data/useDataBucket";
 
 export function hasMany<T extends GameObject>(instance: any, relationKey: string) {
   const getterName = relationKey.replace("Keys", "s").replace("ys", "ies");
@@ -14,9 +14,8 @@ export function hasMany<T extends GameObject>(instance: any, relationKey: string
   Object.defineProperty(instance, getterName, {
     get() {
       if (this[privateProp] === undefined) {
-        const keys = this[relationKey] as GameKey[] | Set<GameKey>;
-        const keysArray = Array.isArray(keys) ? keys : Array.from(keys);
-        this[privateProp] = keysArray.map((key) => useDataBucket().getObject<T>(key));
+        const keys = this[relationKey] as Set<GameKey>;
+        this[privateProp] = Array.from(keys).map((key) => useDataBucket().getObject<T>(key));
       }
       return this[privateProp];
     },

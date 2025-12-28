@@ -7,10 +7,15 @@ import {
   unitDesignRawData,
   unitRawData,
 } from "../../_setup/dataHelpers";
-import { destroyDataBucket, useDataBucket } from "../../../src/Store/useDataBucket";
+import { tileKey } from "../../../src/helpers/mapTools";
+import { destroyDataBucket, useDataBucket } from "../../../src/Data/useDataBucket";
 import { Unit } from "../../../src/objects/game/Unit";
-import { generateKey } from "../../../src/objects/game/_GameObject";
+import { generateKey } from "../../../src/objects/game/_keys";
 import { expectRelationToThrowMissing, testManyToOneRelation } from "../../_setup/testHelpers";
+import { Tile } from "../../../src/objects/game/Tile";
+import { City } from "../../../src/objects/game/City";
+import { UnitDesign } from "../../../src/objects/game/UnitDesign";
+import { Player } from "../../../src/objects/game/Player";
 
 describe("Unit", () => {
   beforeEach(() => {
@@ -26,8 +31,8 @@ describe("Unit", () => {
     const unitKey2 = generateKey("unit");
     const designKey = "unitDesign:1";
     const playerKey = "player:1";
-    const tileKey1 = "tile:0:0";
-    const tileKey2 = "tile:1:1";
+    const tileKey1 = tileKey(0, 0);
+    const tileKey2 = tileKey(1, 1);
     const cityKey = "city:1";
 
     useDataBucket().setRawObjects([
@@ -62,8 +67,13 @@ describe("Unit", () => {
     expect(unit1.customName).toBe("Unit 1");
     expect(unit1.health).toBe(100);
     expect(unit1.movement.moves).toBe(2);
-    testManyToOneRelation(unit1, "design", useDataBucket().getObject(designKey), "units");
-    testManyToOneRelation(unit1, "player", useDataBucket().getObject(playerKey), "units");
+    testManyToOneRelation(
+      unit1,
+      "design",
+      useDataBucket().getObject<UnitDesign>(designKey),
+      "units",
+    );
+    testManyToOneRelation(unit1, "player", useDataBucket().getObject<Player>(playerKey), "units");
     testManyToOneRelation(unit1, "tile", useDataBucket().getObject<Tile>(tileKey1), "units");
     expect(unit1.cityKey).toBeNull();
 
@@ -71,8 +81,13 @@ describe("Unit", () => {
     expect(unit2.health).toBe(50);
     expect(unit2.movement.moves).toBe(0);
     expect(unit2.action?.key).toBe("actionType:move");
-    testManyToOneRelation(unit2, "design", useDataBucket().getObject(designKey), "units");
-    testManyToOneRelation(unit2, "player", useDataBucket().getObject(playerKey), "units");
+    testManyToOneRelation(
+      unit2,
+      "design",
+      useDataBucket().getObject<UnitDesign>(designKey),
+      "units",
+    );
+    testManyToOneRelation(unit2, "player", useDataBucket().getObject<Player>(playerKey), "units");
     testManyToOneRelation(unit2, "tile", useDataBucket().getObject<Tile>(tileKey2), "units");
     testManyToOneRelation(unit2, "city", useDataBucket().getObject<City>(cityKey), "units");
   });
@@ -81,7 +96,7 @@ describe("Unit", () => {
     const unitKey = generateKey("unit");
 
     // Player missing
-    const unitPlayerMissing = new Unit(unitKey, "unitDesign:1", "player:99", "tile:0:0");
+    const unitPlayerMissing = new Unit(unitKey, "unitDesign:1", "player:99", tileKey(0, 0));
     useDataBucket().setObject(unitPlayerMissing);
     expectRelationToThrowMissing(unitPlayerMissing, "player", "player:99");
 
@@ -91,12 +106,12 @@ describe("Unit", () => {
     expectRelationToThrowMissing(unitTileMissing, "tile", "tile:99");
 
     // Design missing
-    const unitDesignMissing = new Unit(unitKey, "unitDesign:99", "player:1", "tile:0:0");
+    const unitDesignMissing = new Unit(unitKey, "unitDesign:99", "player:1", tileKey(0, 0));
     useDataBucket().setObject(unitDesignMissing);
     expectRelationToThrowMissing(unitDesignMissing, "design", "unitDesign:99");
 
     // City missing (when provided)
-    const unitCityMissing = new Unit(unitKey, "unitDesign:1", "player:1", "tile:0:0", "city:99");
+    const unitCityMissing = new Unit(unitKey, "unitDesign:1", "player:1", tileKey(0, 0), "city:99");
     useDataBucket().setObject(unitCityMissing);
     expectRelationToThrowMissing(unitCityMissing, "city", "city:99");
   });

@@ -5,14 +5,18 @@ import {
   playerRawData,
   tileRawData,
 } from "../../_setup/dataHelpers";
-import { destroyDataBucket, useDataBucket } from "../../../src/Store/useDataBucket";
+import { tileKey } from "../../../src/helpers/mapTools";
+import { destroyDataBucket, useDataBucket } from "../../../src/Data/useDataBucket";
 import { Player } from "../../../src/objects/game/Player";
-import { generateKey } from "../../../src/objects/game/_GameObject";
+import { Religion } from "../../../src/objects/game/Religion";
+import { generateKey } from "../../../src/objects/game/_keys";
 import {
   expectRelationToThrowMissing,
+  testManyToManyRelation,
   testManyToOneRelation,
   testOneToOneRelation,
 } from "../../_setup/testHelpers";
+import { Culture } from "../../../src/objects/game/Culture";
 
 describe("Player", () => {
   beforeEach(() => {
@@ -42,8 +46,8 @@ describe("Player", () => {
         religionKey,
         cultureKey: "culture:2" as any,
       }),
-      ...tileRawData("tile:0:0"),
-      ...cityRawData("city:1", { playerKey: playerKey1, tileKey: "tile:0:0" }),
+      ...tileRawData(tileKey(0, 0)),
+      ...cityRawData("city:1", { playerKey: playerKey1, tileKey: tileKey(0, 0) }),
       { key: religionKey, cityKey: "city:1", name: "Test", foundedTurn: 1 } as any,
     ]);
 
@@ -56,7 +60,7 @@ describe("Player", () => {
     testOneToOneRelation(
       player1,
       "culture",
-      useDataBucket().getObject(player1.cultureKey),
+      useDataBucket().getObject<Culture>(player1.cultureKey),
       "player",
     );
     expect(player1.religionKey).toBeNull();
@@ -67,10 +71,20 @@ describe("Player", () => {
     testOneToOneRelation(
       player2,
       "culture",
-      useDataBucket().getObject(player2.cultureKey),
+      useDataBucket().getObject<Culture>(player2.cultureKey),
       "player",
     );
-    testManyToOneRelation(player2, "religion", useDataBucket().getObject(religionKey), "players");
+    testManyToOneRelation(
+      player2,
+      "religion",
+      useDataBucket().getObject<Religion>(religionKey),
+      "players",
+    );
+
+    // Test knownReligionKeys (ManyToMany)
+    useDataBucket().setRawObjects([{ key: playerKey1, knownReligionKeys: [religionKey] } as any]);
+    const religion = useDataBucket().getObject<Religion>(religionKey);
+    testManyToManyRelation(player1, "knownReligions", religion, "knownByPlayers");
   });
 
   it("throws correct message for invalid relations", () => {

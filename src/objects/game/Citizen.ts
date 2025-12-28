@@ -13,7 +13,7 @@ import { useEventStore } from "@/stores/eventStore";
 import { CitizenGained, CitizenLost } from "@/events/Citizen";
 import { useObjectsStore } from "@/stores/objectStore";
 import { Construction } from "@/objects/game/Construction";
-import { useDataBucket } from "@/Store/useDataBucket";
+import { useDataBucket } from "@/Data/useDataBucket";
 
 export class Citizen extends GameObject {
   constructor(
@@ -83,7 +83,7 @@ export class Citizen extends GameObject {
    * Actions
    */
   complete() {
-    this.city.citizenKeys.push(this.key);
+    this.city.citizenKeys.add(this.key);
 
     this.pickTile();
 
@@ -91,13 +91,13 @@ export class Citizen extends GameObject {
   }
 
   delete(reason: string) {
-    this.city.citizenKeys = this.city.citizenKeys.filter((k) => k !== this.key);
-    this.culture.citizenKeys = this.culture.citizenKeys.filter((k) => k !== this.key);
-    this.player.citizenKeys = this.player.citizenKeys.filter((k) => k !== this.key);
+    this.city.citizenKeys.delete(this.key);
+    this.culture.citizenKeys.delete(this.key);
+    this.player.citizenKeys.delete(this.key);
     if (this.religion) {
-      this.religion.citizenKeys = this.religion.citizenKeys.filter((k) => k !== this.key);
+      this.religion.citizenKeys.delete(this.key);
     }
-    this.tile.citizenKeys = this.tile.citizenKeys.filter((k) => k !== this.key);
+    this.tile.citizenKeys.delete(this.key);
 
     delete useObjectsStore()._gameObjects[this.key];
 
@@ -107,8 +107,8 @@ export class Citizen extends GameObject {
   migrate(toCity: City) {
     const fromCity = this.city;
 
-    fromCity.citizenKeys = fromCity.citizenKeys.filter((k) => k !== this.key);
-    this.player.citizenKeys = this.player.citizenKeys.filter((k) => k !== this.key);
+    fromCity.citizenKeys.delete(this.key);
+    this.player.citizenKeys.delete(this.key);
 
     useEventStore().turnEvents.push(
       new CitizenLost(
@@ -120,7 +120,7 @@ export class Citizen extends GameObject {
     );
 
     this.cityKey = toCity.key;
-    toCity.citizenKeys.push(this.key);
+    toCity.citizenKeys.add(this.key);
     this.pickTile();
 
     useEventStore().turnEvents.push(
@@ -130,7 +130,7 @@ export class Citizen extends GameObject {
 
   pickTile() {
     if (this.tileKey) {
-      this.tile.citizenKeys = this.tile.citizenKeys.filter((k) => k !== this.key);
+      this.tile.citizenKeys.delete(this.key);
     }
 
     // todo pick tile per city preferences
@@ -144,6 +144,6 @@ export class Citizen extends GameObject {
 
     this.tileKey = getRandom(possibleTiles).key;
 
-    this.tile.citizenKeys.push(this.key);
+    this.tile.citizenKeys.add(this.key);
   }
 }

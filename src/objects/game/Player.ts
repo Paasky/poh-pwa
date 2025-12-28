@@ -45,23 +45,14 @@ export class Player extends GameObject {
     hasMany<Religion>(this, "knownReligionKeys");
     hasMany<Tile>(this, "knownTileKeys");
 
-    this.agendaKeys = [];
     hasMany<Agenda>(this, "agendaKeys");
-    this.citizenKeys = [];
     hasMany<Citizen>(this, "citizenKeys");
-    this.cityKeys = [];
     hasMany<City>(this, "cityKeys");
-    this.constructionKeys = [];
     hasMany<Construction>(this, "constructionKeys");
-    this.dealKeys = [];
     hasMany<Deal>(this, "dealKeys");
-    this.tileKeys = [];
     hasMany<Tile>(this, "tileKeys");
-    this.tradeRouteKeys = [];
     hasMany<TradeRoute>(this, "tradeRouteKeys");
-    this.unitKeys = [];
     hasMany<Unit>(this, "unitKeys");
-    this.designKeys = [];
     hasMany<UnitDesign>(this, "designKeys");
   }
 
@@ -77,6 +68,16 @@ export class Player extends GameObject {
       attrName: "religionKey",
       isOptional: true,
       related: { theirKeyAttr: "playerKeys" },
+    },
+    {
+      attrName: "knownPlayerKeys",
+      isOptional: true,
+      related: { theirKeyAttr: "knownPlayerKeys", isManyToMany: true },
+    },
+    {
+      attrName: "knownReligionKeys",
+      isOptional: true,
+      related: { theirKeyAttr: "knownByPlayerKeys", isManyToMany: true },
     },
     {
       attrName: "knownTileKeys",
@@ -95,35 +96,39 @@ export class Player extends GameObject {
   /*
    * Relations
    */
-  agendaKeys: GameKey[];
+  agendaKeys = new Set<GameKey>();
   declare agendas: Agenda[];
 
-  citizenKeys: GameKey[];
+  citizenKeys = new Set<GameKey>();
   declare citizens: Citizen[];
 
-  cityKeys: GameKey[];
+  cityKeys = new Set<GameKey>();
   declare cities: City[];
 
-  constructionKeys: GameKey[];
+  constructionKeys = new Set<GameKey>();
   declare constructions: Construction[];
 
   declare culture: Culture;
 
-  dealKeys: GameKey[];
+  dealKeys = new Set<GameKey>();
   declare deals: Deal[];
 
   declare religion: Religion | null;
 
-  tileKeys: GameKey[];
+  tileKeys = new Set<GameKey>();
   declare tiles: Tile[];
 
-  tradeRouteKeys: GameKey[];
+  tradeRouteKeys = new Set<GameKey>();
   declare tradeRoutes: TradeRoute[];
 
-  unitKeys: GameKey[];
+  declare knownPlayers: Player[];
+  declare knownReligions: Religion[];
+  declare knownTiles: Tile[];
+
+  unitKeys = new Set<GameKey>();
   declare units: Unit[];
 
-  designKeys: GameKey[];
+  designKeys = new Set<GameKey>();
   declare designs: UnitDesign[];
 
   /*

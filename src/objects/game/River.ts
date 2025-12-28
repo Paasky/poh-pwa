@@ -6,7 +6,7 @@ export class River extends GameObject {
   constructor(
     key: GameKey,
     public name: string,
-    public tileKeys: GameKey[],
+    public tileKeys: Set<GameKey>,
   ) {
     super(key);
 

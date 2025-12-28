@@ -5,7 +5,7 @@ import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStor
 import { GameData, StaticData } from "@/types/api";
 import { PohEngine } from "@/engine/PohEngine";
 import { createWorld, WorldSize, worldSizes } from "@/factories/worldFactory";
-import { GameDataLoader } from "@/dataLoaders/GameDataLoader";
+import { GameDataLoader } from "@/Data/GameDataLoader";
 import type { Router } from "vue-router";
 import { useGovernmentTabStore } from "@/components/PlayerDetails/Tabs/governmentTabStore";
 import { useCultureTabStore } from "@/components/PlayerDetails/Tabs/cultureTabStore";
@@ -42,7 +42,7 @@ export const useAppStore = defineStore("app", {
     async init(gameDataUrl?: string) {
       if (this.ready) return; // Happens on hot-reload
 
-      // Download data & Init Object Store
+      // Download data & Init Object Data
       const staticData = await fetchJSON<StaticData>("/staticData.json");
       const saveGameData = gameDataUrl
         ? ((await fetchJSON<GameData>(gameDataUrl)) as GameData)
@@ -67,7 +67,7 @@ export const useAppStore = defineStore("app", {
             fn: () => {
               if (saveGameData) {
                 objStore.world = saveGameData.world;
-                const gameObjects = new GameDataLoader().initFromRaw(saveGameData);
+                const gameObjects = new GameDataLoader().setFromRaw(saveGameData);
                 objStore.bulkSet(Object.values(gameObjects));
               } else {
                 try {

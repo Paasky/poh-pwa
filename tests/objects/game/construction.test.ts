@@ -6,9 +6,10 @@ import {
   playerRawData,
   tileRawData,
 } from "../../_setup/dataHelpers";
-import { destroyDataBucket, useDataBucket } from "../../../src/Store/useDataBucket";
+import { tileKey } from "../../../src/helpers/mapTools";
+import { destroyDataBucket, useDataBucket } from "../../../src/Data/useDataBucket";
 import { Construction } from "../../../src/objects/game/Construction";
-import { generateKey } from "../../../src/objects/game/_GameObject";
+import { generateKey } from "../../../src/objects/game/_keys";
 import {
   expectRelationToThrowMissing,
   testManyToOneRelation,
@@ -29,8 +30,8 @@ describe("Construction", () => {
   it("constructor and relations work", () => {
     const constructionKey1 = generateKey("construction");
     const constructionKey2 = generateKey("construction");
-    const tileKey1 = "tile:0:0";
-    const tileKey2 = "tile:1:1";
+    const tileKey1 = tileKey(0, 0);
+    const tileKey2 = tileKey(1, 1);
     const cityKey = "city:1";
 
     useDataBucket().setRawObjects([
@@ -95,7 +96,12 @@ describe("Construction", () => {
     expectRelationToThrowMissing(constructionTileMissing, "tile", "tile:99");
 
     // City missing (when provided)
-    const constructionCityMissing = new Construction(constructionKey, type, "tile:0:0", "city:99");
+    const constructionCityMissing = new Construction(
+      constructionKey,
+      type,
+      tileKey(0, 0),
+      "city:99",
+    );
     useDataBucket().setObject(constructionCityMissing);
     expectRelationToThrowMissing(constructionCityMissing, "city", "city:99");
   });

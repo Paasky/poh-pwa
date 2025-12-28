@@ -1,7 +1,7 @@
 // noinspection JSUnusedGlobalSymbols
 
 import type { IMutation } from "@/Common/IMutation";
-import { DataBucket } from "@/Store/DataBucket";
+import { DataBucket } from "@/Data/DataBucket";
 import type { CategoryObject, TypeObject } from "@/types/typeObjects";
 import type { GameKey, GameObject, IRawGameObject } from "@/objects/game/_GameObject";
 import type { IEvent } from "@/Common/IEvent";
@@ -18,7 +18,7 @@ import type { River } from "@/objects/game/River";
 import type { TradeRoute } from "@/objects/game/TradeRoute";
 import type { Unit } from "@/objects/game/Unit";
 import type { UnitDesign } from "@/objects/game/UnitDesign";
-import { useDataBucket } from "@/Store/useDataBucket";
+import { useDataBucket } from "@/Data/useDataBucket";
 
 export class DataStore {
   private readonly dataBucket: DataBucket;

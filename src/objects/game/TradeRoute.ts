@@ -9,7 +9,7 @@ export class TradeRoute extends GameObject {
     key: GameKey,
     public city1Key: GameKey,
     public city2Key: GameKey,
-    public tileKeys: GameKey[],
+    public tileKeys: Set<GameKey>,
     public unitKey: GameKey,
   ) {
     super(key);
@@ -64,12 +64,12 @@ export class TradeRoute extends GameObject {
    * Actions
    */
   delete(unitIsDead = false) {
-    this.city1.tradeRouteKeys = this.city1.tradeRouteKeys.filter((k) => k !== this.key);
+    this.city1.tradeRouteKeys.delete(this.key);
 
-    this.city2.tradeRouteKeys = this.city2.tradeRouteKeys.filter((k) => k !== this.key);
+    this.city2.tradeRouteKeys.delete(this.key);
 
     for (const tile of this.tiles) {
-      tile.tradeRouteKeys = tile.tradeRouteKeys.filter((k) => k !== this.key);
+      tile.tradeRouteKeys.delete(this.key);
     }
 
     if (!unitIsDead) this.unit.tradeRouteKey = null;

@@ -30,7 +30,6 @@ export class Construction extends GameObject {
     canHaveOne<City>(this, "cityKey");
     hasOne<Tile>(this, "tileKey");
 
-    this.citizenKeys = [];
     hasMany<Citizen>(this, "citizenKeys");
   }
 
@@ -58,7 +57,7 @@ export class Construction extends GameObject {
   /*
    * Relations
    */
-  citizenKeys: GameKey[];
+  citizenKeys = new Set<GameKey>();
   declare citizens: Citizen[];
 
   declare city: City | null;
@@ -118,7 +117,7 @@ export class Construction extends GameObject {
 
   cancel(player: Player, wasLost: boolean): void {
     if (this.city) {
-      this.city.constructionKeys = this.city.constructionKeys.filter((k) => k !== this.key);
+      this.city.constructionKeys.delete(this.key);
     }
     this.tile.constructionKey = null;
 

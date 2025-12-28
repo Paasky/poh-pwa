@@ -1,9 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { initTestDataBucket, riverRawData, tileRawData } from "../../_setup/dataHelpers";
-import { destroyDataBucket, useDataBucket } from "../../../src/Store/useDataBucket";
+import { tileKey } from "../../../src/helpers/mapTools";
+import { destroyDataBucket, useDataBucket } from "../../../src/Data/useDataBucket";
 import { River } from "../../../src/objects/game/River";
 import { Tile } from "../../../src/objects/game/Tile";
-import { generateKey } from "../../../src/objects/game/_GameObject";
+import { GameKey, generateKey } from "../../../src/objects/game/_keys";
 import { expectRelationToThrowMissing, testOneToManyRelation } from "../../_setup/testHelpers";
 
 describe("River", () => {
@@ -18,8 +19,8 @@ describe("River", () => {
   it("constructor and relations work", () => {
     const riverKey1 = generateKey("river");
     const riverKey2 = generateKey("river");
-    const tileKey1 = "tile:0:0";
-    const tileKey2 = "tile:1:1";
+    const tileKey1 = tileKey(0, 0);
+    const tileKey2 = tileKey(1, 1);
 
     useDataBucket().setRawObjects([
       ...tileRawData(tileKey1),
@@ -44,7 +45,7 @@ describe("River", () => {
     const riverKey = generateKey("river");
 
     // Tile missing in tileKeys
-    const riverTileMissing = new River(riverKey, "Test", ["tile:99"]);
+    const riverTileMissing = new River(riverKey, "Test", new Set<GameKey>(["tile:99"]));
     useDataBucket().setObject(riverTileMissing);
     expectRelationToThrowMissing(riverTileMissing, "tiles", "tile:99");
 

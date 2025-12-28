@@ -34,23 +34,11 @@ export class Tile extends GameObject {
     super(key);
 
     canHaveOne<Player>(this, "playerKey");
-
-    this.citizenKeys = [];
     hasMany<Citizen>(this, "citizenKeys");
-
-    this.cityKey = null;
     canHaveOne<City>(this, "cityKey");
-
-    this.constructionKey = null;
     canHaveOne<Construction>(this, "constructionKey");
-
-    this.riverKey = null;
     canHaveOne<River>(this, "riverKey");
-
-    this.tradeRouteKeys = [];
     hasMany<TradeRoute>(this, "tradeRouteKeys");
-
-    this.unitKeys = [];
     hasMany<Unit>(this, "unitKeys");
 
     this._staticTypes = [domain, area, terrain, elevation];
@@ -92,24 +80,24 @@ export class Tile extends GameObject {
   /*
    * Relations
    */
-  citizenKeys: GameKey[];
+  citizenKeys = new Set<GameKey>();
   declare citizens: Citizen[];
 
-  cityKey: GameKey | null;
+  cityKey: GameKey | null = null;
   declare city: City | null;
 
-  constructionKey: GameKey | null;
+  constructionKey: GameKey | null = null;
   declare construction: Construction | null;
 
   declare player: Player | null;
 
-  riverKey: GameKey | null;
+  riverKey: GameKey | null = null;
   declare river: River | null;
 
-  tradeRouteKeys: GameKey[];
+  tradeRouteKeys = new Set<GameKey>();
   declare tradeRoutes: TradeRoute[];
 
-  unitKeys: GameKey[];
+  unitKeys = new Set<GameKey>();
   declare units: Unit[];
 
   private _dynamicTypes: TypeObject[] = [];

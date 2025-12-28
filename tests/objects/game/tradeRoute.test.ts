@@ -8,15 +8,19 @@ import {
   unitDesignRawData,
   unitRawData,
 } from "../../_setup/dataHelpers";
-import { destroyDataBucket, useDataBucket } from "../../../src/Store/useDataBucket";
+import { tileKey } from "../../../src/helpers/mapTools";
+import { destroyDataBucket, useDataBucket } from "../../../src/Data/useDataBucket";
 import { TradeRoute } from "../../../src/objects/game/TradeRoute";
-import { generateKey } from "../../../src/objects/game/_GameObject";
+import { GameKey, generateKey } from "../../../src/objects/game/_keys";
 import {
   expectRelationToThrowMissing,
   testManyToManyRelation,
   testManyToOneRelation,
   testOneToOneRelation,
 } from "../../_setup/testHelpers";
+import { Tile } from "../../../src/objects/game/Tile";
+import { City } from "../../../src/objects/game/City";
+import { Unit } from "../../../src/objects/game/Unit";
 
 describe("TradeRoute", () => {
   beforeEach(() => {
@@ -35,8 +39,8 @@ describe("TradeRoute", () => {
     const city3Key = "city:3";
     const unit1Key = "unit:1";
     const unit2Key = "unit:2";
-    const tileKey1 = "tile:0:0";
-    const tileKey2 = "tile:1:1";
+    const tileKey1 = tileKey(0, 0);
+    const tileKey2 = tileKey(1, 1);
     const playerKey = "player:1";
     const designKey = "unitDesign:1";
 
@@ -67,9 +71,24 @@ describe("TradeRoute", () => {
     const tradeRoute1 = useDataBucket().getObject<TradeRoute>(tradeRouteKey1);
     const tradeRoute2 = useDataBucket().getObject<TradeRoute>(tradeRouteKey2);
 
-    testManyToOneRelation(tradeRoute1, "city1", useDataBucket().getObject(city1Key), "tradeRoutes");
-    testManyToOneRelation(tradeRoute1, "city2", useDataBucket().getObject(city2Key), "tradeRoutes");
-    testOneToOneRelation(tradeRoute1, "unit", useDataBucket().getObject(unit1Key), "tradeRoute");
+    testManyToOneRelation(
+      tradeRoute1,
+      "city1",
+      useDataBucket().getObject<City>(city1Key),
+      "tradeRoutes",
+    );
+    testManyToOneRelation(
+      tradeRoute1,
+      "city2",
+      useDataBucket().getObject<City>(city2Key),
+      "tradeRoutes",
+    );
+    testOneToOneRelation(
+      tradeRoute1,
+      "unit",
+      useDataBucket().getObject<Unit>(unit1Key),
+      "tradeRoute",
+    );
     testManyToManyRelation(
       tradeRoute1,
       "tiles",
@@ -77,9 +96,24 @@ describe("TradeRoute", () => {
       "tradeRoutes",
     );
 
-    testManyToOneRelation(tradeRoute2, "city1", useDataBucket().getObject(city1Key), "tradeRoutes");
-    testManyToOneRelation(tradeRoute2, "city2", useDataBucket().getObject(city3Key), "tradeRoutes");
-    testOneToOneRelation(tradeRoute2, "unit", useDataBucket().getObject(unit2Key), "tradeRoute");
+    testManyToOneRelation(
+      tradeRoute2,
+      "city1",
+      useDataBucket().getObject<City>(city1Key),
+      "tradeRoutes",
+    );
+    testManyToOneRelation(
+      tradeRoute2,
+      "city2",
+      useDataBucket().getObject<City>(city3Key),
+      "tradeRoutes",
+    );
+    testOneToOneRelation(
+      tradeRoute2,
+      "unit",
+      useDataBucket().getObject<Unit>(unit2Key),
+      "tradeRoute",
+    );
     testManyToManyRelation(
       tradeRoute2,
       "tiles",
@@ -102,7 +136,7 @@ describe("TradeRoute", () => {
       tradeRouteKey,
       "city:99",
       "city:2",
-      ["tile:1"],
+      new Set<GameKey>(["tile:1"]),
       "unit:1",
     );
     useDataBucket().setObject(tradeRouteCity1Missing);
@@ -113,7 +147,7 @@ describe("TradeRoute", () => {
       tradeRouteKey,
       "city:1",
       "city:99",
-      ["tile:1"],
+      new Set<GameKey>(["tile:1"]),
       "unit:1",
     );
     useDataBucket().setObject(tradeRouteCity2Missing);
@@ -124,7 +158,7 @@ describe("TradeRoute", () => {
       tradeRouteKey,
       "city:1",
       "city:2",
-      ["tile:1"],
+      new Set<GameKey>(["tile:1"]),
       "unit:99",
     );
     useDataBucket().setObject(tradeRouteUnitMissing);
@@ -135,7 +169,7 @@ describe("TradeRoute", () => {
       tradeRouteKey,
       "city:1",
       "city:2",
-      ["tile:99"],
+      new Set<GameKey>(["tile:99"]),
       "unit:1",
     );
     useDataBucket().setObject(tradeRouteTileMissing);

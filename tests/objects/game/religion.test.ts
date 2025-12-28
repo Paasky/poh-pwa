@@ -6,10 +6,17 @@ import {
   religionRawData,
   tileRawData,
 } from "../../_setup/dataHelpers";
-import { destroyDataBucket, useDataBucket } from "../../../src/Store/useDataBucket";
+import { tileKey } from "../../../src/helpers/mapTools";
+import { destroyDataBucket, useDataBucket } from "../../../src/Data/useDataBucket";
 import { Religion } from "../../../src/objects/game/Religion";
-import { generateKey } from "../../../src/objects/game/_GameObject";
-import { expectRelationToThrowMissing, testManyToOneRelation } from "../../_setup/testHelpers";
+import { generateKey } from "../../../src/objects/game/_keys";
+import {
+  expectRelationToThrowMissing,
+  testManyToManyRelation,
+  testManyToOneRelation,
+} from "../../_setup/testHelpers";
+import { City } from "../../../src/objects/game/City";
+import { Player } from "../../../src/objects/game/Player";
 
 describe("Religion", () => {
   beforeEach(() => {
@@ -26,8 +33,8 @@ describe("Religion", () => {
     const cityKey1 = "city:1";
     const cityKey2 = "city:2";
     const playerKey = "player:1";
-    const tileKey1 = "tile:0:0";
-    const tileKey2 = "tile:1:1";
+    const tileKey1 = tileKey(0, 0);
+    const tileKey2 = tileKey(1, 1);
 
     useDataBucket().setRawObjects([
       ...playerRawData(playerKey),
@@ -76,6 +83,15 @@ describe("Religion", () => {
       "city",
       useDataBucket().getObject<City>(cityKey2),
       "holyCityFors",
+    );
+
+    // Test knownByPlayerKeys (ManyToMany)
+    useDataBucket().setRawObjects([{ key: religionKey1, knownByPlayerKeys: [playerKey] } as any]);
+    testManyToManyRelation(
+      religion1,
+      "knownByPlayers",
+      useDataBucket().getObject<Player>(playerKey),
+      "knownReligions",
     );
   });
 

@@ -6,9 +6,10 @@ import {
   playerRawData,
   tileRawData,
 } from "../../_setup/dataHelpers";
-import { destroyDataBucket, useDataBucket } from "../../../src/Store/useDataBucket";
+import { tileKey } from "../../../src/helpers/mapTools";
+import { destroyDataBucket, useDataBucket } from "../../../src/Data/useDataBucket";
 import { Citizen } from "../../../src/objects/game/Citizen";
-import { generateKey } from "../../../src/objects/game/_GameObject";
+import { generateKey } from "../../../src/objects/game/_keys";
 import { expectRelationToThrowMissing, testManyToOneRelation } from "../../_setup/testHelpers";
 import { Religion } from "../../../src/objects/game/Religion";
 import { Tile } from "../../../src/objects/game/Tile";
@@ -34,8 +35,8 @@ describe("Citizen", () => {
     const playerKey2 = "player:2";
     const cultureKey1 = "culture:1";
     const cultureKey2 = "culture:2";
-    const tileKey1 = "tile:0:0";
-    const tileKey2 = "tile:1:1";
+    const tileKey1 = tileKey(0, 0);
+    const tileKey2 = tileKey(1, 1);
     const religionKey = "religion:1";
 
     useDataBucket().setRawObjects([
@@ -115,7 +116,7 @@ describe("Citizen", () => {
       "city:99",
       "culture:1",
       "player:1",
-      "tile:0:0",
+      tileKey(0, 0),
     );
     useDataBucket().setObject(citizenCityMissing);
     expectRelationToThrowMissing(citizenCityMissing, "city", "city:99");
@@ -126,7 +127,7 @@ describe("Citizen", () => {
       "city:1",
       "culture:99",
       "player:1",
-      "tile:0:0",
+      tileKey(0, 0),
     );
     useDataBucket().setObject(citizenCultureMissing);
     expectRelationToThrowMissing(citizenCultureMissing, "culture", "culture:99");
@@ -137,7 +138,7 @@ describe("Citizen", () => {
       "city:1",
       "culture:1",
       "player:99",
-      "tile:0:0",
+      tileKey(0, 0),
     );
     useDataBucket().setObject(citizenPlayerMissing);
     expectRelationToThrowMissing(citizenPlayerMissing, "player", "player:99");
@@ -162,7 +163,7 @@ describe("Citizen", () => {
           cityKey: "city:1",
           cultureKey: "culture:1",
           playerKey: "player:1",
-          tileKey: "tile:0:0",
+          tileKey: tileKey(0, 0),
           policy: "invalid",
         } as any,
       ]);

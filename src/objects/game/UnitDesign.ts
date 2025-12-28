@@ -29,7 +29,6 @@ export class UnitDesign extends GameObject {
 
     canHaveOne<Player>(this, "playerKey");
 
-    this.unitKeys = [];
     hasMany<Unit>(this, "unitKeys");
   }
 
@@ -58,7 +57,7 @@ export class UnitDesign extends GameObject {
    */
   declare player: Player | null;
 
-  unitKeys: GameKey[];
+  unitKeys = new Set<GameKey>();
   declare units: Unit[];
 
   /*
