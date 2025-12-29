@@ -2,7 +2,7 @@
 import { canHaveOne, hasOne } from "@/objects/game/_relations";
 import { TypeObject } from "@/types/typeObjects";
 import { Yields } from "@/objects/yield";
-import { roundToTenth } from "@/types/common";
+import { roundToTenth, TypeKey } from "@/types/common";
 import { GameKey, GameObjAttr, GameObject } from "@/objects/game/_GameObject";
 import { useObjectsStore } from "@/stores/objectStore";
 import type { UnitDesign } from "@/objects/game/UnitDesign";
@@ -164,8 +164,45 @@ export class Unit extends GameObject {
     ]);
   }
 
+  // Unit yields is
+  // -> the total lump output (+/-) of Design + Tile
+  // -> the YieldMods of Design
+  // -> the YieldMods that are for me of Player & Tile
   get yields(): Yields {
-    return new Yields();
+    const inheritYieldTypes = [
+      "yieldType:attack",
+      "yieldType:damage",
+      "yieldType:defense",
+      "yieldType:evasion",
+      "yieldType:heal",
+      "yieldType:hitRadius",
+      "yieldType:intercept",
+      "yieldType:missileSlot",
+      "yieldType:moves",
+      "yieldType:paradropRange",
+      "yieldType:range",
+      "yieldType:sightRadius",
+      "yieldType:settleSize",
+      "yieldType:strength",
+      "yieldType:tradeRange",
+      "yieldType:tradeYield",
+      "yieldType:upkeep",
+    ] as TypeKey[];
+
+    // Everything that I can inherit from my UnitDesign
+    const yields = this.design.yields.only(inheritYieldTypes);
+
+    // Everything that I can inherit, that is for me, from my Tile.yields
+    for (const y of this.tile.yields.only(inheritYieldTypes, this.types).all()) {
+      yields.add(y);
+    }
+
+    // Everything that I can inherit, that is for me, from my Player.yieldMods
+    for (const y of this.player.yieldMods.only(inheritYieldTypes, this.types).all()) {
+      yields.add(y);
+    }
+
+    return yields;
   }
 
   /*

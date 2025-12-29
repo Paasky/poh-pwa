@@ -21,7 +21,7 @@ export class UnitDesign extends GameObject {
     this.types = [this.platform, this.equipment];
 
     const allYields = new Yields(this.types.flatMap((t) => t.yields.all()));
-    this.yields = allYields.not(["yieldType:productionCost"]).applyMods();
+    this.yields = allYields.not(["yieldType:productionCost"]);
     this.productionCost = allYields
       .only(["yieldType:productionCost"])
       .applyMods()

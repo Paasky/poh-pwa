@@ -1,4 +1,4 @@
-import { IActionHandler } from "@/Simulation/IActionHandler";
+import { IActionHandler } from "@/Simulation/Actions/IActionHandler";
 import { Player } from "@/objects/game/Player";
 import { Tile } from "@/objects/game/Tile";
 import { Unit } from "@/objects/game/Unit";

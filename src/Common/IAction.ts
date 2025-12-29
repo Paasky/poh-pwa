@@ -104,8 +104,8 @@ export interface IAction {
 // Units
 export type Alert = IAction & { type: "alert"; unitKey: GameKey };
 export type Attack = IAction & { type: "attack"; unitKey: GameKey; targetKey: GameKey };
-export type Bombard = IAction & { type: "bombard"; unitKey: GameKey; tileKey: GameKey };
-export type Build = IAction & { type: "build"; unitKey: GameKey; typeKey: GameKey };
+export type Bombard = IAction & { type: "bombard"; unitKey: GameKey; targetKey: GameKey };
+export type Build = IAction & { type: "build"; unitKey: GameKey; typeKey: TypeKey };
 export type Demobilize = IAction & { type: "demobilize"; unitKey: GameKey };
 export type Disband = IAction & { type: "disband"; unitKey: GameKey };
 export type EndTurn = IAction & { type: "endTurn" };
@@ -119,16 +119,16 @@ export type Mission = IAction & {
   targetKey: GameKey;
 };
 export type Mobilize = IAction & { type: "mobilize"; unitKey: GameKey };
-export type Move = IAction & { type: "move"; unitKey: GameKey; tileKey: GameKey };
+export type Move = IAction & { type: "move"; unitKey: GameKey; targetKey: GameKey };
 export type Pillage = IAction & { type: "pillage"; unitKey: GameKey };
-export type Rebase = IAction & { type: "rebase"; unitKey: GameKey; cityKey: GameKey };
-export type Recon = IAction & { type: "recon"; unitKey: GameKey; tileKey: GameKey };
+export type Rebase = IAction & { type: "rebase"; unitKey: GameKey; targetKey: GameKey };
+export type Recon = IAction & { type: "recon"; unitKey: GameKey; targetKey: GameKey };
 export type Rename = IAction & { type: "rename"; unitKey: GameKey; name: string };
 export type Skip = IAction & { type: "skip"; unitKey: GameKey };
 export type Settle = IAction & { type: "settle"; unitKey: GameKey };
 export type Stop = IAction & { type: "stop"; unitKey: GameKey };
 export type Trade = IAction & { type: "trade"; unitKey: GameKey; targetKey: GameKey }; // target could be city or unit
-export type Upgrade = IAction & { type: "upgrade"; unitKey: GameKey; designKey: GameKey };
+export type Upgrade = IAction & { type: "upgrade"; unitKey: GameKey; targetKey: GameKey };
 
 // Unit Design
 export type CreateDesign = IAction & {
@@ -140,7 +140,7 @@ export type CreateDesign = IAction & {
 export type DeactivateDesign = IAction & { type: "deactivateDesign"; designKey: GameKey };
 export type UpgradeDesign = IAction & {
   type: "upgradeDesign";
-  oldDesignKey: GameKey;
+  designKey: GameKey;
   name: string;
   platformKey: TypeKey;
   equipmentKey: TypeKey;

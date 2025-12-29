@@ -4,11 +4,9 @@ import { GameKey } from "@/objects/game/_GameObject";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { DataStore } from "@/Data/DataStore";
 import { IMutation } from "@/Common/IMutation";
-import { MoveUnit } from "@/Simulation/Unit/MoveUnit";
 import { Player } from "@/objects/game/Player";
-import { Tile } from "@/objects/game/Tile";
 import { Unit } from "@/objects/game/Unit";
-import { BasicUnitAction } from "@/Simulation/Unit/BasicUnitAction";
+import { getUnitAction } from "@/Simulation/Actions/UnitActionRegistry";
 
 export class Simulation {
   private readonly dataStore: DataStore;
@@ -56,82 +54,34 @@ export class Simulation {
 
     // 2. & 3. Validation & Mutation Generation
     switch (action.type) {
+      // Unit Actions
       case "alert":
+      case "attack":
+      case "bombard":
+      case "build":
+      case "demobilize":
+      case "disband":
+      case "explore":
       case "fortify":
       case "heal":
+      case "mission":
+      case "mobilize":
+      case "move":
+      case "pillage":
+      case "rebase":
+      case "recon":
       case "rename":
+      case "settle":
       case "skip":
       case "stop":
-        mutations.push(
-          ...new BasicUnitAction(player, bucket.getObject<Unit>(action.unitKey), action.type)
-            .validateAction()
-            .handleAction(),
-        );
-        break;
-
-      case "attack":
-        // todo
-        break;
-
-      case "bombard":
-        // todo
-        break;
-
-      case "build":
-        // todo
-        break;
-
-      case "demobilize":
-        // todo
-        break;
-
-      case "disband":
-        // todo
-        break;
-
-      case "explore":
-        // todo
-        break;
-
-      case "mission":
-        // todo
-        break;
-
-      case "mobilize":
-        // todo
-        break;
-
-      case "pillage":
-        // todo
-        break;
-
-      case "rebase":
-        // todo
-        break;
-
-      case "recon":
-        // todo
-        break;
-
-      case "settle":
-        // todo
-        break;
-
       case "trade":
-        // todo
-        break;
-
       case "upgrade":
-        // todo
-        break;
-
-      case "move":
         mutations.push(
-          ...new MoveUnit(
-            player,
-            bucket.getObject<Unit>(action.unitKey),
-            bucket.getObject<Tile>(action.tileKey),
-          )
+          ...getUnitAction(action.type, player, bucket.getObject<Unit>(action.unitKey), {
+            name: "name" in action ? action.name : undefined,
+            target: "targetKey" in action ? bucket.getObject(action.targetKey) : undefined,
+            type: "typeKey" in action ? bucket.getType(action.typeKey) : undefined,
+          })
             .validateAction()
             .handleAction(),
         );

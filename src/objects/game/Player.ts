@@ -134,8 +134,25 @@ export class Player extends GameObject {
   /*
    * Computed
    */
-  get activeDesigns(): UnitDesign[] {
-    return this.designs.filter((d) => d.isActive);
+
+  // types =
+  // -> common types +
+  // -> citizen types +
+  // -> owned types +
+
+  // citizen types =
+  // -> culture heritages & traits +
+  // -> state religion myths & gods & dogmas
+
+  // common types =
+  // -> government policies +
+  // -> research researched +
+
+  // owned types =
+  // -> cities > citizens > work > types for/vs "all cities"
+
+  get types(): TypeObject[] {
+    return [...this.citizenTypes, ...this.commonTypes, ...this.ownedTypes];
   }
 
   get citizenTypes(): TypeObject[] {
@@ -152,22 +169,21 @@ export class Player extends GameObject {
     return [...this.government.policies, ...this.research.researched] as TypeObject[];
   }
 
-  // All specials from all known types
-  get knownSpecialKeys(): Set<TypeKey> {
-    return new Set(this.knownTypes.flatMap((t) => t.specials));
+  get ownedTypes(): TypeObject[] {
+    return this.cities.flatMap((city) => city.ownedTypes);
   }
 
-  // All 3 types-arrays combined
-  get knownTypes(): TypeObject[] {
-    return [...this.citizenTypes, ...this.commonTypes, ...this.ownedTypes];
+  get activeDesigns(): UnitDesign[] {
+    return this.designs.filter((d) => d.isActive);
+  }
+
+  // All specials from all known types
+  get knownSpecialKeys(): Set<TypeKey> {
+    return new Set(this.types.flatMap((t) => t.specials));
   }
 
   get leader(): TypeObject {
     return this.culture.leader;
-  }
-
-  get ownedTypes(): TypeObject[] {
-    return this.cities.flatMap((city) => city.ownedTypes);
   }
 
   get visibleTileKeys(): Set<GameKey> {
@@ -300,28 +316,5 @@ export class Player extends GameObject {
     return true;
   }
 
-  warmUp(): void {
-    this.agendas;
-    this.citizens;
-    this.culture;
-    this.cities;
-    this.deals;
-    this.designs;
-    this.knownTileKeys;
-    this.knownTypes;
-    this.religion;
-    this.knownSpecialKeys;
-    // this.tiles; // Player doesn't have tiles relation anymore it seems
-    this.tradeRoutes;
-    this.units;
-    this.visibleTileKeys;
-
-    this.activeDesigns;
-    this.leader;
-    this.commonTypes;
-    this.citizenTypes;
-    this.ownedTypes;
-    this.yieldMods;
-    this.yields;
-  }
+  warmUp(): void {}
 }

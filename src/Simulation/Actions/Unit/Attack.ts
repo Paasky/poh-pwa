@@ -1,27 +1,25 @@
 import { Player } from "@/objects/game/Player";
 import { Unit } from "@/objects/game/Unit";
-import { ActionType } from "@/Common/IAction";
-import { IActionHandler } from "@/Simulation/IActionHandler";
-import { belongsToPlayer } from "@/Simulation/Validator";
+import { IActionHandler } from "@/Simulation/Actions/IActionHandler";
+import { isValidCombatTarget } from "@/Simulation/Validator";
 import { IMutation } from "@/Common/IMutation";
+import { Tile } from "@/objects/game/Tile";
+import { City } from "@/objects/game/City";
 
-export class BasicUnitAction implements IActionHandler {
+export class Attack implements IActionHandler {
   constructor(
     private readonly player: Player,
     private readonly unit: Unit,
-    private readonly actionType: ActionType,
+    private readonly target: City | Tile | Unit,
   ) {}
 
   validateAction(): this {
-    belongsToPlayer(this.player, this.unit);
+    isValidCombatTarget(this.unit, this.target);
     return this;
   }
 
   handleAction(): IMutation[] {
-    this.unit.action = {
-      type: this.actionType,
-      target: null,
-    };
+    this.unit.action = { type: "attack", target: this.target.key };
     return [
       {
         type: "update",

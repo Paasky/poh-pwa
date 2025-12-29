@@ -139,6 +139,29 @@ export class Tile extends GameObject {
     return selectable;
   }
 
+  targets(player: Player, vs?: Unit): (City | Construction | Unit)[] {
+    if (this.playerKey === player.key) return [];
+
+    const targets = this.units
+      .filter((unit) => unit.playerKey !== player.key)
+      .sort(
+        (a, b) =>
+          a.yields
+            .only(["yieldType:strength"], undefined, vs ? vs.types : undefined)
+            .applyMods()
+            .getLumpAmount("yieldType:strength") -
+          b.yields
+            .only(["yieldType:strength"], undefined, vs ? vs.types : undefined)
+            .applyMods()
+            .getLumpAmount("yieldType:strength"),
+      ) as (City | Construction | Unit)[];
+
+    if (this.city) targets.push(this.city);
+    if (this.construction) targets.push(this.construction);
+
+    return targets;
+  }
+
   get types(): TypeObject[] {
     this._dynamicTypes.length = 0;
 
