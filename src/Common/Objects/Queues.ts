@@ -114,7 +114,7 @@ export abstract class Queue {
     const turnYields = cityYieldMods
       .only(["yieldType:production"], forObjs)
       .add(...([myProduction, extraYield].filter(Boolean) as Yield[]))
-      .applyMods();
+      .flatten();
 
     let total = 0;
     for (const y of turnYields.all()) {

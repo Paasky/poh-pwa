@@ -121,7 +121,7 @@ export class City extends GameObject {
   }
 
   get yields(): Yields {
-    return new Yields([...this.tileYields.all(), ...this.citizenYields.all()]).applyMods();
+    return new Yields([...this.tileYields.all(), ...this.citizenYields.all()]).flatten();
   }
 
   // Total population derived from citizen count

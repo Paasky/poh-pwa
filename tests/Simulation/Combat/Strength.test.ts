@@ -8,7 +8,11 @@ import {
   unitRawData,
 } from "../../_setup/dataHelpers";
 import { destroyDataBucket, useDataBucket } from "../../../src/Data/useDataBucket";
-import { attackStrength, calcDamage, defenseStrength, } from "../../../src/Simulation/Combat/Strength";
+import {
+  attackStrength,
+  calcDamage,
+  defenseStrength,
+} from "../../../src/Simulation/Combat/Strength";
 import { Unit } from "../../../src/Common/Models/Unit";
 import { City } from "../../../src/Common/Models/City";
 import { tileKey } from "../../../src/helpers/mapTools";

@@ -268,7 +268,7 @@ export class Player extends GameObject {
     )[];
 
     for (const gameObj of inheritFromGameObjs) {
-      for (const y of gameObj.yields.applyMods().all()) {
+      for (const y of gameObj.yields.flatten().all()) {
         if (
           y.amount &&
           y.method === "lump" &&

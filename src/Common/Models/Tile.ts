@@ -148,11 +148,11 @@ export class Tile extends GameObject {
         (a, b) =>
           a.yields
             .only(["yieldType:strength"], undefined, vs ? vs.types : undefined)
-            .applyMods()
+            .flatten()
             .getLumpAmount("yieldType:strength") -
           b.yields
             .only(["yieldType:strength"], undefined, vs ? vs.types : undefined)
-            .applyMods()
+            .flatten()
             .getLumpAmount("yieldType:strength"),
       ) as (City | Construction | Unit)[];
 

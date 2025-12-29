@@ -24,7 +24,7 @@ export class UnitDesign extends GameObject {
     this.yields = allYields.not(["yieldType:productionCost"]);
     this.productionCost = allYields
       .only(["yieldType:productionCost"])
-      .applyMods()
+      .flatten()
       .getLumpAmount("yieldType:productionCost");
 
     canHaveOne<Player>(this, "playerKey");

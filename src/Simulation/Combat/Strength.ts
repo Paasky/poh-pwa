@@ -10,7 +10,7 @@ export const attackStrength = (
 ): number => {
   const yields = attacker.yields
     .only(["yieldType:attack", "yieldType:strength"], getTypes(attacker), getTypes(defender))
-    .applyMods();
+    .flatten();
 
   return roundToTenth(
     yields.getLumpAmount("yieldType:attack") + yields.getLumpAmount("yieldType:strength"),
@@ -23,7 +23,7 @@ export const defenseStrength = (
 ): number => {
   const yields = defender.yields
     .only(["yieldType:defense", "yieldType:strength"], getTypes(defender), getTypes(attacker))
-    .applyMods();
+    .flatten();
 
   return roundToTenth(
     yields.getLumpAmount("yieldType:defense") + yields.getLumpAmount("yieldType:strength"),

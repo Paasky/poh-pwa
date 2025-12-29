@@ -453,108 +453,181 @@ describe("Yields", () => {
     expect(storage.amount("yieldType:gold")).toBe(0);
   });
 
-  describe("applyMods complex logic", () => {
-    it("applies lump and percent modifiers for 'any'", () => {
-      const yields = new Yields([
-        { type: "yieldType:strength", amount: 10, method: "lump", for: [], vs: [] },
-        {
-          type: "yieldType:strength",
-          amount: 50,
-          method: "percent",
-          for: [],
-          vs: [],
-        },
-      ]);
+  it("should flatten correctly", () => {
+    const bucket = useDataBucket();
+    const potter = bucket.getType("buildingType:potter"); // has conceptType:building, category:buildingCategory:growth
+    const garrison = bucket.getType("buildingType:garrison"); // has conceptType:building, category:buildingCategory:milLand
+    const human = bucket.getType("platformType:human"); // has conceptType:platform, category:platformCategory:human
 
-      const applied = yields.applyMods();
-      expect(applied.all()).toEqual([
-        { type: "yieldType:strength", amount: 15, method: "lump", for: [], vs: [] },
-      ]);
-    });
+    const yields = new Yields([
+      // No yield types / Lump
+      { type: "yieldType:food", amount: 10, method: "lump", for: [], vs: [] },
+      // Yield types (will filter)
+      { type: "yieldType:gold", amount: 20, method: "lump", for: [], vs: [] },
 
-    it("applies 'set' override for 'any'", () => {
-      const yields = new Yields([
-        { type: "yieldType:strength", amount: 10, method: "lump", for: [], vs: [] },
-        {
-          type: "yieldType:strength",
-          amount: 50,
-          method: "percent",
-          for: [],
-          vs: [],
-        },
-        { type: "yieldType:strength", amount: 100, method: "set", for: [], vs: [] },
-      ]);
+      // --- For Tests ---
+      // For Concept (potter/garrison matches conceptType:building)
+      {
+        type: "yieldType:production",
+        amount: 5,
+        method: "lump",
+        for: ["conceptType:building"],
+        vs: [],
+      },
+      // For Category (potter matches buildingCategory:growth)
+      {
+        type: "yieldType:food",
+        amount: 2,
+        method: "lump",
+        for: ["buildingCategory:growth"],
+        vs: [],
+      },
+      // For Type (potter matches buildingType:potter)
+      {
+        type: "yieldType:gold",
+        amount: 3,
+        method: "lump",
+        for: ["buildingType:potter"],
+        vs: [],
+      },
 
-      const applied = yields.applyMods();
-      expect(applied.all()).toEqual([
-        { type: "yieldType:strength", amount: 100, method: "lump", for: [], vs: [] },
-      ]);
-    });
+      // --- Vs Tests ---
+      // Vs Concept (human matches conceptType:platform)
+      {
+        type: "yieldType:strength",
+        amount: 1,
+        method: "lump",
+        for: [],
+        vs: ["conceptType:platform"],
+      },
+      // Vs Category (human matches platformCategory:human)
+      {
+        type: "yieldType:strength",
+        amount: 2,
+        method: "lump",
+        for: [],
+        vs: ["platformCategory:human"],
+      },
+      // Vs Type (human matches platformType:human)
+      {
+        type: "yieldType:strength",
+        amount: 3,
+        method: "lump",
+        for: [],
+        vs: ["platformType:human"],
+      },
 
-    it("handles 'for' and 'vs' modifiers independently", () => {
-      const yields = new Yields([
-        {
-          type: "yieldType:strength",
-          amount: 10,
-          method: "lump",
-          for: ["platformType:human"],
-          vs: [],
-        },
-        {
-          type: "yieldType:strength",
-          amount: 50,
-          method: "percent",
-          for: ["platformType:human"],
-          vs: [],
-        },
-        {
-          type: "yieldType:strength",
-          amount: 20,
-          method: "lump",
-          for: [],
-          vs: ["conceptType:urban"],
-        },
-      ]);
+      // Overwriting: set vs lump
+      { type: "yieldType:moves", amount: 1, method: "lump", for: [], vs: [] },
+      { type: "yieldType:moves", amount: 2, method: "set", for: [], vs: [] },
+      // Merging: lump + percent
+      { type: "yieldType:science", amount: 10, method: "lump", for: [], vs: [] },
+      { type: "yieldType:science", amount: 50, method: "percent", for: [], vs: [] },
+    ]);
 
-      const applied = yields.applyMods();
-      expect(applied.all()).toEqual([
-        {
-          type: "yieldType:strength",
-          amount: 15,
-          method: "lump",
-          for: ["platformType:human"],
-          vs: [],
-        },
-        {
-          type: "yieldType:strength",
-          amount: 20,
-          method: "lump",
-          for: [],
-          vs: ["conceptType:urban"],
-        },
-      ]);
-    });
+    // 1. No filters: only yields with no 'for' and no 'vs' should be included
+    const flattenedNoFilters = yields.flatten();
+    // Included: food(10 lump), gold(20 lump), moves(2 set -> 2 lump), science(10 lump + 50% -> 15 lump)
+    expect(flattenedNoFilters.all()).toEqual([
+      { type: "yieldType:moves", amount: 2, method: "lump", for: [], vs: [] },
+      { type: "yieldType:food", amount: 10, method: "lump", for: [], vs: [] },
+      { type: "yieldType:gold", amount: 20, method: "lump", for: [], vs: [] },
+      { type: "yieldType:science", amount: 15, method: "lump", for: [], vs: [] },
+    ]);
 
-    it("rounds results to tenth", () => {
-      const yields = new Yields([
-        {
-          type: "yieldType:strength",
-          amount: 10.11,
-          method: "lump",
-          for: [],
-          vs: [],
-        },
-        {
-          type: "yieldType:strength",
-          amount: 10.11,
-          method: "percent",
-          for: [],
-          vs: [],
-        },
-      ]);
+    // Assert orig yields object does not mutate on flatten
+    expect(yields.all()).toHaveLength(12);
 
-      const applied = yields.applyMods();
-      expect(applied.all()[0].amount).toBe(11.1);
-    });
+    // 2. Filter by yieldTypes
+    const flattenedYieldTypes = yields.flatten(["yieldType:food", "yieldType:science"]);
+    expect(flattenedYieldTypes.all()).toEqual([
+      { type: "yieldType:food", amount: 10, method: "lump", for: [], vs: [] },
+      { type: "yieldType:science", amount: 15, method: "lump", for: [], vs: [] },
+    ]);
+
+    // 3. Filter by forObjs (Potter)
+    const flattenedForPotter = yields.flatten([], [potter]);
+    // Included:
+    // moves(2), food(10), gold(20), science(15)
+    // + production(5) [conceptType:building]
+    // + food(2) [buildingCategory:growth]
+    // + gold(3) [buildingType:potter]
+    // Totals: moves: 2, food: 12, gold: 23, science: 15, production: 5
+    expect(flattenedForPotter.all()).toEqual([
+      { type: "yieldType:moves", amount: 2, method: "lump", for: [], vs: [] },
+      { type: "yieldType:food", amount: 12, method: "lump", for: [], vs: [] },
+      { type: "yieldType:gold", amount: 23, method: "lump", for: [], vs: [] },
+      { type: "yieldType:production", amount: 5, method: "lump", for: [], vs: [] },
+      { type: "yieldType:science", amount: 15, method: "lump", for: [], vs: [] },
+    ]);
+
+    // 4. Filter by forObjs (Garrison)
+    const flattenedForGarrison = yields.flatten([], [garrison]);
+    // Included:
+    // moves(2), food(10), gold(20), science(15)
+    // + production(5) [conceptType:building]
+    // NOT: food(2) [buildingCategory:growth - Garrison is buildingCategory:milLand]
+    // NOT: gold(3) [buildingType:potter]
+    expect(flattenedForGarrison.all()).toEqual([
+      { type: "yieldType:moves", amount: 2, method: "lump", for: [], vs: [] },
+      { type: "yieldType:food", amount: 10, method: "lump", for: [], vs: [] },
+      { type: "yieldType:gold", amount: 20, method: "lump", for: [], vs: [] },
+      { type: "yieldType:production", amount: 5, method: "lump", for: [], vs: [] },
+      { type: "yieldType:science", amount: 15, method: "lump", for: [], vs: [] },
+    ]);
+
+    // 5. Filter by vsObjs (Human)
+    const flattenedVsHuman = yields.flatten([], [], [human]);
+    // Included:
+    // moves(2), food(10), gold(20), science(15)
+    // + strength(1) [conceptType:platform]
+    // + strength(2) [platformCategory:human]
+    // + strength(3) [platformType:human]
+    // Total strength: 6
+    expect(flattenedVsHuman.all()).toEqual([
+      { type: "yieldType:moves", amount: 2, method: "lump", for: [], vs: [] },
+      { type: "yieldType:food", amount: 10, method: "lump", for: [], vs: [] },
+      { type: "yieldType:gold", amount: 20, method: "lump", for: [], vs: [] },
+      { type: "yieldType:strength", amount: 6, method: "lump", for: [], vs: [] },
+      { type: "yieldType:science", amount: 15, method: "lump", for: [], vs: [] },
+    ]);
+
+    // 6. Filter by both forObjs and vsObjs
+    const flattenedBoth = yields.flatten([], [potter], [human]);
+    // Included: moves(2), food(12), gold(23), science(15), production(5), strength(6)
+    expect(flattenedBoth.all()).toEqual([
+      { type: "yieldType:moves", amount: 2, method: "lump", for: [], vs: [] },
+      { type: "yieldType:food", amount: 12, method: "lump", for: [], vs: [] },
+      { type: "yieldType:gold", amount: 23, method: "lump", for: [], vs: [] },
+      { type: "yieldType:production", amount: 5, method: "lump", for: [], vs: [] },
+      { type: "yieldType:strength", amount: 6, method: "lump", for: [], vs: [] },
+      { type: "yieldType:science", amount: 15, method: "lump", for: [], vs: [] },
+    ]);
+
+    // 6. Overwriting ("set" vs "lump")
+    // Already tested in flattenedNoFilters (moves: 1 lump, 2 set -> 2 lump)
+    // Let's add more complex overwriting test
+    const overwriteYields = new Yields([
+      { type: "yieldType:food", amount: 10, method: "lump", for: [], vs: [] },
+      { type: "yieldType:food", amount: 50, method: "percent", for: [], vs: [] },
+      { type: "yieldType:food", amount: 5, method: "set", for: [], vs: [] },
+    ]);
+    const flattenedOverwrite = overwriteYields.flatten();
+    expect(flattenedOverwrite.all()).toEqual([
+      { type: "yieldType:food", amount: 5, method: "lump", for: [], vs: [] },
+    ]);
+
+    // 7. Merging ("lump" + "percent")
+    const mergeYields = new Yields([
+      { type: "yieldType:food", amount: 10, method: "lump", for: [], vs: [] },
+      { type: "yieldType:food", amount: 5, method: "lump", for: [], vs: [] },
+      { type: "yieldType:food", amount: 20, method: "percent", for: [], vs: [] },
+      { type: "yieldType:food", amount: 30, method: "percent", for: [], vs: [] },
+    ]);
+    // (10 + 5) * (100 + 20 + 30) / 100 = 15 * 1.5 = 22.5
+    const flattenedMerge = mergeYields.flatten();
+    expect(flattenedMerge.all()).toEqual([
+      { type: "yieldType:food", amount: 22.5, method: "lump", for: [], vs: [] },
+    ]);
   });
 });

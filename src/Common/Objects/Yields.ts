@@ -64,150 +64,70 @@ export class Yields {
     return this._all.slice();
   }
 
-  applyMods(): Yields {
-    // 1) Init separated objects
-    const separated = {
-      // eg {'lump': {'yieldType:strength': 12}}
-      any: {
-        lump: {},
-        percent: {},
-        set: {},
-      } as Record<YieldMethod, Record<TypeKey, number>>,
+  // Applies all "set" and "percent" yields into single "lump" output
+  // If no types are given, all types will be included
+  // If no "forObjs"/"vsObjs" are given, all "for"/"vs" yields will be dropped
+  // If no "forObjs"/"vsObjs" are given, any "for"/"vs" yields not in "forObjs"/"vsObjs" will be dropped
+  // Returns a new Yields object
+  flatten(
+    yieldTypes: TypeKey[] = [],
+    forObjs: TypeObject[] = [],
+    vsObjs: TypeObject[] = [],
+  ): Yields {
+    const lumpYields = {} as Record<TypeKey, number>;
+    const percentYields = {} as Record<TypeKey, number>;
+    const setYields = {} as Record<TypeKey, number>;
 
-      // eg {'lump': {'yieldType:strength': {'platformType:human': 12}}}
-      for: {
-        lump: {},
-        percent: {},
-        set: {},
-      } as Record<YieldMethod, Record<TypeKey, Record<ObjKey, number>>>,
-
-      // eg {'lump': {'yieldType:strength': {'platformType:human': 12}}}
-      vs: {
-        lump: {},
-        percent: {},
-        set: {},
-      } as Record<YieldMethod, Record<TypeKey, Record<ObjKey, number>>>,
-    };
-
-    // 2) Separate yields into lump/percent/set and any/for/vs
     for (const y of this._all) {
-      if (y.for.length > 0) {
-        for (const forKey of y.for) {
-          const sep = (separated.for[y.method][y.type] ??= {});
-          sep[forKey] = (sep[forKey] ?? 0) + y.amount;
-        }
+      // If YieldTypes filter was given & doesn't pass -> skip
+      if (yieldTypes.length > 0 && !this._yieldInTypes(y, yieldTypes)) continue;
+
+      // If it's only "for" something: no "for" given, or filter doesn't pass -> skip
+      if (y.for.length && (!forObjs.length || !this._yieldIsForTypes(y, forObjs))) continue;
+
+      // If it's only "vs" something: no "for" given, or filter doesn't pass -> skip
+      if (y.vs.length && (!vsObjs.length || !this._yieldIsVsTypes(y, vsObjs))) continue;
+
+      if (y.method === "lump") {
+        lumpYields[y.type] = (lumpYields[y.type] ?? 0) + y.amount;
       }
-
-      if (y.vs.length > 0) {
-        for (const vsKey of y.vs) {
-          const sep = (separated.vs[y.method][y.type] ??= {});
-          sep[vsKey] = (sep[vsKey] ?? 0) + y.amount;
-        }
+      if (y.method === "percent") {
+        percentYields[y.type] = (percentYields[y.type] ?? 0) + y.amount;
       }
-
-      if (y.for.length + y.vs.length === 0) {
-        const sep = separated.any[y.method];
-        sep[y.type] = (sep[y.type] ?? 0) + y.amount;
-      }
-    }
-
-    // 3) Init merged values
-    const values = {
-      // eg {'yieldType:strength': 12}
-      any: {} as Record<TypeKey, number>,
-
-      // eg {'yieldType:moves': {'platformType:human': 1}}
-      for: {} as Record<TypeKey, Record<ObjKey, number>>,
-
-      // eg {'yieldType:strength': {'platformType:tracked': 50}}
-      vs: {} as Record<TypeKey, Record<ObjKey, number>>,
-    };
-
-    // 4) "Set" overrides lump and percent, so add them first
-    for (const target of ["any", "for", "vs"]) {
-      const targetKey = target as "any" | "for" | "vs";
-      const separatedTarget = separated[targetKey];
-
-      for (const [yieldTypeStr, amountPerType] of Object.entries(separatedTarget.set)) {
-        const yieldTypeKey = yieldTypeStr as TypeKey;
-
-        // Dealing with any -> the amount is a number
-        if (targetKey === "any") {
-          values.any[yieldTypeKey] = amountPerType as number;
-          continue;
-        }
-
-        // Dealing with for/vs. -> add amount per TypeKey
-        const targetValues = (values[targetKey][yieldTypeKey] ??= {});
-        for (const [forKey, amount] of Object.entries(amountPerType as Record<TypeKey, number>)) {
-          targetValues[forKey as TypeKey] = amount;
-        }
+      if (y.method === "set") {
+        // "set doesn't accumulate
+        setYields[y.type] = y.amount;
       }
     }
 
-    // 5) Add Lump + Percent into the values (skip if already set)
+    const yields = [] as Yield[];
+    for (const [type, amount] of Object.entries(setYields)) {
+      // "set" overrides any lump/percent
+      delete lumpYields[type as TypeKey];
+      delete percentYields[type as TypeKey];
 
-    // 5.1) Add 'any' target first
-    for (const [yieldTypeKey, amount] of Object.entries(separated.any.lump)) {
-      // amount already in values.any[yieldTypeKey] from "set", don't overwrite it
-      if (yieldTypeKey in values.any) continue;
-
-      const multiplier = 1 + (separated.any.percent[yieldTypeKey as TypeKey] ?? 0) / 100;
-
-      values.any[yieldTypeKey as TypeKey] = roundToTenth(amount * multiplier);
-    }
-
-    // 5.2) Add 'for' and 'vs' targets next
-    for (const targetStr of ["for", "vs"]) {
-      const targetKey = targetStr as "for" | "vs";
-      const targetSeparated = separated[targetKey];
-      const targetValues = values[targetKey];
-
-      for (const [yieldTypeStr, amountPerType] of Object.entries(targetSeparated.lump)) {
-        const yieldTypeKey = yieldTypeStr as TypeKey;
-
-        for (const [typeStr, amount] of Object.entries(amountPerType)) {
-          const typeKey = typeStr as TypeKey;
-
-          // amount already in values.for[yieldTypeKey][forKey] from "set", don't overwrite it
-          if (typeKey in (targetValues[yieldTypeKey] ?? {})) continue;
-
-          const sepPercent = targetSeparated.percent[yieldTypeKey] ?? {};
-          const multiplier = 1 + (sepPercent[typeKey] ?? 0) / 100;
-
-          if (!(yieldTypeKey in targetValues)) targetValues[yieldTypeKey] = {};
-          targetValues[yieldTypeKey][typeKey] = roundToTenth(amount * multiplier);
-        }
-      }
-    }
-
-    // 6) Convert values into Yield objects
-
-    // 6.1) Add 'any' target first
-    const yields = Object.entries(values.any).map(
-      ([yieldType, amount]): Yield => ({
-        type: yieldType as TypeKey,
-        amount,
+      // add "set" as lump yield
+      yields.push({
+        type: type as TypeKey,
+        amount: roundToTenth(amount),
         method: "lump",
         for: [],
         vs: [],
-      }),
-    );
+      });
+    }
 
-    // 6.2) Add 'for' and 'vs' targets next
-    for (const target of ["for", "vs"]) {
-      const targetValues = values[target as "for" | "vs"];
-      for (const [yieldType, amountPerType] of Object.entries(targetValues)) {
-        for (const [objType, amount] of Object.entries(amountPerType)) {
-          yields.push({
-            type: yieldType as TypeKey,
-            amount,
-            method: "lump",
-            for: target === "for" ? [objType] : [],
-            vs: target === "vs" ? [objType] : [],
-          } as Yield);
-        }
-      }
+    for (const [type, amount] of Object.entries(lumpYields)) {
+      // Use percent as extra multiplier
+      const multiplier = (100 + (percentYields[type as TypeKey] ?? 0)) / 100;
+
+      // add combined "lump" and "percent" as lump yield
+      yields.push({
+        type: type as TypeKey,
+        amount: roundToTenth(amount * multiplier),
+        method: "lump",
+        for: [],
+        vs: [],
+      });
     }
 
     return new Yields(yields);
@@ -242,11 +162,11 @@ export class Yields {
   }
 
   protected _yieldIsForTypes(y: Yield, types: TypeObject[]): boolean {
-    return types.some((types) => y.for.length === 0 || objectIsAnyOfKeys(types, y.for));
+    return types.some((type) => y.for.length === 0 || objectIsAnyOfKeys(type, y.for));
   }
 
   protected _yieldIsVsTypes(y: Yield, types: TypeObject[]): boolean {
-    return types.some((types) => y.vs.length === 0 || objectIsAnyOfKeys(types, y.vs));
+    return types.some((type) => y.vs.length === 0 || objectIsAnyOfKeys(type, y.vs));
   }
 
   getLumpAmount(type: TypeKey): number {
