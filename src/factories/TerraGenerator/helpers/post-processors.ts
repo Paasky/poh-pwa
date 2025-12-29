@@ -2,11 +2,11 @@ import { getRandom } from "@/helpers/arrayTools";
 import { useObjectsStore } from "@/stores/objectStore";
 import { GenTile } from "@/factories/TerraGenerator/gen-tile";
 import { Tetris } from "@/factories/TerraGenerator/helpers/tetris";
-import { generateKey } from "@/objects/game/_GameObject";
+import { generateKey } from "@/Common/Models/_GameModel";
 import { Coords, getHexNeighborCoords, getTile } from "@/helpers/mapTools";
 import { TerraGenerator } from "@/factories/TerraGenerator/terra-generator";
 import { AcceptResult, Snake } from "@/factories/TerraGenerator/helpers/snake";
-import { River } from "@/objects/game/River";
+import { River } from "@/Common/Models/River";
 
 export const removeOrphanArea = (tile: GenTile, neighbors: GenTile[]): void => {
   if (neighbors.length === 0) return;

@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { markRaw, nextTick } from "vue";
 import pluralize from "pluralize";
 import { capitalCase } from "change-case";
-import { CategoryObject, TypeObject } from "@/types/typeObjects";
+import { CategoryObject, TypeObject } from "@/Common/Objects/TypeObject";
 import { useObjectsStore } from "@/stores/objectStore";
 import { useAudioStore } from "@/stores/audioStore";
 

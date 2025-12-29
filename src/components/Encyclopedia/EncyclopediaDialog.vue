@@ -6,10 +6,10 @@ import UiObjectChips from "@/components/Ui/UiObjectChips.vue";
 import UiTypeChip from "@/components/Ui/UiTypeChip.vue";
 import { useObjectsStore } from "@/stores/objectStore";
 import { useAudioStore } from "@/stores/audioStore";
-import { CategoryObject, TypeObject } from "@/types/typeObjects";
-import { TypeKey } from "@/types/common";
+import { CategoryObject, TypeObject } from "@/Common/Objects/TypeObject";
+import { TypeKey } from "@/Common/Objects/Common";
 import UiYields from "@/components/Ui/UiYields.vue";
-import { Yields } from "@/objects/yield";
+import { Yields } from "@/Common/Objects/Yields";
 
 const store = useEncyclopediaStore();
 const audio = useAudioStore();

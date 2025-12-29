@@ -1,7 +1,7 @@
 import { tileCenter } from "@/helpers/math";
 import { Coords, tileHeight } from "@/helpers/mapTools";
-import type { GameKey } from "@/objects/game/_GameObject";
-import type { Tile } from "@/objects/game/Tile";
+import type { GameKey } from "@/Common/Models/_GameModel";
+import type { Tile } from "@/Common/Models/Tile";
 import { Matrix, Mesh, Quaternion, Scene, TransformNode, Vector3 } from "@babylonjs/core";
 import { FeatureGroup, featureMeshMap } from "@/assets/meshes/features";
 import { buildRandomPointsInHex } from "@/helpers/hexPointSampling";

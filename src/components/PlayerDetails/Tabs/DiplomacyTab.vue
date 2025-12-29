@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import UiTable from "@/components/Ui/UiTable.vue";
-import type { Player } from "@/objects/game/Player";
+import type { Player } from "@/Common/Models/Player";
 import { includes } from "@/helpers/textTools";
 import UiTypeChip from "@/components/Ui/UiTypeChip.vue";
 import UiObjectChips from "@/components/Ui/UiObjectChips.vue";

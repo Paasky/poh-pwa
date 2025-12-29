@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { TypeObject } from "@/types/typeObjects";
-import { CatKey } from "@/types/common";
+import { TypeObject } from "@/Common/Objects/TypeObject";
+import { CatKey } from "@/Common/Objects/Common";
 import ResearchTabArrows from "./ResearchTabArrows.vue";
 import UiHeader from "@/components/Ui/UiHeader.vue";
 import UiObjectCard from "@/components/Ui/UiObjectCard.vue";

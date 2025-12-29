@@ -1,7 +1,7 @@
-import type { GameKey } from "@/objects/game/_GameObject";
+import type { GameKey } from "@/Common/Models/_GameModel";
 import type { TurnEnd } from "@/movement/UnitMovement";
-import type { UnitDesign } from "@/objects/game/UnitDesign";
-import type { TypeKey } from "@/types/common";
+import type { UnitDesign } from "@/Common/Models/UnitDesign";
+import type { TypeKey } from "@/Common/Objects/Common";
 
 const cache = new Map<string, Map<GameKey, Map<GameKey, number | TurnEnd | null>>>();
 

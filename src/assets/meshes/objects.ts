@@ -1,5 +1,5 @@
 import { Color3, Mesh, MeshBuilder, Scene, StandardMaterial, Vector3 } from "@babylonjs/core";
-import { TypeKey } from "@/types/common";
+import { TypeKey } from "@/Common/Objects/Common";
 
 const baseMeshLib = {
   // todo test these once pink boxes work

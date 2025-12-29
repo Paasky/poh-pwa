@@ -2,22 +2,22 @@
 
 import type { IMutation } from "@/Common/IMutation";
 import { DataBucket } from "@/Data/DataBucket";
-import type { CategoryObject, TypeObject } from "@/types/typeObjects";
-import type { GameKey, GameObject, IRawGameObject } from "@/objects/game/_GameObject";
+import type { CategoryObject, TypeObject } from "@/Common/Objects/TypeObject";
+import type { GameKey, GameObject, IRawGameObject } from "@/Common/Models/_GameModel";
 import type { IEvent } from "@/Common/IEvent";
 import { publishEvents } from "@/Common/EventBus";
-import type { Agenda } from "@/objects/game/Agenda";
-import type { Citizen } from "@/objects/game/Citizen";
-import type { City } from "@/objects/game/City";
-import type { Construction } from "@/objects/game/Construction";
-import type { Culture } from "@/objects/game/Culture";
-import type { Deal } from "@/objects/game/Deal";
-import type { Player } from "@/objects/game/Player";
-import type { Religion } from "@/objects/game/Religion";
-import type { River } from "@/objects/game/River";
-import type { TradeRoute } from "@/objects/game/TradeRoute";
-import type { Unit } from "@/objects/game/Unit";
-import type { UnitDesign } from "@/objects/game/UnitDesign";
+import type { Agenda } from "@/Common/Models/Agenda";
+import type { Citizen } from "@/Common/Models/Citizen";
+import type { City } from "@/Common/Models/City";
+import type { Construction } from "@/Common/Models/Construction";
+import type { Culture } from "@/Common/Models/Culture";
+import type { Deal } from "@/Common/Models/Deal";
+import type { Player } from "@/Common/Models/Player";
+import type { Religion } from "@/Common/Models/Religion";
+import type { River } from "@/Common/Models/River";
+import type { TradeRoute } from "@/Common/Models/TradeRoute";
+import type { Unit } from "@/Common/Models/Unit";
+import type { UnitDesign } from "@/Common/Models/UnitDesign";
 import { useDataBucket } from "@/Data/useDataBucket";
 
 export class DataStore {

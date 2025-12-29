@@ -1,6 +1,6 @@
-import { Player } from "@/objects/game/Player";
-import { Unit } from "@/objects/game/Unit";
-import { Tile } from "@/objects/game/Tile";
+import { Player } from "@/Common/Models/Player";
+import { Unit } from "@/Common/Models/Unit";
+import { Tile } from "@/Common/Models/Tile";
 import { IActionHandler } from "@/Simulation/Actions/IActionHandler";
 import { belongsToPlayer, hasMoves, isAlive } from "@/Simulation/Validator";
 import { IMutation } from "@/Common/IMutation";

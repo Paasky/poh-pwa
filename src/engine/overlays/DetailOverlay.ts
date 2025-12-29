@@ -1,7 +1,7 @@
 import { Scene, TransformNode } from "@babylonjs/core";
 import { AdvancedDynamicTexture, Control, StackPanel, TextBlock } from "@babylonjs/gui";
 import { BaseOverlay } from "./BaseOverlay";
-import { Tile } from "@/objects/game/Tile";
+import { Tile } from "@/Common/Models/Tile";
 import getIcon from "@/types/icons";
 import { EngineOverlaySettings } from "@/engine/EngineStyles";
 

@@ -1,20 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { GameObjAttr, GameObject } from "@/objects/game/_GameObject";
-import { type GameClass, type GameKey, type IRawGameObject, parseKey } from "@/objects/game/_keys";
-import { Agenda } from "@/objects/game/Agenda";
-import { Citizen } from "@/objects/game/Citizen";
-import { City } from "@/objects/game/City";
-import { Construction } from "@/objects/game/Construction";
-import { Culture } from "@/objects/game/Culture";
-import { Deal } from "@/objects/game/Deal";
-import { Player } from "@/objects/game/Player";
-import { River } from "@/objects/game/River";
-import { Religion } from "@/objects/game/Religion";
-import { Tile } from "@/objects/game/Tile";
-import { TradeRoute } from "@/objects/game/TradeRoute";
-import { Unit } from "@/objects/game/Unit";
-import { UnitDesign } from "@/objects/game/UnitDesign";
-import type { TypeKey } from "@/types/common";
+import type { GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
+import {
+  type GameClass,
+  type GameKey,
+  type IRawGameObject,
+  parseKey,
+} from "@/Common/Models/_GameTypes";
+import { Agenda } from "@/Common/Models/Agenda";
+import { Citizen } from "@/Common/Models/Citizen";
+import { City } from "@/Common/Models/City";
+import { Construction } from "@/Common/Models/Construction";
+import { Culture } from "@/Common/Models/Culture";
+import { Deal } from "@/Common/Models/Deal";
+import { Player } from "@/Common/Models/Player";
+import { River } from "@/Common/Models/River";
+import { Religion } from "@/Common/Models/Religion";
+import { Tile } from "@/Common/Models/Tile";
+import { TradeRoute } from "@/Common/Models/TradeRoute";
+import { Unit } from "@/Common/Models/Unit";
+import { UnitDesign } from "@/Common/Models/UnitDesign";
+import type { TypeKey } from "@/Common/Objects/Common";
 import type { DataBucket } from "@/Data/DataBucket"; // Constructor type that also exposes the static attrsConf declared on each GameObject subclass
 
 // Constructor type that also exposes the static attrsConf declared on each GameObject subclass

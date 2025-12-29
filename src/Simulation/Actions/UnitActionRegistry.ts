@@ -1,8 +1,8 @@
 import { BasicUnitAction } from "@/Simulation/Actions/Unit/BasicUnitAction";
-import { Unit } from "@/objects/game/Unit";
+import { Unit } from "@/Common/Models/Unit";
 import { Attack } from "@/Simulation/Actions/Unit/Attack";
 import { Bombard } from "@/Simulation/Actions/Unit/Bombard";
-import { Tile } from "@/objects/game/Tile";
+import { Tile } from "@/Common/Models/Tile";
 import { BuildImprovement } from "@/Simulation/Actions/Unit/BuildImprovement";
 import { DemobilizeUnit } from "@/Simulation/Actions/Unit/DemobilizeUnit";
 import { DisbandUnit } from "@/Simulation/Actions/Unit/DisbandUnit";
@@ -12,18 +12,18 @@ import { MobilizeUnit } from "@/Simulation/Actions/Unit/MobilizeUnit";
 import { MoveUnit } from "@/Simulation/Actions/Unit/MoveUnit";
 import { PillageTile } from "@/Simulation/Actions/Unit/PillageTile";
 import { RebaseUnit } from "@/Simulation/Actions/Unit/RebaseUnit";
-import { City } from "@/objects/game/City";
+import { City } from "@/Common/Models/City";
 import { ReconTile } from "@/Simulation/Actions/Unit/ReconTile";
 import { RenameUnit } from "@/Simulation/Actions/Unit/RenameUnit";
 import { SettleCity } from "@/Simulation/Actions/Unit/SettleCity";
 import { TradeAction } from "@/Simulation/Actions/Unit/TradeAction";
 import { UpgradeUnit } from "@/Simulation/Actions/Unit/UpgradeUnit";
-import { UnitDesign } from "@/objects/game/UnitDesign";
+import { UnitDesign } from "@/Common/Models/UnitDesign";
 import { IActionHandler } from "@/Simulation/Actions/IActionHandler";
 import { ActionType } from "@/Common/IAction";
-import { Player } from "@/objects/game/Player";
-import { TypeObject } from "@/types/typeObjects";
-import { GameObject } from "@/objects/game/_GameObject";
+import { Player } from "@/Common/Models/Player";
+import { TypeObject } from "@/Common/Objects/TypeObject";
+import { GameObject } from "@/Common/Models/_GameModel";
 
 export const getUnitAction = (
   actionType: ActionType,

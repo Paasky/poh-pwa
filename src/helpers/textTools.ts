@@ -1,7 +1,7 @@
 import { removeAccents } from "@urbanzoo/remove-accents";
 import indefinite from "indefinite";
 import pluralize from "pluralize";
-import { TypeObject } from "@/types/typeObjects";
+import { TypeObject } from "@/Common/Objects/TypeObject";
 
 export function includes(text: string, term: string): boolean {
   const safeTerm = removeAccents(term.trim()).toLowerCase();

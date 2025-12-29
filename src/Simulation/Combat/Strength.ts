@@ -1,8 +1,8 @@
-import { Construction } from "@/objects/game/Construction";
-import { Unit } from "@/objects/game/Unit";
-import { City } from "@/objects/game/City";
-import { TypeObject } from "@/types/typeObjects";
-import { roundToTenth } from "@/types/common";
+import { Construction } from "@/Common/Models/Construction";
+import { Unit } from "@/Common/Models/Unit";
+import { City } from "@/Common/Models/City";
+import { TypeObject } from "@/Common/Objects/TypeObject";
+import { roundToTenth } from "@/Common/Objects/Common";
 
 export const attackStrength = (
   attacker: City | Unit,

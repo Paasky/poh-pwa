@@ -1,4 +1,4 @@
-import type { GameKey, IRawGameObject } from "@/objects/game/_GameObject";
+import type { GameKey, IRawGameObject } from "@/Common/Models/_GameModel";
 import type { IMutation } from "@/Common/IMutation";
 
 export interface IEvent {

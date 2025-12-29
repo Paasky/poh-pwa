@@ -1,6 +1,6 @@
 import { PohEvent } from "@/events/_Event";
-import { Player } from "@/objects/game/Player";
-import { Tile } from "@/objects/game/Tile";
+import { Player } from "@/Common/Models/Player";
+import { Tile } from "@/Common/Models/Tile";
 
 export class AreaDiscovered extends PohEvent {
   constructor(tile: Tile, player: Player) {

@@ -1,6 +1,6 @@
 import { PohEvent } from "@/events/_Event";
-import { Culture } from "@/objects/game/Culture";
-import { TypeObject } from "@/types/typeObjects";
+import { Culture } from "@/Common/Models/Culture";
+import { TypeObject } from "@/Common/Objects/TypeObject";
 
 export class CultureCanSelect extends PohEvent {
   constructor(culture: Culture) {

@@ -1,5 +1,5 @@
-import { TypeKey } from "@/types/common";
-import { TypeClass, TypeObject } from "@/types/typeObjects";
+import { TypeKey } from "@/Common/Objects/Common";
+import { TypeClass, TypeObject } from "@/Common/Objects/TypeObject";
 import { WorldSize } from "@/factories/worldFactory";
 import { useObjectsStore } from "@/stores/objectStore";
 import { getRandom } from "@/helpers/arrayTools";
@@ -16,8 +16,8 @@ import {
   getYTypes,
   getYXTypes,
 } from "@/factories/TerraGenerator/config";
-import { Tile } from "@/objects/game/Tile";
-import { River } from "@/objects/game/River";
+import { Tile } from "@/Common/Models/Tile";
+import { River } from "@/Common/Models/River";
 
 export class TerraGenerator {
   size: WorldSize;

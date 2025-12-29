@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useMapGenStore } from "@/stores/mapGenStore";
-import { TypeObject } from "@/types/typeObjects";
+import { TypeObject } from "@/Common/Objects/TypeObject";
 
 const props = defineProps<{ variant: "strat" | "reg" | "game" }>();
 

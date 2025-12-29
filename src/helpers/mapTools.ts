@@ -1,5 +1,5 @@
-import { type Tile } from "@/objects/game/Tile";
-import { type GameKey, getKey } from "@/objects/game/_GameObject";
+import { type Tile } from "@/Common/Models/Tile";
+import { type GameKey, getKey } from "@/Common/Models/_GameModel";
 import { getRandom } from "@/helpers/arrayTools";
 import { wrapExclusive } from "@/helpers/basicMath";
 

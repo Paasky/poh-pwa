@@ -108,7 +108,7 @@ import {
   faWind,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { ObjectIcon } from "@/types/common";
+import { ObjectIcon } from "@/Common/Objects/Common";
 
 const colors = {
   default: "#f1f5f9", // slate-100

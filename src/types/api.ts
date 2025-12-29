@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { WorldState } from "@/types/common";
+import { WorldState } from "@/Common/Objects/Common";
 
 export interface StaticData {
   categories: any[];

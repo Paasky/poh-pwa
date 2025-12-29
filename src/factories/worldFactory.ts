@@ -1,14 +1,14 @@
-import { ObjKey, yearsPerTurnConfig } from "@/types/common";
+import { ObjKey, yearsPerTurnConfig } from "@/Common/Objects/Common";
 import { useObjectsStore } from "@/stores/objectStore";
 import { TerraGenerator } from "@/factories/TerraGenerator/terra-generator";
 import { shuffle, takeRandom } from "@/helpers/arrayTools";
-import { Player } from "@/objects/game/Player";
-import { generateKey } from "@/objects/game/_GameObject";
-import { Culture } from "@/objects/game/Culture";
-import { UnitDesign } from "@/objects/game/UnitDesign";
-import { Unit } from "@/objects/game/Unit";
+import { Player } from "@/Common/Models/Player";
+import { generateKey } from "@/Common/Models/_GameModel";
+import { Culture } from "@/Common/Models/Culture";
+import { UnitDesign } from "@/Common/Models/UnitDesign";
+import { Unit } from "@/Common/Models/Unit";
 import { GameData } from "@/types/api";
-import { Tile } from "@/objects/game/Tile";
+import { Tile } from "@/Common/Models/Tile";
 
 export type WorldSize = {
   name: string;

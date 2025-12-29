@@ -8,9 +8,9 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { initTestPinia, loadStaticData } from "../_setup/pinia";
 import { useMoveCostCache } from "../../src/composables/useMoveCostCache";
 import { createTestDesign } from "../_setup/gameHelpers";
-import type { TypeKey } from "../../src/types/common";
+import type { TypeKey } from "../../src/Common/Objects/Common";
 import type { TurnEnd } from "../../src/movement/UnitMovement";
-import type { GameKey } from "../../src/objects/game/_GameObject";
+import type { GameKey } from "../../src/Common/Models/_GameModel";
 
 describe("useMoveCostCache", () => {
   const { cache, getCacheKey, getMoveCost, resetCache, setMoveCost } = useMoveCostCache();

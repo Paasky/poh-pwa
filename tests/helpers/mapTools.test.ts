@@ -10,7 +10,7 @@ import {
   tileKey,
 } from "../../src/helpers/mapTools";
 import { mockRandom } from "../_setup/testHelpers";
-import { Tile } from "../../src/objects/game/Tile";
+import { Tile } from "../../src/Common/Models/Tile";
 import { initTestPinia, loadStaticData } from "../_setup/pinia";
 import { useObjectsStore } from "../../src/stores/objectStore";
 import { createTestWorld } from "../_setup/testWorld";

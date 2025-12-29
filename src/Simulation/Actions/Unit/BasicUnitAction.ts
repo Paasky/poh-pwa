@@ -1,5 +1,5 @@
-import { Player } from "@/objects/game/Player";
-import { Unit } from "@/objects/game/Unit";
+import { Player } from "@/Common/Models/Player";
+import { Unit } from "@/Common/Models/Unit";
 import { ActionType } from "@/Common/IAction";
 import { IActionHandler } from "@/Simulation/Actions/IActionHandler";
 import { belongsToPlayer } from "@/Simulation/Validator";

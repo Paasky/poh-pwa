@@ -1,9 +1,9 @@
-import { Tile } from "../../src/objects/game/Tile";
-import { GameKey, GameObject } from "../../src/objects/game/_GameObject";
-import { Player } from "../../src/objects/game/Player";
-import { Unit } from "../../src/objects/game/Unit";
-import { City } from "../../src/objects/game/City";
-import { WorldState } from "../../src/types/common";
+import { Tile } from "../../src/Common/Models/Tile";
+import { GameKey, GameObject } from "../../src/Common/Models/_GameModel";
+import { Player } from "../../src/Common/Models/Player";
+import { Unit } from "../../src/Common/Models/Unit";
+import { City } from "../../src/Common/Models/City";
+import { WorldState } from "../../src/Common/Objects/Common";
 import { useDataBucket } from "../../src/Data/useDataBucket";
 
 export const TestWorldState = {

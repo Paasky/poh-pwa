@@ -1,4 +1,4 @@
-import { Tile } from "@/objects/game/Tile";
+import { Tile } from "@/Common/Models/Tile";
 
 export class GenTile extends Tile {
   isContinentCenter = false;

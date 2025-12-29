@@ -4,9 +4,9 @@ import { useAppStore } from "@/stores/appStore";
 import { MovementManager } from "@/movement/MovementManager";
 import { UnitMovement } from "@/movement/UnitMovement";
 import { Pathfinder } from "@/movement/Pathfinder";
-import { Tile } from "@/objects/game/Tile";
+import { Tile } from "@/Common/Models/Tile";
 import { EngineAlpha, EngineLayers, EnginePathStyles } from "@/engine/EngineStyles";
-import { Unit } from "@/objects/game/Unit";
+import { Unit } from "@/Common/Models/Unit";
 import { PohEngine } from "@/engine/PohEngine";
 
 /**

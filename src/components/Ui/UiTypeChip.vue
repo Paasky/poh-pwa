@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { ObjKey, PohObject } from "@/types/common";
+import { ObjKey, PohObject } from "@/Common/Objects/Common";
 import { useObjectsStore } from "@/stores/objectStore";
-import { TypeObject } from "@/types/typeObjects";
+import { TypeObject } from "@/Common/Objects/TypeObject";
 import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
 
 const props = defineProps<{

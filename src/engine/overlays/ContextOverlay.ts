@@ -14,8 +14,8 @@ import {
 import { watchEffect } from "vue";
 import { getMapBounds } from "@/helpers/math";
 import type { Coords } from "@/helpers/mapTools";
-import { Tile } from "@/objects/game/Tile";
-import type { GameKey } from "@/objects/game/_GameObject";
+import { Tile } from "@/Common/Models/Tile";
+import type { GameKey } from "@/Common/Models/_GameModel";
 import { useSettingsStore } from "@/stores/settingsStore";
 import { useObjectsStore } from "@/stores/objectStore";
 import { BaseOverlay } from "./BaseOverlay";

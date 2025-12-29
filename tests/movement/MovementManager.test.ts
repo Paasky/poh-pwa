@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { initTestPinia, loadStaticData } from "../_setup/pinia";
 import { createTestWorld } from "../_setup/testWorld";
-import { Tile } from "../../src/objects/game/Tile";
+import { Tile } from "../../src/Common/Models/Tile";
 import { MovementManager } from "../../src/movement/MovementManager";
 import { useCurrentContext } from "../../src/composables/useCurrentContext";
 import { useAppStore } from "../../src/stores/appStore";

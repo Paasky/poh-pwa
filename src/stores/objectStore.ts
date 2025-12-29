@@ -8,7 +8,7 @@ import {
   ObjKey,
   TypeKey,
   WorldState,
-} from "@/types/common";
+} from "@/Common/Objects/Common";
 import { StaticData } from "@/types/api";
 import {
   type CategoryObject,
@@ -16,11 +16,11 @@ import {
   initTypeObject,
   type TypeClass,
   type TypeObject,
-} from "@/types/typeObjects";
-import { GameClass, GameKey, GameObject } from "@/objects/game/_GameObject";
+} from "@/Common/Objects/TypeObject";
+import { GameClass, GameKey, GameObject } from "@/Common/Models/_GameModel";
 import { withCallerContext } from "@/utils/stack";
-import { Player } from "@/objects/game/Player";
-import { Tile } from "@/objects/game/Tile";
+import { Player } from "@/Common/Models/Player";
+import { Tile } from "@/Common/Models/Tile";
 
 export const useObjectsStore = defineStore("objects", {
   state: () => ({

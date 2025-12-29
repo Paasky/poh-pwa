@@ -3,7 +3,7 @@ import UiButton from "@/components/Ui/UiButton.vue";
 import UiYields from "@/components/Ui/UiYields.vue";
 import UiTypeChip from "@/components/Ui/UiTypeChip.vue";
 import UiObjectChips from "@/components/Ui/UiObjectChips.vue";
-import { TypeObject } from "@/types/typeObjects";
+import { TypeObject } from "@/Common/Objects/TypeObject";
 
 withDefaults(
   defineProps<{

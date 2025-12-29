@@ -3,8 +3,8 @@
 // very targeted manner. This file does not require them.
 import { tileCenter, wrapExclusive } from "@/helpers/math";
 import type { Coords } from "@/helpers/mapTools";
-import { Tile } from "@/objects/game/Tile";
-import type { GameKey } from "@/objects/game/_GameObject";
+import { Tile } from "@/Common/Models/Tile";
+import type { GameKey } from "@/Common/Models/_GameModel";
 import { EngineLayers } from "@/engine/EngineStyles";
 import {
   Color3,
@@ -20,7 +20,7 @@ import {
 import { useSettingsStore } from "@/stores/settingsStore";
 import { watch } from "vue";
 import { useCurrentContext } from "@/composables/useCurrentContext";
-import type { Unit } from "@/objects/game/Unit";
+import type { Unit } from "@/Common/Models/Unit";
 import { MovementManager } from "@/movement/MovementManager";
 import type { PohEngine } from "@/engine/PohEngine";
 

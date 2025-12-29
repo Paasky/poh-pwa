@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Unit } from "@/objects/game/Unit";
+import { Unit } from "@/Common/Models/Unit";
 import { useCurrentContext } from "@/composables/useCurrentContext";
 import UiUnitIcon from "@/components/Ui/UiUnitIcon.vue";
 import UiYields from "@/components/Ui/UiYields.vue";

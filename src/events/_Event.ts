@@ -1,8 +1,8 @@
-import { Player } from "@/objects/game/Player";
-import { Tile } from "@/objects/game/Tile";
-import { TypeObject } from "@/types/typeObjects";
-import { City } from "@/objects/game/City";
-import { GameObject } from "@/objects/game/_GameObject";
+import { Player } from "@/Common/Models/Player";
+import { Tile } from "@/Common/Models/Tile";
+import { TypeObject } from "@/Common/Objects/TypeObject";
+import { City } from "@/Common/Models/City";
+import { GameObject } from "@/Common/Models/_GameModel";
 import { capitalize } from "@/helpers/textTools";
 
 export abstract class PohEvent {

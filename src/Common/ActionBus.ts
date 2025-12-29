@@ -1,5 +1,5 @@
 import { Action } from "@/Common/IAction";
-import { GameKey } from "@/objects/game/_GameObject";
+import { GameKey } from "@/Common/Models/_GameModel";
 
 const listeners = [] as ((playerKey: GameKey, action: Action) => void)[];
 

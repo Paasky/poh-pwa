@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
 import { computed } from "vue";
-import type { TypeKey } from "@/types/common";
-import type { TypeObject } from "@/types/typeObjects";
+import type { TypeKey } from "@/Common/Objects/Common";
+import type { TypeObject } from "@/Common/Objects/TypeObject";
 
 const props = defineProps<{
   title: string;

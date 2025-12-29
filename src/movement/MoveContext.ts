@@ -1,4 +1,4 @@
-import type { GameKey } from "@/objects/game/_GameObject";
+import type { GameKey } from "@/Common/Models/_GameModel";
 
 /**
  * MoveContext provides external state and policy for MovementService calculations.

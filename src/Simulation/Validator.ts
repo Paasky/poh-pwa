@@ -1,9 +1,9 @@
-import { GameKey } from "@/objects/game/_keys";
-import { Player } from "@/objects/game/Player";
-import { Unit } from "@/objects/game/Unit";
-import { Construction } from "@/objects/game/Construction";
-import { City } from "@/objects/game/City";
-import { Tile } from "@/objects/game/Tile";
+import { GameKey } from "@/Common/Models/_GameTypes";
+import { Player } from "@/Common/Models/Player";
+import { Unit } from "@/Common/Models/Unit";
+import { Construction } from "@/Common/Models/Construction";
+import { City } from "@/Common/Models/City";
+import { Tile } from "@/Common/Models/Tile";
 
 export const belongsToPlayer = (
   player: Player,

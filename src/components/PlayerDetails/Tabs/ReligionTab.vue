@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { formatYear, getYearFromTurn } from "@/types/common";
+import { formatYear, getYearFromTurn } from "@/Common/Objects/Common";
 import { ref } from "vue";
-import { Religion } from "@/objects/game/Religion";
+import { Religion } from "@/Common/Models/Religion";
 import UiCols from "@/components/Ui/UiCols.vue";
 import UiTable from "@/components/Ui/UiTable.vue";
 import { includes } from "@/helpers/textTools";

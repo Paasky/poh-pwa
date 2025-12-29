@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import UiCols from "@/components/Ui/UiCols.vue";
-import { Tile } from "@/objects/game/Tile";
+import { Tile } from "@/Common/Models/Tile";
 import { useObjectsStore } from "@/stores/objectStore";
 import { StaticData } from "@/types/api";
 import { fetchJSON, useAppStore } from "@/stores/appStore";
-import { TypeObject } from "@/types/typeObjects";
+import { TypeObject } from "@/Common/Objects/TypeObject";
 import { PohEngine } from "@/engine/PohEngine";
 import GameMenu from "@/components/GameView/GameMenu.vue";
 

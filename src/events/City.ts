@@ -1,6 +1,6 @@
 import { PohEvent } from "@/events/_Event";
-import { Player } from "@/objects/game/Player";
-import { City } from "@/objects/game/City";
+import { Player } from "@/Common/Models/Player";
+import { City } from "@/Common/Models/City";
 
 export class CityAttacked extends PohEvent {
   constructor(city: City, player: Player) {

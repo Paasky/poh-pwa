@@ -2,7 +2,7 @@
 
 import { Coords, getCoordsFromTileKey } from "@/helpers/mapTools";
 import { type EngineCoords } from "@/engine/TerrainMesh/_terrainMeshTypes";
-import { GameKey } from "@/objects/game/_GameObject";
+import { GameKey } from "@/Common/Models/_GameModel";
 import { clamp } from "@/helpers/basicMath";
 
 export * from "@/helpers/basicMath";

@@ -1,11 +1,11 @@
-import { Unit } from "@/objects/game/Unit";
-import { Tile } from "@/objects/game/Tile";
-import { roundToTenth, TypeKey } from "@/types/common";
+import { Unit } from "@/Common/Models/Unit";
+import { Tile } from "@/Common/Models/Tile";
+import { roundToTenth, TypeKey } from "@/Common/Objects/Common";
 import { MoveContext } from "./MoveContext";
 import { PathStep } from "@/movement/Pathfinder";
 import { useMoveCostCache } from "@/composables/useMoveCostCache";
 import { useObjectsStore } from "@/stores/objectStore";
-import { GameKey } from "@/objects/game/_GameObject";
+import { GameKey } from "@/Common/Models/_GameModel";
 
 /**
  * MovementService handles pathfinding cost calculations for a specific Unit.

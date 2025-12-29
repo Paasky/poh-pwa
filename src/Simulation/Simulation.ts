@@ -1,11 +1,11 @@
 import { subscribe } from "@/Common/ActionBus";
 import { Action } from "@/Common/IAction";
-import { GameKey } from "@/objects/game/_GameObject";
+import { GameKey } from "@/Common/Models/_GameModel";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { DataStore } from "@/Data/DataStore";
 import { IMutation } from "@/Common/IMutation";
-import { Player } from "@/objects/game/Player";
-import { Unit } from "@/objects/game/Unit";
+import { Player } from "@/Common/Models/Player";
+import { Unit } from "@/Common/Models/Unit";
 import { getUnitAction } from "@/Simulation/Actions/UnitActionRegistry";
 
 export class Simulation {

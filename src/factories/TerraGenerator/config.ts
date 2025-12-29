@@ -1,6 +1,6 @@
-import { TypeClass, TypeObject } from "@/types/typeObjects";
+import { TypeClass, TypeObject } from "@/Common/Objects/TypeObject";
 import { GenTile } from "@/factories/TerraGenerator/gen-tile";
-import { TypeKey } from "@/types/common";
+import { TypeKey } from "@/Common/Objects/Common";
 
 export type ContinentData = {
   type: TypeObject;

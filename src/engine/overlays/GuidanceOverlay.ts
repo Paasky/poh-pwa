@@ -1,6 +1,6 @@
 import { Matrix, Mesh, MeshBuilder, Scene, StandardMaterial, TransformNode } from "@babylonjs/core";
 import { BaseOverlay } from "./BaseOverlay";
-import { Tile } from "@/objects/game/Tile";
+import { Tile } from "@/Common/Models/Tile";
 import {
   EngineAlpha,
   EngineColors,

@@ -1,7 +1,7 @@
 import TinyQueue from "tinyqueue";
-import { Unit } from "@/objects/game/Unit";
-import { Tile } from "@/objects/game/Tile";
-import { GameKey } from "@/objects/game/_GameObject";
+import { Unit } from "@/Common/Models/Unit";
+import { Tile } from "@/Common/Models/Tile";
+import { GameKey } from "@/Common/Models/_GameModel";
 import { useObjectsStore } from "@/stores/objectStore";
 import { MoveContext } from "@/movement/MoveContext";
 import { TurnEnd } from "@/movement/UnitMovement";

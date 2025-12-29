@@ -1,6 +1,6 @@
 import { ref } from "vue";
-import { Tile } from "@/objects/game/Tile";
-import { GameObject } from "@/objects/game/_GameObject";
+import { Tile } from "@/Common/Models/Tile";
+import { GameObject } from "@/Common/Models/_GameModel";
 
 const actionMode = ref<"move" | undefined>(undefined);
 const hover = ref<Tile | undefined>(undefined);

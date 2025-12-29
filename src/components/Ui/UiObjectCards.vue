@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import UiObjectCard from "@/components/Ui/UiObjectCard.vue";
-import type { TypeObject } from "@/types/typeObjects";
+import type { TypeObject } from "@/Common/Objects/TypeObject";
 
 // noinspection JSUnusedGlobalSymbols
 withDefaults(

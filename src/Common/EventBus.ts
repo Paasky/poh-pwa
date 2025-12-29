@@ -1,5 +1,5 @@
 import type { IEvent } from "@/Common/IEvent";
-import { GameKey } from "@/objects/game/_GameObject";
+import { GameKey } from "@/Common/Models/_GameModel";
 
 const listeners = new Map<GameKey, (events: IEvent[]) => void>();
 

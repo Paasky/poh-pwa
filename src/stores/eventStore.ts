@@ -1,10 +1,10 @@
 import { defineStore } from "pinia";
 import { type EventSetting, type EventType } from "@/types/events";
-import { type Construction } from "@/objects/game/Construction";
-import { type Citizen } from "@/objects/game/Citizen";
-import { type Unit } from "@/objects/game/Unit";
+import { type Construction } from "@/Common/Models/Construction";
+import { type Citizen } from "@/Common/Models/Citizen";
+import { type Unit } from "@/Common/Models/Unit";
 import { type PohEvent } from "@/events/_Event";
-import { type TypeKey } from "@/types/common";
+import { type TypeKey } from "@/Common/Objects/Common";
 
 export const useEventStore = defineStore("events", {
   state: () => ({

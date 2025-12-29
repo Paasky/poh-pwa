@@ -18,9 +18,9 @@ import { useCitiesTabStore } from "@/components/PlayerDetails/Tabs/citiesTabStor
 import { useTradeTabStore } from "@/components/PlayerDetails/Tabs/tradeTabStore";
 import { useSettingsStore } from "@/stores/settingsStore";
 import { asyncProcess } from "@/helpers/asyncProcess";
-import { Tile } from "@/objects/game/Tile";
-import { Player } from "@/objects/game/Player";
-import { Unit } from "@/objects/game/Unit";
+import { Tile } from "@/Common/Models/Tile";
+import { Player } from "@/Common/Models/Player";
+import { Unit } from "@/Common/Models/Unit";
 import { GameManager } from "@/managers/GameManager";
 
 export async function fetchJSON<T>(url: string): Promise<T> {

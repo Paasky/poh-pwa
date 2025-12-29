@@ -1,5 +1,5 @@
-import { GameKey } from "@/objects/game/_GameObject";
-import { TypeKey } from "@/types/common";
+import { GameKey } from "@/Common/Models/_GameModel";
+import { TypeKey } from "@/Common/Objects/Common";
 
 export type ActionType =
   // Units

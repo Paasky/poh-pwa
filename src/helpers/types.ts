@@ -1,5 +1,5 @@
-import { TypeObject } from "@/types/typeObjects";
-import { TypeKey } from "@/types/common";
+import { TypeObject } from "@/Common/Objects/TypeObject";
+import { TypeKey } from "@/Common/Objects/Common";
 import { useObjectsStore } from "@/stores/objectStore";
 
 export function typeTimeline(type: TypeObject): TypeObject[] {

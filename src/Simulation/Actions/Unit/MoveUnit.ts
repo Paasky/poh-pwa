@@ -1,7 +1,7 @@
 import { IActionHandler } from "@/Simulation/Actions/IActionHandler";
-import { Player } from "@/objects/game/Player";
-import { Tile } from "@/objects/game/Tile";
-import { Unit } from "@/objects/game/Unit";
+import { Player } from "@/Common/Models/Player";
+import { Tile } from "@/Common/Models/Tile";
+import { Unit } from "@/Common/Models/Unit";
 import { IMutation } from "@/Common/IMutation";
 import { Pathfinder } from "@/movement/Pathfinder";
 import { UnitMovement } from "@/movement/UnitMovement";

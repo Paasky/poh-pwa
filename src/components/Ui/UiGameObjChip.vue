@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { computed } from "vue";
-import { GameObject } from "@/objects/game/_GameObject";
+import { GameObject } from "@/Common/Models/_GameModel";
 import { useCurrentContext } from "@/composables/useCurrentContext";
 
 const props = defineProps<{ obj: GameObject; size?: string }>();

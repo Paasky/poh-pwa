@@ -2,9 +2,9 @@
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
 import { useObjectsStore } from "@/stores/objectStore";
-import { Religion } from "@/objects/game/Religion";
-import type { CatKey } from "@/types/common";
-import { generateKey } from "@/objects/game/_GameObject";
+import { Religion } from "@/Common/Models/Religion";
+import type { CatKey } from "@/Common/Objects/Common";
+import { generateKey } from "@/Common/Models/_GameModel";
 
 export const useReligionTabStore = defineStore("religionTabStore", () => {
   const objStore = useObjectsStore();

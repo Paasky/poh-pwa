@@ -1,6 +1,6 @@
 import { TerraGenerator } from "@/factories/TerraGenerator/terra-generator";
 import { getRandom, takeRandom } from "@/helpers/arrayTools";
-import { Tile } from "@/objects/game/Tile";
+import { Tile } from "@/Common/Models/Tile";
 import {
   makeIsland,
   mountainRange,

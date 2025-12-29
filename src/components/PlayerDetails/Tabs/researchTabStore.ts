@@ -2,7 +2,7 @@
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
 import { useObjectsStore } from "@/stores/objectStore";
-import type { TypeObject } from "@/types/typeObjects";
+import type { TypeObject } from "@/Common/Objects/TypeObject";
 
 export const useResearchTabStore = defineStore("researchTabStore", () => {
   const objStore = useObjectsStore();

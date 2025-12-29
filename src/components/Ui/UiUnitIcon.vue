@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { Unit } from "@/objects/game/Unit";
-import { UnitDesign } from "@/objects/game/UnitDesign";
+import { Unit } from "@/Common/Models/Unit";
+import { UnitDesign } from "@/Common/Models/UnitDesign";
 
 const props = withDefaults(
   defineProps<{

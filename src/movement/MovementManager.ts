@@ -1,5 +1,5 @@
-import { Unit } from "@/objects/game/Unit";
-import { Tile } from "@/objects/game/Tile";
+import { Unit } from "@/Common/Models/Unit";
+import { Tile } from "@/Common/Models/Tile";
 import { UnitMovement } from "@/movement/UnitMovement";
 import { Pathfinder, PathStep } from "@/movement/Pathfinder";
 import { useCurrentContext } from "@/composables/useCurrentContext";

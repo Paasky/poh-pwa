@@ -1,7 +1,7 @@
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
 import { useObjectsStore } from "@/stores/objectStore";
-import type { City } from "@/objects/game/City";
+import type { City } from "@/Common/Models/City";
 
 export const useEconomyTabStore = defineStore("economyTabStore", () => {
   const objStore = useObjectsStore();

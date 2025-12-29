@@ -1,7 +1,7 @@
-import { UnitDesign } from "../../src/objects/game/UnitDesign";
-import { initTypeObject } from "../../src/types/typeObjects";
-import { GameKey } from "../../src/objects/game/_GameObject";
-import { Tile } from "../../src/objects/game/Tile";
+import { UnitDesign } from "../../src/Common/Models/UnitDesign";
+import { initTypeObject } from "../../src/Common/Objects/TypeObject";
+import { GameKey } from "../../src/Common/Models/_GameModel";
+import { Tile } from "../../src/Common/Models/Tile";
 import { PathStep } from "../../src/movement/Pathfinder";
 import { MoveContext } from "../../src/movement/MoveContext";
 

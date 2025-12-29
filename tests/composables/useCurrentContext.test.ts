@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { initTestPinia, loadStaticData } from "../_setup/pinia";
 import { useCurrentContext } from "../../src/composables/useCurrentContext";
 import { createTestWorld } from "../_setup/testWorld";
-import { Tile } from "../../src/objects/game/Tile";
+import { Tile } from "../../src/Common/Models/Tile";
 
 describe("useCurrentContext", () => {
   let world: ReturnType<typeof createTestWorld>;

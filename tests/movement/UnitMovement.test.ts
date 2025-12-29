@@ -2,15 +2,15 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { initTestPinia, loadStaticData } from "../_setup/pinia";
 import { createTestWorld } from "../_setup/testWorld";
 import { createMovementContext, createPathStep } from "../_setup/gameHelpers";
-import { Tile } from "../../src/objects/game/Tile";
-import { Unit } from "../../src/objects/game/Unit";
+import { Tile } from "../../src/Common/Models/Tile";
+import { Unit } from "../../src/Common/Models/Unit";
 import { useObjectsStore } from "../../src/stores/objectStore";
-import { initTypeObject } from "../../src/types/typeObjects";
+import { initTypeObject } from "../../src/Common/Objects/TypeObject";
 import { useMoveCostCache } from "../../src/composables/useMoveCostCache";
-import { UnitDesign } from "../../src/objects/game/UnitDesign";
-import { Construction } from "../../src/objects/game/Construction";
-import { GameKey } from "../../src/objects/game/_GameObject";
-import { TypeKey } from "../../src/types/common";
+import { UnitDesign } from "../../src/Common/Models/UnitDesign";
+import { Construction } from "../../src/Common/Models/Construction";
+import { GameKey } from "../../src/Common/Models/_GameModel";
+import { TypeKey } from "../../src/Common/Objects/Common";
 
 describe("UnitMovement", () => {
   let world: ReturnType<typeof createTestWorld>;

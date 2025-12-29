@@ -2,8 +2,8 @@ import { GameData } from "@/types/api";
 import { useObjectsStore } from "@/stores/objectStore";
 import { useEventStore } from "@/stores/eventStore";
 import { getRandom } from "@/helpers/arrayTools";
-import { Construction } from "@/objects/game/Construction";
-import { Player } from "@/objects/game/Player";
+import { Construction } from "@/Common/Models/Construction";
+import { Player } from "@/Common/Models/Player";
 import { asyncProcess } from "@/helpers/asyncProcess";
 
 export class GameManager {

@@ -6,8 +6,8 @@ import {
   TransformNode,
   Vector3,
 } from "@babylonjs/core";
-import { Tile } from "@/objects/game/Tile";
-import { GameKey } from "@/objects/game/_GameObject";
+import { Tile } from "@/Common/Models/Tile";
+import { GameKey } from "@/Common/Models/_GameModel";
 import { Coords } from "@/helpers/mapTools";
 import { tileCenter } from "@/helpers/math";
 import { EngineAlpha, EngineColors, EngineLayers, toColor3 } from "@/engine/EngineStyles";

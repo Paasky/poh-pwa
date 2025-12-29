@@ -14,7 +14,7 @@ import GameMenu from "@/components/GameView/GameMenu.vue";
 import UiUnitCard from "@/components/Ui/UiUnitCard.vue";
 import { useMovementInteraction } from "@/composables/useMovementInteraction";
 import { useCurrentContext } from "@/composables/useCurrentContext";
-import { Unit } from "@/objects/game/Unit";
+import { Unit } from "@/Common/Models/Unit";
 
 const app = useAppStore();
 const context = useCurrentContext();

@@ -1,6 +1,6 @@
 import { PohEvent } from "@/events/_Event";
-import { Player } from "@/objects/game/Player";
-import { Deal } from "@/objects/game/Deal";
+import { Player } from "@/Common/Models/Player";
+import { Deal } from "@/Common/Models/Deal";
 
 export class DealAccepted extends PohEvent {
   subject: Deal;

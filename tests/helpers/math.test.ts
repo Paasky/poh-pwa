@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import * as MathHelpers from "../../src/helpers/math";
 import { wrapInclusive } from "../../src/helpers/math";
 import { expectFloatsToBeClose } from "../_setup/testHelpers";
-import { Tile } from "../../src/objects/game/Tile";
+import { Tile } from "../../src/Common/Models/Tile";
 
 const {
   avg,

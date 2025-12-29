@@ -5,7 +5,7 @@ import { useObjectsStore } from "@/stores/objectStore";
 import { initTestPinia, loadStaticData } from "../_setup/pinia";
 import { createTestWorld } from "../_setup/testWorld";
 import { createMovementContext, createPathStep } from "../_setup/gameHelpers";
-import { GameKey } from "../../src/objects/game/_GameObject";
+import { GameKey } from "../../src/Common/Models/_GameModel";
 import { initTypeObject } from "@/types/typeObjects";
 import { useMoveCostCache } from "@/composables/useMoveCostCache";
 import { Pathfinder } from "../../src/movement/Pathfinder";

@@ -1,7 +1,7 @@
 import { TerraGenerator } from "@/factories/TerraGenerator/terra-generator";
-import { TypeClass } from "@/types/typeObjects";
-import { TypeKey } from "@/types/common";
-import { Tile } from "@/objects/game/Tile";
+import { TypeClass } from "@/Common/Objects/TypeObject";
+import { TypeKey } from "@/Common/Objects/Common";
+import { Tile } from "@/Common/Models/Tile";
 import { getRandom, takeRandom } from "@/helpers/arrayTools";
 import { removeOrphanArea } from "@/factories/TerraGenerator/helpers/post-processors";
 import { GenTile } from "@/factories/TerraGenerator/gen-tile";

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import UiTypeChip from "@/components/Ui/UiTypeChip.vue";
 import UiYields from "@/components/Ui/UiYields.vue";
-import type { Unit } from "@/objects/game/Unit";
-import type { UnitDesign } from "@/objects/game/UnitDesign";
+import type { Unit } from "@/Common/Models/Unit";
+import type { UnitDesign } from "@/Common/Models/UnitDesign";
 import UiYield from "@/components/Ui/UiYield.vue";
 import UiTable from "@/components/Ui/UiTable.vue";
 import { includes } from "@/helpers/textTools";

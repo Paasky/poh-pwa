@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import UiGrid from "@/components/Ui/UiGrid.vue";
 import UiObjectCards from "@/components/Ui/UiObjectCards.vue";
-import { TypeObject } from "@/types/typeObjects";
+import { TypeObject } from "@/Common/Objects/TypeObject";
 import UiCols from "@/components/Ui/UiCols.vue";
 import { useCultureTabStore } from "@/components/PlayerDetails/Tabs/cultureTabStore";
 import { CatData } from "@/stores/objectStore";

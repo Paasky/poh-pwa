@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useObjectsStore } from "@/stores/objectStore";
-import { TypeKey } from "@/types/common";
+import { TypeKey } from "@/Common/Objects/Common";
 
 const props = defineProps<{
   strokeColorRgb: string;

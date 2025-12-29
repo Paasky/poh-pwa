@@ -1,8 +1,8 @@
-import { TypeObject } from "@/types/typeObjects";
+import { TypeObject } from "@/Common/Objects/TypeObject";
 import { useObjectsStore } from "@/stores/objectStore";
-import { UnitDesign } from "@/objects/game/UnitDesign";
-import { Player } from "@/objects/game/Player";
-import { generateKey } from "@/objects/game/_GameObject";
+import { UnitDesign } from "@/Common/Models/UnitDesign";
+import { Player } from "@/Common/Models/Player";
+import { generateKey } from "@/Common/Models/_GameModel";
 
 type UnitDesignPrototype = {
   player?: unknown;

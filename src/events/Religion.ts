@@ -1,6 +1,6 @@
 import { PohEvent } from "@/events/_Event";
-import { Religion } from "@/objects/game/Religion";
-import { TypeObject } from "@/types/typeObjects";
+import { Religion } from "@/Common/Models/Religion";
+import { TypeObject } from "@/Common/Objects/TypeObject";
 
 export class ReligionCanSelect extends PohEvent {
   constructor(religion: Religion) {

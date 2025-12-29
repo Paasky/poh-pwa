@@ -1,7 +1,7 @@
 import { TerraGenerator } from "@/factories/TerraGenerator/terra-generator";
 import { getRandom, shuffle } from "@/helpers/arrayTools";
 import { GenTile } from "@/factories/TerraGenerator/gen-tile";
-import { GameKey } from "@/objects/game/_GameObject";
+import { GameKey } from "@/Common/Models/_GameModel";
 import {
   makeIsland,
   makeRiver,
@@ -10,8 +10,8 @@ import {
   spreadSalt,
 } from "@/factories/TerraGenerator/helpers/post-processors";
 import { getNeighborCoords } from "@/helpers/mapTools";
-import { TypeKey } from "@/types/common";
-import { River } from "@/objects/game/River";
+import { TypeKey } from "@/Common/Objects/Common";
+import { River } from "@/Common/Models/River";
 
 export class GameLevel {
   gen: TerraGenerator;

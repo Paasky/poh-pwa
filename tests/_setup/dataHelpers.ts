@@ -1,6 +1,6 @@
 import staticData from "../../public/staticData.json";
-import { GameKey, IRawGameObject } from "../../src/objects/game/_keys";
-import { WorldState } from "../../src/types/common";
+import { GameKey, IRawGameObject } from "../../src/Common/Models/_GameTypes";
+import { WorldState } from "../../src/Common/Objects/Common";
 import { setDataBucket } from "../../src/Data/useDataBucket";
 import { DataBucket, RawStaticData } from "../../src/Data/DataBucket";
 import { TestWorldState } from "./testWorld";

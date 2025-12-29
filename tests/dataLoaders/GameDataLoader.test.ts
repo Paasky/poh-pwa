@@ -9,9 +9,9 @@ import {
 } from "../_setup/dataHelpers";
 import { tileKey } from "../../src/helpers/mapTools";
 import { destroyDataBucket, useDataBucket } from "../../src/Data/useDataBucket";
-import { Tile } from "../../src/objects/game/Tile";
-import { City } from "../../src/objects/game/City";
-import { Unit } from "../../src/objects/game/Unit";
+import { Tile } from "../../src/Common/Models/Tile";
+import { City } from "../../src/Common/Models/City";
+import { Unit } from "../../src/Common/Models/Unit";
 
 describe("GameDataLoader", () => {
   beforeEach(() => {

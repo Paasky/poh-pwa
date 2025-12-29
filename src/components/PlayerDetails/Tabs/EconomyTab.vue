@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import type { City } from "@/objects/game/City";
-import type { Citizen } from "@/objects/game/Citizen";
+import type { City } from "@/Common/Models/City";
+import type { Citizen } from "@/Common/Models/Citizen";
 import { useEconomyTabStore } from "@/components/PlayerDetails/Tabs/economyTabStore";
 
 const store = useEconomyTabStore();

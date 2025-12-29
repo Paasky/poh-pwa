@@ -1,10 +1,10 @@
-import { Player } from "@/objects/game/Player";
-import { Unit } from "@/objects/game/Unit";
+import { Player } from "@/Common/Models/Player";
+import { Unit } from "@/Common/Models/Unit";
 import { IActionHandler } from "@/Simulation/Actions/IActionHandler";
 import { belongsToPlayer, hasMoves, isAlive } from "@/Simulation/Validator";
 import { IMutation } from "@/Common/IMutation";
-import { TypeObject } from "@/types/typeObjects";
-import { GameObject } from "@/objects/game/_GameObject";
+import { TypeObject } from "@/Common/Objects/TypeObject";
+import { GameObject } from "@/Common/Models/_GameModel";
 
 export class UnitMission implements IActionHandler {
   constructor(

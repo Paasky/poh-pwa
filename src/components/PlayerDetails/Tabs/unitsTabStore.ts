@@ -2,8 +2,8 @@
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
 import { useObjectsStore } from "@/stores/objectStore";
-import type { Unit } from "@/objects/game/Unit";
-import type { UnitDesign } from "@/objects/game/UnitDesign";
+import type { Unit } from "@/Common/Models/Unit";
+import type { UnitDesign } from "@/Common/Models/UnitDesign";
 
 export const useUnitsTabStore = defineStore("unitsTabStore", () => {
   const objStore = useObjectsStore();

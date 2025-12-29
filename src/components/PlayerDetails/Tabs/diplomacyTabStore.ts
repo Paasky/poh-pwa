@@ -2,9 +2,9 @@
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
 import { useObjectsStore } from "@/stores/objectStore";
-import type { Player } from "@/objects/game/Player";
-import { TypeKey } from "@/types/common";
-import { TypeObject } from "@/types/typeObjects";
+import type { Player } from "@/Common/Models/Player";
+import { TypeKey } from "@/Common/Objects/Common";
+import { TypeObject } from "@/Common/Objects/TypeObject";
 import { typeTimeline } from "@/helpers/types";
 import { TableColumn } from "@/types/uiComponents";
 

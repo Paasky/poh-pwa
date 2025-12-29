@@ -1,6 +1,6 @@
 // noinspection JSUnusedGlobalSymbols
 
-import type { CatKey, TypeKey, WorldState } from "@/types/common";
+import type { CatKey, TypeKey, WorldState } from "@/Common/Objects/Common";
 import {
   type CategoryClass,
   type CategoryObject,
@@ -8,10 +8,10 @@ import {
   initTypeObject,
   type TypeClass,
   type TypeObject,
-} from "@/types/typeObjects";
-import type { GameClass, GameKey, GameObject, IRawGameObject } from "@/objects/game/_GameObject";
+} from "@/Common/Objects/TypeObject";
+import type { GameClass, GameKey, GameObject, IRawGameObject } from "@/Common/Models/_GameModel";
 import { GameDataLoader } from "@/Data/GameDataLoader";
-import type { Tile } from "@/objects/game/Tile";
+import type { Tile } from "@/Common/Models/Tile";
 
 // todo create a IRawType & IRawCategory
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

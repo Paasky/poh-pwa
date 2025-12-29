@@ -1,11 +1,11 @@
 import { useObjectsStore } from "@/stores/objectStore";
-import { GameObject, generateKey } from "@/objects/game/_GameObject";
-import { City } from "@/objects/game/City";
-import { Tile } from "@/objects/game/Tile";
-import { Citizen } from "@/objects/game/Citizen";
-import type { Unit } from "@/objects/game/Unit";
-import { Construction } from "@/objects/game/Construction";
-import { Player } from "@/objects/game/Player";
+import { GameObject, generateKey } from "@/Common/Models/_GameModel";
+import { City } from "@/Common/Models/City";
+import { Tile } from "@/Common/Models/Tile";
+import { Citizen } from "@/Common/Models/Citizen";
+import type { Unit } from "@/Common/Models/Unit";
+import { Construction } from "@/Common/Models/Construction";
+import { Player } from "@/Common/Models/Player";
 
 export function cityTestData(): void {
   const objStore = useObjectsStore();

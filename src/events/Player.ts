@@ -1,5 +1,5 @@
 import { PohEvent } from "@/events/_Event";
-import { Player } from "@/objects/game/Player";
+import { Player } from "@/Common/Models/Player";
 
 export class PlayerDestroyed extends PohEvent {
   constructor(deadPlayer: Player, player: Player) {

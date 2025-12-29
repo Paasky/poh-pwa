@@ -1,10 +1,10 @@
-import { Player } from "@/objects/game/Player";
-import { Unit } from "@/objects/game/Unit";
+import { Player } from "@/Common/Models/Player";
+import { Unit } from "@/Common/Models/Unit";
 import { IActionHandler } from "@/Simulation/Actions/IActionHandler";
 import { isValidCombatTarget } from "@/Simulation/Validator";
 import { IMutation } from "@/Common/IMutation";
-import { Tile } from "@/objects/game/Tile";
-import { City } from "@/objects/game/City";
+import { Tile } from "@/Common/Models/Tile";
+import { City } from "@/Common/Models/City";
 
 export class Attack implements IActionHandler {
   constructor(

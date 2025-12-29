@@ -2,7 +2,7 @@
 import { useCurrentContext } from "@/composables/useCurrentContext";
 import UiTypeChip from "@/components/Ui/UiTypeChip.vue";
 import { useObjectsStore } from "@/stores/objectStore";
-import { Tile } from "@/objects/game/Tile";
+import { Tile } from "@/Common/Models/Tile";
 import UiGameObjChip from "@/components/Ui/UiGameObjChip.vue";
 
 const hoveredTile = useCurrentContext().hover as unknown as Tile;

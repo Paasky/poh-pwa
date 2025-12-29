@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import UiObjectCards from "@/components/Ui/UiObjectCards.vue";
-import { Religion } from "@/objects/game/Religion";
-import { CatKey } from "@/types/common";
-import { CategoryObject, TypeObject } from "@/types/typeObjects";
+import { Religion } from "@/Common/Models/Religion";
+import { CatKey } from "@/Common/Objects/Common";
+import { CategoryObject, TypeObject } from "@/Common/Objects/TypeObject";
 import { useObjectsStore } from "@/stores/objectStore";
 
 const props = defineProps<{

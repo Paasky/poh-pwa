@@ -1,9 +1,9 @@
-import { type Construction } from "@/objects/game/Construction";
+import { type Construction } from "@/Common/Models/Construction";
 import { PohEvent } from "@/events/_Event";
-import { TypeObject } from "@/types/typeObjects";
-import { City } from "@/objects/game/City";
-import { Player } from "@/objects/game/Player";
-import { Tile } from "@/objects/game/Tile";
+import { TypeObject } from "@/Common/Objects/TypeObject";
+import { City } from "@/Common/Models/City";
+import { Player } from "@/Common/Models/Player";
+import { Tile } from "@/Common/Models/Tile";
 import { typeObjWithArticle } from "@/helpers/textTools";
 
 export class ConstructionAbandoned extends PohEvent {

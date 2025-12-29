@@ -7,7 +7,7 @@ import {
   Vector3,
 } from "@babylonjs/core";
 import { BaseOverlay } from "./BaseOverlay";
-import { Tile } from "@/objects/game/Tile";
+import { Tile } from "@/Common/Models/Tile";
 import { EngineLayers, EngineOverlayColors, EngineOverlaySettings } from "@/engine/EngineStyles";
 import { Coords } from "@/helpers/mapTools";
 import { getMapBounds } from "@/helpers/math";
