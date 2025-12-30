@@ -13,7 +13,7 @@ import { type Tile } from "@/Common/Models/Tile";
 import { useEventStore } from "@/stores/eventStore";
 import { UnitCreated, UnitHealed, UnitLost } from "@/events/Unit";
 import { getCoordsFromTileKey, getHexNeighborCoords, tileKey } from "@/helpers/mapTools";
-import { UnitMovement } from "@/movement/UnitMovement";
+import { UnitMovement } from "@/Simulation/Movement/UnitMovement";
 import { ActionType } from "@/Common/IAction";
 
 // mercenary: +10% strength, +50% upkeep, 1/city/t;

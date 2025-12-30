@@ -23,7 +23,7 @@ import type { GameKey } from "@/Common/Models/_GameModel";
 import { Coords, getCoordsFromTileKey } from "@/helpers/mapTools";
 import { EngineCoords } from "@/engine/TerrainMesh/_terrainMeshTypes";
 import { useCurrentContext } from "@/composables/useCurrentContext";
-import { Pathfinder } from "@/movement/Pathfinder";
+import { Pathfinder } from "@/Simulation/Movement/Pathfinder";
 import { useSettingsStore } from "@/stores/settingsStore";
 import { watch } from "vue";
 import { AdvancedDynamicTexture } from "@babylonjs/gui";

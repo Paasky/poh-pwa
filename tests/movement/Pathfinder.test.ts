@@ -8,7 +8,7 @@ import { createMovementContext, createPathStep } from "../_setup/gameHelpers";
 import { GameKey } from "../../src/Common/Models/_GameModel";
 import { initTypeObject } from "@/types/typeObjects";
 import { useMoveCostCache } from "@/composables/useMoveCostCache";
-import { Pathfinder } from "../../src/movement/Pathfinder";
+import { Pathfinder } from "../../src/Simulation/Movement/Pathfinder";
 
 describe("Pathfinder", () => {
   let pathfinder: Pathfinder;

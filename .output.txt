@@ -1,0 +1,211 @@
+        "equipmentType:bombard",
+        "equipmentType:cannon",
+        "equipmentType:howitzer",
+        "equipmentType:rocketArtillery",
+        "equipmentType:mLRS",
+        "equipmentType:droneSwarm",
+        "equipmentType:bomb",
+        "equipmentType:guidedBomb",
+        "equipmentType:homingBomb",
+        "platformType:chariot",
+        "platformType:horse",
+        "platformType:camel",
+        "platformType:elephant",
+        "platformType:truck",
+        "platformType:tracked"
+      ],
+      "requires": [
+        [
+          "conceptType:city",
+          "conceptType:building",
+          "conceptType:nationalWonder",
+--
+      "upgradesTo": ["equipmentType:bombard"],
+      "upgradesFrom": ["equipmentType:catapult"],
+      "specials": [
+        "specialType:cannotKillLandUnits",
+        "specialType:damagesBuildings",
+        "specialType:damagesImprovements",
+        "specialType:canCarryStockpile"
+      ],
+      "names": {
+        "platformType:carriage": "Trebuchet",
+        "platformType:heavyClinker": "Heavy Galleass"
+      },
+      "image": "\/media\/images\/equipmentType\/trebuchet.jpg",
+      "audio": [],
+      "requires": ["technologyType:castles"]
+    },
+    {
+      "key": "equipmentType:bombard",
+      "name": "Bombard",
+      "concept": "conceptType:equipment",
+      "description": "Bombards were early large-caliber gunpowder cannon for sieges during the late medieval and early Renaissance periods. They used wrought iron staves bound by hoops or cast bronze barrels, firing spherical stone shot. Rates of fire were slow due to heavy charges and delicate barrels. The Ottomans employed giant bombards at the siege of Constantinople in 1453, breaching sections of the Theodosian Walls. French forces in the Italian Wars combined smaller bronze bombards with field artillery to reduce fortresses. Transport required oxen, sledges, and elaborate carpentry. Trunnions, lighter metal, and iron cannonballs later enabled more manageable guns. Bombards introduced explosive propellant artillery to European siegecraft.",
+      "category": "equipmentCategory:siege",
+      "yields": [
+        {
+          "type": "yieldType:productionCost",
+          "amount": 130
+        },
+        {
+          "type": "yieldType:productionCost",
+          "amount": 10,
+          "method": "percent"
+        },
+        {
+          "type": "yieldType:strength",
+          "amount": 18
+        },
+        {
+          "type": "yieldType:range",
+--
+      "upgradesFrom": ["equipmentType:bombard"],
+      "specials": [
+        "specialType:cannotKillLandUnits",
+        "specialType:damagesBuildings",
+        "specialType:damagesImprovements",
+        "specialType:canCarryStockpile"
+      ],
+      "names": {
+        "platformType:carriage": "Cannon",
+        "platformType:heavyCarvel": "Ship-of-the-Line",
+        "platformType:heavySteamer": "Ironclad"
+      },
+      "image": "\/media\/images\/equipmentType\/cannon.jpg",
+      "audio": [],
+      "requires": ["technologyType:steelCasting"]
+    },
+    {
+      "key": "equipmentType:howitzer",
+      "name": "Howitzer",
+      "concept": "conceptType:equipment",
+      "description": "The howitzer is a high-angle artillery piece designed for indirect fire into entrenchments and behind cover. In the late nineteenth century, industrialized armies adopted steel construction, recoil systems, and separate-loading ammunition with variable propellant charges, enabling flexible trajectories. The Krupp 15 cm sFH 93 (1893) and \u0160koda 10 cm M.99 (1899) became standard field and fortress weapons across Europe. Howitzers combined portability with curved fire that guns could not provide, making them central in sieges and positional warfare. During World War I they dominated counter-battery tasks and trench reduction using high explosive and shrapnel. Interwar developments refined carriages, shields, and limbers for motor traction. The type persisted into the twentieth century with split trails, faster rates of fire, and improved fuzes, securing a lasting role in combined-arms doctrine.",
+--
+        "equipmentType:bombard",
+        "equipmentType:cannon",
+        "equipmentType:howitzer",
+        "equipmentType:rocketArtillery",
+        "equipmentType:mLRS",
+        "equipmentType:droneSwarm",
+        "equipmentType:bomb",
+        "equipmentType:guidedBomb",
+        "equipmentType:homingBomb",
+        "platformType:carriage",
+        "platformType:dirigible",
+        "platformType:monocoque",
+        "platformType:supersonic",
+        "platformType:superagile",
+        "platformType:sealth",
+        "platformType:mRBM",
+        "platformType:iCBM"
+      ]
+    },
+    {
+      "key": "specialType:canEnterIce",
+--
+        "equipmentType:bombard",
+        "equipmentType:cannon",
+        "equipmentType:howitzer",
+        "equipmentType:rocketArtillery",
+        "equipmentType:mLRS",
+        "equipmentType:droneSwarm",
+        "equipmentType:bomb",
+        "equipmentType:guidedBomb",
+        "equipmentType:homingBomb"
+      ]
+    },
+    {
+      "key": "specialType:cannotTradeNonAllies",
+      "name": "Cannot trade non-allies",
+      "concept": "conceptType:special",
+      "description": "",
+      "relatesTo": ["policyType:isolationist"]
+    },
+    {
+      "key": "specialType:chooseFreeTechnology",
+      "name": "Choose Free Technology",
+--
+        "equipmentType:bombard",
+        "equipmentType:cannon",
+        "equipmentType:howitzer",
+        "equipmentType:rocketArtillery",
+        "equipmentType:mLRS",
+        "equipmentType:droneSwarm",
+        "equipmentType:bomb",
+        "equipmentType:guidedBomb",
+        "equipmentType:homingBomb"
+      ]
+    },
+    {
+      "key": "specialType:damagesImprovements",
+      "name": "Damages Improvements",
+      "concept": "conceptType:special",
+      "description": "",
+      "relatesTo": [
+        "equipmentType:catapult",
+        "equipmentType:trebuchet",
+        "equipmentType:bombard",
+        "equipmentType:cannon",
+        "equipmentType:howitzer",
+        "equipmentType:rocketArtillery",
+        "equipmentType:mLRS",
+        "equipmentType:droneSwarm",
+        "equipmentType:bomb",
+        "equipmentType:guidedBomb",
+        "equipmentType:homingBomb"
+      ]
+    },
+    {
+      "key": "specialType:distanceFromCapital",
+      "name": "Distance from Capital",
+      "concept": "conceptType:special",
+      "description": "",
+      "relatesTo": ["heritageType:settledI"]
+    },
+    {
+      "key": "specialType:elections",
+      "name": "Elections",
+--
+        "equipmentType:bombard",
+        "technologyType:militaryDiscipline",
+        "technologyType:civilService",
+        "worldWonderType:orbansFoundry"
+      ],
+      "yields": [
+        {
+          "type": "yieldType:scienceCost",
+          "amount": 240
+        }
+      ],
+      "image": "\/media\/images\/technologyType\/gunpowder.jpg",
+      "requires": ["technologyType:optics", "technologyType:buttress"]
+    },
+    {
+      "key": "technologyType:fundamentalism",
+      "name": "Fundamentalism",
+      "concept": "conceptType:technology",
+      "description": "Fundamentalism in early modern Europe described strict adherence to religious doctrine that directed public and private life. Reformers and magistrates sought uniform belief as a foundation for order. Geneva under John Calvin enforced discipline through consistory courts. The English and Scottish Reformations produced zealous movements that shaped policy and warfare. Puritan leaders built governance in Massachusetts Bay around covenant theology. Catholic monarchies sponsored the Counter-Reformation, using councils, missions, and inquisitorial courts to police doctrine. These regimes legislated worship, education, and morals. Confessional rigidity influenced diplomacy and civil conflict from the French Wars of Religion to the Thirty Years\u2019 War.",
+      "quote": {
+        "text": "One faith, one law, one king.",
+--
+        "equipmentType:bombard",
+        "equipmentType:cannon",
+        "worldWonderType:orbansFoundry"
+      ]
+    },
+    {
+      "key": "equipmentCategory:artillery",
+      "concept": "conceptType:equipment",
+      "name": "Artillery",
+      "description": "",
+      "relatesTo": [
+        "buildingType:artilleryFactory",
+        "equipmentType:howitzer",
+        "equipmentType:rocketArtillery",
+        "equipmentType:mLRS",
+        "equipmentType:droneSwarm"
+      ]
+    },
+    {
+      "key": "equipmentCategory:ranged",
+      "concept": "conceptType:equipment",

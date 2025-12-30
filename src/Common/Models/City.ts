@@ -15,6 +15,7 @@ import { useEventStore } from "@/stores/eventStore";
 import { getRandom } from "@/helpers/arrayTools";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { UnitDesign } from "@/Common/Models/UnitDesign";
+import { useDataBucket } from "@/Data/useDataBucket";
 
 export class City extends GameObject {
   constructor(
@@ -118,6 +119,10 @@ export class City extends GameObject {
 
   get trainableDesigns(): UnitDesign[] {
     return this.player.designs;
+  }
+
+  get types(): TypeObject[] {
+    return [this.concept, useDataBucket().getType("conceptType:urban")];
   }
 
   get yields(): Yields {

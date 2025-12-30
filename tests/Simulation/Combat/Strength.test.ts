@@ -80,13 +80,11 @@ describe("Strength & Combat", () => {
     const aStr = attackStrength(spearman, horseman);
     const bStr = defenseStrength(spearman, horseman);
 
-    // platformType:human strength: 0 (default)
-    // equipmentType:bronzeSpear strength: 8 lump, attack: 30% vs platformCategory:mounted
-    // Base strength = 0 + 8 = 8
-    // Bonus = 8 * 0.3 = 2.4
-    // Total = 10.4
+    // Total = 8 + 30% = 10.4
     expect(aStr).toBe(10.4);
-    expect(bStr).toBe(10.4);
+
+    // Total = 6 + 30% = 7.8
+    expect(bStr).toBe(7.8);
   });
 
   it("Test B: Anti-Infantry Dominance (Axeman vs Spearman)", () => {
@@ -194,6 +192,7 @@ describe("Strength & Combat", () => {
 
     bucket.setRawObjects([
       ...playerRawData("player:1"),
+      ...playerRawData("player:2"),
       ...tileRawData(flatTileKey, { x: 0, y: 0, elevation: "elevationType:flat" }),
       ...tileRawData(hillTileKey, { x: 1, y: 1, elevation: "elevationType:hill" }),
       ...cityRawData("city:flat", { playerKey: "player:1", tileKey: flatTileKey }),
@@ -209,7 +208,11 @@ describe("Strength & Combat", () => {
     // attacker doesn't matter much here, but we need one for defenseStrength
     bucket.setRawObjects([
       ...unitDesignRawData("unitDesign:attacker"),
-      ...unitRawData("unit:attacker", { playerKey: "player:2", tileKey: flatTileKey }),
+      ...unitRawData("unit:attacker", {
+        playerKey: "player:2",
+        tileKey: flatTileKey,
+        designKey: "unitDesign:attacker",
+      }),
     ]);
     const attacker = bucket.getObject<Unit>("unit:attacker");
 

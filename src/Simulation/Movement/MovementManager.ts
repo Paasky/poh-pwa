@@ -1,7 +1,7 @@
 import { Unit } from "@/Common/Models/Unit";
 import { Tile } from "@/Common/Models/Tile";
-import { UnitMovement } from "@/movement/UnitMovement";
-import { Pathfinder, PathStep } from "@/movement/Pathfinder";
+import { UnitMovement } from "@/Simulation/Movement/UnitMovement";
+import { Pathfinder, PathStep } from "@/Simulation/Movement/Pathfinder";
 import { useCurrentContext } from "@/composables/useCurrentContext";
 import { EngineAlpha, EngineLayers, EnginePathStyles } from "@/engine/EngineStyles";
 import { PohEngine } from "@/engine/PohEngine";

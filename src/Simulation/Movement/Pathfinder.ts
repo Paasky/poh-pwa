@@ -3,8 +3,8 @@ import { Unit } from "@/Common/Models/Unit";
 import { Tile } from "@/Common/Models/Tile";
 import { GameKey } from "@/Common/Models/_GameModel";
 import { useObjectsStore } from "@/stores/objectStore";
-import { MoveContext } from "@/movement/MoveContext";
-import { TurnEnd } from "@/movement/UnitMovement";
+import { MoveContext } from "@/Simulation/Movement/MoveContext";
+import { TurnEnd } from "@/Simulation/Movement/UnitMovement";
 
 /** Data structure representing a single step in a calculated path */
 export type PathStep = {

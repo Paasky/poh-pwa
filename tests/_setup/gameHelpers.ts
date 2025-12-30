@@ -1,9 +1,9 @@
-import { UnitDesign } from "../../src/Common/Models/UnitDesign";
-import { initTypeObject } from "../../src/Common/Objects/TypeObject";
-import { GameKey } from "../../src/Common/Models/_GameModel";
-import { Tile } from "../../src/Common/Models/Tile";
-import { PathStep } from "../../src/movement/Pathfinder";
-import { MoveContext } from "../../src/movement/MoveContext";
+import { UnitDesign } from '../../src/Common/Models/UnitDesign'
+import { initTypeObject } from '../../src/Common/Objects/TypeObject'
+import { GameKey } from '../../src/Common/Models/_GameModel'
+import { Tile } from '../../src/Common/Models/Tile'
+import { PathStep } from '../../src/Simulation/Movement/Pathfinder'
+import { MoveContext } from '../../src/Simulation/Movement/MoveContext'
 
 /**
  * Factory for creating a real UnitDesign instance without mocking.

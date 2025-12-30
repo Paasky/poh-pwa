@@ -1,10 +1,10 @@
 import { Player } from "@/Common/Models/Player";
 import { Unit } from "@/Common/Models/Unit";
-import { IActionHandler } from "@/Simulation/Actions/IActionHandler";
+import { IAction } from "@/Simulation/Actions/IAction";
 import { belongsToPlayer, hasMoves, isAlive } from "@/Simulation/Validator";
 import { IMutation } from "@/Common/IMutation";
 
-export class MobilizeUnit implements IActionHandler {
+export class UnitDemobilize implements IAction {
   constructor(
     private readonly player: Player,
     private readonly unit: Unit,
@@ -14,11 +14,12 @@ export class MobilizeUnit implements IActionHandler {
     belongsToPlayer(this.player, this.unit);
     isAlive(this.unit);
     hasMoves(this.unit);
+    // Future: check if unit status allows demobilization
     return this;
   }
 
   handleAction(): IMutation[] {
-    this.unit.action = { type: "mobilize", target: null };
+    this.unit.action = { type: "demobilize", target: null };
     return [
       {
         type: "update",

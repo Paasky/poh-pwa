@@ -1,27 +1,25 @@
 import { Player } from "@/Common/Models/Player";
 import { Unit } from "@/Common/Models/Unit";
-import { Tile } from "@/Common/Models/Tile";
-import { IActionHandler } from "@/Simulation/Actions/IActionHandler";
+import { IAction } from "@/Simulation/Actions/IAction";
 import { belongsToPlayer, hasMoves, isAlive } from "@/Simulation/Validator";
 import { IMutation } from "@/Common/IMutation";
 
-export class RebaseUnit implements IActionHandler {
+export class UnitPillage implements IAction {
   constructor(
     private readonly player: Player,
     private readonly unit: Unit,
-    private readonly tile: Tile,
   ) {}
 
   validateAction(): this {
     belongsToPlayer(this.player, this.unit);
     isAlive(this.unit);
     hasMoves(this.unit);
-    // Future: check if unit can rebase and tile is a valid destination
+    // Future: check if tile has improvements to pillage
     return this;
   }
 
   handleAction(): IMutation[] {
-    this.unit.action = { type: "rebase", target: this.tile.key };
+    this.unit.action = { type: "pillage", target: null };
     return [
       {
         type: "update",

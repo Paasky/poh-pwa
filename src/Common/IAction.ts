@@ -3,87 +3,87 @@ import { TypeKey } from "@/Common/Objects/Common";
 
 export type ActionType =
   // Units
-  | "alert"
-  | "attack"
-  | "bombard"
-  | "build"
-  | "demobilize"
-  | "disband"
-  | "endTurn"
-  | "explore"
-  | "fortify"
-  | "heal"
-  | "mission"
-  | "mobilize"
-  | "move"
-  | "pillage"
-  | "rebase"
-  | "recon"
-  | "rename"
-  | "skip"
-  | "settle"
-  | "stop"
-  | "trade"
-  | "upgrade"
+  | "actionType:alert"
+  | "actionType:attack"
+  | "actionType:bombard"
+  | "actionType:build"
+  | "actionType:demobilize"
+  | "actionType:disband"
+  | "actionType:endTurn"
+  | "actionType:explore"
+  | "actionType:fortify"
+  | "actionType:heal"
+  | "actionType:mission"
+  | "actionType:mobilize"
+  | "actionType:move"
+  | "actionType:pillage"
+  | "actionType:rebase"
+  | "actionType:recon"
+  | "actionType:rename"
+  | "actionType:skipTurn"
+  | "actionType:settle"
+  | "actionType:stop"
+  | "actionType:trade"
+  | "actionType:upgrade"
 
   // Unit Design
-  | "createDesign"
-  | "deactivateDesign"
-  | "upgradeDesign"
+  | "actionType:createDesign"
+  | "actionType:deactivateDesign"
+  | "actionType:upgradeDesign"
 
   // City
-  | "startBuilding"
-  | "hurryBuilding"
-  | "cancelBuilding"
-  | "startTraining"
-  | "hurryTraining"
-  | "cancelTraining"
-  | "moveCitizen"
-  | "purchaseTile"
-  | "renameCity"
+  | "actionType:startBuilding"
+  | "actionType:hurryBuilding"
+  | "actionType:cancelBuilding"
+  | "actionType:startTraining"
+  | "actionType:hurryTraining"
+  | "actionType:cancelTraining"
+  | "actionType:moveCitizen"
+  | "actionType:purchaseTile"
+  | "actionType:renameCity"
 
   // Diplomacy
-  | "startAgenda"
-  | "opposeAgenda"
-  | "supportAgenda"
-  | "cancelAgenda"
-  | "proposeDeal"
-  | "approveDeal"
-  | "rejectDeal"
+  | "actionType:startAgenda"
+  | "actionType:opposeAgenda"
+  | "actionType:supportAgenda"
+  | "actionType:cancelAgenda"
+  | "actionType:proposeDeal"
+  | "actionType:approveDeal"
+  | "actionType:rejectDeal"
 
   // Player
-  | "selectHeritage"
-  | "selectTrait"
-  | "unselectTrait"
-  | "selectMyth"
-  | "selectGod"
-  | "selectDogma"
-  | "selectPolicy"
-  | "selectTechnology"
-  | "enactReforms"
-  | "joinRevolution"
-  | "keepStatusQuo";
+  | "actionType:selectHeritage"
+  | "actionType:selectTrait"
+  | "actionType:unselectTrait"
+  | "actionType:selectMyth"
+  | "actionType:selectGod"
+  | "actionType:selectDogma"
+  | "actionType:selectPolicy"
+  | "actionType:selectTechnology"
+  | "actionType:enactReforms"
+  | "actionType:joinRevolution"
+  | "actionType:keepStatusQuo";
 
 export const ActionHotkey = {
-  a: "alert",
-  b: "build",
-  D: "demobilize",
-  d: "disband",
-  e: "explore",
-  f: "fortify",
-  h: "heal",
-  m: "mission",
-  M: "mobilize",
-  p: "pillage",
-  R: "rebase",
-  r: "recon",
-  N: "rename",
-  s: "settle",
-  t: "trade",
-  u: "upgrade",
-  x: "stop",
-  enter: "endTurn",
-  space: "skip",
+  a: "actionType:alert",
+  b: "actionType:build",
+  D: "actionType:demobilize",
+  d: "actionType:disband",
+  e: "actionType:explore",
+  f: "actionType:fortify",
+  h: "actionType:heal",
+  m: "actionType:mission",
+  M: "actionType:mobilize",
+  p: "actionType:pillage",
+  R: "actionType:rebase",
+  r: "actionType:recon",
+  N: "actionType:rename",
+  s: "actionType:settle",
+  t: "actionType:trade",
+  u: "actionType:upgrade",
+  x: "actionType:stop",
+  enter: "actionType:endTurn",
+  space: "actionType:skipTurn",
 } as Record<string, ActionType>;
 
 export interface IAction {

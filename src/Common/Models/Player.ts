@@ -18,7 +18,7 @@ import type { Unit } from "@/Common/Models/Unit";
 import { Diplomacy } from "@/Common/Objects/Diplomacy";
 import { ObjKey, TypeKey } from "@/Common/Objects/Common";
 import { useObjectsStore } from "@/stores/objectStore";
-import { UnitMovement } from "@/movement/UnitMovement";
+import { UnitMovement } from "@/Simulation/Movement/UnitMovement";
 import { Construction } from "@/Common/Models/Construction";
 
 export class Player extends GameObject {

@@ -2,7 +2,7 @@ import { Unit } from "@/Common/Models/Unit";
 import { Tile } from "@/Common/Models/Tile";
 import { roundToTenth, TypeKey } from "@/Common/Objects/Common";
 import { MoveContext } from "./MoveContext";
-import { PathStep } from "@/movement/Pathfinder";
+import { PathStep } from "@/Simulation/Movement/Pathfinder";
 import { useMoveCostCache } from "@/composables/useMoveCostCache";
 import { useObjectsStore } from "@/stores/objectStore";
 import { GameKey } from "@/Common/Models/_GameModel";

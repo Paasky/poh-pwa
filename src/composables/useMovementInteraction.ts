@@ -1,9 +1,9 @@
 import { watch } from "vue";
 import { useCurrentContext } from "@/composables/useCurrentContext";
 import { useAppStore } from "@/stores/appStore";
-import { MovementManager } from "@/movement/MovementManager";
-import { UnitMovement } from "@/movement/UnitMovement";
-import { Pathfinder } from "@/movement/Pathfinder";
+import { MovementManager } from "@/Simulation/Movement/MovementManager";
+import { UnitMovement } from "@/Simulation/Movement/UnitMovement";
+import { Pathfinder } from "@/Simulation/Movement/Pathfinder";
 import { Tile } from "@/Common/Models/Tile";
 import { EngineAlpha, EngineLayers, EnginePathStyles } from "@/engine/EngineStyles";
 import { Unit } from "@/Common/Models/Unit";

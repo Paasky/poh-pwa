@@ -100,7 +100,7 @@ function color(y: Yield): string {
   return "#ff0000";
 }
 const progressBg = computed(() => {
-  // Health special thresholds
+  // UnitHealth special thresholds
   if (props.y.type === "yieldType:health") {
     if (props.y.amount < 35) return "#881111";
     if (props.y.amount < 75) return "#f97316";

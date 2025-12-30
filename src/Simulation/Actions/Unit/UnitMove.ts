@@ -1,13 +1,13 @@
-import { IActionHandler } from "@/Simulation/Actions/IActionHandler";
+import { IAction } from "@/Simulation/Actions/IAction";
 import { Player } from "@/Common/Models/Player";
 import { Tile } from "@/Common/Models/Tile";
 import { Unit } from "@/Common/Models/Unit";
 import { IMutation } from "@/Common/IMutation";
-import { Pathfinder } from "@/movement/Pathfinder";
-import { UnitMovement } from "@/movement/UnitMovement";
+import { Pathfinder } from "@/Simulation/Movement/Pathfinder";
+import { UnitMovement } from "@/Simulation/Movement/UnitMovement";
 import { belongsToPlayer } from "@/Simulation/Validator";
 
-export class MoveUnit implements IActionHandler {
+export class UnitMove implements IAction {
   constructor(
     private readonly player: Player,
     private readonly unit: Unit,

@@ -21,7 +21,7 @@ import { useSettingsStore } from "@/stores/settingsStore";
 import { watch } from "vue";
 import { useCurrentContext } from "@/composables/useCurrentContext";
 import type { Unit } from "@/Common/Models/Unit";
-import { MovementManager } from "@/movement/MovementManager";
+import { MovementManager } from "@/Simulation/Movement/MovementManager";
 import type { PohEngine } from "@/engine/PohEngine";
 
 /**

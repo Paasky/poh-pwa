@@ -14,6 +14,7 @@ import {
   ConstructionLost,
 } from "@/events/Construction";
 import { Player } from "@/Common/Models/Player";
+import { useDataBucket } from "@/Data/useDataBucket";
 
 export class Construction extends GameObject {
   constructor(
@@ -69,6 +70,18 @@ export class Construction extends GameObject {
    */
   get isActive(): boolean {
     return this.progress === 100 && this.health > 0;
+  }
+
+  get types(): TypeObject[] {
+    const types = [this.concept, this.type];
+    if (
+      this.type.class === "buildingType" ||
+      this.type.class === "nationalWonderType" ||
+      this.type.class === "worldWonderType"
+    ) {
+      types.push(useDataBucket().getType("conceptType:urban"));
+    }
+    return types;
   }
 
   get yields(): Yields {

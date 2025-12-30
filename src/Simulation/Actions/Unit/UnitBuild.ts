@@ -1,28 +1,27 @@
 import { Player } from "@/Common/Models/Player";
 import { Unit } from "@/Common/Models/Unit";
-import { Tile } from "@/Common/Models/Tile";
-import { IActionHandler } from "@/Simulation/Actions/IActionHandler";
+import { TypeObject } from "@/Common/Objects/TypeObject";
+import { IAction } from "@/Simulation/Actions/IAction";
 import { belongsToPlayer, hasMoves, isAlive } from "@/Simulation/Validator";
 import { IMutation } from "@/Common/IMutation";
-import { City } from "@/Common/Models/City";
 
-export class Bombard implements IActionHandler {
+export class UnitBuild implements IAction {
   constructor(
     private readonly player: Player,
     private readonly unit: Unit,
-    private readonly target: City | Tile | Unit,
+    private readonly improvementType: TypeObject,
   ) {}
 
   validateAction(): this {
     belongsToPlayer(this.player, this.unit);
     isAlive(this.unit);
     hasMoves(this.unit);
-    // Future: check if unit has bombard capability and tile is in range
+    // Future: check if unit can build this improvement on this tile
     return this;
   }
 
   handleAction(): IMutation[] {
-    this.unit.action = { type: "bombard", target: this.target.key };
+    this.unit.action = { type: "build", target: this.improvementType.key };
     return [
       {
         type: "update",

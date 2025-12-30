@@ -1,10 +1,10 @@
 import { Player } from "@/Common/Models/Player";
 import { Unit } from "@/Common/Models/Unit";
-import { IActionHandler } from "@/Simulation/Actions/IActionHandler";
-import { belongsToPlayer, hasMoves, isAlive } from "@/Simulation/Validator";
+import { IAction } from "@/Simulation/Actions/IAction";
+import { belongsToPlayer, isAlive } from "@/Simulation/Validator";
 import { IMutation } from "@/Common/IMutation";
 
-export class PillageTile implements IActionHandler {
+export class UnitExplore implements IAction {
   constructor(
     private readonly player: Player,
     private readonly unit: Unit,
@@ -13,13 +13,12 @@ export class PillageTile implements IActionHandler {
   validateAction(): this {
     belongsToPlayer(this.player, this.unit);
     isAlive(this.unit);
-    hasMoves(this.unit);
-    // Future: check if tile has improvements to pillage
+    // explore might not need hasMoves immediately if it's setting an automated state
     return this;
   }
 
   handleAction(): IMutation[] {
-    this.unit.action = { type: "pillage", target: null };
+    this.unit.action = { type: "explore", target: null };
     return [
       {
         type: "update",

@@ -3,14 +3,17 @@ import { Unit } from "@/Common/Models/Unit";
 import { City } from "@/Common/Models/City";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { roundToTenth } from "@/Common/Objects/Common";
+import { clamp } from "@/helpers/basicMath";
 
 export const attackStrength = (
   attacker: City | Unit,
   defender: Unit | City | Construction,
 ): number => {
-  const yields = attacker.yields
-    .only(["yieldType:attack", "yieldType:strength"], getTypes(attacker), getTypes(defender))
-    .flatten();
+  const yields = attacker.yields.flatten(
+    ["yieldType:attack", "yieldType:strength"],
+    attacker.types,
+    defender.types,
+  );
 
   return roundToTenth(
     yields.getLumpAmount("yieldType:attack") + yields.getLumpAmount("yieldType:strength"),
@@ -21,9 +24,11 @@ export const defenseStrength = (
   attacker: City | Unit,
   defender: Unit | City | Construction,
 ): number => {
-  const yields = defender.yields
-    .only(["yieldType:defense", "yieldType:strength"], getTypes(defender), getTypes(attacker))
-    .flatten();
+  const yields = defender.yields.flatten(
+    ["yieldType:defense", "yieldType:strength"],
+    defender.types,
+    attacker.types,
+  );
 
   return roundToTenth(
     yields.getLumpAmount("yieldType:defense") + yields.getLumpAmount("yieldType:strength"),
@@ -38,8 +43,8 @@ export const calcDamage = (
   const defenderDamage = rawDamage(defenseStrength, attackStrength);
 
   return {
-    attackerDamage: roundToTenth(Math.min(100, Math.max(0, attackerDamage))),
-    defenderDamage: roundToTenth(Math.min(100, Math.max(0, defenderDamage))),
+    attackerDamage: roundToTenth(clamp(attackerDamage, 0, 100)),
+    defenderDamage: roundToTenth(clamp(defenderDamage, 0, 100)),
   };
 };
 
@@ -69,7 +74,5 @@ const rawDamage = (strengthA: number, strengthB: number): number => {
 };
 
 const getTypes = (obj: City | Construction | Unit): TypeObject[] => {
-  if (obj instanceof City) return [obj.concept];
-  if (obj instanceof Construction) return [obj.concept, obj.type];
   return obj.types;
 };
