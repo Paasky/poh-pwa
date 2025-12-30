@@ -7,6 +7,8 @@ import { useAppStore } from "@/stores/appStore";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { NullEngine } from "@babylonjs/core";
 import type { Tile } from "@/Common/Models/Tile";
+import type { Player } from "@/Common/Models/Player";
+import type { Culture } from "@/Common/Models/Culture";
 import type { RawSaveData } from "@/Data/DataBucket";
 import type { GameKey } from "@/Common/Models/_GameModel";
 import type { Router } from "vue-router";
@@ -32,6 +34,69 @@ afterEach(() => {
 });
 afterAll(() => server.close());
 
+const sharedWorldData = {
+  id: "shared-world-id",
+  size: { x: 2, y: 2 },
+  turn: 1,
+  year: 100,
+  currentPlayerKey: "player:1" as GameKey,
+};
+
+const sharedObjects = [
+  {
+    key: "culture:1",
+    class: "culture",
+    name: "Test Culture",
+    type: "majorCultureType:viking",
+    playerKey: "player:1",
+  },
+  { key: "player:1", class: "player", name: "Test Player", cultureKey: "culture:1" },
+  {
+    key: "tile:x0,y0",
+    class: "tile",
+    x: 0,
+    y: 0,
+    domain: "domainType:land",
+    area: "continentType:taiga",
+    climate: "climateType:cold",
+    terrain: "terrainType:tundra",
+    elevation: "elevationType:hill",
+  },
+  {
+    key: "tile:x1,y0",
+    class: "tile",
+    x: 1,
+    y: 0,
+    domain: "domainType:land",
+    area: "continentType:taiga",
+    climate: "climateType:cold",
+    terrain: "terrainType:grass",
+    elevation: "elevationType:mountain",
+  },
+  {
+    key: "tile:x0,y1",
+    class: "tile",
+    x: 0,
+    y: 1,
+    domain: "domainType:water",
+    area: "oceanType:atlantic",
+    climate: "climateType:temperate",
+    terrain: "terrainType:sea",
+    elevation: "elevationType:flat",
+  },
+  {
+    key: "tile:x1,y1",
+    class: "tile",
+    x: 1,
+    y: 1,
+    domain: "domainType:water",
+    area: "oceanType:atlantic",
+    climate: "climateType:temperate",
+    terrain: "terrainType:coast",
+    elevation: "elevationType:flat",
+  },
+];
+
 // Mock world factory to avoid complex generation logic in smoke test
 // Although "strictly no mocking" is a guideline, worldFactory relies on TerraGenerator
 // and a massive staticData.json, making it impractical for a central integration smoke test.
@@ -42,68 +107,19 @@ vi.mock("@/factories/worldFactory", () => ({
     { name: "Regular", x: 144, y: 72, continents: 5, majorsPerContinent: 3, minorsPerPlayer: 2 },
   ],
   createWorld: vi.fn(() => ({
-    world: {
-      id: "test-world",
-      size: { x: 2, y: 2 },
-      turn: 0,
-      year: 0,
-      currentPlayerKey: "player:1" as GameKey,
-    },
-    objects: [
-      {
-        key: "culture:1",
-        class: "culture",
-        name: "Test Culture",
-        type: "majorCultureType:viking",
-        playerKey: "player:1",
-      },
-      { key: "player:1", class: "player", name: "Test Player", cultureKey: "culture:1" },
-      {
-        key: "tile:x0,y0",
-        class: "tile",
-        x: 0,
-        y: 0,
-        domain: "domainType:land",
-        area: "continentType:taiga",
-        climate: "climateType:cold",
-        terrain: "terrainType:tundra",
-        elevation: "elevationType:hill",
-      },
-      {
-        key: "tile:x1,y0",
-        class: "tile",
-        x: 1,
-        y: 0,
-        domain: "domainType:land",
-        area: "continentType:taiga",
-        climate: "climateType:cold",
-        terrain: "terrainType:grass",
-        elevation: "elevationType:mountain",
-      },
-      {
-        key: "tile:x0,y1",
-        class: "tile",
-        x: 0,
-        y: 1,
-        domain: "domainType:water",
-        area: "oceanType:atlantic",
-        climate: "climateType:temperate",
-        terrain: "terrainType:sea",
-        elevation: "elevationType:flat",
-      },
-      {
-        key: "tile:x1,y1",
-        class: "tile",
-        x: 1,
-        y: 1,
-        domain: "domainType:water",
-        area: "oceanType:atlantic",
-        climate: "climateType:temperate",
-        terrain: "terrainType:coast",
-        elevation: "elevationType:flat",
-      },
-    ],
+    world: sharedWorldData,
+    objects: sharedObjects,
   })),
+}));
+
+// Mock the screenshot tool to prevent issues in the NullEngine environment
+vi.mock("@babylonjs/core/Misc/screenshotTools", () => ({
+  CreateScreenshotUsingRenderTarget: vi.fn((_engine, _camera, _size, callback) => {
+    // Immediately call the callback with a dummy data URI to simulate success
+    callback(
+      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==",
+    );
+  }),
 }));
 
 // Minimal Router interface for stubbing
@@ -150,16 +166,7 @@ describe("Game Boot Sequence", () => {
     await app.init(undefined, new NullEngine());
     await flushPromises();
 
-    // Structural Invariants
-    expect(app.loaded).toBe(true);
-    expect(app.engineService.engine).toBeDefined();
-    expect(app.engineService.scene).toBeDefined();
-
-    const bucket = useDataBucket();
-    expect(bucket.world).toBeDefined();
-    expect(bucket.world.id).toBeDefined();
-    // Verify that tiles are loaded (using size as getClassObjects returns a Set)
-    expect(bucket.getClassObjects<Tile>("tile").size).toBeGreaterThan(0);
+    verifySharedInvariants(app, sharedWorldData, sharedObjects);
   });
 
   it("should boot from a save game and match seeded data", async () => {
@@ -169,67 +176,8 @@ describe("Game Boot Sequence", () => {
       name: "Test Save",
       time: Date.now(),
       version: "0.1.0",
-      world: {
-        id: "world-123",
-        size: { x: 2, y: 2 },
-        turn: 1,
-        year: 0,
-        currentPlayerKey: "player:1" as GameKey,
-      },
-      objects: [
-        {
-          key: "culture:1",
-          class: "culture",
-          name: "Test Culture",
-          type: "majorCultureType:viking",
-          playerKey: "player:1",
-        },
-        { key: "player:1", class: "player", name: "Test Player", cultureKey: "culture:1" },
-        {
-          key: "tile:x0,y0",
-          class: "tile",
-          x: 0,
-          y: 0,
-          domain: "domainType:land",
-          area: "continentType:taiga",
-          climate: "climateType:cold",
-          terrain: "terrainType:tundra",
-          elevation: "elevationType:hill",
-        },
-        {
-          key: "tile:x1,y0",
-          class: "tile",
-          x: 1,
-          y: 0,
-          domain: "domainType:land",
-          area: "continentType:taiga",
-          climate: "climateType:cold",
-          terrain: "terrainType:grass",
-          elevation: "elevationType:mountain",
-        },
-        {
-          key: "tile:x0,y1",
-          class: "tile",
-          x: 0,
-          y: 1,
-          domain: "domainType:water",
-          area: "oceanType:atlantic",
-          climate: "climateType:temperate",
-          terrain: "terrainType:sea",
-          elevation: "elevationType:flat",
-        },
-        {
-          key: "tile:x1,y1",
-          class: "tile",
-          x: 1,
-          y: 1,
-          domain: "domainType:water",
-          area: "oceanType:atlantic",
-          climate: "climateType:temperate",
-          terrain: "terrainType:coast",
-          elevation: "elevationType:flat",
-        },
-      ],
+      world: sharedWorldData,
+      objects: sharedObjects as any[],
     };
     localStorage.setItem(`poh.save.${saveId}`, JSON.stringify(mockSave));
 
@@ -238,6 +186,50 @@ describe("Game Boot Sequence", () => {
     await flushPromises();
 
     expect(app.loaded).toBe(true);
-    expect(useDataBucket().world.id).toBe(mockSave.world.id);
+    verifySharedInvariants(app, sharedWorldData, sharedObjects);
   });
 });
+
+function verifySharedInvariants(app: any, expectedWorld: any, expectedObjects: any[]) {
+  const bucket = useDataBucket();
+
+  // 1. App State
+  expect(app.loaded).toBe(true);
+  expect(app.engineService.engine).toBeDefined();
+  expect(app.engineService.scene).toBeDefined();
+
+  // 2. World Data
+  expect(bucket.world).toBeDefined();
+  expect(bucket.world.id).toBe(expectedWorld.id);
+  expect(bucket.world.turn).toBe(expectedWorld.turn);
+  expect(bucket.world.year).toBe(expectedWorld.year);
+  expect(bucket.world.size).toEqual(expectedWorld.size);
+
+  // 3. Object Counts
+  const tiles = bucket.getClassObjects<Tile>("tile");
+  const expectedTileCount = expectedObjects.filter((o) => o.class === "tile").length;
+  expect(tiles.size).toBe(expectedTileCount);
+
+  const players = bucket.getClassObjects("player");
+  const expectedPlayerCount = expectedObjects.filter((o) => o.class === "player").length;
+  expect(players.size).toBe(expectedPlayerCount);
+
+  // 4. Player & Culture Integrity
+  const currentPlayer = bucket.getObject<Player>(bucket.world.currentPlayerKey);
+  expect(currentPlayer).toBeDefined();
+  expect(currentPlayer.name).toBe("Test Player");
+
+  const culture = bucket.getObject<Culture>(currentPlayer.cultureKey);
+  expect(culture).toBeDefined();
+  expect(culture.type.key).toBe("majorCultureType:viking");
+
+  // 5. Specific Object Integrity (Spot check a tile)
+  const firstTile = Array.from(tiles)[0] as Tile;
+  const expectedTile = expectedObjects.find((o) => o.key === firstTile.key);
+  expect(expectedTile).toBeDefined();
+  expect(firstTile.x).toBe(expectedTile.x);
+  expect(firstTile.y).toBe(expectedTile.y);
+  expect(firstTile.terrain.key).toBe(expectedTile.terrain);
+  expect(firstTile.domain.key).toBe(expectedTile.domain);
+  expect(firstTile.climate.key).toBe(expectedTile.climate);
+}

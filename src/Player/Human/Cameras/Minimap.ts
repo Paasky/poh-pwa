@@ -101,7 +101,7 @@ export class Minimap {
     }, 150); // Delay by 150ms to catch "bursts" of movement and ensure other async updates (like mask texture) have finished
   }
 
-  public capture(): void {
+  public async capture(): Promise<void> {
     const known = this.getKnownBounds() || getFullWorldOrthoBounds(this._size);
     const ortho = calculateMinimapCameraBounds(known, this._canvas.width, this._canvas.height);
 
@@ -109,6 +109,10 @@ export class Minimap {
 
     // Update the public bounds property
     this.bounds = { minX: ortho.left, maxX: ortho.right, minZ: ortho.bottom, maxZ: ortho.top };
+
+    // Ensure the scene and its resources (textures/shaders) are fully ready before taking a screenshot.
+    // This prevents race conditions and potential null-pointer errors in headless/slow environments.
+    await this._scene.whenReadyAsync();
 
     const { width, height } = this._canvas;
     CreateScreenshotUsingRenderTarget(this._engine, this._camera, { width, height }, (data) => {
