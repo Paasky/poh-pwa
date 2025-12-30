@@ -2,7 +2,7 @@ import TinyQueue from "tinyqueue";
 import { Unit } from "@/Common/Models/Unit";
 import { Tile } from "@/Common/Models/Tile";
 import { GameKey } from "@/Common/Models/_GameModel";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import { MoveContext } from "@/Simulation/Movement/MoveContext";
 import { TurnEnd } from "@/Simulation/Movement/UnitMovement";
 
@@ -37,7 +37,7 @@ export class Pathfinder {
    * Calculates the optimal path from start to target.
    */
   findPath(unit: Unit, target: Tile, context: MoveContext): PathStep[] {
-    const mapSize = useObjectsStore().world.size;
+    const mapSize = useDataBucket().world.size;
 
     const startTile = unit.tile;
     if (startTile.key === target.key) return [];

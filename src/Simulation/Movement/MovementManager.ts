@@ -3,8 +3,8 @@ import { Tile } from "@/Common/Models/Tile";
 import { UnitMovement } from "@/Simulation/Movement/UnitMovement";
 import { Pathfinder, PathStep } from "@/Simulation/Movement/Pathfinder";
 import { useCurrentContext } from "@/composables/useCurrentContext";
-import { EngineAlpha, EngineLayers, EnginePathStyles } from "@/engine/EngineStyles";
-import { PohEngine } from "@/engine/PohEngine";
+import { EngineAlpha, EngineLayers, EnginePathStyles } from "@/Player/Human/EngineStyles";
+import { PohEngine } from "@/Player/Human/PohEngine";
 
 /**
  * MovementManager handles high-level movement execution for both Players and AI.

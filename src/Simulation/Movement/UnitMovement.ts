@@ -4,7 +4,7 @@ import { roundToTenth, TypeKey } from "@/Common/Objects/Common";
 import { MoveContext } from "./MoveContext";
 import { PathStep } from "@/Simulation/Movement/Pathfinder";
 import { useMoveCostCache } from "@/composables/useMoveCostCache";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import { GameKey } from "@/Common/Models/_GameModel";
 
 /**
@@ -118,7 +118,7 @@ export class UnitMovement {
   }
 
   static getMoveContext(unit: Unit): MoveContext {
-    const objectStore = useObjectsStore();
+    const bucket = useDataBucket();
     const player = unit.player;
 
     const known = player.knownTileKeys;
@@ -127,7 +127,7 @@ export class UnitMovement {
     const friendlyUnitTiles = new Set<GameKey>();
     const enemyUnitTiles = new Set<GameKey>();
 
-    for (const u of objectStore.getClassGameObjects("unit") as Unit[]) {
+    for (const u of bucket.getClassObjects<Unit>("unit")) {
       if (player.visibleTileKeys.has(u.tileKey.value)) {
         if (u.playerKey.value === player.key) {
           friendlyUnitTiles.add(u.tileKey.value);

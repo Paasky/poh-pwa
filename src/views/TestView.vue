@@ -2,43 +2,43 @@
 import { onMounted } from "vue";
 import UiCols from "@/components/Ui/UiCols.vue";
 import { Tile } from "@/Common/Models/Tile";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import { StaticData } from "@/types/api";
 import { fetchJSON, useAppStore } from "@/stores/appStore";
 import { TypeObject } from "@/Common/Objects/TypeObject";
-import { PohEngine } from "@/engine/PohEngine";
+import { PohEngine } from "@/Player/Human/PohEngine";
 import GameMenu from "@/components/GameView/GameMenu.vue";
 
 // Init static data
-const objStore = useObjectsStore();
+const bucket = useDataBucket();
 
 // Init engine
 let engine: PohEngine | null = null;
 const appStore = useAppStore();
 onMounted(async () => {
-  objStore.initStatic(await fetchJSON<StaticData>("/staticData.json"));
+  bucket.initStatic(await fetchJSON<StaticData>("/staticData.json"));
 
-  const land = objStore.getTypeObject("domainType:land");
-  const water = objStore.getTypeObject("domainType:water");
+  const land = bucket.getTypeObject("domainType:land");
+  const water = bucket.getTypeObject("domainType:water");
 
-  const ocean = objStore.getTypeObject("terrainType:ocean");
-  const sea = objStore.getTypeObject("terrainType:sea");
-  const coast = objStore.getTypeObject("terrainType:coast");
-  const lake = objStore.getTypeObject("terrainType:lake");
-  const majorRiver = objStore.getTypeObject("terrainType:majorRiver");
-  const grass = objStore.getTypeObject("terrainType:grass");
-  const tundra = objStore.getTypeObject("terrainType:tundra");
+  const ocean = bucket.getTypeObject("terrainType:ocean");
+  const sea = bucket.getTypeObject("terrainType:sea");
+  const coast = bucket.getTypeObject("terrainType:coast");
+  const lake = bucket.getTypeObject("terrainType:lake");
+  const majorRiver = bucket.getTypeObject("terrainType:majorRiver");
+  const grass = bucket.getTypeObject("terrainType:grass");
+  const tundra = bucket.getTypeObject("terrainType:tundra");
 
-  const flat = objStore.getTypeObject("elevationType:flat");
-  const hill = objStore.getTypeObject("elevationType:hill");
-  const mountain = objStore.getTypeObject("elevationType:mountain");
-  const snowMountain = objStore.getTypeObject("elevationType:snowMountain");
+  const flat = bucket.getTypeObject("elevationType:flat");
+  const hill = bucket.getTypeObject("elevationType:hill");
+  const mountain = bucket.getTypeObject("elevationType:mountain");
+  const snowMountain = bucket.getTypeObject("elevationType:snowMountain");
 
-  const pineForest = objStore.getTypeObject("featureType:pineForest");
-  const forest = objStore.getTypeObject("featureType:forest");
-  const jungle = objStore.getTypeObject("featureType:jungle");
-  const shrubs = objStore.getTypeObject("featureType:shrubs");
-  const swamp = objStore.getTypeObject("featureType:swamp");
+  const pineForest = bucket.getTypeObject("featureType:pineForest");
+  const forest = bucket.getTypeObject("featureType:forest");
+  const jungle = bucket.getTypeObject("featureType:jungle");
+  const shrubs = bucket.getTypeObject("featureType:shrubs");
+  const swamp = bucket.getTypeObject("featureType:swamp");
 
   // Init test world
   const tile = (
@@ -60,8 +60,8 @@ onMounted(async () => {
       x,
       y,
       opts.domain ?? land,
-      opts.area ?? objStore.getTypeObject("continentType:taiga"),
-      opts.climate ?? objStore.getTypeObject("climateType:temperate"),
+      opts.area ?? bucket.getTypeObject("continentType:taiga"),
+      opts.climate ?? bucket.getTypeObject("climateType:temperate"),
       opts.terrain ?? grass,
       opts.elevation ?? flat,
       opts.feature ?? null,
@@ -226,18 +226,18 @@ onMounted(async () => {
     tile(11, 11),
   ];
 
-  objStore.bulkSet(objs);
-  objStore.world = {
+  bucket.bulkSet(objs);
+  bucket.world = {
     id: "test",
     size: { x: 12, y: 12 },
     turn: 0,
     year: 0,
-    currentPlayer: "player:1",
+    currentPlayerKey: "player:1",
   };
 
   const engineCanvas = document.getElementById("engine-canvas") as HTMLCanvasElement | null;
   if (!engineCanvas) throw new Error("PohEngine canvas `#engine-canvas` not found");
-  engine = new PohEngine(objStore.world.size, engineCanvas);
+  engine = new PohEngine(bucket.world.size, engineCanvas);
   // Expose the engine to the GameMenu via the app store so options can be applied in TestView
   appStore.engineService = engine;
 });

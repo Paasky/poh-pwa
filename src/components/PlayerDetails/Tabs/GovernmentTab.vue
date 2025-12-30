@@ -4,7 +4,7 @@ import UiObjectCards from "@/components/Ui/UiObjectCards.vue";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import UiCols from "@/components/Ui/UiCols.vue";
 import { useGovernmentTabStore } from "@/components/PlayerDetails/Tabs/governmentTabStore";
-import { CatData } from "@/stores/objectStore";
+import { CatData } from "@/Data/useDataBucket";
 
 const store = useGovernmentTabStore();
 </script>

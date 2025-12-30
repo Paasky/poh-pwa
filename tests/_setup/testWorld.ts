@@ -11,7 +11,7 @@ export const TestWorldState = {
   size: { x: 5, y: 5 },
   turn: 0,
   year: -10000,
-  currentPlayer: "player:1",
+  currentPlayerKey: "player:1",
 } as WorldState;
 
 export function createTestWorld() {

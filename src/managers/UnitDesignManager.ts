@@ -1,5 +1,5 @@
 import { TypeObject } from "@/Common/Objects/TypeObject";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import { UnitDesign } from "@/Common/Models/UnitDesign";
 import { Player } from "@/Common/Models/Player";
 import { generateKey } from "@/Common/Models/_GameModel";
@@ -40,7 +40,7 @@ export class UnitDesignManager {
       }
     }
 
-    useObjectsStore().set(design);
+    useDataBucket().set(design);
 
     return design;
   }

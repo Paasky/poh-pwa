@@ -23,8 +23,8 @@ import { useDataBucket } from "@/Data/useDataBucket";
 export class DataStore {
   readonly dataBucket: DataBucket;
 
-  constructor() {
-    this.dataBucket = useDataBucket();
+  constructor(dataBucket?: DataBucket) {
+    this.dataBucket = dataBucket ?? useDataBucket();
   }
 
   set(mutations: IMutation[]): void {

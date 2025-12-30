@@ -1,5 +1,5 @@
 import { describe, it } from "vitest";
-import { pointsInRing } from "../../../src/engine/TerrainMesh/pointsInRing";
+import { pointsInRing } from "../../../src/Player/Human/Terrain/pointsInRing";
 import { expectFloatsToBeClose } from "../../_setup/testHelpers";
 
 describe("pointsInRing", () => {

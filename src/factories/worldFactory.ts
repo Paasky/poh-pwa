@@ -1,14 +1,14 @@
-import { ObjKey, yearsPerTurnConfig } from "@/Common/Objects/Common";
-import { useObjectsStore } from "@/stores/objectStore";
+import { ObjKey, WorldState, yearsPerTurnConfig } from "@/Common/Objects/Common";
+import { useDataBucket } from "@/Data/useDataBucket";
 import { TerraGenerator } from "@/factories/TerraGenerator/terra-generator";
 import { shuffle, takeRandom } from "@/helpers/arrayTools";
 import { Player } from "@/Common/Models/Player";
-import { generateKey } from "@/Common/Models/_GameModel";
+import { GameObject, generateKey, type IRawGameObject } from "@/Common/Models/_GameModel";
 import { Culture } from "@/Common/Models/Culture";
 import { UnitDesign } from "@/Common/Models/UnitDesign";
 import { Unit } from "@/Common/Models/Unit";
-import { GameData } from "@/types/api";
 import { Tile } from "@/Common/Models/Tile";
+import { MapGenConfig } from "@/stores/mapGenStore";
 
 export type WorldSize = {
   name: string;
@@ -63,32 +63,35 @@ export const worldSizes: WorldSize[] = [
   },
 ];
 
-export const createWorld = (size: WorldSize): GameData => {
-  const objStore = useObjectsStore();
+export const createWorld = (
+  config: MapGenConfig & { flipX?: boolean; flipY?: boolean; flipClimate?: boolean },
+): { objects: IRawGameObject[]; world: WorldState } => {
+  const bucket = useDataBucket();
+  const { size } = config;
 
   const bundle = {
+    objects: [] as IRawGameObject[],
     world: {
       id: crypto.randomUUID(),
       size,
       turn: 0,
       year: yearsPerTurnConfig[0].start,
-      currentPlayer: "" as ObjKey,
+      currentPlayerKey: "" as ObjKey,
     },
-    objects: [] as object[],
-  } as GameData;
+  } as { objects: IRawGameObject[]; world: WorldState };
 
-  const objects = [] as object[];
+  const objects = [] as GameObject[];
   const players = [] as Player[];
 
   // Init global data
-  const cultureTypes = objStore.getClassTypes("majorCultureType");
+  const cultureTypes = bucket.getClassTypes("majorCultureType");
 
-  const humanPlatform = objStore.getTypeObject("platformType:human");
+  const humanPlatform = bucket.getType("platformType:human");
 
-  const spearEquipment = objStore.getTypeObject("equipmentType:spear");
-  const javelinEquipment = objStore.getTypeObject("equipmentType:javelin");
-  const workerEquipment = objStore.getTypeObject("equipmentType:worker");
-  const tribeEquipment = objStore.getTypeObject("equipmentType:tribe");
+  const spearEquipment = bucket.getType("equipmentType:spear");
+  const javelinEquipment = bucket.getType("equipmentType:javelin");
+  const workerEquipment = bucket.getType("equipmentType:worker");
+  const tribeEquipment = bucket.getType("equipmentType:tribe");
 
   const warbandDesign = new UnitDesign(
     generateKey("unitDesign"),
@@ -116,7 +119,10 @@ export const createWorld = (size: WorldSize): GameData => {
   );
   objects.push(warbandDesign, hunterDesign, workerDesign, tribeDesign);
 
-  const gen = new TerraGenerator(size).generateStratLevel().generateRegLevel().generateGameLevel();
+  const gen = new TerraGenerator(size, config.flipX, config.flipY, config.flipClimate)
+    .generateStratLevel()
+    .generateRegLevel()
+    .generateGameLevel();
   objects.push(...Object.values(gen.gameTiles), ...Object.values(gen.rivers));
 
   // Validate that all tiles & rivers exist
@@ -127,7 +133,7 @@ export const createWorld = (size: WorldSize): GameData => {
         throw new Error(`Tile (x${x},y${y}) not found in generated tiles`);
       }
       if (tile.riverKey) {
-        const river = gen.rivers[tile.riverKey as any];
+        const river = gen.rivers[tile.riverKey];
         if (!river) {
           throw new Error(
             `River ${tile.riverKey} not found in generated rivers: ${JSON.stringify(Object.keys(gen.rivers))}`,
@@ -138,23 +144,23 @@ export const createWorld = (size: WorldSize): GameData => {
   }
 
   for (const continentData of shuffle(Object.values(gen.continents))) {
-    const continentStartCultures = cultureTypes.filter(
+    const continentStartCultures = Array.from(cultureTypes).filter(
       (c) => !c.upgradesFrom.length && c.category!.includes(`:${continentData.type.id}`),
     );
 
     for (const tile of shuffle(continentData.majorStarts.game)) {
+      if (players.length >= config.continents * config.majorsPerContinent) break;
+
       const cultureKey = generateKey("culture");
       const player = new Player(
         generateKey("player"),
         cultureKey,
         "Player " + (players.length + 1),
-        !bundle.world.currentPlayer,
       );
       objects.push(player);
       players.push(player);
-      if (player.isCurrent) {
-        bundle.world.currentPlayer = player.key;
-      }
+
+      if (!bundle.world.currentPlayerKey) bundle.world.currentPlayerKey = player.key;
 
       const cultureType = takeRandom(continentStartCultures);
       const culture = new Culture(cultureKey, cultureType, player.key);
@@ -162,34 +168,35 @@ export const createWorld = (size: WorldSize): GameData => {
       objects.push(culture);
       player.cultureKey = culture.key;
 
-      player.designKeys.push(warbandDesign.key, hunterDesign.key, workerDesign.key);
+      player.designKeys.add(warbandDesign.key);
+      player.designKeys.add(hunterDesign.key);
+      player.designKeys.add(workerDesign.key);
 
       const hunter = new Unit(generateKey("unit"), hunterDesign.key, player.key, tile.key);
       const tribe = new Unit(generateKey("unit"), tribeDesign.key, player.key, tile.key);
       objects.push(hunter, tribe);
-      player.unitKeys.push(hunter.key, tribe.key);
-      tile.unitKeys.push(hunter.key, tribe.key);
-      hunterDesign.unitKeys.push(hunter.key);
-      tribeDesign.unitKeys.push(tribe.key);
+      player.unitKeys.add(hunter.key);
+      player.unitKeys.add(tribe.key);
+      tile.unitKeys.add(hunter.key);
+      tile.unitKeys.add(tribe.key);
+      hunterDesign.unitKeys.add(hunter.key);
+      tribeDesign.unitKeys.add(tribe.key);
     }
   }
 
   // Validate players
-  if (!bundle.world.currentPlayer) {
-    throw new Error("No current player set");
-  }
   for (const player of players) {
     if (!player.cultureKey) {
       throw new Error(`Player ${player.key} has no culture`);
     }
-    if (player.designKeys.length < 3) {
+    if (player.designKeys.size < 3) {
       throw new Error(`Player ${player.key} has less than 3 designs`);
     }
-    if (player.unitKeys.length < 2) {
+    if (player.unitKeys.size < 2) {
       throw new Error(`Player ${player.key} has less than 2 units`);
     }
   }
 
-  bundle.objects = objects;
+  bundle.objects = objects.map((o) => (o.toJSON ? o.toJSON() : o) as IRawGameObject);
   return bundle;
 };

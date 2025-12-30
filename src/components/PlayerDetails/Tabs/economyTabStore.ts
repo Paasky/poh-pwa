@@ -1,15 +1,15 @@
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import type { City } from "@/Common/Models/City";
 
 export const useEconomyTabStore = defineStore("economyTabStore", () => {
-  const objStore = useObjectsStore();
+  const bucket = useDataBucket();
   const initialized = ref(false);
 
   const headers = ref([{ title: "Source", key: "source" }]);
 
-  const cities = computed<City[]>(() => objStore.currentPlayer.cities as City[]);
+  const cities = computed<City[]>(() => useCurrentContext().currentPlayer.cities as City[]);
 
   function init() {
     if (initialized.value) return;

@@ -1,37 +1,102 @@
 <script setup lang="ts">
-// Home landing view
+import { computed, ref } from "vue";
+import { saveManager } from "@/utils/saveManager";
+import { useAppStore } from "@/stores/appStore";
+import { formatSaveDate } from "@/helpers/timeFormatter";
+import TerraConfigDialog from "./Home/TerraConfigDialog.vue";
+import SaveBrowserDialog from "./Home/SaveBrowserDialog.vue";
+import SettingsDialog from "@/components/Settings/SettingsDialog.vue";
+
+const app = useAppStore();
+const latestSave = computed(() => saveManager.getLatest());
+
+const showNewGame = ref(false);
+const showLoadGame = ref(false);
+const showSettings = ref(false);
+
+async function continueGame() {
+  const latest = latestSave.value;
+  if (latest) {
+    app.router.push({ path: "/game", query: { saveId: latest.id } });
+  }
+}
 </script>
 
 <template>
-  <main class="min-h-screen flex items-center justify-center text-slate-100">
-    <div class="text-center p-6">
-      <div class="flex justify-center mb-4">
-        <font-awesome-icon :icon="['fas', 'book-open']" class="text-5xl text-sky-400" />
-      </div>
-      <h1 class="text-4xl sm:text-6xl tracking-tight">Pages of History</h1>
+  <v-main class="fill-height d-flex align-center justify-center bg-grey-darken-4 text-white">
+    <div class="text-center pa-6" style="max-width: 600px; width: 100%">
+      <v-icon icon="mdi-book-open-variant" size="84" color="light-blue-lighten-2" class="mb-6" />
+      <h1 class="text-h2 font-weight-light tracking-tighter mb-12">Pages of History</h1>
 
-      <div class="mt-8">
-        <RouterLink
-          to="/game"
-          class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-900 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-400"
+      <div class="d-flex flex-column ga-4 align-center">
+        <!-- Continue Button -->
+        <v-btn
+          v-if="latestSave"
+          color="light-blue-darken-1"
+          size="x-large"
+          width="100%"
+          height="72"
+          prepend-icon="mdi-play-circle-outline"
+          @click="continueGame"
         >
-          Start
-        </RouterLink>
-        <RouterLink
-          to="/generator"
-          class="inline-flex items-center gap-2 px-6 py-3 ml-3 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400"
+          <div class="d-flex flex-column align-start">
+            <span class="text-button">Continue</span>
+            <span class="text-caption opacity-80">
+              {{ latestSave.name }} ({{ formatSaveDate(latestSave.time) }})
+            </span>
+          </div>
+        </v-btn>
+
+        <!-- New Game Button -->
+        <v-btn
+          color="emerald-darken-1"
+          size="x-large"
+          width="100%"
+          height="64"
+          prepend-icon="mdi-plus-circle-outline"
+          class="bg-green-darken-2"
+          @click="showNewGame = true"
         >
-          Generator
-        </RouterLink>
-        <RouterLink
-          to="/test"
-          class="inline-flex items-center gap-2 px-6 py-3 ml-3 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-900 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-300"
+          New Game
+        </v-btn>
+
+        <!-- Load Game Button -->
+        <v-btn
+          color="amber-darken-2"
+          size="x-large"
+          width="100%"
+          height="64"
+          prepend-icon="mdi-folder-open-outline"
+          @click="showLoadGame = true"
         >
-          Test
-        </RouterLink>
+          Load Game
+        </v-btn>
+
+        <!-- Settings Button -->
+        <v-btn
+          variant="outlined"
+          size="x-large"
+          width="100%"
+          height="64"
+          prepend-icon="mdi-cog-outline"
+          @click="showSettings = true"
+        >
+          Settings
+        </v-btn>
       </div>
+
+      <div class="mt-12 text-caption opacity-50">Alpha Version • Made with Love & History</div>
     </div>
-  </main>
+
+    <!-- Dialogs -->
+    <TerraConfigDialog v-model="showNewGame" />
+    <SaveBrowserDialog v-model="showLoadGame" />
+    <SettingsDialog v-model="showSettings" />
+  </v-main>
 </template>
 
-<style scoped></style>
+<style scoped>
+.tracking-tighter {
+  letter-spacing: -0.05em !important;
+}
+</style>

@@ -9,13 +9,12 @@ import type { Religion } from "@/Common/Models/Religion";
 import type { Tile } from "@/Common/Models/Tile";
 import type { TradeRoute } from "@/Common/Models/TradeRoute";
 import { Unit } from "@/Common/Models/Unit";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import { Construction } from "@/Common/Models/Construction";
 import { useEventStore } from "@/stores/eventStore";
 import { getRandom } from "@/helpers/arrayTools";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { UnitDesign } from "@/Common/Models/UnitDesign";
-import { useDataBucket } from "@/Data/useDataBucket";
 
 export class City extends GameObject {
   constructor(
@@ -91,7 +90,7 @@ export class City extends GameObject {
   }
 
   get constructableTypes(): TypeObject[] {
-    return Array.from(useObjectsStore().getClassTypes("buildingType"));
+    return Array.from(useDataBucket().getClassTypes("buildingType"));
   }
 
   get ownedTypes(): TypeObject[] {
@@ -181,5 +180,9 @@ export class City extends GameObject {
         new Unit(generateKey("unit"), trained.key, this.playerKey, this.tileKey, this.key),
       );
     }
+  }
+
+  warmUp(): void {
+    // todo
   }
 }

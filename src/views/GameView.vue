@@ -28,7 +28,7 @@ onMounted(async () => {
   initFullscreen();
 
   // Bootstrap the app data once (types + gameData) before showing the game UI
-  await app.init();
+  await app.init(app.router.currentRoute.value.query.saveId as string | undefined);
 
   // Initialize movement cameras orchestrator
   useMovementInteraction();

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import { TypeKey } from "@/Common/Objects/Common";
 
 const props = defineProps<{
@@ -21,7 +21,7 @@ const cornerSizeRem = computed(() => Math.min(props.xSize, props.ySize) * (2 / p
 const strokeOpacity = 1;
 const strokeWidth = 0.15;
 
-const objects = useObjectsStore();
+const objects = useDataBucket();
 
 function pathBetween(fromKey: TypeKey, toKey: TypeKey): string | null {
   const from = objects.getTypeObject(fromKey);

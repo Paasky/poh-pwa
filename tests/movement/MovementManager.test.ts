@@ -5,8 +5,8 @@ import { Tile } from "../../src/Common/Models/Tile";
 import { MovementManager } from "../../src/Simulation/Movement/MovementManager";
 import { useCurrentContext } from "../../src/composables/useCurrentContext";
 import { useAppStore } from "../../src/stores/appStore";
-import { EngineLayers } from "../../src/engine/EngineStyles";
-import { PohEngine } from "../../src/engine/PohEngine";
+import { EngineLayers } from "../../src/Player/Human/EngineStyles";
+import { PohEngine } from "../../src/Player/Human/PohEngine";
 
 describe("MovementManager", () => {
   let world: ReturnType<typeof createTestWorld>;

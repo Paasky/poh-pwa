@@ -1,20 +1,20 @@
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
-import { CatData, useObjectsStore } from "@/stores/objectStore";
+import { CatData, useDataBucket } from "@/Data/useDataBucket";
 
 export const useGovernmentTabStore = defineStore("governmentTabStore", () => {
-  const objStore = useObjectsStore();
+  const bucket = useDataBucket();
   const initialized = ref(false);
 
   // Static per-session data (categories & types don't change)
   const policyCats = ref<CatData[]>([]);
 
   // Pointers to current player's government selections
-  const government = computed(() => objStore.currentPlayer.government);
+  const government = computed(() => useCurrentContext().currentPlayer.government);
 
   function init() {
     if (initialized.value) return;
-    policyCats.value = objStore.getClassTypesPerCategory("policyType");
+    policyCats.value = bucket.getClassTypesPerCategory("policyType");
 
     // Warm up computed values
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions

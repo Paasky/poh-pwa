@@ -1,21 +1,21 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import Controls from "@/views/MapGenerator/components/Controls.vue";
 import Filters from "@/views/MapGenerator/components/Filters.vue";
 import LevelSection from "@/views/MapGenerator/components/LevelSection.vue";
 import { StaticData } from "@/types/api";
 import { useMapGenStore } from "@/stores/mapGenStore";
 
-const objStore = useObjectsStore();
+const bucket = useDataBucket();
 const mapGenStore = useMapGenStore();
 
 // Ensure static types are loaded for the generator
 async function ensureTypesReady() {
-  if (objStore.ready) return;
+  if (bucket.ready) return;
   const res = await fetch("/staticData.json", { cache: "no-store" });
   const staticData: StaticData = await res.json();
-  objStore.initStatic(staticData);
+  bucket.initStatic(staticData);
 }
 
 onMounted(async () => {

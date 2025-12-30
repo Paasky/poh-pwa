@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { Yield } from "@/Common/Objects/Yields";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import UiObjectChips from "@/components/Ui/UiObjectChips.vue";
 import getIcon from "@/types/icons";
 
@@ -15,7 +15,7 @@ export type yieldProps = {
 };
 
 const props = defineProps<{ y: Yield } & yieldProps>();
-const type = computed(() => useObjectsStore().getTypeObject(props.y.type));
+const type = computed(() => useDataBucket().getTypeObject(props.y.type));
 const icon = computed(() => getIcon(type.value.key));
 
 function amount(y: Yield): string {
@@ -27,7 +27,7 @@ function amount(y: Yield): string {
     return "Set to " + y.amount;
   }
 
-  const type = useObjectsStore().getTypeObject(y.type);
+  const type = useDataBucket().getTypeObject(y.type);
   let out = y.amount + "";
 
   // Percent-method
@@ -65,7 +65,7 @@ function color(y: Yield): string {
   // Respect opts first
   if (props.opts?.posLumpIsNeutral && y.amount > 0 && y.method === "lump") return "";
 
-  const type = useObjectsStore().getTypeObject(y.type);
+  const type = useDataBucket().getTypeObject(y.type);
 
   // These types are neutral if positive lump
   if (

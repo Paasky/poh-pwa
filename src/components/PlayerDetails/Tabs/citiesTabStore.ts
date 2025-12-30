@@ -1,13 +1,14 @@
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import type { City } from "@/Common/Models/City";
+import { useCurrentContext } from "@/composables/useCurrentContext";
 
 export const useCitiesTabStore = defineStore("citiesTabStore", () => {
-  const objStore = useObjectsStore();
+  const bucket = useDataBucket();
   const initialized = ref(false);
 
-  const cities = computed<City[]>(() => objStore.currentPlayer.cities as City[]);
+  const cities = computed<City[]>(() => useCurrentContext().currentPlayer.cities as City[]);
 
   // Column definitions are fairly UI-specific; keep data here per requirement
   const columns = ref([

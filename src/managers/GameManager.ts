@@ -1,5 +1,5 @@
 import { GameData } from "@/types/api";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import { useEventStore } from "@/stores/eventStore";
 import { getRandom } from "@/helpers/arrayTools";
 import { Construction } from "@/Common/Models/Construction";
@@ -8,25 +8,25 @@ import { asyncProcess } from "@/helpers/asyncProcess";
 
 export class GameManager {
   eventStore: ReturnType<typeof useEventStore>;
-  objStore: ReturnType<typeof useObjectsStore>;
+  bucket: ReturnType<typeof useDataBucket>;
   turnProgress: (step: string, progress: number | true) => void;
 
   // progress = 0-100 as percent, true = ready
   constructor(turnProgress: (step: string, progress: number | true) => void) {
     this.eventStore = useEventStore();
-    this.objStore = useObjectsStore();
+    this.bucket = useDataBucket();
     this.turnProgress = turnProgress;
   }
 
   save(): GameData {
     return {
-      objects: Object.values(this.objStore._gameObjects),
-      world: this.objStore.world,
+      objects: Object.values(this.bucket._gameObjects),
+      world: this.bucket.world,
     };
   }
 
   async startTurn(): Promise<this> {
-    const players = this.objStore.getClassGameObjects("player") as Player[];
+    const players = this.bucket.getClassGameObjects("player") as Player[];
     const stepCount = players.length + 4;
     let step = 0;
 
@@ -43,13 +43,11 @@ export class GameManager {
       const winner = getRandom(constructions);
       winner.complete(winner.city.value!.player.value);
 
-      (this.objStore.getClassGameObjects("construction") as Construction[]).forEach(
-        (construction) => {
-          if (construction.type.key === winner.type.key && construction.key !== winner.key) {
-            construction.cancel(construction.city.value!.player.value, true);
-          }
-        },
-      );
+      this.bucket.getClassObjects<Construction>("construction").forEach((construction) => {
+        if (construction.type.key === winner.type.key && construction.key !== winner.key) {
+          construction.cancel(construction.city.value!.player.value, true);
+        }
+      });
     }
     step++;
 

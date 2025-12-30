@@ -59,7 +59,7 @@ export type WorldState = {
   size: Coords;
   turn: number;
   year: number;
-  currentPlayer: GameKey;
+  currentPlayerKey: GameKey;
 };
 
 export type ObjectIcon = {

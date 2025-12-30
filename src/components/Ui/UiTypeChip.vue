@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { ObjKey, PohObject } from "@/Common/Objects/Common";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
 
@@ -13,7 +13,7 @@ const props = defineProps<{
 
 const t = computed((): TypeObject => {
   if (typeof props.type === "string")
-    return useObjectsStore().get(props.type as ObjKey) as TypeObject;
+    return useDataBucket().get(props.type as ObjKey) as TypeObject;
   return props.type as TypeObject;
 });
 
@@ -82,14 +82,14 @@ const border = computed(() => {
 const isCategory = computed(() => t.value.key.includes("Category:"));
 
 const tooltip = computed(() => {
-  const concept = useObjectsStore().getTypeObject(t.value.concept).name;
+  const concept = useDataBucket().getTypeObject(t.value.concept).name;
 
   if (isCategory.value) {
     return concept + " Category";
   }
 
   if (t.value.category) {
-    return `${useObjectsStore().getCategoryObject(t.value.category).name} ${concept}`;
+    return `${useDataBucket().getCategoryObject(t.value.category).name} ${concept}`;
   }
 
   return concept;

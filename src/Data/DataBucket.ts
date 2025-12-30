@@ -16,7 +16,13 @@ import type { Tile } from "@/Common/Models/Tile";
 // todo create a IRawType & IRawCategory
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type RawStaticData = { categories: any[]; types: any[] };
-export type RawSaveData = { objects: IRawGameObject[]; world: WorldState };
+export type RawSaveData = {
+  name: string; // "Leader Name - Culture Name" (user editable)
+  time: number; // UTC timestamp (ms)
+  version: string; // Schema version from package.json
+  objects: IRawGameObject[];
+  world: WorldState;
+};
 
 export class DataBucket {
   // Static Types and Categories
@@ -174,11 +180,16 @@ export class DataBucket {
     return [...created, ...updated];
   }
 
-  toSaveData(): RawSaveData {
-    const out = { objects: [] as IRawGameObject[], world: this.world };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.objects.forEach((o) => out.objects.push(o.toJSON() as any as IRawGameObject));
-    return out;
+  toSaveData(name: string, version: string): RawSaveData {
+    return {
+      name,
+      time: Date.now(),
+      version,
+      objects: Array.from(this.objects.values()).map(
+        (o) => o.toJSON() as unknown as IRawGameObject,
+      ),
+      world: JSON.parse(JSON.stringify(this.world)),
+    };
   }
 
   // Used to restore a save (if a Mutation set has failed)

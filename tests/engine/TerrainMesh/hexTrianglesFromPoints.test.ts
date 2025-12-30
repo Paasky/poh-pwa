@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { hexTrianglesFromPoints } from "../../../src/engine/TerrainMesh/hexTrianglesFromPoints";
+import { hexTrianglesFromPoints } from "../../../src/Player/Human/Terrain/hexTrianglesFromPoints";
 
 describe("hexTrianglesFromPoints", () => {
   it("K1 output", () => {

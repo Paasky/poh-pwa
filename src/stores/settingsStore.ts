@@ -1,9 +1,14 @@
+import pkg from "../../package.json";
 import { defineStore } from "pinia";
 import { loadFromBrowser, saveToBrowser } from "@/utils/persistentStorage";
-import { defaultEngineSettings, EngineSettings, gameSettingKeys } from "@/engine/EngineSettings";
+import {
+  defaultEngineSettings,
+  EngineSettings,
+  gameSettingKeys,
+} from "@/Player/Human/EngineSettings";
 
 const STORAGE_KEY = "poh.settings";
-const STORAGE_VERSION = 1;
+const STORAGE_VERSION = pkg.version;
 
 export type SettingsData = {
   engineSettings: EngineSettings;
@@ -35,10 +40,10 @@ export const useSettingsStore = defineStore("settings", {
         );
       }
 
-      // Auto-save on game-tab mutation (incl revert)
+      // Auto-save settings on mutation
       const snapshotGame = (): Record<string, unknown> => {
         const s: Record<string, unknown> = {};
-        for (const k of gameSettingKeys) s[k as string] = this.engineSettings[k];
+        for (const k of gameSettingKeys) s[k] = this.engineSettings[k];
         return s;
       };
 
