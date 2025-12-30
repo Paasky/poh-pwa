@@ -3,6 +3,7 @@ import { computed, ref } from "vue";
 import { defineStore } from "pinia";
 import { useDataBucket } from "@/Data/useDataBucket";
 import type { TypeObject } from "@/Common/Objects/TypeObject";
+import { useCurrentContext } from "@/composables/useCurrentContext";
 
 export const useResearchTabStore = defineStore("researchTabStore", () => {
   const bucket = useDataBucket();
@@ -19,8 +20,8 @@ export const useResearchTabStore = defineStore("researchTabStore", () => {
 
   function init() {
     if (initialized.value) return;
-    techs.value = bucket.getClassTypes("technologyType");
-    eras.value = bucket.getClassTypes("eraType");
+    techs.value = Array.from(bucket.getClassTypes("technologyType"));
+    eras.value = Array.from(bucket.getClassTypes("eraType"));
 
     // Warm up computed values
     player;

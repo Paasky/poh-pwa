@@ -37,11 +37,11 @@ describe("textTools", () => {
     loadStaticData();
     const objectsStore = useDataBucket();
 
-    const grass = objectsStore.getTypeObject("terrainType:grass");
+    const grass = objectsStore.getType("terrainType:grass");
     expect(typeObjWithArticle(grass)).toBe("a Grass");
 
     // Check wonder (should use "the")
-    const tajMahal = objectsStore.getTypeObject("worldWonderType:tajMahal");
+    const tajMahal = objectsStore.getType("worldWonderType:tajMahal");
     expect(typeObjWithArticle(tajMahal)).toBe("the Taj Mahal");
   });
 });

@@ -139,7 +139,7 @@ onBeforeUnmount(() => audio.stopQuote());
                     v-for="t in store.searchResults"
                     :key="t.key"
                     :title="t.name"
-                    :subtitle="useDataBucket().getTypeObject(t.concept).name"
+                    :subtitle="useDataBucket().getType(t.concept).name"
                     @click="
                       store.addSearchToHistory();
                       store.open(t.key);
@@ -173,7 +173,7 @@ onBeforeUnmount(() => audio.stopQuote());
           <div v-else class="px-4 d-flex flex-column ga-4">
             <h1>
               {{ store.current.title }} ({{
-                useDataBucket().getTypeObject(store.current.type.concept).name
+                useDataBucket().getType(store.current.type.concept).name
               }})
             </h1>
 

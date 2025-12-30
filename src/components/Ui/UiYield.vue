@@ -15,7 +15,7 @@ export type yieldProps = {
 };
 
 const props = defineProps<{ y: Yield } & yieldProps>();
-const type = computed(() => useDataBucket().getTypeObject(props.y.type));
+const type = computed(() => useDataBucket().getType(props.y.type));
 const icon = computed(() => getIcon(type.value.key));
 
 function amount(y: Yield): string {
@@ -27,7 +27,7 @@ function amount(y: Yield): string {
     return "Set to " + y.amount;
   }
 
-  const type = useDataBucket().getTypeObject(y.type);
+  const type = useDataBucket().getType(y.type);
   let out = y.amount + "";
 
   // Percent-method
@@ -65,7 +65,7 @@ function color(y: Yield): string {
   // Respect opts first
   if (props.opts?.posLumpIsNeutral && y.amount > 0 && y.method === "lump") return "";
 
-  const type = useDataBucket().getTypeObject(y.type);
+  const type = useDataBucket().getType(y.type);
 
   // These types are neutral if positive lump
   if (

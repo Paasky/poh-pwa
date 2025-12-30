@@ -82,7 +82,7 @@ const border = computed(() => {
 const isCategory = computed(() => t.value.key.includes("Category:"));
 
 const tooltip = computed(() => {
-  const concept = useDataBucket().getTypeObject(t.value.concept).name;
+  const concept = useDataBucket().getType(t.value.concept).name;
 
   if (isCategory.value) {
     return concept + " Category";

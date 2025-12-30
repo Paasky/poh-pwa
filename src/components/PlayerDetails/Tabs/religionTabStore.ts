@@ -4,7 +4,7 @@ import { defineStore } from "pinia";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { Religion } from "@/Common/Models/Religion";
 import type { CatKey } from "@/Common/Objects/Common";
-import { generateKey } from "@/Common/Models/_GameModel";
+import { Citizen } from "@/Common/Models/Citizen";
 
 export const useReligionTabStore = defineStore("religionTabStore", () => {
   const bucket = useDataBucket();
@@ -49,16 +49,8 @@ export const useReligionTabStore = defineStore("religionTabStore", () => {
     ],
   ] as unknown as CatKey[][]);
 
-  const religions = computed(() => bucket.getClassGameObjects("religion") as Religion[]);
-  const citizensCount = computed(() => bucket.getClassGameObjects("citizen").length);
-
-  const defaultCurrent = computed<Religion | null>(() => {
-    const firstCity = bucket.getClassGameObjects("city")[0];
-    if (!firstCity) return null;
-    // Construct a placeholder religion as in component
-    // name and turn are placeholders
-    return new Religion(generateKey("religion"), "Zoroastrianism", firstCity.key, 84) as Religion;
-  });
+  const religions = computed(() => Array.from(bucket.getClassObjects<Religion>("religion")));
+  const citizensCount = computed(() => bucket.getClassObjects<Citizen>("citizen").size);
 
   function init() {
     if (initialized.value) return;
@@ -66,7 +58,6 @@ export const useReligionTabStore = defineStore("religionTabStore", () => {
     // Warm up computed values
     religions;
     citizensCount;
-    defaultCurrent;
 
     initialized.value = true;
   }
@@ -79,7 +70,6 @@ export const useReligionTabStore = defineStore("religionTabStore", () => {
     dogmaData,
     religions,
     citizensCount,
-    defaultCurrent,
     init,
   };
 });

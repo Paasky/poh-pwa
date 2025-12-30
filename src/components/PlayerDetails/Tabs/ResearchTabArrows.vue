@@ -24,8 +24,8 @@ const strokeWidth = 0.15;
 const objects = useDataBucket();
 
 function pathBetween(fromKey: TypeKey, toKey: TypeKey): string | null {
-  const from = objects.getTypeObject(fromKey);
-  const to = objects.getTypeObject(toKey);
+  const from = objects.getType(fromKey);
+  const to = objects.getType(toKey);
   if (!from || !to) return null;
 
   const startX = from.x! * props.xSize + props.cardWidthRem / 2;

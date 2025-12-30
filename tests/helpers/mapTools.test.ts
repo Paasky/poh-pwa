@@ -34,11 +34,11 @@ describe("mapTools", () => {
         "tile:x0,y0",
         0,
         0,
-        objectsStore.getTypeObject("domainType:water"),
-        objectsStore.getTypeObject("continentType:taiga"),
-        objectsStore.getTypeObject("climateType:temperate"),
-        objectsStore.getTypeObject("terrainType:ocean"),
-        objectsStore.getTypeObject("elevationType:flat"),
+        objectsStore.getType("domainType:water"),
+        objectsStore.getType("continentType:taiga"),
+        objectsStore.getType("climateType:temperate"),
+        objectsStore.getType("terrainType:ocean"),
+        objectsStore.getType("elevationType:flat"),
       );
 
       expect(tileHeight(oceanTile)).toBe(-1);
@@ -53,11 +53,11 @@ describe("mapTools", () => {
         "tile:x0,y0",
         0,
         0,
-        objectsStore.getTypeObject("domainType:water"),
-        objectsStore.getTypeObject("continentType:taiga"),
-        objectsStore.getTypeObject("climateType:temperate"),
-        objectsStore.getTypeObject("terrainType:ocean"),
-        objectsStore.getTypeObject("elevationType:flat"),
+        objectsStore.getType("domainType:water"),
+        objectsStore.getType("continentType:taiga"),
+        objectsStore.getType("climateType:temperate"),
+        objectsStore.getType("terrainType:ocean"),
+        objectsStore.getType("elevationType:flat"),
       );
       expect(tileHeight(oceanTile, true)).toBe(-0.2); // waterLevel
     });

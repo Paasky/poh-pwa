@@ -32,11 +32,11 @@ describe("UnitMovement", () => {
       expect(landUnit.movement.isMobile.value).toBe(true);
 
       // Create a ship
-      const galleyPlatform = objectsStore.getTypeObject("platformType:galley");
+      const galleyPlatform = objectsStore.getType("platformType:galley");
       const shipDesign = new UnitDesign(
         "unitDesign:ship",
         galleyPlatform,
-        objectsStore.getTypeObject("equipmentType:woodRam"),
+        objectsStore.getType("equipmentType:woodRam"),
         "Galley",
         world.player.key,
       );
@@ -45,11 +45,11 @@ describe("UnitMovement", () => {
       expect(ship.movement.isMobile.value).toBe(true);
 
       // Create an air unit
-      const biplanePlatform = objectsStore.getTypeObject("platformType:biplane");
+      const biplanePlatform = objectsStore.getType("platformType:biplane");
       const airDesign = new UnitDesign(
         "unitDesign:air",
         biplanePlatform,
-        objectsStore.getTypeObject("equipmentType:airGun"),
+        objectsStore.getType("equipmentType:airGun"),
         "Biplane",
         world.player.key,
       );
@@ -58,11 +58,11 @@ describe("UnitMovement", () => {
       expect(plane.movement.isMobile.value).toBe(false);
 
       // Create a space unit
-      const satellitePlatform = objectsStore.getTypeObject("platformType:satellite");
+      const satellitePlatform = objectsStore.getType("platformType:satellite");
       const spaceDesign = new UnitDesign(
         "unitDesign:space",
         satellitePlatform,
-        objectsStore.getTypeObject("equipmentType:axe"),
+        objectsStore.getType("equipmentType:axe"),
         "Satellite",
         world.player.key,
       );
@@ -77,11 +77,11 @@ describe("UnitMovement", () => {
     });
 
     it("should return null cost for immobile units", () => {
-      const biplanePlatform = objectsStore.getTypeObject("platformType:biplane");
+      const biplanePlatform = objectsStore.getType("platformType:biplane");
       const airDesign = new UnitDesign(
         "unitDesign:air",
         biplanePlatform,
-        objectsStore.getTypeObject("equipmentType:airGun"),
+        objectsStore.getType("equipmentType:airGun"),
         "Biplane",
         world.player.key,
       );
@@ -158,7 +158,7 @@ describe("UnitMovement", () => {
     const shipDesign = new UnitDesign(
       "unitDesign:custom",
       customPlatform,
-      objectsStore.getTypeObject("equipmentType:woodRam"),
+      objectsStore.getType("equipmentType:woodRam"),
       "Custom Unit",
       world.player.key,
     );
@@ -204,8 +204,8 @@ describe("UnitMovement", () => {
       const objectsStore = useDataBucket();
       const shipDesign = new UnitDesign(
         "unitDesign:ship",
-        objectsStore.getTypeObject("platformType:galley"),
-        objectsStore.getTypeObject("equipmentType:woodRam"),
+        objectsStore.getType("platformType:galley"),
+        objectsStore.getType("equipmentType:woodRam"),
         "Galley",
         world.player.key,
       );
@@ -242,8 +242,8 @@ describe("UnitMovement", () => {
       const objectsStore = useDataBucket();
       const shipDesign = new UnitDesign(
         "unitDesign:ship",
-        objectsStore.getTypeObject("platformType:galley"),
-        objectsStore.getTypeObject("equipmentType:woodRam"),
+        objectsStore.getType("platformType:galley"),
+        objectsStore.getType("equipmentType:woodRam"),
         "Galley",
         world.player.key,
       );
@@ -263,8 +263,8 @@ describe("UnitMovement", () => {
       const objectsStore = useDataBucket();
       const shipDesign = new UnitDesign(
         "unitDesign:ship",
-        objectsStore.getTypeObject("platformType:galley"),
-        objectsStore.getTypeObject("equipmentType:woodRam"),
+        objectsStore.getType("platformType:galley"),
+        objectsStore.getType("equipmentType:woodRam"),
         "Galley",
         world.player.key,
       );
@@ -272,8 +272,8 @@ describe("UnitMovement", () => {
       const ship = new Unit("unit:ship", shipDesign.key, world.player.key, Tile.getKey(1, 2)); // Coast
 
       const anotherCoast = world.tiles[Tile.getKey(0, 0)]; // Make it coast for test
-      anotherCoast.domain = objectsStore.getTypeObject("domainType:water");
-      anotherCoast.terrain = objectsStore.getTypeObject("terrainType:coast");
+      anotherCoast.domain = objectsStore.getType("domainType:water");
+      anotherCoast.terrain = objectsStore.getType("terrainType:coast");
 
       expect(ship.movement.cost(anotherCoast)).toBe(1);
     });
@@ -282,8 +282,8 @@ describe("UnitMovement", () => {
       const objectsStore = useDataBucket();
       const shipDesign = new UnitDesign(
         "unitDesign:ship",
-        objectsStore.getTypeObject("platformType:galley"),
-        objectsStore.getTypeObject("equipmentType:woodRam"),
+        objectsStore.getType("platformType:galley"),
+        objectsStore.getType("equipmentType:woodRam"),
         "Galley",
         world.player.key,
       );
@@ -418,7 +418,7 @@ describe("UnitMovement", () => {
       ] as TypeKey[];
 
       standardTerrains.forEach((key) => {
-        target.terrain = objectsStore.getTypeObject(key);
+        target.terrain = objectsStore.getType(key);
         expect(unit.movement.cost(target)).toBe(1);
       });
     });
@@ -426,10 +426,10 @@ describe("UnitMovement", () => {
     it("should add +1 for difficult terrain (Desert, Snow)", () => {
       const unit = world.unit;
       const desertTile = world.tiles[Tile.getKey(0, 0)];
-      desertTile.terrain = objectsStore.getTypeObject("terrainType:desert");
+      desertTile.terrain = objectsStore.getType("terrainType:desert");
       expect(unit.movement.cost(desertTile)).toBe(2);
 
-      desertTile.terrain = objectsStore.getTypeObject("terrainType:snow");
+      desertTile.terrain = objectsStore.getType("terrainType:snow");
       expect(unit.movement.cost(desertTile)).toBe(2);
     });
 
@@ -464,7 +464,7 @@ describe("UnitMovement", () => {
       ] as TypeKey[];
 
       denseFeatures.forEach((key) => {
-        target.feature.value = objectsStore.getTypeObject(key);
+        target.feature.value = objectsStore.getType(key);
         expect(unit.movement.cost(target)).toBe(2); // 1 base + 1 feature
       });
     });
@@ -480,7 +480,7 @@ describe("UnitMovement", () => {
       ] as TypeKey[];
 
       lightFeatures.forEach((key) => {
-        target.feature.value = objectsStore.getTypeObject(key);
+        target.feature.value = objectsStore.getType(key);
         expect(unit.movement.cost(target)).toBe(1); // 1 base + 0 feature
       });
     });
@@ -495,9 +495,9 @@ describe("UnitMovement", () => {
     it("should accumulate multiple costs (e.g., Desert Hill Forest)", () => {
       const unit = world.unit;
       const complexTile = world.tiles[Tile.getKey(0, 0)];
-      complexTile.terrain = objectsStore.getTypeObject("terrainType:desert");
-      complexTile.elevation = objectsStore.getTypeObject("elevationType:hill");
-      complexTile.feature.value = objectsStore.getTypeObject("featureType:forest");
+      complexTile.terrain = objectsStore.getType("terrainType:desert");
+      complexTile.elevation = objectsStore.getType("elevationType:hill");
+      complexTile.feature.value = objectsStore.getType("featureType:forest");
 
       // Math: 1 (base) + 1 (Desert) + 1 (Hill) + 1 (Forest) = 4.0.
       expect(unit.movement.cost(complexTile)).toBe(4);

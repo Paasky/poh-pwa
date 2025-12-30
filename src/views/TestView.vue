@@ -18,27 +18,27 @@ const appStore = useAppStore();
 onMounted(async () => {
   bucket.initStatic(await fetchJSON<StaticData>("/staticData.json"));
 
-  const land = bucket.getTypeObject("domainType:land");
-  const water = bucket.getTypeObject("domainType:water");
+  const land = bucket.getType("domainType:land");
+  const water = bucket.getType("domainType:water");
 
-  const ocean = bucket.getTypeObject("terrainType:ocean");
-  const sea = bucket.getTypeObject("terrainType:sea");
-  const coast = bucket.getTypeObject("terrainType:coast");
-  const lake = bucket.getTypeObject("terrainType:lake");
-  const majorRiver = bucket.getTypeObject("terrainType:majorRiver");
-  const grass = bucket.getTypeObject("terrainType:grass");
-  const tundra = bucket.getTypeObject("terrainType:tundra");
+  const ocean = bucket.getType("terrainType:ocean");
+  const sea = bucket.getType("terrainType:sea");
+  const coast = bucket.getType("terrainType:coast");
+  const lake = bucket.getType("terrainType:lake");
+  const majorRiver = bucket.getType("terrainType:majorRiver");
+  const grass = bucket.getType("terrainType:grass");
+  const tundra = bucket.getType("terrainType:tundra");
 
-  const flat = bucket.getTypeObject("elevationType:flat");
-  const hill = bucket.getTypeObject("elevationType:hill");
-  const mountain = bucket.getTypeObject("elevationType:mountain");
-  const snowMountain = bucket.getTypeObject("elevationType:snowMountain");
+  const flat = bucket.getType("elevationType:flat");
+  const hill = bucket.getType("elevationType:hill");
+  const mountain = bucket.getType("elevationType:mountain");
+  const snowMountain = bucket.getType("elevationType:snowMountain");
 
-  const pineForest = bucket.getTypeObject("featureType:pineForest");
-  const forest = bucket.getTypeObject("featureType:forest");
-  const jungle = bucket.getTypeObject("featureType:jungle");
-  const shrubs = bucket.getTypeObject("featureType:shrubs");
-  const swamp = bucket.getTypeObject("featureType:swamp");
+  const pineForest = bucket.getType("featureType:pineForest");
+  const forest = bucket.getType("featureType:forest");
+  const jungle = bucket.getType("featureType:jungle");
+  const shrubs = bucket.getType("featureType:shrubs");
+  const swamp = bucket.getType("featureType:swamp");
 
   // Init test world
   const tile = (
@@ -60,8 +60,8 @@ onMounted(async () => {
       x,
       y,
       opts.domain ?? land,
-      opts.area ?? bucket.getTypeObject("continentType:taiga"),
-      opts.climate ?? bucket.getTypeObject("climateType:temperate"),
+      opts.area ?? bucket.getType("continentType:taiga"),
+      opts.climate ?? bucket.getType("climateType:temperate"),
       opts.terrain ?? grass,
       opts.elevation ?? flat,
       opts.feature ?? null,

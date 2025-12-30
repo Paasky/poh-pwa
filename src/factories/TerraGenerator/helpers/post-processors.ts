@@ -91,8 +91,8 @@ export const mountainRange = (
   tiles: Record<string, GenTile>,
   size: { x: number; y: number },
 ): GenTile[] => {
-  const mountain = useDataBucket().getTypeObject("elevationType:mountain");
-  const snowMountain = useDataBucket().getTypeObject("elevationType:snowMountain");
+  const mountain = useDataBucket().getType("elevationType:mountain");
+  const snowMountain = useDataBucket().getType("elevationType:snowMountain");
 
   let waterCount = 0;
   return new Snake(
@@ -197,7 +197,7 @@ export const makeRiver = (
   tiles: Record<string, GenTile>,
   rivers: Record<string, River>,
 ): River => {
-  const floodPlain = useDataBucket().getTypeObject("featureType:floodPlain");
+  const floodPlain = useDataBucket().getType("featureType:floodPlain");
   const river = new River(generateKey("river"), "River", []);
   rivers[river.key] = river;
 
@@ -216,7 +216,7 @@ export const makeRiver = (
       if (majorMode) {
         tile.isMajorRiver = true;
         if (tile.domain.id === "land") {
-          tile.terrain = useDataBucket().getTypeObject("terrainType:majorRiver");
+          tile.terrain = useDataBucket().getType("terrainType:majorRiver");
           tile.feature = null;
         }
       }
@@ -299,7 +299,7 @@ export const makeRiver = (
         const tileKey = otherRiverTileKeys[i];
         tiles[tileKey].isMajorRiver = true;
         if (tiles[tileKey].domain.id === "land") {
-          tiles[tileKey].terrain = useDataBucket().getTypeObject("terrainType:majorRiver");
+          tiles[tileKey].terrain = useDataBucket().getType("terrainType:majorRiver");
           tiles[tileKey].feature = null;
         }
       }

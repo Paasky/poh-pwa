@@ -96,7 +96,7 @@ describe("Pathfinder", () => {
     // Setup: Unit at (1,1) with 1 move.
     // Neighbor (0,1) is made flat grass (cost 1).
     const targetNeighbor = tiles[Tile.getKey(0, 1)];
-    targetNeighbor.elevation = objectsStore.getTypeObject("elevationType:flat");
+    targetNeighbor.elevation = objectsStore.getType("elevationType:flat");
     targetNeighbor.feature.value = null;
 
     unit.movement.moves.value = 1;

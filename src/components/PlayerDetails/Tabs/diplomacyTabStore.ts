@@ -13,7 +13,7 @@ export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
   const bucket = useDataBucket();
   const initialized = ref(false);
 
-  const players = computed(() => bucket.getClassGameObjects("player") as Player[]);
+  const players = computed(() => Array.from(bucket.getClassObjects<Player>("player")));
   const current = ref<Player | null>(null);
 
   const columns = ref<TableColumn<Player>[]>([
@@ -29,17 +29,17 @@ export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
       title: "Agendas",
       key: "agendas",
       align: "end",
-      value: (p: Player) => p.agendaKeys.length,
+      value: (p: Player) => p.agendaKeys.size,
     },
-    { title: "Deals", key: "deals", align: "end", value: (p: Player) => p.dealKeys.length },
+    { title: "Deals", key: "deals", align: "end", value: (p: Player) => p.dealKeys.size },
     {
       title: "Trade Routes",
       key: "tradeRoutes",
       align: "end",
-      value: (p: Player) => p.tradeRouteKeys.length,
+      value: (p: Player) => p.tradeRouteKeys.size,
     },
-    { title: "Cities", key: "cities", align: "end", value: (p: Player) => p.cityKeys.length },
-    { title: "Units", key: "units", align: "end", value: (p: Player) => p.unitKeys.length },
+    { title: "Cities", key: "cities", align: "end", value: (p: Player) => p.cityKeys.size },
+    { title: "Units", key: "units", align: "end", value: (p: Player) => p.unitKeys.size },
   ]);
 
   const cultureTimeline = computed(() => {
@@ -49,9 +49,7 @@ export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
 
   const leaderTimeline = computed(() => {
     return cultureTimeline.value.map((c) =>
-      bucket.getTypeObject(
-        c.allows.find((a: string) => a.startsWith("majorLeaderType:")) as TypeKey,
-      ),
+      bucket.getType(c.allows.find((a: string) => a.startsWith("majorLeaderType:")) as TypeKey),
     );
   });
 

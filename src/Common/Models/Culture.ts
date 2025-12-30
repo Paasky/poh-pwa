@@ -73,12 +73,12 @@ export class Culture extends GameObject {
         `${this.type.key}.allows has no majorLeaderType: ${JSON.stringify(this.type.allows)}`,
       );
     }
-    return useDataBucket().getTypeObject(leaderKey);
+    return useDataBucket().getType(leaderKey);
   }
 
   get region(): TypeObject {
     const key = this.type.requires!.filter(["regionType"]).allTypes[0] as TypeKey;
-    return useDataBucket().getTypeObject(key);
+    return useDataBucket().getType(key);
   }
 
   get selectableHeritages(): TypeObject[] {
@@ -86,10 +86,10 @@ export class Culture extends GameObject {
     if (this.status === "settled") return [];
 
     const selectable: TypeObject[] = [];
-    for (const CatKey, Set<TypeObject> of useDataBucket().getClassTypesPerCategory("heritageType")) {
-      const catIsSelected = CatKey, Set<TypeObject>.types.some((h) => this.heritages.includes(h));
+    for (const types of useDataBucket().getClassTypesPerCategory("heritageType").values()) {
+      const catIsSelected = this.heritages.some((heritage) => types.has(heritage));
 
-      for (const heritage of CatKey, Set<TypeObject>.types) {
+      for (const heritage of types) {
         // Already selected
         if (this.heritages.includes(heritage)) continue;
 
@@ -113,10 +113,10 @@ export class Culture extends GameObject {
     if (this.mustSelectTraits.positive + this.mustSelectTraits.negative <= 0) return [];
 
     const selectable: TypeObject[] = [];
-    for (const CatKey, Set<TypeObject> of useDataBucket().getClassTypesPerCategory("traitType")) {
-      const catIsSelected = CatKey, Set<TypeObject>.types.some((t) => this.traits.includes(t));
+    for (const types of useDataBucket().getClassTypesPerCategory("traitType").values()) {
+      const catIsSelected = this.traits.some((trait) => types.has(trait));
 
-      for (const trait of CatKey, Set<TypeObject>.types) {
+      for (const trait of types) {
         // Category already selected
         if (catIsSelected) continue;
 
@@ -151,7 +151,7 @@ export class Culture extends GameObject {
     for (const type of tile.types) {
       for (const allowedKey of type.allows) {
         if (allowedKey.startsWith("heritageType:")) {
-          const heritage = useDataBucket().getTypeObject(allowedKey as TypeKey);
+          const heritage = useDataBucket().getType(allowedKey as TypeKey);
           if (heritage.category) {
             this.addHeritagePoints(heritage.category, 1);
           }
@@ -164,7 +164,7 @@ export class Culture extends GameObject {
     const nextTypeKey = this.type.upgradesTo[0];
     if (!nextTypeKey) throw new Error(`${this.key} cannot evolve further`);
 
-    this.type = useDataBucket().getTypeObject(nextTypeKey);
+    this.type = useDataBucket().getType(nextTypeKey);
 
     // If all traits have not been selected yet (4 = two categories to select: one must be pos, one neg)
     if (this.selectableTraits.length >= 4) {
@@ -195,7 +195,7 @@ export class Culture extends GameObject {
     // If gains a tech, complete it immediately
     for (const gainKey of heritage.gains) {
       if (gainKey.startsWith("technologyType:")) {
-        this.player.research.complete(useDataBucket().getTypeObject(gainKey));
+        this.player.research.complete(useDataBucket().getType(gainKey));
       }
     }
   }

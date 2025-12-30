@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-import { computed, ref } from 'vue'
-import { defineStore } from 'pinia'
-import { useDataBucket } from '@/Data/useDataBucket'
-import type { Unit } from '@/Common/Models/Unit'
-import type { UnitDesign } from '@/Common/Models/UnitDesign'
+import { computed, ref } from "vue";
+import { defineStore } from "pinia";
+import type { Unit } from "@/Common/Models/Unit";
+import type { UnitDesign } from "@/Common/Models/UnitDesign";
+import { useCurrentContext } from "@/composables/useCurrentContext";
 
 export const useUnitsTabStore = defineStore("unitsTabStore", () => {
-  const bucket = useDataBucket();
   const initialized = ref(false);
 
   const player = computed(() => useCurrentContext().currentPlayer);
