@@ -93,5 +93,9 @@ export default defineConfig(async ({ command }) => {
         "@": fileURLToPath(new URL("./src", import.meta.url)),
       },
     },
+    test: {
+      environment: "happy-dom",
+      setupFiles: ["./tests/_setup/vitest-canvas-mock.ts"],
+    },
   };
 });

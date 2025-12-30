@@ -5,6 +5,13 @@ import { Construction } from "@/Common/Models/Construction";
 import { City } from "@/Common/Models/City";
 import { Tile } from "@/Common/Models/Tile";
 
+export const belongsToCity = (
+  city: City,
+  object: { key: GameKey; cityKey: GameKey | null },
+): void => {
+  if (city.key !== object.cityKey) throw new Error(`${object.key} does not belong to ${city.name}`);
+};
+
 export const belongsToPlayer = (
   player: Player,
   object: { key: GameKey; playerKey: GameKey | null },

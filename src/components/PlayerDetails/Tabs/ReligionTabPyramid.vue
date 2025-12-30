@@ -14,12 +14,12 @@ const props = defineProps<{
 
 const bucket = useDataBucket();
 
-type CatData = {
+type CatKey, Set<TypeObject> = {
   cat: CategoryObject;
   types: TypeObject[];
 };
 
-function buildPyramid(pyramid: CatKey[][], selectedTypes: TypeObject[]): CatData[][] {
+function buildPyramid(pyramid: CatKey[][], selectedTypes: TypeObject[]): CatKey, Set<TypeObject>[][] {
   return pyramid.map((row) =>
     row.map((catKey) => {
       const catTypes = bucket.getCategoryTypes(catKey);
@@ -44,10 +44,10 @@ const pyramid = computed(() => buildPyramid(props.catPyramid, props.current.myth
     <h2 class="mb-4" style="text-align: center">{{ title }}</h2>
     <div v-for="row in pyramid" :key="row.join(',')" class="d-flex ga-4 justify-center">
       <UiObjectCards
-        v-for="catData in row"
-        :key="catData.cat.key"
-        :title="catData.cat.name"
-        :types="catData.types"
+        v-for="CatKey, Set<TypeObject> in row"
+        :key="CatKey, Set<TypeObject>.cat.key"
+        :title="CatKey, Set<TypeObject>.cat.name"
+        :types="CatKey, Set<TypeObject>.types"
         :selected="current.myths as TypeObject[]"
         :selectable="current.selectableMyths"
         :select-pos="'bottom'"

@@ -128,11 +128,11 @@ export class UnitMovement {
     const enemyUnitTiles = new Set<GameKey>();
 
     for (const u of bucket.getClassObjects<Unit>("unit")) {
-      if (player.visibleTileKeys.has(u.tileKey.value)) {
-        if (u.playerKey.value === player.key) {
-          friendlyUnitTiles.add(u.tileKey.value);
+      if (player.visibleTileKeys.has(u.tileKey)) {
+        if (u.playerKey === player.key) {
+          friendlyUnitTiles.add(u.tileKey);
         } else {
-          enemyUnitTiles.add(u.tileKey.value);
+          enemyUnitTiles.add(u.tileKey);
         }
       }
     }
@@ -152,9 +152,9 @@ export class UnitMovement {
   move(context?: MoveContext): boolean | TurnEnd {
     if (!context) context = UnitMovement.getMoveContext(this.unit);
 
-    if (!this.isMobile.value) return false;
-    if (this.path.length === 0) return this.moves.value <= 0 ? "turnEnd" : true;
-    if (this.moves.value <= 0) return "turnEnd";
+    if (!this.isMobile) return false;
+    if (this.path.length === 0) return this.moves <= 0 ? "turnEnd" : true;
+    if (this.moves <= 0) return "turnEnd";
 
     // 1. Pre-calculate reachable steps
     const reachableSteps: { tile: Tile; cost: number }[] = [];
@@ -213,16 +213,16 @@ export class UnitMovement {
     }
 
     // Remove from orig tile, add to new tiles
-    this.unit.tile.unitKeys.value = this.unit.tile.unitKeys.filter((key) => key !== this.unit.key);
-    this.unit.tileKey.value = reachableSteps[actualStepCount - 1].tile.key;
-    this.unit.tile.unitKeys.push(this.unit.key);
+    this.unit.tile.unitKeys.delete(this.unit.key);
+    this.unit.tileKey = reachableSteps[actualStepCount - 1].tile.key;
+    this.unit.tile.unitKeys.add(this.unit.key);
 
-    this.moves.value = Math.max(0, roundToTenth(this.moves.value - totalSpent));
+    this.moves = Math.max(0, roundToTenth(this.moves - totalSpent));
 
     this.path = this.path.slice(actualStepCount);
 
     if (stopReason === "blocked" || stopReason === "danger") return false;
-    return this.moves.value <= 0 ? "turnEnd" : true;
+    return this.moves <= 0 ? "turnEnd" : true;
   }
 
   // NOTE: Keep in-sync with keys used in useMoveCostCache.getRelevantSpecialKeys()
@@ -237,7 +237,7 @@ export class UnitMovement {
     // 1. Domain Constraints
     // Water units on land: only if City or Canal
     if (myDomainKey === "domainType:water" && to.domain.id !== "water") {
-      if (!to.cityKey.value && to.construction.value?.type.key !== "improvementType:canal") {
+      if (!to.cityKey && to.construction?.type.key !== "improvementType:canal") {
         return null;
       }
     }
@@ -325,11 +325,11 @@ export class UnitMovement {
   }
 
   private getCachedCost(to: Tile, from: Tile): number | TurnEnd | null | undefined {
-    return this.costCache.getMoveCost(this.cacheKey.value, from.key, to.key);
+    return this.costCache.getMoveCost(this.cacheKey, from.key, to.key);
   }
 
   private setCachedCost(to: Tile, from: Tile, cost: number | TurnEnd | null) {
-    return this.costCache.setMoveCost(this.cacheKey.value, from.key, to.key, cost);
+    return this.costCache.setMoveCost(this.cacheKey, from.key, to.key, cost);
   }
 
   toJSON(): unknown {

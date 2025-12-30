@@ -78,7 +78,7 @@ export class Minimap {
     this._applyCameraBounds(getFullWorldOrthoBounds(this._size));
 
     // Build a simple terrain for the minimap to capture
-    this._terrain = new TerrainMesh(this._scene, this._size, useDataBucket().getTiles, {
+    this._terrain = new TerrainMesh(this._scene, this._size, useDataBucket().getTiles(), {
       hexRingCount: 1,
       lowDetail: true,
     });

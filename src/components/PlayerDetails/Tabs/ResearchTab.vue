@@ -82,7 +82,7 @@ function onTechClick(tech: TypeObject, e: MouseEvent) {
         width: `${cardWidthRem}rem`,
         height: `${cardHeightRem}rem`,
         cursor:
-          !store.research.researched.includes(tech) && store.research.current.value !== tech
+          !store.research.researched.includes(tech) && store.research.current !== tech
             ? 'pointer'
             : 'default',
       }"
@@ -92,7 +92,7 @@ function onTechClick(tech: TypeObject, e: MouseEvent) {
         class="h-100"
         :type="tech as TypeObject"
         :canSelect="!store.research.researched.includes(tech)"
-        :isSelected="store.research.queue.includes(tech) || store.research.current.value === tech"
+        :isSelected="store.research.queue.includes(tech) || store.research.current === tech"
       />
     </div>
   </div>

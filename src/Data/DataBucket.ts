@@ -11,6 +11,7 @@ import {
 } from "@/Common/Objects/TypeObject";
 import type { GameClass, GameKey, GameObject, IRawGameObject } from "@/Common/Models/_GameModel";
 import { GameDataLoader } from "@/Data/GameDataLoader";
+import { setDataBucket } from "@/Data/useDataBucket";
 import type { Tile } from "@/Common/Models/Tile";
 
 // todo create a IRawType & IRawCategory
@@ -20,7 +21,9 @@ export type RawSaveData = {
   name: string; // "Leader Name - Culture Name" (user editable)
   time: number; // UTC timestamp (ms)
   version: string; // Schema version from package.json
-  objects: IRawGameObject[];
+  // Use any so IDE doesn't complain (this is raw json data anyway)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  objects: (IRawGameObject | any)[];
   world: WorldState;
 };
 
@@ -64,6 +67,7 @@ export class DataBucket {
 
     // All static data initialized, now create the DataBucket instance
     const instance = new DataBucket(types, categories, rawSaveData.world);
+    setDataBucket(instance);
 
     // Finally, initialize the raw objects
     instance.setRawObjects(rawSaveData.objects);
@@ -79,7 +83,15 @@ export class DataBucket {
 
   getCategory(key: CatKey): CategoryObject {
     const category = this.categories.get(key);
-    if (!category) throw new Error(`DataBucket.getCategory(${key}) does not exist!`);
+    if (!category) {
+      // Special case for Eras: eraType is used as category for techs
+      if (key.startsWith("eraType:")) {
+        const era = this.types.get(key as TypeKey);
+        if (era) return era as unknown as CategoryObject;
+      }
+
+      throw new Error(`DataBucket.getCategory(${key}) does not exist!`);
+    }
     return category;
   }
 
@@ -109,6 +121,22 @@ export class DataBucket {
     return out;
   }
 
+  getClassTypesPerCategory(classKey: TypeClass): Map<CatKey, Set<TypeObject>> {
+    const classTypes = this.classTypesIndex.get(classKey);
+    if (!classTypes) throw new Error(`DataBucket.getClassTypes(${classKey}) does not exist!`);
+
+    const out = new Map<CatKey, Set<TypeObject>>();
+    classTypes.forEach((key) => {
+      const category = this.getType(key).category;
+      if (category) {
+        const set = out.get(category) ?? new Set<TypeObject>();
+        set.add(this.getType(key));
+        out.set(category, set);
+      }
+    });
+    return out;
+  }
+
   getClassCats(classKey: CategoryClass): Set<CategoryObject> {
     const out = new Set<CategoryObject>();
     const classCats = this.classCatsIndex.get(classKey);
@@ -119,10 +147,10 @@ export class DataBucket {
   }
 
   getClassObjects<T extends GameObject>(classKey: GameClass): Set<T> {
-    const out = new Set<T>();
     const classObjects = this.classObjectsIndex.get(classKey);
-    if (!classObjects) throw new Error(`DataBucket.getClassObjects(${classKey}) does not exist!`);
+    if (!classObjects) return new Set<T>();
 
+    const out = new Set<T>();
     classObjects.forEach((key) => out.add(this.getObject(key)));
     return out;
   }

@@ -187,27 +187,26 @@ export class LogicMesh {
         // Don't trust indexOf as it does an exact obj check
         for (const [i, item] of tile.selectable.entries()) {
           if (item.key === current.object.value!.key) {
-            current.object.value =
-              tile.selectable.value[wrapExclusive(i + 1, 0, tile.selectable.length)];
+            current.object.value = tile.selectable[wrapExclusive(i + 1, 0, tile.selectable.length)];
             return;
           }
         }
       }
 
       // Nothing is selected/selected item is not selectable anymore -> select the first item
-      current.object.value = tile.selectable.value[0];
+      current.object.value = tile.selectable[0];
       return;
     }
 
     // Tile is not selected -> select the first item
     current.tile.value = tile;
-    current.object.value = tile.selectable.value[0];
+    current.object.value = tile.selectable[0];
   }
 
   private onTileAction(tile: Tile): void {
     const current = useCurrentContext();
     // Check it's a unit
-    const object = current.object;
+    const object = current.object.value;
     if (object?.class !== "unit") return;
     const unit = object as Unit;
 

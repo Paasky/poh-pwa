@@ -216,18 +216,18 @@ export default class FeatureInstancer {
   }
 
   private getFeatureGroup(tile: Tile): FeatureGroup | null {
-    if (tile.feature.value?.id === "pineForest") return "pineTree";
-    if (tile.feature.value?.id === "forest") return "leafTree";
-    if (tile.feature.value?.id === "jungle") return "jungleTree";
-    if (tile.feature.value?.id === "shrubs") return "bush";
-    if (tile.feature.value?.id === "oasis") return "palmTree";
-    if (tile.feature.value?.id === "floodPlain") return "floodPlain";
-    if (tile.feature.value?.id === "swamp") return "swamp";
-    if (tile.feature.value?.id === "ice") return "ice";
-    if (tile.feature.value?.id === "kelp") return "kelp";
-    if (tile.feature.value?.id === "lagoon") return "lagoon";
-    if (tile.feature.value?.id === "atoll") return "atoll";
-    if (tile.feature.value?.id === "tradeWind") return "tradeWind";
+    if (tile.feature?.id === "pineForest") return "pineTree";
+    if (tile.feature?.id === "forest") return "leafTree";
+    if (tile.feature?.id === "jungle") return "jungleTree";
+    if (tile.feature?.id === "shrubs") return "bush";
+    if (tile.feature?.id === "oasis") return "palmTree";
+    if (tile.feature?.id === "floodPlain") return "floodPlain";
+    if (tile.feature?.id === "swamp") return "swamp";
+    if (tile.feature?.id === "ice") return "ice";
+    if (tile.feature?.id === "kelp") return "kelp";
+    if (tile.feature?.id === "lagoon") return "lagoon";
+    if (tile.feature?.id === "atoll") return "atoll";
+    if (tile.feature?.id === "tradeWind") return "tradeWind";
     return null;
   }
 

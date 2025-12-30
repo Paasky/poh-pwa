@@ -10,8 +10,6 @@ import { Construction } from "@/Common/Models/Construction";
 import { tileCenter } from "@/helpers/math";
 import { Tile } from "@/Common/Models/Tile";
 import { EngineLayers } from "@/Player/Human/EngineStyles";
-import { watch } from "vue";
-import { useDataBucket } from "@/Data/useDataBucket";
 
 export class ObjectInstancer {
   scene: Scene;
@@ -76,13 +74,6 @@ export class ObjectInstancer {
     regUnit.instance.dispose();
     this.unitReg.delete(unitKey);
 
-    // Clean up unwatchers added in setUnit
-    const unit = useDataBucket()._gameObjects[unitKey] as Unit;
-    if (unit) {
-      unit.unwatchers.forEach((u) => u());
-      unit.unwatchers = [];
-    }
-
     return this;
   }
 
@@ -128,7 +119,7 @@ export class ObjectInstancer {
           else throw new Error(`Construction ${key} already exists`);
         }
 
-        const pos = this.getPos(construction.tile.value);
+        const pos = this.getPos(construction.tile);
         const m = Matrix.Translation(pos.x, pos.y, pos.z);
         m.copyToArray(batch.matrices, batch.count * 16);
 
@@ -155,18 +146,12 @@ export class ObjectInstancer {
         }
       }
 
-      const instance = this.getDesignMesh(unit.design.value).createInstance(unit.key);
+      const instance = this.getDesignMesh(unit.design).createInstance(unit.key);
       instance.isVisible = true;
       instance.renderingGroupId = EngineLayers.units.group;
-      instance.position.copyFrom(this.getPos(unit.tile.value));
+      instance.position.copyFrom(this.getPos(unit.tile));
 
       this.unitReg.set(unit.key, { instance, designKey: unit.design.key });
-
-      unit.unwatchers.push(
-        watch(unit.tileKey, () => {
-          instance.position.copyFrom(this.getPos(unit.tile.value));
-        }),
-      );
     }
 
     return this;

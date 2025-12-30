@@ -59,6 +59,7 @@ export class PohEngine {
   private _knownBounds: OrthoBounds | null = null;
   private flyToObserver: Observer<Scene> | null = null;
   private readonly _stopHandles: (() => void)[] = [];
+  private readonly _injectedEngine?: BabylonEngine;
 
   constructor(size: Coords, canvas: HTMLCanvasElement, minimapCanvas?: HTMLCanvasElement) {
     // Prevent strange bugs from happening
@@ -75,26 +76,30 @@ export class PohEngine {
     useCurrentContext().hover.value = undefined;
   };
 
-  initEngineAndScene(): this {
+  initEngineAndScene(customEngine?: BabylonEngine): this {
     const settings = useSettingsStore().engineSettings;
 
-    this.engine = new BabylonEngine(
-      this.canvas,
-      settings.antialias,
-      {
-        preserveDrawingBuffer: settings.preserveDrawingBuffer,
-        stencil: settings.stencil,
-        disableWebGL2Support: settings.disableWebGL2Support,
-        powerPreference: settings.powerPreference,
-      },
-      settings.adaptToDeviceRatio,
-    );
+    if (customEngine) {
+      // Used in tests for NullEngine
+      this.engine = customEngine;
+    } else {
+      this.engine = new BabylonEngine(
+        this.canvas,
+        settings.antialias,
+        {
+          preserveDrawingBuffer: settings.preserveDrawingBuffer,
+          stencil: settings.stencil,
+          disableWebGL2Support: settings.disableWebGL2Support,
+          powerPreference: settings.powerPreference,
+        },
+        settings.adaptToDeviceRatio,
+      );
+    }
     this.scene = new Scene(this.engine);
     this.scene.clearColor = new Color4(0.63, 0.63, 0.63, 1); // Same-ish as snow
 
     // Allow for easy debugging
-    // eslint-disable-next-line
-    (document as any).engineService = this;
+    (window as unknown as { engineService: PohEngine }).engineService = this;
 
     // Watch for non-restart settings changes
     this.applyRenderScale(settings.renderScale);
@@ -189,8 +194,9 @@ export class PohEngine {
     this.objectInstancer = new ObjectInstancer(
       this.scene,
       this.size,
-      bucket.getClassObjects<Construction>("construction"),
-      bucket.getClassObjects<Unit>("unit"),
+      // todo should we refactor instancer to accept the Set?
+      Array.from(bucket.getClassObjects<Construction>("construction")),
+      Array.from(bucket.getClassObjects<Unit>("unit")),
     );
 
     return this;
@@ -203,7 +209,7 @@ export class PohEngine {
     const player = useCurrentContext().currentPlayer;
     this._stopHandles.push(
       watch(
-        [player.knownTileKeys, player.visibleTileKeys],
+        () => [player.knownTileKeys, player.visibleTileKeys],
         ([known]) => {
           this._knownBounds = calculateKnownBounds(this.size, known);
           // Trigger minimap update if it exists
@@ -247,33 +253,33 @@ export class PohEngine {
     return this;
   }
 
-  initOrder(): { title: string; fn: () => void }[] {
+  initOrder(customEngine?: BabylonEngine): { title: string; fn: () => void }[] {
     return [
       // All components require the engine/scene
-      { title: "initEngineAndScene", fn: () => this.initEngineAndScene() },
+      { title: "Start Engine", fn: () => this.initEngineAndScene(customEngine) },
 
       // No other requirements
-      { title: "initContextOverlay", fn: () => this.initContextOverlay() },
-      { title: "initGridOverlay", fn: () => this.initGridOverlay() },
-      { title: "initPathfinding", fn: () => this.initPathfinding() },
-      { title: "initLogic", fn: () => this.initLogic() },
-      { title: "initObjects", fn: () => this.initObjectInstancer() },
-      { title: "initTerrain", fn: () => this.initTerrain() },
+      { title: "Start ContextOverlay", fn: () => this.initContextOverlay() },
+      { title: "Start GridOverlay", fn: () => this.initGridOverlay() },
+      { title: "Start Pathfinding", fn: () => this.initPathfinding() },
+      { title: "Start Logic", fn: () => this.initLogic() },
+      { title: "Start Objects", fn: () => this.initObjectInstancer() },
+      { title: "Start Terrain", fn: () => this.initTerrain() },
 
       // Requires ContextOverlay & GridOverlay
-      { title: "initCamera", fn: () => this.initCamera() },
+      { title: "Start Camera", fn: () => this.initCamera() },
 
       // Requires Terrain
-      { title: "initFeatures", fn: () => this.initFeatures() },
+      { title: "Start Features", fn: () => this.initFeatures() },
 
       // Requires Camera
-      { title: "initEnvironment", fn: () => this.initEnvironment() },
+      { title: "Start Environment", fn: () => this.initEnvironment() },
 
       // Start Rendering!
-      { title: "render", fn: () => this.render() },
+      { title: "Start Rendering", fn: () => this.render() },
 
       // Optional minimap (if canvas was given)
-      { title: "initMinimap", fn: () => this.initMinimap() },
+      { title: "Create Minimap", fn: () => this.initMinimap() },
     ];
   }
 
@@ -365,9 +371,9 @@ export class PohEngine {
     const currentPlayer = useCurrentContext().currentPlayer;
 
     // Unit has priority
-    const unit = currentPlayer.units.value[0];
+    const unit = currentPlayer.units[0];
     if (unit) {
-      this.flyToTile(unit.tileKey.value, teleport);
+      this.flyToTile(unit.tileKey, teleport);
       return;
     }
 

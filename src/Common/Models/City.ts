@@ -15,6 +15,7 @@ import { useEventStore } from "@/stores/eventStore";
 import { getRandom } from "@/helpers/arrayTools";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { UnitDesign } from "@/Common/Models/UnitDesign";
+import { getNeighbors } from "@/helpers/mapTools";
 
 export class City extends GameObject {
   constructor(
@@ -112,6 +113,26 @@ export class City extends GameObject {
     return Array.from(types);
   }
 
+  get tilesWithFreeCitizenSlots(): Tile[] {
+    const possibleTiles = getNeighbors(
+      useDataBucket().world.size,
+      this.tile,
+      useDataBucket().getTiles(),
+      "hex",
+      3,
+    );
+
+    return possibleTiles.filter(
+      (tile) =>
+        // Tile belongs to same Player
+        tile.playerKey === this.playerKey &&
+        // Tile has free citizen slot(s)
+        tile.freeCitizenSlotCount &&
+        // Tile is not occupied by another city
+        !tile.citizens.some((citizen) => citizen.cityKey !== this.key),
+    );
+  }
+
   get tileYields(): Yields {
     return this.tile.yields.only(this.concept.inheritYieldTypes!, [this.concept]);
   }
@@ -146,7 +167,7 @@ export class City extends GameObject {
 
     // If the city has enough food to grow, add a new Citizen
     if (this.storage.amount("yieldType:food") >= this.foodToGrow) {
-      const policies = this.player.knownTypes.filter((t) => t.class === "policyType");
+      const policies = this.player.government.policies;
       useEventStore().readyCitizens.push(
         new Citizen(
           generateKey("citizen"),

@@ -8,7 +8,7 @@ const store = useEconomyTabStore();
 
 // Adapt items for the table to avoid custom slots that eslint flags
 const rows = computed(() =>
-  store.cities.map((c) => ({ key: c.key as unknown as string, source: c.name.value, _city: c })),
+  store.cities.map((c) => ({ key: c.key as unknown as string, source: c.name, _city: c })),
 );
 
 // Track expanded rows

@@ -132,6 +132,13 @@ export class Tile extends GameObject {
   /*
    * Computed
    */
+  get freeCitizenSlotCount(): number {
+    return (
+      this.yields
+        .flatten(["yieldType:citizenSlot"], this.types)
+        .getLumpAmount("yieldType:citizenSlot") - this.citizenKeys.size
+    );
+  }
   get selectable(): (City | Unit)[] {
     const selectable: (City | Unit)[] = this.units.filter(
       (u) => u.playerKey === useCurrentContext().currentPlayer.key,
@@ -169,6 +176,7 @@ export class Tile extends GameObject {
     if (this.feature) this._dynamicTypes.push(this.feature);
     if (this.resource) this._dynamicTypes.push(this.resource);
     if (this.pollution) this._dynamicTypes.push(this.pollution);
+    if (this.construction) this._dynamicTypes.push(...this.construction.types);
 
     return this._staticTypes.concat(this._dynamicTypes);
   }

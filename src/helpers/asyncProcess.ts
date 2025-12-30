@@ -1,6 +1,6 @@
 export async function asyncProcess<T>(
   objs: readonly T[],
-  process: (obj: T, index: number) => void,
+  process: (obj: T, index: number) => void | Promise<void>,
   onProgress?: (percent: number | true) => void,
   batchSize: number = 1,
   yieldEveryMs: number = 1,
@@ -13,7 +13,7 @@ export async function asyncProcess<T>(
     const end = Math.min(i + batchSize, total);
 
     for (; i < end; i++) {
-      process(objs[i], i);
+      await process(objs[i], i);
     }
 
     onProgress?.(Math.floor((i / total) * 100));

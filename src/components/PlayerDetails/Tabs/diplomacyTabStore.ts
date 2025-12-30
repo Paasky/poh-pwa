@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-import { computed, ref } from 'vue'
-import { defineStore } from 'pinia'
-import { useDataBucket } from '@/Data/useDataBucket'
-import type { Player } from '@/Common/Models/Player'
-import { TypeKey } from '@/Common/Objects/Common'
-import { TypeObject } from '@/Common/Objects/TypeObject'
-import { typeTimeline } from '@/helpers/types'
-import { TableColumn } from '@/types/uiComponents'
+import { computed, ref } from "vue";
+import { defineStore } from "pinia";
+import { useDataBucket } from "@/Data/useDataBucket";
+import type { Player } from "@/Common/Models/Player";
+import { TypeKey } from "@/Common/Objects/Common";
+import { TypeObject } from "@/Common/Objects/TypeObject";
+import { typeTimeline } from "@/helpers/types";
+import { TableColumn } from "@/types/uiComponents";
+import { useCurrentContext } from "@/composables/useCurrentContext";
 
 export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
   const bucket = useDataBucket();
@@ -22,7 +23,7 @@ export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
     {
       title: "State Religion",
       key: "religion",
-      value: (p: Player) => p.religion.value?.name ?? "-",
+      value: (p: Player) => p.religion?.name ?? "-",
     },
     {
       title: "Agendas",
@@ -42,7 +43,7 @@ export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
   ]);
 
   const cultureTimeline = computed(() => {
-    if (!current.value?.culture.type?.value) return [];
+    if (!current.value?.culture.type) return [];
     return typeTimeline(current.value.culture.type as TypeObject);
   });
 
@@ -56,7 +57,7 @@ export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
 
   function init() {
     if (initialized.value) return;
-    current.value = useCurrentContext().currentPlayer as Player;
+    current.value = useCurrentContext().currentPlayer;
 
     // Warm up computed values
     players;

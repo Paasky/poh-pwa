@@ -86,10 +86,10 @@ export class Culture extends GameObject {
     if (this.status === "settled") return [];
 
     const selectable: TypeObject[] = [];
-    for (const catData of useDataBucket().getClassTypesPerCategory("heritageType")) {
-      const catIsSelected = catData.types.some((h) => this.heritages.includes(h));
+    for (const CatKey, Set<TypeObject> of useDataBucket().getClassTypesPerCategory("heritageType")) {
+      const catIsSelected = CatKey, Set<TypeObject>.types.some((h) => this.heritages.includes(h));
 
-      for (const heritage of catData.types) {
+      for (const heritage of CatKey, Set<TypeObject>.types) {
         // Already selected
         if (this.heritages.includes(heritage)) continue;
 
@@ -113,10 +113,10 @@ export class Culture extends GameObject {
     if (this.mustSelectTraits.positive + this.mustSelectTraits.negative <= 0) return [];
 
     const selectable: TypeObject[] = [];
-    for (const catData of useDataBucket().getClassTypesPerCategory("traitType")) {
-      const catIsSelected = catData.types.some((t) => this.traits.includes(t));
+    for (const CatKey, Set<TypeObject> of useDataBucket().getClassTypesPerCategory("traitType")) {
+      const catIsSelected = CatKey, Set<TypeObject>.types.some((t) => this.traits.includes(t));
 
-      for (const trait of catData.types) {
+      for (const trait of CatKey, Set<TypeObject>.types) {
         // Category already selected
         if (catIsSelected) continue;
 

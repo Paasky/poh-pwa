@@ -7,13 +7,7 @@ import type { Player } from "@/Common/Models/Player";
 import type { Culture } from "@/Common/Models/Culture";
 import type { Religion } from "@/Common/Models/Religion";
 import type { Tile } from "@/Common/Models/Tile";
-import { getNeighbors } from "@/helpers/mapTools";
-import { getRandom } from "@/helpers/arrayTools";
-import { useEventStore } from "@/stores/eventStore";
-import { CitizenGained, CitizenLost } from "@/events/Citizen";
-import { useDataBucket } from "@/Data/useDataBucket";
 import { Construction } from "@/Common/Models/Construction";
-import { useDataBucket } from "@/Data/useDataBucket";
 
 export class Citizen extends GameObject {
   constructor(
@@ -77,73 +71,5 @@ export class Citizen extends GameObject {
 
   get yields(): Yields {
     return new Yields([...this.tileYields.all(), ...(this.workYields?.all() ?? [])]);
-  }
-
-  /*
-   * Actions
-   */
-  complete() {
-    this.city.citizenKeys.add(this.key);
-
-    this.pickTile();
-
-    useEventStore().turnEvents.push(new CitizenGained(this, "growth"));
-  }
-
-  delete(reason: string) {
-    this.city.citizenKeys.delete(this.key);
-    this.culture.citizenKeys.delete(this.key);
-    this.player.citizenKeys.delete(this.key);
-    if (this.religion) {
-      this.religion.citizenKeys.delete(this.key);
-    }
-    this.tile.citizenKeys.delete(this.key);
-
-    delete useDataBucket()._gameObjects[this.key];
-
-    useEventStore().turnEvents.push(new CitizenLost(this.city, this.tile, reason));
-  }
-
-  migrate(toCity: City) {
-    const fromCity = this.city;
-
-    fromCity.citizenKeys.delete(this.key);
-    this.player.citizenKeys.delete(this.key);
-
-    useEventStore().turnEvents.push(
-      new CitizenLost(
-        fromCity,
-        this.tile,
-        `migration to ${toCity.name} (${toCity.player.name})`,
-        this,
-      ),
-    );
-
-    this.cityKey = toCity.key;
-    toCity.citizenKeys.add(this.key);
-    this.pickTile();
-
-    useEventStore().turnEvents.push(
-      new CitizenGained(this, `immigrated from ${fromCity.name} (${fromCity.player.name})`),
-    );
-  }
-
-  pickTile() {
-    if (this.tileKey) {
-      this.tile.citizenKeys.delete(this.key);
-    }
-
-    // todo pick tile per city preferences
-    const possibleTiles = getNeighbors(
-      useDataBucket().world.size,
-      this.city.tile,
-      useDataBucket().getTiles(),
-      "hex",
-      3,
-    ).filter((n) => n.playerKey === this.playerKey);
-
-    this.tileKey = getRandom(possibleTiles).key;
-
-    this.tile.citizenKeys.add(this.key);
   }
 }

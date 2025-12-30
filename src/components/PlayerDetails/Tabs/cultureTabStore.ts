@@ -1,15 +1,18 @@
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
-import { CatData, useDataBucket } from "@/Data/useDataBucket";
+import { useDataBucket } from "@/Data/useDataBucket";
+import { useCurrentContext } from "@/composables/useCurrentContext";
+import { TypeObject } from "@/Common/Objects/TypeObject";
+import { CatKey } from "@/Common/Objects/Common";
 
 export const useCultureTabStore = defineStore("cultureTabStore", () => {
   const bucket = useDataBucket();
   const initialized = ref(false);
 
-  const heritageCats = ref<CatData[]>([]);
-  const traitCats = ref<CatData[]>([]);
+  const heritageCats = ref<Map<CatKey, Set<TypeObject>>>();
+  const traitCats = ref<Map<CatKey, Set<TypeObject>>>();
 
-  const culture = computed(() => useCurrentContext().currentPlayer.culture.value);
+  const culture = computed(() => useCurrentContext().currentPlayer.culture);
 
   function init() {
     if (initialized.value) return;

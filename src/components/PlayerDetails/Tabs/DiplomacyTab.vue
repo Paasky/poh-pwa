@@ -21,7 +21,7 @@ function searchPlayer(p: Player, term: string): boolean {
     includes(p.name, term) ||
     includes(p.culture.type.name, term) ||
     includes(p.leader.name, term) ||
-    includes(p.religion.value?.name ?? "", term)
+    includes(p.religion?.name ?? "", term)
   );
 }
 </script>
@@ -92,7 +92,7 @@ function searchPlayer(p: Player, term: string): boolean {
               <UiTypeChip
                 :type="
                   // continent derived from culture category
-                  store.current.culture.type.value
+                  store.current.culture.type
                 "
                 size="small"
                 color="secondary"

@@ -1,13 +1,13 @@
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
-import { CatData, useDataBucket } from "@/Data/useDataBucket";
+import { CatKey, Set<TypeObject>, useDataBucket } from "@/Data/useDataBucket";
 
 export const useGovernmentTabStore = defineStore("governmentTabStore", () => {
   const bucket = useDataBucket();
   const initialized = ref(false);
 
   // Static per-session data (categories & types don't change)
-  const policyCats = ref<CatData[]>([]);
+  const policyCats = ref<new Map<CatKey, Set<TypeObject>>();
 
   // Pointers to current player's government selections
   const government = computed(() => useCurrentContext().currentPlayer.government);

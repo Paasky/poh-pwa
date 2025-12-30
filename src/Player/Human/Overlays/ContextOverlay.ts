@@ -115,11 +115,11 @@ export class ContextOverlay extends BaseOverlay<ContextPayload> {
     this.maskBuffer.fill(0);
 
     // 1. Fill FoW (R: Known, G: Visible)
-    for (const key of player.knownTileKeys.value) {
+    for (const key of player.knownTileKeys) {
       const index = this.tileKeyToIndex.get(key);
       if (index !== undefined) this.maskBuffer[index * 4] = 255;
     }
-    for (const key of player.visibleTileKeys.value) {
+    for (const key of player.visibleTileKeys) {
       const index = this.tileKeyToIndex.get(key);
       if (index !== undefined) this.maskBuffer[index * 4 + 1] = 255;
     }

@@ -1,10 +1,11 @@
-import { markRaw } from "vue";
+import { Engine } from "@babylonjs/core";
 import { defineStore } from "pinia";
+import { markRaw } from "vue";
+import type { Router } from "vue-router";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
 import { PohEngine } from "@/Player/Human/PohEngine";
 import { createWorld } from "@/factories/worldFactory";
-import type { Router } from "vue-router";
 import { useGovernmentTabStore } from "@/components/PlayerDetails/Tabs/governmentTabStore";
 import { useCultureTabStore } from "@/components/PlayerDetails/Tabs/cultureTabStore";
 import { useResearchTabStore } from "@/components/PlayerDetails/Tabs/researchTabStore";
@@ -25,7 +26,7 @@ import { DataBucket, RawSaveData, RawStaticData } from "@/Data/DataBucket";
 import { saveManager } from "@/utils/saveManager";
 import { useMapGenStore } from "@/stores/mapGenStore";
 import pkg from "../../package.json";
-import { useCurrentContext } from "@/composables/useCurrentContext";
+import { setCurrentPlayer, useCurrentContext } from "@/composables/useCurrentContext";
 
 const APP_VERSION = pkg.version;
 
@@ -48,7 +49,7 @@ export const useAppStore = defineStore("app", {
     _router: markRaw({}) as Router,
   }),
   actions: {
-    async init(saveId?: string) {
+    async init(saveId?: string, engine?: Engine) {
       if (this.ready) return; // Happens on hot-reload
 
       async function getStaticData() {
@@ -84,72 +85,81 @@ export const useAppStore = defineStore("app", {
         );
       };
 
-      await asyncProcess<{ title: string; fn: () => void | Promise<void> }>(
-        [
-          { title: "Load Settings", fn: () => useSettingsStore().init() },
-          {
-            title: saveId ? "Load Saved Game" : "Create New World",
-            fn: async () => {
-              if (saveId) {
-                await loadGame(saveId);
-              } else {
-                await createGame();
-              }
-            },
+      // PHASE 1: Data & Settings
+      // Data-layer completion is a hard precondition for Phase 2.
+      const dataTasks = [
+        { title: "Load Settings", fn: () => useSettingsStore().init() },
+        {
+          title: saveId ? "Load Saved Game" : "Create New World",
+          fn: async () => {
+            if (saveId) {
+              await loadGame(saveId);
+            } else {
+              await createGame();
+            }
           },
-          {
-            title: "Start Engine",
-            fn: createEngine,
-          },
-          ...this.engineService.initOrder(),
-          {
-            title: "Load Tiles",
-            fn: () =>
-              useDataBucket()
-                .getClassObjects<Tile>("tile")
-                .forEach((t) => t.warmUp()),
-          },
-          {
-            title: "Load Players",
-            fn: () =>
-              useDataBucket()
-                .getClassObjects<Player>("player")
-                .forEach((p) => p.warmUp()),
-          },
-          {
-            title: "Load Cities",
-            fn: () =>
-              useDataBucket()
-                .getClassObjects<City>("city")
-                .forEach((c) => c.warmUp()),
-          },
-          {
-            title: "Load Units",
-            fn: () =>
-              useDataBucket()
-                .getClassObjects<Unit>("unit")
-                .forEach((u) => u.warmUp()),
-          },
-          { title: "Initialize Encyclopedia", fn: () => useEncyclopediaStore().init() },
-          { title: "Initialize Cities Tab", fn: () => useCitiesTabStore().init() },
-          { title: "Initialize Culture Tab", fn: () => useCultureTabStore().init() },
-          { title: "Initialize Diplomacy Tab", fn: () => useDiplomacyTabStore().init() },
-          { title: "Initialize Economy Tab", fn: () => useEconomyTabStore().init() },
-          { title: "Initialize Government Tab", fn: () => useGovernmentTabStore().init() },
-          { title: "Initialize Religion Tab", fn: () => useReligionTabStore().init() },
-          { title: "Initialize Research Tab", fn: () => useResearchTabStore().init() },
-          { title: "Initialize Trade Tab", fn: () => useTradeTabStore().init() },
-          { title: "Initialize Units Tab", fn: () => useUnitsTabStore().init() },
-        ],
-        (process): void => {
-          this.loadTitle = process.title;
-          process.fn();
         },
-        (progress): void => {
+      ];
+
+      await asyncProcess(
+        dataTasks,
+        async (task) => {
+          this.loadTitle = task.title;
+          await task.fn();
+        },
+        (progress) => {
+          this.loadPercent = typeof progress === "number" ? progress + "%" : "Data Ready";
+        },
+      );
+
+      // Set current player context
+      const bucket = useDataBucket();
+      setCurrentPlayer(bucket.getObject<Player>(bucket.world.currentPlayerKey));
+
+      // Initialize Engine Service (Data is now available for map size)
+      createEngine();
+
+      // PHASE 2: Graphics & UI
+      // engineService.initOrder() exposes boot sequencing intentionally.
+      const engineTasks = [
+        ...this.engineService.initOrder(engine),
+        {
+          title: "Load Tiles",
+          fn: () => bucket.getClassObjects<Tile>("tile").forEach((t) => t.warmUp()),
+        },
+        {
+          title: "Load Players",
+          fn: () => bucket.getClassObjects<Player>("player").forEach((p) => p.warmUp()),
+        },
+        {
+          title: "Load Cities",
+          fn: () => bucket.getClassObjects<City>("city").forEach((c) => c.warmUp()),
+        },
+        {
+          title: "Load Units",
+          fn: () => bucket.getClassObjects<Unit>("unit").forEach((u) => u.warmUp()),
+        },
+        { title: "Initialize Encyclopedia", fn: () => useEncyclopediaStore().init() },
+        { title: "Initialize Cities Tab", fn: () => useCitiesTabStore().init() },
+        { title: "Initialize Culture Tab", fn: () => useCultureTabStore().init() },
+        { title: "Initialize Diplomacy Tab", fn: () => useDiplomacyTabStore().init() },
+        { title: "Initialize Economy Tab", fn: () => useEconomyTabStore().init() },
+        { title: "Initialize Government Tab", fn: () => useGovernmentTabStore().init() },
+        { title: "Initialize Religion Tab", fn: () => useReligionTabStore().init() },
+        { title: "Initialize Research Tab", fn: () => useResearchTabStore().init() },
+        { title: "Initialize Trade Tab", fn: () => useTradeTabStore().init() },
+        { title: "Initialize Units Tab", fn: () => useUnitsTabStore().init() },
+      ];
+
+      await asyncProcess(
+        engineTasks,
+        (task) => {
+          this.loadTitle = task.title;
+          task.fn();
+        },
+        (progress) => {
           this.loadPercent = typeof progress === "number" ? progress + "%" : "Ready!";
         },
-        1,
-        1,
       );
 
       this.loaded = true;

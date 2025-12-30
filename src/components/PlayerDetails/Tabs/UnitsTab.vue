@@ -16,7 +16,7 @@ const unitHeaders = [
   {
     title: "Name",
     key: "name",
-    value: (u) => u.customName.value || u.design.name,
+    value: (u) => u.customName || u.design.name,
   },
   {
     title: "Design",
@@ -25,10 +25,10 @@ const unitHeaders = [
   },
   { title: "Platform", key: "platform" },
   { title: "Equipment", key: "equipment" },
-  { title: "Status", key: "status", value: (u: Unit) => u.status.value },
-  { title: "Health", key: "health", align: "end", value: (u: Unit) => u.health.value },
-  { title: "Moves", key: "moves", align: "end", value: (u: Unit) => u.movement.moves.value },
-  { title: "City", key: "city", value: (u: Unit) => (u.city.value ? u.city.value!.name : "-") },
+  { title: "Status", key: "status", value: (u: Unit) => u.status },
+  { title: "Health", key: "health", align: "end", value: (u: Unit) => u.health },
+  { title: "Moves", key: "moves", align: "end", value: (u: Unit) => u.movement.moves },
+  { title: "City", key: "city", value: (u: Unit) => (u.city ? u.city!.name : "-") },
   {
     title: "Tile",
     key: "tile",
@@ -37,7 +37,7 @@ const unitHeaders = [
   {
     title: "Action",
     key: "action",
-    value: (u: Unit) => (u.action.value ? u.action.value!.name : "-"),
+    value: (u: Unit) => (u.action ? u.action!.name : "-"),
   },
 ] as TableColumn<Unit>[];
 
@@ -62,7 +62,7 @@ const designHeaders = [
 ] as TableColumn<UnitDesign>[];
 
 function searchUnit(unit: Unit, term: string): boolean {
-  return includes(unit.customName.value, term) || searchDesign(unit.design.value, term);
+  return includes(unit.customName, term) || searchDesign(unit.design, term);
 }
 
 function searchDesign(design: UnitDesign, term: string): boolean {
@@ -103,8 +103,8 @@ function searchDesign(design: UnitDesign, term: string): boolean {
           </v-chip>
         </template>
         <template #[`item.isActive`]="{ item }">
-          <v-chip :color="(item as UnitDesign).isActive.value ? 'green' : 'grey'" size="small">
-            {{ (item as UnitDesign).isActive.value ? "Active" : "Inactive" }}
+          <v-chip :color="(item as UnitDesign).isActive ? 'green' : 'grey'" size="small">
+            {{ (item as UnitDesign).isActive ? "Active" : "Inactive" }}
           </v-chip>
         </template>
       </UiTable>

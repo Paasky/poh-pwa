@@ -17,7 +17,7 @@ const cities = computed<City[]>(() => store.cities);
 // Search predicate consumed by UiTable
 function searchCity(c: City, term: string): boolean {
   return (
-    includes(c.name.value, term) ||
+    includes(c.name, term) ||
     includes(c.constructionQueue.queue[0]?.item.name ?? "", term) ||
     includes(c.trainingQueue.queue[0]?.item.name ?? "", term)
   );

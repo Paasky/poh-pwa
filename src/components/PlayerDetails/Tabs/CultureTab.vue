@@ -4,7 +4,7 @@ import UiObjectCards from "@/components/Ui/UiObjectCards.vue";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import UiCols from "@/components/Ui/UiCols.vue";
 import { useCultureTabStore } from "@/components/PlayerDetails/Tabs/cultureTabStore";
-import { CatData } from "@/Data/useDataBucket";
+import { CatKey, Set<TypeObject> } from "@/Data/useDataBucket";
 
 const store = useCultureTabStore();
 </script>
@@ -14,10 +14,10 @@ const store = useCultureTabStore();
     <UiCols :cols="{ left: 9, right: 3 }">
       <template #left>
         <UiGrid :items="store.heritageCats" :col-count="5">
-          <template #cell="{ item: catData }">
+          <template #cell="{ item: CatKey, Set }">
             <UiObjectCards
-              :title="(catData as CatData).category.name"
-              :types="(catData as CatData).types"
+              :title="(CatKey, Set<TypeObject> as CatKey, Set<TypeObject>).category.name"
+              :types="(CatKey, Set<TypeObject> as CatKey, Set<TypeObject>).types"
               :selectable="store.culture.selectableTraits"
               :selected="store.culture.traits as TypeObject[]"
               :select-pos="'right'"
@@ -27,10 +27,10 @@ const store = useCultureTabStore();
           </template>
         </UiGrid>
         <UiGrid :items="store.traitCats" :col-count="4">
-          <template #cell="{ item: catData }">
+          <template #cell="{ item: CatKey, Set }">
             <UiObjectCards
-              :title="(catData as CatData).category.name"
-              :types="(catData as CatData).types"
+              :title="(CatKey, Set<TypeObject> as CatKey, Set<TypeObject>).category.name"
+              :types="(CatKey, Set<TypeObject> as CatKey, Set<TypeObject>).types"
               :selectable="store.culture.selectableTraits"
               :selected="store.culture.traits as TypeObject[]"
               :select-pos="'right'"

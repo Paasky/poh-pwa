@@ -13,7 +13,7 @@ const store = useReligionTabStore();
 function searchReligion(rel: Religion, term: string): boolean {
   return (
     includes(rel.name, term) ||
-    includes(rel.city.name.value, term) ||
+    includes(rel.city.name, term) ||
     rel.players.some((p) => includes(p.name, term))
   );
 }
