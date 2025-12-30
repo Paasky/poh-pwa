@@ -1,20 +1,20 @@
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
-import { CatData, useObjectsStore } from "@/stores/objectStore";
+import { CatData, useDataBucket } from "@/Data/useDataBucket";
 
 export const useCultureTabStore = defineStore("cultureTabStore", () => {
-  const objStore = useObjectsStore();
+  const bucket = useDataBucket();
   const initialized = ref(false);
 
   const heritageCats = ref<CatData[]>([]);
   const traitCats = ref<CatData[]>([]);
 
-  const culture = computed(() => objStore.currentPlayer.culture.value);
+  const culture = computed(() => bucket.currentPlayer.culture.value);
 
   function init() {
     if (initialized.value) return;
-    heritageCats.value = objStore.getClassTypesPerCategory("heritageType");
-    traitCats.value = objStore.getClassTypesPerCategory("traitType");
+    heritageCats.value = bucket.getClassTypesPerCategory("heritageType");
+    traitCats.value = bucket.getClassTypesPerCategory("traitType");
 
     // Warm up computed values
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions

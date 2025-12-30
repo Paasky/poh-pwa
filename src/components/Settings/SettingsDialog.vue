@@ -72,6 +72,32 @@ function fmtHour(h: number): string {
           <!-- Game tab -->
           <v-window-item value="game">
             <div class="d-flex flex-column ga-5">
+              <!-- Save Management -->
+              <div>
+                <div class="text-subtitle-2 mb-2">Autosave</div>
+                <div class="d-flex flex-column ga-4">
+                  <v-select
+                    v-model="settings.engineSettings.autoSaveFrequency"
+                    :items="[
+                      { title: 'Every Turn', value: 1 },
+                      { title: 'Every 5 Turns', value: 5 },
+                      { title: 'Every 10 Turns', value: 10 },
+                      { title: 'Disabled', value: 0 },
+                    ]"
+                    label="Frequency"
+                    density="comfortable"
+                  />
+                  <v-slider
+                    v-model="settings.engineSettings.maxAutoSaves"
+                    min="1"
+                    max="50"
+                    step="1"
+                    thumb-label
+                    label="Max to keep"
+                  />
+                </div>
+              </div>
+
               <!-- Overlays & Layers -->
               <div>
                 <div class="text-subtitle-2 mb-2">Overlays & Layers</div>

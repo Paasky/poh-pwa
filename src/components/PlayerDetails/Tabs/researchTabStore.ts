@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import type { TypeObject } from "@/Common/Objects/TypeObject";
 
 export const useResearchTabStore = defineStore("researchTabStore", () => {
-  const objStore = useObjectsStore();
+  const bucket = useDataBucket();
   const initialized = ref(false);
 
   const techs = ref<TypeObject[]>([]);
   const eras = ref<TypeObject[]>([]);
 
-  const player = computed(() => objStore.currentPlayer);
+  const player = computed(() => bucket.currentPlayer);
   const research = computed(() => player.value.research);
 
   const maxX = computed(() => Math.max(...techs.value.map((t) => t.x!)));
@@ -19,8 +19,8 @@ export const useResearchTabStore = defineStore("researchTabStore", () => {
 
   function init() {
     if (initialized.value) return;
-    techs.value = objStore.getClassTypes("technologyType");
-    eras.value = objStore.getClassTypes("eraType");
+    techs.value = bucket.getClassTypes("technologyType");
+    eras.value = bucket.getClassTypes("eraType");
 
     // Warm up computed values
     player;

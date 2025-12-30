@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import type { Player } from "@/Common/Models/Player";
 import { TypeKey } from "@/Common/Objects/Common";
 import { TypeObject } from "@/Common/Objects/TypeObject";
@@ -9,10 +9,10 @@ import { typeTimeline } from "@/helpers/types";
 import { TableColumn } from "@/types/uiComponents";
 
 export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
-  const objStore = useObjectsStore();
+  const bucket = useDataBucket();
   const initialized = ref(false);
 
-  const players = computed(() => objStore.getClassGameObjects("player") as Player[]);
+  const players = computed(() => bucket.getClassGameObjects("player") as Player[]);
   const current = ref<Player | null>(null);
 
   const columns = ref<TableColumn<Player>[]>([
@@ -48,7 +48,7 @@ export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
 
   const leaderTimeline = computed(() => {
     return cultureTimeline.value.map((c) =>
-      objStore.getTypeObject(
+      bucket.getTypeObject(
         c.allows.find((a: string) => a.startsWith("majorLeaderType:")) as TypeKey,
       ),
     );
@@ -56,7 +56,7 @@ export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
 
   function init() {
     if (initialized.value) return;
-    current.value = objStore.currentPlayer as Player;
+    current.value = bucket.currentPlayer as Player;
 
     // Warm up computed values
     players;

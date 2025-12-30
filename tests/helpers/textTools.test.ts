@@ -7,7 +7,7 @@ import {
   typeObjWithArticle,
 } from "../../src/helpers/textTools";
 import { initTestPinia, loadStaticData } from "../_setup/pinia";
-import { useObjectsStore } from "../../src/stores/objectStore";
+import { useDataBucket } from "../../src/Data/useDataBucket";
 
 describe("textTools", () => {
   it("includes", () => {
@@ -35,7 +35,7 @@ describe("textTools", () => {
   it("typeObjWithArticle", () => {
     initTestPinia();
     loadStaticData();
-    const objectsStore = useObjectsStore();
+    const objectsStore = useDataBucket();
 
     const grass = objectsStore.getTypeObject("terrainType:grass");
     expect(typeObjWithArticle(grass)).toBe("a Grass");

@@ -1,5 +1,5 @@
 import { ObjKey, yearsPerTurnConfig } from "@/Common/Objects/Common";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import { TerraGenerator } from "@/factories/TerraGenerator/terra-generator";
 import { shuffle, takeRandom } from "@/helpers/arrayTools";
 import { Player } from "@/Common/Models/Player";
@@ -9,6 +9,7 @@ import { UnitDesign } from "@/Common/Models/UnitDesign";
 import { Unit } from "@/Common/Models/Unit";
 import { GameData } from "@/types/api";
 import { Tile } from "@/Common/Models/Tile";
+import { MapGenConfig } from "@/stores/mapGenStore";
 
 export type WorldSize = {
   name: string;
@@ -63,8 +64,11 @@ export const worldSizes: WorldSize[] = [
   },
 ];
 
-export const createWorld = (size: WorldSize): GameData => {
-  const objStore = useObjectsStore();
+export const createWorld = (
+  config: MapGenConfig & { flipX?: boolean; flipY?: boolean; flipClimate?: boolean },
+): GameData => {
+  const bucket = useDataBucket();
+  const { size } = config;
 
   const bundle = {
     world: {
@@ -74,21 +78,21 @@ export const createWorld = (size: WorldSize): GameData => {
       year: yearsPerTurnConfig[0].start,
       currentPlayer: "" as ObjKey,
     },
-    objects: [] as object[],
+    objects: [],
   } as GameData;
 
-  const objects = [] as object[];
+  const objects = [] as any[];
   const players = [] as Player[];
 
   // Init global data
-  const cultureTypes = objStore.getClassTypes("majorCultureType");
+  const cultureTypes = bucket.getClassTypes("majorCultureType");
 
-  const humanPlatform = objStore.getTypeObject("platformType:human");
+  const humanPlatform = bucket.getType("platformType:human");
 
-  const spearEquipment = objStore.getTypeObject("equipmentType:spear");
-  const javelinEquipment = objStore.getTypeObject("equipmentType:javelin");
-  const workerEquipment = objStore.getTypeObject("equipmentType:worker");
-  const tribeEquipment = objStore.getTypeObject("equipmentType:tribe");
+  const spearEquipment = bucket.getType("equipmentType:spear");
+  const javelinEquipment = bucket.getType("equipmentType:javelin");
+  const workerEquipment = bucket.getType("equipmentType:worker");
+  const tribeEquipment = bucket.getType("equipmentType:tribe");
 
   const warbandDesign = new UnitDesign(
     generateKey("unitDesign"),
@@ -116,7 +120,10 @@ export const createWorld = (size: WorldSize): GameData => {
   );
   objects.push(warbandDesign, hunterDesign, workerDesign, tribeDesign);
 
-  const gen = new TerraGenerator(size).generateStratLevel().generateRegLevel().generateGameLevel();
+  const gen = new TerraGenerator(size, config.flipX, config.flipY, config.flipClimate)
+    .generateStratLevel()
+    .generateRegLevel()
+    .generateGameLevel();
   objects.push(...Object.values(gen.gameTiles), ...Object.values(gen.rivers));
 
   // Validate that all tiles & rivers exist
@@ -143,6 +150,8 @@ export const createWorld = (size: WorldSize): GameData => {
     );
 
     for (const tile of shuffle(continentData.majorStarts.game)) {
+      if (players.length >= config.continents * config.majorsPerContinent) break;
+
       const cultureKey = generateKey("culture");
       const player = new Player(
         generateKey("player"),
@@ -190,6 +199,6 @@ export const createWorld = (size: WorldSize): GameData => {
     }
   }
 
-  bundle.objects = objects;
+  bundle.objects = objects.map((o) => (o.toJSON ? o.toJSON() : o));
   return bundle;
 };

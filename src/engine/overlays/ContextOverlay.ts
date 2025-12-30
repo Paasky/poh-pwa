@@ -17,9 +17,10 @@ import type { Coords } from "@/helpers/mapTools";
 import { Tile } from "@/Common/Models/Tile";
 import type { GameKey } from "@/Common/Models/_GameModel";
 import { useSettingsStore } from "@/stores/settingsStore";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import { BaseOverlay } from "./BaseOverlay";
 import { EngineGroups, EngineOverlayColors } from "@/engine/EngineStyles";
+import { useAppStore } from "@/stores/appStore";
 
 export type ContextHighlight = { tile: Tile; colorId: string; alpha: number };
 export type ContextPayload = { items: ContextHighlight[] };
@@ -94,10 +95,10 @@ export class ContextOverlay extends BaseOverlay<ContextPayload> {
     // Default Palette
     this.setPalette(EngineOverlayColors);
 
-    // Sync FoW state from ObjectStore
+    // Sync FoW state from DataBucket
     this.cleanupStopHandles.push(
       watchEffect(() => {
-        const player = useObjectsStore().currentPlayer;
+        const player = useAppStore().currentPlayer;
         // Explicitly access values synchronously to register Vue dependencies
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         player.knownTileKeys;
@@ -111,7 +112,7 @@ export class ContextOverlay extends BaseOverlay<ContextPayload> {
   }
 
   protected onRefresh(): void {
-    const player = useObjectsStore().currentPlayer;
+    const player = useDataBucket().currentPlayer;
     this.maskBuffer.fill(0);
 
     // 1. Fill FoW (R: Known, G: Visible)

@@ -1,18 +1,29 @@
 // noinspection ExceptionCaughtLocallyJS
 
 export type PersistEnvelope<T> = {
-  v: number; // schema version
-  at: number; // saved at (ms since epoch)
+  version: string;
+  time: number;
   data: T;
 };
 
-export function saveToBrowser<T>(key: string, version: number, data: T): void {
-  const env: PersistEnvelope<T> = { v: version, at: Date.now(), data };
+export function saveToBrowser<T>(key: string, version: string, data: T): void {
+  const env: PersistEnvelope<T> = { version, time: Date.now(), data };
   // will throw on failure
   localStorage.setItem(key, JSON.stringify(env));
 }
 
-export function loadFromBrowser<T>(key: string, expectedVersion: number): T | undefined {
+export function loadFromBrowser<T>(key: string, expectedVersion?: string): T | undefined {
+  const env = loadEnvelope<T>(key);
+  if (!env) return undefined;
+
+  // If expectedVersion is provided, we still return undefined on mismatch for backward compatibility
+  // or simple use cases. Advanced use cases should use loadEnvelope.
+  if (expectedVersion !== undefined && env.version !== expectedVersion) return undefined;
+
+  return env.data;
+}
+
+export function loadEnvelope<T>(key: string): PersistEnvelope<T> | undefined {
   try {
     const raw = localStorage.getItem(key);
     if (!raw) return undefined;
@@ -25,19 +36,18 @@ export function loadFromBrowser<T>(key: string, expectedVersion: number): T | un
       throw new Error(`Persistent data for '${key}' is not an object`);
     }
     const anyEnv = env as Record<string, unknown>;
-    if (typeof anyEnv.v !== "number") {
-      throw new Error(`Persistent data for '${key}' is missing a numeric 'v' (version)`);
+
+    if (typeof anyEnv.version !== "string") {
+      throw new Error(`Persistent data for '${key}' is missing a string 'version'`);
     }
-    if (typeof anyEnv.at !== "number") {
-      throw new Error(`Persistent data for '${key}' is missing a numeric 'at' (timestamp)`);
+    if (typeof anyEnv.time !== "number") {
+      throw new Error(`Persistent data for '${key}' is missing a numeric 'time'`);
     }
     if (!("data" in anyEnv)) {
       throw new Error(`Persistent data for '${key}' is missing the 'data' field`);
     }
-    // Version mismatch is not an error: caller may add migrations later
-    if (anyEnv.v !== expectedVersion) return undefined;
 
-    return anyEnv.data as T;
+    return anyEnv as unknown as PersistEnvelope<T>;
   } catch (err) {
     // Swallow errors but log a concise message so the app continues with defaults
     // eslint-disable-next-line

@@ -1,4 +1,4 @@
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import { GameObject, generateKey } from "@/Common/Models/_GameModel";
 import { City } from "@/Common/Models/City";
 import { Tile } from "@/Common/Models/Tile";
@@ -8,10 +8,10 @@ import { Construction } from "@/Common/Models/Construction";
 import { Player } from "@/Common/Models/Player";
 
 export function cityTestData(): void {
-  const objStore = useObjectsStore();
+  const bucket = useDataBucket();
 
   const objects = [] as GameObject[];
-  const otherPlayer = objStore.getClassGameObjects("player")[1] as Player;
+  const otherPlayer = bucket.getClassGameObjects("player")[1] as Player;
 
   for (const [index, cityName] of ["Helsinki", "Paris"].entries()) {
     // 1) create City object for `cityName` and push into `objects`
@@ -22,7 +22,7 @@ export function cityTestData(): void {
     const isHelsinki = cityName === "Helsinki";
     const city = new City(
       generateKey("city"),
-      objStore.currentPlayer.key,
+      bucket.currentPlayer.key,
       Tile.getKey(x, y),
       cityName,
       isHelsinki, // canAttack
@@ -30,8 +30,8 @@ export function cityTestData(): void {
       isHelsinki, // isCapital
       isHelsinki ? undefined : otherPlayer.key, // orig player key
     );
-    objStore.set(city);
-    objStore.currentPlayer.cityKeys.push(city.key);
+    bucket.set(city);
+    bucket.currentPlayer.cityKeys.push(city.key);
     city.tile.cityKey = city.key;
 
     // 2) Citizens: create N citizens per city, set relations, and push into `objects`
@@ -41,23 +41,23 @@ export function cityTestData(): void {
       const cz = new Citizen(
         generateKey("citizen"),
         city.key,
-        isHelsinki || i === 0 ? objStore.currentPlayer.cultureKey : otherPlayer.cultureKey,
-        objStore.currentPlayer.key,
+        isHelsinki || i === 0 ? bucket.currentPlayer.cultureKey : otherPlayer.cultureKey,
+        bucket.currentPlayer.key,
         city.tileKey,
       );
       // Track created object
-      objStore.set(cz);
+      bucket.set(cz);
       // Set relation keys
       city.citizenKeys.push(cz.key);
       cz.culture.citizenKeys.push(cz.key);
-      objStore.currentPlayer.citizenKeys.push(cz.key);
+      bucket.currentPlayer.citizenKeys.push(cz.key);
       city.tile.citizenKeys.push(cz.key);
     }
 
     // 3) Units: link some existing player units to this city (set cityKey etc.)
     //    - Per prior tests: Helsinki gets 2 units; Paris gets 0
     if (isHelsinki) {
-      const units = objStore.currentPlayer.units as Unit[];
+      const units = bucket.currentPlayer.units as Unit[];
       const toAssign = Math.min(2, units.length);
       for (let i = 0; i < toAssign; i++) {
         const u = units[i]!;
@@ -70,13 +70,13 @@ export function cityTestData(): void {
     if (isHelsinki) {
       const cons = new Construction(
         generateKey("construction"),
-        objStore.getTypeObject("buildingType:palisades"),
+        bucket.getTypeObject("buildingType:palisades"),
         city.tileKey,
         city.key,
         100,
         10,
       );
-      objStore.set(cons);
+      bucket.set(cons);
       city.tile.constructionKey = cons.key;
       city.constructionQueue.add(cons);
       city.constructionQueue.queue[0]!.progress = 10;
@@ -84,7 +84,7 @@ export function cityTestData(): void {
 
     // 5) Training: add all current player's designs to Paris training queue with progress (5, 10, rest 0)
     if (!isHelsinki) {
-      const designs = objStore.currentPlayer.designs;
+      const designs = bucket.currentPlayer.designs;
       designs.forEach((d, idx) => {
         city.trainingQueue.add(d);
         if (idx === 0) city.trainingQueue.queue[0]!.progress = 5;
@@ -93,5 +93,5 @@ export function cityTestData(): void {
     }
   }
 
-  objStore.bulkSet(objects);
+  bucket.bulkSet(objects);
 }

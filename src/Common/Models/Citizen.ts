@@ -11,7 +11,7 @@ import { getNeighbors } from "@/helpers/mapTools";
 import { getRandom } from "@/helpers/arrayTools";
 import { useEventStore } from "@/stores/eventStore";
 import { CitizenGained, CitizenLost } from "@/events/Citizen";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import { Construction } from "@/Common/Models/Construction";
 import { useDataBucket } from "@/Data/useDataBucket";
 
@@ -99,7 +99,7 @@ export class Citizen extends GameObject {
     }
     this.tile.citizenKeys.delete(this.key);
 
-    delete useObjectsStore()._gameObjects[this.key];
+    delete useDataBucket()._gameObjects[this.key];
 
     useEventStore().turnEvents.push(new CitizenLost(this.city, this.tile, reason));
   }

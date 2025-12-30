@@ -1,11 +1,9 @@
 import { markRaw } from "vue";
 import { defineStore } from "pinia";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
-import { GameData, StaticData } from "@/types/api";
 import { PohEngine } from "@/engine/PohEngine";
-import { createWorld, WorldSize, worldSizes } from "@/factories/worldFactory";
-import { GameDataLoader } from "@/Data/GameDataLoader";
+import { createWorld } from "@/factories/worldFactory";
 import type { Router } from "vue-router";
 import { useGovernmentTabStore } from "@/components/PlayerDetails/Tabs/governmentTabStore";
 import { useCultureTabStore } from "@/components/PlayerDetails/Tabs/cultureTabStore";
@@ -21,7 +19,14 @@ import { asyncProcess } from "@/helpers/asyncProcess";
 import { Tile } from "@/Common/Models/Tile";
 import { Player } from "@/Common/Models/Player";
 import { Unit } from "@/Common/Models/Unit";
-import { GameManager } from "@/managers/GameManager";
+import { City } from "@/Common/Models/City";
+import { DataStore } from "@/Data/DataStore";
+import { DataBucket, RawSaveData, RawStaticData } from "@/Data/DataBucket";
+import { saveManager } from "@/utils/saveManager";
+import { useMapGenStore } from "@/stores/mapGenStore";
+import pkg from "../../package.json";
+
+const APP_VERSION = pkg.version;
 
 export async function fetchJSON<T>(url: string): Promise<T> {
   const res = await fetch(url, { cache: "no-store" });
@@ -36,80 +41,107 @@ export const useAppStore = defineStore("app", {
     loadTitle: "",
     loadPercent: "",
     uiStateListeners: markRaw({}) as Record<string, UiStateConfig>,
+
+    // These will be filled in on init()
+    currentPlayer: {} as Player,
+    store: {} as DataStore,
+
+    // This will be filled in by `src/router/index.ts` using setRouter()
     _router: markRaw({}) as Router,
   }),
   actions: {
-    async init(gameDataUrl?: string) {
+    async init(saveId?: string) {
       if (this.ready) return; // Happens on hot-reload
 
-      // Download data & Init Object Data
-      const staticData = await fetchJSON<StaticData>("/staticData.json");
-      const saveGameData = gameDataUrl
-        ? ((await fetchJSON<GameData>(gameDataUrl)) as GameData)
-        : null;
-      const size = saveGameData?.world.size ?? worldSizes[4];
+      async function getStaticData() {
+        return await fetchJSON<RawStaticData>("/staticData.json");
+      }
 
-      const objStore = useObjectsStore();
-      const settings = useSettingsStore();
+      const loadGame = async (saveId: string): Promise<void> => {
+        this.store = markRaw(
+          new DataStore(DataBucket.fromRaw(await getStaticData(), saveManager.load(saveId))),
+        );
+      };
 
-      const engineCanvas = document.getElementById("engine-canvas") as HTMLCanvasElement | null;
-      if (!engineCanvas) throw new Error("PohEngine canvas `#engine-canvas` not found");
-      const minimapCanvas = document.getElementById("minimap-canvas") as HTMLCanvasElement | null;
-      if (!minimapCanvas) throw new Error("Minimap canvas `#minimap-canvas` not found");
+      const createGame = async (): Promise<void> => {
+        const worldData = createWorld(useMapGenStore().getResolvedConfig());
+        const rawSave: RawSaveData = {
+          name: "New Game",
+          time: Date.now(),
+          version: APP_VERSION,
+          objects: worldData.objects,
+          world: worldData.world,
+        };
+        this.store = markRaw(new DataStore(DataBucket.fromRaw(await getStaticData(), rawSave)));
+      };
 
-      this.engineService = markRaw(new PohEngine(size, engineCanvas, minimapCanvas));
+      const createEngine = (): void => {
+        const engineCanvas = document.getElementById("engine-canvas") as HTMLCanvasElement | null;
+        if (!engineCanvas) throw new Error("PohEngine canvas `#engine-canvas` not found");
+        const minimapCanvas = document.getElementById("minimap-canvas") as HTMLCanvasElement | null;
+        if (!minimapCanvas) throw new Error("Minimap canvas `#minimap-canvas` not found");
 
-      await asyncProcess<{ title: string; fn: () => void }>(
+        this.engineService = markRaw(
+          new PohEngine(useDataBucket().world.size, engineCanvas, minimapCanvas),
+        );
+      };
+
+      await asyncProcess<{ title: string; fn: () => void | Promise<void> }>(
         [
-          { title: "initStaticData", fn: () => objStore.initStatic(staticData) },
+          { title: "Load Settings", fn: () => useSettingsStore().init() },
           {
-            title: "initSaveOrCreateWorld",
-            fn: () => {
-              if (saveGameData) {
-                objStore.world = saveGameData.world;
-                const gameObjects = new GameDataLoader().setFromRaw(saveGameData);
-                objStore.bulkSet(Object.values(gameObjects));
+            title: saveId ? "Load Saved Game" : "Create New World",
+            fn: async () => {
+              if (saveId) {
+                await loadGame(saveId);
               } else {
-                try {
-                  const gameData = createWorld(size as WorldSize);
-                  objStore.world = gameData.world;
-                  objStore.bulkSet(gameData.objects);
-
-                  new GameManager((step) => (this.loadTitle = `Init ${step}`)).startTurn();
-                } catch (e) {
-                  // eslint-disable-next-line
-                  console.error("Failed to create world, retrying...", e);
-                  //document.location.reload();
-                }
+                await createGame();
               }
-              objStore.ready = true;
             },
           },
           {
-            title: "initPlayers",
+            title: "Start Engine",
+            fn: createEngine,
+          },
+          {
+            title: "Load Tiles",
             fn: () =>
-              (objStore.getClassGameObjects("player") as Player[]).forEach((p) => p.warmUp()),
+              useDataBucket()
+                .getClassObjects<Tile>("tile")
+                .forEach((t) => t.warmUp()),
           },
           {
-            title: "initTiles",
-            fn: () => (objStore.getClassGameObjects("tile") as Tile[]).forEach((t) => t.warmUp()),
+            title: "Load Players",
+            fn: () =>
+              useDataBucket()
+                .getClassObjects<Player>("player")
+                .forEach((p) => p.warmUp()),
           },
           {
-            title: "initUnits",
-            fn: () => (objStore.getClassGameObjects("unit") as Unit[]).forEach((u) => u.warmUp()),
+            title: "Load Cities",
+            fn: () =>
+              useDataBucket()
+                .getClassObjects<City>("city")
+                .forEach((c) => c.warmUp()),
           },
-          { title: "initEncyclopedia", fn: () => useEncyclopediaStore().init() },
-          { title: "initSettings", fn: () => settings.init() },
+          {
+            title: "Load Units",
+            fn: () =>
+              useDataBucket()
+                .getClassObjects<Unit>("unit")
+                .forEach((u) => u.warmUp()),
+          },
           ...this.engineService.initOrder(),
-          { title: "initGovernment", fn: () => useGovernmentTabStore().init() },
-          { title: "initCulture", fn: () => useCultureTabStore().init() },
-          { title: "initResearch", fn: () => useResearchTabStore().init() },
-          { title: "initReligion", fn: () => useReligionTabStore().init() },
-          { title: "initDiplomacy", fn: () => useDiplomacyTabStore().init() },
-          { title: "initEconomy", fn: () => useEconomyTabStore().init() },
-          { title: "initUnits", fn: () => useUnitsTabStore().init() },
-          { title: "initCities", fn: () => useCitiesTabStore().init() },
-          { title: "initTrade", fn: () => useTradeTabStore().init() },
+          { title: "Initialize Encyclopedia", fn: () => useEncyclopediaStore().init() },
+          { title: "Initialize Cities Tab", fn: () => useCitiesTabStore().init() },
+          { title: "Initialize Culture Tab", fn: () => useCultureTabStore().init() },
+          { title: "Initialize Diplomacy Tab", fn: () => useDiplomacyTabStore().init() },
+          { title: "Initialize Economy Tab", fn: () => useEconomyTabStore().init() },
+          { title: "Initialize Government Tab", fn: () => useGovernmentTabStore().init() },
+          { title: "Initialize Religion Tab", fn: () => useReligionTabStore().init() },
+          { title: "Initialize Research Tab", fn: () => useResearchTabStore().init() },
+          { title: "Initialize Trade Tab", fn: () => useTradeTabStore().init() },
+          { title: "Initialize Units Tab", fn: () => useUnitsTabStore().init() },
         ],
         (process): void => {
           this.loadTitle = process.title;
@@ -123,6 +155,13 @@ export const useAppStore = defineStore("app", {
       );
 
       this.loaded = true;
+    },
+    async saveGame(isAutosave = false) {
+      const bucket = useDataBucket();
+      const currentPlayer = bucket.getObject<Player>(bucket.world.currentPlayer);
+
+      const name = `${currentPlayer.leader.name} - ${currentPlayer.culture.type.name}`;
+      saveManager.save(bucket.toSaveData(name, APP_VERSION), isAutosave);
     },
 
     // Process for UI event -> sync to URL (URL is the source of truth for UI state)
@@ -138,7 +177,9 @@ export const useAppStore = defineStore("app", {
     // -> I trigger _openFromUiState(key) / _closeFromUiState() for relevant state listeners (as confed in router)
     pushUiState(id: string, value: string | undefined) {
       // Modify current query params to reflect the new UI state
-      const query = { ...this.router.currentRoute.query } as Record<string, string>;
+      // IDE doesn't understand 'currentRoute' is not a ref here
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const query = { ...(this.router.currentRoute as any).query } as Record<string, string>;
 
       if (value === undefined) {
         // Remove from the query (if exists)
@@ -175,7 +216,9 @@ export const useAppStore = defineStore("app", {
     // UI state listeners are configured in router/index.ts
     syncUiStateFromNav() {
       try {
-        const query = this.router.currentRoute.query;
+        // IDE doesn't understand 'currentRoute' is not a ref here
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const query = (this.router.currentRoute as any).query;
         // Update each registered UI state
         for (const cfg of Object.values(this.uiStateListeners)) {
           if (query[cfg.id] === undefined) {

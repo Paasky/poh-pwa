@@ -11,7 +11,7 @@ import { tileCenter } from "@/helpers/math";
 import { Tile } from "@/Common/Models/Tile";
 import { EngineLayers } from "@/engine/EngineStyles";
 import { watch } from "vue";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 
 export class ObjectInstancer {
   scene: Scene;
@@ -77,7 +77,7 @@ export class ObjectInstancer {
     this.unitReg.delete(unitKey);
 
     // Clean up unwatchers added in setUnit
-    const unit = useObjectsStore()._gameObjects[unitKey] as Unit;
+    const unit = useDataBucket()._gameObjects[unitKey] as Unit;
     if (unit) {
       unit.unwatchers.forEach((u) => u());
       unit.unwatchers = [];

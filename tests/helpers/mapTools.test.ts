@@ -12,8 +12,8 @@ import {
 import { mockRandom } from "../_setup/testHelpers";
 import { Tile } from "../../src/Common/Models/Tile";
 import { initTestPinia, loadStaticData } from "../_setup/pinia";
-import { useObjectsStore } from "../../src/stores/objectStore";
 import { createTestWorld } from "../_setup/testWorld";
+import { useDataBucket } from "../../src/Data/useDataBucket";
 
 describe("mapTools", () => {
   beforeEach(() => {
@@ -23,7 +23,7 @@ describe("mapTools", () => {
 
   describe("tileHeight", () => {
     it("uses mocked random values for terrain height", () => {
-      const objectsStore = useObjectsStore();
+      const objectsStore = useDataBucket();
       const restore = mockRandom(0.1, 0.9); // Will pick first and last from arrays usually if used with floor(random * length)
       // Wait, getRandom(arr) uses Math.floor(Math.random() * arr.length)
       // For ocean: [-1, -1.1, -1.2]
@@ -48,7 +48,7 @@ describe("mapTools", () => {
     });
 
     it("returns fixed value when forLogic is true", () => {
-      const objectsStore = useObjectsStore();
+      const objectsStore = useDataBucket();
       const oceanTile = new Tile(
         "tile:x0,y0",
         0,
@@ -95,7 +95,7 @@ describe("mapTools", () => {
 
     it("getTile returns tile or null", () => {
       createTestWorld();
-      const store = useObjectsStore();
+      const store = useDataBucket();
       const size = store.world.size;
       const tiles = store.getTiles;
 
@@ -116,7 +116,7 @@ describe("mapTools", () => {
 
     it("getHexNeighbor finds specific neighbor", () => {
       createTestWorld();
-      const store = useObjectsStore();
+      const store = useDataBucket();
       const size = store.world.size;
       const tiles = store.getTiles;
       const tile11 = tiles[Tile.getKey(1, 1)];

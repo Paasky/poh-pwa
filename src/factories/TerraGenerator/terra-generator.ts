@@ -1,7 +1,7 @@
 import { TypeKey } from "@/Common/Objects/Common";
 import { TypeClass, TypeObject } from "@/Common/Objects/TypeObject";
 import { WorldSize } from "@/factories/worldFactory";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import { getRandom } from "@/helpers/arrayTools";
 import { StratLevel } from "./levels/strat-level";
 import { RegLevel } from "./levels/reg-level";
@@ -30,7 +30,7 @@ export class TerraGenerator {
   gameTiles: Record<string, GenTile> = {};
   rivers: Record<string, River> = {};
 
-  objStore = useObjectsStore();
+  bucket = useDataBucket();
   land: TypeObject;
   water: TypeObject;
   flat: TypeObject;
@@ -62,19 +62,19 @@ export class TerraGenerator {
     this.stratSize = { x: size.x / 9, y: size.y / 9 };
     this.regSize = { x: size.x / 3, y: size.y / 3 };
 
-    this.land = this.objStore.getTypeObject("domainType:land");
-    this.water = this.objStore.getTypeObject("domainType:water");
-    this.flat = this.objStore.getTypeObject("elevationType:flat");
-    this.hill = this.objStore.getTypeObject("elevationType:hill");
-    this.mountain = this.objStore.getTypeObject("elevationType:mountain");
+    this.land = this.bucket.getTypeObject("domainType:land");
+    this.water = this.bucket.getTypeObject("domainType:water");
+    this.flat = this.bucket.getTypeObject("elevationType:flat");
+    this.hill = this.bucket.getTypeObject("elevationType:hill");
+    this.mountain = this.bucket.getTypeObject("elevationType:mountain");
 
-    this.terrains = this.objStore.getClassTypes("terrainType");
+    this.terrains = this.bucket.getClassTypes("terrainType");
 
-    this.oceans = this.objStore.getClassTypes("oceanType");
-    this.oceanTerrain = this.objStore.getTypeObject("terrainType:ocean");
-    this.seaTerrain = this.objStore.getTypeObject("terrainType:sea");
-    this.coastTerrain = this.objStore.getTypeObject("terrainType:coast");
-    this.lakeTerrain = this.objStore.getTypeObject("terrainType:lake");
+    this.oceans = this.bucket.getClassTypes("oceanType");
+    this.oceanTerrain = this.bucket.getTypeObject("terrainType:ocean");
+    this.seaTerrain = this.bucket.getTypeObject("terrainType:sea");
+    this.coastTerrain = this.bucket.getTypeObject("terrainType:coast");
+    this.lakeTerrain = this.bucket.getTypeObject("terrainType:lake");
 
     // Initialize flipped presets according to options
     this.climateBands = getClimateBands(flipClimate);
@@ -123,7 +123,7 @@ export class TerraGenerator {
       lo === hi ? this.climateBands[lo] : [...this.climateBands[lo], ...this.climateBands[hi]];
 
     const climateKey = getRandom(options);
-    const climate = this.objStore.getClassTypes("climateType").find((c) => c.key === climateKey);
+    const climate = this.bucket.getClassTypes("climateType").find((c) => c.key === climateKey);
 
     if (!climate)
       throw new Error(`[terraGenerator] Invalid climate in climateBands: ${climateKey}`);
@@ -169,12 +169,12 @@ export class TerraGenerator {
     const rand = Math.random();
 
     if ((!distToPole && rand < 0.75) || (distToPole === 1 && rand < 0.25)) {
-      return this.objStore.getTypeObject("featureType:ice");
+      return this.bucket.getTypeObject("featureType:ice");
     }
 
     if (tile.climate.key === "climateType:frozen") {
       if (tile.terrain === this.oceanTerrain) {
-        return rand < 0.2 ? this.objStore.getTypeObject("featureType:ice") : null;
+        return rand < 0.2 ? this.bucket.getTypeObject("featureType:ice") : null;
       }
     }
 
@@ -182,19 +182,19 @@ export class TerraGenerator {
       if (tile.domain === this.land) {
         return rand < 0.75
           ? rand < 0.25
-            ? this.objStore.getTypeObject("featureType:swamp")
-            : this.objStore.getTypeObject("featureType:pineForest")
+            ? this.bucket.getTypeObject("featureType:swamp")
+            : this.bucket.getTypeObject("featureType:pineForest")
           : null;
       }
 
       if (tile.terrain === this.coastTerrain || tile.terrain === this.lakeTerrain) {
-        return rand < 0.2 ? this.objStore.getTypeObject("featureType:kelp") : null;
+        return rand < 0.2 ? this.bucket.getTypeObject("featureType:kelp") : null;
       }
     }
 
     if (tile.climate.key === "climateType:temperate") {
       if (tile.domain === this.land) {
-        return rand < 0.5 ? this.objStore.getTypeObject("featureType:forest") : null;
+        return rand < 0.5 ? this.bucket.getTypeObject("featureType:forest") : null;
       }
     }
 
@@ -202,8 +202,8 @@ export class TerraGenerator {
       if (tile.domain === this.land) {
         return rand < 0.5
           ? rand < 0.2
-            ? this.objStore.getTypeObject("featureType:forest")
-            : this.objStore.getTypeObject("featureType:shrubs")
+            ? this.bucket.getTypeObject("featureType:forest")
+            : this.bucket.getTypeObject("featureType:shrubs")
           : null;
       }
     }
@@ -212,31 +212,31 @@ export class TerraGenerator {
       if (tile.domain === this.land) {
         return rand < 0.25
           ? rand < 0.1
-            ? this.objStore.getTypeObject("featureType:oasis")
-            : this.objStore.getTypeObject("featureType:shrubs")
+            ? this.bucket.getTypeObject("featureType:oasis")
+            : this.bucket.getTypeObject("featureType:shrubs")
           : null;
       }
 
       if (tile.terrain === this.oceanTerrain) {
-        return rand < 0.1 ? this.objStore.getTypeObject("featureType:atoll") : null;
+        return rand < 0.1 ? this.bucket.getTypeObject("featureType:atoll") : null;
       }
 
       if (tile.terrain === this.coastTerrain || tile.terrain === this.lakeTerrain) {
-        return rand < 0.25 ? this.objStore.getTypeObject("featureType:lagoon") : null;
+        return rand < 0.25 ? this.bucket.getTypeObject("featureType:lagoon") : null;
       }
     }
 
     if (tile.climate.key === "climateType:equatorial") {
       if (tile.domain === this.land) {
-        return rand < 0.75 ? this.objStore.getTypeObject("featureType:jungle") : null;
+        return rand < 0.75 ? this.bucket.getTypeObject("featureType:jungle") : null;
       }
 
       if (tile.terrain === this.oceanTerrain) {
-        return rand < 0.1 ? this.objStore.getTypeObject("featureType:atoll") : null;
+        return rand < 0.1 ? this.bucket.getTypeObject("featureType:atoll") : null;
       }
 
       if (tile.terrain === this.coastTerrain || tile.terrain === this.lakeTerrain) {
-        return rand < 0.25 ? this.objStore.getTypeObject("featureType:lagoon") : null;
+        return rand < 0.25 ? this.bucket.getTypeObject("featureType:lagoon") : null;
       }
     }
 

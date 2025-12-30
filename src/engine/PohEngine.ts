@@ -8,7 +8,7 @@ import {
   tileCenter,
 } from "@/helpers/math";
 import { TerrainMesh } from "@/engine/TerrainMesh/TerrainMesh";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import { Environment } from "@/engine/environment/Environment";
 import LogicMesh from "@/engine/LogicMesh";
 import { Minimap } from "@/engine/cameras/Minimap";
@@ -133,19 +133,19 @@ export class PohEngine {
   }
 
   initLogic(): this {
-    this.logicMesh = new LogicMesh(this, useObjectsStore().getTiles);
+    this.logicMesh = new LogicMesh(this, useDataBucket().getTiles);
 
     return this;
   }
 
   initTerrain(): this {
-    this.terrainBuilder = new TerrainMesh(this.scene, this.size, useObjectsStore().getTiles);
+    this.terrainBuilder = new TerrainMesh(this.scene, this.size, useDataBucket().getTiles);
 
     return this;
   }
 
   initGridOverlay(): this {
-    this.gridOverlay = new GridOverlay(this.scene, this.size, useObjectsStore().getTiles);
+    this.gridOverlay = new GridOverlay(this.scene, this.size, useDataBucket().getTiles);
 
     const settings = useSettingsStore();
     this._stopHandles.push(
@@ -177,7 +177,7 @@ export class PohEngine {
     this.featureInstancer = new FeatureInstancer(
       this.scene,
       this.size,
-      Object.values(useObjectsStore().getTiles),
+      Object.values(useDataBucket().getTiles),
       this.terrainBuilder.root,
     );
 
@@ -185,12 +185,12 @@ export class PohEngine {
   }
 
   initObjectInstancer(): this {
-    const objStore = useObjectsStore();
+    const bucket = useDataBucket();
     this.objectInstancer = new ObjectInstancer(
       this.scene,
       this.size,
-      objStore.getClassGameObjects("construction") as Construction[],
-      objStore.getClassGameObjects("unit") as Unit[],
+      bucket.getClassGameObjects("construction") as Construction[],
+      bucket.getClassGameObjects("unit") as Unit[],
     );
 
     return this;
@@ -200,7 +200,7 @@ export class PohEngine {
     this.contextOverlay = new ContextOverlay(this.scene, this.size);
 
     // Watch for known/visible area changes to update minimap and clamping bounds
-    const player = useObjectsStore().currentPlayer;
+    const player = useDataBucket().currentPlayer;
     this._stopHandles.push(
       watch(
         [player.knownTileKeys, player.visibleTileKeys],
@@ -362,7 +362,7 @@ export class PohEngine {
   }
 
   flyToCurrentPlayer(teleport = false): void {
-    const currentPlayer = useObjectsStore().currentPlayer;
+    const currentPlayer = useDataBucket().currentPlayer;
 
     // Unit has priority
     const unit = currentPlayer.units.value[0];

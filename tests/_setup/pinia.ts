@@ -1,6 +1,6 @@
 // tests/setup/pinia.ts
 import { createPinia, setActivePinia } from "pinia";
-import { useObjectsStore } from "../../src/stores/objectStore";
+import { useDataBucket } from "../../src/Data/useDataBucket";
 import { StaticData } from "../../src/types/api";
 import staticData from "../../public/staticData.json";
 
@@ -12,5 +12,5 @@ export function initTestPinia() {
 }
 
 export function loadStaticData() {
-  useObjectsStore().initStatic(staticData as StaticData);
+  useDataBucket().initStatic(staticData as StaticData);
 }

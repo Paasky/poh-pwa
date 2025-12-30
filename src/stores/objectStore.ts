@@ -22,7 +22,7 @@ import { withCallerContext } from "@/utils/stack";
 import { Player } from "@/Common/Models/Player";
 import { Tile } from "@/Common/Models/Tile";
 
-export const useObjectsStore = defineStore("objects", {
+export const useDataBucket = defineStore("objects", {
   state: () => ({
     // These will be filled in init() or WorldManager.create()
     world: {
@@ -51,7 +51,7 @@ export const useObjectsStore = defineStore("objects", {
       (key: ObjKey): CategoryObject | GameObject | TypeObject => {
         const obj =
           state._staticObjects[key as CatKey | TypeKey] ?? state._gameObjects[key as GameKey];
-        if (!obj) throwWithContext(`[objStore] Tried to get(${key}), key does not exist in store`);
+        if (!obj) throwWithContext(`[bucket] Tried to get(${key}), key does not exist in store`);
         return obj;
       },
 
@@ -62,9 +62,7 @@ export const useObjectsStore = defineStore("objects", {
       (key: GameKey): GameObject => {
         const obj = state._gameObjects[key];
         if (!obj)
-          throwWithContext(
-            `[objStore] Tried to getGameObject(${key}), key does not exist in store`,
-          );
+          throwWithContext(`[bucket] Tried to getGameObject(${key}), key does not exist in store`);
         return obj;
       },
 
@@ -72,7 +70,7 @@ export const useObjectsStore = defineStore("objects", {
       const player = state._gameObjects[state.world.currentPlayer];
       if (!player)
         throwWithContext(
-          `[objStore] Tried to ge current player (${state.world.currentPlayer}), key does not exist in store`,
+          `[bucket] Tried to ge current player (${state.world.currentPlayer}), key does not exist in store`,
         );
       return player as Player;
     },
@@ -82,11 +80,9 @@ export const useObjectsStore = defineStore("objects", {
       (key: TypeKey): TypeObject => {
         const obj = state._staticObjects[key];
         if (!obj)
-          throwWithContext(
-            `[objStore] Tried to getTypeObject(${key}), key does not exist in store`,
-          );
+          throwWithContext(`[bucket] Tried to getTypeObject(${key}), key does not exist in store`);
         if (!isTypeObject(obj))
-          throwWithContext(`[objStore] Not a TypeObject: ${key} : ${JSON.stringify(obj)}`);
+          throwWithContext(`[bucket] Not a TypeObject: ${key} : ${JSON.stringify(obj)}`);
         return obj as TypeObject;
       },
 
@@ -96,12 +92,12 @@ export const useObjectsStore = defineStore("objects", {
         const obj = state._staticObjects[key];
         if (!obj)
           throwWithContext(
-            `[objStore] Tried to getCategoryObject(${key}), key does not exist in store`,
+            `[bucket] Tried to getCategoryObject(${key}), key does not exist in store`,
           );
 
         // Allow TypeObjects (Tech uses EraType as its Category)
         if (!isCategoryObject(obj) && !isTypeObject(obj))
-          throwWithContext(`[objStore] Not a CategoryObject: ${key}`);
+          throwWithContext(`[bucket] Not a CategoryObject: ${key}`);
         return obj as CategoryObject;
       },
 
@@ -282,7 +278,7 @@ export const useObjectsStore = defineStore("objects", {
 });
 
 function throwWithContext(message: string) {
-  throw withCallerContext(message, ["/src/stores/objectStore.ts"]);
+  throw withCallerContext(message, ["/src/Data/useDataBucket.ts"]);
 }
 
 export type CatData = {

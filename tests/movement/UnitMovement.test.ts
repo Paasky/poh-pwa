@@ -4,7 +4,7 @@ import { createTestWorld } from "../_setup/testWorld";
 import { createMovementContext, createPathStep } from "../_setup/gameHelpers";
 import { Tile } from "../../src/Common/Models/Tile";
 import { Unit } from "../../src/Common/Models/Unit";
-import { useObjectsStore } from "../../src/stores/objectStore";
+import { useDataBucket } from "../../src/Data/useDataBucket";
 import { initTypeObject } from "../../src/Common/Objects/TypeObject";
 import { useMoveCostCache } from "../../src/composables/useMoveCostCache";
 import { UnitDesign } from "../../src/Common/Models/UnitDesign";
@@ -14,14 +14,14 @@ import { TypeKey } from "../../src/Common/Objects/Common";
 
 describe("UnitMovement", () => {
   let world: ReturnType<typeof createTestWorld>;
-  let objectsStore: ReturnType<typeof useObjectsStore>;
+  let objectsStore: ReturnType<typeof useDataBucket>;
   let cache: ReturnType<typeof useMoveCostCache>;
 
   beforeEach(() => {
     initTestPinia();
     loadStaticData();
     world = createTestWorld();
-    objectsStore = useObjectsStore();
+    objectsStore = useDataBucket();
     cache = useMoveCostCache();
     cache.resetCache();
   });
@@ -150,7 +150,7 @@ describe("UnitMovement", () => {
   });
 
   it("should accumulate specials from both unit design and player research", () => {
-    const objectsStore = useObjectsStore();
+    const objectsStore = useDataBucket();
     const customPlatform = initTypeObject({
       key: "platformType:custom",
       specials: ["specialType:canEnterMountains"],
@@ -201,7 +201,7 @@ describe("UnitMovement", () => {
     });
 
     it("should allow water units to enter land ONLY via City or Canal", () => {
-      const objectsStore = useObjectsStore();
+      const objectsStore = useDataBucket();
       const shipDesign = new UnitDesign(
         "unitDesign:ship",
         objectsStore.getTypeObject("platformType:galley"),
@@ -239,7 +239,7 @@ describe("UnitMovement", () => {
     });
 
     it("should allow water units to move between adjacent cities/canals with cost 1", () => {
-      const objectsStore = useObjectsStore();
+      const objectsStore = useDataBucket();
       const shipDesign = new UnitDesign(
         "unitDesign:ship",
         objectsStore.getTypeObject("platformType:galley"),
@@ -260,7 +260,7 @@ describe("UnitMovement", () => {
     });
 
     it("should allow water units to move between water tiles with cost 1", () => {
-      const objectsStore = useObjectsStore();
+      const objectsStore = useDataBucket();
       const shipDesign = new UnitDesign(
         "unitDesign:ship",
         objectsStore.getTypeObject("platformType:galley"),
@@ -279,7 +279,7 @@ describe("UnitMovement", () => {
     });
 
     it("should enforce water unit terrain permissions (Sea, Ocean, Ice)", () => {
-      const objectsStore = useObjectsStore();
+      const objectsStore = useDataBucket();
       const shipDesign = new UnitDesign(
         "unitDesign:ship",
         objectsStore.getTypeObject("platformType:galley"),

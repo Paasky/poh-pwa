@@ -4,7 +4,7 @@ import { TypeObject } from "@/Common/Objects/TypeObject";
 import { Yields } from "@/Common/Objects/Yields";
 import { roundToTenth, TypeKey } from "@/Common/Objects/Common";
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import type { UnitDesign } from "@/Common/Models/UnitDesign";
 import type { City } from "@/Common/Models/City";
 import type { Player } from "@/Common/Models/Player";
@@ -132,7 +132,7 @@ export class Unit extends GameObject {
   }
 
   get visibleTileKeys(): Set<GameKey> {
-    const store = useObjectsStore();
+    const store = useDataBucket();
     const center = getCoordsFromTileKey(this.tileKey);
     const neighbors = getHexNeighborCoords(store.world.size, center, 2);
     const keys = new Set<GameKey>();
@@ -255,7 +255,7 @@ export class Unit extends GameObject {
       this.tradeRoute.delete(true);
     }
 
-    delete useObjectsStore()._gameObjects[this.key];
+    delete useDataBucket()._gameObjects[this.key];
 
     useEventStore().turnEvents.push(new UnitLost(this.name, this.player, this.tile, reason, city));
   }

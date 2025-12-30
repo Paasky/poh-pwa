@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useCurrentContext } from "@/composables/useCurrentContext";
 import UiTypeChip from "@/components/Ui/UiTypeChip.vue";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import { Tile } from "@/Common/Models/Tile";
 import UiGameObjChip from "@/components/Ui/UiGameObjChip.vue";
 
@@ -12,7 +12,7 @@ const hoveredTile = useCurrentContext().hover as unknown as Tile;
   <v-sheet class="d-flex flex-column ga-1" style="width: 12rem; overflow: hidden">
     <div
       class="d-flex flex-column ga-1"
-      v-if="hoveredTile && useObjectsStore().currentPlayer.knownTileKeys.has(hoveredTile.key)"
+      v-if="hoveredTile && useDataBucket().currentPlayer.knownTileKeys.has(hoveredTile.key)"
     >
       <div
         v-if="hoveredTile.unitKeys.length"

@@ -4,7 +4,7 @@ import EncyclopediaMenuItem from "@/components/Encyclopedia/EncyclopediaMenuItem
 import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
 import UiObjectChips from "@/components/Ui/UiObjectChips.vue";
 import UiTypeChip from "@/components/Ui/UiTypeChip.vue";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import { useAudioStore } from "@/stores/audioStore";
 import { CategoryObject, TypeObject } from "@/Common/Objects/TypeObject";
 import { TypeKey } from "@/Common/Objects/Common";
@@ -96,7 +96,7 @@ onBeforeUnmount(() => audio.stopQuote());
             density="compact"
             :items="
               store.breadcrumbs.map((key) => ({
-                title: (useObjectsStore().get(key as TypeKey) as TypeObject).name,
+                title: (useDataBucket().get(key as TypeKey) as TypeObject).name,
                 key,
               }))
             "
@@ -139,7 +139,7 @@ onBeforeUnmount(() => audio.stopQuote());
                     v-for="t in store.searchResults"
                     :key="t.key"
                     :title="t.name"
-                    :subtitle="useObjectsStore().getTypeObject(t.concept).name"
+                    :subtitle="useDataBucket().getTypeObject(t.concept).name"
                     @click="
                       store.addSearchToHistory();
                       store.open(t.key);
@@ -173,7 +173,7 @@ onBeforeUnmount(() => audio.stopQuote());
           <div v-else class="px-4 d-flex flex-column ga-4">
             <h1>
               {{ store.current.title }} ({{
-                useObjectsStore().getTypeObject(store.current.type.concept).name
+                useDataBucket().getTypeObject(store.current.type.concept).name
               }})
             </h1>
 
@@ -234,9 +234,7 @@ onBeforeUnmount(() => audio.stopQuote());
                 <div v-if="store.current.type.category">
                   <h3>Category</h3>
                   <div class="opacity-50">
-                    {{
-                      (useObjectsStore().get(store.current.type.category) as CategoryObject).name
-                    }}
+                    {{ (useDataBucket().get(store.current.type.category) as CategoryObject).name }}
                   </div>
                 </div>
 

@@ -2,7 +2,7 @@ import { canHaveOne, hasMany } from "@/Common/Models/_Relations";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { Yields } from "@/Common/Objects/Yields";
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import type { River } from "@/Common/Models/River";
 import type { Construction } from "@/Common/Models/Construction";
 import type { Citizen } from "@/Common/Models/Citizen";
@@ -109,9 +109,9 @@ export class Tile extends GameObject {
   get neighborTiles(): Tile[] {
     if (this._neighborTiles.length === 0) {
       this._neighborTiles = getNeighbors(
-        useObjectsStore().world.size,
+        useDataBucket().world.size,
         this,
-        useObjectsStore().getTiles,
+        useDataBucket().getTiles,
         "hex",
       );
     }
@@ -121,7 +121,7 @@ export class Tile extends GameObject {
   private _worldPosition: Vector3 | null = null;
   get worldPosition(): Vector3 {
     if (!this._worldPosition) {
-      const center = tileCenter(useObjectsStore().world.size, this);
+      const center = tileCenter(useDataBucket().world.size, this);
       const height = tileHeight(this, true); // Logic height
       this._worldPosition = new Vector3(center.x, height, center.z);
     }
@@ -133,7 +133,7 @@ export class Tile extends GameObject {
    */
   get selectable(): (City | Unit)[] {
     const selectable: (City | Unit)[] = this.units.filter(
-      (u) => u.playerKey === useObjectsStore().currentPlayer.key,
+      (u) => u.playerKey === useDataBucket().currentPlayer.key,
     );
     if (this.city) selectable.push(this.city);
     return selectable;
@@ -182,6 +182,9 @@ export class Tile extends GameObject {
   /*
    * Actions
    */
+  warmUp(): void {
+    // todo
+  }
 
   // Used all over to always generate standard tile ID
   static getKey(x: number, y: number): GameKey {

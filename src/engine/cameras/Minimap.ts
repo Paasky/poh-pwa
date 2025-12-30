@@ -8,7 +8,7 @@ import {
 } from "@babylonjs/core";
 import { CreateScreenshotUsingRenderTarget } from "@babylonjs/core/Misc/screenshotTools";
 import { TerrainMesh } from "@/engine/TerrainMesh/TerrainMesh";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import {
   calculateMinimapCameraBounds,
   getFullWorldOrthoBounds,
@@ -78,7 +78,7 @@ export class Minimap {
     this._applyCameraBounds(getFullWorldOrthoBounds(this._size));
 
     // Build a simple terrain for the minimap to capture
-    this._terrain = new TerrainMesh(this._scene, this._size, useObjectsStore().getTiles, {
+    this._terrain = new TerrainMesh(this._scene, this._size, useDataBucket().getTiles, {
       hexRingCount: 1,
       lowDetail: true,
     });

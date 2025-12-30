@@ -1,6 +1,10 @@
 import { WeatherType } from "@/engine/environment/Environment";
 
 export type EngineSettings = {
+  // Save Management
+  autoSaveFrequency: number;
+  maxAutoSaves: number;
+
   // Camera UX
   manualTilt: boolean; // Allow user to tilt manually (otherwise auto-tilt by zoom)
 
@@ -37,6 +41,8 @@ export type EngineSettings = {
 };
 
 export const gameSettingKeys: (keyof EngineSettings)[] = [
+  "autoSaveFrequency",
+  "maxAutoSaves",
   "manualTilt",
   "showGrid",
   "showClock",
@@ -75,6 +81,8 @@ export const restartRequiredSettingKeys: (keyof EngineSettings)[] = [
 
 // This is the same as "high" preset
 export const defaultEngineSettings: Required<EngineSettings> = {
+  autoSaveFrequency: 1,
+  maxAutoSaves: 10,
   manualTilt: false,
   showGrid: true,
   showClock: true,

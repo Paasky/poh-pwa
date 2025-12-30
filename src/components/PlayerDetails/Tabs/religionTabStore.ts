@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import { Religion } from "@/Common/Models/Religion";
 import type { CatKey } from "@/Common/Objects/Common";
 import { generateKey } from "@/Common/Models/_GameModel";
 
 export const useReligionTabStore = defineStore("religionTabStore", () => {
-  const objStore = useObjectsStore();
+  const bucket = useDataBucket();
   const initialized = ref(false);
 
   // Table columns (kept empty per current implementation)
@@ -49,11 +49,11 @@ export const useReligionTabStore = defineStore("religionTabStore", () => {
     ],
   ] as unknown as CatKey[][]);
 
-  const religions = computed(() => objStore.getClassGameObjects("religion") as Religion[]);
-  const citizensCount = computed(() => objStore.getClassGameObjects("citizen").length);
+  const religions = computed(() => bucket.getClassGameObjects("religion") as Religion[]);
+  const citizensCount = computed(() => bucket.getClassGameObjects("citizen").length);
 
   const defaultCurrent = computed<Religion | null>(() => {
-    const firstCity = objStore.getClassGameObjects("city")[0];
+    const firstCity = bucket.getClassGameObjects("city")[0];
     if (!firstCity) return null;
     // Construct a placeholder religion as in component
     // name and turn are placeholders

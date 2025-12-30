@@ -1,6 +1,6 @@
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { TypeKey } from "@/Common/Objects/Common";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 
 export function typeTimeline(type: TypeObject): TypeObject[] {
   let timeline = [type];
@@ -8,7 +8,7 @@ export function typeTimeline(type: TypeObject): TypeObject[] {
   let needleType = type as TypeObject | undefined;
   do {
     needle = needleType!.upgradesFrom.find((from) => from.startsWith(type.class + ":"));
-    needleType = needle ? useObjectsStore().getTypeObject(needle) : undefined;
+    needleType = needle ? useDataBucket().getTypeObject(needle) : undefined;
     if (needleType) {
       timeline = [needleType, ...timeline];
     }
@@ -17,7 +17,7 @@ export function typeTimeline(type: TypeObject): TypeObject[] {
   needleType = type as TypeObject;
   do {
     needle = needleType!.upgradesTo.find((to) => to.startsWith(type.class + ":"));
-    needleType = needle ? useObjectsStore().getTypeObject(needle) : undefined;
+    needleType = needle ? useDataBucket().getTypeObject(needle) : undefined;
     if (needleType) {
       timeline.push(needleType as TypeObject);
     }

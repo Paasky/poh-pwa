@@ -3,7 +3,7 @@ import { markRaw, nextTick } from "vue";
 import pluralize from "pluralize";
 import { capitalCase } from "change-case";
 import { CategoryObject, TypeObject } from "@/Common/Objects/TypeObject";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import { useAudioStore } from "@/stores/audioStore";
 
 export type MenuItem = {
@@ -31,7 +31,7 @@ export const useEncyclopediaStore = defineStore("encyclopedia", {
     // Finally, register to UiState
     init() {
       const out: Record<string, MenuItem> = {};
-      for (const type of useObjectsStore().getAllTypes()) {
+      for (const type of useDataBucket().getAllTypes()) {
         // Build the type item first, then the tree it belongs to
         const typeItem = {
           key: type.key,
@@ -61,7 +61,7 @@ export const useEncyclopediaStore = defineStore("encyclopedia", {
         if (type.category) {
           if (!conceptItem.children![type.category]) {
             try {
-              const category = useObjectsStore().get(type.category) as TypeObject | CategoryObject;
+              const category = useDataBucket().get(type.category) as TypeObject | CategoryObject;
               conceptItem.children![type.category] = {
                 key: type.category,
                 title: category.name,
@@ -177,13 +177,13 @@ export const useEncyclopediaStore = defineStore("encyclopedia", {
 
       // First: add direct name matches
       const nameMatches = {} as Record<string, TypeObject>;
-      for (const t of useObjectsStore().getAllTypes()) {
+      for (const t of useDataBucket().getAllTypes()) {
         if (t.name.toLowerCase().includes(state.search.toLowerCase())) nameMatches[t.key] = t;
       }
 
       // Second find in category, concept & description
       const otherMatches = {} as Record<string, TypeObject>;
-      for (const t of useObjectsStore().getAllTypes()) {
+      for (const t of useDataBucket().getAllTypes()) {
         if (t.key in nameMatches) continue;
 
         const searchIn = [t.category?.split(":")[1], t.concept.split(":")[1], t.description].filter(

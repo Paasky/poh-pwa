@@ -4,7 +4,7 @@ import UiObjectCards from "@/components/Ui/UiObjectCards.vue";
 import { Religion } from "@/Common/Models/Religion";
 import { CatKey } from "@/Common/Objects/Common";
 import { CategoryObject, TypeObject } from "@/Common/Objects/TypeObject";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 
 const props = defineProps<{
   title: string;
@@ -12,7 +12,7 @@ const props = defineProps<{
   current: Religion;
 }>();
 
-const objStore = useObjectsStore();
+const bucket = useDataBucket();
 
 type CatData = {
   cat: CategoryObject;
@@ -22,11 +22,11 @@ type CatData = {
 function buildPyramid(pyramid: CatKey[][], selectedTypes: TypeObject[]): CatData[][] {
   return pyramid.map((row) =>
     row.map((catKey) => {
-      const catTypes = objStore.getCategoryTypes(catKey);
+      const catTypes = bucket.getCategoryTypes(catKey);
       const catIsSelected = selectedTypes.some((t) => t.category === catKey);
 
       return {
-        cat: objStore.getCategoryObject(catKey),
+        cat: bucket.getCategoryObject(catKey),
         // If the category is selected, only show the selected types
         types: catIsSelected
           ? [...catTypes.filter((t) => selectedTypes.find((st) => t.key === st.key))]

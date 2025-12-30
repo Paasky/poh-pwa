@@ -1,5 +1,5 @@
 import { getRandom } from "@/helpers/arrayTools";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import { GenTile } from "@/factories/TerraGenerator/gen-tile";
 import { Tetris } from "@/factories/TerraGenerator/helpers/tetris";
 import { generateKey } from "@/Common/Models/_GameModel";
@@ -91,8 +91,8 @@ export const mountainRange = (
   tiles: Record<string, GenTile>,
   size: { x: number; y: number },
 ): GenTile[] => {
-  const mountain = useObjectsStore().getTypeObject("elevationType:mountain");
-  const snowMountain = useObjectsStore().getTypeObject("elevationType:snowMountain");
+  const mountain = useDataBucket().getTypeObject("elevationType:mountain");
+  const snowMountain = useDataBucket().getTypeObject("elevationType:snowMountain");
 
   let waterCount = 0;
   return new Snake(
@@ -197,7 +197,7 @@ export const makeRiver = (
   tiles: Record<string, GenTile>,
   rivers: Record<string, River>,
 ): River => {
-  const floodPlain = useObjectsStore().getTypeObject("featureType:floodPlain");
+  const floodPlain = useDataBucket().getTypeObject("featureType:floodPlain");
   const river = new River(generateKey("river"), "River", []);
   rivers[river.key] = river;
 
@@ -216,7 +216,7 @@ export const makeRiver = (
       if (majorMode) {
         tile.isMajorRiver = true;
         if (tile.domain.id === "land") {
-          tile.terrain = useObjectsStore().getTypeObject("terrainType:majorRiver");
+          tile.terrain = useDataBucket().getTypeObject("terrainType:majorRiver");
           tile.feature = null;
         }
       }
@@ -299,7 +299,7 @@ export const makeRiver = (
         const tileKey = otherRiverTileKeys[i];
         tiles[tileKey].isMajorRiver = true;
         if (tiles[tileKey].domain.id === "land") {
-          tiles[tileKey].terrain = useObjectsStore().getTypeObject("terrainType:majorRiver");
+          tiles[tileKey].terrain = useDataBucket().getTypeObject("terrainType:majorRiver");
           tiles[tileKey].feature = null;
         }
       }

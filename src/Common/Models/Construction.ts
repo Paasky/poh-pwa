@@ -5,7 +5,7 @@ import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import type { Citizen } from "@/Common/Models/Citizen";
 import type { Tile } from "@/Common/Models/Tile";
 import { City } from "@/Common/Models/City";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import { useEventStore } from "@/stores/eventStore";
 import {
   ConstructionAbandoned,
@@ -122,7 +122,7 @@ export class Construction extends GameObject {
   }
 
   complete(player: Player): void {
-    this.completedAtTurn = useObjectsStore().world.turn;
+    this.completedAtTurn = useDataBucket().world.turn;
     this.progress = 100;
 
     useEventStore().turnEvents.push(new ConstructionCompleted(this, player));
@@ -134,7 +134,7 @@ export class Construction extends GameObject {
     }
     this.tile.constructionKey = null;
 
-    delete useObjectsStore()._gameObjects[this.key];
+    delete useDataBucket()._gameObjects[this.key];
 
     if (wasLost) {
       useEventStore().turnEvents.push(

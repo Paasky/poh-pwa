@@ -17,7 +17,7 @@ export class StratLevel {
 
   generatePresets(): StratLevel {
     // Make a copy so we don't mutate the store
-    const continents = [...this.gen.objStore.getClassTypes("continentType")];
+    const continents = [...this.gen.bucket.getClassTypes("continentType")];
 
     // Shuffle x & y values to randomize preset continent order & placement
     const ys = [...Array(this.gen.stratSize.y).keys()];

@@ -1,7 +1,7 @@
 import { hasMany, hasOne } from "@/Common/Models/_Relations";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
-import { useObjectsStore } from "@/stores/objectStore";
+import { useDataBucket } from "@/Data/useDataBucket";
 import type { Citizen } from "@/Common/Models/Citizen";
 import type { Player } from "@/Common/Models/Player";
 import type { City } from "@/Common/Models/City";
@@ -83,8 +83,8 @@ export class Religion extends GameObject {
   }
 
   get canSelect(): boolean {
-    // Prevent crashing when objStore is not fully loaded yet
-    if (!useObjectsStore().ready) return false;
+    // Prevent crashing when bucket is not fully loaded yet
+    if (!useDataBucket().ready) return false;
 
     const holyCityOwner = this.city.player;
     // If the holy city owner doesn't follow the religion: can never select
@@ -103,7 +103,7 @@ export class Religion extends GameObject {
     if (this.status !== "dogmas") return [];
 
     const selectable: TypeObject[] = [];
-    for (const dogma of useObjectsStore().getClassTypes("dogmaType")) {
+    for (const dogma of useDataBucket().getClassTypes("dogmaType")) {
       // Category already chosen
       if (this.dogmas.some((m) => m.category === dogma.category)) {
         continue;
@@ -121,7 +121,7 @@ export class Religion extends GameObject {
     if (this.status !== "gods") return [];
 
     const selectable: TypeObject[] = [];
-    for (const god of useObjectsStore().getClassTypes("godType")) {
+    for (const god of useDataBucket().getClassTypes("godType")) {
       // Category already chosen
       if (this.gods.some((m) => m.category === god.category)) {
         continue;
@@ -139,7 +139,7 @@ export class Religion extends GameObject {
     if (this.status !== "myths") return [];
 
     const selectable: TypeObject[] = [];
-    for (const myth of useObjectsStore().getClassTypes("mythType")) {
+    for (const myth of useDataBucket().getClassTypes("mythType")) {
       // Category already chosen
       if (this.myths.some((m) => m.category === myth.category)) {
         continue;
