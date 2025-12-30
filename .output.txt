@@ -1,211 +1,389 @@
-        "equipmentType:bombard",
-        "equipmentType:cannon",
-        "equipmentType:howitzer",
-        "equipmentType:rocketArtillery",
-        "equipmentType:mLRS",
-        "equipmentType:droneSwarm",
-        "equipmentType:bomb",
-        "equipmentType:guidedBomb",
-        "equipmentType:homingBomb",
-        "platformType:chariot",
-        "platformType:horse",
-        "platformType:camel",
-        "platformType:elephant",
-        "platformType:truck",
-        "platformType:tracked"
-      ],
-      "requires": [
-        [
-          "conceptType:city",
-          "conceptType:building",
-          "conceptType:nationalWonder",
---
-      "upgradesTo": ["equipmentType:bombard"],
-      "upgradesFrom": ["equipmentType:catapult"],
-      "specials": [
-        "specialType:cannotKillLandUnits",
-        "specialType:damagesBuildings",
-        "specialType:damagesImprovements",
-        "specialType:canCarryStockpile"
-      ],
-      "names": {
-        "platformType:carriage": "Trebuchet",
-        "platformType:heavyClinker": "Heavy Galleass"
-      },
-      "image": "\/media\/images\/equipmentType\/trebuchet.jpg",
-      "audio": [],
-      "requires": ["technologyType:castles"]
-    },
-    {
-      "key": "equipmentType:bombard",
-      "name": "Bombard",
-      "concept": "conceptType:equipment",
-      "description": "Bombards were early large-caliber gunpowder cannon for sieges during the late medieval and early Renaissance periods. They used wrought iron staves bound by hoops or cast bronze barrels, firing spherical stone shot. Rates of fire were slow due to heavy charges and delicate barrels. The Ottomans employed giant bombards at the siege of Constantinople in 1453, breaching sections of the Theodosian Walls. French forces in the Italian Wars combined smaller bronze bombards with field artillery to reduce fortresses. Transport required oxen, sledges, and elaborate carpentry. Trunnions, lighter metal, and iron cannonballs later enabled more manageable guns. Bombards introduced explosive propellant artillery to European siegecraft.",
-      "category": "equipmentCategory:siege",
-      "yields": [
-        {
-          "type": "yieldType:productionCost",
-          "amount": 130
-        },
-        {
-          "type": "yieldType:productionCost",
-          "amount": 10,
-          "method": "percent"
-        },
-        {
-          "type": "yieldType:strength",
-          "amount": 18
-        },
-        {
-          "type": "yieldType:range",
---
-      "upgradesFrom": ["equipmentType:bombard"],
-      "specials": [
-        "specialType:cannotKillLandUnits",
-        "specialType:damagesBuildings",
-        "specialType:damagesImprovements",
-        "specialType:canCarryStockpile"
-      ],
-      "names": {
-        "platformType:carriage": "Cannon",
-        "platformType:heavyCarvel": "Ship-of-the-Line",
-        "platformType:heavySteamer": "Ironclad"
-      },
-      "image": "\/media\/images\/equipmentType\/cannon.jpg",
-      "audio": [],
-      "requires": ["technologyType:steelCasting"]
-    },
-    {
-      "key": "equipmentType:howitzer",
-      "name": "Howitzer",
-      "concept": "conceptType:equipment",
-      "description": "The howitzer is a high-angle artillery piece designed for indirect fire into entrenchments and behind cover. In the late nineteenth century, industrialized armies adopted steel construction, recoil systems, and separate-loading ammunition with variable propellant charges, enabling flexible trajectories. The Krupp 15 cm sFH 93 (1893) and \u0160koda 10 cm M.99 (1899) became standard field and fortress weapons across Europe. Howitzers combined portability with curved fire that guns could not provide, making them central in sieges and positional warfare. During World War I they dominated counter-battery tasks and trench reduction using high explosive and shrapnel. Interwar developments refined carriages, shields, and limbers for motor traction. The type persisted into the twentieth century with split trails, faster rates of fire, and improved fuzes, securing a lasting role in combined-arms doctrine.",
---
-        "equipmentType:bombard",
-        "equipmentType:cannon",
-        "equipmentType:howitzer",
-        "equipmentType:rocketArtillery",
-        "equipmentType:mLRS",
-        "equipmentType:droneSwarm",
-        "equipmentType:bomb",
-        "equipmentType:guidedBomb",
-        "equipmentType:homingBomb",
-        "platformType:carriage",
-        "platformType:dirigible",
-        "platformType:monocoque",
-        "platformType:supersonic",
-        "platformType:superagile",
-        "platformType:sealth",
-        "platformType:mRBM",
-        "platformType:iCBM"
-      ]
-    },
-    {
-      "key": "specialType:canEnterIce",
---
-        "equipmentType:bombard",
-        "equipmentType:cannon",
-        "equipmentType:howitzer",
-        "equipmentType:rocketArtillery",
-        "equipmentType:mLRS",
-        "equipmentType:droneSwarm",
-        "equipmentType:bomb",
-        "equipmentType:guidedBomb",
-        "equipmentType:homingBomb"
-      ]
-    },
-    {
-      "key": "specialType:cannotTradeNonAllies",
-      "name": "Cannot trade non-allies",
-      "concept": "conceptType:special",
-      "description": "",
-      "relatesTo": ["policyType:isolationist"]
-    },
-    {
-      "key": "specialType:chooseFreeTechnology",
-      "name": "Choose Free Technology",
---
-        "equipmentType:bombard",
-        "equipmentType:cannon",
-        "equipmentType:howitzer",
-        "equipmentType:rocketArtillery",
-        "equipmentType:mLRS",
-        "equipmentType:droneSwarm",
-        "equipmentType:bomb",
-        "equipmentType:guidedBomb",
-        "equipmentType:homingBomb"
-      ]
-    },
-    {
-      "key": "specialType:damagesImprovements",
-      "name": "Damages Improvements",
-      "concept": "conceptType:special",
-      "description": "",
-      "relatesTo": [
-        "equipmentType:catapult",
-        "equipmentType:trebuchet",
-        "equipmentType:bombard",
-        "equipmentType:cannon",
-        "equipmentType:howitzer",
-        "equipmentType:rocketArtillery",
-        "equipmentType:mLRS",
-        "equipmentType:droneSwarm",
-        "equipmentType:bomb",
-        "equipmentType:guidedBomb",
-        "equipmentType:homingBomb"
-      ]
-    },
-    {
-      "key": "specialType:distanceFromCapital",
-      "name": "Distance from Capital",
-      "concept": "conceptType:special",
-      "description": "",
-      "relatesTo": ["heritageType:settledI"]
-    },
-    {
-      "key": "specialType:elections",
-      "name": "Elections",
---
-        "equipmentType:bombard",
-        "technologyType:militaryDiscipline",
-        "technologyType:civilService",
-        "worldWonderType:orbansFoundry"
-      ],
-      "yields": [
-        {
-          "type": "yieldType:scienceCost",
-          "amount": 240
-        }
-      ],
-      "image": "\/media\/images\/technologyType\/gunpowder.jpg",
-      "requires": ["technologyType:optics", "technologyType:buttress"]
-    },
-    {
-      "key": "technologyType:fundamentalism",
-      "name": "Fundamentalism",
-      "concept": "conceptType:technology",
-      "description": "Fundamentalism in early modern Europe described strict adherence to religious doctrine that directed public and private life. Reformers and magistrates sought uniform belief as a foundation for order. Geneva under John Calvin enforced discipline through consistory courts. The English and Scottish Reformations produced zealous movements that shaped policy and warfare. Puritan leaders built governance in Massachusetts Bay around covenant theology. Catholic monarchies sponsored the Counter-Reformation, using councils, missions, and inquisitorial courts to police doctrine. These regimes legislated worship, education, and morals. Confessional rigidity influenced diplomacy and civil conflict from the French Wars of Religion to the Thirty Years\u2019 War.",
-      "quote": {
-        "text": "One faith, one law, one king.",
---
-        "equipmentType:bombard",
-        "equipmentType:cannon",
-        "worldWonderType:orbansFoundry"
-      ]
-    },
-    {
-      "key": "equipmentCategory:artillery",
-      "concept": "conceptType:equipment",
-      "name": "Artillery",
-      "description": "",
-      "relatesTo": [
-        "buildingType:artilleryFactory",
-        "equipmentType:howitzer",
-        "equipmentType:rocketArtillery",
-        "equipmentType:mLRS",
-        "equipmentType:droneSwarm"
-      ]
-    },
-    {
-      "key": "equipmentCategory:ranged",
-      "concept": "conceptType:equipment",
+public/media/images:
+buildingType   goalType         nationalWonderType  technologyType
+continentType  majorLeaderType  naturalWonderType   unitType
+eraType        minorLeaderType  regionType          worldWonderType
+public/media/images/buildingType:
+aircraftFactory.jpg     geolyph.jpg               royalPalace.jpg
+amphitheater.jpg        geothermalPowerPlant.jpg  schoolOfSocrates.jpg
+amusementPark.jpg       governor.jpg              scribery.jpg
+apothecary.jpg          granary.jpg               shipwright.jpg
+aqueduct.jpg            guildHall.jpg             shipyard.jpg
+archeryRange.jpg        harbor.jpg                shrine.jpg
+arena.jpg               hospital.jpg              smith.jpg
+artilleryFactory.jpg    hydroPowerPlant.jpg       solarPowerPlant.jpg
+assemblyLine.jpg        inn.jpg                   spiceMarket.jpg
+automatedFactory.jpg    internetProvider.jpg      stables.jpg
+automatedPort.jpg       jemCutter.jpg             starFort.jpg
+bakery.jpg              library.jpg               startupHub.jpg
+bank.jpg                lighthouse.jpg            steelMill.jpg
+barracks.jpg            magistrate.jpg            stockExchange.jpg
+boatyard.jpg            mansion.jpg               stoneWalls.jpg
+bronzeSmith.jpg         market.jpg                stoneWorks.jpg
+butchery.jpg            medicalClinic.jpg         supermarket.jpg
+carFactory.jpg          megachurch.jpg            syntheticOilPlant.jpg
+castle.jpg              metroSystem.jpg           tavern.jpg
+cathedral.jpg           militaryBase.jpg          taxCollector.jpg
+cinema.jpg              mint.jpg                  televangelist.jpg
+civilDefense.jpg        multimodalTerminal.jpg    temple.jpg
+coalPowerPlant.jpg      nanotechLab.jpg           theater.jpg
+coffeeHouse.jpg         navalStation.jpg          tournamentGrounds.jpg
+congregation.jpg        networkMonitoring.jpg     townHall.jpg
+containerPort.jpg       nuclearPowerPlant.jpg     townHealer.jpg
+courthouse.jpg          obelisk.jpg               townSquare.jpg
+departmentStore.jpg     observatory.jpg           townWatch.jpg
+dispensary.jpg          oilPowerPlant.jpg         tractorFactory.jpg
+drydock.jpg             opera.jpg                 tradersGuild.jpg
+electronicsFactory.jpg  palisades.jpg             trainingGround.jpg
+embassyQuarter.jpg      policeStation.jpg         university.jpg
+factory.jpg             port.jpg                  vegetableMarket.jpg
+fishMarket.jpg          potter.jpg                voyageOfMagellan.jpg
+forge.jpg               railwayStation.jpg        warehouse.jpg
+fruitMarket.jpg         recruitmentOffice.jpg     weaver.jpg
+fullfillmentCenter.jpg  researchLab.jpg           wharf.jpg
+garden.jpg              riotPolice.jpg            windFarm.jpg
+garrison.jpg            roastery.jpg              windmill.jpg
+gentlemensClub.jpg      royalCourt.jpg
+public/media/images/continentType:
+africa.jpg   andea.jpg  europe.jpg     mediterra.jpg  siberia.jpg
+america.jpg  asia.jpg   levantica.jpg  oceania.jpg    taiga.jpg
+public/media/images/eraType:
+atomic.jpg     digital.jpg        information.jpg  nano.jpg
+bronze.jpg     enlightenment.jpg  iron.jpg         neolithic.jpg
+classical.jpg  exploration.jpg    lateBronze.jpg   postIndustrial.jpg
+colonial.jpg   imperial.jpg       medieval.jpg     renaissance.jpg
+copper.jpg     industrial.jpg     modern.jpg
+public/media/images/goalType:
+colonialEmpire.jpg         nuclearDeterrence.jpg  urbanSociety.jpg
+culturalSingularity.jpg    oceanVoyages.jpg       veniVidiVici.jpg
+feudalLords.jpg            olympics.jpg           wondersOfTheWorld.jpg
+firstCities.jpg            oneTrueFaith.jpg       worldDomination.jpg
+globalMonopoly.jpg         pantheonOfGods.jpg     worldPolice.jpg
+greatPhilosophers.jpg      securityCouncil.jpg    worldsFair.jpg
+industrialMight.jpg        spaceRace.jpg          worldWar.jpg
+interplanetarySpecies.jpg  theEnlightenment.jpg   worldWideWeb.jpg
+mandateOfHeaven.jpg        tradeNetwork.jpg
+public/media/images/majorLeaderType:
+abdAlMumin.jpg             hannibalBarca.jpg      paiShume.jpg
+abdulKarimQasim.jpg        harunAlRashid.jpg      pandukabhaya.jpg
+airlangga.jpg              hayamWuruk.jpg         parakramabahuI.jpg
+aja.jpg                    hermannVonSalza.jpg    patriceLumumba.jpg
+ajiSaka.jpg                hiawatha.jpg           pelantaro.jpg
+akbarTheGreat.jpg          hoChiMinh.jpg          pericles.jpg
+alfredTheGreat.jpg         hungVuong.jpg          phraRuang.jpg
+alpArslan.jpg              indibilis.jpg          piye.jpg
+anacaona.jpg               isabella.jpg           pomareI.jpg
+arganthonius.jpg           islamKarimov.jpg       popay.jpg
+arminius.jpg               ismailSamani.jpg       quetzalcoatl.jpg
+asadPashaAlAzm.jpg         ivanTheGreat.jpg       ragnarLodbrok.jpg
+ashoka.jpg                 jadwiga.jpg            ramaV.jpg
+ashurbanipal.jpg           jamesKeirHardie.jpg    ramkhamhaeng.jpg
+ataturk.jpg                janIIISobieski.jpg     ramsesII.jpg
+attila.jpg                 jarl.jpg               reg.jpg
+augustoPinochet.jpg        jimmu.jpg              robertTheBruce.jpg
+baibars.jpg                jingu.jpg              saintMargaret.jpg
+bandaranaike.jpg           joseMarti.jpg          sakima.jpg
+barsBek.jpg                josipTito.jpg          saladin.jpg
+batuKhan.jpg               jozefPilsudski.jpg     salamasina.jpg
+benFranklin.jpg            jubaII.jpg             samaratungga.jpg
+benitoJuarez.jpg           juliusCaesar.jpg       sarki.jpg
+bessus.jpg                 justinianI.jpg         sayyidaAlHurra.jpg
+bigBear.jpg                kangxi.jpg             seleucusI.jpg
+boudica.jpg                khonvoum.jpg           shahAbbasI.jpg
+boz.jpg                    khosrowI.jpg           shilhakInshushinak.jpg
+brennus.jpg                kikmongwi.jpg          simonBolivar.jpg
+brideiI.jpg                knyaz.jpg              sitacles.jpg
+catherineTheGreat.jpg      koiKonboro.jpg         skjoldr.jpg
+chandraguptaI.jpg          krum.jpg               songtsenGampo.jpg
+chao.jpg                   kupe.jpg               sriTriBuana.jpg
+charlemagne.jpg            ladySixSky.jpg         sriVikramaRajasinha.jpg
+charlesDeGaulle.jpg        lautaro.jpg            stefanDusan.jpg
+charlesIII.jpg             leLoi.jpg              sukarno.jpg
+choibalsan.jpg             lonko.jpg              suleimanTheMagnificent.jpg
+cleopatraVII.jpg           lukeniLuaNimi.jpg      sunYatSen.jpg
+constantineXI.jpg          lyThaiTo.jpg           suppiluliumaI.jpg
+cunhambebe.jpg             mahatmaGandhi.jpg      taharqa.jpg
+cyrusTheGreat.jpg          mallku.jpg             tanaquil.jpg
+dalaiLamaV.jpg             mansaMusa.jpg          teRauparaha.jpg
+dalaiLamaXIV.jpg           masinissa.jpg          tessouat.jpg
+datu.jpg                   meiji.jpg              theodelinda.jpg
+dido.jpg                   menelikII.jpg          theodoreRoosevelt.jpg
+eleftheriosVenizelos.jpg   midhatPasha.jpg        theodoric.jpg
+elizabethI.jpg             mieszkoI.jpg           timur.jpg
+enricoDandolo.jpg          minos.jpg              toisech.jpg
+ezana.jpg                  mithridatesVI.jpg      tokugawa.jpg
+fidelCastro.jpg            mohammadMossadegh.jpg  tomyris.jpg
+franciscoFranco.jpg        mohammedV.jpg          trieuDa.jpg
+frederickTheGreat.jpg      montezumaII.jpg        trisongDetsen.jpg
+gamalAbdelNasser.jpg       moulayIsmail.jpg       tunkaManin.jpg
+garciaIINkangaALukeni.jpg  muawiyahI.jpg          tupacAmaruII.jpg
+gebeMesqelLalibela.jpg     muhammadAliJinnah.jpg  tuxaua.jpg
+genghisKhan.jpg            mwene.jpg              varkhumanUnash.jpg
+geronimo.jpg               napoleonBonaparte.jpg  vercingetorix.jpg
+getulioVargas.jpg          naresuan.jpg           victoria.jpg
+gilgamesh.jpg              nemequene.jpg          whinaCooper.jpg
+giuseppeGaribaldi.jpg      nikitaKhrushchev.jpg   wilfridLaurier.jpg
+gustavIIAdolf.jpg          nnamdiAzikiwe.jpg      williamTheConqueror.jpg
+gyalpo.jpg                 nyatriTsenpo.jpg       wuOfZhou.jpg
+habibBourguiba.jpg         ojin.jpg               yuTheGreat.jpg
+hafezAlAssad.jpg           olofPalme.jpg          zhuYuanzhang.jpg
+haileSelassie.jpg          ottoVonBismarck.jpg    ziyadatAllahI.jpg
+hammurabi.jpg              pachacuti.jpg
+public/media/images/minorLeaderType:
+abbas.jpg                     henriGuisan.jpg          omarTorrijos.jpg
+abdullahI.jpg                 hiramI.jpg               opothleyahola.jpg
+adanMartinMenis.jpg           hotuMatua.jpg            palemon.jpg
+aeetes.jpg                    idrissDeby.jpg           paulOkalik.jpg
+ahmadShahDurrani.jpg          imamYahya.jpg            pavlosMelas.jpg
+aitor.jpg                     iranzu.jpg               perdiccasI.jpg
+ajax.jpg                      isakSaba.jpg             platonOyunsky.jpg
+akizziOfQatna.jpg             ishe.jpg                 ptesanwin.jpg
+alexandruIoanCuza.jpg         istvanSzechenyi.jpg      qaboosBinSaid.jpg
+altjira.jpg                   jacoboArbenz.jpg         queenLiliuokalani.jpg
+ambiorix.jpg                  jayavarmanII.jpg         queenNanny.jpg
+amghar.jpg                    jomoKenyatta.jpg         queenOfSheba.jpg
+andriamanelo.jpg              jonSigurdsson.jpg        queenTeuta.jpg
+antanasSmetona.jpg            joseAntonioAguirre.jpg   raficHariri.jpg
+antonioDeOliveiraSalazar.jpg  joseRizal.jpg            rajan.jpg
+aretasIVPhilopatris.jpg       juanPeron.jpg            rajaPorus.jpg
+arpad.jpg                     kaggen.jpg               ranavalonaI.jpg
+askarAkayev.jpg               kanati.jpg               ravan.jpg
+atamuTekena.jpg               karikalaChola.jpg        rix.jpg
+augustoCesarSandino.jpg       khan.jpg                 robertMenzies.jpg
+aungSan.jpg                   kingArthur.jpg           robertMugabe.jpg
+battusI.jpg                   kingDavid.jpg            romuloBetancourt.jpg
+bey.jpg                       kingMark.jpg             rurik.jpg
+bochica.jpg                   kokalos.jpg              samNujoma.jpg
+bPKoirala.jpg                 krishnadevaraya.jpg      sedna.jpg
+buluotuo.jpg                  kuningaz.jpg             shah.jpg
+burebista.jpg                 kutlugBilgeKulKhan.jpg   shoTai.jpg
+cacique.jpg                   lacTuong.jpg             shunten.jpg
+cech.jpg                      leopoldSedarSenghor.jpg  shuttarnaI.jpg
+cemaco.jpg                    levonTerPetrosyan.jpg    sisavangVong.jpg
+cGEMannerheim.jpg             lonko.jpg                sittingBull.jpg
+cheddiJagan.jpg               ludwigII.jpg             spilyay.jpg
+chiangKaiShek.jpg             lyndenPindling.jpg       syngmanRhee.jpg
+chicoMendes.jpg               makariosIII.jpg          talaiotic.jpg
+chrocus.jpg                   mammadAminRasulzade.jpg  tenoch.jpg
+curaca.jpg                    mankeme.jpg              tinerfeTheGreat.jpg
+dangun.jpg                    margretheII.jpg          tomasGarrigueMasaryk.jpg
+davidLloydGeorge.jpg          matveiPlatov.jpg         toshao.jpg
+derde.jpg                     michaelAnGof.jpg         toyon.jpg
+divico.jpg                    michaelCollins.jpg       tunkuAbdulRahman.jpg
+ehmetjanQasim.jpg             michaelSomare.jpg        tupacKatari.jpg
+eleanorOfAquitaine.jpg        moktarOuldDaddah.jpg     ugyenWangchuck.jpg
+eloyAlfaro.jpg                morubixaba.jpg           umiALiloa.jpg
+emirAbdelkader.jpg            muammarGaddafi.jpg       vainamoinen.jpg
+fengBaiju.jpg                 mwanaMkisi.jpg           viriathus.jpg
+francescAntich.jpg            mykhailoHrushevsky.jpg   warJabi.jpg
+francescoCrispi.jpg           niall.jpg                wenapSnoot.jpg
+franjoTudman.jpg              noaidi.jpg               wilhelmina.jpg
+fumeripits.jpg                norodomSihanouk.jpg      zviadGamsakhurdia.jpg
+goldaMeir.jpg                 nursultanNazarbayev.jpg
+gopala.jpg                    omarAlBashir.jpg
+public/media/images/nationalWonderType:
+campusMartius.jpg        industrialFund.jpg         operationIvy.jpg
+carcassonne.jpg          intelligenceAgency.jpg     parliament.jpg
+carnegieSteel.jpg        largeLanguageModel.jpg     royalPalace.jpg
+codexManesse.jpg         manhattanProject.jpg       royalSociety.jpg
+diplomacyInstitute.jpg   marineInstitute.jpg        schoolOfSocrates.jpg
+eastIndiaCompany.jpg     militaryAcademy.jpg        spaceport.jpg
+foodProgram.jpg          militaryPracticeRange.jpg  spaceProgram.jpg
+freeTradeZone.jpg        nationalArtMuseum.jpg      statePolice.jpg
+fusionPowerPlant.jpg     nationalBank.jpg           templeMount.jpg
+generalStaff.jpg         nationalChurch.jpg         tournamentGrounds.jpg
+geolyph.jpg              nationalHealthService.jpg  tradeDelegation.jpg
+greatEpic.jpg            nationalLibrary.jpg        tsarBomba.jpg
+greatMarket.jpg          nationalPark.jpg           voyageOfMagellan.jpg
+highCourt.jpg            naturalHistoryMuseum.jpg
+hybridWarfareCenter.jpg  navalAcademy.jpg
+public/media/images/naturalWonderType:
+amalfiCoast.jpg         ironGateGorge.jpg       orkhonCanyon.jpg
+badlands.jpg            khonePhaphengFalls.jpg  ouniangaOasis.jpg
+benNevis.jpg            krakatoa.jpg            pamirMountains.jpg
+bialowiezaForest.jpg    lakeBaikal.jpg          pamukkaleSprings.jpg
+blackForest.jpg         lakeLadoga.jpg          pearlHarbor.jpg
+blueGrotto.jpg          lenaPillars.jpg         phangNgaBay.jpg
+canoCristales.jpg       lesCalanques.jpg        picosDeEuropa.jpg
+cappadocia.jpg          lofotenIslands.jpg      plitviceLakes.jpg
+cedarsOfGod.jpg         malpeloIsland.jpg       puertoMosquito.jpg
+cliffsOfDover.jpg       mekongDelta.jpg         rhineGorge.jpg
+dashtELutDesert.jpg     mesopotamia.jpg         rockOfGibraltar.jpg
+deadSea.jpg             meteoraPillars.jpg      sigiriya.jpg
+dunajecCanyon.jpg       montBlanc.jpg           siwaOasis.jpg
+ergChebbiDunes.jpg      monumentValley.jpg      sriPada.jpg
+euphratesGorge.jpg      mountDamavand.jpg       strokkurGeyser.jpg
+eyeOfSahara.jpg         mountEtna.jpg           sumideroCanyon.jpg
+galapagosIslands.jpg    mountEverest.jpg        tharDesert.jpg
+gangesDelta.jpg         mountFuji.jpg           tigerLeapingGorge.jpg
+garabogazkolLagoon.jpg  mountKilimanjaro.jpg    torajaHighlands.jpg
+giantsCauseway.jpg      mountOlympus.jpg        torresDelPaine.jpg
+grandCanyon.jpg         mountRoraima.jpg        victoriaFalls.jpg
+greatBarrierReef.jpg    mountSinai.jpg          villarrica.jpg
+greatBlueHole.jpg       naeroyfjord.jpg         vinicunca.jpg
+greatRiftValley.jpg     niagaraFalls.jpg        volcanDeFuego.jpg
+halongBay.jpg           nigerDelta.jpg          wulingyuanPillars.jpg
+homboriTondo.jpg        nyiragongo.jpg          yarlungTsangpoCanyon.jpg
+iguazuFalls.jpg         ogasawaraIslands.jpg
+public/media/images/regionType:
+aegean.png         centralAsia.png    himalaya.png     nippon.png
+amazonia.png       centralEurope.png  hispania.png     northAfrica.png
+anatolia.png       centralSteppe.png  indochina.png    northAmerica.png
+apennine.png       chaoPhraya.png     lanka.png        northAndes.png
+balkans.png        eastAfrica.png     levant.png       persia.png
+bharat.png         eastEurope.png     maghreb.png      polynesia.png
+britannia.png      gallia.png         malay.png        scandinavia.png
+caribbean.png      germania.png       mesoamerica.png  southAndes.png
+centralAfrica.png  greatLakes.png     mesopotamia.png  wesAfrica.png
+centralAndes.png   highlands.png      nileValley.png   zhonghua.png
+public/media/images/technologyType:
+aerodynamics.jpg            electricity.jpg         plastics.jpg
+agriculture.jpg             engineering.jpg         pottery.jpg
+aIAnalysis.jpg              feudalism.jpg           privateSpaceFlight.jpg
+aIProcessing.jpg            firearms.jpg            radio.jpg
+aITargeting.jpg             fission.jpg             railroad.jpg
+alphabet.jpg                flight.jpg              renewableEnergy.jpg
+aluminumMilling.jpg         flintlock.jpg           repeatingRifles.jpg
+animalHusbandry.jpg         flyByWire.jpg           replaceableParts.jpg
+antibiotics.jpg             fundamentalism.jpg      riding.jpg
+archery.jpg                 futureTech.jpg          rifleScopes.jpg
+architecture.jpg            genetics.jpg            rifling.jpg
+artDeco.jpg                 globalArmy.jpg          robotics.jpg
+artHistory.jpg              globalization.jpg       rocketry.jpg
+artificialIntelligence.jpg  government.jpg          royalCharter.jpg
+artillery.jpg               graphite.jpg            sailing.jpg
+atomicTheory.jpg            guidanceSystems.jpg     scientificMethod.jpg
+automaticCarbines.jpg       gunpowder.jpg           semiconductors.jpg
+ballistics.jpg              herbalRemedies.jpg      shipBuilding.jpg
+banking.jpg                 hollowCharge.jpg        shipEngineering.jpg
+bronzeCasting.jpg           homingSystems.jpg       sieging.jpg
+bronzeSmithing.jpg          hydrodynamics.jpg       slings.jpg
+bronzeWorking.jpg           hypersonicFlight.jpg    spaceFlight.jpg
+bureaucracy.jpg             industrialization.jpg   sports.jpg
+buttress.jpg                internet.jpg            stainlessSteel.jpg
+calendar.jpg                ironCasting.jpg         stateReligion.jpg
+canning.jpg                 ironSmithing.jpg        stateSurveillance.jpg
+cartography.jpg             ironWorking.jpg         stealth.jpg
+carvelHulls.jpg             irrigation.jpg          steamEngine.jpg
+castles.jpg                 liberalism.jpg          steelCasting.jpg
+celestialNavigation.jpg     machinery.jpg           steel.jpg
+chemistry.jpg               massMedia.jpg           steelMilling.jpg
+chivalry.jpg                mathematics.jpg         steelSmithing.jpg
+civilDefense.jpg            medicine.jpg            supersonicFlight.jpg
+civilService.jpg            mercantilism.jpg        syntheticGraphite.jpg
+clinkerHulls.jpg            microchips.jpg          theater.jpg
+codeOfLaw.jpg               militaryDiscipline.jpg  thermonuclearDevice.jpg
+coldSteel.jpg               militaryDrones.jpg      township.jpg
+colonialism.jpg             militaryTradition.jpg   trackedTreads.jpg
+combustion.jpg              militaryTraining.jpg    tradeCaravans.jpg
+commerce.jpg                mining.jpg              trade.jpg
+compass.jpg                 minting.jpg             tradition.jpg
+composites.jpg              mysticism.jpg           transistors.jpg
+construction.jpg            nanotechnology.jpg      trapping.jpg
+copperWorking.jpg           nationalism.jpg         trenchWarfare.jpg
+cropRotation.jpg            navalCatapults.jpg      universalSuffrage.jpg
+currency.jpg                nuclearFusion.jpg       verticalFlight.jpg
+deliveryServices.jpg        nuclearPropulsion.jpg   virtualReality.jpg
+democracy.jpg               oilRefining.jpg         warfare.jpg
+diplomacy.jpg               onlineEconomy.jpg       weaponizedLasers.jpg
+divineRight.jpg             opera.jpg               wheel.jpg
+drama.jpg                   optics.jpg              woodComposites.jpg
+drilling.jpg                organizedReligion.jpg   woodWorking.jpg
+dynamite.jpg                philosophy.jpg          writing.jpg
+economics.jpg               pistols.jpg
+education.jpg               pitMining.jpg
+public/media/images/unitType:
+aaGunCapitalistGasProjectileHowitzer.png
+aaMissileHydrogenBomb.png
+airMissileCommsSatellite.png
+aiTorpedoAirGunAirHomingMissileDroneSwarm.png
+arquebusLongbowMortar.png
+assaultRifleAtomBombGuidedBomb.png
+axeIronSwordLongsword.png
+biplaneDirigibleMonocoqueSuperagile.png
+bowBronzeSpearAttackDrone.png
+bronzeAxeSaberMusketSpear.png
+builder.png
+chariotHeavyGalleyHeavyClinkerHeavySteamer.png
+compositeBow.png
+crossbowDieseasProjectilePeasantPike.png
+dieselHullHeavyDieselAnuclearHullSubmersible.png
+engineerLightCannonMusketMarines.png
+envoyEmissaryPlanetBuster.png
+freighterGuidedMortarGuidedTorpedoHelicopter.png
+gentlemanDiplomat.png
+halberdBuccaneerColonist.png
+handCannonHeavyCarvelCannon.png
+homingBombVirusBombSpyMissileBay.png
+horse.png
+humanCarriageTracked.png
+ironJavelin.png
+migrantRifleTruck.png
+mlrsSniper.png
+monkPreacherTrader.png
+mrbmSmg.png
+musketCarvel.png
+priestCamelCatapultElephant.png
+raft.png
+rifledMusketSteamerAtGunAtRifle.png
+rocketPodAtMissileDroneMissileBomb.png
+rpgAtDroneAiDroneHighVelocityGun.png
+satelliteSpySatelliteAaHomingMissile.png
+scopedRifleLaserRifleNightVision.png
+settler.png
+shamanIronSpearBatteringRam.png
+slingMerchant.png
+smoothboreGunLaserGunRaidersTorpedo.png
+stealthGuidedMissileHypersonicMissileIcbm.png
+supersonic.png
+thiefGalleyTribeWorker.png
+tractorContractor.png
+trebuchetAmbassadorClinkerCourtier.png
+woodDeckCatapultDeckRadarDeckNuclearSub.png
+woodenJavelinGrenadierBombardRocketArtillery.png
+woodRamBronzeRamIronRamHomingTorpedo.png
+public/media/images/worldWonderType:
+alhambra.jpg                   mosqueOfDjenne.jpg
+angkorWat.jpg                  neuschwanstein.jpg
+baileyYard.jpg                 newgrange.jpg
+bazaarOfIstanbul.jpg           notreDame.jpg
+bellLabs.jpg                   oldBailey.jpg
+blohmVoss.jpg                  oldCityOfDamascus.jpg
+brandenburgGate.jpg            oracle.jpg
+burjKhalifa.jpg                orbansFoundry.jpg
+centralDeAbastos.jpg           oxfordUniversity.jpg
+cERN.jpg                       panamaCanal.jpg
+chichenItza.jpg                pantheon.jpg
+circusMaximus.jpg              parthenon.jpg
+colosseum.jpg                  pentagon.jpg
+colossus.jpg                   petra.jpg
+copernicusObservatory.jpg      pharosOfAlexandria.jpg
+cristoRedentor.jpg             porcelainTower.jpg
+eiffelTower.jpg                portOfCarthage.jpg
+embankment.jpg                 portOfShanghai.jpg
+empireStateBuilding.jpg        prora.jpg
+everettFactory.jpg             pyramidOfDjoser.jpg
+forbiddenPalace.jpg            pyramidsOfGiza.jpg
+ggantija.jpg                   ruhrValley.jpg
+gigafactory.jpg                sagradaFamilia.jpg
+gobekliTepe.jpg                schneiderCup.jpg
+granaryOfHarappa.jpg           shakespearesTheater.jpg
+grandCanal.jpg                 statueOfLiberty.jpg
+greatFirewall.jpg              stonehenge.jpg
+greatWall.jpg                  suomenlinna.jpg
+hallstattSaltMines.jpg         sydneyOperaHouse.jpg
+hangingGardens.jpg             tajMahal.jpg
+hollywood.jpg                  tankograd.jpg
+hooverDam.jpg                  tempelhofAirport.jpg
+houseOfWisdom.jpg              templeOfArtemis.jpg
+humanGenomeProject.jpg         terracottaArmy.jpg
+hyundaiHeavyIndustries.jpg     threeGorgesDam.jpg
+internationalSpaceStation.jpg  tombOfMausolus.jpg
+kremlin.jpg                    tSMC.jpg
+libraryOfAlexandria.jpg        tynesideShipyards.jpg
+lockheedSkunkWorks.jpg         uffizi.jpg
+lofotrLonghouse.jpg            unionStockyards.jpg
+louvre.jpg                     unitedNations.jpg
+luxembourgGarden.jpg           venetianArsenal.jpg
+machuPicchu.jpg                wallsOfConstantinople.jpg
+maginotLine.jpg                westIndiaDocks.jpg
+moaiStatues.jpg

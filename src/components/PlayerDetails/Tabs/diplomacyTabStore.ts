@@ -5,7 +5,6 @@ import { useDataBucket } from "@/Data/useDataBucket";
 import type { Player } from "@/Common/Models/Player";
 import { TypeKey } from "@/Common/Objects/Common";
 import { TypeObject } from "@/Common/Objects/TypeObject";
-import { typeTimeline } from "@/helpers/types";
 import { TableColumn } from "@/types/uiComponents";
 import { useCurrentContext } from "@/composables/useCurrentContext";
 
@@ -44,7 +43,7 @@ export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
 
   const cultureTimeline = computed(() => {
     if (!current.value?.culture.type) return [];
-    return typeTimeline(current.value.culture.type as TypeObject);
+    return worldLinks.getTimeline(current.value.culture.type as TypeObject);
   });
 
   const leaderTimeline = computed(() => {
