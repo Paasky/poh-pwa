@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import UiGrid from "@/components/Ui/UiGrid.vue";
-import UiObjectCards from "@/components/Ui/UiObjectCards.vue";
-import { TypeObject } from "@/Common/Objects/TypeObject";
-import UiCols from "@/components/Ui/UiCols.vue";
 import { useGovernmentTabStore } from "@/components/PlayerDetails/Tabs/governmentTabStore";
-import { CatKey, Set<TypeObject> } from "@/Data/useDataBucket";
+import { CatData, TypeObject } from "@/Common/Objects/TypeObject";
+import UiCols from "@/components/Ui/UiCols.vue";
+import UiObjectCards from "@/components/Ui/UiObjectCards.vue";
+import UiGrid from "@/components/Ui/UiGrid.vue";
 
 const store = useGovernmentTabStore();
 </script>
@@ -13,12 +12,12 @@ const store = useGovernmentTabStore();
   <div class="pa-2">
     <UiCols :cols="{ left: 9, right: 3 }">
       <template #left>
-        <UiGrid :items="store.policyCats" :col-count="5" class="w-100">
-          <template #cell="{ item: CatKey, Set }">
+        <UiGrid :items="Array.from(store.policyCats.values())" :col-count="5" class="w-100">
+          <template #cell="{ item }">
             <UiObjectCards
-              :title="(CatKey, Set<TypeObject> as CatKey, Set<TypeObject>).category.name"
+              :title="(item as CatData).category.name"
               title-class="text-h5"
-              :types="(CatKey, Set<TypeObject> as CatKey, Set<TypeObject>).types"
+              :types="(item as CatData).types"
               :selectable="store.government.selectablePolicies"
               :selected="store.government.policies as TypeObject[]"
               :select-pos="'right'"

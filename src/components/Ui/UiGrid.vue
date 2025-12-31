@@ -1,7 +1,8 @@
 <script setup lang="ts">
 withDefaults(
   defineProps<{
-    items?: unknown[];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    items?: any[];
     colCount?: number; // desired columns on lg+
   }>(),
   {

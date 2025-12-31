@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import UiGrid from "@/components/Ui/UiGrid.vue";
 import UiObjectCards from "@/components/Ui/UiObjectCards.vue";
-import { TypeObject } from "@/Common/Objects/TypeObject";
+import { CatData, TypeObject } from "@/Common/Objects/TypeObject";
 import UiCols from "@/components/Ui/UiCols.vue";
 import { useCultureTabStore } from "@/components/PlayerDetails/Tabs/cultureTabStore";
-import { CatKey, Set<TypeObject> } from "@/Data/useDataBucket";
 
 const store = useCultureTabStore();
 </script>
@@ -13,11 +12,11 @@ const store = useCultureTabStore();
   <div class="pa-2">
     <UiCols :cols="{ left: 9, right: 3 }">
       <template #left>
-        <UiGrid :items="store.heritageCats" :col-count="5">
-          <template #cell="{ item: CatKey, Set }">
+        <UiGrid :items="Array.from(store.heritageCats.values())" :col-count="5">
+          <template #cell="{ item }">
             <UiObjectCards
-              :title="(CatKey, Set<TypeObject> as CatKey, Set<TypeObject>).category.name"
-              :types="(CatKey, Set<TypeObject> as CatKey, Set<TypeObject>).types"
+              :title="(item as CatData).category.name"
+              :types="(item as CatData).types"
               :selectable="store.culture.selectableTraits"
               :selected="store.culture.traits as TypeObject[]"
               :select-pos="'right'"
@@ -26,11 +25,11 @@ const store = useCultureTabStore();
             />
           </template>
         </UiGrid>
-        <UiGrid :items="store.traitCats" :col-count="4">
-          <template #cell="{ item: CatKey, Set }">
+        <UiGrid :items="Array.from(store.traitCats.values())" :col-count="4">
+          <template #cell="{ item }">
             <UiObjectCards
-              :title="(CatKey, Set<TypeObject> as CatKey, Set<TypeObject>).category.name"
-              :types="(CatKey, Set<TypeObject> as CatKey, Set<TypeObject>).types"
+              :title="(item as CatData).category.name"
+              :types="(item as CatData).types"
               :selectable="store.culture.selectableTraits"
               :selected="store.culture.traits as TypeObject[]"
               :select-pos="'right'"

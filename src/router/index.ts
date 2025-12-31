@@ -1,9 +1,13 @@
 import { watch } from "vue";
-import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router";
+import {
+  createRouter,
+  createWebHistory,
+  RouteLocationNormalizedLoadedGeneric,
+  type RouteRecordRaw,
+} from "vue-router";
 
 import HomeView from "@/views/HomeView.vue";
 import GameView from "@/views/GameView.vue";
-import MapGeneratorView from "@/views/MapGeneratorView.vue";
 import TestView from "@/views/TestView.vue";
 import { useAppStore } from "@/stores/appStore";
 import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
@@ -12,7 +16,6 @@ import { usePlayerDetailsStore } from "@/components/PlayerDetails/playerDetailsS
 const routes: Readonly<RouteRecordRaw[]> = [
   { path: "/", name: "home", component: HomeView },
   { path: "/game", name: "game", component: GameView },
-  { path: "/generator", name: "generator", component: MapGeneratorView },
   { path: "/test", name: "test", component: TestView },
 ];
 
@@ -30,12 +33,15 @@ const injectIt = () => {
     const appStore = useAppStore();
     appStore.setRouter(router);
 
+    // IDE doesn't understand the currentRoute ref has vanished
+    const currentRoute = router.currentRoute as unknown as RouteLocationNormalizedLoadedGeneric;
+
     // Validate that the router is injected properly (IDE thinks it's lost .value - it is still there)
     if (
       // eslint-disable-next-line
-      (appStore._router?.currentRoute as any)?.value?.fullPath == router.currentRoute.fullPath &&
+      (appStore._router?.currentRoute as any)?.value?.fullPath == currentRoute.fullPath &&
       // eslint-disable-next-line
-      (appStore._router?.currentRoute as any)?.value?.query == router.currentRoute.query
+      (appStore._router?.currentRoute as any)?.value?.query == currentRoute.query
     ) {
       const encStore = useEncyclopediaStore();
       const pdStore = usePlayerDetailsStore();
@@ -62,7 +68,7 @@ const injectIt = () => {
       // Run initial sync between UI state <-> URL before turning on the watcher
       appStore.syncUiStateFromNav();
       watch(
-        () => router.currentRoute.fullPath,
+        () => currentRoute.fullPath,
         () => useAppStore().syncUiStateFromNav(),
       );
       return;

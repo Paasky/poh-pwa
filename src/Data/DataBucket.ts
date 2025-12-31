@@ -2,6 +2,7 @@
 
 import type { CatKey, TypeKey, WorldState } from "@/Common/Objects/Common";
 import {
+  CatData,
   type CategoryClass,
   type CategoryObject,
   initCategoryObject,
@@ -121,17 +122,24 @@ export class DataBucket {
     return out;
   }
 
-  getClassTypesPerCategory(classKey: TypeClass): Map<CatKey, Set<TypeObject>> {
-    const classTypes = this.classTypesIndex.get(classKey);
+  getClassTypesPerCategory(classKey: TypeClass): Map<CatKey, CatData> {
+    const classTypes = this.getClassTypes(classKey);
     if (!classTypes) throw new Error(`DataBucket.getClassTypes(${classKey}) does not exist!`);
 
-    const out = new Map<CatKey, Set<TypeObject>>();
-    classTypes.forEach((key) => {
-      const category = this.getType(key).category;
-      if (category) {
-        const set = out.get(category) ?? new Set<TypeObject>();
-        set.add(this.getType(key));
-        out.set(category, set);
+    const out = new Map<CatKey, CatData>();
+    classTypes.forEach((type) => {
+      const categoryKey = type.category;
+      if (categoryKey) {
+        const catData = out.get(categoryKey);
+        if (catData) {
+          catData.types.push(type);
+        } else {
+          const newCatData: CatData = {
+            category: this.getCategory(categoryKey),
+            types: [type],
+          };
+          out.set(categoryKey, newCatData);
+        }
       }
     });
     return out;

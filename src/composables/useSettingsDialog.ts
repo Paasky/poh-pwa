@@ -100,7 +100,7 @@ export function useSettingsDialog(onRequestReload: () => void) {
   }
 
   function loadPreset(presetId: string) {
-    const preset = engineSettingPresets.find((preset) => preset.id === presetId)?;
+    const preset = engineSettingPresets.find((preset) => preset.id === presetId)?.value;
     if (!preset) {
       throw new Error(`No preset found with id ${presetId}`);
     }
@@ -118,7 +118,7 @@ export function useSettingsDialog(onRequestReload: () => void) {
       }
     }
 
-    settings.selectedPresetId = localPresetId;
+    settings.selectedPresetId = localPresetId.value;
     Object.assign(settings.engineSettings, localGraphicsSettings);
     settings.save();
     close();
@@ -129,7 +129,7 @@ export function useSettingsDialog(onRequestReload: () => void) {
     if (!_pendingSave) return;
 
     _pendingSave = false;
-    settings.selectedPresetId = localPresetId;
+    settings.selectedPresetId = localPresetId.value;
     Object.assign(settings.engineSettings, localGraphicsSettings);
 
     settings.save();

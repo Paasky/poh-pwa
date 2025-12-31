@@ -112,6 +112,11 @@ export interface TypeObject extends PohObject {
   relatesTo: TypeKey[];
 }
 
+export type CatData = {
+  category: CategoryObject;
+  types: TypeObject[];
+};
+
 export function objectIsAnyOfObjects(
   object: TypeObject | CategoryObject,
   anyOfObjects: (TypeObject | CategoryObject)[],
