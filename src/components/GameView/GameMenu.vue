@@ -43,7 +43,7 @@ onBeforeUnmount(() => {
       {{ time }}
     </div>
     <UiButton
-      icon="fa-question"
+      icon="question"
       color="secondary"
       rounded="0"
       class="rounded-b-lg"
@@ -51,7 +51,7 @@ onBeforeUnmount(() => {
       @click="useEncyclopediaStore().open()"
     />
     <UiButton
-      icon="fa-up-right-and-down-left-from-center"
+      icon="fullscreenAlt"
       color="secondary"
       rounded="0"
       class="rounded-b-lg"
@@ -60,7 +60,7 @@ onBeforeUnmount(() => {
     />
     <UiButton
       id="menu-btn"
-      icon="fa-bars"
+      icon="menu"
       color="secondary"
       rounded="0"
       class="rounded-b-lg"

@@ -1,8 +1,8 @@
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import getIcon from "@/types/icons";
 import { CategoryClass, CategoryObject, TypeClass, TypeObject } from "@/Common/Objects/TypeObject";
 import { GameClass, GameKey, GameObject } from "@/Common/Models/_GameModel";
 import { Coords } from "@/helpers/mapTools";
+import { getObjectIcon } from "@/types/icons";
 
 export type ObjType = "TypeObject" | "CategoryObject" | "GameObject";
 export type CatKey = `${CategoryClass}:${string}`;
@@ -36,7 +36,7 @@ export function initPohObject(objType: ObjType, data: any): PohObject {
     key: data.key,
     name: data.name ?? "",
     concept: data.concept,
-    icon: getIcon(data.key, data.concept, data.category),
+    icon: getObjectIcon(data.key, data.concept, data.category),
   };
 }
 

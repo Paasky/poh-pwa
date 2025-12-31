@@ -2,12 +2,12 @@ import { Player } from "@/Common/Models/Player";
 import { Citizen } from "@/Common/Models/Citizen";
 import { Tile } from "@/Common/Models/Tile";
 import { createMutation, IMutation } from "@/Common/IMutation";
-import { IAction } from "@/Simulation/Actions/IAction";
+import { ISimAction } from "@/Simulation/Actions/ISimAction";
 import { belongsToCity, belongsToPlayer } from "@/Simulation/Validator";
 import { City } from "@/Common/Models/City";
 import { getRandom } from "@/helpers/arrayTools";
 
-export class CitizenPickTile implements IAction {
+export class CitizenPickTile implements ISimAction {
   constructor(
     private readonly player: Player,
     private readonly citizen: Citizen,

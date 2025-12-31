@@ -4,6 +4,8 @@ import { Unit } from "@/Common/Models/Unit";
 import { Construction } from "@/Common/Models/Construction";
 import { City } from "@/Common/Models/City";
 import { Tile } from "@/Common/Models/Tile";
+import { Yields } from "@/Common/Objects/Yields";
+import { TypeObject } from "@/Common/Objects/TypeObject";
 
 export const belongsToCity = (
   city: City,
@@ -16,19 +18,35 @@ export const belongsToPlayer = (
   player: Player,
   object: { key: GameKey; playerKey: GameKey | null },
 ): void => {
-  if (player.key !== object.playerKey)
-    throw new Error(`${object.key} does not belong to ${player.name}`);
+  if (player.key !== object.playerKey) throw new Error(`Does not belong to ${player.name}`);
 };
+
+export const canAttack = (object: { canAttack: boolean }): void => {
+  if (!object.canAttack) throw new Error("Cannot attack");
+};
+
 export const doesNotBelongToPlayer = (
   player: Player,
   object: { key: GameKey; playerKey: GameKey | null },
 ): void => {
-  if (player.key === object.playerKey) throw new Error(`${object.key} belongs to ${player.name}`);
+  if (player.key === object.playerKey) throw new Error(`Belongs to ${player.name}`);
 };
 
 export const hasMoves = (unit: Unit): void => {
   if (unit.movement.moves <= 0) {
-    throw new Error(`Unit ${unit.key} has no moves left`);
+    throw new Error("No moves left");
+  }
+};
+
+export const isInRange = (
+  object: { tile: Tile; types: TypeObject[]; yields: Yields },
+  tile: Tile,
+): void => {
+  const range = object.yields
+    .flatten(["yieldType:range"], [...object.types, ...object.tile.types], tile.types)
+    .getLumpAmount("yieldType:range");
+  if (range < object.tile.distanceTo(tile)) {
+    throw new Error(`Tile ${tile.key} is out of range`);
   }
 };
 

@@ -33,7 +33,7 @@ export class TrainingQueueItem extends QueueItem {
 }
 
 export abstract class Queue {
-  protected _queue: QueueItem[] = [];
+  protected _items: QueueItem[] = [];
   primaryYieldKey: TypeKey;
   secondaryYieldKey: TypeKey;
 
@@ -42,13 +42,13 @@ export abstract class Queue {
     this.secondaryYieldKey = secondaryYieldKey;
   }
 
-  get queue(): QueueItem[] {
-    return this._queue.slice();
+  get items(): QueueItem[] {
+    return this._items.slice();
   }
 
   // Returns overflow, if any
   addProgress(amount: number): number {
-    const queueItem = this._queue[0];
+    const queueItem = this._items[0];
     if (!queueItem) throw new Error("Nothing in the queue to add progress to.");
 
     // If progress + amount < cost, just add progress and return 0
@@ -64,11 +64,11 @@ export abstract class Queue {
   }
 
   remove(index: number) {
-    this._queue.splice(index, 1);
+    this._items.splice(index, 1);
   }
 
   reorder(index: number, newIndex: number) {
-    this._queue.splice(newIndex, 0, this._queue.splice(index, 1)[0]);
+    this._items.splice(newIndex, 0, this._items.splice(index, 1)[0]);
   }
 
   /**
@@ -82,7 +82,7 @@ export abstract class Queue {
     cityYields: TypeStorage,
     cityYieldMods: Yields,
   ): Construction | UnitDesign | null {
-    const queueItem = this._queue[0];
+    const queueItem = this._items[0];
 
     // Nothing to construct: Convert my prod to primary/secondary yields and return null
     if (!queueItem) {
@@ -138,13 +138,13 @@ export class ConstructionQueue extends Queue {
   }
 
   add(item: Construction) {
-    this._queue.push(new ConstructionQueueItem(item));
+    this._items.push(new ConstructionQueueItem(item));
   }
 
   get purchaseCost(): Yield | null {
-    if (this._queue.length === 0) return null;
+    if (this._items.length === 0) return null;
 
-    const queueItem = this._queue[0] as ConstructionQueueItem;
+    const queueItem = this._items[0] as ConstructionQueueItem;
     const typeClass = (queueItem.item as unknown as Construction).type.class! as TypeClass;
 
     // National or WorldState Wonder -> null
@@ -167,13 +167,13 @@ export class TrainingQueue extends Queue {
   }
 
   add(design: UnitDesign) {
-    this._queue.push(new TrainingQueueItem(design));
+    this._items.push(new TrainingQueueItem(design));
   }
 
   get purchaseCost(): Yield | null {
-    if (this._queue.length === 0) return null;
+    if (this._items.length === 0) return null;
 
-    const queueItem = this._queue[0] as TrainingQueueItem;
+    const queueItem = this._items[0] as TrainingQueueItem;
     const equipmentCategory = (queueItem.item as unknown as UnitDesign).equipment
       .category! as CatKey;
 

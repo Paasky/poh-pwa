@@ -10,7 +10,7 @@ import type { City } from "@/Common/Models/City";
 import type { Player } from "@/Common/Models/Player";
 import type { TradeRoute } from "@/Common/Models/TradeRoute";
 import type { Unit } from "@/Common/Models/Unit";
-import { getNeighbors, tileHeight, tileKey } from "@/helpers/mapTools";
+import { getDistance, getNeighbors, tileHeight, tileKey } from "@/helpers/mapTools";
 import { Vector3 } from "@babylonjs/core";
 import { tileCenter } from "@/helpers/math";
 import { useCurrentContext } from "@/composables/useCurrentContext";
@@ -112,7 +112,7 @@ export class Tile extends GameObject {
       this._neighborTiles = getNeighbors(
         useDataBucket().world.size,
         this,
-        useDataBucket().getTiles,
+        useDataBucket().getTiles(),
         "hex",
       );
     }
@@ -132,6 +132,10 @@ export class Tile extends GameObject {
   /*
    * Computed
    */
+  distanceTo(tile: Tile): number {
+    return getDistance(useDataBucket().world.size, this, tile, "hex");
+  }
+
   get freeCitizenSlotCount(): number {
     return (
       this.yields
@@ -147,25 +151,25 @@ export class Tile extends GameObject {
     return selectable;
   }
 
-  targets(player: Player, vs?: Unit): (City | Construction | Unit)[] {
+  targets(player: Player, vs?: City | Unit): (City | Construction | Unit)[] {
     if (this.playerKey === player.key) return [];
 
     const targets = this.units
-      .filter((unit) => unit.playerKey !== player.key)
+      .filter((unit) => unit.playerKey !== player.key && unit.health > 0)
       .sort(
         (a, b) =>
           a.yields
-            .only(["yieldType:strength"], undefined, vs ? vs.types : undefined)
+            .only(["yieldType:strength"], a.types, vs ? vs.types : undefined)
             .flatten()
             .getLumpAmount("yieldType:strength") -
           b.yields
-            .only(["yieldType:strength"], undefined, vs ? vs.types : undefined)
+            .only(["yieldType:strength"], b.types, vs ? vs.types : undefined)
             .flatten()
             .getLumpAmount("yieldType:strength"),
       ) as (City | Construction | Unit)[];
 
-    if (this.city) targets.push(this.city);
-    if (this.construction) targets.push(this.construction);
+    if ((this.city?.health ?? 0) > 0) targets.push(this.city!);
+    if ((this.construction?.health ?? 0) > 0) targets.push(this.construction!);
 
     return targets;
   }

@@ -22,6 +22,7 @@ export function crawlTiles<TContext>(
     return validTiles;
   }
   seenTiles.add(start.key);
+  validTiles.add(start.key);
 
   for (const neighbor of start.neighborTiles) {
     // Check if we've seen it before
@@ -217,6 +218,51 @@ export function getHexNeighborCoords(size: Coords, center: Coords, dist = 1): Co
   return result;
 }
 
+export function toCube(c: Coords) {
+  const q = c.x - (c.y - (c.y & 1)) / 2;
+  const r = c.y;
+  const s = -q - r;
+  return { q, r, s };
+}
+
+export function getDistance(
+  size: Coords,
+  a: Coords,
+  b: Coords,
+  method: NeighborMethod = "chebyshev",
+): number {
+  if (method === "hex") {
+    const c1 = toCube(a);
+    const c2 = toCube({ x: wrapX(size, b.x), y: b.y });
+
+    const getCubeDist = (q1: number, r1: number, s1: number, q2: number, r2: number, s2: number) =>
+      Math.max(Math.abs(q1 - q2), Math.abs(r1 - r2), Math.abs(s1 - s2));
+
+    // Standard distance
+    const dist = getCubeDist(c1.q, c1.r, c1.s, c2.q, c2.r, c2.s);
+
+    // X wrapping: in odd-r, wrapping X by size.x just shifts q by size.x and s by -size.x
+    // We check both directions
+    const distRight = getCubeDist(c1.q, c1.r, c1.s, c2.q + size.x, c2.r, c2.s - size.x);
+    const distLeft = getCubeDist(c1.q, c1.r, c1.s, c2.q - size.x, c2.r, c2.s + size.x);
+
+    return Math.min(dist, distRight, distLeft);
+  }
+
+  const dx = Math.abs(a.x - wrapX(size, b.x));
+  const dy = Math.abs(a.y - b.y);
+
+  // Handle X wrapping for square grids
+  const wrappedDx = Math.min(dx, size.x - dx);
+
+  if (method === "manhattan") {
+    return wrappedDx + dy;
+  }
+
+  // Chebyshev (default)
+  return Math.max(wrappedDx, dy);
+}
+
 export function getNeighbors<T extends Tile>(
   size: Coords,
   tile: Coords,
@@ -258,7 +304,7 @@ export function getNeighborCoords(
       if (method === "manhattan" && Math.abs(dx) + Math.abs(dy) > distance) continue;
 
       // Include x-wrapping for new X
-      const nx = wrapExclusive(tile.x + dx, 0, size.x);
+      const nx = wrapX(size, tile.x + dx);
 
       // Skip self, skip duplicates
       if (nx === tile.x && ny === tile.y) continue;

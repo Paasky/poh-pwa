@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 import { saveManager, SaveMeta } from "@/utils/saveManager";
-import { useAppStore } from "@/stores/appStore";
 import { formatSaveDate } from "@/helpers/timeFormatter";
 import { formatYear } from "@/Common/Objects/Common";
 import pkg from "../../../package.json";
+import router from "@/router";
 
 const open = defineModel<boolean>({ required: true });
-const app = useAppStore();
 
 const APP_VERSION = pkg.version;
 const saves = ref<SaveMeta[]>([]);
@@ -29,15 +28,29 @@ onMounted(() => {
 
 async function loadSave(id: string) {
   open.value = false;
-  app.router.push({ path: "/game", query: { saveId: id } });
+  router.push({ path: "/game", query: { saveId: id } });
 }
 
 function deleteSave(id: string) {
-  if (confirm("Are you sure you want to delete this save?")) {
-    saveManager.delete(id);
-    if (selectedId.value === id) selectedId.value = null;
-    refreshSaves();
+  saveManager.delete(id);
+  if (selectedId.value === id) selectedId.value = null;
+  refreshSaves();
+}
+
+const showDeleteConfirm = ref(false);
+const saveToDelete = ref<string | null>(null);
+
+function requestDelete(id: string) {
+  saveToDelete.value = id;
+  showDeleteConfirm.value = true;
+}
+
+function confirmDelete() {
+  if (saveToDelete.value) {
+    deleteSave(saveToDelete.value);
+    saveToDelete.value = null;
   }
+  showDeleteConfirm.value = false;
 }
 
 async function onFileUpload(files: File | File[]) {
@@ -68,8 +81,9 @@ async function onFileUpload(files: File | File[]) {
           label="Upload Save"
           density="compact"
           hide-details
-          prepend-icon="mdi-upload"
-          variant="outlined"
+          prepend-icon="fa-file-import"
+          variant="tonal"
+          color="secondary"
           style="max-width: 16rem"
           accept=".json"
           @update:model-value="onFileUpload"
@@ -91,10 +105,10 @@ async function onFileUpload(files: File | File[]) {
               <v-icon
                 v-if="save.version !== APP_VERSION"
                 color="warning"
-                icon="mdi-alert-circle-outline"
+                icon="fa-circle-exclamation"
                 title="Version mismatch"
               />
-              <v-icon v-else icon="mdi-content-save-outline" />
+              <v-icon v-else icon="fa-floppy-disk" />
             </template>
 
             <v-list-item-title>{{ save.name }}</v-list-item-title>
@@ -150,7 +164,7 @@ async function onFileUpload(files: File | File[]) {
             <v-spacer />
 
             <div class="d-flex ga-2">
-              <v-btn color="error" variant="outlined" @click="deleteSave(selectedSave.id)"
+              <v-btn color="error" variant="flat" @click="requestDelete(selectedSave.id)"
                 >Delete</v-btn
               >
               <v-spacer />
@@ -169,6 +183,20 @@ async function onFileUpload(files: File | File[]) {
       <v-card-actions>
         <v-spacer />
         <v-btn variant="text" @click="open = false">Close</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+  <!-- Delete confirmation dialog -->
+  <v-dialog v-model="showDeleteConfirm" max-width="400">
+    <v-card rounded="lg">
+      <v-card-title class="text-h6">Delete Save</v-card-title>
+      <v-card-text>
+        Are you sure you want to delete this save? This action cannot be undone.
+      </v-card-text>
+      <v-card-actions class="justify-end ga-2">
+        <v-btn variant="text" @click="showDeleteConfirm = false">Cancel</v-btn>
+        <v-btn color="error" variant="flat" @click="confirmDelete">Delete</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

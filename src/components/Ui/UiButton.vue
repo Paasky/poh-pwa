@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import type { IconKey } from "@/types/icons";
+import type { ObjectIcon } from "@/Common/Objects/Common";
+import UiIcon from "@/components/Ui/UiIcon.vue";
+
 type Density = "default" | "comfortable" | "compact";
 type Variant = "elevated" | "flat" | "outlined" | "tonal" | "text" | "plain";
 // Vuetify size tokens
@@ -17,7 +21,7 @@ withDefaults(
     rounded?: Rounded;
     elevation?: 0 | 1 | 2 | 3 | 4 | 6 | 8 | 12 | 16 | 24;
     // Content
-    icon?: string; // Font Awesome class suffix, e.g., 'fa-bars' or full 'fa-solid fa-bars'
+    icon?: IconKey | ObjectIcon;
     iconColor?: string; // Vuetify theme color key
     text?: string;
     effectText?: string;
@@ -34,7 +38,7 @@ withDefaults(
     rounded: "lg",
     elevation: 4,
     // Content
-    icon: undefined, // Font Awesome class suffix, e.g., 'fa-bars' or full 'fa-solid fa-bars'
+    icon: undefined,
     iconColor: undefined, // Vuetify theme color key
     text: undefined,
     effectText: undefined,
@@ -64,15 +68,10 @@ withDefaults(
         :rounded="rounded"
         class="d-flex flex-wrap ga-1"
       >
-        <v-icon
-          v-if="icon"
-          :icon="icon"
-          :color="iconColor"
-          :class="text || effectText ? 'mr-1' : ''"
-        />
+        <UiIcon v-if="icon" :icon="icon" :color="iconColor" class="me-1" />
         <div v-if="text || effectText" class="d-flex flex-wrap ga-1 text-normal-case">
           <div v-if="text">{{ text }}</div>
-          <div v-if="effectText" class="opacity-50" :class="effectClass">
+          <div v-if="effectText" class="opacity-50 text-caption" :class="effectClass">
             {{ effectText }}
           </div>
         </div>
@@ -90,10 +89,10 @@ withDefaults(
     :rounded="rounded"
     class="d-flex flex-wrap ga-1"
   >
-    <v-icon v-if="icon" :icon="icon" :color="iconColor" :class="text || effectText ? 'mr-1' : ''" />
+    <UiIcon v-if="icon" :icon="icon" :color="iconColor" class="me-1" />
     <div v-if="text || effectText" class="d-flex flex-wrap ga-1 text-normal-case">
       <div v-if="text">{{ text }}</div>
-      <div v-if="effectText" class="opacity-50" :class="effectClass">
+      <div v-if="effectText" class="opacity-50 text-caption" :class="effectClass">
         {{ effectText }}
       </div>
     </div>

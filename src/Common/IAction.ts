@@ -32,15 +32,19 @@ export type ActionType =
   | "actionType:upgradeDesign"
 
   // City
-  | "actionType:startBuilding"
-  | "actionType:hurryBuilding"
-  | "actionType:cancelBuilding"
+  | "actionType:cityBombard"
+  | "actionType:startConstruction"
+  | "actionType:orderConstruction"
+  | "actionType:hurryConstruction"
+  | "actionType:cancelConstruction"
   | "actionType:startTraining"
+  | "actionType:orderTraining"
   | "actionType:hurryTraining"
   | "actionType:cancelTraining"
   | "actionType:moveCitizen"
   | "actionType:purchaseTile"
   | "actionType:renameCity"
+  | "actionType:levyUnit"
 
   // Diplomacy
   | "actionType:startAgenda"
@@ -99,6 +103,19 @@ export interface IAction {
    * Client-side timestamp when the action was created.
    */
   timestamp: number;
+
+  citizenKey?: GameKey;
+  cityKey?: GameKey;
+  designKey?: GameKey;
+  equipmentKey?: TypeKey;
+  index?: number;
+  toIndex?: number;
+  name?: string;
+  platformKey?: TypeKey;
+  targetKey?: GameKey;
+  tileKey?: GameKey;
+  typeKey?: TypeKey;
+  unitKey?: GameKey;
 }
 
 // Units
@@ -125,10 +142,10 @@ export type Rebase = IAction & { type: "rebase"; unitKey: GameKey; targetKey: Ga
 export type Recon = IAction & { type: "recon"; unitKey: GameKey; targetKey: GameKey };
 export type Rename = IAction & { type: "rename"; unitKey: GameKey; name: string };
 export type Skip = IAction & { type: "skip"; unitKey: GameKey };
-export type Settle = IAction & { type: "settle"; unitKey: GameKey };
+export type Settle = IAction & { type: "settle"; unitKey: GameKey; tileKey?: GameKey };
 export type Stop = IAction & { type: "stop"; unitKey: GameKey };
-export type Trade = IAction & { type: "trade"; unitKey: GameKey; targetKey: GameKey }; // target could be city or unit
-export type Upgrade = IAction & { type: "upgrade"; unitKey: GameKey; targetKey: GameKey };
+export type Trade = IAction & { type: "trade"; unitKey: GameKey; targetKey: GameKey };
+export type Upgrade = IAction & { type: "upgrade"; unitKey: GameKey; designKey: GameKey };
 
 // Unit Design
 export type CreateDesign = IAction & {
@@ -147,10 +164,22 @@ export type UpgradeDesign = IAction & {
 };
 
 // City
-export type StartBuilding = IAction & { type: "startBuilding"; cityKey: GameKey; typeKey: TypeKey };
-export type HurryBuilding = IAction & { type: "hurryBuilding"; cityKey: GameKey };
-export type CancelBuilding = IAction & {
-  type: "cancelBuilding";
+export type StartConstruction = IAction & {
+  type: "startConstruction";
+  cityKey: GameKey;
+  tileKey: GameKey;
+  typeKey: TypeKey;
+  index: number;
+};
+export type OrderConstruction = IAction & {
+  type: "orderConstruction";
+  cityKey: GameKey;
+  index: number;
+  toIndex: number;
+};
+export type HurryConstruction = IAction & { type: "hurryConstruction"; cityKey: GameKey };
+export type CancelConstruction = IAction & {
+  type: "cancelConstruction";
   cityKey: GameKey;
   typeKey: TypeKey;
 };
@@ -158,6 +187,13 @@ export type StartTraining = IAction & {
   type: "startTraining";
   cityKey: GameKey;
   designKey: GameKey;
+  index: number;
+};
+export type OrderTraining = IAction & {
+  type: "orderTraining";
+  cityKey: GameKey;
+  index: number;
+  toIndex: number;
 };
 export type HurryTraining = IAction & { type: "hurryTraining"; cityKey: GameKey };
 export type CancelTraining = IAction & {
@@ -220,10 +256,12 @@ export type Action =
   | CreateDesign
   | DeactivateDesign
   | UpgradeDesign
-  | StartBuilding
-  | HurryBuilding
-  | CancelBuilding
+  | StartConstruction
+  | OrderConstruction
+  | HurryConstruction
+  | CancelConstruction
   | StartTraining
+  | OrderTraining
   | HurryTraining
   | CancelTraining
   | MoveCitizen

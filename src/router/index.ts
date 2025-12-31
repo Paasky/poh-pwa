@@ -29,6 +29,7 @@ const router = createRouter({
 // The interval should not be needed, but there's an off-chance
 // that the router is not yet ready when the appStore is created
 const injectIt = () => {
+  if (router.currentRoute.value.name !== "game") return;
   try {
     const appStore = useAppStore();
     appStore.setRouter(router);
@@ -77,7 +78,7 @@ const injectIt = () => {
     console.warn(
       "Failed, appStore._router.currentRoute vs actual router.currentRoute: ",
       appStore._router?.currentRoute,
-      router.currentRoute.value,
+      currentRoute,
     );
   } catch (e) {
     // eslint-disable-next-line

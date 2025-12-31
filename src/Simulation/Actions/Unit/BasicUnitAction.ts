@@ -1,11 +1,11 @@
 import { Player } from "@/Common/Models/Player";
 import { Unit } from "@/Common/Models/Unit";
 import { ActionType } from "@/Common/IAction";
-import { IAction } from "@/Simulation/Actions/IAction";
+import { ISimAction } from "@/Simulation/Actions/ISimAction";
 import { belongsToPlayer } from "@/Simulation/Validator";
 import { IMutation } from "@/Common/IMutation";
 
-export class BasicUnitAction implements IAction {
+export class BasicUnitAction implements ISimAction {
   constructor(
     private readonly player: Player,
     private readonly unit: Unit,

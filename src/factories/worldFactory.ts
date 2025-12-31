@@ -22,7 +22,7 @@ export type WorldSize = {
 // Adjusted to satisfy TerraGenerator constraints: y must be multiple of 9 and x = 2 * y
 export const worldSizes: WorldSize[] = [
   {
-    name: "Tiny",
+    name: "Tiny (36 x 72)",
     x: 72,
     y: 36,
     continents: 4,
@@ -30,7 +30,7 @@ export const worldSizes: WorldSize[] = [
     minorsPerPlayer: 0,
   },
   {
-    name: "Small",
+    name: "Small (54 x 108)",
     x: 108,
     y: 54,
     continents: 4,
@@ -38,7 +38,7 @@ export const worldSizes: WorldSize[] = [
     minorsPerPlayer: 2,
   },
   {
-    name: "Regular",
+    name: "Regular (72 x 144)",
     x: 144,
     y: 72,
     continents: 5,
@@ -46,7 +46,7 @@ export const worldSizes: WorldSize[] = [
     minorsPerPlayer: 2,
   },
   {
-    name: "Large",
+    name: "Large (90 x 180)",
     x: 180,
     y: 90,
     continents: 6,
@@ -54,7 +54,7 @@ export const worldSizes: WorldSize[] = [
     minorsPerPlayer: 2,
   },
   {
-    name: "Huge",
+    name: "Huge (126 x 252)",
     x: 252,
     y: 126,
     continents: 10,

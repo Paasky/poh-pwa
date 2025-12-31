@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { saveManager } from "@/utils/saveManager";
-import { useAppStore } from "@/stores/appStore";
 import { formatSaveDate } from "@/helpers/timeFormatter";
 import TerraConfigDialog from "./Home/TerraConfigDialog.vue";
 import SaveBrowserDialog from "./Home/SaveBrowserDialog.vue";
 import SettingsDialog from "@/components/Settings/SettingsDialog.vue";
+import UiButton from "@/components/Ui/UiButton.vue";
+import UiIcon from "@/components/Ui/UiIcon.vue";
+import { useSettingsStore } from "@/stores/settingsStore";
+import router from "@/router";
 
-const app = useAppStore();
+useSettingsStore().init();
 const latestSave = computed(() => saveManager.getLatest());
 
 const showNewGame = ref(false);
@@ -17,7 +20,7 @@ const showSettings = ref(false);
 async function continueGame() {
   const latest = latestSave.value;
   if (latest) {
-    app.router.push({ path: "/game", query: { saveId: latest.id } });
+    router.push({ path: "/game", query: { saveId: latest.id } });
   }
 }
 </script>
@@ -25,67 +28,59 @@ async function continueGame() {
 <template>
   <v-main class="fill-height d-flex align-center justify-center bg-grey-darken-4 text-white">
     <div class="text-center pa-6" style="max-width: 600px; width: 100%">
-      <v-icon icon="mdi-book-open-variant" size="84" color="light-blue-lighten-2" class="mb-6" />
+      <UiIcon icon="bookOpen" size="lg" class="mb-6" />
       <h1 class="text-h2 font-weight-light tracking-tighter mb-12">Pages of History</h1>
 
       <div class="d-flex flex-column ga-4 align-center">
         <!-- Continue Button -->
-        <v-btn
+        <UiButton
           v-if="latestSave"
-          color="light-blue-darken-1"
+          color="secondary"
           size="x-large"
           width="100%"
           height="72"
-          prepend-icon="mdi-play-circle-outline"
+          icon="play"
           @click="continueGame"
-        >
-          <div class="d-flex flex-column align-start">
-            <span class="text-button">Continue</span>
-            <span class="text-caption opacity-80">
-              {{ latestSave.name }} ({{ formatSaveDate(latestSave.time) }})
-            </span>
-          </div>
-        </v-btn>
+          text="Continue"
+          :effectText="`${latestSave.name} (${formatSaveDate(latestSave.time)})`"
+        />
 
         <!-- New Game Button -->
-        <v-btn
-          color="emerald-darken-1"
+        <UiButton
+          color="secondary"
           size="x-large"
           width="100%"
           height="64"
-          prepend-icon="mdi-plus-circle-outline"
-          class="bg-green-darken-2"
+          icon="plus"
           @click="showNewGame = true"
-        >
-          New Game
-        </v-btn>
+          text="New Game"
+        />
 
         <!-- Load Game Button -->
-        <v-btn
-          color="amber-darken-2"
+        <UiButton
+          color="secondary"
           size="x-large"
           width="100%"
           height="64"
-          prepend-icon="mdi-folder-open-outline"
+          icon="folderOpen"
           @click="showLoadGame = true"
-        >
-          Load Game
-        </v-btn>
+          text="Load Game"
+        />
 
         <!-- Settings Button -->
-        <v-btn
-          variant="outlined"
+        <UiButton
+          color="surface"
+          variant="flat"
           size="x-large"
           width="100%"
           height="64"
-          prepend-icon="mdi-cog-outline"
+          icon="cog"
           @click="showSettings = true"
-        >
-          Settings
-        </v-btn>
+          text="Settings"
+        />
       </div>
 
-      <div class="mt-12 text-caption opacity-50">Alpha Version • Made with Love & History</div>
+      <div class="mt-12 text-caption opacity-50">Alpha Version • Made for the Love of History</div>
     </div>
 
     <!-- Dialogs -->

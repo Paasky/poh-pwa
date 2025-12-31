@@ -8,7 +8,7 @@ import {
   shuffle,
   SKIP_DESCEND,
   takeRandom,
-} from "../../src/helpers/arrayTools";
+} from "@/helpers/arrayTools";
 import { mockRandom } from "../_setup/testHelpers";
 
 describe("arrayTools", () => {

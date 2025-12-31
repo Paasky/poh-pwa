@@ -1,13 +1,7 @@
 import { describe, expect, it } from "vitest";
-import {
-  aWord,
-  capitalize,
-  includes,
-  theWord,
-  typeObjWithArticle,
-} from "../../src/helpers/textTools";
-import { initTestPinia, loadStaticData } from "../_setup/pinia";
-import { useDataBucket } from "../../src/Data/useDataBucket";
+import { aWord, capitalize, includes, theWord, typeObjWithArticle } from "@/helpers/textTools";
+import { useDataBucket } from "@/Data/useDataBucket";
+import { initTestDataBucket } from "../_setup/dataHelpers";
 
 describe("textTools", () => {
   it("includes", () => {
@@ -33,15 +27,14 @@ describe("textTools", () => {
   });
 
   it("typeObjWithArticle", () => {
-    initTestPinia();
-    loadStaticData();
-    const objectsStore = useDataBucket();
+    initTestDataBucket();
+    const bucket = useDataBucket();
 
-    const grass = objectsStore.getType("terrainType:grass");
+    const grass = bucket.getType("terrainType:grass");
     expect(typeObjWithArticle(grass)).toBe("a Grass");
 
     // Check wonder (should use "the")
-    const tajMahal = objectsStore.getType("worldWonderType:tajMahal");
+    const tajMahal = bucket.getType("worldWonderType:tajMahal");
     expect(typeObjWithArticle(tajMahal)).toBe("the Taj Mahal");
   });
 });
