@@ -1,6 +1,6 @@
 import { IMutation } from "@/Common/IMutation";
 
-export interface IAction {
+export interface ISimAction {
   validateAction(): this;
   handleAction(): IMutation[];
 }

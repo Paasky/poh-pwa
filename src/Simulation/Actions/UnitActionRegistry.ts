@@ -19,27 +19,51 @@ import { UnitSettle } from "@/Simulation/Actions/Unit/UnitSettle";
 import { UnitTrade } from "@/Simulation/Actions/Unit/UnitTrade";
 import { UnitUpgrade } from "@/Simulation/Actions/Unit/UnitUpgrade";
 import { UnitDesign } from "@/Common/Models/UnitDesign";
-import { IAction } from "@/Simulation/Actions/IAction";
+import { ISimAction } from "@/Simulation/Actions/ISimAction";
 import { ActionType } from "@/Common/IAction";
 import { Player } from "@/Common/Models/Player";
 import { TypeObject } from "@/Common/Objects/TypeObject";
-import { GameObject } from "@/Common/Models/_GameModel";
+import { Construction } from "@/Common/Models/Construction";
+
+export const UnitActionKeys = new Set<ActionType>([
+  "actionType:alert",
+  "actionType:fortify",
+  "actionType:heal",
+  "actionType:skipTurn",
+  "actionType:stop",
+  "actionType:attack",
+  "actionType:bombard",
+  "actionType:build",
+  "actionType:demobilize",
+  "actionType:disband",
+  "actionType:explore",
+  "actionType:mission",
+  "actionType:mobilize",
+  "actionType:move",
+  "actionType:pillage",
+  "actionType:rebase",
+  "actionType:recon",
+  "actionType:rename",
+  "actionType:settle",
+  "actionType:trade",
+  "actionType:upgrade",
+]);
 
 export const getUnitAction = (
   actionType: ActionType,
   player: Player,
   unit: Unit,
   extras?: {
+    design?: UnitDesign;
     name?: string;
-    target?: GameObject;
+    target?: City | Construction | Tile | Unit;
     type?: TypeObject;
   },
-): IAction => {
+): ISimAction => {
   const city = extras?.target?.class === "city" ? (extras.target as City) : undefined;
   const tile = extras?.target?.class === "tile" ? (extras.target as Tile) : undefined;
   const targetUnit = extras?.target?.class === "unit" ? (extras.target as Unit) : undefined;
-  const unitDesign =
-    extras?.target?.class === "unitDesign" ? (extras.target as UnitDesign) : undefined;
+  const unitDesign = extras?.target?.class === "unitDesign" ? extras.design : undefined;
 
   switch (actionType) {
     // Basic Unit Actions
@@ -52,27 +76,29 @@ export const getUnitAction = (
 
     // Complex Unit Actions
     case "actionType:attack": {
-      const target =
-        // If a target unit was given, use it
-        targetUnit ??
-        // If a city was given, use it
-        city ??
-        // If a tile was given, get a target from it
-        (tile ? UnitAttack.getTileTarget(unit, tile) : undefined);
+      if (!extras?.target) throw new Error(`No target given for attack action`);
 
-      if (!target) {
-        throw new Error(`No target given for attack action`);
-      }
+      const actualTarget =
+        extras.target instanceof Tile
+          ? UnitAttack.getTileTarget(unit, extras.target)
+          : extras.target;
 
-      return new UnitAttack(player, unit, target);
+      if (!actualTarget) throw new Error(`No valid target for attack action`);
+
+      return new UnitAttack(player, unit, actualTarget);
     }
 
     case "actionType:bombard": {
-      const target = targetUnit ?? city ?? tile;
-      if (!target) {
-        throw new Error(`No target given for attack action`);
-      }
-      return new UnitBombard(player, unit, target);
+      if (!extras?.target) throw new Error(`No target given for bombard action`);
+
+      const actualTarget =
+        extras.target instanceof Tile
+          ? UnitBombard.getTileTarget(unit, extras.target)
+          : extras.target;
+
+      if (!actualTarget) throw new Error(`No valid target for bombard action`);
+
+      return new UnitBombard(player, unit, actualTarget);
     }
 
     case "actionType:build": {

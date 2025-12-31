@@ -1,12 +1,19 @@
 import { subscribe } from "@/Common/ActionBus";
-import { Action } from "@/Common/IAction";
+import { IAction } from "@/Common/IAction";
 import { GameKey } from "@/Common/Models/_GameModel";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { DataStore } from "@/Data/DataStore";
-import { IMutation } from "@/Common/IMutation";
 import { Player } from "@/Common/Models/Player";
 import { Unit } from "@/Common/Models/Unit";
-import { getUnitAction } from "@/Simulation/Actions/UnitActionRegistry";
+import { getUnitAction, UnitActionKeys } from "@/Simulation/Actions/UnitActionRegistry";
+import { getPlayerAction, PlayerActionKeys } from "@/Simulation/Actions/PlayerActionRegistry";
+import { CityActionKeys, getCityAction } from "@/Simulation/Actions/CityActionRegistry";
+import { City } from "@/Common/Models/City";
+import { ISimAction } from "@/Simulation/Actions/ISimAction";
+import { Construction } from "@/Common/Models/Construction";
+import { Tile } from "@/Common/Models/Tile";
+import { UnitDesign } from "@/Common/Models/UnitDesign";
+import { Citizen } from "@/Common/Models/Citizen";
 
 export class Simulation {
   private readonly dataStore: DataStore;
@@ -18,27 +25,8 @@ export class Simulation {
 
   /**
    * Main entry point for performing player actions.
-   *
-   * Workflow:
-   * 1. Conflict Resolution: Check if action.version matches current world.turn
-   * 2. Validation: Ensure the action is legal given the current state
-   * 3. Transformation: Convert high-level IAction into low-level IMutation[]
-   * 4. Execution: Apply mutations via DataStore
-   *
-   * @example
-   * // Inside a specific action handler:
-   * if (action.type === 'move') {
-   *   const unit = dataBucket.getObject<Unit>(action.unitKey);
-   *   if (unit.playerKey !== playerKey) throw new Error("Not your unit");
-   *   // ... more validation
-   *   const mutations: IMutation[] = [{
-   *     type: 'update',
-   *     payload: { key: unit.key, tileKey: action.tileKey, moves: unit.moves + 1 }
-   *   }];
-   *   this.dataStore.set(mutations);
-   * }
    */
-  onAction(playerKey: GameKey, action: Action) {
+  onAction(playerKey: GameKey, action: IAction) {
     const bucket = useDataBucket();
 
     // 1. Conflict Resolution (Optimistic Locking)
@@ -50,41 +38,53 @@ export class Simulation {
     }
 
     const player = bucket.getObject<Player>(playerKey);
-    const mutations: IMutation[] = [];
 
     // 2. & 3. Validation & Mutation Generation
-    switch (action.type) {
-      // Unit Actions
-      case "alert":
-      case "attack":
-      case "bombard":
-      case "build":
-      case "demobilize":
-      case "disband":
-      case "explore":
-      case "fortify":
-      case "heal":
-      case "mission":
-      case "mobilize":
-      case "move":
-      case "pillage":
-      case "rebase":
-      case "recon":
-      case "rename":
-      case "settle":
-      case "skip":
-      case "stop":
-      case "trade":
-      case "upgrade":
-        mutations.push(
-          ...getUnitAction(action.type, player, bucket.getObject<Unit>(action.unitKey), {
-            name: "name" in action ? action.name : undefined,
-            target: "targetKey" in action ? bucket.getObject(action.targetKey) : undefined,
-            type: "typeKey" in action ? bucket.getType(action.typeKey) : undefined,
-          })
-            .validateAction()
-            .handleAction(),
+    let simAction = null as ISimAction | null;
+    switch (true) {
+      // City Actions
+      case CityActionKeys.has(action.type):
+        if (!action.cityKey) {
+          throw new Error(`No city key given for action: ${action.type}`);
+        }
+        simAction = getCityAction(
+          action.type,
+          player,
+          useDataBucket().getObject<City>(action.cityKey),
+          {
+            citizen: action.citizenKey ? bucket.getObject<Citizen>(action.citizenKey) : undefined,
+            design: action.designKey ? bucket.getObject<UnitDesign>(action.designKey) : undefined,
+            index: action.index,
+            toIndex: action.toIndex,
+            name: action.name,
+            target: action.targetKey
+              ? bucket.getObject<City | Construction | Tile | Unit>(action.targetKey)
+              : undefined,
+            tile: action.tileKey ? bucket.getObject<Tile>(action.tileKey) : undefined,
+            type: action.typeKey ? bucket.getType(action.typeKey) : undefined,
+          },
         );
+        break;
+
+      // Player Actions
+      case PlayerActionKeys.has(action.type):
+        simAction = getPlayerAction(action.type, player, {
+          type: action.typeKey ? bucket.getType(action.typeKey) : undefined,
+        });
+        break;
+
+      // Unit Actions
+      case UnitActionKeys.has(action.type):
+        if (!action.unitKey) {
+          throw new Error(`No unit key given for action: ${action.type}`);
+        }
+        simAction = getUnitAction(action.type, player, bucket.getObject<Unit>(action.unitKey), {
+          name: action.name,
+          target: action.targetKey
+            ? bucket.getObject<City | Construction | Tile | Unit>(action.targetKey)
+            : undefined,
+          type: action.typeKey ? bucket.getType(action.typeKey) : undefined,
+        });
         break;
 
       default:
@@ -92,6 +92,7 @@ export class Simulation {
     }
 
     // 4. Execution
+    const mutations = simAction.validateAction().handleAction();
     if (mutations.length > 0) {
       this.dataStore.set(mutations);
     }

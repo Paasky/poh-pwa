@@ -3,24 +3,20 @@ import { Player } from "@/Common/Models/Player";
 import { City } from "@/Common/Models/City";
 import { IMutation } from "@/Common/IMutation";
 import { belongsToPlayer } from "@/Simulation/Validator";
+import { UnitDesign } from "@/Common/Models/UnitDesign";
 
-export class CityRename implements ISimAction {
+export class CityStartTraining implements ISimAction {
   constructor(
     private readonly player: Player,
     private readonly city: City,
-    private readonly name: string,
+    private readonly design: UnitDesign,
+    private readonly index = 0,
   ) {}
 
   validateAction(): this {
     belongsToPlayer(this.player, this.city);
-
-    if (!this.name) throw new Error("City name cannot be empty");
-
-    if (this.city.name === this.name)
-      throw new Error("City name cannot be the same as the current one");
-
-    if (this.player.cities.some((c) => c.name === this.name))
-      throw new Error("City name already exists");
+    belongsToPlayer(this.player, this.design);
+    if (!this.design.isActive) throw new Error("Unit design is not active");
 
     return this;
   }
@@ -29,7 +25,10 @@ export class CityRename implements ISimAction {
     return [
       {
         type: "update",
-        payload: { key: this.city.key, name: this.name },
+        payload: {
+          key: this.city.key,
+          constructionQueue: { design: this.design, index: this.index },
+        },
       },
     ];
   }

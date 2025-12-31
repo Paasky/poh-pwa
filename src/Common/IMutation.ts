@@ -2,9 +2,13 @@
 import type { GameKey, IRawGameObject } from "@/Common/Models/_GameModel";
 
 export interface IMutation {
-  type: "create" | "update" | "remove";
+  type: MutationType;
+  action?: MutationAction;
   payload: IRawGameObject | any;
 }
+
+export type MutationType = "create" | "update" | "remove" | "action";
+export type MutationAction = "selectType" | "unselectType" | "actionCrisis";
 
 export function createMutation(type: "create" | "update" | "remove", key: GameKey): IMutation {
   return {

@@ -113,6 +113,22 @@ export class City extends GameObject {
     return Array.from(types);
   }
 
+  get religions(): Map<GameKey, { count: number; religion: Religion }> {
+    const religions = new Map<GameKey, { count: number; religion: Religion }>();
+    this.citizens.forEach((citizen) => {
+      if (citizen.religionKey && !religions.has(citizen.religionKey)) {
+        const item = religions.get(citizen.religionKey);
+        if (item) {
+          item.count++;
+        } else {
+          religions.set(citizen.religionKey, { count: 1, religion: citizen.religion! });
+        }
+      }
+    });
+
+    return religions;
+  }
+
   get tilesWithFreeCitizenSlots(): Tile[] {
     const possibleTiles = getNeighbors(
       useDataBucket().world.size,

@@ -1,19 +1,24 @@
 import { Citizen } from "@/Common/Models/Citizen";
 import { City } from "@/Common/Models/City";
 import { IMutation } from "@/Common/IMutation";
-import { IAction } from "@/Simulation/Actions/IAction";
-import { CitizenPickTile } from "@/Simulation/Actions/Citizen/CitizenPickTile";
+import { ISimAction } from "@/Simulation/Actions/ISimAction";
+import { CitizenPickTile } from "@/Simulation/Actions/City/CitizenPickTile";
 import { getRandom } from "@/helpers/arrayTools";
+import { useDataBucket } from "@/Data/useDataBucket";
+import { UnitDesign } from "@/Common/Models/UnitDesign";
+import { CreateUnit } from "@/Simulation/CreateMutations/CreateUnit";
 
 // Note: a Player cannot decide to migrate a citizen,
 // it only happens automatically if the city is full or very unhappy
-export class CitizenMigrate implements IAction {
+export class CitizenMigrate implements ISimAction {
   constructor(
     private readonly citizen: Citizen,
-    private readonly toCity: City,
+    private readonly toCity?: City, // If empty, Citizen will immediately convert to Settler (assuming no available cities)
   ) {}
 
   validateAction(): this {
+    if (!this.toCity) return this;
+
     if (!this.toCity.tilesWithFreeCitizenSlots.length) {
       throw new Error(`City ${this.toCity.key} does not have any free slots for citizens`);
     }
@@ -21,20 +26,40 @@ export class CitizenMigrate implements IAction {
   }
 
   handleAction(): IMutation[] {
-    this.citizen.playerKey = this.toCity.playerKey;
-    this.citizen.cityKey = this.toCity.key;
+    if (this.toCity) {
+      this.citizen.playerKey = this.toCity.playerKey;
+      this.citizen.cityKey = this.toCity.key;
 
-    // No validation, we already know the city can accept the citizen
-    const mutation = new CitizenPickTile(
-      this.toCity.player,
-      this.citizen,
-      CitizenPickTile.getTile(this.toCity)!,
-    ).handleAction()[0];
+      // No validation, we already know the city can accept the citizen
+      const mutation = new CitizenPickTile(
+        this.toCity.player,
+        this.citizen,
+        CitizenPickTile.getTile(this.toCity)!,
+      ).handleAction()[0];
 
-    mutation.payload.playerKey = this.toCity.playerKey;
-    mutation.payload.cityKey = this.toCity.key;
+      mutation.payload.playerKey = this.toCity.playerKey;
+      mutation.payload.cityKey = this.toCity.key;
 
-    return [mutation];
+      return [mutation];
+    }
+
+    // No city -> convert to Settler
+    const settlerDesign =
+      // Player settler design with the highest prod cost
+      this.citizen.player.activeDesigns
+        .filter((design) => design.equipment.category === "equipmentCategory:settler")
+        .sort((a, b) => b.productionCost - a.productionCost)[0] ??
+      // Fallback to global Settler design
+      Array.from(useDataBucket().getClassObjects<UnitDesign>("unitDesign")).filter(
+        (design) => design.equipment.category === "equipmentCategory:settler" && !design.playerKey,
+      )[0];
+
+    if (!settlerDesign) throw new Error("Invalid World: No settler design found");
+
+    return [
+      { type: "remove", payload: { key: this.citizen.key } },
+      new CreateUnit(this.citizen.player, settlerDesign).create(this.citizen.city.tile),
+    ];
   }
 
   static getCity(citizen: Citizen): City | undefined {

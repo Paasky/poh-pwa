@@ -197,10 +197,10 @@ function fmtHour(h: number): string {
                   :items="engineSettingPresets"
                   item-title="label"
                   item-value="id"
-                  v-model="dialog.localPresetId"
+                  v-model="dialog.localPresetId.value"
                   label="Quality Preset"
                   density="comfortable"
-                  @update:model-value="(v) => dialog.loadPreset(v.value)"
+                  @update:model-value="(v) => dialog.loadPreset(v)"
                 />
               </div>
 
@@ -331,7 +331,7 @@ function fmtHour(h: number): string {
       <v-card-actions class="justify-space-between ga-2 flex-wrap">
         <div class="text-caption text-medium-emphasis">
           <template v-if="!isGameTab">
-            <span v-if="dialog.isGraphicsDirty">You have unapplied changes</span>
+            <span v-if="dialog.isGraphicsDirty.value">You have unapplied changes</span>
             <span v-else>No pending changes</span>
           </template>
           <template v-else>
@@ -342,7 +342,11 @@ function fmtHour(h: number): string {
         <div class="d-flex ga-2">
           <template v-if="isGameTab">
             <v-btn variant="text" @click="dialog.cancelGame(closeDialog)">Cancel</v-btn>
-            <v-btn variant="text" :disabled="!dialog.isGameDirty" @click="dialog.revertGame"
+            <v-btn
+              variant="text"
+              :color="dialog.isGameDirty.value ? 'secondary' : undefined"
+              :disabled="!dialog.isGameDirty.value"
+              @click="dialog.revertGame"
               >Revert</v-btn
             >
             <v-btn color="primary" variant="flat" @click="closeDialog">Close</v-btn>
@@ -350,15 +354,16 @@ function fmtHour(h: number): string {
           <template v-else>
             <v-btn variant="text" @click="dialog.cancelGraphics(closeDialog)">Cancel</v-btn>
             <v-btn
-              variant="tonal"
-              :disabled="!dialog.isGraphicsDirty"
+              :color="dialog.isGraphicsDirty.value ? 'secondary' : undefined"
+              :variant="dialog.isGraphicsDirty.value ? 'elevated' : 'tonal'"
+              :disabled="!dialog.isGraphicsDirty.value"
               @click="dialog.revertGraphics"
               >Revert</v-btn
             >
             <v-btn
               color="primary"
               variant="flat"
-              :disabled="!dialog.isGraphicsDirty"
+              :disabled="!dialog.isGraphicsDirty.value"
               @click="dialog.applyGraphics(closeDialog)"
               >Apply</v-btn
             >
@@ -369,7 +374,7 @@ function fmtHour(h: number): string {
   </v-dialog>
 
   <!-- Restart confirmation dialog -->
-  <v-dialog v-model="dialog.showRestartConfirm" max-width="520" persistent>
+  <v-dialog v-model="dialog.showRestartConfirm.value" max-width="520" persistent>
     <v-card rounded="lg">
       <v-card-title class="text-h6">Restart Required</v-card-title>
       <v-card-text>

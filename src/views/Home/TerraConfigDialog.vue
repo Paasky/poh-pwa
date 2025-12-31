@@ -1,14 +1,22 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useMapGenStore } from "@/stores/mapGenStore";
-import { useAppStore } from "@/stores/appStore";
 import { worldSizes } from "@/factories/worldFactory";
+import UiRadioButtons from "@/components/Ui/UiRadioButtons.vue";
+import router from "@/router";
 
 const open = defineModel<boolean>({ required: true });
 const mapGen = useMapGenStore();
-const app = useAppStore();
 
 const alignments = ["Earth-like", "Mirror X", "Mirror Y", "Mirror Both", "Random"];
+
+const alignmentItems = [
+  { title: "Earth-like", value: "Earth-like" },
+  { title: "Mirror X", value: "Mirror X" },
+  { title: "Mirror Y", value: "Mirror Y" },
+  { title: "Mirror Both", value: "Mirror Both" },
+  { title: "Random", value: "Random" },
+];
 
 const selectedSize = computed({
   get: () => mapGen.config.size,
@@ -22,7 +30,7 @@ const selectedSize = computed({
 
 async function startGame() {
   open.value = false;
-  app.router.push("/game");
+  router.push("/game");
 }
 </script>
 
@@ -31,19 +39,21 @@ async function startGame() {
     <v-card rounded="lg">
       <v-card-title class="text-h5">Terra Generator Config</v-card-title>
       <v-card-text>
-        <div class="d-flex flex-column ga-4">
+        <div class="d-flex flex-column ga-6">
           <v-select
             v-model="selectedSize"
             :items="worldSizes"
             item-title="name"
             label="World Size"
+            prepend-inner-icon="fa fa-map"
             return-object
           />
 
-          <div class="text-subtitle-1">Alignment</div>
-          <v-radio-group v-model="mapGen.config.alignment" inline>
-            <v-radio v-for="a in alignments" :key="a" :label="a" :value="a" />
-          </v-radio-group>
+          <UiRadioButtons
+            v-model="mapGen.config.alignment"
+            label="Alignment"
+            :items="alignmentItems"
+          />
 
           <v-divider />
 
@@ -54,6 +64,8 @@ async function startGame() {
             step="1"
             label="Continents"
             thumb-label
+            show-ticks="always"
+            prepend-icon="fa fa-earth-americas"
           />
 
           <v-slider
@@ -63,6 +75,8 @@ async function startGame() {
             step="1"
             label="Majors per Continent"
             thumb-label
+            show-ticks="always"
+            prepend-icon="fa fa-users"
           />
 
           <v-slider
@@ -72,6 +86,8 @@ async function startGame() {
             step="1"
             label="Minors per Player"
             thumb-label
+            show-ticks="always"
+            prepend-icon="fa fa-object-group"
           />
         </div>
       </v-card-text>

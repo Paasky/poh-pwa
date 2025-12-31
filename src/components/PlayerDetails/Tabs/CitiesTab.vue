@@ -18,8 +18,8 @@ const cities = computed<City[]>(() => store.cities);
 function searchCity(c: City, term: string): boolean {
   return (
     includes(c.name, term) ||
-    includes(c.constructionQueue.queue[0]?.item.name ?? "", term) ||
-    includes(c.trainingQueue.queue[0]?.item.name ?? "", term)
+    includes(c.constructionQueue.items[0]?.item.name ?? "", term) ||
+    includes(c.trainingQueue.items[0]?.item.name ?? "", term)
   );
 }
 
@@ -90,28 +90,28 @@ const cityColumns = store.columns as unknown as TableColumn<City>[];
         </template>
         <template #[`item.constructing`]="{ item }">
           <span>
-            {{ ((item as City).constructionQueue.queue[0]?.item as any)?.name ?? "-" }}
-            <template v-if="(item as City).constructionQueue.queue.length > 0">
+            {{ ((item as City).constructionQueue.items[0]?.item as any)?.name ?? "-" }}
+            <template v-if="(item as City).constructionQueue.items.length > 0">
               —
-              {{ (item as City).constructionQueue.queue[0].progress }}/{{
-                (item as City).constructionQueue.queue[0].cost
+              {{ (item as City).constructionQueue.items[0].progress }}/{{
+                (item as City).constructionQueue.items[0].cost
               }}
-              <span v-if="(item as City).constructionQueue.queue.length > 1">
-                ({{ (item as City).constructionQueue.queue.length - 1 }} queued)
+              <span v-if="(item as City).constructionQueue.items.length > 1">
+                ({{ (item as City).constructionQueue.items.length - 1 }} queued)
               </span>
             </template>
           </span>
         </template>
         <template #[`item.training`]="{ item }">
           <span>
-            {{ ((item as City).trainingQueue.queue[0]?.item as any)?.name ?? "-" }}
-            <template v-if="(item as City).trainingQueue.queue.length > 0">
+            {{ ((item as City).trainingQueue.items[0]?.item as any)?.name ?? "-" }}
+            <template v-if="(item as City).trainingQueue.items.length > 0">
               —
-              {{ (item as City).trainingQueue.queue[0].progress }}/{{
-                (item as City).trainingQueue.queue[0].cost
+              {{ (item as City).trainingQueue.items[0].progress }}/{{
+                (item as City).trainingQueue.items[0].cost
               }}
-              <span v-if="(item as City).trainingQueue.queue.length > 1">
-                ({{ (item as City).trainingQueue.queue.length - 1 }} queued)
+              <span v-if="(item as City).trainingQueue.items.length > 1">
+                ({{ (item as City).trainingQueue.items.length - 1 }} queued)
               </span>
             </template>
           </span>

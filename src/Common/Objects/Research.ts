@@ -149,6 +149,10 @@ export class Research {
     return Math.ceil(costLeft / sciencePerTurn);
   }
 
+  get knownTypeKeys(): TypeKey[] {
+    return this.researched.flatMap((tech) => tech.allows);
+  }
+
   startTurn() {
     if (!this.current) return;
 

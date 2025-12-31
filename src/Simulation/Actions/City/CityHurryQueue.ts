@@ -1,15 +1,14 @@
 import { ISimAction } from "@/Simulation/Actions/ISimAction";
+import { Player } from "@/Common/Models/Player";
 import { City } from "@/Common/Models/City";
 import { IMutation } from "@/Common/IMutation";
-import { Tile } from "@/Common/Models/Tile";
-import { Player } from "@/Common/Models/Player";
+import { Queue } from "@/Common/Objects/Queues";
 
-export class CityExpand implements ISimAction {
+export class CityHurryQueue implements ISimAction {
   constructor(
     private readonly player: Player,
     private readonly city: City,
-    private readonly tile: Tile,
-    private readonly isPurchase = false,
+    private readonly queue: Queue,
   ) {}
 
   validateAction(): this {

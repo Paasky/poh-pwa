@@ -1,4 +1,4 @@
-import { IAction } from "@/Simulation/Actions/IAction";
+import { ISimAction } from "@/Simulation/Actions/ISimAction";
 import { Player } from "@/Common/Models/Player";
 import { Tile } from "@/Common/Models/Tile";
 import { Unit } from "@/Common/Models/Unit";
@@ -7,7 +7,7 @@ import { Pathfinder } from "@/Simulation/Movement/Pathfinder";
 import { UnitMovement } from "@/Simulation/Movement/UnitMovement";
 import { belongsToPlayer } from "@/Simulation/Validator";
 
-export class UnitMove implements IAction {
+export class UnitMove implements ISimAction {
   constructor(
     private readonly player: Player,
     private readonly unit: Unit,

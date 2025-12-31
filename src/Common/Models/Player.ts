@@ -17,7 +17,6 @@ import type { TradeRoute } from "@/Common/Models/TradeRoute";
 import type { Unit } from "@/Common/Models/Unit";
 import { Diplomacy } from "@/Common/Objects/Diplomacy";
 import { ObjKey, TypeKey } from "@/Common/Objects/Common";
-import { useDataBucket } from "@/Data/useDataBucket";
 import { UnitMovement } from "@/Simulation/Movement/UnitMovement";
 import { Construction } from "@/Common/Models/Construction";
 
@@ -188,9 +187,6 @@ export class Player extends GameObject {
 
   get visibleTileKeys(): Set<GameKey> {
     const keys = new Set<GameKey>(this.tileKeys);
-
-    // Prevent crash if store is not ready yet
-    if (!useDataBucket().ready) return keys;
 
     this.units.forEach((u) => u.visibleTileKeys.forEach((k) => keys.add(k)));
     return keys;

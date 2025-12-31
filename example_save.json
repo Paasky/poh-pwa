@@ -1,0 +1,71 @@
+{
+  "name": "Example Save",
+  "time": 1704096000000,
+  "version": "0.1.0",
+  "world": {
+    "id": "example-world-id",
+    "size": { "x": 2, "y": 2 },
+    "turn": 1,
+    "year": 100,
+    "currentPlayerKey": "player:1"
+  },
+  "objects": [
+    {
+      "key": "culture:1",
+      "class": "culture",
+      "name": "Test Culture",
+      "type": "majorCultureType:viking",
+      "playerKey": "player:1"
+    },
+    {
+      "key": "player:1",
+      "class": "player",
+      "name": "Test Player",
+      "cultureKey": "culture:1"
+    },
+    {
+      "key": "tile:x0,y0",
+      "class": "tile",
+      "x": 0,
+      "y": 0,
+      "domain": "domainType:land",
+      "area": "continentType:taiga",
+      "climate": "climateType:cold",
+      "terrain": "terrainType:tundra",
+      "elevation": "elevationType:hill"
+    },
+    {
+      "key": "tile:x1,y0",
+      "class": "tile",
+      "x": 1,
+      "y": 0,
+      "domain": "domainType:land",
+      "area": "continentType:taiga",
+      "climate": "climateType:cold",
+      "terrain": "terrainType:grass",
+      "elevation": "elevationType:mountain"
+    },
+    {
+      "key": "tile:x0,y1",
+      "class": "tile",
+      "x": 0,
+      "y": 1,
+      "domain": "domainType:water",
+      "area": "oceanType:atlantic",
+      "climate": "climateType:temperate",
+      "terrain": "terrainType:sea",
+      "elevation": "elevationType:flat"
+    },
+    {
+      "key": "tile:x1,y1",
+      "class": "tile",
+      "x": 1,
+      "y": 1,
+      "domain": "domainType:water",
+      "area": "oceanType:atlantic",
+      "climate": "climateType:temperate",
+      "terrain": "terrainType:coast",
+      "elevation": "elevationType:flat"
+    }
+  ]
+}

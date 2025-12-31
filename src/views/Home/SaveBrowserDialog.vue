@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 import { saveManager, SaveMeta } from "@/utils/saveManager";
-import { useAppStore } from "@/stores/appStore";
 import { formatSaveDate } from "@/helpers/timeFormatter";
 import { formatYear } from "@/Common/Objects/Common";
 import pkg from "../../../package.json";
+import router from "@/router";
 
 const open = defineModel<boolean>({ required: true });
-const app = useAppStore();
 
 const APP_VERSION = pkg.version;
 const saves = ref<SaveMeta[]>([]);
@@ -29,7 +28,7 @@ onMounted(() => {
 
 async function loadSave(id: string) {
   open.value = false;
-  app.router.push({ path: "/game", query: { saveId: id } });
+  router.push({ path: "/game", query: { saveId: id } });
 }
 
 function deleteSave(id: string) {
@@ -68,8 +67,9 @@ async function onFileUpload(files: File | File[]) {
           label="Upload Save"
           density="compact"
           hide-details
-          prepend-icon="mdi-upload"
+          prepend-icon="fa-file-import"
           variant="outlined"
+          color="secondary"
           style="max-width: 16rem"
           accept=".json"
           @update:model-value="onFileUpload"
@@ -91,10 +91,10 @@ async function onFileUpload(files: File | File[]) {
               <v-icon
                 v-if="save.version !== APP_VERSION"
                 color="warning"
-                icon="mdi-alert-circle-outline"
+                icon="fa-circle-exclamation"
                 title="Version mismatch"
               />
-              <v-icon v-else icon="mdi-content-save-outline" />
+              <v-icon v-else icon="fa-floppy-disk" />
             </template>
 
             <v-list-item-title>{{ save.name }}</v-list-item-title>
@@ -150,7 +150,7 @@ async function onFileUpload(files: File | File[]) {
             <v-spacer />
 
             <div class="d-flex ga-2">
-              <v-btn color="error" variant="outlined" @click="deleteSave(selectedSave.id)"
+              <v-btn color="danger" variant="outlined" @click="deleteSave(selectedSave.id)"
                 >Delete</v-btn
               >
               <v-spacer />
