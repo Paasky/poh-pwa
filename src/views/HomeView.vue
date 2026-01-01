@@ -9,7 +9,14 @@ import UiButton from "@/components/Ui/UiButton.vue";
 import UiIcon from "@/components/Ui/UiIcon.vue";
 import { useSettingsStore } from "@/stores/settingsStore";
 import router from "@/router";
+import { hasDataBucket } from "@/Data/useDataBucket";
+import { DataBucket } from "@/Data/DataBucket";
+import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
+import EncyclopediaDialog from "@/components/Encyclopedia/EncyclopediaDialog.vue";
+import { useAppStore } from "@/stores/appStore";
 
+if (!hasDataBucket()) await DataBucket.init();
+useEncyclopediaStore().init();
 useSettingsStore().init();
 const latestSave = computed(() => saveManager.getLatest());
 
@@ -23,6 +30,8 @@ async function continueGame() {
     router.push({ path: "/game", query: { saveId: latest.id } });
   }
 }
+
+useAppStore().syncUiStateFromNav();
 </script>
 
 <template>
@@ -35,19 +44,22 @@ async function continueGame() {
         <!-- Continue Button -->
         <UiButton
           v-if="latestSave"
-          color="secondary"
+          type="secondary"
+          is-block
           size="x-large"
           width="100%"
           height="72"
           icon="play"
           @click="continueGame"
           text="Continue"
+          effect-is-under
           :effectText="`${latestSave.name} (${formatSaveDate(latestSave.time)})`"
         />
 
         <!-- New Game Button -->
         <UiButton
-          color="secondary"
+          type="secondary"
+          is-block
           size="x-large"
           width="100%"
           height="64"
@@ -58,7 +70,8 @@ async function continueGame() {
 
         <!-- Load Game Button -->
         <UiButton
-          color="secondary"
+          type="secondary"
+          is-block
           size="x-large"
           width="100%"
           height="64"
@@ -69,8 +82,8 @@ async function continueGame() {
 
         <!-- Settings Button -->
         <UiButton
-          color="surface"
-          variant="flat"
+          type="utility"
+          is-block
           size="x-large"
           width="100%"
           height="64"
@@ -78,15 +91,28 @@ async function continueGame() {
           @click="showSettings = true"
           text="Settings"
         />
+
+        <!-- Encyclopedia Button -->
+        <UiButton
+          type="utility"
+          is-block
+          size="x-large"
+          width="100%"
+          height="64"
+          icon="question"
+          @click="useEncyclopediaStore().open()"
+          text="Encyclopedia"
+        />
       </div>
 
       <div class="mt-12 text-caption opacity-50">Alpha Version • Made for the Love of History</div>
     </div>
 
     <!-- Dialogs -->
-    <TerraConfigDialog v-model="showNewGame" />
+    <EncyclopediaDialog />
     <SaveBrowserDialog v-model="showLoadGame" />
     <SettingsDialog v-model="showSettings" />
+    <TerraConfigDialog v-model="showNewGame" />
   </v-main>
 </template>
 

@@ -25,7 +25,7 @@ const context = useCurrentContext();
           class="name-input rounded px-1"
         >
           <template #append-inner>
-            <v-icon icon="fa-pen" size="x-small" class="opacity-50" />
+            <UiIcon icon="edit" size="xs" class="opacity-50" />
           </template>
         </v-text-field>
         <div class="d-flex ga-1">
@@ -49,11 +49,11 @@ const context = useCurrentContext();
 
     <div class="d-flex ga-2 mt-1">
       <UiButton
-        icon="fa-location-arrow"
+        icon="move"
         text="Move"
-        :color="context.actionMode.value === 'move' ? 'tertiary' : 'primary'"
+        :type="context.actionMode.value === 'move' ? 'warning' : 'primary'"
         @click="context.actionMode.value = context.actionMode.value === 'move' ? undefined : 'move'"
-        :disabled="unit.movement.moves.value <= 0"
+        :is-disabled="unit.movement.moves.value <= 0"
       />
       <!-- TODO: Add more actions here -->
     </div>

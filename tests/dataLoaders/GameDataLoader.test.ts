@@ -7,11 +7,11 @@ import {
   unitDesignRawData,
   unitRawData,
 } from "../_setup/dataHelpers";
-import { tileKey } from "../../src/helpers/mapTools";
-import { destroyDataBucket, useDataBucket } from "../../src/Data/useDataBucket";
-import { Tile } from "../../src/Common/Models/Tile";
-import { City } from "../../src/Common/Models/City";
-import { Unit } from "../../src/Common/Models/Unit";
+import { tileKey } from "@/helpers/mapTools";
+import { destroyDataBucket, useDataBucket } from "@/Data/useDataBucket";
+import { Tile } from "@/Common/Models/Tile";
+import { City } from "@/Common/Models/City";
+import { Unit } from "@/Common/Models/Unit";
 
 describe("GameDataLoader", () => {
   beforeEach(() => {

@@ -14,7 +14,7 @@ const hoveredTile = useCurrentContext().hover as unknown as Tile;
       v-if="hoveredTile && useCurrentContext().currentPlayer.knownTileKeys.has(hoveredTile.key)"
     >
       <div
-        v-if="hoveredTile.unitKeys.length"
+        v-if="hoveredTile.unitKeys.size"
         class="d-flex ga-1 pb-1 mb-1"
         style="border-bottom: 1px solid rgba(255, 255, 255, 0.25)"
       >

@@ -2,7 +2,6 @@
 
 import type { IMutation } from "@/Common/IMutation";
 import { DataBucket } from "@/Data/DataBucket";
-import type { CategoryObject, TypeObject } from "@/Common/Objects/TypeObject";
 import type { GameKey, GameObject, IRawGameObject } from "@/Common/Models/_GameModel";
 import type { IEvent } from "@/Common/IEvent";
 import { publishEvents } from "@/Common/EventBus";
@@ -44,7 +43,7 @@ export class DataStore {
       }
     });
 
-    const backup = this.dataBucket.toSaveData();
+    const backup = this.dataBucket.toSaveData("backup", "backup");
 
     try {
       remove.forEach(this.dataBucket.removeObject);
@@ -71,14 +70,6 @@ export class DataStore {
       this.dataBucket.restore(backup);
       throw error;
     }
-  }
-
-  getData(): { types: TypeObject[]; categories: CategoryObject[]; objects: GameObject[] } {
-    return {
-      types: this.dataBucket.getTypes(),
-      categories: this.dataBucket.getCats(),
-      objects: this.dataBucket.getObjects(),
-    };
   }
 
   private eventFromMutation(mutation: IMutation, object: GameObject, players: Set<Player>): IEvent {

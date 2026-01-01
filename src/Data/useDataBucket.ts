@@ -2,6 +2,10 @@ import { DataBucket } from "@/Data/DataBucket";
 
 let dataBucket: undefined | DataBucket = undefined;
 
+export function hasDataBucket(): boolean {
+  return !!dataBucket;
+}
+
 export function setDataBucket(bucket: DataBucket): DataBucket {
   return (dataBucket = bucket);
 }

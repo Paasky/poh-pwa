@@ -1,7 +1,7 @@
 import { hasMany, hasOne } from "@/Common/Models/_Relations";
 import { ConstructionQueue, TrainingQueue } from "@/Common/Objects/Queues";
 import { TypeStorage } from "@/Common/Objects/TypeStorage";
-import { Yield, Yields } from "@/Common/Objects/Yields";
+import { cityYieldTypeKeys, Yield, Yields } from "@/Common/Objects/Yields";
 import { GameKey, GameObjAttr, GameObject, generateKey } from "@/Common/Models/_GameModel";
 import { Citizen } from "@/Common/Models/Citizen";
 import type { Player } from "@/Common/Models/Player";
@@ -85,32 +85,9 @@ export class City extends GameObject {
   /*
    * Computed
    */
-  get citizenYields(): Yields {
-    const inherit = this.concept.inheritYieldTypes!;
-    return new Yields(this.citizens.flatMap((c) => c.yields.only(inherit).all()));
-  }
 
-  get constructableTypes(): TypeObject[] {
-    return Array.from(useDataBucket().getClassTypes("buildingType"));
-  }
-
-  get ownedTypes(): TypeObject[] {
-    const types = new Set<TypeObject>();
-    for (const citizen of this.citizens) {
-      if (citizen.tile.naturalWonder) {
-        types.add(citizen.tile.naturalWonder);
-      }
-      if (citizen.work?.isActive) {
-        if (
-          citizen.work.type.class === "buildingType" ||
-          citizen.work.type.class === "nationalWonderType" ||
-          citizen.work.type.class === "worldWonderType"
-        ) {
-          types.add(citizen.work.type);
-        }
-      }
-    }
-    return Array.from(types);
+  get constructableTypes(): Set<TypeObject> {
+    return useDataBucket().getClassTypes("buildingType");
   }
 
   get religions(): Map<GameKey, { count: number; religion: Religion }> {
@@ -149,25 +126,13 @@ export class City extends GameObject {
     );
   }
 
-  get tileYields(): Yields {
-    return this.tile.yields.only(this.concept.inheritYieldTypes!, [this.concept]);
-  }
-
   get trainableDesigns(): UnitDesign[] {
     return this.player.designs;
   }
 
-  get types(): TypeObject[] {
-    return [this.concept, useDataBucket().getType("conceptType:urban")];
-  }
-
-  get yields(): Yields {
-    return new Yields([...this.tileYields.all(), ...this.citizenYields.all()]).flatten();
-  }
-
   // Total population derived from citizen count
   get pop(): number {
-    return 25 + Math.round(Math.pow(this.citizens.length, 3.5));
+    return 25 + Math.round(Math.pow(this.citizens.size, 3.5));
   }
 
   get foodToGrow(): number {
@@ -192,7 +157,7 @@ export class City extends GameObject {
           this.playerKey,
           this.tileKey,
           this.player.religionKey,
-          getRandom(policies.length ? policies : [null]),
+          getRandom(policies.size ? policies : [null]),
         ),
       );
       this.storage.take("yieldType:food", this.foodToGrow);
@@ -202,8 +167,8 @@ export class City extends GameObject {
       type: "yieldType:production",
       amount: this.storage.takeAll("yieldType:production") / 2,
       method: "lump",
-      for: [],
-      vs: [],
+      for: new Set(),
+      vs: new Set(),
     } as Yield;
 
     const constructed = this.constructionQueue.startTurn(halfProd, this.storage, this.yields);
@@ -221,5 +186,116 @@ export class City extends GameObject {
 
   warmUp(): void {
     // todo
+  }
+
+  // Types I give to the Player
+  get typesForPlayer(): Set<TypeObject> {
+    return this.computed(
+      "_typesForCity",
+      () => {
+        const types = new Set<TypeObject>([this.concept]);
+        const processedTileKeys = new Set<GameKey>();
+        this.citizens.forEach((citizen) => {
+          if (processedTileKeys.has(citizen.tileKey)) return;
+          citizen.typesForCity.forEach((type) => types.add(type));
+          processedTileKeys.add(citizen.tileKey);
+        });
+        return types;
+      },
+      ["citizenKeys"],
+    );
+  }
+
+  // Yield Mods for all my Citizens/Constructions/Tiles/Trade Routes (they use these to calc their Yields)
+  get yieldMods(): Yields {
+    return this.computed(
+      "_yieldMods",
+      () => {
+        const yieldMods = new Yields();
+
+        // Helper to output the yield mods we want
+        const mods = (yields: Yields): Yield[] => {
+          const yieldList: Yield[] = [];
+          yields.all().forEach((y) => {
+            // Not for or vs anyone -> not a yield mod
+            if (y.for.size + y.vs.size === 0) return;
+
+            yieldList.push(y);
+          });
+          return yieldList;
+        };
+
+        // From Citizens
+        this.citizens.forEach((citizen) =>
+          citizen.typesForCity.forEach((type) => yieldMods.add(...mods(type.yields))),
+        );
+
+        // From Player
+        yieldMods.add(...mods(this.player.yieldMods));
+
+        return yieldMods;
+      },
+      ["citizenKeys", "playerKey"],
+    );
+  }
+
+  // My Yield output
+  get yields(): Yields {
+    return this.computed(
+      "_yields",
+      () => {
+        const forMe = new Set<TypeObject>([
+          this.concept,
+          useDataBucket().getType("specialType:allCities"),
+        ]);
+
+        // Look for railroad/motorway/river tiles
+        let hasRailroad = false;
+        let hasRiver = false;
+        if (
+          this.tile.route?.key === "routeType:railroad" ||
+          this.tile.route?.key === "routeType:motorway"
+        ) {
+          forMe.add(useDataBucket().getType("specialType:allCitiesWithRailroad"));
+          hasRailroad = true;
+        }
+        if (this.tile.riverKey) {
+          forMe.add(useDataBucket().getType("specialType:allCitiesWithRiver"));
+          hasRiver = true;
+        }
+
+        if (!hasRailroad || !hasRiver) {
+          this.tile.neighborTiles.forEach((tile) => {
+            if (hasRailroad && hasRiver) return;
+
+            if (
+              !hasRailroad &&
+              (tile.route?.key === "routeType:railroad" || tile.route?.key === "routeType:motorway")
+            ) {
+              forMe.add(useDataBucket().getType("specialType:allCitiesWithRailroad"));
+              hasRailroad = true;
+            }
+
+            if (!hasRiver && tile.riverKey) {
+              forMe.add(useDataBucket().getType("specialType:allCitiesWithRiver"));
+              hasRiver = true;
+            }
+          });
+        }
+
+        const yieldsForMe = (yields: Yields): Yield[] => {
+          return yields.only(cityYieldTypeKeys, forMe).all();
+        };
+
+        // City Yields are All Citizens + Player Mods
+        const yields = new Yields();
+        this.citizens.forEach((citizen) => yields.add(...yieldsForMe(citizen.yields)));
+        yields.add(...yieldsForMe(this.player.yieldMods));
+
+        // Flatten Yields to apply modifiers
+        return yields.flatten();
+      },
+      ["citizenKeys", "playerKey"],
+    );
   }
 }

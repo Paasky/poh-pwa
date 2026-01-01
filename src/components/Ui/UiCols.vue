@@ -1,5 +1,5 @@
 <script setup lang="ts">
-withDefaults(
+const props = withDefaults(
   defineProps<{
     cols?: { left: number; right: number };
   }>(),
@@ -7,6 +7,10 @@ withDefaults(
     cols: () => ({ left: 6, right: 6 }),
   },
 );
+
+if (props.cols.left + props.cols.right !== 12) {
+  console.warn(`UiCols: left (${props.cols.left}) + right (${props.cols.right}) must equal 12.`);
+}
 </script>
 
 <template>

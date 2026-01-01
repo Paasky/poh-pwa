@@ -20,10 +20,17 @@ const props = withDefaults(
 const tickLabels = computed(() => {
   if (props.ticks !== "labels") return undefined;
   const labels: Record<number, string> = {};
-  const everyNth = Math.ceil((props.max - props.min) / props.step / 10);
 
-  for (let i = props.min; i <= props.max; i += props.step) {
-    labels[i] = i % everyNth === 0 ? i.toString() : "";
+  const totalSteps = Math.round((props.max - props.min) / props.step);
+  const everyNth = Math.ceil(totalSteps / 10);
+
+  for (let i = 0; i <= totalSteps; i++) {
+    const value = Number((props.min + i * props.step).toFixed(10)); // Fix precision
+    if (i % everyNth === 0 || i === totalSteps) {
+      labels[value] = value.toString();
+    } else {
+      labels[value] = "";
+    }
   }
   return labels;
 });

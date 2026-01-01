@@ -3,8 +3,13 @@ import { TypeObject } from "@/Common/Objects/TypeObject";
 import { ObjType } from "@/Common/Objects/Common";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { GameClass, GameKey, IRawGameObject, parseKey } from "@/Common/Models/_GameTypes";
+import { computedProp } from "@/Common/Models/_Relations";
 
 export * from "@/Common/Models/_GameTypes";
+
+export interface ObjectWithProps {
+  updateWatchers: ((changes: Partial<ObjectWithProps>) => void)[];
+}
 
 export type GameObjAttr = {
   isTypeObj?: boolean;
@@ -18,7 +23,7 @@ export type GameObjAttr = {
   };
 };
 
-export class GameObject {
+export class GameObject implements ObjectWithProps {
   // noinspection JSUnusedGlobalSymbols
   objType: ObjType = "GameObject";
   key: GameKey;
@@ -26,6 +31,7 @@ export class GameObject {
   concept: TypeObject;
   id: string;
   static attrsConf: GameObjAttr[] = [];
+  updateWatchers = [] as ((changes: Partial<ObjectWithProps>) => void)[];
 
   constructor(key: GameKey) {
     this.key = key;
@@ -99,5 +105,13 @@ export class GameObject {
     }
 
     return out;
+  }
+
+  protected computed<ValueT>(
+    privatePropName: string,
+    getter: () => ValueT,
+    watchProps?: (keyof this)[],
+  ): ValueT {
+    return computedProp(this, privatePropName, getter, watchProps);
   }
 }

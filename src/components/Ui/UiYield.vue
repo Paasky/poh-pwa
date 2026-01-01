@@ -3,7 +3,7 @@ import { computed } from "vue";
 import { Yield } from "@/Common/Objects/Yields";
 import { useDataBucket } from "@/Data/useDataBucket";
 import UiObjectChips from "@/components/Ui/UiObjectChips.vue";
-import getIcon from "@/types/icons";
+import UiIcon from "@/components/Ui/UiIcon.vue";
 
 export type yieldProps = {
   opts?: {
@@ -16,7 +16,6 @@ export type yieldProps = {
 
 const props = defineProps<{ y: Yield } & yieldProps>();
 const type = computed(() => useDataBucket().getType(props.y.type));
-const icon = computed(() => getIcon(type.value.key));
 
 function amount(y: Yield): string {
   // 0 is always neutral
@@ -120,14 +119,10 @@ const progressBg = computed(() => {
       </div>
       <v-tooltip :text="type.name" content-class="text-grey bg-grey-darken-4" location="bottom">
         <template #activator="{ props: tip }">
-          <v-icon
-            v-bind="tip"
-            :icon="icon.icon.iconName"
-            :color="icon.color"
-            size="x-small"
-            class="mx-1"
-          />
-          <div v-if="opts?.showName">{{ type.name }}</div>
+          <div v-bind="tip" class="d-flex align-center">
+            <UiIcon :icon="type.key" size="xs" class="mx-1" />
+            <div v-if="opts?.showName">{{ type.name }}</div>
+          </div>
         </template>
       </v-tooltip>
     </div>
@@ -145,7 +140,7 @@ const progressBg = computed(() => {
         <v-tooltip :text="type.name" content-class="text-grey bg-grey-darken-4" location="bottom">
           <template #activator="{ props: tip }">
             <div class="d-flex align-center ga-1 px-2 h-100" v-bind="tip">
-              <v-icon :icon="icon.icon.iconName" :color="icon.color" size="x-small" />
+              <UiIcon :icon="type.key" size="xs" />
               <span class="text-caption font-weight-bold" style="text-shadow: 0 0 2px black">
                 {{ amount(y) }} / {{ y.max }}
               </span>

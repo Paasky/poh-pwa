@@ -2,8 +2,8 @@
 import { computed } from "vue";
 import UiButton from "@/components/Ui/UiButton.vue";
 
+const modelValue = defineModel<string | number | boolean | null>({ required: true });
 const props = defineProps<{
-  modelValue: string | number | boolean | null;
   items: string[] | { title: string; value: string | number | boolean | null }[];
   label?: string;
 }>();
@@ -19,13 +19,15 @@ const normalizedItems = computed(() => {
 </script>
 
 <template>
-  <v-item-group :model-value="modelValue" mandatory class="ui-radio-buttons">
+  <v-item-group v-model="modelValue" mandatory class="ui-radio-buttons">
     <v-item v-for="item in normalizedItems" :key="String(item.value)" :value="item.value">
       <template #default="{ isSelected, toggle }">
         <UiButton
-          :color="isSelected ? 'primary' : 'secondary'"
+          :type="isSelected ? 'primary' : 'secondary'"
           class="flex-grow-1"
           :text="item.title"
+          is-block
+          size="default"
           @click="toggle"
         />
       </template>

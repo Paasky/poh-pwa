@@ -5,9 +5,9 @@ import type { TypeObject } from "@/Common/Objects/TypeObject";
 // noinspection JSUnusedGlobalSymbols
 withDefaults(
   defineProps<{
-    types: TypeObject[];
-    selected?: TypeObject[]; // items currently selected
-    selectable?: TypeObject[]; // items that can be selected
+    types: Set<TypeObject>;
+    selected?: Set<TypeObject>; // items currently selected
+    selectable?: Set<TypeObject>; // items that can be selected
     selectPos?: "right" | "bottom" | "hidden";
     withSpacer?: boolean;
     showOrBetween?: boolean; // show small "or" label between options
@@ -45,8 +45,8 @@ withDefaults(
         </div>
         <UiObjectCard
           :type="type"
-          :is-selected="selected.includes(type)"
-          :can-select="selectable.includes(type)"
+          :is-selected="selected.has(type)"
+          :can-select="selectable.has(type)"
           :with-spacer="withSpacer"
           :select-pos="selectPos"
           :style="

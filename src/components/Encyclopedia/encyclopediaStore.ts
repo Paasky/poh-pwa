@@ -86,7 +86,7 @@ export const useEncyclopediaStore = defineStore("encyclopedia", {
 
     // Toggle a menu section
     toggle(itemKey: string) {
-      if (this.openSections.includes(itemKey)) {
+      if (this.openSections.has(itemKey)) {
         this.openSections = this.openSections.filter((s) => s !== itemKey);
         return;
       }
@@ -103,12 +103,16 @@ export const useEncyclopediaStore = defineStore("encyclopedia", {
 
     // Wrapper for pushUiState -> _openFromUiState to keep state & router in-sync
     open(itemKey: string = "") {
-      this.pushUiState!(itemKey);
+      if (!this.pushUiState)
+        throw new Error("router has not injected pushUiState into encyclopedia");
+      this.pushUiState(itemKey);
     },
 
     // Wrapper for pushUiState -> _closeFromUiState to keep state & router in-sync
     close() {
-      this.pushUiState!(undefined);
+      if (!this.pushUiState)
+        throw new Error("router has not injected pushUiState into encyclopedia");
+      this.pushUiState(undefined);
     },
 
     // Search handling
@@ -141,7 +145,7 @@ export const useEncyclopediaStore = defineStore("encyclopedia", {
         // Open all the parent sections of the item and scroll to the menu entry
         const pathKeys = itemFamilyTree(itemKey, Object.values(this.data));
         for (const pathKey of pathKeys) {
-          if (!this.openSections.includes(pathKey)) {
+          if (!this.openSections.has(pathKey)) {
             this.openSections.push(pathKey);
           }
         }
@@ -172,7 +176,7 @@ export const useEncyclopediaStore = defineStore("encyclopedia", {
     },
   },
   getters: {
-    searchResults(state): null | TypeObject[] {
+    searchResults(state): null | Set<TypeObject> {
       if (!state.search || state.search.length < 3) return null;
 
       // First: add direct name matches

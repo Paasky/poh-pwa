@@ -44,28 +44,19 @@ onBeforeUnmount(() => {
     </div>
     <UiButton
       icon="question"
-      color="secondary"
-      rounded="0"
-      class="rounded-b-lg"
+      type="secondary"
+      rounded="b-lg"
       tooltip="Encyclopedia"
       @click="useEncyclopediaStore().open()"
     />
     <UiButton
       icon="fullscreenAlt"
-      color="secondary"
-      rounded="0"
-      class="rounded-b-lg"
+      type="secondary"
+      rounded="b-lg"
       tooltip="Toggle Fullscreen"
       @click="toggleFullscreen()"
     />
-    <UiButton
-      id="menu-btn"
-      icon="menu"
-      color="secondary"
-      rounded="0"
-      class="rounded-b-lg"
-      tooltip="Menu"
-    />
+    <UiButton id="menu-btn" icon="menu" type="secondary" rounded="b-lg" tooltip="Menu" />
     <v-menu activator="#menu-btn" transition="slide-y-transition">
       <v-list density="comfortable">
         <v-list-item value="save" title="Save" />
@@ -88,8 +79,8 @@ onBeforeUnmount(() => {
           Unsaved progress may be lost.
         </v-card-text>
         <v-card-actions class="justify-end ga-2">
-          <v-btn variant="text" @click="showQuitConfirm = false">Cancel</v-btn>
-          <v-btn color="red" variant="flat" @click="$emit('quit')">Quit</v-btn>
+          <UiButton type="text" @click="showQuitConfirm = false" text="Cancel" />
+          <UiButton type="danger" @click="$emit('quit')" text="Quit" />
         </v-card-actions>
       </v-card>
     </v-dialog>

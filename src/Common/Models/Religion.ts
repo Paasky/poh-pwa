@@ -7,6 +7,8 @@ import type { Player } from "@/Common/Models/Player";
 import type { City } from "@/Common/Models/City";
 import { useEventStore } from "@/stores/eventStore";
 import { ReligionHasEvolved, ReligionHasNewType } from "@/events/Religion";
+import { Yields } from "@/Common/Objects/Yields";
+import { has } from "@/helpers/collectionTools";
 
 export type ReligionStatus = "myths" | "gods" | "dogmas";
 
@@ -17,9 +19,9 @@ export class Religion extends GameObject {
     public cityKey: GameKey,
     public foundedTurn: number,
     public status: ReligionStatus = "myths",
-    public myths: TypeObject[] = [],
-    public gods: TypeObject[] = [],
-    public dogmas: TypeObject[] = [],
+    public myths: Set<TypeObject> = new Set(),
+    public gods: Set<TypeObject> = new Set(),
+    public dogmas: Set<TypeObject> = new Set(),
     public knownByPlayerKeys = new Set<GameKey>(),
   ) {
     super(key);
@@ -74,18 +76,15 @@ export class Religion extends GameObject {
 
     switch (this.status) {
       case "myths":
-        return this.myths.length > 3;
+        return this.myths.size > 3;
       case "gods":
-        return this.gods.length > 6;
+        return this.gods.size > 6;
       default:
         return false;
     }
   }
 
   get canSelect(): boolean {
-    // Prevent crashing when bucket is not fully loaded yet
-    if (!useDataBucket().ready) return false;
-
     const holyCityOwner = this.city.player;
     // If the holy city owner doesn't follow the religion: can never select
     if (holyCityOwner.religionKey !== this.key) {
@@ -96,65 +95,61 @@ export class Religion extends GameObject {
   }
 
   get faithToGrow(): number {
-    return Math.round(((this.dogmas.length + this.gods.length + this.myths.length) * 7) ** 1.2);
+    return Math.round(((this.dogmas.size + this.gods.size + this.myths.size) * 7) ** 1.2);
   }
 
-  get selectableDogmas(): TypeObject[] {
-    if (this.status !== "dogmas") return [];
+  get selectableDogmas(): Set<TypeObject> {
+    if (this.status !== "dogmas") return new Set();
 
-    const selectable: TypeObject[] = [];
+    const selectable: Set<TypeObject> = new Set();
     for (const dogma of useDataBucket().getClassTypes("dogmaType")) {
       // Category already chosen
-      if (this.dogmas.some((m) => m.category === dogma.category)) {
+      if (has(this.dogmas, (dogma) => dogma.category === dogma.category)) {
         continue;
       }
 
       if (dogma.requires.isEmpty || dogma.requires.isSatisfied(this.dogmas)) {
-        selectable.push(dogma);
+        selectable.add(dogma);
       }
     }
 
     return selectable;
   }
 
-  get selectableGods(): TypeObject[] {
-    if (this.status !== "gods") return [];
+  get selectableGods(): Set<TypeObject> {
+    if (this.status !== "gods") return new Set();
 
-    const selectable: TypeObject[] = [];
+    const selectable: Set<TypeObject> = new Set();
     for (const god of useDataBucket().getClassTypes("godType")) {
       // Category already chosen
-      if (this.gods.some((m) => m.category === god.category)) {
+      if (has(this.gods, (god) => god.category === god.category)) {
         continue;
       }
 
       if (god.requires.isEmpty || god.requires.isSatisfied(this.gods)) {
-        selectable.push(god);
+        selectable.add(god);
       }
     }
 
     return selectable;
   }
 
-  get selectableMyths(): TypeObject[] {
-    if (this.status !== "myths") return [];
+  get selectableMyths(): Set<TypeObject> {
+    if (this.status !== "myths") return new Set();
 
-    const selectable: TypeObject[] = [];
+    const selectable: Set<TypeObject> = new Set();
     for (const myth of useDataBucket().getClassTypes("mythType")) {
       // Category already chosen
-      if (this.myths.some((m) => m.category === myth.category)) {
+      if (has(this.myths, (myth) => myth.category === myth.category)) {
         continue;
       }
 
       if (myth.requires.isEmpty || myth.requires.isSatisfied(this.myths)) {
-        selectable.push(myth);
+        selectable.add(myth);
       }
     }
 
     return selectable;
-  }
-
-  get types(): TypeObject[] {
-    return [this.concept, ...this.myths, ...this.gods, ...this.dogmas];
   }
 
   /*
@@ -183,37 +178,60 @@ export class Religion extends GameObject {
   }
 
   selectMyth(myth: TypeObject): void {
-    if (this.myths.includes(myth)) {
+    if (this.myths.has(myth)) {
       throw new Error(`Myth ${myth.name} already selected`);
     }
-    this.myths.push(myth);
+    this.myths.add(myth);
 
     useEventStore().turnEvents.push(new ReligionHasNewType(this, myth));
   }
 
   selectGod(god: TypeObject): void {
-    if (this.gods.includes(god)) {
+    if (this.gods.has(god)) {
       throw new Error(`God ${god.name} already selected`);
     }
-    this.gods.push(god);
+    this.gods.add(god);
 
     useEventStore().turnEvents.push(new ReligionHasNewType(this, god));
   }
 
   selectDogma(dogma: TypeObject, keepGod?: TypeObject): void {
-    if (this.dogmas.includes(dogma)) {
+    if (this.dogmas.has(dogma)) {
       throw new Error(`Dogma ${dogma.name} already selected`);
     }
 
     if (dogma.specials.includes("specialType:canHaveOnlyOneGod")) {
-      if (!keepGod || !this.gods.includes(keepGod)) {
+      if (!keepGod || !this.gods.has(keepGod)) {
         throw new Error(`Can only keep one selected God with ${dogma.name}`);
       }
-      this.gods = [keepGod];
+      this.gods = new Set([keepGod]);
     }
 
-    this.dogmas.push(dogma);
+    this.dogmas.add(dogma);
 
     useEventStore().turnEvents.push(new ReligionHasNewType(this, dogma));
+  }
+
+  ////// v0.1
+
+  get myTypes(): Set<TypeObject> {
+    return this.computed(
+      "_myTypes",
+      () => new Set([...this.myths, ...this.gods, ...this.dogmas, this.concept]),
+      ["myths", "gods", "dogmas"],
+    );
+  }
+
+  // My Yield output
+  get yields(): Yields {
+    return this.computed(
+      "_yields",
+      () => {
+        const yields = new Yields();
+        this.myTypes.forEach((type) => yields.add(...type.yields.all()));
+        return yields;
+      },
+      ["myths", "gods", "dogmas"],
+    );
   }
 }

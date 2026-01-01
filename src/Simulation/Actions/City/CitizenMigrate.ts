@@ -82,8 +82,7 @@ export class CitizenMigrate implements ISimAction {
       );
       // Note: if citizen has no religion, will get points from atheist players
       if (tile.city.player.religionKey === citizen.religionKey) score += 10;
-      if (citizen.policy && tile.city.player.government.policies.includes(citizen.policy))
-        score += 10;
+      if (citizen.policy && tile.city.player.government.policies.has(citizen.policy)) score += 10;
       if (tile.city.player.cultureKey === citizen.cultureKey) score -= 10;
 
       cities.push({ city: tile.city, score });

@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import type { IconKey } from "@/types/icons";
 
 export type TabId =
   | "economy"
@@ -14,7 +15,7 @@ export type TabId =
 type DetailItem = {
   id: TabId;
   label: string;
-  iconClass: string; // FontAwesome class
+  icon: IconKey;
   iconColor: string; // theme color key (matches vuetify theme colors)
   text: string;
   effect: { text: string; color?: string };
@@ -25,7 +26,7 @@ export const playerDetailConfig = [
   {
     id: "economy",
     label: "Economy",
-    iconClass: "fa-coins",
+    icon: "coins",
     iconColor: "gold",
     text: "12",
     effect: { text: "-3", color: "red" },
@@ -34,7 +35,7 @@ export const playerDetailConfig = [
   {
     id: "research",
     label: "Research",
-    iconClass: "fa-flask",
+    icon: "tech",
     iconColor: "lightBlue",
     text: "234 (5)",
     effect: { text: "+123" },
@@ -43,7 +44,7 @@ export const playerDetailConfig = [
   {
     id: "culture",
     label: "Culture",
-    iconClass: "fa-masks-theater",
+    icon: "masksTheater",
     iconColor: "lightPurple",
     text: "234 (5)",
     effect: { text: "+123" },
@@ -52,7 +53,7 @@ export const playerDetailConfig = [
   {
     id: "religion",
     label: "Religion",
-    iconClass: "fa-hands-praying",
+    icon: "handsPraying",
     iconColor: "darkPurple",
     text: "234 (5)",
     effect: { text: "+123" },
@@ -61,7 +62,7 @@ export const playerDetailConfig = [
   {
     id: "diplomacy",
     label: "Diplomacy",
-    iconClass: "fa-scroll",
+    icon: "scroll",
     iconColor: "lightGray",
     text: "3",
     effect: { text: "5/8", color: "green" },
@@ -70,7 +71,7 @@ export const playerDetailConfig = [
   {
     id: "trade",
     label: "Trade",
-    iconClass: "fa-route",
+    icon: "route",
     iconColor: "orange",
     text: "12",
     effect: { text: "(8)", color: "green" },
@@ -79,7 +80,7 @@ export const playerDetailConfig = [
   {
     id: "units",
     label: "Units",
-    iconClass: "fa-shield",
+    icon: "shield",
     iconColor: "gray",
     text: "4",
     effect: { text: "(6)", color: "green" },
@@ -88,7 +89,7 @@ export const playerDetailConfig = [
   {
     id: "cities",
     label: "Cities",
-    iconClass: "fa-city",
+    icon: "cityAlt",
     iconColor: "white",
     text: "6",
     effect: { text: "8%" },
@@ -97,7 +98,7 @@ export const playerDetailConfig = [
   {
     id: "government",
     label: "Government",
-    iconClass: "fa-landmark",
+    icon: "landmark",
     iconColor: "white",
     text: "Stable",
     effect: { text: "12%" },

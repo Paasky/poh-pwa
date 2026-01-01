@@ -33,6 +33,7 @@ If a request or change conflicts with this document, **stop immediately and push
 4. **Readable Code**
 
     * No cryptic 1–2 letter variables
+        * Exceptions: y for yield (reserved word); i in for-loop index
     * Be explicit and descriptive
     * Use proper English
 

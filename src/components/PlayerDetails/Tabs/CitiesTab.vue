@@ -53,7 +53,7 @@ const cityColumns = store.columns as unknown as TableColumn<City>[];
               content-class="text-grey bg-grey-darken-4"
             >
               <template #activator="{ props }">
-                <v-icon v-bind="props" icon="fa-location-dot" color="white" size="small" />
+                <UiIcon v-bind="props" icon="locate" color="white" size="sm" />
               </template>
             </v-tooltip>
             <!-- Name -->
@@ -66,7 +66,7 @@ const cityColumns = store.columns as unknown as TableColumn<City>[];
               content-class="text-grey bg-grey-darken-4"
             >
               <template #activator="{ props }">
-                <v-icon v-bind="props" icon="fa-star" color="gold" size="small" />
+                <UiIcon v-bind="props" icon="star" color="gold" size="sm" />
               </template>
             </v-tooltip>
           </span>
@@ -126,7 +126,7 @@ const cityColumns = store.columns as unknown as TableColumn<City>[];
             >
               <template #activator="{ props }">
                 <span class="d-inline-flex align-center ga-1" v-bind="props">
-                  <v-icon icon="fa-users" color="white" size="small" />
+                  <UiIcon icon="users" color="white" size="sm" />
                   {{ (item as City).citizens.length }}
                 </span>
               </template>
@@ -140,11 +140,11 @@ const cityColumns = store.columns as unknown as TableColumn<City>[];
                 content-class="text-grey bg-grey-darken-4"
               >
                 <template #activator="{ props }">
-                  <v-icon
+                  <UiIcon
                     v-bind="props"
-                    icon="fa-star"
+                    icon="star"
                     color="lightPurple"
-                    size="small"
+                    size="sm"
                     @click.stop="detailsStore.open('religion')"
                   />
                 </template>
@@ -159,11 +159,11 @@ const cityColumns = store.columns as unknown as TableColumn<City>[];
               content-class="text-grey bg-grey-darken-4"
             >
               <template #activator="{ props }">
-                <v-icon
+                <UiIcon
                   v-bind="props"
-                  icon="fa-theater-masks"
+                  icon="masksTheater"
                   color="disabled"
-                  size="small"
+                  size="sm"
                   @click.stop="detailsStore.open('diplomacy')"
                 />
               </template>
@@ -177,7 +177,7 @@ const cityColumns = store.columns as unknown as TableColumn<City>[];
               content-class="text-grey bg-grey-darken-4"
             >
               <template #activator="{ props }">
-                <v-icon v-bind="props" icon="fa-bullseye" color="red" size="small" class="pulse" />
+                <UiIcon v-bind="props" icon="bullseye" color="red" size="sm" class="pulse" />
               </template>
             </v-tooltip>
           </div>
@@ -194,7 +194,7 @@ const cityColumns = store.columns as unknown as TableColumn<City>[];
               content-class="text-grey bg-grey-darken-4"
             >
               <template #activator="{ props }">
-                <v-icon v-bind="props" icon="fa-location-dot" color="white" size="small" />
+                <UiIcon v-bind="props" icon="locate" color="white" size="sm" />
               </template>
             </v-tooltip>
 
@@ -208,7 +208,7 @@ const cityColumns = store.columns as unknown as TableColumn<City>[];
               content-class="text-grey bg-grey-darken-4"
             >
               <template #activator="{ props }">
-                <v-icon v-bind="props" icon="fa-pen" color="white" size="x-small" class="ml-1" />
+                <UiIcon v-bind="props" icon="edit" color="white" size="xs" class="ml-1" />
               </template>
             </v-tooltip>
 
@@ -233,14 +233,13 @@ const cityColumns = store.columns as unknown as TableColumn<City>[];
         </v-row>
         <v-row class="ga-2">
           <v-col aria-colspan="2">
-            <v-select
+            <UiSelect
               placeholder="Converting to Gold and Happiness"
               :items="current.constructableTypes"
               item-title="name"
               return-object
               :model-value="(current.constructionQueue.queue[0]?.item as any) ?? null"
-              density="compact"
-              hide-details
+              label="Construction"
             />
           </v-col>
           <v-col aria-colspan="1">
@@ -249,14 +248,13 @@ const cityColumns = store.columns as unknown as TableColumn<City>[];
             </div>
           </v-col>
           <v-col aria-colspan="2">
-            <v-select
+            <UiSelect
               placeholder="Converting to Food and Order"
               :items="current.trainableDesigns"
               item-title="name"
               return-object
               :model-value="(current.trainingQueue.queue[0]?.item as any) ?? null"
-              density="compact"
-              hide-details
+              label="Training"
             />
           </v-col>
           <v-col aria-colspan="1">

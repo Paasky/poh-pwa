@@ -54,13 +54,12 @@ export class GameLevel {
         );
 
         // Oasis and Atoll are handled in postProcessPass1()
-        const setFeatureLater =
-          regTile.feature.value?.id === "oasis" || regTile.feature.value?.id == "atoll";
+        const setFeatureLater = regTile.feature?.id === "oasis" || regTile.feature?.id == "atoll";
         if (!setFeatureLater) {
           // Allow a 25% chance for feature swap for extra variety
           tile.feature =
             Math.random() < 0.25
-              ? regTile.feature.value
+              ? regTile.feature
                 ? // Had a feature -> swap to empty
                   null
                 : // Didn't have a feature -> add one
@@ -122,13 +121,13 @@ export class GameLevel {
         }
 
         // Region is an oasis: add to a random game tile in the 3x3 group
-        if (regTile.feature.value?.key === "featureType:oasis") {
+        if (regTile.feature?.key === "featureType:oasis") {
           getRandom(neighbors).feature = regTile.feature;
           return;
         }
 
         // Region is an atoll: add to a random game tile in the 3x3 group
-        if (regTile.feature.value?.key === "featureType:atoll") {
+        if (regTile.feature?.key === "featureType:atoll") {
           if (Math.random() < 0.5) {
             // Center flat island
             tile.domain = this.gen.land;
@@ -189,7 +188,7 @@ export class GameLevel {
     //    - Non-salt water becomes Lake (not connected to any Ocean)
     //    - Salt water next to land becomes Coast
     this.gen.forEachGameTile((tile) => {
-      if (tile.domain.id !== "water" && tile.feature.value?.id !== "oasis") return;
+      if (tile.domain.id !== "water" && tile.feature?.id !== "oasis") return;
 
       // Include quick water elevation sanity check
       if (tile.elevation.id !== this.gen.flat.id) tile.elevation = this.gen.flat;
@@ -273,7 +272,7 @@ export class GameLevel {
   private fixInvalidTiles(): GameLevel {
     for (const tile of Object.values(this.gen.gameTiles)) {
       // Fix invalid instancers
-      if (tile.feature.value) {
+      if (tile.feature) {
         if (tile.elevation.id === "mountain" || tile.elevation.id === "snowMountain") {
           // Mountains cannot have instancers
           tile.feature = null;

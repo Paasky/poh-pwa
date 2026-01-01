@@ -1,6 +1,6 @@
 import { canHaveOne, hasMany, hasOne } from "@/Common/Models/_Relations";
 import { TypeObject } from "@/Common/Objects/TypeObject";
-import { Yield, Yields } from "@/Common/Objects/Yields";
+import { constructionYieldTypeKeys, Yield, Yields } from "@/Common/Objects/Yields";
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import type { Citizen } from "@/Common/Models/Citizen";
 import type { Tile } from "@/Common/Models/Tile";
@@ -14,7 +14,6 @@ import {
   ConstructionLost,
 } from "@/events/Construction";
 import { Player } from "@/Common/Models/Player";
-import { useDataBucket } from "@/Data/useDataBucket";
 
 export class Construction extends GameObject {
   constructor(
@@ -72,43 +71,66 @@ export class Construction extends GameObject {
     return this.progress === 100 && this.health > 0;
   }
 
-  get types(): TypeObject[] {
-    const types = [this.concept, this.type];
-    if (
-      this.type.class === "buildingType" ||
-      this.type.class === "nationalWonderType" ||
-      this.type.class === "worldWonderType"
-    ) {
-      types.push(useDataBucket().getType("conceptType:urban"));
-    }
-    return types;
+  get types(): Set<TypeObject> {
+    return this.computed("_types", () => {
+      const types = new Set<TypeObject>([this.concept]);
+      if (this.progress < 100) return types;
+
+      types.add(this.type);
+
+      if (
+        this.type.class === "buildingType" ||
+        this.type.class === "nationalWonderType" ||
+        this.type.class === "worldWonderType"
+      ) {
+        types.add(useDataBucket().getType("conceptType:urban"));
+      }
+
+      return types;
+    });
   }
 
+  // My Yield output
   get yields(): Yields {
-    // Is a Wonder or full health -> no yield changes
-    if (
-      this.type.class === "nationalWonderType" ||
-      this.type.class === "worldWonderType" ||
-      this.health >= 100
-    ) {
-      return this.type.yields;
-    }
+    return this.computed(
+      "_yields",
+      () => {
+        // Must be completed and be alive to grant yields
+        if (this.progress < 100 || this.health <= 0) return new Yields();
+        const yieldsForMe = (yields: Yields): Yield[] => {
+          return yields.only(constructionYieldTypeKeys, this.types).all();
+        };
 
-    const yields = [] as Yield[];
-    for (const y of this.type.yields.all()) {
-      // Include the original yield
-      yields.push(y);
+        // Construction Yields are from my Types + City Mods
+        const yields = new Yields();
+        this.types.forEach((type) => yields.add(...yieldsForMe(type.yields)));
+        if (this.city) yields.add(...yieldsForMe(this.city.yieldMods));
 
-      // If it's a lump yield, add a -health% modifier
-      if (y.method === "lump") {
-        yields.push({
-          ...y,
-          method: "percent",
-          amount: this.health - 100,
-        });
-      }
-    }
-    return new Yields(yields);
+        // Flatten Yields to apply modifiers
+        const flatYields = yields.flatten();
+
+        // Full health -> no yield changes
+        if (this.health >= 100) return flatYields;
+
+        // Construction is damaged -> reduce Yields
+        const damageYields = [] as Yield[];
+        for (const y of this.type.yields.all()) {
+          // Include the original yield
+          damageYields.push(y);
+
+          // If it's a lump yield, add a -health% modifier
+          if (y.method === "lump") {
+            damageYields.push({
+              ...y,
+              method: "percent",
+              amount: this.health - 100,
+            });
+          }
+        }
+        return new Yields(damageYields).flatten();
+      },
+      ["health", "progress", "cityKey"],
+    );
   }
 
   /*

@@ -14,6 +14,7 @@ import type { GameClass, GameKey, GameObject, IRawGameObject } from "@/Common/Mo
 import { GameDataLoader } from "@/Data/GameDataLoader";
 import { setDataBucket } from "@/Data/useDataBucket";
 import type { Tile } from "@/Common/Models/Tile";
+import { fetchJSON } from "@/helpers/network";
 
 // todo create a IRawType & IRawCategory
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -39,10 +40,10 @@ export class DataBucket {
 
   private readonly dataLoader: GameDataLoader;
 
-  constructor(
+  private constructor(
     private readonly types: Map<TypeKey, TypeObject>,
     private readonly categories: Map<CatKey, CategoryObject>,
-    readonly world: WorldState,
+    private readonly _world: WorldState,
     private readonly objects: Map<GameKey, GameObject> = new Map(),
     dataLoader?: GameDataLoader,
   ) {
@@ -54,7 +55,18 @@ export class DataBucket {
     this.objects.forEach((o) => this.buildObjectIndex(o));
   }
 
-  static fromRaw(rawStaticData: RawStaticData, rawSaveData: RawSaveData): DataBucket {
+  static async init(rawStaticData?: RawStaticData): Promise<DataBucket> {
+    if (!rawStaticData) rawStaticData = await fetchJSON<RawStaticData>("/staticData.json");
+
+    return this.fromRaw(rawStaticData, {} as WorldState);
+  }
+
+  static fromRaw(
+    rawStaticData: RawStaticData,
+    world: WorldState,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    rawObjects?: (IRawGameObject | any)[],
+  ): DataBucket {
     const types = new Map<TypeKey, TypeObject>();
     const categories = new Map<CatKey, CategoryObject>();
 
@@ -67,11 +79,13 @@ export class DataBucket {
     }
 
     // All static data initialized, now create the DataBucket instance
-    const instance = new DataBucket(types, categories, rawSaveData.world);
+    const instance = new DataBucket(types, categories, world);
     setDataBucket(instance);
 
     // Finally, initialize the raw objects
-    instance.setRawObjects(rawSaveData.objects);
+    if (rawObjects) {
+      instance.setRawObjects(rawObjects);
+    }
 
     return instance;
   }
@@ -96,12 +110,12 @@ export class DataBucket {
     return category;
   }
 
-  getTypes(): TypeObject[] {
-    return Array.from(this.types.values());
+  getTypes(): Set<TypeObject> {
+    return new Set(this.types.values());
   }
 
-  getCats(): CategoryObject[] {
-    return Array.from(this.categories.values());
+  getCats(): Set<CategoryObject> {
+    return new Set(this.categories.values());
   }
 
   getCategoryTypes(catKey: CatKey): Set<TypeObject> {
@@ -132,11 +146,11 @@ export class DataBucket {
       if (categoryKey) {
         const catData = out.get(categoryKey);
         if (catData) {
-          catData.types.push(type);
+          catData.types.add(type);
         } else {
           const newCatData: CatData = {
             category: this.getCategory(categoryKey),
-            types: [type],
+            types: new Set([type]),
           };
           out.set(categoryKey, newCatData);
         }
@@ -181,6 +195,11 @@ export class DataBucket {
     return out;
   }
 
+  get world(): WorldState {
+    if (!this._world.id) throw new Error("DataBucket.world is not initialized!");
+    return this._world;
+  }
+
   removeObject(key: GameKey): void {
     const object = this.getObject(key);
     this.dataLoader.removeRelations(object, this.objects);
@@ -216,6 +235,10 @@ export class DataBucket {
     return [...created, ...updated];
   }
 
+  setWorld(world: Partial<WorldState>): void {
+    Object.assign(this._world, world);
+  }
+
   toSaveData(name: string, version: string): RawSaveData {
     return {
       name,
@@ -224,14 +247,14 @@ export class DataBucket {
       objects: Array.from(this.objects.values()).map(
         (o) => o.toJSON() as unknown as IRawGameObject,
       ),
-      world: JSON.parse(JSON.stringify(this.world)),
+      world: JSON.parse(JSON.stringify(this._world)),
     };
   }
 
   // Used to restore a save (if a Mutation set has failed)
   restore(data: RawSaveData) {
     this.objects.clear();
-    Object.assign(this.world, data.world);
+    Object.assign(this._world, data.world);
     this.setRawObjects(data.objects);
   }
 

@@ -42,10 +42,10 @@ const vuetify = createVuetify({
         dark: true,
         colors: {
           // Palette
-          primary: "#805C0FFF",
+          primary: "#805C0F",
           secondary: "#082c00",
           tertiary: "#0e3a68",
-          disabled: "#6b7280",
+          disabled: "#333333",
           background: "#0f172a",
           surface: "#1e293b",
           error: "#880909",
@@ -70,5 +70,5 @@ const vuetify = createVuetify({
 app.use(createPinia());
 app.use(router);
 app.use(vuetify);
-app.component("font-awesome-icon", FontAwesomeIcon);
+app.component("FontAwesomeIcon", FontAwesomeIcon);
 app.mount("#app");

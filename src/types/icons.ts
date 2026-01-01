@@ -89,6 +89,8 @@ import {
   faRandom,
   faRightLeft,
   faRoad,
+  faRotateLeft,
+  faRotateRight,
   faRoute,
   faSatellite,
   faScroll,
@@ -163,6 +165,10 @@ export const icons = {
   search: { icon: faMagnifyingGlass, color: colors.default },
   locate: { icon: faLocationDot, color: colors.default },
   cityAlt: { icon: faCity, color: colors.default },
+  undo: { icon: faRotateLeft, color: colors.default },
+  redo: { icon: faRotateRight, color: colors.default },
+  load: { icon: faFileImport, color: colors.default },
+  settings: { icon: faCog, color: colors.default },
   handsPraying: { icon: faHandsPraying, color: colors.faith },
   masksTheater: { icon: faMasksTheater, color: colors.culture },
   users: { icon: faUsers, color: colors.default },
@@ -184,6 +190,7 @@ export const icons = {
   world: { icon: faGlobe, color: colors.default },
   earth: { icon: faEarthAmericas, color: colors.default },
   random: { icon: faRandom, color: colors.default },
+  move: { icon: faLocationArrow, color: colors.default },
   map: { icon: faMap, color: colors.default },
   objectGroup: { icon: faObjectGroup, color: colors.default },
   upload: { icon: faFileImport, color: colors.default },
@@ -565,6 +572,17 @@ export function getIcon(iconKey: IconKey | ObjectIcon): ObjectIcon {
   if (iconKey in icons) {
     return icons[iconKey];
   }
+  if (iconKey in categoryKeys) {
+    return categoryKeys[iconKey];
+  }
+  if (iconKey in conceptKeys) {
+    return conceptKeys[iconKey];
+  }
+  if (iconKey in keys) {
+    return keys[iconKey];
+  }
+
+  // eslint-disable-next-line no-console
   console.warn(`Icon key "${iconKey}" not found in icons.ts`);
   return { icon: faQuestion, color: colors.default };
 }

@@ -49,7 +49,7 @@ export class UnitDesign extends GameObject {
    * Attributes
    */
   productionCost: number;
-  types: TypeObject[];
+  types: Set<TypeObject>;
   yields: Yields;
 
   /*

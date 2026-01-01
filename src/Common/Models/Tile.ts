@@ -1,6 +1,6 @@
 import { canHaveOne, hasMany } from "@/Common/Models/_Relations";
 import { TypeObject } from "@/Common/Objects/TypeObject";
-import { Yields } from "@/Common/Objects/Yields";
+import { tileYieldTypeKeys, Yield, Yields } from "@/Common/Objects/Yields";
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import { useDataBucket } from "@/Data/useDataBucket";
 import type { River } from "@/Common/Models/River";
@@ -10,10 +10,9 @@ import type { City } from "@/Common/Models/City";
 import type { Player } from "@/Common/Models/Player";
 import type { TradeRoute } from "@/Common/Models/TradeRoute";
 import type { Unit } from "@/Common/Models/Unit";
-import { getDistance, getNeighbors, tileHeight, tileKey } from "@/helpers/mapTools";
+import { getNeighbors, tileHeight, tileKey } from "@/helpers/mapTools";
 import { Vector3 } from "@babylonjs/core";
 import { tileCenter } from "@/helpers/math";
-import { useCurrentContext } from "@/composables/useCurrentContext";
 
 // TODO: Centralize tile mutations in a TileManager to trigger useMoveCostCache().resetCache([tile.key])
 export class Tile extends GameObject {
@@ -30,6 +29,7 @@ export class Tile extends GameObject {
     public resource: TypeObject | null = null,
     public naturalWonder: TypeObject | null = null,
     public pollution: TypeObject | null = null,
+    public route: TypeObject | null = null,
     public playerKey: GameKey | null = null,
   ) {
     super(key);
@@ -41,11 +41,6 @@ export class Tile extends GameObject {
     canHaveOne<River>(this, "riverKey");
     hasMany<TradeRoute>(this, "tradeRouteKeys");
     hasMany<Unit>(this, "unitKeys");
-
-    this._staticTypes = [domain, area, terrain, elevation];
-    if (this.naturalWonder) this._staticTypes.push(this.naturalWonder);
-
-    this._staticYields = new Yields(this._staticTypes.flatMap((t) => t.yields.all()));
   }
 
   static attrsConf: GameObjAttr[] = [
@@ -63,6 +58,7 @@ export class Tile extends GameObject {
       isOptional: true,
       isTypeObj: true,
     },
+    { attrName: "route", isOptional: true, isTypeObj: true },
     { attrName: "pollution", isOptional: true, isTypeObj: true },
     {
       attrName: "playerKey",
@@ -101,10 +97,6 @@ export class Tile extends GameObject {
   unitKeys = new Set<GameKey>();
   declare units: Unit[];
 
-  private _dynamicTypes: TypeObject[] = [];
-  private _staticTypes: TypeObject[];
-  private _staticYields: Yields;
-
   // Use direct array vs computed for peak-performance during Tile calc (especially A*)
   private _neighborTiles: Tile[] = [];
   get neighborTiles(): Tile[] {
@@ -132,71 +124,79 @@ export class Tile extends GameObject {
   /*
    * Computed
    */
-  distanceTo(tile: Tile): number {
-    return getDistance(useDataBucket().world.size, this, tile, "hex");
-  }
 
-  get freeCitizenSlotCount(): number {
-    return (
-      this.yields
-        .flatten(["yieldType:citizenSlot"], this.types)
-        .getLumpAmount("yieldType:citizenSlot") - this.citizenKeys.size
+  // My Types (not inherited)
+  get myTypes(): Set<TypeObject> {
+    return this.computed(
+      "_myTypes",
+      () => {
+        const types = new Set<TypeObject>([
+          this.concept,
+          this.domain,
+          this.area,
+          this.climate,
+          this.terrain,
+          this.elevation,
+        ]);
+        if (this.naturalWonder) types.add(this.naturalWonder);
+        if (this.feature) types.add(this.feature);
+        if (this.resource) types.add(this.resource);
+        if (this.pollution) types.add(this.pollution);
+        if (this.construction) this.construction.types.forEach((type) => types.add(type));
+        // todo: if (this.route) types.add(this.route);
+
+        // Special Land types
+        if (this.domain.id === "land" && this.elevation.id === "flat")
+          types.add(useDataBucket().getType("conceptType:flatLand"));
+        if (this.elevation.id === "mountain" || this.elevation.id === "snowMountain")
+          types.add(useDataBucket().getType("conceptType:mountain"));
+
+        // Special Water types
+        if (this.river) types.add(this.river.concept);
+        if (this.isMajorRiver) types.add(useDataBucket().getType("conceptType:navigableRiver"));
+        if (this.isFresh) types.add(useDataBucket().getType("conceptType:freshWater"));
+        if (this.isSalt) types.add(useDataBucket().getType("conceptType:saltWater"));
+
+        return types;
+      },
+      ["feature", "resource", "pollution", "constructionKey"],
     );
   }
-  get selectable(): (City | Unit)[] {
-    const selectable: (City | Unit)[] = this.units.filter(
-      (u) => u.playerKey === useCurrentContext().currentPlayer.key,
+
+  // Types a Citizen inherits from me
+  get typesForCitizen(): Set<TypeObject> {
+    return this.computed(
+      "_typesForCitizen",
+      () => {
+        const types = new Set<TypeObject>();
+        if (this.naturalWonder) types.add(this.naturalWonder);
+        if (this.construction) this.construction.types.forEach((type) => types.add(type));
+        return types;
+      },
+      ["constructionKey"],
     );
-    if (this.city) selectable.push(this.city);
-    return selectable;
   }
 
-  targets(player: Player, vs?: City | Unit): (City | Construction | Unit)[] {
-    if (this.playerKey === player.key) return [];
-
-    const targets = this.units
-      .filter((unit) => unit.playerKey !== player.key && unit.health > 0)
-      .sort(
-        (a, b) =>
-          a.yields
-            .only(["yieldType:strength"], a.types, vs ? vs.types : undefined)
-            .flatten()
-            .getLumpAmount("yieldType:strength") -
-          b.yields
-            .only(["yieldType:strength"], b.types, vs ? vs.types : undefined)
-            .flatten()
-            .getLumpAmount("yieldType:strength"),
-      ) as (City | Construction | Unit)[];
-
-    if ((this.city?.health ?? 0) > 0) targets.push(this.city!);
-    if ((this.construction?.health ?? 0) > 0) targets.push(this.construction!);
-
-    return targets;
-  }
-
-  get types(): TypeObject[] {
-    this._dynamicTypes.length = 0;
-
-    if (this.feature) this._dynamicTypes.push(this.feature);
-    if (this.resource) this._dynamicTypes.push(this.resource);
-    if (this.pollution) this._dynamicTypes.push(this.pollution);
-    if (this.construction) this._dynamicTypes.push(...this.construction.types);
-
-    return this._staticTypes.concat(this._dynamicTypes);
-  }
-
+  // My Yield output
   get yields(): Yields {
-    return new Yields([
-      ...this._staticYields.all(),
-      ...this.types.slice(this._staticTypes.length).flatMap((t) => t.yields.all()),
-    ]);
-  }
+    return this.computed(
+      "_yields",
+      () => {
+        const yieldsForMe = (yields: Yields): Yield[] => {
+          return yields.only(tileYieldTypeKeys, this.myTypes).all();
+        };
 
-  /*
-   * Actions
-   */
-  warmUp(): void {
-    // todo
+        // Tile Yields are from my Types + Construction + Player Mods
+        const yields = new Yields();
+        this.myTypes.forEach((type) => yields.add(...yieldsForMe(type.yields)));
+        if (this.construction) yields.add(...yieldsForMe(this.construction.yields));
+        if (this.city) yields.add(...yieldsForMe(this.city.yieldMods));
+
+        // Flatten Yields to apply modifiers
+        return yields.flatten();
+      },
+      ["feature", "resource", "pollution", "constructionKey", "playerKey"],
+    );
   }
 
   // Used all over to always generate standard tile ID

@@ -2,6 +2,7 @@ import pkg from "../../package.json";
 import { defineStore } from "pinia";
 import { WorldSize, worldSizes } from "@/factories/worldFactory";
 import { loadFromBrowser, saveToBrowser } from "@/utils/persistentStorage";
+import { WorldState } from "@/Common/Objects/Common";
 
 const STORAGE_KEY = "poh.mapgen.config";
 const STORAGE_VERSION = pkg.version;
@@ -14,6 +15,7 @@ export interface MapGenConfig {
   continents: number;
   majorsPerContinent: number;
   minorsPerPlayer: number;
+  worldState: Partial<WorldState>;
 }
 
 const alignmentPresets: Record<
@@ -34,6 +36,12 @@ export const useMapGenStore = defineStore("mapGen", {
       continents: worldSizes[2].continents,
       majorsPerContinent: worldSizes[2].majorsPerContinent,
       minorsPerPlayer: worldSizes[2].minorsPerPlayer,
+      worldState: {
+        id: crypto.randomUUID(),
+        size: worldSizes[2],
+        turn: 0,
+        year: -10000,
+      } as Partial<WorldState>,
     } as MapGenConfig,
   }),
   actions: {

@@ -40,7 +40,7 @@ function searchPlayer(p: Player, term: string): boolean {
         <template #[`item.name`]="{ item }">
           <div class="d-flex align-center ga-2">
             <span>{{ (item as Player).name }}</span>
-            <v-icon v-if="(item as Player).isCurrent" icon="fa-star" color="amber" size="x-small" />
+            <UiIcon v-if="(item as Player).isCurrent" icon="star" color="amber" size="xs" />
           </div>
         </template>
       </UiTable>
@@ -52,7 +52,7 @@ function searchPlayer(p: Player, term: string): boolean {
           <h2>Leader</h2>
           <div class="d-flex align-center ga-2" style="font-size: 1rem">
             <template v-for="(type, i) in store.leaderTimeline" :key="type.key">
-              <v-icon v-if="i > 0" icon="fa-chevron-right" color="grey" size="x-small" />
+              <UiIcon v-if="i > 0" icon="chevronRight" color="grey" size="xs" />
               <UiTypeChip
                 :type="type"
                 :size="store.current.leader.key === type.key ? 'large' : 'x-small'"
@@ -75,7 +75,7 @@ function searchPlayer(p: Player, term: string): boolean {
           <h2>Culture</h2>
           <div class="d-flex align-center ga-2" style="font-size: 1rem">
             <template v-for="(type, i) in store.cultureTimeline" :key="type.key">
-              <v-icon v-if="i > 0" icon="fa-chevron-right" color="grey" size="x-small" />
+              <UiIcon v-if="i > 0" icon="chevronRight" color="grey" size="xs" />
               <UiTypeChip
                 :type="type"
                 :size="store.current.culture.type.key === type.key ? 'large' : 'x-small'"

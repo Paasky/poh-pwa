@@ -198,7 +198,7 @@ export const makeRiver = (
   rivers: Record<string, River>,
 ): River => {
   const floodPlain = useDataBucket().getType("featureType:floodPlain");
-  const river = new River(generateKey("river"), "River", []);
+  const river = new River(generateKey("river"), "River", new Set());
   rivers[river.key] = river;
 
   // Keep track of the current/end-state
@@ -212,7 +212,7 @@ export const makeRiver = (
       // Convert tile to River
       tile.isFresh = true;
       tile.riverKey = river.key;
-      river.tileKeys.push(tile.key);
+      river.tileKeys.add(tile.key);
       if (majorMode) {
         tile.isMajorRiver = true;
         if (tile.domain.id === "land") {
@@ -292,7 +292,7 @@ export const makeRiver = (
   // If we merged into another river, mark downstream as major
   if (metRiverTile) {
     const otherRiver = rivers[(metRiverTile as GenTile).riverKey!] as River;
-    const otherRiverTileKeys = otherRiver.tileKeys;
+    const otherRiverTileKeys = Array.from(otherRiver.tileKeys);
     const metAtIdx = otherRiverTileKeys.indexOf((metRiverTile as GenTile).key);
     if (metAtIdx !== -1) {
       for (let i = metAtIdx; i < otherRiverTileKeys.length; i++) {

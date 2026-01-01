@@ -3,6 +3,8 @@ import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import type { City } from "@/Common/Models/City";
 import type { Unit } from "@/Common/Models/Unit";
 import type { Tile } from "@/Common/Models/Tile";
+import { tradeRouteYieldTypeKeys, Yield, Yields } from "@/Common/Objects/Yields";
+import { TypeObject } from "@/Common/Objects/TypeObject";
 
 export class TradeRoute extends GameObject {
   constructor(
@@ -58,7 +60,23 @@ export class TradeRoute extends GameObject {
   /*
    * Computed
    */
-  // todo add here
+
+  // My Yield output
+  get yields(): Yields {
+    return this.computed("_yields", () => {
+      const yieldsForMe = (yields: Yields): Yield[] => {
+        return yields.only(tradeRouteYieldTypeKeys, new Set<TypeObject>([this.concept])).all();
+      };
+
+      // Trade Route Yields are From the two cities
+      const yields = new Yields();
+      yields.add(...yieldsForMe(this.city1.yieldMods));
+      yields.add(...yieldsForMe(this.city2.yieldMods));
+
+      // Flatten Yields to apply modifiers
+      return yields.flatten();
+    });
+  }
 
   /*
    * Actions

@@ -9,6 +9,7 @@ import type { Player } from "@/Common/Models/Player";
 import type { Tile } from "@/Common/Models/Tile";
 import { useEventStore } from "@/stores/eventStore";
 import { CultureHasNewType, CultureHasSettled } from "@/events/Culture";
+import { has } from "@/helpers/collectionTools";
 
 export type CultureStatus = "notSettled" | "canSettle" | "mustSettle" | "settled";
 
@@ -42,10 +43,10 @@ export class Culture extends GameObject {
   /*
    * Attributes
    */
-  heritages: TypeObject[] = [];
+  heritages: Set<TypeObject> = new Set();
   heritageCategoryPoints: Record<CatKey, number> = {};
   mustSelectTraits = { positive: 0, negative: 0 };
-  traits: TypeObject[] = [];
+  traits: Set<TypeObject> = new Set();
 
   /*
    * Relations
@@ -59,7 +60,7 @@ export class Culture extends GameObject {
    * Computed
    */
   get canSelect(): boolean {
-    return this.selectableHeritages.length + this.selectableTraits.length > 0;
+    return this.selectableHeritages.size + this.selectableTraits.size > 0;
   }
 
   get canSettle(): boolean {
@@ -81,17 +82,17 @@ export class Culture extends GameObject {
     return useDataBucket().getType(key);
   }
 
-  get selectableHeritages(): TypeObject[] {
-    if (this.status === "mustSettle") return [];
-    if (this.status === "settled") return [];
+  get selectableHeritages(): Set<TypeObject> {
+    if (this.status === "mustSettle") return new Set();
+    if (this.status === "settled") return new Set();
 
-    const selectable: TypeObject[] = [];
+    const selectable: Set<TypeObject> = new Set();
     for (const catData of useDataBucket().getClassTypesPerCategory("heritageType").values()) {
-      const catIsSelected = catData.types.some((type) => this.heritages.includes(type));
+      const catIsSelected = has(catData.types, (type) => this.heritages.has(type));
 
       for (const heritage of catData.types) {
         // Already selected
-        if (this.heritages.includes(heritage)) continue;
+        if (this.heritages.has(heritage)) continue;
 
         // If it's stage II -> must have stage I heritage selected
         if (heritage.heritagePointCost! > 10 && !catIsSelected) continue;
@@ -100,21 +101,21 @@ export class Culture extends GameObject {
         if ((this.heritageCategoryPoints[heritage.category!] ?? 0) < heritage.heritagePointCost!)
           continue;
 
-        selectable.push(heritage);
+        selectable.add(heritage);
       }
     }
     return selectable;
   }
 
-  get selectableTraits(): TypeObject[] {
-    if (this.status !== "settled") return [];
+  get selectableTraits(): Set<TypeObject> {
+    if (this.status !== "settled") return new Set();
 
     // Nothing to select?
-    if (this.mustSelectTraits.positive + this.mustSelectTraits.negative <= 0) return [];
+    if (this.mustSelectTraits.positive + this.mustSelectTraits.negative <= 0) return new Set();
 
-    const selectable: TypeObject[] = [];
+    const selectable: Set<TypeObject> = new Set();
     for (const catData of useDataBucket().getClassTypesPerCategory("traitType").values()) {
-      const catIsSelected = catData.types.some((type) => this.traits.includes(type));
+      const catIsSelected = has(catData.types, (type) => this.traits.has(type));
 
       for (const trait of catData.types) {
         // Category already selected
@@ -124,18 +125,10 @@ export class Culture extends GameObject {
         if (trait.isPositive! && this.mustSelectTraits.positive <= 0) continue;
         if (!trait.isPositive! && this.mustSelectTraits.negative <= 0) continue;
 
-        selectable.push(trait);
+        selectable.add(trait);
       }
     }
     return selectable;
-  }
-
-  get types(): TypeObject[] {
-    return [this.concept, ...this.heritages, ...this.traits];
-  }
-
-  get yields(): Yields {
-    return new Yields(this.types.flatMap((t) => t.yields.all()));
   }
 
   /*
@@ -167,7 +160,7 @@ export class Culture extends GameObject {
     this.type = useDataBucket().getType(nextTypeKey);
 
     // If all traits have not been selected yet (4 = two categories to select: one must be pos, one neg)
-    if (this.selectableTraits.length >= 4) {
+    if (this.selectableTraits.size >= 4) {
       this.mustSelectTraits.positive++;
       this.mustSelectTraits.negative++;
     }
@@ -176,19 +169,19 @@ export class Culture extends GameObject {
   }
 
   selectHeritage(heritage: TypeObject) {
-    if (this.heritages.includes(heritage)) return;
-    if (!this.selectableHeritages.includes(heritage))
+    if (this.heritages.has(heritage)) return;
+    if (!this.selectableHeritages.has(heritage))
       throw new Error(`${this.key}: ${heritage.name} not selectable`);
 
     // Add the heritage
-    this.heritages.push(heritage);
+    this.heritages.add(heritage);
     useEventStore().turnEvents.push(new CultureHasNewType(this, heritage));
 
     // Check if culture status needs to change
-    if (this.heritages.length === 2) {
+    if (this.heritages.size === 2) {
       this.status = "canSettle";
     }
-    if (this.heritages.length > 2) {
+    if (this.heritages.size > 2) {
       this.status = "mustSettle";
     }
 
@@ -201,12 +194,12 @@ export class Culture extends GameObject {
   }
 
   selectTrait(trait: TypeObject) {
-    if (this.traits.includes(trait)) return;
-    if (!this.selectableTraits.includes(trait)) {
+    if (this.traits.has(trait)) return;
+    if (!this.selectableTraits.has(trait)) {
       throw new Error(`${this.key}: ${trait.name} not selectable`);
     }
 
-    this.traits.push(trait);
+    this.traits.add(trait);
     useEventStore().turnEvents.push(new CultureHasNewType(this, trait));
 
     if (trait.isPositive!) {
@@ -225,5 +218,28 @@ export class Culture extends GameObject {
 
   startTurn(): void {
     //
+  }
+
+  ////// v0.1
+
+  get myTypes(): Set<TypeObject> {
+    return this.computed(
+      "_myTypes",
+      () => new Set([...this.heritages, ...this.traits, this.type, this.concept]),
+      ["heritages", "traits", "type"],
+    );
+  }
+
+  // My Yield output
+  get yields(): Yields {
+    return this.computed(
+      "_yields",
+      () => {
+        const yields = new Yields();
+        this.myTypes.forEach((type) => yields.add(...type.yields.all()));
+        return yields;
+      },
+      ["heritages", "traits", "type"],
+    );
   }
 }

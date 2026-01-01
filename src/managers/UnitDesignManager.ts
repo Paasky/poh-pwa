@@ -34,7 +34,7 @@ export class UnitDesignManager {
     );
 
     if (player) {
-      player.designKeys.push(design.key);
+      player.designKeys.add(design.key);
       if (!isFree) {
         player.storage.take("yieldType:designPoints", prototype.pointCost.value);
       }

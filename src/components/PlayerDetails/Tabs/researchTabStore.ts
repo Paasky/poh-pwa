@@ -9,8 +9,8 @@ export const useResearchTabStore = defineStore("researchTabStore", () => {
   const bucket = useDataBucket();
   const initialized = ref(false);
 
-  const techs = ref<TypeObject[]>([]);
-  const eras = ref<TypeObject[]>([]);
+  const techs = ref<Set<TypeObject>>([]);
+  const eras = ref<Set<TypeObject>>([]);
 
   const player = computed(() => useCurrentContext().currentPlayer);
   const research = computed(() => player.value.research);

@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { computed, ref, useAttrs } from "vue";
 import { TableColumn } from "@/types/uiComponents";
+import UiIcon from "@/components/Ui/UiIcon.vue";
 
 const props = withDefaults(
   defineProps<{
@@ -77,9 +78,12 @@ const filteredItems = computed(() => {
         @click:clear="searchTerm = ''"
         variant="outlined"
         label="Search"
-        prepend-inner-icon="fa-magnifying-glass"
         style="max-width: 16.25rem"
-      />
+      >
+        <template #prepend-inner>
+          <UiIcon icon="search" />
+        </template>
+      </v-text-field>
     </div>
     <v-data-table
       :headers="normalizedHeaders"

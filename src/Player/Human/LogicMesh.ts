@@ -173,7 +173,7 @@ export class LogicMesh {
   private onTileSelect(tile: Tile): void {
     const current = useCurrentContext();
     // Tile has nothing to select -> clear selection
-    if (!tile.selectable.length) {
+    if (!tile.selectable.size) {
       current.actionMode.value = undefined;
       current.tile.value = undefined;
       current.object.value = undefined;
@@ -187,7 +187,7 @@ export class LogicMesh {
         // Don't trust indexOf as it does an exact obj check
         for (const [i, item] of tile.selectable.entries()) {
           if (item.key === current.object.value!.key) {
-            current.object.value = tile.selectable[wrapExclusive(i + 1, 0, tile.selectable.length)];
+            current.object.value = tile.selectable[wrapExclusive(i + 1, 0, tile.selectable.size)];
             return;
           }
         }

@@ -68,9 +68,9 @@ export class TerraGenerator {
     this.hill = this.bucket.getType("elevationType:hill");
     this.mountain = this.bucket.getType("elevationType:mountain");
 
-    this.terrains = this.bucket.getClassTypes("terrainType");
+    this.terrains = Array.from(this.bucket.getClassTypes("terrainType"));
 
-    this.oceans = this.bucket.getClassTypes("oceanType");
+    this.oceans = Array.from(this.bucket.getClassTypes("oceanType"));
     this.oceanTerrain = this.bucket.getType("terrainType:ocean");
     this.seaTerrain = this.bucket.getType("terrainType:sea");
     this.coastTerrain = this.bucket.getType("terrainType:coast");
@@ -123,7 +123,9 @@ export class TerraGenerator {
       lo === hi ? this.climateBands[lo] : [...this.climateBands[lo], ...this.climateBands[hi]];
 
     const climateKey = getRandom(options);
-    const climate = this.bucket.getClassTypes("climateType").find((c) => c.key === climateKey);
+    const climate = Array.from(this.bucket.getClassTypes("climateType")).find(
+      (c) => c.key === climateKey,
+    );
 
     if (!climate)
       throw new Error(`[terraGenerator] Invalid climate in climateBands: ${climateKey}`);

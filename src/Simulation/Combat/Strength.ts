@@ -73,6 +73,6 @@ const rawDamage = (strengthA: number, strengthB: number): number => {
   return ((strengthA / strengthB) ** pow2 + addition2) * multiplier2 + addition3;
 };
 
-const getTypes = (obj: City | Construction | Unit): TypeObject[] => {
+const getTypes = (obj: City | Construction | Unit): Set<TypeObject> => {
   return obj.types;
 };

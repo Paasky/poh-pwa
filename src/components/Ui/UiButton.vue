@@ -1,107 +1,100 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import type { IconKey } from "@/types/icons";
 import type { ObjectIcon } from "@/Common/Objects/Common";
 import UiIcon from "@/components/Ui/UiIcon.vue";
+import UiTooltip from "@/components/Ui/UiTooltip.vue";
 
-type Density = "default" | "comfortable" | "compact";
-type Variant = "elevated" | "flat" | "outlined" | "tonal" | "text" | "plain";
-// Vuetify size tokens
-type Size = "x-small" | "small" | "default" | "large" | "x-large";
-// Vuetify rounded tokens (subset of common values)
-type Rounded = false | true | number | "0" | "xs" | "sm" | "md" | "lg" | "xl" | "pill" | "circle";
-type Location = "top" | "bottom" | "start" | "end";
+export type UiButtonSize = "small" | "default" | "large" | "x-large";
 
-withDefaults(
+export type UiButtonType =
+  | "primary"
+  | "secondary"
+  | "danger"
+  | "success"
+  | "warning"
+  | "text"
+  | "utility";
+
+const props = withDefaults(
   defineProps<{
-    // Styling
-    color?: string; // use any Vuetify theme color key or CSS color
-    density?: Density;
-    variant?: Variant;
-    size?: Size;
-    rounded?: Rounded;
-    elevation?: 0 | 1 | 2 | 3 | 4 | 6 | 8 | 12 | 16 | 24;
-    // Content
+    type?: UiButtonType;
+    isBlock?: boolean;
+    isDisabled?: boolean;
+    size?: UiButtonSize;
+    rounded?: string;
     icon?: IconKey | ObjectIcon;
-    iconColor?: string; // Vuetify theme color key
+    iconColor?: string;
     text?: string;
     effectText?: string;
     effectClass?: string;
-    // Tooltip
+    effectIsUnder?: boolean;
     tooltip?: string;
-    tooltipLocation?: Location;
   }>(),
   {
-    color: "primary",
-    density: "default",
-    variant: "elevated",
+    type: "primary",
+    isBlock: false,
+    isDisabled: false,
     size: "small",
     rounded: "lg",
-    elevation: 4,
-    // Content
-    icon: undefined,
-    iconColor: undefined, // Vuetify theme color key
-    text: undefined,
-    effectText: undefined,
-    effectClass: undefined,
-    // Tooltip
-    tooltip: undefined,
-    tooltipLocation: "bottom",
+    effectIsUnder: false,
   },
+);
+
+const themeMapping = computed(() => {
+  switch (props.type) {
+    case "secondary":
+      return { color: "secondary", variant: "elevated" as const };
+    case "danger":
+      return { color: "error", variant: "elevated" as const };
+    case "success":
+      return { color: "success", variant: "elevated" as const };
+    case "warning":
+      return { color: "warning", variant: "tonal" as const };
+    case "text":
+      return { color: undefined, variant: "text" as const };
+    case "utility":
+      return { color: "tertiary", variant: "elevated" as const };
+    case "primary":
+    default:
+      return { color: "primary", variant: "elevated" as const };
+  }
+});
+
+const btnProps = computed(() => ({
+  ...themeMapping.value,
+  disabled: props.isDisabled,
+  size: props.size,
+  rounded: props.rounded,
+  block: props.isBlock,
+}));
+
+const tooltipProps = computed(() =>
+  props.tooltip ? { text: props.tooltip, location: "bottom" } : {},
 );
 </script>
 
 <template>
-  <v-tooltip
-    v-if="tooltip"
-    :text="tooltip"
-    :location="tooltipLocation"
-    content-class="text-grey bg-grey-darken-4"
+  <component
+    :is="tooltip ? UiTooltip : 'div'"
+    v-bind="tooltipProps"
+    :class="{ 'd-inline-block': tooltip, 'w-100': isBlock }"
   >
-    <template #activator="{ props: tip }">
-      <v-btn
-        v-bind="{ ...$attrs, ...tip }"
-        :color="color"
-        :density="density"
-        :variant="variant"
-        :elevation="elevation"
-        :size="size"
-        :rounded="rounded"
-        class="d-flex flex-wrap ga-1"
-      >
-        <UiIcon v-if="icon" :icon="icon" :color="iconColor" class="me-1" />
-        <div v-if="text || effectText" class="d-flex flex-wrap ga-1 text-normal-case">
-          <div v-if="text">{{ text }}</div>
-          <div v-if="effectText" class="opacity-50 text-caption" :class="effectClass">
-            {{ effectText }}
-          </div>
+    <v-btn
+      v-bind="{ ...btnProps, ...$attrs }"
+      :style="isDisabled ? 'background-color: #000 !important;opacity:0.25;' : ''"
+    >
+      <div class="d-flex ga-1" :class="effectIsUnder ? 'flex-column' : 'align-center'">
+        <div class="d-flex ga-2 align-center justify-center text-none font-weight-bold">
+          <UiIcon v-if="icon" :icon="icon" :color="iconColor" />
+          <span v-if="text">{{ text }}</span>
         </div>
-      </v-btn>
-    </template>
-  </v-tooltip>
-  <v-btn
-    v-else
-    v-bind="$attrs"
-    :color="color"
-    :density="density"
-    :variant="variant"
-    :elevation="elevation"
-    :size="size"
-    :rounded="rounded"
-    class="d-flex flex-wrap ga-1"
-  >
-    <UiIcon v-if="icon" :icon="icon" :color="iconColor" class="me-1" />
-    <div v-if="text || effectText" class="d-flex flex-wrap ga-1 text-normal-case">
-      <div v-if="text">{{ text }}</div>
-      <div v-if="effectText" class="opacity-50 text-caption" :class="effectClass">
-        {{ effectText }}
+        <div v-if="effectText" class="opacity-50 text-caption" :class="effectClass">
+          {{ effectText }}
+        </div>
       </div>
-    </div>
-  </v-btn>
+    </v-btn>
+  </component>
 </template>
 
-<style scoped>
-.text-normal-case {
-  text-transform: none;
-  letter-spacing: normal;
-}
-</style>
+<style scoped></style>

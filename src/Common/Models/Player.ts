@@ -1,7 +1,7 @@
 import { canHaveOne, hasMany, hasOne } from "@/Common/Models/_Relations";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { TypeStorage } from "@/Common/Objects/TypeStorage";
-import { Yield, Yields } from "@/Common/Objects/Yields";
+import { playerYieldTypeKeys, Yield, Yields } from "@/Common/Objects/Yields";
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import type { UnitDesign } from "@/Common/Models/UnitDesign";
 import type { City } from "@/Common/Models/City";
@@ -16,9 +16,9 @@ import type { Tile } from "@/Common/Models/Tile";
 import type { TradeRoute } from "@/Common/Models/TradeRoute";
 import type { Unit } from "@/Common/Models/Unit";
 import { Diplomacy } from "@/Common/Objects/Diplomacy";
-import { ObjKey, TypeKey } from "@/Common/Objects/Common";
 import { UnitMovement } from "@/Simulation/Movement/UnitMovement";
 import { Construction } from "@/Common/Models/Construction";
+import { Incident } from "@/Common/Models/Incident";
 
 export class Player extends GameObject {
   constructor(
@@ -49,6 +49,7 @@ export class Player extends GameObject {
     hasMany<City>(this, "cityKeys");
     hasMany<Construction>(this, "constructionKeys");
     hasMany<Deal>(this, "dealKeys");
+    hasMany<Incident>(this, "incidentKeys");
     hasMany<Tile>(this, "tileKeys");
     hasMany<TradeRoute>(this, "tradeRouteKeys");
     hasMany<Unit>(this, "unitKeys");
@@ -112,6 +113,9 @@ export class Player extends GameObject {
   dealKeys = new Set<GameKey>();
   declare deals: Deal[];
 
+  incidentKeys = new Set<GameKey>();
+  declare incidents: Incident[];
+
   declare religion: Religion | null;
 
   tileKeys = new Set<GameKey>();
@@ -134,53 +138,6 @@ export class Player extends GameObject {
    * Computed
    */
 
-  // types =
-  // -> common types +
-  // -> citizen types +
-  // -> owned types +
-
-  // citizen types =
-  // -> culture heritages & traits +
-  // -> state religion myths & gods & dogmas
-
-  // common types =
-  // -> government policies +
-  // -> research researched +
-
-  // owned types =
-  // -> cities > citizens > work > types for/vs "all cities"
-
-  get types(): TypeObject[] {
-    return [...this.citizenTypes, ...this.commonTypes, ...this.ownedTypes];
-  }
-
-  get citizenTypes(): TypeObject[] {
-    return [
-      ...this.culture.heritages,
-      ...this.culture.traits,
-      ...(this.religion?.myths ?? []),
-      ...(this.religion?.gods ?? []),
-      ...(this.religion?.dogmas ?? []),
-    ] as TypeObject[];
-  }
-
-  get commonTypes(): TypeObject[] {
-    return [...this.government.policies, ...this.research.researched] as TypeObject[];
-  }
-
-  get ownedTypes(): TypeObject[] {
-    return this.cities.flatMap((city) => city.ownedTypes);
-  }
-
-  get activeDesigns(): UnitDesign[] {
-    return this.designs.filter((d) => d.isActive);
-  }
-
-  // All specials from all known types
-  get knownSpecialKeys(): Set<TypeKey> {
-    return new Set(this.types.flatMap((t) => t.specials));
-  }
-
   get leader(): TypeObject {
     return this.culture.leader;
   }
@@ -190,99 +147,6 @@ export class Player extends GameObject {
 
     this.units.forEach((u) => u.visibleTileKeys.forEach((k) => keys.add(k)));
     return keys;
-  }
-
-  // Player yield mods are the combined nation-wide yield for/vs
-  get yieldMods(): Yields {
-    const yieldMods = new Yields();
-
-    // Add any Common Type yield that is for/vs (aka is a yield mod)
-    for (const type of this.commonTypes) {
-      for (const y of type.yields.all()) {
-        if (y.for.length + y.vs.length > 0) {
-          yieldMods.add(y);
-        }
-      }
-    }
-
-    // Add any Culture/Religion Type yield that is for/vs AND NOT for Citizens
-    for (const type of this.citizenTypes) {
-      for (const y of type.yields.all()) {
-        const forOthers = y.for.filter((forKey: ObjKey) => forKey !== "conceptType:citizen");
-
-        // Does it have any mods we can use?
-        if (forOthers.length + y.vs.length > 0) {
-          yieldMods.add({
-            type: y.type,
-            amount: y.amount,
-            method: y.method,
-            for: forOthers,
-            vs: y.vs,
-          } as Yield);
-        }
-      }
-    }
-
-    // Add any Owned Type yields that is for/vs a specialType
-    for (const type of this.ownedTypes) {
-      for (const y of type.yields.all()) {
-        const forSpecials = y.for.filter((forKey: ObjKey) => forKey.startsWith("specialType:"));
-        const vsSpecials = y.for.filter((forKey: ObjKey) => forKey.startsWith("specialType:"));
-
-        // Does it have any mods we can use?
-        if (forSpecials.length + vsSpecials.length > 0) {
-          yieldMods.add({
-            type: y.type,
-            amount: y.amount,
-            method: y.method,
-            for: forSpecials,
-            vs: vsSpecials,
-          } as Yield);
-        }
-      }
-    }
-
-    return yieldMods;
-  }
-
-  // Player yields is the total lump output (+/-) of all Cities, Deals and Units
-  get yields(): Yields {
-    const yields = new Yields();
-    const inheritYieldTypes = [
-      "yieldType:culture",
-      "yieldType:faith",
-      "yieldType:gold",
-      "yieldType:influence",
-      "yieldType:science",
-      "yieldType:upkeep",
-    ] as TypeKey[];
-
-    const inheritFromGameObjs = [...this.cities, ...this.deals, ...this.units] as (
-      | City
-      | Deal
-      | Unit
-    )[];
-
-    for (const gameObj of inheritFromGameObjs) {
-      for (const y of gameObj.yields.flatten().all()) {
-        if (
-          y.amount &&
-          y.method === "lump" &&
-          y.for.length + y.vs.length === 0 &&
-          inheritYieldTypes.includes(y.type)
-        ) {
-          yields.add({
-            type: y.type,
-            amount: y.amount,
-            method: y.method,
-            for: [],
-            vs: [],
-          } as Yield);
-        }
-      }
-    }
-
-    return yields;
   }
 
   /*
@@ -313,4 +177,88 @@ export class Player extends GameObject {
   }
 
   warmUp(): void {}
+
+  ////// v0.1
+
+  // Yield Mods for all the Models I own (they use these to calc their Yields)
+  get yieldMods(): Yields {
+    return this.computed(
+      "_yieldMods",
+      () => {
+        const yieldMods = new Yields();
+
+        // Helper to output the yield mods we want
+        const mods = (yields: Yields, purgeForCitizen = false): Yield[] => {
+          const yieldList: Yield[] = [];
+          yields.all().forEach((y) => {
+            // Not for or vs anyone -> not a yield mod
+            if (y.for.size + y.vs.size === 0) return;
+
+            // If purging citizen mods & it's for citizens -> ignore
+            if (purgeForCitizen && y.for.has("conceptType:citizen")) return;
+
+            yieldList.push(y);
+          });
+          return yieldList;
+        };
+
+        // Government & Research are simple
+        yieldMods.add(...mods(this.government.yields));
+        yieldMods.add(...mods(this.research.yields));
+
+        // Culture & Religion "for Citizen" ony affects Citizens who have that Culture/Religion
+        // -> purgeForCitizen
+        yieldMods.add(...mods(this.culture.yields, true));
+        if (this.religion) yieldMods.add(...mods(this.religion.yields, true));
+
+        // From Cities: only include yield mods that are for All Cities
+        this.cities.forEach((city) => {
+          city.yields.all().forEach((y) => {
+            if (
+              y.for.has("specialType:allCities") ||
+              y.for.has("specialType:allCitiesWithRailroad") ||
+              y.for.has("specialType:allCitiesWithRiver")
+            ) {
+              yieldMods.add(y);
+            }
+          });
+        });
+
+        return yieldMods;
+      },
+      ["government", "research", "cultureKey", "religionKey", "cityKeys"],
+    );
+  }
+
+  // My Yield output
+  get yields(): Yields {
+    return this.computed(
+      "_yields",
+      () => {
+        const yieldsForMe = (yields: Yields): Yield[] => {
+          return yields.only(playerYieldTypeKeys, new Set<TypeObject>([this.concept])).all();
+        };
+
+        // Player Yields are:
+        // Government + Research + Culture + Religion
+        // + Agendas + Cities + Deals + Incidents + Trade Routes + Units
+        const yields = new Yields();
+        yields.add(...yieldsForMe(this.government.yields));
+        yields.add(...yieldsForMe(this.research.yields));
+        yields.add(...yieldsForMe(this.culture.yields));
+        if (this.religion) yields.add(...yieldsForMe(this.religion.yields));
+
+        this.agendas.forEach((agenda) => yields.add(...yieldsForMe(agenda.yields)));
+        this.cities.forEach((city) => yields.add(...yieldsForMe(city.yields)));
+        this.deals.forEach((deal) => yields.add(...yieldsForMe(deal.yields)));
+        this.incidents.forEach((incident) => yields.add(...yieldsForMe(incident.yields)));
+        this.tradeRoutes.forEach((tradeRoute) => yields.add(...yieldsForMe(tradeRoute.yields)));
+        this.units.forEach((unit) => yields.add(...yieldsForMe(unit.yields)));
+
+        // Flatten Yields to apply modifiers
+        return yields.flatten();
+      },
+      ["government", "research", "cultureKey", "religionKey", "dealKeys", "cityKeys", "unitKeys"],
+    );
+  }
 }

@@ -1,16 +1,14 @@
 import staticData from "../../public/staticData.json";
-import { GameKey, IRawGameObject } from "../../src/Common/Models/_GameTypes";
-import { WorldState } from "../../src/Common/Objects/Common";
-import { setDataBucket } from "../../src/Data/useDataBucket";
-import { DataBucket, RawStaticData } from "../../src/Data/DataBucket";
+import { GameKey, IRawGameObject } from "@/Common/Models/_GameTypes";
+import { WorldState } from "@/Common/Objects/Common";
+import { setDataBucket } from "@/Data/useDataBucket";
+import { DataBucket, RawStaticData } from "@/Data/DataBucket";
 import { TestWorldState } from "./testWorld";
-import { tileKey } from "../../src/helpers/mapTools";
+import { tileKey } from "@/helpers/mapTools";
 
 export function initTestDataBucket(gameData?: IRawGameObject[], world?: WorldState): DataBucket {
   const rawStaticData = staticData as RawStaticData;
-  return setDataBucket(
-    DataBucket.fromRaw(rawStaticData, { objects: gameData ?? [], world: world ?? TestWorldState }),
-  );
+  return setDataBucket(DataBucket.fromRaw(rawStaticData, world ?? TestWorldState, gameData));
 }
 
 // NOTE: using any is allowed here as otherwise TS will complain about nonexistent properties

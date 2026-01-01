@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import { canHaveOne, hasOne } from "@/Common/Models/_Relations";
 import { TypeObject } from "@/Common/Objects/TypeObject";
-import { Yields } from "@/Common/Objects/Yields";
-import { roundToTenth, TypeKey } from "@/Common/Objects/Common";
+import { unitYieldTypeKeys, Yield, Yields } from "@/Common/Objects/Yields";
+import { roundToTenth } from "@/Common/Objects/Common";
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import { useDataBucket } from "@/Data/useDataBucket";
 import type { UnitDesign } from "@/Common/Models/UnitDesign";
@@ -111,7 +111,7 @@ export class Unit extends GameObject {
   /*
    * Computed
    */
-  get myTypes(): TypeObject[] {
+  get myTypes(): Set<TypeObject> {
     return [this.concept, this.design.platform, this.design.equipment];
   }
 
@@ -127,7 +127,7 @@ export class Unit extends GameObject {
     return this.tile.yields.only(this.concept.inheritYieldTypes!, this.types);
   }
 
-  get types(): TypeObject[] {
+  get types(): Set<TypeObject> {
     return this.myTypes.concat(this.tile.types);
   }
 
@@ -162,47 +162,6 @@ export class Unit extends GameObject {
         max: this.movement.maxMoves,
       },
     ]);
-  }
-
-  // Unit yields is
-  // -> the total lump output (+/-) of Design + Tile
-  // -> the YieldMods of Design
-  // -> the YieldMods that are for me of Player & Tile
-  get yields(): Yields {
-    const inheritYieldTypes = [
-      "yieldType:attack",
-      "yieldType:damage",
-      "yieldType:defense",
-      "yieldType:evasion",
-      "yieldType:heal",
-      "yieldType:hitRadius",
-      "yieldType:intercept",
-      "yieldType:missileSlot",
-      "yieldType:moves",
-      "yieldType:paradropRange",
-      "yieldType:range",
-      "yieldType:sightRadius",
-      "yieldType:settleSize",
-      "yieldType:strength",
-      "yieldType:tradeRange",
-      "yieldType:tradeYield",
-      "yieldType:upkeep",
-    ] as TypeKey[];
-
-    // Everything that I can inherit from my UnitDesign
-    const yields = this.design.yields.only(inheritYieldTypes);
-
-    // Everything that I can inherit, that is for me, from my Tile.yields
-    for (const y of this.tile.yields.only(inheritYieldTypes, this.types).all()) {
-      yields.add(y);
-    }
-
-    // Everything that I can inherit, that is for me, from my Player.yieldMods
-    for (const y of this.player.yieldMods.only(inheritYieldTypes, this.types).all()) {
-      yields.add(y);
-    }
-
-    return yields;
   }
 
   /*
@@ -294,5 +253,26 @@ export class Unit extends GameObject {
     const json = super.toJSON();
     json.moves = this.movement.moves;
     return json;
+  }
+
+  // My Yield output
+  get yields(): Yields {
+    return this.computed(
+      "_yields",
+      () => {
+        const yieldsForMe = (yields: Yields): Yield[] => {
+          return yields.only(unitYieldTypeKeys, new Set<TypeObject>(this.types)).all();
+        };
+
+        // Unit Yields are from Tile + Player YieldMods
+        const yields = new Yields();
+        yields.add(...yieldsForMe(this.tile.yields));
+        yields.add(...yieldsForMe(this.player.yieldMods));
+
+        // Flatten Yields to apply modifiers
+        return yields.flatten();
+      },
+      ["designKey", "playerKey", "tileKey"],
+    );
   }
 }

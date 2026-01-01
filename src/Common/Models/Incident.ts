@@ -4,26 +4,18 @@ import { hasOne } from "@/Common/Models/_Relations";
 import { playerYieldTypeKeys, Yield, Yields } from "@/Common/Objects/Yields";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 
-export class Deal extends GameObject {
+export class Incident extends GameObject {
   constructor(
     key: GameKey,
-    public fromPlayerKey: GameKey,
-    public toPlayerKey: GameKey,
+    public playerKey: GameKey,
   ) {
     super(key);
-    hasOne<Player>(this, "fromPlayerKey");
-    hasOne<Player>(this, "toPlayerKey");
+
+    hasOne<Player>(this, "playerKey");
   }
 
   static attrsConf: GameObjAttr[] = [
-    {
-      attrName: "fromPlayerKey",
-      related: { theirKeyAttr: "dealKeys" },
-    },
-    {
-      attrName: "toPlayerKey",
-      related: { theirKeyAttr: "dealKeys" },
-    },
+    { attrName: "playerKey", related: { theirKeyAttr: "incidentKeys" } },
   ];
 
   /*
@@ -34,9 +26,7 @@ export class Deal extends GameObject {
   /*
    * Relations
    */
-  declare fromPlayer: Player;
-
-  declare toPlayer: Player;
+  declare player: Player;
 
   /*
    * Computed
@@ -49,9 +39,9 @@ export class Deal extends GameObject {
         return yields.only(playerYieldTypeKeys, new Set<TypeObject>([this.concept])).all();
       };
 
-      // Deal Yields are just From Player Mods
+      // Incident Yields are just From Player Mods
       const yields = new Yields();
-      yields.add(...yieldsForMe(this.fromPlayer.yieldMods));
+      yields.add(...yieldsForMe(this.player.yieldMods));
 
       // Flatten Yields to apply modifiers
       return yields.flatten();

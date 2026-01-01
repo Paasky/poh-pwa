@@ -1,24 +1,26 @@
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { UnitStatus } from "@/Common/Models/Unit";
-import { Yields } from "@/Common/Objects/Yields";
+import { Yield, Yields } from "@/Common/Objects/Yields";
 import { CatKey, roundToTenth, TypeKey } from "@/Common/Objects/Common";
-import { GameKey } from "@/Common/Models/_GameModel";
+import { GameKey, ObjectWithProps } from "@/Common/Models/_GameModel";
 import { Player } from "@/Common/Models/Player";
-import { hasOne } from "@/Common/Models/_Relations";
+import { computedProp, hasOne } from "@/Common/Models/_Relations";
+import { useDataBucket } from "@/Data/useDataBucket";
 
-export class Government {
+export class Government implements ObjectWithProps {
   constructor(public playerKey: GameKey) {
     hasOne<Player>(this, "playerKey");
   }
 
   declare player: Player;
+  updateWatchers = [] as ((changes: Partial<ObjectWithProps>) => void)[];
 
   corruption = 0;
   discontent = 0;
 
-  policies: TypeObject[] = [];
+  policies: Set<TypeObject> = new Set();
 
-  get selectablePolicies(): TypeObject[] {
+  get selectablePolicies(): Set<TypeObject> {
     return this.player.knownTypes.filter((t) => t.class === "policyType");
   }
 
@@ -55,18 +57,14 @@ export class Government {
       : "regular";
   }
 
-  get yields(): Yields {
-    return new Yields(this.policies.flatMap((p) => p.yields.all()));
-  }
-
-  setPolicies(policies: TypeObject[]) {
+  setPolicies(policies: Set<TypeObject>) {
     if (this.hasElections)
       throw new Error(`Player ${this.player.name} cannot change policy with elections`);
     const errors = [] as string[];
     policies.forEach((p) => {
-      if (!this.selectablePolicies.includes(p))
+      if (!this.selectablePolicies.has(p))
         errors.push(`Player ${this.player.name} cannot select policy ${p.name}`);
-      if (this.policies.includes(p))
+      if (this.policies.has(p))
         errors.push(`Player ${this.player.name} already has policy ${p.name}`);
     });
     if (errors.length) throw new Error(errors.join("\n"));
@@ -79,7 +77,7 @@ export class Government {
 
     // Set Policies & add discontent (100%/policy)
     this.policies = newPolicies;
-    this.discontent = roundToTenth(this.discontent + policies.length * 100);
+    this.discontent = roundToTenth(this.discontent + policies.size * 100);
   }
 
   runElections() {
@@ -97,7 +95,7 @@ export class Government {
       if (!countedPolicies[cat]) countedPolicies[cat] = {};
       countedPolicies[cat][p.key] = {
         policy: p as TypeObject,
-        citizens: this.player.citizens.filter((c) => c.policy === p).length,
+        citizens: this.player.citizens.filter((c) => c.policy === p).size,
       };
     });
     const topPolicies = {} as Record<CatKey, TypeObject>;
@@ -109,7 +107,7 @@ export class Government {
     }
 
     // Filter out top policies that are already selected and set those
-    this.setPolicies(Object.values(topPolicies).filter((p) => !this.policies.includes(p)));
+    this.setPolicies(Object.values(topPolicies).filter((p) => !this.policies.has(p)));
 
     // Remove up to 100% discontent
     this.discontent = Math.max(0, roundToTenth(this.discontent - 100));
@@ -141,5 +139,66 @@ export class Government {
       // No elections -> Discontent disappears slowly (2%/t)
       this.discontent = Math.max(0, roundToTenth(this.discontent - 2));
     }
+  }
+
+  ////// v0.1
+
+  get specialTypes(): Set<TypeObject> {
+    return this.computed(
+      "_specialTypes",
+      () => {
+        const bucket = useDataBucket();
+        const types = new Set<TypeObject>();
+        this.policies.forEach((policies) => {
+          types.add(policies);
+          policies.specials.forEach((typeKey) => types.add(bucket.getType(typeKey)));
+        });
+
+        return types;
+      },
+      ["policies"],
+    );
+  }
+
+  // My Yield output
+  get yields(): Yields {
+    return this.computed(
+      "_yields",
+      () => {
+        const yields = new Yields();
+        this.policies.forEach((policy) => yields.add(...policy.yields.all()));
+
+        if (this.corruption) {
+          yields.add({
+            type: "yieldType:order",
+            amount: -this.corruption,
+            method: "percent",
+            for: new Set<TypeKey>(["conceptType:citizen"]),
+            vs: new Set(),
+          } as Yield);
+        }
+
+        if (this.discontent) {
+          yields.add({
+            type: "yieldType:happiness",
+            amount: -this.discontent,
+            method: "percent",
+            for: new Set<TypeKey>(["conceptType:citizen"]),
+            vs: new Set(),
+          } as Yield);
+        }
+
+        return yields;
+      },
+      ["policies"],
+    );
+  }
+
+  protected computed<ValueT>(
+    privatePropName: string,
+    getter: () => ValueT,
+    watchProps?: (keyof this)[],
+  ): ValueT {
+    return computedProp(this, privatePropName, getter, watchProps);
   }
 }

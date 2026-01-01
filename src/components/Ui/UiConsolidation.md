@@ -39,7 +39,7 @@ Raw Vuetify usage is allowed **only** in spike / prototype work, or by explicit 
 
 ## 3. Phase 1 — Core UI Infrastructure
 
-### 3.1 Icon System Consolidation
+### ✅ 3.1 Icon System Consolidation
 
 **What**
 Centralize all system‑level icons behind semantic keys.
@@ -61,7 +61,7 @@ Centralize all system‑level icons behind semantic keys.
 
 ---
 
-### 3.2 UiIcon
+### ✅ 3.2 UiIcon
 
 **What**
 A strict wrapper around icon rendering.
@@ -88,7 +88,7 @@ A strict wrapper around icon rendering.
 
 ---
 
-### 3.3 UiButton Refactor
+### ✅ 3.3 UiButton Refactor
 
 **What**
 Refactor UiButton to exclusively use UiIcon.
@@ -110,7 +110,7 @@ Refactor UiButton to exclusively use UiIcon.
 
 ---
 
-### 3.4 Form Input Standardization
+### ✅ 3.4 Form Input Standardization
 
 **What**
 Introduce opinionated wrappers for common form inputs.
@@ -155,7 +155,7 @@ No passthrough styling or variant overrides.
 
 ## 4. Phase 2 — Shell & Navigation Primitives
 
-### 4.1 UiDialog
+### ✅ 4.1 UiDialog
 
 **What**
 A reusable dialog shell with optional search support.
@@ -199,7 +199,7 @@ local storage). `UiDialog` only provides the `v-model:search` binding.
 
 ---
 
-### 4.2 UiTabs (Folder Style)
+### ✅ 4.2 UiTabs (Folder Style)
 
 **What**
 Opinionated tab container with folder‑style visuals.
@@ -227,7 +227,7 @@ Opinionated tab container with folder‑style visuals.
 
 ---
 
-### 4.3 UiList
+### ✅ 4.3 UiList
 
 **What**
 A minimal wrapper for flat lists.
@@ -250,7 +250,7 @@ A minimal wrapper for flat lists.
 
 ## 5. Phase 3 — Feature Migration
 
-### 5.1 Settings Dialog
+### ✅ 5.1 Settings Dialog
 
 **Where**
 `src/components/Settings/SettingsDialog.vue`
@@ -262,7 +262,7 @@ A minimal wrapper for flat lists.
 
 ---
 
-### 5.2 Encyclopedia
+### ✅ 5.2 Encyclopedia
 
 **Where**
 
@@ -280,7 +280,7 @@ Search result limiting (e.g. top 25) remains feature‑specific.
 
 ---
 
-### 5.3 Player Details
+### ✅ 5.3 Player Details
 
 **Where**
 `src/components/PlayerDetails/PlayerDetailsDialog.vue`
@@ -293,7 +293,7 @@ Search result limiting (e.g. top 25) remains feature‑specific.
 
 ---
 
-### 5.4 Terra Config
+### ✅ 5.4 Terra Config
 
 **Where**
 `src/views/Home/TerraConfigDialog.vue`

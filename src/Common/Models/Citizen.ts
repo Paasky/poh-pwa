@@ -1,13 +1,12 @@
 import { canHaveOne, hasOne } from "@/Common/Models/_Relations";
 import { TypeObject } from "@/Common/Objects/TypeObject";
-import { Yields } from "@/Common/Objects/Yields";
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import type { City } from "@/Common/Models/City";
 import type { Player } from "@/Common/Models/Player";
 import type { Culture } from "@/Common/Models/Culture";
 import type { Religion } from "@/Common/Models/Religion";
 import type { Tile } from "@/Common/Models/Tile";
-import { Construction } from "@/Common/Models/Construction";
+import { citizenYieldTypeKeys, Yield, Yields } from "@/Common/Objects/Yields";
 
 export class Citizen extends GameObject {
   constructor(
@@ -57,19 +56,32 @@ export class Citizen extends GameObject {
   /*
    * Computed
    */
-  get tileYields(): Yields {
-    return this.tile.yields.only(this.concept.inheritYieldTypes!, [this.concept]);
+
+  // Types I give to the City
+  get typesForCity(): Set<TypeObject> {
+    return this.computed("_typesForCity", () => this.tile.typesForCitizen, ["tileKey"]);
   }
 
-  get work(): Construction | null {
-    return this.tile.construction;
-  }
-
-  get workYields(): Yields | null {
-    return this.work?.yields.only(this.concept.inheritYieldTypes!, [this.concept]) ?? null;
-  }
-
+  // My Yield output
   get yields(): Yields {
-    return new Yields([...this.tileYields.all(), ...(this.workYields?.all() ?? [])]);
+    return this.computed(
+      "_yields",
+      () => {
+        const yieldsForMe = (yields: Yields): Yield[] => {
+          return yields.only(citizenYieldTypeKeys, new Set<TypeObject>([this.concept])).all();
+        };
+
+        // Citizen Yields are Culture + Religion + Tile + Player Mods
+        const yields = new Yields();
+        yields.add(...yieldsForMe(this.culture.yields));
+        if (this.religion) yields.add(...yieldsForMe(this.religion.yields));
+        yields.add(...yieldsForMe(this.tile.yields));
+        yields.add(...yieldsForMe(this.city.yieldMods));
+
+        // Flatten Yields to apply modifiers
+        return yields.flatten();
+      },
+      ["cultureKey", "religionKey", "tileKey", "playerKey"],
+    );
   }
 }

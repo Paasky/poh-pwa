@@ -14,6 +14,8 @@ import TradeTab from "@/components/PlayerDetails/Tabs/TradeTab.vue";
 import UnitsTab from "@/components/PlayerDetails/Tabs/UnitsTab.vue";
 import CitiesTab from "@/components/PlayerDetails/Tabs/CitiesTab.vue";
 import GovernmentTab from "@/components/PlayerDetails/Tabs/GovernmentTab.vue";
+import UiDialog from "@/components/Ui/UiDialog.vue";
+import UiTabs from "@/components/Ui/UiTabs.vue";
 
 const store = usePlayerDetailsStore();
 
@@ -25,64 +27,50 @@ const tabModel = computed<TabId | null>({
 </script>
 
 <template>
-  <v-dialog v-model="store.isOpen" fullscreen :scrim="true" :close-on-back="false">
-    <v-card color="surface" class="d-flex flex-column h-100">
-      <!-- Top bar: Tabs fill available space + Close button on the right -->
-      <v-toolbar density="comfortable" color="secondary" class="px-2" style="user-select: none">
-        <!-- Growing tabs -->
-        <div class="flex-grow-1 overflow-hidden">
-          <v-tabs v-model="tabModel" grow height="48" class="flex-grow-1" color="primary">
-            <v-tab v-for="t in playerDetailConfig" :key="t.id" :value="t.id">
-              <template #prepend>
-                <v-icon :icon="t.iconClass" :color="t.iconColor" />
-              </template>
-              {{ t.label }}
-            </v-tab>
-          </v-tabs>
-        </div>
-        <v-btn
-          icon
-          variant="text"
-          class="flex-shrink-0 ml-2"
-          :title="'Close'"
-          @click="store.close()"
-        >
-          <v-icon icon="fa-xmark" />
-        </v-btn>
-      </v-toolbar>
+  <UiDialog
+    :model-value="store.isOpen"
+    @update:model-value="(val) => !val && store.close()"
+    title="Player Details"
+    fullscreen
+    :close-on-back="false"
+  >
+    <div class="d-flex flex-column h-100 ga-4">
+      <UiTabs
+        v-model="tabModel"
+        :items="
+          playerDetailConfig.map((t) => ({
+            label: t.label,
+            value: t.id,
+            icon: t.icon,
+          }))
+        "
+      />
 
-      <!-- Content -->
-      <v-card-text class="pa-0 flex-grow-1 d-flex flex-column overflow-hidden">
-        <v-window v-model="tabModel" class="flex-grow-1 w-100 h-100 overflow-hidden">
-          <v-window-item value="economy" class="w-100 h-100 overflow-x-hidden overflow-y-auto"
-            ><EconomyTab />
-          </v-window-item>
-          <v-window-item value="research" class="w-100 h-100 overflow-auto"
-            ><ResearchTab />
-          </v-window-item>
-          <v-window-item value="culture" class="w-100 h-100 overflow-x-hidden overflow-y-auto"
-            ><CultureTab />
-          </v-window-item>
-          <v-window-item value="religion" class="w-100 h-100 overflow-x-hidden overflow-y-auto"
-            ><ReligionTab />
-          </v-window-item>
-          <v-window-item value="diplomacy" class="w-100 h-100 overflow-x-hidden overflow-y-auto"
-            ><DiplomacyTab />
-          </v-window-item>
-          <v-window-item value="trade" class="w-100 h-100 overflow-x-hidden overflow-y-auto"
-            ><TradeTab />
-          </v-window-item>
-          <v-window-item value="units" class="w-100 h-100 overflow-x-hidden overflow-y-auto"
-            ><UnitsTab />
-          </v-window-item>
-          <v-window-item value="cities" class="w-100 h-100 overflow-x-hidden overflow-y-auto"
-            ><CitiesTab />
-          </v-window-item>
-          <v-window-item value="government" class="w-100 h-100 overflow-x-hidden overflow-y-auto"
-            ><GovernmentTab />
-          </v-window-item>
+      <div class="flex-grow-1 overflow-hidden">
+        <v-window v-model="tabModel" class="h-100">
+          <v-window-item value="economy" class="h-100 overflow-y-auto"
+            ><EconomyTab
+          /></v-window-item>
+          <v-window-item value="research" class="h-100 overflow-y-auto"
+            ><ResearchTab
+          /></v-window-item>
+          <v-window-item value="culture" class="h-100 overflow-y-auto"
+            ><CultureTab
+          /></v-window-item>
+          <v-window-item value="religion" class="h-100 overflow-y-auto"
+            ><ReligionTab
+          /></v-window-item>
+          <v-window-item value="diplomacy" class="h-100 overflow-y-auto"
+            ><DiplomacyTab
+          /></v-window-item>
+          <v-window-item value="trade" class="h-100 overflow-y-auto"><TradeTab /></v-window-item>
+          <v-window-item value="units" class="h-100 overflow-y-auto"><UnitsTab /></v-window-item>
+          <v-window-item value="cities" class="h-100 overflow-y-auto"><CitiesTab /></v-window-item>
+          <v-window-item value="government" class="h-100 overflow-y-auto"
+            ><GovernmentTab
+          /></v-window-item>
         </v-window>
-      </v-card-text>
-    </v-card>
-  </v-dialog>
+      </div>
+    </div>
+  </UiDialog>
 </template>

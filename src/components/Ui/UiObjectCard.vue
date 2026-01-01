@@ -55,10 +55,9 @@ defineEmits(["select"]);
                 ? 'Select'
                 : 'Not Available'
         "
-        :variant="isSelected ? 'elevated' : canSelect ? 'outlined' : 'text'"
+        :type="isSelected ? 'primary' : canSelect ? 'secondary' : 'text'"
         :class="(canSelect ? 'selectable text-white ' : '') + 'flex-0-0-auto'"
         style="width: 6rem; white-space: nowrap"
-        :aria-disabled="!canSelect"
       />
     </div>
 
@@ -90,10 +89,9 @@ defineEmits(["select"]);
               ? 'Select'
               : 'Not Available'
       "
-      :variant="isSelected ? 'elevated' : canSelect ? 'outlined' : 'text'"
+      :type="isSelected ? 'primary' : canSelect ? 'secondary' : 'text'"
       :class="canSelect ? 'selectable text-white ' : ''"
       style="white-space: nowrap"
-      :aria-disabled="!canSelect"
     />
   </v-card>
 </template>

@@ -9,11 +9,11 @@ export class Requires {
   constructor(requires: ObjKey[] | ObjKey[][] = []) {
     for (const r of requires) {
       if (Array.isArray(r)) {
-        this._requireAny.push(r);
-        this._allTypes.push(...r);
+        this._requireAny.add(r);
+        this._allTypes.add(...r);
       } else {
-        this._requireAll.push(r);
-        this._allTypes.push(r);
+        this._requireAll.add(r);
+        this._allTypes.add(r);
       }
     }
   }
@@ -23,7 +23,7 @@ export class Requires {
   }
 
   get isEmpty(): boolean {
-    return this._allTypes.length === 0;
+    return this._allTypes.size === 0;
   }
 
   get requireAll(): ObjKey[] {
@@ -34,7 +34,7 @@ export class Requires {
     return this._requireAny;
   }
 
-  isSatisfied(types: TypeObject[]): boolean {
+  isSatisfied(types: Set<TypeObject>): boolean {
     // Need to check type.key, type.category && type.concept
 
     // At least one of the given objects must match each "require all"-keys
@@ -48,9 +48,7 @@ export class Requires {
       if (
         !types.some(
           (t) =>
-            require.includes(t.key) ||
-            (t.category && require.includes(t.category)) ||
-            require.includes(t.concept),
+            require.has(t.key) || (t.category && require.has(t.category)) || require.has(t.concept),
         )
       )
         return false;
@@ -66,14 +64,14 @@ export class Requires {
 
     for (const req of this._requireAll) {
       if (classes.some((c) => req.startsWith(`${c}:`))) {
-        all.push(req);
+        all.add(req);
       }
     }
 
     for (const reqAny of this._requireAny) {
       for (const req of reqAny) {
         if (classes.some((c) => req.startsWith(`${c}:`))) {
-          any.push(reqAny);
+          any.add(reqAny);
           break;
         }
       }

@@ -1,6 +1,7 @@
 import { useDataBucket } from "@/Data/useDataBucket";
 import { TypeClass, TypeObject } from "@/Common/Objects/TypeObject";
 import { TypeKey } from "@/Common/Objects/Common";
+import { filter, map } from "@/helpers/collectionTools";
 
 export interface WorldLinkFilters {
   typeClasses?: TypeClass[];
@@ -144,9 +145,8 @@ export class WorldLinks {
     const cultureTimeline = this._typeTimeline(culture);
 
     if (cultureOrLeader.class.includes("LeaderType")) {
-      return cultureTimeline.map((c) => {
-        const meta = this.registry.get(c.key);
-        return meta?.leader ? bucket.getType(meta.leader) : c; // Fallback to culture if no leader? Or just return the leader.
+      return map(cultureTimeline, (culture) => {
+        return bucket.getType(this.registry.get(culture.key)!.leader!);
       });
     }
 
@@ -156,25 +156,22 @@ export class WorldLinks {
   /**
    * Flexible API to retrieve filtered TypeObjects
    */
-  public only(filters: WorldLinkFilters): TypeObject[] {
+  public only(filters: WorldLinkFilters): Set<TypeObject> {
     this.init();
     const bucket = useDataBucket();
     const allTypes = bucket.getTypes();
 
-    return Array.from(allTypes.values()).filter((obj) => {
+    return filter(allTypes, (obj) => {
       const meta = this.registry.get(obj.key);
 
-      if (filters.typeClasses && !filters.typeClasses.includes(obj.class)) return false;
-      if (filters.continents && (!meta?.continent || !filters.continents.includes(meta.continent)))
+      if (filters.typeClasses && !filters.typeClasses.has(obj.class)) return false;
+      if (filters.continents && (!meta?.continent || !filters.continents.has(meta.continent)))
         return false;
-      if (filters.regions && (!meta?.region || !filters.regions.includes(meta.region)))
-        return false;
+      if (filters.regions && (!meta?.region || !filters.regions.has(meta.region))) return false;
       if (
         filters.cultures &&
         ((!meta?.culture && obj.class !== "majorCultureType" && obj.class !== "minorCultureType") ||
-          (meta?.culture
-            ? !filters.cultures.includes(meta.culture)
-            : !filters.cultures.includes(obj.key)))
+          (meta?.culture ? !filters.cultures.has(meta.culture) : !filters.cultures.has(obj.key)))
       )
         return false;
 
@@ -184,7 +181,7 @@ export class WorldLinks {
           obj.class === "majorCultureType" || obj.class === "minorCultureType"
             ? obj.key
             : meta?.culture;
-        if (!cultureKey || !filters.cultures.includes(cultureKey)) return false;
+        if (!cultureKey || !filters.cultures.has(cultureKey)) return false;
       }
 
       if (filters.leaders) {
@@ -192,13 +189,11 @@ export class WorldLinks {
           obj.class === "majorLeaderType" || obj.class === "minorLeaderType"
             ? obj.key
             : meta?.leader;
-        if (!leaderKey || !filters.leaders.includes(leaderKey)) return false;
+        if (!leaderKey || !filters.leaders.has(leaderKey)) return false;
       }
 
-      if (filters.eras && (!meta?.era || !filters.eras.includes(meta.era))) return false;
-      if (filters.isMinor !== undefined && meta?.isMinor !== filters.isMinor) return false;
-
-      return true;
+      if (filters.eras && (!meta?.era || !filters.eras.has(meta.era))) return false;
+      return !(filters.isMinor !== undefined && meta?.isMinor !== filters.isMinor);
     });
   }
 }

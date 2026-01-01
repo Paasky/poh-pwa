@@ -1,61 +1,60 @@
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { TypeKey } from "@/Common/Objects/Common";
-import { GameKey } from "@/Common/Models/_GameModel";
+import { GameKey, ObjectWithProps } from "@/Common/Models/_GameModel";
 import { Player } from "@/Common/Models/Player";
 import { useDataBucket } from "@/Data/useDataBucket";
-import { hasOne } from "@/Common/Models/_Relations";
+import { computedProp, hasOne } from "@/Common/Models/_Relations";
+import { sort } from "@/helpers/collectionTools";
+import { Yields, YieldTypeKey } from "@/Common/Objects/Yields";
 
-export class Research {
+export class Research implements ObjectWithProps {
   constructor(public playerKey: GameKey) {
     hasOne<Player>(this, "playerKey");
   }
 
   declare player: Player;
 
-  researched: TypeObject[] = [];
+  researched: Set<TypeObject> = new Set();
   researching: Record<TypeKey, { progress: number; target: TypeObject }> = {};
   current: TypeObject | null = null;
   queue: TypeObject[] = [];
+  updateWatchers = [] as ((changes: Partial<ObjectWithProps>) => void)[];
 
   get era(): TypeObject | null {
-    if (!this.researched.length) return null;
+    if (!this.researched.size) return null;
 
-    const highestYTech = this.researched.reduce<TypeObject | null>((highest, current) => {
-      if (!highest) return current as TypeObject;
-      const curY = current.y!;
-      const hiY = highest.y!;
-      return curY > hiY ? (current as TypeObject) : (highest as TypeObject);
-    }, null) as TypeObject;
+    let highestYTech = null as TypeObject | null;
+    for (const tech of this.researched) {
+      if (!highestYTech || tech.y! > highestYTech.y!) highestYTech = tech;
+    }
 
-    return this.getEra(highestYTech);
+    return highestYTech ? this.getEra(highestYTech) : null;
   }
 
   addToQueue(tech: TypeObject, reset = true) {
-    if (this.researched.includes(tech)) return;
+    if (this.researched.has(tech)) return;
 
     if (reset) this.queue = [];
 
     // Anything already in the queue is "in the chain"
-    const chain = [...this.queue] as TypeObject[];
+    const chain = new Set<TypeObject>([...this.queue]);
     this.collectRequired(tech, chain);
 
     // Finally, add requested tech to the chain
-    chain.push(tech);
-
-    // Deduplicate while preserving order
-    const unique = Array.from(new Set(chain));
+    chain.add(tech);
 
     // Sort top-to-bottom then left-to-right (fallback if y equal)
-    unique.sort((a, b) => a.y! - b.y! || a.x! - b.x!);
-    this.queue.push(...unique);
+    const unique = sort<Set<TypeObject>, TypeObject>(chain, (a, b) => a.y! - b.y! || a.x! - b.x!);
+
+    unique.forEach((tech) => this.queue.push(tech));
     if (!this.current) this.current = unique[0];
   }
 
   complete(tech: TypeObject) {
-    if (this.researched.includes(tech)) return;
+    if (this.researched.has(tech)) return;
 
     // It's now researched
-    this.researched.push(tech);
+    this.researched.add(tech);
     delete this.researching[tech.key];
 
     // Remove from current and queue if it was in either
@@ -90,24 +89,13 @@ export class Research {
     }
   }
 
-  isLaterEra(from: TypeObject, to: TypeObject): boolean {
-    const eras = useDataBucket()
-      .getTypes()
-      .filter((t) => t.class === "eraType");
-    return eras.indexOf(from) < eras.indexOf(to);
-  }
-
-  private collectRequired(target: TypeObject, acc: TypeObject[]): void {
+  private collectRequired(target: TypeObject, acc: Set<TypeObject>): void {
     // Crawl up the required-chain
     target.requires.requireAll.forEach((reqKey) => {
       const required = useDataBucket().getType(reqKey as TypeKey);
-      if (
-        required.class !== "technologyType" ||
-        this.researched.includes(required) ||
-        acc.includes(required)
-      )
+      if (required.class !== "technologyType" || this.researched.has(required) || acc.has(required))
         return;
-      acc.push(required);
+      acc.add(required);
       this.collectRequired(required, acc);
     });
 
@@ -117,8 +105,8 @@ export class Research {
       anyKeys.forEach((orReqKey) => {
         if (cheapest === false) return;
         const required = useDataBucket().getType(orReqKey as TypeKey);
-        if (required.class !== "technologyType" || acc.includes(required)) return;
-        if (this.researched.includes(required)) {
+        if (required.class !== "technologyType" || acc.has(required)) return;
+        if (this.researched.has(required)) {
           cheapest = false;
           return;
         }
@@ -131,7 +119,7 @@ export class Research {
         }
       });
       if (cheapest) {
-        acc.push(cheapest);
+        acc.add(cheapest);
         this.collectRequired(cheapest, acc);
       }
     });
@@ -149,13 +137,51 @@ export class Research {
     return Math.ceil(costLeft / sciencePerTurn);
   }
 
-  get knownTypeKeys(): TypeKey[] {
-    return this.researched.flatMap((tech) => tech.allows);
-  }
-
   startTurn() {
     if (!this.current) return;
 
     this.addProgress(this.current as TypeObject, this.player.storage.takeAll("yieldType:science"));
+  }
+
+  ////// v0.1
+
+  get specialTypes(): Set<TypeObject> {
+    return this.computed(
+      "_specialTypes",
+      () => {
+        const bucket = useDataBucket();
+        const types = new Set<TypeObject>();
+        this.researched.forEach((tech) => {
+          types.add(tech);
+          tech.specials.forEach((typeKey) => types.add(bucket.getType(typeKey)));
+        });
+
+        return types;
+      },
+      ["researched"],
+    );
+  }
+
+  // My Yield output
+  get yields(): Yields {
+    return this.computed(
+      "_yields",
+      () => {
+        const yields = new Yields();
+        const notTypes = new Set<YieldTypeKey>(["yieldType:science"]);
+        this.researched.forEach((tech) => yields.add(...tech.yields.not(notTypes).all()));
+
+        return yields;
+      },
+      ["researched"],
+    );
+  }
+
+  protected computed<ValueT>(
+    privatePropName: string,
+    getter: () => ValueT,
+    watchProps?: (keyof this)[],
+  ): ValueT {
+    return computedProp(this, privatePropName, getter, watchProps);
   }
 }

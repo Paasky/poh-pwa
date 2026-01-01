@@ -1,8 +1,8 @@
 import { Engine } from "@babylonjs/core";
 import { defineStore } from "pinia";
-import { markRaw } from "vue";
+import { markRaw, Ref } from "vue";
 import type { Router } from "vue-router";
-import { useDataBucket } from "@/Data/useDataBucket";
+import { hasDataBucket, useDataBucket } from "@/Data/useDataBucket";
 import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
 import { PohEngine } from "@/Player/Human/PohEngine";
 import { createWorld } from "@/factories/worldFactory";
@@ -22,19 +22,13 @@ import { Player } from "@/Common/Models/Player";
 import { Unit } from "@/Common/Models/Unit";
 import { City } from "@/Common/Models/City";
 import { DataStore } from "@/Data/DataStore";
-import { DataBucket, RawSaveData, RawStaticData } from "@/Data/DataBucket";
 import { saveManager } from "@/utils/saveManager";
 import { useMapGenStore } from "@/stores/mapGenStore";
 import pkg from "../../package.json";
 import { setCurrentPlayer, useCurrentContext } from "@/composables/useCurrentContext";
+import { DataBucket } from "@/Data/DataBucket";
 
 const APP_VERSION = pkg.version;
-
-export async function fetchJSON<T>(url: string): Promise<T> {
-  const res = await fetch(url, { cache: "no-store" });
-  if (!res.ok) throw new Error(`${url} HTTP ${res.status}`);
-  return (await res.json()) as Promise<T>;
-}
 
 export const useAppStore = defineStore("app", {
   state: () => ({
@@ -46,32 +40,37 @@ export const useAppStore = defineStore("app", {
     store: {} as DataStore,
 
     // This will be filled in by `src/router/index.ts` using setRouter()
-    _router: markRaw({}) as Router,
+    _router: markRaw({}) as Ref<Router>,
   }),
   actions: {
     async init(saveId?: string, engine?: Engine) {
       if (this.ready) return; // Happens on hot-reload
 
-      async function getStaticData() {
-        return await fetchJSON<RawStaticData>("/staticData.json");
-      }
+      type TaskDefinition = () => void | Promise<void>;
 
       const loadGame = async (saveId: string): Promise<void> => {
-        this.store = markRaw(
-          new DataStore(DataBucket.fromRaw(await getStaticData(), saveManager.load(saveId))),
-        );
+        const rawSaveData = saveManager.load(saveId);
+        const dataBucket = useDataBucket();
+        dataBucket.setWorld(rawSaveData.world);
+        dataBucket.setRawObjects(rawSaveData.objects);
+
+        this.store = markRaw(new DataStore(dataBucket));
       };
 
       const createGame = async (): Promise<void> => {
-        const worldData = createWorld(useMapGenStore().getResolvedConfig());
-        const rawSave: RawSaveData = {
-          name: "New Game",
-          time: Date.now(),
-          version: APP_VERSION,
-          objects: worldData.objects,
-          world: worldData.world,
-        };
-        this.store = markRaw(new DataStore(DataBucket.fromRaw(await getStaticData(), rawSave)));
+        const dataBucket = useDataBucket();
+        const worldConfig = useMapGenStore().getResolvedConfig();
+
+        // Set a partial World (used by World Factory)
+        dataBucket.setWorld(worldConfig.worldState);
+
+        const worldBundle = createWorld(worldConfig);
+
+        // Set the full World State and Objects from the generated bundle
+        dataBucket.setWorld(worldBundle.world);
+        dataBucket.setRawObjects(worldBundle.objects);
+
+        this.store = markRaw(new DataStore(dataBucket));
       };
 
       const createEngine = (): void => {
@@ -87,7 +86,15 @@ export const useAppStore = defineStore("app", {
 
       // PHASE 1: Data & Settings
       // Data-layer completion is a hard precondition for Phase 2.
-      const dataTasks = [
+      const dataTasks: { title: string; fn: TaskDefinition }[] = [
+        {
+          title: "Load Static Data",
+          fn: () => {
+            if (!hasDataBucket()) {
+              DataBucket.init();
+            }
+          },
+        },
         { title: "Load Settings", fn: () => useSettingsStore().init() },
         {
           title: saveId ? "Load Saved Game" : "Create New World",
@@ -163,6 +170,7 @@ export const useAppStore = defineStore("app", {
       );
 
       this.loaded = true;
+      this.syncUiStateFromNav();
     },
     async saveGame(isAutosave = false) {
       const bucket = useDataBucket();
@@ -223,25 +231,16 @@ export const useAppStore = defineStore("app", {
     // NOTE: Never update UI state manually, always listen for this!
     // UI state listeners are configured in router/index.ts
     syncUiStateFromNav() {
-      try {
-        // IDE doesn't understand 'currentRoute' is not a ref here
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const query = (this.router.currentRoute as any).query;
-        // Update each registered UI state
-        for (const cfg of Object.values(this.uiStateListeners)) {
-          if (query[cfg.id] === undefined) {
-            // Does not exist in query -> clear the data from UI
-            cfg.onClear();
-          } else {
-            // Has data in query -> update the UI
-
-            // IDE doesn't understand that `query` is a regular object
-            // eslint-disable-next-line
-            cfg.onUpdate((query as any)[cfg.id]);
-          }
+      const query = this.router.currentRoute.value.query;
+      // Update each registered UI state
+      for (const cfg of Object.values(this.uiStateListeners)) {
+        if (query[cfg.id] === undefined) {
+          // Does not exist in query -> clear the data from UI
+          cfg.onClear();
+        } else {
+          // Has data in query -> update the UI
+          cfg.onUpdate(query[cfg.id] as string);
         }
-      } catch {
-        return;
       }
     },
 
@@ -253,8 +252,7 @@ export const useAppStore = defineStore("app", {
       if (!router.currentRoute.value) {
         throw new Error("Router.currentRoute does not exist");
       }
-      // eslint-disable-next-line
-      this._router = markRaw(router) as any; // this is where .value magically disappears
+      this._router = markRaw(router);
     },
   },
   getters: {

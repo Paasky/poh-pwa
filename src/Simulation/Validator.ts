@@ -39,7 +39,7 @@ export const hasMoves = (unit: Unit): void => {
 };
 
 export const isInRange = (
-  object: { tile: Tile; types: TypeObject[]; yields: Yields },
+  object: { tile: Tile; types: Set<TypeObject>; yields: Yields },
   tile: Tile,
 ): void => {
   const range = object.yields

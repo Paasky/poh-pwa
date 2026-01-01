@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { ObjKey, PohObject } from "@/Common/Objects/Common";
+import { ObjKey, PohObject, TypeKey } from "@/Common/Objects/Common";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
@@ -12,8 +12,7 @@ const props = defineProps<{
 }>();
 
 const t = computed((): TypeObject => {
-  if (typeof props.type === "string")
-    return useDataBucket().get(props.type as ObjKey) as TypeObject;
+  if (typeof props.type === "string") return useDataBucket().getType(props.type as TypeKey);
   return props.type as TypeObject;
 });
 
@@ -89,7 +88,7 @@ const tooltip = computed(() => {
   }
 
   if (t.value.category) {
-    return `${useDataBucket().getCategoryObject(t.value.category).name} ${concept}`;
+    return `${useDataBucket().getCategory(t.value.category).name} ${concept}`;
   }
 
   return concept;

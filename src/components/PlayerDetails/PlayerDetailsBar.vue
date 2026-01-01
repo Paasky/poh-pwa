@@ -14,16 +14,14 @@ const store = usePlayerDetailsStore();
     <UiButton
       v-for="item in playerDetailConfig"
       :key="item.id"
-      :icon="item.iconClass"
+      :icon="item.icon"
       :icon-color="item.iconColor"
       :text="item.text"
       :effect-text="item.effect.text"
       :effect-class="item.effect.color"
       :tooltip="item.tooltip"
-      color="secondary"
-      rounded="0"
-      size="small"
-      class="rounded-b-lg"
+      type="secondary"
+      rounded="b-lg"
       @click="store.open(item.id)"
     />
   </div>

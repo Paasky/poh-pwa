@@ -12,7 +12,7 @@ export class PlayerUnselectType implements ISimAction {
   validateAction(): this {
     switch (this.type.class) {
       case "traitType":
-        if (!this.player.culture.traits.includes(this.type)) {
+        if (!this.player.culture.traits.has(this.type)) {
           throw new Error("This trait is not selected by this player");
         }
         break;

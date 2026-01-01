@@ -44,8 +44,8 @@ const current = ref<Religion | null>(store.defaultCurrent as Religion | null);
           Founded {{ formatYear(getYearFromTurn(current.foundedTurn)) }} in {{ current.city.name }}
         </div>
         <div>
-          {{ current.citizenKeys.length }} followers,
-          {{ Math.round((current.citizenKeys.length / store.citizensCount) * 100) }}% of world
+          {{ current.citizenKeys.size }} followers,
+          {{ Math.round((current.citizenKeys.size / store.citizensCount) * 100) }}% of world
           population
         </div>
 

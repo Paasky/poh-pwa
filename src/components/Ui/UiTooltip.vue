@@ -36,7 +36,7 @@ const props = withDefaults(
   >
     <template #activator="{ props: tip }">
       <!-- Apply Vuetify-provided activator props to an inline wrapper.
-           This keeps consumer usage clean: <UiTooltip> <v-icon/> </UiTooltip> -->
+           This keeps consumer usage clean: <UiTooltip> <UiIcon/> </UiTooltip> -->
       <span class="ui-tooltip-activator" v-bind="tip">
         <slot />
       </span>
