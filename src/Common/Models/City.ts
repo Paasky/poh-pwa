@@ -1,7 +1,3 @@
-import { hasMany, hasOne } from "@/Common/Models/_Relations";
-import { ConstructionQueue, TrainingQueue } from "@/Common/Objects/Queues";
-import { TypeStorage } from "@/Common/Objects/TypeStorage";
-import { cityYieldTypeKeys, Yield, Yields } from "@/Common/Objects/Yields";
 import { GameKey, GameObjAttr, GameObject, generateKey } from "@/Common/Models/_GameModel";
 import { Citizen } from "@/Common/Models/Citizen";
 import type { Player } from "@/Common/Models/Player";
@@ -16,6 +12,9 @@ import { getRandom } from "@/helpers/arrayTools";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { UnitDesign } from "@/Common/Models/UnitDesign";
 import { getNeighbors } from "@/helpers/mapTools";
+import { ConstructionQueue, TrainingQueue } from "@/Common/Objects/Queues";
+import { TypeStorage } from "@/Common/Objects/TypeStorage";
+import { cityYieldTypeKeys, Yield, Yields } from "@/Common/Objects/Yields";
 
 export class City extends GameObject {
   constructor(
@@ -29,16 +28,6 @@ export class City extends GameObject {
     public origPlayerKey: GameKey = playerKey,
   ) {
     super(key);
-
-    hasOne<Player>(this, "origPlayerKey");
-    hasOne<Player>(this, "playerKey");
-    hasOne<Tile>(this, "tileKey");
-
-    hasMany<Citizen>(this, "citizenKeys");
-    hasMany<Construction>(this, "constructionKeys");
-    hasMany<Religion>(this, "holyCityForKeys");
-    hasMany<TradeRoute>(this, "tradeRouteKeys");
-    hasMany<Unit>(this, "unitKeys");
   }
 
   static attrsConf: GameObjAttr[] = [
@@ -62,25 +51,41 @@ export class City extends GameObject {
    * Relations
    */
   citizenKeys = new Set<GameKey>();
-  declare citizens: Citizen[];
+  get citizens(): Map<GameKey, Citizen> {
+    return this.hasMany<Citizen>("citizenKeys");
+  }
 
   constructionKeys = new Set<GameKey>();
-  declare constructions: Construction[];
+  get constructions(): Map<GameKey, Construction> {
+    return this.hasMany<Construction>("constructionKeys");
+  }
 
   holyCityForKeys = new Set<GameKey>();
-  declare holyCityFors: Religion[];
+  get holyCityFors(): Map<GameKey, Religion> {
+    return this.hasMany<Religion>("holyCityForKeys");
+  }
 
-  declare origPlayer: Player;
+  get origPlayer(): Player {
+    return this.hasOne<Player>("origPlayerKey");
+  }
 
-  declare player: Player;
+  get player(): Player {
+    return this.hasOne<Player>("playerKey");
+  }
 
-  declare tile: Tile;
+  get tile(): Tile {
+    return this.hasOne<Tile>("tileKey");
+  }
 
   tradeRouteKeys = new Set<GameKey>();
-  declare tradeRoutes: TradeRoute[];
+  get tradeRoutes(): Map<GameKey, TradeRoute> {
+    return this.hasMany<TradeRoute>("tradeRouteKeys");
+  }
 
   unitKeys = new Set<GameKey>();
-  declare units: Unit[];
+  get units(): Map<GameKey, Unit> {
+    return this.hasMany<Unit>("unitKeys");
+  }
 
   /*
    * Computed
@@ -117,17 +122,17 @@ export class City extends GameObject {
 
     return possibleTiles.filter(
       (tile) =>
-        // Tile belongs to same Player
+        // Tile belongs to same Actor
         tile.playerKey === this.playerKey &&
         // Tile has free citizen slot(s)
         tile.freeCitizenSlotCount &&
         // Tile is not occupied by another city
-        !tile.citizens.some((citizen) => citizen.cityKey !== this.key),
+        ![...tile.citizens.values()].some((citizen) => citizen.cityKey !== this.key),
     );
   }
 
   get trainableDesigns(): UnitDesign[] {
-    return this.player.designs;
+    return [...this.player.designs.values()];
   }
 
   // Total population derived from citizen count
@@ -188,10 +193,10 @@ export class City extends GameObject {
     // todo
   }
 
-  // Types I give to the Player
+  // Types I give to the Actor
   get typesForPlayer(): Set<TypeObject> {
     return this.computed(
-      "_typesForCity",
+      "typesForCity",
       () => {
         const types = new Set<TypeObject>([this.concept]);
         const processedTileKeys = new Set<GameKey>();
@@ -209,7 +214,7 @@ export class City extends GameObject {
   // Yield Mods for all my Citizens/Constructions/Tiles/Trade Routes (they use these to calc their Yields)
   get yieldMods(): Yields {
     return this.computed(
-      "_yieldMods",
+      "yieldMods",
       () => {
         const yieldMods = new Yields();
 
@@ -230,7 +235,7 @@ export class City extends GameObject {
           citizen.typesForCity.forEach((type) => yieldMods.add(...mods(type.yields))),
         );
 
-        // From Player
+        // From Actor
         yieldMods.add(...mods(this.player.yieldMods));
 
         return yieldMods;
@@ -242,7 +247,7 @@ export class City extends GameObject {
   // My Yield output
   get yields(): Yields {
     return this.computed(
-      "_yields",
+      "yields",
       () => {
         const forMe = new Set<TypeObject>([
           this.concept,
@@ -287,7 +292,7 @@ export class City extends GameObject {
           return yields.only(cityYieldTypeKeys, forMe).all();
         };
 
-        // City Yields are All Citizens + Player Mods
+        // City Yields are All Citizens + Actor Mods
         const yields = new Yields();
         this.citizens.forEach((citizen) => yields.add(...yieldsForMe(citizen.yields)));
         yields.add(...yieldsForMe(this.player.yieldMods));

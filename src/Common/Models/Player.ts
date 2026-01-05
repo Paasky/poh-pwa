@@ -1,4 +1,3 @@
-import { canHaveOne, hasMany, hasOne } from "@/Common/Models/_Relations";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { TypeStorage } from "@/Common/Objects/TypeStorage";
 import { playerYieldTypeKeys, Yield, Yields } from "@/Common/Objects/Yields";
@@ -8,8 +7,8 @@ import type { City } from "@/Common/Models/City";
 import type { Agenda } from "@/Common/Models/Agenda";
 import type { Deal } from "@/Common/Models/Deal";
 import type { Culture } from "@/Common/Models/Culture";
-import { Government } from "@/Common/Objects/Government";
-import { Research } from "@/Common/Objects/Research";
+import { Government } from "@/Common/Models/Government";
+import { Research } from "@/Common/Models/Research";
 import type { Citizen } from "@/Common/Models/Citizen";
 import type { Religion } from "@/Common/Models/Religion";
 import type { Tile } from "@/Common/Models/Tile";
@@ -24,6 +23,9 @@ export class Player extends GameObject {
   constructor(
     key: GameKey,
     public cultureKey: GameKey,
+    public diplomacyKey: GameKey,
+    public governmentKey: GameKey,
+    public researchKey: GameKey,
     public name: string,
     public isCurrent = false,
     public isMinor = false,
@@ -35,30 +37,23 @@ export class Player extends GameObject {
     super(key);
 
     this.diplomacy = new Diplomacy(key);
-    this.government = new Government(key);
-    this.research = new Research(key);
-
-    hasOne<Culture>(this, "cultureKey");
-    canHaveOne<Religion>(this, "religionKey");
-    hasMany<Player>(this, "knownPlayerKeys");
-    hasMany<Religion>(this, "knownReligionKeys");
-    hasMany<Tile>(this, "knownTileKeys");
-
-    hasMany<Agenda>(this, "agendaKeys");
-    hasMany<Citizen>(this, "citizenKeys");
-    hasMany<City>(this, "cityKeys");
-    hasMany<Construction>(this, "constructionKeys");
-    hasMany<Deal>(this, "dealKeys");
-    hasMany<Incident>(this, "incidentKeys");
-    hasMany<Tile>(this, "tileKeys");
-    hasMany<TradeRoute>(this, "tradeRouteKeys");
-    hasMany<Unit>(this, "unitKeys");
-    hasMany<UnitDesign>(this, "designKeys");
   }
 
   static attrsConf: GameObjAttr[] = [
     {
       attrName: "cultureKey",
+      related: { theirKeyAttr: "playerKey", isOne: true },
+    },
+    {
+      attrName: "diplomacyKey",
+      related: { theirKeyAttr: "playerKey", isOne: true },
+    },
+    {
+      attrName: "governmentKey",
+      related: { theirKeyAttr: "playerKey", isOne: true },
+    },
+    {
+      attrName: "researchKey",
       related: { theirKeyAttr: "playerKey", isOne: true },
     },
     { attrName: "name" },
@@ -88,51 +83,91 @@ export class Player extends GameObject {
   /*
    * Attributes
    */
-  diplomacy: Diplomacy;
-  government: Government;
-  research: Research;
   storage = new TypeStorage();
 
   /*
    * Relations
    */
+
   agendaKeys = new Set<GameKey>();
-  declare agendas: Agenda[];
+  get agendas(): Map<GameKey, Agenda> {
+    return this.hasMany<Agenda>("agendaKeys");
+  }
 
   citizenKeys = new Set<GameKey>();
-  declare citizens: Citizen[];
+  get citizens(): Map<GameKey, Citizen> {
+    return this.hasMany<Citizen>("citizenKeys");
+  }
 
   cityKeys = new Set<GameKey>();
-  declare cities: City[];
+  get cities(): Map<GameKey, City> {
+    return this.hasMany<City>("cityKeys");
+  }
 
   constructionKeys = new Set<GameKey>();
-  declare constructions: Construction[];
+  get constructions(): Map<GameKey, Construction> {
+    return this.hasMany<Construction>("constructionKeys");
+  }
 
-  declare culture: Culture;
+  get culture(): Culture {
+    return this.hasOne<Culture>("cultureKey");
+  }
 
   dealKeys = new Set<GameKey>();
-  declare deals: Deal[];
-
-  incidentKeys = new Set<GameKey>();
-  declare incidents: Incident[];
-
-  declare religion: Religion | null;
-
-  tileKeys = new Set<GameKey>();
-  declare tiles: Tile[];
-
-  tradeRouteKeys = new Set<GameKey>();
-  declare tradeRoutes: TradeRoute[];
-
-  declare knownPlayers: Player[];
-  declare knownReligions: Religion[];
-  declare knownTiles: Tile[];
-
-  unitKeys = new Set<GameKey>();
-  declare units: Unit[];
+  get deals(): Map<GameKey, Deal> {
+    return this.hasMany<Deal>("dealKeys");
+  }
 
   designKeys = new Set<GameKey>();
-  declare designs: UnitDesign[];
+  get designs(): Map<GameKey, UnitDesign> {
+    return this.hasMany<UnitDesign>("designKeys");
+  }
+
+  get diplomacy(): Diplomacy {
+    return this.hasOne<Diplomacy>("diplomacyKey");
+  }
+
+  get government(): Government {
+    return this.hasOne<Government>("governmentKey");
+  }
+
+  incidentKeys = new Set<GameKey>();
+  get incidents(): Map<GameKey, Incident> {
+    return this.hasMany<Incident>("incidentKeys");
+  }
+
+  get religion(): Religion | null {
+    return this.canHaveOne<Religion>("religionKey");
+  }
+
+  get research(): Research {
+    return this.hasOne<Research>("researchKey");
+  }
+
+  tileKeys = new Set<GameKey>();
+  get tiles(): Map<GameKey, Tile> {
+    return this.hasMany<Tile>("tileKeys");
+  }
+
+  tradeRouteKeys = new Set<GameKey>();
+  get tradeRoutes(): Map<GameKey, TradeRoute> {
+    return this.hasMany<TradeRoute>("tradeRouteKeys");
+  }
+
+  unitKeys = new Set<GameKey>();
+  get units(): Map<GameKey, Unit> {
+    return this.hasMany<Unit>("unitKeys");
+  }
+
+  get knownPlayers(): Map<GameKey, Player> {
+    return this.hasMany<Player>("knownPlayerKeys");
+  }
+  get knownReligions(): Map<GameKey, Religion> {
+    return this.hasMany<Religion>("knownReligionKeys");
+  }
+  get knownTiles(): Map<GameKey, Tile> {
+    return this.hasMany<Tile>("knownTileKeys");
+  }
 
   /*
    * Computed
@@ -162,7 +197,7 @@ export class Player extends GameObject {
     this.culture.startTurn();
     this.diplomacy.startTurn();
     this.government.startTurn();
-    this.religion?.startTurn();
+    if (this.religion) this.religion.startTurn();
     this.research.startTurn();
   }
 
@@ -183,7 +218,7 @@ export class Player extends GameObject {
   // Yield Mods for all the Models I own (they use these to calc their Yields)
   get yieldMods(): Yields {
     return this.computed(
-      "_yieldMods",
+      "yieldMods",
       () => {
         const yieldMods = new Yields();
 
@@ -226,20 +261,26 @@ export class Player extends GameObject {
 
         return yieldMods;
       },
-      ["government", "research", "cultureKey", "religionKey", "cityKeys"],
+      {
+        relations: [
+          { relName: "culture", relProps: ["yields"] },
+          { relName: "religion", relProps: ["yields"] },
+          { relName: "cities", relProps: ["yields"] },
+        ],
+      },
     );
   }
 
   // My Yield output
   get yields(): Yields {
     return this.computed(
-      "_yields",
+      "yields",
       () => {
         const yieldsForMe = (yields: Yields): Yield[] => {
           return yields.only(playerYieldTypeKeys, new Set<TypeObject>([this.concept])).all();
         };
 
-        // Player Yields are:
+        // Actor Yields are:
         // Government + Research + Culture + Religion
         // + Agendas + Cities + Deals + Incidents + Trade Routes + Units
         const yields = new Yields();
@@ -258,7 +299,21 @@ export class Player extends GameObject {
         // Flatten Yields to apply modifiers
         return yields.flatten();
       },
-      ["government", "research", "cultureKey", "religionKey", "dealKeys", "cityKeys", "unitKeys"],
+      {
+        relations: [
+          { relName: "agendas", relProps: ["yields"] },
+          { relName: "culture", relProps: ["yields"] },
+          { relName: "cities", relProps: ["yields"] },
+          { relName: "diplomacy", relProps: ["yields"] },
+          { relName: "deals", relProps: ["yields"] },
+          { relName: "government", relProps: ["yields"] },
+          { relName: "incidents", relProps: ["yields"] },
+          { relName: "religion", relProps: ["yields"] },
+          { relName: "research", relProps: ["yields"] },
+          { relName: "tradeRoutes", relProps: ["yields"] },
+          { relName: "units", relProps: ["yields"] },
+        ],
+      },
     );
   }
 }

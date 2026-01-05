@@ -1,4 +1,4 @@
-import { BasicUnitAction } from "@/Simulation/Actions/Unit/BasicUnitAction";
+import { UnitBasicAction } from "@/Simulation/Actions/Unit/UnitBasicAction";
 import { Unit } from "@/Common/Models/Unit";
 import { UnitAttack } from "@/Simulation/Actions/Unit/UnitAttack";
 import { UnitBombard } from "@/Simulation/Actions/Unit/UnitBombard";
@@ -72,7 +72,7 @@ export const getUnitAction = (
     case "actionType:heal":
     case "actionType:skipTurn":
     case "actionType:stop":
-      return new BasicUnitAction(player, unit, actionType);
+      return new UnitBasicAction(player, unit, actionType);
 
     // Complex Unit Actions
     case "actionType:attack": {

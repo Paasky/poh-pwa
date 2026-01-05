@@ -1,6 +1,6 @@
 // Type object definitions (encyclopedia/types dataset)
 import { CatKey, initPohObject, ObjKey, PohObject, TypeKey } from "./Common";
-import { Yield, Yields, YieldTypeKey } from "@/Common/Objects/Yields";
+import { Yields, YieldTypeKey } from "@/Common/Objects/Yields";
 import { Requires } from "@/Common/Objects/Requires";
 
 export type TypeClass =
@@ -134,13 +134,11 @@ export function objectIsAnyOfKeys(
   return false;
 }
 
-// eslint-disable-next-line
-export function initCategoryObject(data: any): CategoryObject {
+export function initCategoryObject(data: Record<string, unknown>): CategoryObject {
   return initPohObject("CategoryObject", data) as CategoryObject;
 }
 
-// eslint-disable-next-line
-export function initTypeObject(data: any): TypeObject {
+export function initTypeObject(data: Record<string, unknown>): TypeObject {
   const obj = initPohObject("TypeObject", {
     allows: [],
     gains: [],
@@ -152,11 +150,11 @@ export function initTypeObject(data: any): TypeObject {
   }) as TypeObject;
 
   // Init requires
-  obj.requires = new Requires(data.requires);
+  obj.requires = new Requires(data.requires as (ObjKey | ObjKey[])[]);
 
   // Init yields
   obj.yields = new Yields();
-  for (const yieldObj of data.yields ?? []) {
+  for (const yieldObj of (data.yields as Yield[]) ?? []) {
     obj.yields.add({
       type: yieldObj.type,
       method: yieldObj.method ?? "lump",
@@ -214,6 +212,7 @@ export type ConceptTypeKey =
   | "conceptType:freshWater"
   | "conceptType:goal"
   | "conceptType:god"
+  | "conceptType:government"
   | "conceptType:heritage"
   | "conceptType:improvement"
   | "conceptType:interaction"
@@ -232,6 +231,7 @@ export type ConceptTypeKey =
   | "conceptType:policy"
   | "conceptType:region"
   | "conceptType:religion"
+  | "conceptType:research"
   | "conceptType:resource"
   | "conceptType:revolution"
   | "conceptType:river"

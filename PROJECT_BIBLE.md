@@ -64,7 +64,7 @@ If a request or change conflicts with this document, **stop immediately and push
 
     * `Math.random` via faker for deterministic tests
     * Stateless Babylon engine if required
-    * External interactions (network, file I/O)
+    * External interactions (external network, external file I/O)
 
 9. **Import Hygiene**
 

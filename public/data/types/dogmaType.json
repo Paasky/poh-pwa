@@ -1,0 +1,474 @@
+[
+  {
+    "key": "dogmaType:monotheism",
+    "name": "Monotheism",
+    "concept": "conceptType:dogma",
+    "description": "Monotheism is the belief that one supreme deity governs the universe and claims exclusive worship by a defined community. It matured in ancient Israel through prophetic literature and law, shaped later by Second Temple debates and rabbinic codification. Christianity universalized the claim through creeds, canon, and imperial patronage in Late Antiquity. Islam established strict tawhid with scripture, law, and empire from the 7th century. Monotheistic polities organized worship, education, and charity under centralized doctrine. They engaged pagan, dualist, and philosophical rivals, and framed history as a single divine plan. Conversion, scripture translation, and legal institutions sustained expansion.",
+    "category": "dogmaCategory:gods",
+    "yields": [
+      {
+        "type": "yieldType:faith",
+        "amount": 25,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "dogmaType:polytheism",
+    "name": "Polytheism",
+    "concept": "conceptType:dogma",
+    "description": "Polytheism structures worship around multiple gods with distinct domains, cults, and myths. Ancient Greek religion tied gods to cities, festivals, and oracles, while maintaining a shared Olympian pantheon. Rome integrated foreign deities and maintained state rites, household lares, and the imperial cult. Egyptian temple systems honored Amun-Ra, Osiris, Isis, and local gods through ritual cycles and monumental building. Polytheistic systems favored syncretism, priestly specialization, and civic patronage. They managed cosmic order through sacrifice, divination, and public vows. Many traditions declined under Christianization and Islam, yet polytheistic forms persisted or revived in South and East Asia and in modern reconstructionist movements.",
+    "category": "dogmaCategory:gods"
+  },
+  {
+    "key": "dogmaType:clergy",
+    "name": "Clergy",
+    "concept": "conceptType:dogma",
+    "description": "The clergy are organized religious officials who administer doctrine, ritual, and social order. In Christianity, bishops, priests, and deacons governed sacraments, law, and education through dioceses and monastic networks. Islamic societies relied on ulama, judges, and preachers to interpret scripture, issue rulings, and oversee endowments. Buddhist monastic leadership regulated ordination, discipline, and teaching within the sangha. Clerical bodies accumulated land, revenues, and jurisdiction, negotiating with kings, cities, and patrons. Reformers sought moral discipline and doctrinal clarity, while lay movements and states at times curtailed privilege. Clergy preserved texts, trained elites, managed charity, and mediated disputes across many polities.",
+    "category": "dogmaCategory:authority",
+    "yields": [
+      {
+        "type": "yieldType:order",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "dogmaType:meditation",
+    "name": "Meditation",
+    "concept": "conceptType:dogma",
+    "description": "Meditation comprises disciplined techniques for attention, insight, and calm. South Asian traditions elaborated early methods: the Upanishads, the Buddha’s teachings, and yogic systems shaped dhyana and mindfulness. Buddhist schools systematized Vipassana, Zen, and Pure Land contemplative practices, spreading along the Silk Roads to East Asia. Hindu texts like the Yoga Sutra framed stages of concentration and liberation. Christian monasticism developed contemplative prayer, culminating in Hesychasm and the Philokalia in the medieval East. Teachers codified postures, breath, and mental objects. Courts and monasteries sponsored practice. Manuals, commentaries, and lineages preserved transmission across languages and regions.",
+    "category": "dogmaCategory:authority",
+    "yields": [
+      {
+        "type": "yieldType:happiness",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "dogmaType:heaven",
+    "name": "Heaven",
+    "concept": "conceptType:dogma",
+    "description": "Heaven is a postmortem realm of reward and perfected life for the righteous. In Christianity, it culminates in resurrection, the beatific vision, and communion with God, set within apocalyptic chronology. Islam describes Jannah as gardens, flowing water, and companionship, promised to believers under divine justice. Ancient Egyptians imagined the Field of Reeds, an idealized Nile landscape gained through judgment and ritual knowledge. Doctrines of Heaven shaped ethics, law, burial, and art. They defined pilgrimage, prayer for the dead, and visions of the cosmos. Debates addressed body and soul, hierarchy of rewards, and the timing of entry.",
+    "category": "dogmaCategory:afterlife",
+    "yields": [
+      {
+        "type": "yieldType:production",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "dogmaType:reincarnation",
+    "name": "Reincarnation",
+    "concept": "conceptType:dogma",
+    "description": "Reincarnation holds that the soul or stream of consciousness returns in new births. South Asian traditions placed it within samsara, governed by karma. Upanishadic teaching tied rebirth to knowledge and liberation. Buddhism adapted the doctrine without a permanent self, linking rebirth to causation and merit, and circulated Jataka narratives. Jainism emphasized strict nonviolence to purify karma over many lives. Ideas of transmigration also appeared in Orphic and Pythagorean circles in Greece. The doctrine shaped ethics, ritual, and social views of fate and responsibility. Monastic rules, pilgrimage, and funerary practices often presupposed multi-life progress toward release.",
+    "category": "dogmaCategory:afterlife",
+    "yields": [
+      {
+        "type": "yieldType:culture",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "dogmaType:donations",
+    "name": "Donations",
+    "concept": "conceptType:dogma",
+    "description": "Donations are voluntary gifts that support religious persons, institutions, and works. Medieval Christians endowed monasteries, hospitals, and poor relief, seeking merit and commemoration. Islamic societies structured charity through zakat and waqf, funding mosques, schools, fountains, and caravansaries. Romans offered votives and financed temples and festivals as civic benefaction. South and Southeast Asian dana sustained monastic communities and pilgrimage sites. Donors gained prestige and legal privileges, while endowments stabilized revenue over generations. Rulers used donations to consolidate authority and urban life. Boundaries between gift and tax could blur, and reformers policed abuses and redirected funds.",
+    "category": "dogmaCategory:support",
+    "yields": [
+      {
+        "type": "yieldType:happiness",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "dogmaType:taxes",
+    "name": "Taxes",
+    "concept": "conceptType:dogma",
+    "description": "Taxes are compulsory levies gathered by authorities to finance administration, defense, and infrastructure. The Roman Empire managed land, poll, and customs taxes, often through provincial assessments and tax farming. Persian empires integrated diverse tribute and road systems. Medieval Europe imposed tithes for churches and lay taxes for kings, negotiated in estates and parliaments. The Song dynasty refined census records, salt monopolies, and paper money to stabilize revenue. States built bureaus, censuses, and courts to enforce collection. Fiscal pressure sparked evasion and revolt. Reforms shifted burdens between land, trade, and labor, reshaping class relations and regional economies.",
+    "category": "dogmaCategory:support",
+    "yields": [
+      {
+        "type": "yieldType:gold",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "dogmaType:missionaries",
+    "name": "Missionaries",
+    "concept": "conceptType:dogma",
+    "description": "Missionaries are agents sent to spread doctrine, translate texts, and organize new communities. Early Christian apostles traveled Roman routes, while medieval missions advanced into northern and eastern Europe with royal backing. Emperor Ashoka promoted Buddhist missions to Central and Southeast Asia. Sufi orders carried Islam through trade networks in Africa and Asia. Jesuits engaged courts in China, Japan, and India with science, schools, and diplomacy. Methods included preaching, education, charity, and adaptation to local languages. Missionaries sometimes followed merchants and armies, and sometimes opposed them. Their work produced conversions, hybrid practices, and enduring institutions.",
+    "category": "dogmaCategory:outreach",
+    "yields": [
+      {
+        "type": "yieldType:tradeYield",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "dogmaType:community",
+    "name": "Community",
+    "concept": "conceptType:dogma",
+    "description": "A community is a group that shares place, kinship, economy, or belief, and acts collectively. Medieval guilds regulated crafts, charity, and civic rights in European towns. Monastic houses organized labor, prayer, study, and landholding. Many Indigenous societies formed clans and tribes based on descent and ritual ties. Classical city-states created citizenship, assemblies, and festivals around urban identity. Communities provided mutual aid, courts, and defense. They kept records and maintained shrines, halls, and commons. Membership rules defined insiders and outsiders. Crises such as famine, war, or plague often reconfigured boundaries, leadership, and obligations.",
+    "category": "dogmaCategory:outreach",
+    "yields": [
+      {
+        "type": "yieldType:food",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "dogmaType:burial",
+    "name": "Burial",
+    "concept": "conceptType:dogma",
+    "description": "Burial is the practice of placing the dead in earth, tombs, or constructed chambers. It appears in the earliest archaeological horizons and shows varied rites and grave goods. Ancient Egypt developed complex tomb architecture and provisioning to sustain the dead. In Europe, Bronze Age societies raised barrows and mounds as communal or elite markers. Medieval Christian communities favored churchyard burials tied to parish life and prayers for the dead. Laws and guilds regulated grave plots and funerary trades. Burial practices display beliefs about afterlife, social rank, and memory. Excavated cemeteries provide demographic data, disease evidence, and material culture sequences.",
+    "category": "dogmaCategory:deathRites",
+    "yields": [
+      {
+        "type": "yieldType:gold",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "dogmaType:cremation",
+    "name": "Cremation",
+    "concept": "conceptType:dogma",
+    "description": "Cremation reduces the body by fire and gathers remains for deposition or scattering. It is central to Vedic and later Hindu funerary custom, performed on pyres near water. In the Roman Republic and early Empire, cremation prevailed among elites before inhumation returned in Late Antiquity. Buddhist traditions spread cremation across East Asia, with relic veneration for eminent monks. Abrahamic norms often discouraged it, shaping medieval European practice. Modern cremation reemerged with urbanization and public health reforms in the nineteenth century. Archaeology identifies cremation through urnfields, pyre debris, and burnt bone analysis, revealing status and ritual variation.",
+    "category": "dogmaCategory:deathRites",
+    "yields": [
+      {
+        "type": "yieldType:health",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "dogmaType:workEthic",
+    "name": "Work-Ethic",
+    "concept": "conceptType:dogma",
+    "description": "The work-ethic is a cultural valuation of disciplined labor, duty, and productive conduct. Confucian administration emphasized performance, filial duty, and service to the state. Early modern Europe articulated a Protestant work ethic linking vocation, frugality, and moral order. Roman civic life tied labor to public works, military service, and municipal obligations. These frameworks informed schooling, law, and guild organization. They also shaped migration, settlement, and industrial routines. Historians study sermons, edicts, and household accounts to trace how ideals of labor evolved and interacted with markets, technology, and empire.",
+    "category": "dogmaCategory:practice",
+    "yields": [
+      {
+        "type": "yieldType:food",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "dogmaType:rites",
+    "name": "Rites",
+    "concept": "conceptType:dogma",
+    "description": "Rites are prescribed ceremonies that enact communal belief and obligation. They structure life stages, seasonal cycles, and political authority. Christian sacraments organized medieval parish life from baptism to burial. Agrarian societies performed planting and harvest rites to secure fertility. Imperial courts used elaborate ritual to stage sovereignty and succession. Rites are codified in liturgies, law codes, and court manuals. Calendars, sacred spaces, and specialized roles ensure proper performance. Comparative study follows how rites change under conquest, reform, and urbanization, while preserving continuity through formula, gesture, and material culture.",
+    "category": "dogmaCategory:practice",
+    "yields": [
+      {
+        "type": "yieldType:faith",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "dogmaType:priests",
+    "name": "Priests",
+    "concept": "conceptType:dogma",
+    "description": "Priests are ritual specialists who maintain cults, teach doctrine, and mediate with the sacred. In Sumer, temple priesthoods managed offerings, landholdings, and archives within city-states. Brahmin lineages preserved Vedic recitation and sacrifice, regulating purity and social hierarchy. Medieval Catholic clergy administered sacraments, oversaw parish discipline, and staffed courts and schools. Training involved apprenticeship and scripture, sometimes formalized in seminaries. Authority drew from lineage, ordination, or state sanction. Conflicts over priestly power shaped reforms and schisms, from ancient disputes to the Reformation. Records of liturgy, land tenure, and legal cases document their reach.",
+    "category": "dogmaCategory:devotion",
+    "yields": [
+      {
+        "type": "yieldType:order",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "dogmaType:monks",
+    "name": "Monks",
+    "concept": "conceptType:dogma",
+    "description": "Monks are men who pursue religious life in communal houses under rules of prayer, work, and study. Benedictine communities balanced liturgy and labor; Monte Cassino is a noted early center. The Cluniac network centralized observance and reshaped medieval church politics. Cistercians emphasized simplicity, manual work, and rural expansion, founding granges and managing water and forests. Monastic scriptoria copied and preserved texts, while libraries and schools trained clerics. Monasteries acted as landholders, hospitals, and refuges. Their rhythms structured regional economies and calendars. Reform, suppression, and new orders periodically redirected monastic aims.",
+    "category": "dogmaCategory:devotion",
+    "yields": [
+      {
+        "type": "yieldType:science",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "dogmaType:spirits",
+    "name": "Spirits",
+    "concept": "conceptType:dogma",
+    "description": "Spirits are non-corporeal beings, ancestors, or powers thought to influence the living. Animist traditions locate spirit agency in landscapes, animals, and objects. Shinto honors kami linked to shrines, festivals, and localities. Many African communities maintain ancestor veneration through offerings and divination. In Rome, household Lares and Penates guarded domestic life. Spirit belief organizes moral sanction, healing, and protection. Specialists mediate contact through trance, mediumship, or ritual. Colonial encounters and missionary activity recast spirit worlds in syncretic forms, yet local cults often persisted within new religious frameworks.",
+    "category": "dogmaCategory:belief",
+    "yields": [
+      {
+        "type": "yieldType:strength",
+        "amount": 1,
+        "for": [
+          "conceptType:unit"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "dogmaType:souls",
+    "name": "Souls",
+    "concept": "conceptType:dogma",
+    "description": "The soul is conceived as the immaterial essence of a person that endures beyond death. Egyptians articulated ka and ba aspects with distinct postmortem needs. Greek thought developed the psyche and philosophical debates on immortality. Christian doctrine affirmed an immortal soul judged after death, shaping penitence and burial. Hindu traditions identify Atman and its relation to rebirth and liberation. Conceptions of the soul influenced law on personhood, oaths, and homicide, and guided funerary provisions. Texts, funerary art, and liturgies trace shifts in belief across regions and epochs.",
+    "category": "dogmaCategory:belief",
+    "yields": [
+      {
+        "type": "yieldType:faith",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "dogmaType:burialMounds",
+    "name": "Burial Mounds",
+    "concept": "conceptType:dogma",
+    "description": "Burial mounds are artificial earthen or stone elevations constructed to inter the dead and mark ritual landscapes. Builders selected prominent ridges or river terraces, raised cores of soil or turf, and added kerbs or timber chambers. Newgrange in Ireland combines a passage tomb with megalithic art and solar alignment. Kurgans across the Eurasian steppe contain elite graves, sacrificed animals, and rich goods. In North America, Mississippian centers created mound complexes tied to ceremonial plazas. The Sutton Hoo tumulus enclosed a ship burial of Anglo-Saxon nobility. Excavation reveals construction phases, feasting deposits, and regional exchange networks, providing chronology and social hierarchy data.",
+    "category": "dogmaCategory:monuments",
+    "yields": [
+      {
+        "type": "yieldType:happiness",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "dogmaType:cathedrals",
+    "name": "Cathedrals",
+    "concept": "conceptType:dogma",
+    "description": "Cathedrals are episcopal churches that contain a bishop's seat and serve as diocesan centers. They concentrate worship, administration, and patronage, often anchoring urban growth. Architectural forms include Romanesque massing and Gothic rib vaults, flying buttresses, and stained glass cycles. Byzantine models, such as Hagia Sophia, used domes and complex liturgy. Notable examples include Notre-Dame de Paris, Chartres Cathedral, and Canterbury Cathedral. Construction drew on guild labor, donations, and princely support over generations. Cathedrals housed relics, hosted synods, and maintained schools and archives. Their maintenance reflected changing confessional regimes, from medieval Catholicism to Reformation and later restorations.",
+    "category": "dogmaCategory:monuments",
+    "yields": [
+      {
+        "type": "yieldType:culture",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "dogmaType:effigies",
+    "name": "Effigies",
+    "concept": "conceptType:dogma",
+    "description": "Effigies are crafted likenesses of persons used in ritual, memory, or protest. Medieval Europe produced lifelike funerary effigies in stone, wood, or alabaster, placed on tombs of nobles and clergy. They recorded dress, arms, and insignia, and asserted lineage at sacred sites. Royal households in England created articulated wax effigies for funerals, displayed on hearses and later preserved at Westminster Abbey. Civic and royal ceremonies used effigial figures in processions to project presence and authority. In popular politics, crowds paraded and burned effigies during carnivals and protests, dramatizing dissent without direct assault. The practice spans many cultures and periods, adapting materials and styles to local craft and purpose.",
+    "category": "dogmaCategory:expression",
+    "yields": [
+      {
+        "type": "yieldType:culture",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "dogmaType:scripture",
+    "name": "Scripture",
+    "concept": "conceptType:dogma",
+    "description": "Scripture denotes authoritative sacred writings that define doctrine, practice, and communal memory. Communities established canons, preserved texts through copying and recitation, and regulated interpretation. The Latin Vulgate shaped Western Christianity for a millennium in liturgy and teaching. Qur’an manuscripts and oral recitation organized Islamic learning, law, and devotion. Torah scrolls structured Jewish worship and legal life in synagogue and academy. Buddhist sutras circulated in monastic networks, guiding ritual and philosophy. With print, scriptural access widened while debates over authority intensified.",
+    "category": "dogmaCategory:expression",
+    "yields": [
+      {
+        "type": "yieldType:science",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "dogmaType:pilgrims",
+    "name": "Pilgrims",
+    "concept": "conceptType:dogma",
+    "description": "Pilgrims undertake travel to sacred places for devotion, penance, vows, or healing. Medieval Europe developed routes, hospices, and badges for journeys to Santiago de Compostela and Canterbury. Literature, such as Chaucer’s Canterbury Tales, recorded the social world of the road. The Hajj to Mecca formed a central obligation in Islam and drew rulers and commoners into a shared ritual calendar. Christians, Jews, and Muslims sought Jerusalem’s shrines in shifting periods of access and conflict. Pilgrimage shaped trade, infrastructure, and cross-cultural contact, and created durable local economies around major shrines.",
+    "category": "dogmaCategory:journey",
+    "yields": [
+      {
+        "type": "yieldType:tradeYield",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "dogmaType:crusaders",
+    "name": "Crusaders",
+    "concept": "conceptType:dogma",
+    "description": "Crusaders were participants in armed campaigns declared for holy purposes, most famously to the eastern Mediterranean. The First Crusade seized Jerusalem and founded Latin principalities in the Levant. The Third Crusade drew monarchs such as Richard I of England and confronted Saladin’s realm. Participants took vows, bore the cross, and received spiritual privileges. Military orders, including the Templars and Hospitallers, combined monastic rule with warfare and logistics. Crusading ideals later extended to campaigns in Iberia and the Baltic, while the legacy left fortified landscapes, trade links, and enduring polemics.",
+    "category": "dogmaCategory:journey",
+    "yields": [
+      {
+        "type": "yieldType:strength",
+        "amount": 1,
+        "for": [
+          "conceptType:unit"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "dogmaType:cosmicUnity",
+    "name": "Cosmic Unity",
+    "concept": "conceptType:dogma",
+    "description": "Cosmic Unity is a family of doctrines that affirm a fundamental oneness linking deity, cosmos, and human being. Sufi authors, notably Ibn Arabi, articulated wahdat al-wujud and mapped spiritual stages within that unity. Advaita Vedanta, associated with Adi Shankaracharya, taught non-dual realization of Atman and Brahman. Renaissance Neoplatonists such as Marsilio Ficino drew on ancient sources to frame a harmonious, ensouled cosmos. Hermetic and alchemical texts presented correspondences between macrocosm and microcosm and informed early modern natural philosophy. These currents shaped mystical practice, ethics, and aesthetics across regions.",
+    "category": "dogmaCategory:identity",
+    "yields": [
+      {
+        "type": "yieldType:health",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "dogmaType:chosenPeople",
+    "name": "Chosen People",
+    "concept": "conceptType:dogma",
+    "description": "The idea of a Chosen People asserts divine selection of a group for covenantal duties and promises. Ancient Israel’s narratives in the Hebrew Bible grounded identity in law, land, and worship. Medieval Jewish communities sustained this covenantal self-understanding under diaspora conditions. Early modern Puritans adapted election language to communal covenants, reading their migrations and polities through biblical typology. The concept supported endurance, discipline, and internal debate, and it also generated friction with neighbors and rival confessional claims. Its language continues to inform theology and political rhetoric.",
+    "category": "dogmaCategory:identity",
+    "yields": [
+      {
+        "type": "yieldType:strength",
+        "amount": 1,
+        "for": [
+          "conceptType:unit"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "dogmaType:holyLanguage",
+    "name": "Holy Language",
+    "concept": "conceptType:dogma",
+    "description": "A holy language is a sanctioned tongue for scripture, liturgy, and formal doctrine. It preserves authoritative recitation and stabilizes law and ritual across regions. Biblical Hebrew structures Jewish worship and study around scrolls and prayer. Latin bound medieval Western Christianity in shared texts and rites. Classical Arabic anchors Qur’anic recitation, jurisprudence, and devotion. Church Slavonic served Eastern Slavic Orthodoxy as a liturgical standard. Periods of reform raised disputes over vernacular access, but sacred languages retained core functions of unity, precision, and continuity.",
+    "category": "dogmaCategory:texts",
+    "yields": [
+      {
+        "type": "yieldType:order",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "dogmaType:translatedScript",
+    "name": "Translated Script",
+    "concept": "conceptType:dogma",
+    "description": "Translated script refers to rendering sacred texts into languages accessible to wider publics. The Septuagint carried Hebrew scriptures into Hellenistic communities. Jerome’s Vulgate provided a Latin Bible for Western churches and learning. Medieval and Reformation translators, including Wycliffe and Luther, produced English and German versions that reshaped devotion, preaching, and literacy. Syriac communities used the Peshitta to integrate Greek and Semitic traditions. Translation expanded participation yet prompted controversies over accuracy, authority, and control. The printing press magnified these effects by multiplying copies and standardizing texts.",
+    "category": "dogmaCategory:texts",
+    "yields": [
+      {
+        "type": "yieldType:faith",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "dogmaType:holyGifts",
+    "name": "Holy Gifts",
+    "concept": "conceptType:dogma",
+    "description": "Holy gifts are offerings to temples, clergy, and religious institutions. In the ancient Near East, rulers and subjects endowed cults with grain, animals, and crafted votives. Medieval parishes drew tithes, bequests, and oblations that funded altars, lights, and poor relief. Islamic law structured almsgiving through zakat and sadaqa, supporting mosques, scholars, and welfare. Pilgrimage centers accumulated ex-votos and fees that sustained hospitals and infrastructure. Such giving linked piety to economic circulation, enriched treasuries and libraries, and anchored religious patronage in local and imperial politics.",
+    "category": "dogmaCategory:service",
+    "yields": [
+      {
+        "type": "yieldType:gold",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "dogmaType:communalWork",
+    "name": "Communal Work",
+    "concept": "conceptType:dogma",
+    "description": "Communal work is organized labor undertaken by religious communities for shared welfare. Benedictine monasteries joined prayer with agriculture, mills, and craft, creating self-sufficient estates and schools. Reform movements such as the Cistercians emphasized manual labor and rural development. Church-sponsored guilds coordinated production, charity, and funerals in towns. States and temples levied corvée for construction and irrigation tied to shrines. Village communities met obligations through collective planting, harvest, and maintenance. These systems trained skills, redistributed resources, and left lasting landscapes of fields, roads, and waterworks.",
+    "category": "dogmaCategory:service",
+    "yields": [
+      {
+        "type": "yieldType:production",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  }
+]

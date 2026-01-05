@@ -1,4 +1,3 @@
-import { hasMany, hasOne } from "@/Common/Models/_Relations";
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import type { City } from "@/Common/Models/City";
 import type { Unit } from "@/Common/Models/Unit";
@@ -15,11 +14,6 @@ export class TradeRoute extends GameObject {
     public unitKey: GameKey,
   ) {
     super(key);
-
-    hasOne<City>(this, "city1Key");
-    hasOne<City>(this, "city2Key");
-    hasMany<Tile>(this, "tileKeys");
-    hasOne<Unit>(this, "unitKey");
   }
 
   static attrsConf: GameObjAttr[] = [
@@ -49,13 +43,21 @@ export class TradeRoute extends GameObject {
   /*
    * Relations
    */
-  declare city1: City;
+  get city1(): City {
+    return this.hasOne<City>("city1Key");
+  }
 
-  declare city2: City;
+  get city2(): City {
+    return this.hasOne<City>("city2Key");
+  }
 
-  declare tiles: Tile[];
+  get tiles(): Map<GameKey, Tile> {
+    return this.hasMany<Tile>("tileKeys");
+  }
 
-  declare unit: Unit;
+  get unit(): Unit {
+    return this.hasOne<Unit>("unitKey");
+  }
 
   /*
    * Computed
@@ -63,19 +65,28 @@ export class TradeRoute extends GameObject {
 
   // My Yield output
   get yields(): Yields {
-    return this.computed("_yields", () => {
-      const yieldsForMe = (yields: Yields): Yield[] => {
-        return yields.only(tradeRouteYieldTypeKeys, new Set<TypeObject>([this.concept])).all();
-      };
+    return this.computed(
+      "yields",
+      () => {
+        const yieldsForMe = (yields: Yields): Yield[] => {
+          return yields.only(tradeRouteYieldTypeKeys, new Set<TypeObject>([this.concept])).all();
+        };
 
-      // Trade Route Yields are From the two cities
-      const yields = new Yields();
-      yields.add(...yieldsForMe(this.city1.yieldMods));
-      yields.add(...yieldsForMe(this.city2.yieldMods));
+        // Trade Route Yields are From the two cities
+        const yields = new Yields();
+        yields.add(...yieldsForMe(this.city1.yieldMods));
+        yields.add(...yieldsForMe(this.city2.yieldMods));
 
-      // Flatten Yields to apply modifiers
-      return yields.flatten();
-    });
+        // Flatten Yields to apply modifiers
+        return yields.flatten();
+      },
+      {
+        relations: [
+          { relName: "city1", relProps: ["yieldMods"] },
+          { relName: "city2", relProps: ["yieldMods"] },
+        ],
+      },
+    );
   }
 
   /*
@@ -86,7 +97,7 @@ export class TradeRoute extends GameObject {
 
     this.city2.tradeRouteKeys.delete(this.key);
 
-    for (const tile of this.tiles) {
+    for (const tile of this.tiles.values()) {
       tile.tradeRouteKeys.delete(this.key);
     }
 

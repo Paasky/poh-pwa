@@ -1,0 +1,14 @@
+[
+  {
+    "key": "stockpileCategory:biological",
+    "name": "Biological",
+    "concept": "conceptType:stockpile",
+    "description": ""
+  },
+  {
+    "key": "stockpileCategory:nuclear",
+    "name": "Nuclear",
+    "concept": "conceptType:stockpile",
+    "description": ""
+  }
+]

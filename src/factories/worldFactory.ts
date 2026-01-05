@@ -152,11 +152,7 @@ export const createWorld = (
       if (players.length >= config.continents * config.majorsPerContinent) break;
 
       const cultureKey = generateKey("culture");
-      const player = new Player(
-        generateKey("player"),
-        cultureKey,
-        "Player " + (players.length + 1),
-      );
+      const player = new Player(generateKey("player"), cultureKey, "Actor " + (players.length + 1));
       objects.push(player);
       players.push(player);
 

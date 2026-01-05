@@ -1,0 +1,435 @@
+[
+  {
+    "key": "goalType:firstCities",
+    "name": "First Cities",
+    "concept": "conceptType:goal",
+    "description": "First cities emerged during the Neolithic and early Bronze Age as permanent settlements with planned space, ritual centers, and surplus storage. They concentrated population, craft specialists, and exchange. Defensive works and monumental buildings marked authority and collective labor. Göbekli Tepe shows early ceremonial architecture preceding full urban life. Jericho offers one of the earliest fortified sites with towers and walls. Çatalhöyük displays dense agglomeration, house-centered rituals, and extensive craft production, often viewed as a proto-city. Later urban centers added administration, writing, and formal markets. These settlements created enduring patterns of governance, religion, and economy that framed later civilizations.",
+    "category": "goalCategory:growth",
+    "image": "/media/images/goalType/firstCities.jpg",
+    "requires": [
+      "technologyType:tradition",
+      "yieldType:goalPoints"
+    ],
+    "quote": {
+      "text": "In towns, men live together for the sake of the good life.",
+      "source": "Aristotle, ca. 400 BCE",
+      "url": "/media/quotes/goalType/firstCities.mp3"
+    }
+  },
+  {
+    "key": "goalType:tradeNetwork",
+    "name": "Trade Network",
+    "concept": "conceptType:goal",
+    "description": "Trade networks link distant communities through regular exchange of raw materials, finished goods, and knowledge. In the Bronze Age Mediterranean, Minoan and Mycenaean mariners moved metals, ceramics, and luxury items among islands and coastal hubs. Phoenician sailors later organized wide maritime routes, established colonies, and spread alphabets and crafts. The Indus Valley maintained contacts with Mesopotamia via overland caravans and Gulf shipping, moving lapis, carnelian, timber, and textiles. Such networks required standardized weights, seals, credit practices, and diplomatic ties. They carried religious motifs and technical skills along with goods, reshaping economies and social hierarchies across broad regions.",
+    "category": "goalCategory:trade",
+    "image": "/media/images/goalType/tradeNetwork.jpg",
+    "requires": [
+      "technologyType:commerce",
+      "yieldType:goalPoints"
+    ],
+    "quote": {
+      "text": "Without commerce, no city could exist.",
+      "source": "Ibn Khaldun, 1377",
+      "url": "/media/quotes/goalType/tradeNetwork.mp3"
+    }
+  },
+  {
+    "key": "goalType:pantheonOfGods",
+    "name": "Pantheon of Gods",
+    "concept": "conceptType:goal",
+    "description": "A pantheon is the ordered assembly of deities acknowledged by a society, sustained by cult rites, temples, and priestly administration. In Sumer and Babylonia, city gods occupied ziggurats and received offerings through temple economies that controlled land and labor. Ancient Egypt organized state cults for deities and the divine kingship, with large temple estates and ritual calendars. In the Levant, Solomonic traditions centered on the Jerusalem Temple and its sacrificial system. Pantheons allowed syncretism, festival cycles, and civic identity. They anchored law, kingship, and memory, and they produced monumental architecture that structured urban landscapes for centuries.",
+    "category": "goalCategory:faith",
+    "image": "/media/images/goalType/pantheonOfGods.jpg",
+    "requires": [
+      "technologyType:pottery",
+      "yieldType:goalPoints"
+    ],
+    "quote": {
+      "text": "The gods are many, yet their essence is one.",
+      "source": "Rig Veda, ca. 1300 BCE",
+      "url": "/media/quotes/goalType/pantheonOfGods.mp3"
+    }
+  },
+  {
+    "key": "goalType:wondersOfTheWorld",
+    "name": "Wonders of the World",
+    "concept": "conceptType:goal",
+    "description": "The Seven Wonders of the ancient world formed a Hellenistic catalog of exceptional monuments known to travelers and writers. The list featured the Great Pyramid of Giza, the Hanging Gardens of Babylon, the Temple of Artemis at Ephesus, the Statue of Zeus at Olympia, the Mausoleum at Halicarnassus, the Colossus of Rhodes, and the Lighthouse of Alexandria. These works displayed mastery of stone, bronze, and large-scale construction, and they served religious, funerary, civic, or navigational purposes. Most were destroyed by earthquakes, fires, or reuse of materials. The tradition shaped later canons of world monuments and inspired antiquarian study.",
+    "category": "goalCategory:culture",
+    "image": "/media/images/goalType/wondersOfTheWorld.jpg",
+    "requires": [
+      "technologyType:government",
+      "yieldType:goalPoints"
+    ],
+    "quote": {
+      "text": "Mortal hands have wrought works which vie with those of gods.",
+      "source": "Philo of Byzantium, ca. 300 BCE",
+      "url": "/media/quotes/goalType/wondersOfTheWorld.mp3"
+    }
+  },
+  {
+    "key": "goalType:greatPhilosophers",
+    "name": "Great Philosophers",
+    "concept": "conceptType:goal",
+    "description": "Classical Greek philosophy developed systematic inquiry into ethics, politics, metaphysics, and knowledge. Socrates taught through questioning and moral examination. Plato founded the Academy and advanced theories of forms and just governance. Aristotle established the Lyceum, codified logic, and analyzed nature and causation. The Hellenistic era broadened the field with Stoicism, Epicureanism, and the Peripatetic tradition. The Library and Museum of Alexandria supported scholarship, commentary, and scientific research. Texts circulated across the Mediterranean and later through late antique, Islamic, and medieval Christian scholars. Their methods shaped curricula, law, natural philosophy, and public debate for millennia.",
+    "category": "goalCategory:science",
+    "image": "/media/images/goalType/greatPhilosophers.jpg",
+    "requires": [
+      "technologyType:philosophy",
+      "yieldType:goalPoints"
+    ],
+    "quote": {
+      "text": "Life without questioning is not worth living.",
+      "source": "Socrates, 399 BCE",
+      "url": "/media/quotes/goalType/greatPhilosophers.mp3"
+    }
+  },
+  {
+    "key": "goalType:olympics",
+    "name": "Olympics",
+    "concept": "conceptType:goal",
+    "description": "The ancient Olympic Games were a Pan-Hellenic festival held at Olympia to honor Zeus. The first recorded festival dates to 776 BCE. Athletes from Greek cities competed in events such as the stadion race, wrestling, boxing, pentathlon, and chariot racing. A sacred truce protected travel and assemblies. Victors received wreaths and lifelong honors in their home cities. Under Roman rule, emperors patronized the games, and Greek athletic festivals continued across the empire. The tradition faded in late antiquity as institutions changed. Nineteenth-century scholars and organizers revived the idea in modern form, using the ancient model as inspiration.",
+    "category": "goalCategory:influence",
+    "image": "/media/images/goalType/olympics.jpg",
+    "requires": [
+      "technologyType:sports",
+      "yieldType:goalPoints"
+    ],
+    "quote": {
+      "text": "Victory is the greatest good for mortal men.",
+      "source": "Pindar, 476 BCE",
+      "url": "/media/quotes/goalType/olympics.mp3"
+    }
+  },
+  {
+    "key": "goalType:veniVidiVici",
+    "name": "Veni, Vidi, Vici",
+    "concept": "conceptType:goal",
+    "description": "Veni, vidi, vici is a Latin proclamation attributed to Julius Caesar after his rapid victory over Pharnaces II at Zela in 47 BCE. The phrase, meaning “I came, I saw, I conquered,” appeared in dispatches to the Roman Senate and on triumphal displays. It condensed the message of swift, decisive action and legitimized authority through success in war. Roman politicians reused the slogan in inscriptions and public celebrations to frame campaigns as complete and uncontested. Later rulers and generals adopted it as a motto when recording quick victories, linking themselves to Caesarian speed and effective command.",
+    "category": "goalCategory:military",
+    "image": "/media/images/goalType/veniVidiVici.jpg",
+    "requires": [
+      "technologyType:ironSmithing",
+      "yieldType:goalPoints"
+    ],
+    "quote": {
+      "text": "I came, I saw, I conquered.",
+      "source": "Julius Caesar, 47 BCE",
+      "url": "/media/quotes/goalType/veniVidiVici.mp3"
+    }
+  },
+  {
+    "key": "goalType:feudalLords",
+    "name": "Feudal Lords",
+    "concept": "conceptType:goal",
+    "description": "Feudal lords were landholding elites bound by personal ties of homage and fealty to higher nobles or kings. They granted fiefs to vassals in exchange for military service and counsel. Authority rested on control of castles, courts, and rights over peasantry. After 1066, Norman barons in England held estates from William and supplied knights for campaigns. In Capetian France, castellans and regional vassals organized local defense and justice. In Japan, daimyo governed domains and maintained samurai retinues under shifting central authority. This structure shaped taxation, warfare, and regional politics from the high Middle Ages into early modern periods.",
+    "category": "goalCategory:culture",
+    "image": "/media/images/goalType/feudalLords.jpg",
+    "requires": [
+      "technologyType:feudalism",
+      "yieldType:goalPoints"
+    ],
+    "quote": {
+      "text": "The man who would be a knight must have land.",
+      "source": "John of Salisbury, 1159",
+      "url": "/media/quotes/goalType/feudalLords.mp3"
+    }
+  },
+  {
+    "key": "goalType:tournaments",
+    "name": "Tournaments",
+    "concept": "conceptType:goal",
+    "description": "Medieval tournaments were formalized combats that trained warriors and displayed chivalric status. Early events featured large melees simulating battlefield maneuvers across open ground. By the thirteenth century, the joust with lances in enclosed lists dominated. Rules, heraldry, and heralds regulated conduct and recorded arms. Monarchs and magnates sponsored pas d’armes and prize contests to recruit fighters, cement alliances, and entertain courts. In England and France, major series of tournaments accompanied royal ceremonies, as under Edward III. Over time, safer armor, blunted lances, and pageantry increased, and the tournament became a controlled spectacle rather than war practice.",
+    "category": "goalCategory:influence",
+    "image": "/media/images/goalType/tournaments.jpg",
+    "requires": [
+      "technologyType:chivalry",
+      "yieldType:goalPoints"
+    ],
+    "quote": {
+      "text": "Knights should delight in tournaments, for through them they gain honor.",
+      "source": "Geoffroi de Charny, ca. 1350",
+      "url": "/media/quotes/goalType/tournaments.mp3"
+    }
+  },
+  {
+    "key": "goalType:mandateOfHeaven",
+    "name": "Mandate of Heaven",
+    "concept": "conceptType:goal",
+    "description": "The Mandate of Heaven is a Chinese doctrine stating that just rule grants divine approval, while misrule voids it. The Zhou used it to justify replacing the Shang in the eleventh century BCE. Natural disasters, famine, and rebellion signaled a loss of mandate, encouraging acceptance of dynastic change. Han rulers elaborated its moral dimension in state ideology. Rebel leaders and new dynasties later invoked it, as when Ming forces overthrew the Yuan. The concept framed the dynastic cycle and guided historical judgment, balancing hereditary claim with performance in governance and care for the populace.",
+    "category": "goalCategory:faith",
+    "image": "/media/images/goalType/mandateOfHeaven.jpg",
+    "requires": [
+      "technologyType:divineRight",
+      "yieldType:goalPoints"
+    ],
+    "quote": {
+      "text": "Heaven sees as the people see; Heaven hears as the people hear.",
+      "source": "Book of Documents, ca. 1000 CE",
+      "url": "/media/quotes/goalType/mandateOfHeaven.mp3"
+    }
+  },
+  {
+    "key": "goalType:oceanVoyages",
+    "name": "Ocean Voyages",
+    "concept": "conceptType:goal",
+    "description": "Ocean voyages of the fifteenth and sixteenth centuries linked distant hemispheres through sustained blue-water sailing. Mariners used caravels and carracks, lateen and square rigs, the magnetic compass, and the astrolabe. Portolan charts, dead reckoning, and growing knowledge of currents and winds guided routes. Iberian crowns funded expeditions to bypass overland trade and rival fleets. Columbus reached the Caribbean for Castile in 1492–1504. Vasco da Gama rounded the Cape of Good Hope to India in 1497–1499, creating the Carreira da Índia. The Magellan–Elcano circumnavigation of 1519–1522 established the Pacific’s scale and global sea connectivity. Voyages mapped trade winds, westerlies, and monsoon cycles and set up oceanic way stations. They carried merchants, soldiers, missionaries, and administrators. Scurvy, storms, mutiny, and shipwreck remained constant risks. The new routes bound Europe, Africa, Asia, and the Americas into a single maritime system.",
+    "category": "goalCategory:military",
+    "image": "/media/images/goalType/oceanVoyages.jpg",
+    "requires": [
+      "technologyType:carvelHulls",
+      "yieldType:goalPoints"
+    ],
+    "quote": {
+      "text": "It is not down on any map; true places never are.",
+      "source": "Herman Melville, 1851",
+      "url": "/media/quotes/goalType/oceanVoyages.mp3"
+    }
+  },
+  {
+    "key": "goalType:colonialEmpire",
+    "name": "Colonial Empire",
+    "concept": "conceptType:goal",
+    "description": "European states built overseas empires through conquest, settlement, and chartered companies from the sixteenth century onward. The Spanish Empire in the Americas drew silver and agricultural wealth under crown monopolies and forced labor systems. The British and Dutch East India Companies fused trade with coercion, fielded private armies, and established fortified ports and administrative enclaves. The Portuguese expanded across Brazil and Atlantic Africa, developing sugar plantations and slave trafficking networks. Mercantilist policies regulated commerce and prioritized metropolitan industry. Missionary activity advanced cultural and legal change. Indigenous resistance, disease, and adaptation reshaped societies on all sides. Revolutions and anticolonial movements from the late eighteenth to the twentieth century dismantled many imperial structures.",
+    "category": "goalCategory:trade",
+    "image": "/media/images/goalType/colonialEmpire.jpg",
+    "requires": [
+      "technologyType:colonialism",
+      "yieldType:goalPoints"
+    ],
+    "quote": {
+      "text": "We came here to serve God and the king, and also to get rich.",
+      "source": "Bernal Díaz del Castillo, 1568",
+      "url": "/media/quotes/goalType/colonialEmpire.mp3"
+    }
+  },
+  {
+    "key": "goalType:theEnlightenment",
+    "name": "The Enlightenment",
+    "concept": "conceptType:goal",
+    "description": "The Enlightenment was an eighteenth-century intellectual movement that promoted reason, empirical science, and secular reform in politics and society. Learned societies such as the Royal Society sponsored experimental inquiry, while academies and journals spread vetted results. The Encyclopédie and Parisian salons connected authors, artisans, and patrons and diffused arguments about knowledge and utility. Philosophers including Locke, Voltaire, and Rousseau advanced natural rights, religious toleration, the social contract, and critiques of arbitrary power. Newtonian physics and experimental method shaped wider standards of proof. Print culture carried debates across Europe and the Atlantic. Censorship prompted both self-restraint and open conflict with authorities. Enlightenment programs informed legal codification, educational reform, and projects of public improvement. They also fed revolutionary rhetoric in the late eighteenth century, while monarchs and ministers selectively applied ideas to strengthen state capacity.",
+    "category": "goalCategory:science",
+    "image": "/media/images/goalType/theEnlightenment.jpg",
+    "requires": [
+      "technologyType:education",
+      "yieldType:goalPoints"
+    ],
+    "quote": {
+      "text": "Knowledge itself is power.",
+      "source": "Francis Bacon, 1597",
+      "url": "/media/quotes/goalType/theEnlightenment.mp3"
+    }
+  },
+  {
+    "key": "goalType:worldsFair",
+    "name": "World's Fair",
+    "concept": "conceptType:goal",
+    "description": "World’s fairs were international expositions that displayed industrial process, arts, science, and national prestige. The Great Exhibition of 1851 in London, housed in the Crystal Palace, set a model for mass display of machinery and raw materials. The 1889 Exposition Universelle in Paris unveiled the Eiffel Tower as a colossal entrance structure and a statement of engineering skill. Chicago’s World’s Columbian Exposition of 1893 presented the “White City,” electric lighting, and new amusements such as the Ferris Wheel. Expositions fostered standards, patents, and commercial exchange, and staged colonial pavilions and ethnographic displays. They left urban legacies in architecture, parks, and transit, and served as arenas for diplomatic signaling and public education about modern technology.",
+    "category": "goalCategory:influence",
+    "image": "/media/images/goalType/worldsFair.jpg",
+    "requires": [
+      "technologyType:industrialization",
+      "yieldType:goalPoints"
+    ],
+    "quote": {
+      "text": "We are living at a time of marvels and wonders.",
+      "source": "Victor Hugo, 1867",
+      "url": "/media/quotes/goalType/worldsFair.mp3"
+    }
+  },
+  {
+    "key": "goalType:urbanSociety",
+    "name": "Urban Society",
+    "concept": "conceptType:goal",
+    "description": "Urban society in the nineteenth century developed dense settlements with formal policing, sanitation, and bureaucratic governance. Haussmann’s reconstruction of Paris created broad boulevards, sewers, and new housing stock, integrating traffic and public health goals. London’s Metropolitan Police, municipal boards, and courts professionalized order and administration. Expanding magistracies and institutions such as the Old Bailey shaped routine justice and record keeping. Cities deployed piped water, gas, and later electric lighting, and extended rail and tram networks. Growth produced slums and reform campaigns, zoning, and building codes. Urban institutions coordinated welfare, schooling, and public works, embedding the city as the core engine of national economies.",
+    "category": "goalCategory:growth",
+    "image": "/media/images/goalType/urbanSociety.jpg",
+    "requires": [
+      "technologyType:bureaucracy",
+      "yieldType:goalPoints"
+    ],
+    "quote": {
+      "text": "Never in history have so many human beings lived together in such vast communities.",
+      "source": "Friedrich Engels, 1845",
+      "url": "/media/quotes/goalType/urbanSociety.mp3"
+    }
+  },
+  {
+    "key": "goalType:industrialMight",
+    "name": "Industrial Might",
+    "concept": "conceptType:goal",
+    "description": "Industrial might arose from mechanized production, high-energy fuels, and scaled organization. The Bessemer process lowered steel costs and enabled mass rolling mills by the late nineteenth century. Carnegie Steel integrated mines, rail, and mills to dominate the U.S. steel market. Germany’s Ruhr Valley fused coal and iron into a heavy-industry complex tied to chemical and electrical sectors. Manchester and Lancashire textile mills harnessed steam power and factory discipline to supply global markets. Railroads, telegraphs, and standardized parts coordinated supply chains. Trusts and cartels managed prices and investment. Industrial power underwrote military capacity, urban growth, and national fiscal strength.",
+    "category": "goalCategory:growth",
+    "image": "/media/images/goalType/industrialMight.jpg",
+    "requires": [
+      "technologyType:steelMilling",
+      "yieldType:goalPoints"
+    ],
+    "quote": {
+      "text": "The country is rich in coal and iron; upon these, industry rests.",
+      "source": "Friedrich List, 1841",
+      "url": "/media/quotes/goalType/industrialMight.mp3"
+    }
+  },
+  {
+    "key": "goalType:worldWar",
+    "name": "World War",
+    "concept": "conceptType:goal",
+    "description": "World war mobilized entire societies, treasuries, and industries for sustained conflict. In the First World War, general staffs coordinated mass conscription, rail timetables, and shell production. Repeating rifles, machine guns, and heavy artillery fixed fronts into trench systems. Battles such as the Somme and Verdun demonstrated extreme firepower and attrition. Aviation, armor, and chemical agents entered the battlefield. Civilian economies rationed food and fuel and expanded munitions workforces. Propaganda and censorship shaped morale. The scale of casualties and resource demands drove diplomacy, revolution, and postwar reconstruction, setting patterns for later industrialized warfare.",
+    "category": "goalCategory:military",
+    "image": "/media/images/goalType/worldWar.jpg",
+    "requires": [
+      "technologyType:repeatingRifles",
+      "yieldType:goalPoints"
+    ],
+    "quote": {
+      "text": "The lamps are going out all over Europe.",
+      "source": "Edward Grey, 1914",
+      "url": "/media/quotes/goalType/worldWar.mp3"
+    }
+  },
+  {
+    "key": "goalType:nuclearDeterrence",
+    "name": "Nuclear Deterrence",
+    "concept": "conceptType:goal",
+    "description": "Nuclear deterrence is a strategic doctrine that seeks to prevent attack by threatening devastating retaliation. The Manhattan Project produced atomic weapons used in 1945. During the Cold War, the superpowers built arsenals and tested high-yield devices such as the Tsar Bomba. Mutual Assured Destruction defined the risks of a nuclear exchange and steered crisis behavior. Delivery systems expanded into a triad of bombers, land-based missiles, and submarine-launched missiles. The Cuban Missile Crisis exposed escalation dangers and prompted hotlines and arms control. Treaties, verification, and second-strike survivability became core tools for stabilizing nuclear relations.",
+    "category": "goalCategory:military",
+    "image": "/media/images/goalType/nuclearDeterrence.jpg",
+    "requires": [
+      "technologyType:fission",
+      "yieldType:goalPoints"
+    ],
+    "quote": {
+      "text": "The atom changed everything but our thinking.",
+      "source": "Albert Einstein, 1946",
+      "url": "/media/quotes/goalType/nuclearDeterrence.mp3"
+    }
+  },
+  {
+    "key": "goalType:securityCouncil",
+    "name": "Security Council",
+    "concept": "conceptType:goal",
+    "description": "The United Nations Security Council, created in 1945, was tasked with maintaining international peace and security. Five permanent members received veto power, shaping decision-making during the Cold War and after. The Council authorized collective action in Korea in 1950 and later established peacekeeping mandates on multiple continents. It issues sanctions, arms embargoes, and resolutions under Chapters VI and VII of the UN Charter. Vetoes often blocked action during superpower standoffs, while post–Cold War operations expanded scope and tempo. Debates continue over membership, regional balance, and the effectiveness of enforcement tools.",
+    "category": "goalCategory:influence",
+    "image": "/media/images/goalType/securityCouncil.jpg",
+    "requires": [
+      "technologyType:plastics",
+      "yieldType:goalPoints"
+    ],
+    "quote": {
+      "text": "The UN was not created to take mankind to heaven, but to save humanity from hell.",
+      "source": "Dag Hammarskjöld, 1954",
+      "url": "/media/quotes/goalType/securityCouncil.mp3"
+    }
+  },
+  {
+    "key": "goalType:spaceRace",
+    "name": "Space Race",
+    "concept": "conceptType:goal",
+    "description": "The Space Race was a bipolar, state-driven contest for technological prestige, military advantage, and scientific leadership. The Soviet Union set the pace with Sputnik in 1957, the first human spaceflight in 1961, and a series of pioneering lunar and planetary probes. The United States responded with rapid investment, culminating in Apollo’s crewed lunar landings from 1969 to 1972 and major advances in satellite, robotic, and crewed-spaceflight capabilities. After Apollo, the competition shifted into sustained programs such as the Space Shuttle, Mir, and early plans for an international space station. The collapse of the USSR transformed the rivalry into cooperative ventures, including Shuttle–Mir and joint ISS development. By the 1990s and 2000s, the Space Race had evolved from ideological confrontation into a mix of collaboration, national pride, and long-term infrastructure building in Earth orbit.",
+    "category": "goalCategory:science",
+    "image": "/media/images/goalType/spaceRace.jpg",
+    "quote": {
+      "text": "Payekhali, Let's go!",
+      "source": "Yuri Gagarin, 1961",
+      "url": "/media/quotes/goalType/spaceRace.mp3"
+    }
+  },
+  {
+    "key": "goalType:worldWideWeb",
+    "name": "World Wide Web",
+    "concept": "conceptType:goal",
+    "description": "The World Wide Web is a hypertext-based information system devised by Tim Berners-Lee at CERN between 1989 and 1991. It integrated URLs, HTTP, and HTML to link documents across TCP/IP networks. The first website went live in 1991. Adoption accelerated with graphical browsers, notably NCSA Mosaic (1993) and Netscape Navigator (1994), which brought images and clickable links to mass audiences. Open standards and the client–server model enabled rapid publishing and search. Commercialization in the mid-1990s produced the dot-com boom, e-commerce, and online advertising. After the 2000 crash, the Web evolved toward interactive platforms, social media, and cloud services. Web 2.0 fostered user-generated content and network effects. The mobile era extended access via smartphones and responsive design. The Web now underpins communication, software distribution, finance, education, and entertainment, while governance debates center on privacy, security, interoperability, and content moderation.",
+    "category": "goalCategory:influence",
+    "image": "/media/images/goalType/worldWideWeb.jpg",
+    "quote": {
+      "text": "The Web is for everyone.",
+      "source": "Tim Berners-Lee, 2012",
+      "url": "/media/quotes/goalType/worldWideWeb.mp3"
+    }
+  },
+  {
+    "key": "goalType:interplanetarySpecies",
+    "name": "Interplanetary Species",
+    "concept": "conceptType:goal",
+    "description": "",
+    "category": "goalCategory:victory",
+    "image": "/media/images/goalType/interplanetarySpecies.jpg",
+    "quote": {
+      "text": "The Earth is the cradle of humanity, but one cannot live in the cradle forever.",
+      "source": "Konstantin Tsiolkovsky, 1911",
+      "url": "/media/quotes/goalType/interplanetarySpecies.mp3"
+    },
+    "p1": "From the dust of one world, we rose to claim the stars. The gravity that bound us became the forge of our resolve. Now the void itself carries our breath, our memory, our will — and the endless frontier knows the name of humankind."
+  },
+  {
+    "key": "goalType:oneTrueFaith",
+    "name": "One True Faith",
+    "concept": "conceptType:goal",
+    "description": "One True Faith describes political-religious projects that aim to enforce a single creed or ideology across populations or borders. States and movements have used law, education, media, and coercion to promote uniform belief and suppress dissent. In the late 20th and early 21st centuries, Saudi-funded promotion of Wahhabi doctrines shaped religious institutions abroad. The Islamic State sought territorial control under rigid legal codes during the 2010s before military defeat. Religious nationalism in several countries linked majority faiths to state identity and policy. Such campaigns generate resistance, sectarian conflict, and counter-radicalization measures, and often prompt international scrutiny.",
+    "category": "goalCategory:victory",
+    "image": "/media/images/goalType/oneTrueFaith.jpg",
+    "quote": {
+      "text": "If God is with us, who can be against us?",
+      "source": "Romans 8:31, ca. 0 CE",
+      "url": "/media/quotes/goalType/oneTrueFaith.mp3"
+    },
+    "p1": "Empires crumbled, tongues divided, prophets fell silent — yet belief endured. Across fire and doubt, one creed gathered the hearts of nations. Now, the spirit of humanity stands united in purpose, bound not by fear, but by faith everlasting."
+  },
+  {
+    "key": "goalType:worldPolice",
+    "name": "World Police",
+    "concept": "conceptType:goal",
+    "description": "World Police refers to the use of military power by a state or coalition to enforce international norms or restore order beyond its borders. After 1945, the United States developed global force projection and practiced intervention, notably in Afghanistan (2001) and Iraq (2003). NATO conducted operations in Kosovo (1999) and Libya (2011). UN Security Council mandates underpin peacekeeping and stabilization missions, though mandates vary in scope and rules of engagement. Supporters argue such actions deter aggression and mass atrocities. Critics point to sovereignty violations, uneven application, and protracted occupations. Outcomes depend on legitimacy, planning, and post-conflict governance.",
+    "category": "goalCategory:victory",
+    "image": "/media/images/goalType/worldPolice.jpg",
+    "quote": {
+      "text": "Speak softly and carry a big stick; you will go far.",
+      "source": "Theodore Roosevelt, 1901",
+      "url": "/media/quotes/goalType/worldPolice.mp3"
+    },
+    "p1": "When war had no victors and chaos knew no borders, governance itself became the final weapon. Through treaty, tribunal, and tireless negotiation, the nations bent toward a single will. The world is unified not by conquest, but by the quiet supremacy of order."
+  },
+  {
+    "key": "goalType:globalMonopoly",
+    "name": "Global Monopoly",
+    "concept": "conceptType:goal",
+    "description": "",
+    "category": "goalCategory:victory",
+    "image": "/media/images/goalType/globalMonopoly.jpg",
+    "quote": {
+      "text": "The world has become one vast market; humanity itself, the commodity.",
+      "source": "Karl Marx, 1848",
+      "url": "/media/quotes/goalType/globalMonopoly.mp3"
+    },
+    "p1": "The merchants of the past dreamed of gold; now value itself obeys design. Every exchange, every thought, every breath of commerce flows through an unseen hand. The market has become the world — and the world, its dominion."
+  },
+  {
+    "key": "goalType:worldDomination",
+    "name": "World Domination",
+    "concept": "conceptType:goal",
+    "description": "World Domination denotes ambitions to secure comprehensive political, military, or economic control at a global scale. In the 20th century, ideologically driven projects included the Comintern’s effort to foster worldwide communist revolution and Nazi Germany’s plans for continental conquest before defeat in 1945. After 1945, the United States built an alliance network, financial institutions, and forward deployments that produced extensive influence sometimes termed Pax Americana. In the late 20th and 21st centuries, multinational corporations and digital platforms pursued universal market reach and infrastructural control. Attempts at total dominance have met counterbalancing coalitions, nationalist resistance, and regulatory constraints.",
+    "category": "goalCategory:victory",
+    "image": "/media/images/goalType/worldDomination.jpg",
+    "quote": {
+      "text": "Power tends to corrupt, and absolute power corrupts absolutely.",
+      "source": "Lord Acton, 1887",
+      "url": "/media/quotes/goalType/worldDomination.mp3"
+    },
+    "p1": "The banners of countless nations fell before ambition’s march. Where others faltered, power endured, until all borders dissolved beneath its shadow. The world kneels, not from fear alone, but from awe at the will that conquered it."
+  },
+  {
+    "key": "goalType:culturalSingularity",
+    "name": "Cultural Singularity",
+    "concept": "conceptType:goal",
+    "description": "",
+    "category": "goalCategory:victory",
+    "image": "/media/images/goalType/culturalSingularity.jpg",
+    "quote": {
+      "text": "The supreme art of war is to subdue the enemy without fighting",
+      "source": "Sun Tzu, ca. 500 BC",
+      "url": "/media/quotes/goalType/culturalSingularity.mp3"
+    },
+    "p1": "The stories of the world no longer compete — they echo one another. Music, art, and meaning revolve around a single star of inspiration. The age of imitation has become the age of unity"
+  }
+]

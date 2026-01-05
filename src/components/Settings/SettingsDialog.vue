@@ -6,8 +6,8 @@ import {
   engineSettingPresets,
   type EngineSettings,
   restartRequiredSettingKeys,
-} from "@/Player/Human/EngineSettings";
-import { WeatherType } from "@/Player/Human/Environment/weather";
+} from "@/Actor/Human/EngineSettings";
+import { WeatherType } from "@/Actor/Human/Environment/weather";
 import UiSelect from "@/components/Ui/UiSelect.vue";
 import UiSlider from "@/components/Ui/UiSlider.vue";
 import UiSwitch from "@/components/Ui/UiSwitch.vue";

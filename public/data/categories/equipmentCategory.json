@@ -1,0 +1,158 @@
+[
+  {
+    "key": "equipmentCategory:siege",
+    "name": "Siege",
+    "concept": "conceptType:equipment",
+    "description": ""
+  },
+  {
+    "key": "equipmentCategory:artillery",
+    "name": "Artillery",
+    "concept": "conceptType:equipment",
+    "description": ""
+  },
+  {
+    "key": "equipmentCategory:ranged",
+    "name": "Ranged",
+    "concept": "conceptType:equipment",
+    "description": ""
+  },
+  {
+    "key": "equipmentCategory:mortar",
+    "name": "Mortar",
+    "concept": "conceptType:equipment",
+    "description": ""
+  },
+  {
+    "key": "equipmentCategory:specOps",
+    "name": "SpecOps",
+    "concept": "conceptType:equipment",
+    "description": ""
+  },
+  {
+    "key": "equipmentCategory:melee",
+    "name": "Melee",
+    "concept": "conceptType:equipment",
+    "description": ""
+  },
+  {
+    "key": "equipmentCategory:firearm",
+    "name": "Firearm",
+    "concept": "conceptType:equipment",
+    "description": ""
+  },
+  {
+    "key": "equipmentCategory:antiCavalry",
+    "name": "Anti-Cavalry",
+    "concept": "conceptType:equipment",
+    "description": ""
+  },
+  {
+    "key": "equipmentCategory:antiTank",
+    "name": "Anti-Tank",
+    "concept": "conceptType:equipment",
+    "description": ""
+  },
+  {
+    "key": "equipmentCategory:tankGun",
+    "name": "Tank Gun",
+    "concept": "conceptType:equipment",
+    "description": ""
+  },
+  {
+    "key": "equipmentCategory:navalMelee",
+    "name": "Naval Melee",
+    "concept": "conceptType:equipment",
+    "description": ""
+  },
+  {
+    "key": "equipmentCategory:torpedo",
+    "name": "Torpedo",
+    "concept": "conceptType:equipment",
+    "description": ""
+  },
+  {
+    "key": "equipmentCategory:airCombat",
+    "name": "Air Combat",
+    "concept": "conceptType:equipment",
+    "description": ""
+  },
+  {
+    "key": "equipmentCategory:scout",
+    "name": "Scout",
+    "concept": "conceptType:equipment",
+    "description": ""
+  },
+  {
+    "key": "equipmentCategory:carrier",
+    "name": "Carrier",
+    "concept": "conceptType:equipment",
+    "description": ""
+  },
+  {
+    "key": "equipmentCategory:missileBay",
+    "name": "Missile Bay",
+    "concept": "conceptType:equipment",
+    "description": ""
+  },
+  {
+    "key": "equipmentCategory:antiAir",
+    "name": "Anti-Air",
+    "concept": "conceptType:equipment",
+    "description": ""
+  },
+  {
+    "key": "equipmentCategory:groundAttack",
+    "name": "Ground Attack",
+    "concept": "conceptType:equipment",
+    "description": ""
+  },
+  {
+    "key": "equipmentCategory:bomb",
+    "name": "Bomb",
+    "concept": "conceptType:equipment",
+    "description": ""
+  },
+  {
+    "key": "equipmentCategory:satellite",
+    "name": "Satellite",
+    "concept": "conceptType:equipment",
+    "description": ""
+  },
+  {
+    "key": "equipmentCategory:worker",
+    "name": "Worker",
+    "concept": "conceptType:equipment",
+    "description": ""
+  },
+  {
+    "key": "equipmentCategory:settler",
+    "name": "Settler",
+    "concept": "conceptType:equipment",
+    "description": ""
+  },
+  {
+    "key": "equipmentCategory:trader",
+    "name": "Trader",
+    "concept": "conceptType:equipment",
+    "description": ""
+  },
+  {
+    "key": "equipmentCategory:missionary",
+    "name": "Missionary",
+    "concept": "conceptType:equipment",
+    "description": ""
+  },
+  {
+    "key": "equipmentCategory:diplomat",
+    "name": "Diplomat",
+    "concept": "conceptType:equipment",
+    "description": ""
+  },
+  {
+    "key": "equipmentCategory:spy",
+    "name": "Spy",
+    "concept": "conceptType:equipment",
+    "description": ""
+  }
+]

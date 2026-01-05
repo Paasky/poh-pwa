@@ -1,0 +1,2722 @@
+[
+  {
+    "key": "naturalWonderType:greatRiftValley",
+    "name": "Great Rift Valley",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Great Rift Valley is a major continental rift system stretching from the Red Sea to southern Africa. Nineteenth- and twentieth-century geological surveys established its tectonic nature and traced fault lines, escarpments, and volcanic centers. John Walter Gregory’s late nineteenth-century work popularized the term in European science. The valley became central to paleoanthropology in the twentieth century. Louis and Mary Leakey’s excavations at Olduvai Gorge in the 1930s–1960s yielded early hominid remains and stone tools that reshaped debates on human origins. Further expeditions in the 1930s framed the region as a likely cradle of early humans. Research expanded to adjacent basins and volcanic highlands, with stratigraphy, paleomagnetism, and radiometric dating refining timelines. The valley’s lakes and volcanoes also drew studies of climate history and active tectonics. Field camps, aerial mapping, and later satellite imagery produced a layered record of rifting, volcanism, and human prehistory that continues to guide African geology and archaeology.",
+    "category": "naturalWonderCategory:canyon",
+    "yields": [
+      {
+        "type": "yieldType:science",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:health",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/greatRiftValley.jpg",
+    "requires": [
+      "continentType:africa"
+    ],
+    "quote": {
+      "text": "The cradle of mankind.",
+      "source": "Louis Leakey, ca. 1930",
+      "url": "/media/quotes/naturalWonderType/greatRiftValley.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:nigerDelta",
+    "name": "Niger Delta",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Niger Delta is a vast low-lying delta in present-day Nigeria formed by distributaries of the Niger River. It long served as a hub for regional trade, with canoe traffic linking coastal markets to inland communities. In the nineteenth century the palm oil trade expanded rapidly, drawing European merchants and rival coastal polities into dense riverine commercial networks. Richard Burton’s 1864 notes described waterways, settlements, and trade practices in detail. Colonial authorities intensified mapping of creeks and channels in the late nineteenth century to regulate customs and transport. Twentieth-century development brought new infrastructure and large-scale resource extraction, especially petroleum, which transformed local economies and environments. Despite industrial change, traditional fishing and boatbuilding persisted in many creeks. The delta remains a historic contact zone, with archives of charts, hydrographic surveys, and consular reports documenting navigation, commerce, and shifting governance across the tidal landscape.",
+    "category": "naturalWonderCategory:floodPlains",
+    "yields": [
+      {
+        "type": "yieldType:food",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:gold",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/nigerDelta.jpg",
+    "requires": [
+      "continentType:africa"
+    ],
+    "quote": {
+      "text": "The Delta is a labyrinth of rivers, swamps, and forests.",
+      "source": "Richard Burton, 1864",
+      "url": "/media/quotes/naturalWonderType/nigerDelta.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:ergChebbiDunes",
+    "name": "Erg Chebbi Dunes",
+    "concept": "conceptType:naturalWonder",
+    "description": "Erg Chebbi is a field of high Saharan dunes in southeastern Morocco shaped by prevailing winds. Oral traditions and caravan records tie the dunes to trans-Saharan trade routes that linked oases across the Tafilalt and beyond. Berber nomadic groups used nearby wells and seasonal camps to manage livestock and desert travel. Nineteenth-century European explorers crossed the region and produced travelogues that described dune forms, mirages, and local lifeways; French accounts from the 1890s are particularly detailed. Ethnographic notes recorded trade in salt, dates, and textiles that passed along caravan paths near the erg. Twentieth-century surveys mapped dune migration and documented desert meteorology. Small settlements at the erg’s margins shifted as road connections improved. By the late twentieth century the area drew scholarly and popular interest for its geomorphology and desert ecology, while still preserving traces of older navigation points, campgrounds, and oral histories of caravan travel.",
+    "category": "naturalWonderCategory:hills",
+    "yields": [
+      {
+        "type": "yieldType:faith",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:culture",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/ergChebbiDunes.jpg",
+    "requires": [
+      "continentType:africa"
+    ],
+    "quote": {
+      "text": "The dunes of Erg Chebbi are waves of gold.",
+      "source": "French travelogue, 1890",
+      "url": "/media/quotes/naturalWonderType/ergChebbiDunes.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:homboriTondo",
+    "name": "Hombori Tondo",
+    "concept": "conceptType:naturalWonder",
+    "description": "Hombori Tondo is a prominent sandstone massif in central Mali that dominates the surrounding Sahelian plain. It served as a navigational landmark for caravans moving between the Niger Bend and the inland plateaus. Communities used its cliffs and caves as refuges during conflict and raiding, and as lookouts that controlled movement across dry-season grazing lands. René Caillé noted the feature in his 1828 journey, adding to early European geographic knowledge of the region. Archaeological and ethnographic surveys in the nineteenth and twentieth centuries documented rock shelters, rock art, and traces of long-term occupation. Researchers studied settlement patterns, ritual sites, and the use of natural cisterns that collect scarce rainfall. The massif’s terraces preserved evidence of changing subsistence practices, including grain storage and hunting stations. Later mapping campaigns recorded its escarpments and talus slopes, linking local history with broader studies of West African sandstone plateaus and their human use.",
+    "category": "naturalWonderCategory:mountain",
+    "yields": [
+      {
+        "type": "yieldType:happiness",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:faith",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/homboriTondo.jpg",
+    "requires": [
+      "continentType:africa"
+    ],
+    "quote": {
+      "text": "Hombori rises like a sentinel above the plains.",
+      "source": "René Caillié, 1828",
+      "url": "/media/quotes/naturalWonderType/homboriTondo.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:mountKilimanjaro",
+    "name": "Mount Kilimanjaro",
+    "concept": "conceptType:naturalWonder",
+    "description": "Mount Kilimanjaro is a stratovolcanic massif in northern Tanzania with three main peaks: Kibo, Mawenzi, and Shira. German colonial surveys in the late nineteenth century charted its glaciers and alpine zones, establishing routes for scientific access. Hans Meyer and Ludwig Purtscheller reached the summit of Kibo in 1889, an event that anchored subsequent climbing and research. Early twentieth-century expeditions studied glaciation, flora zonation, and high-altitude physiology. Ernest Hemingway’s 1936 story broadened its cultural profile. Botanists and geographers documented the progression from montane forest to alpine desert, while glaciologists tracked ice retreat through photographs and later mass-balance measurements. Postcolonial administrations expanded conservation measures, culminating in national park status and regulated ascent routes. The mountain’s long record of survey data, field diaries, and climatic observations supports studies of East African climate variability, volcanic history, and the development of high-altitude field science.",
+    "category": "naturalWonderCategory:mountain",
+    "yields": [
+      {
+        "type": "yieldType:science",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:happiness",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/mountKilimanjaro.jpg",
+    "requires": [
+      "continentType:africa"
+    ],
+    "quote": {
+      "text": "There is nothing more solemnly grand than Kilimanjaro.",
+      "source": "Ernest Hemingway, 1936",
+      "url": "/media/quotes/naturalWonderType/mountKilimanjaro.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:ouniangaOasis",
+    "name": "Ounianga Oasis",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Ounianga Oasis is a chain of freshwater and saline lakes in northeastern Chad sustained by fossil groundwater. The lakes form a distinctive Saharan landscape that supports date palms, small gardens, and fishing in select basins. Caravans moving across the central Sahara used the waters as staging points in the nineteenth and twentieth centuries. French officer Jean Tilho documented the lakes in 1910 during his survey mission, noting hydrology, routes, and surrounding dunes. Local communities organized irrigation, salt extraction, and limited millet cultivation around shorelines and palaeochannels. Twentieth-century expeditions mapped basin morphologies and recorded wind-driven surface processes that maintain open-water conditions despite aridity. Archival photographs, colonial reports, and later limnological studies built a long-term record of lake levels and use. The oasis remains a key case for Saharan settlement history and for understanding groundwater-fed lakes in hyper-arid environments.",
+    "category": "naturalWonderCategory:spring",
+    "yields": [
+      {
+        "type": "yieldType:food",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:health",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/ouniangaOasis.jpg",
+    "requires": [
+      "continentType:africa"
+    ],
+    "quote": {
+      "text": "Lakes of great beauty, jewels in the desert.",
+      "source": "Jean Tilho, 1910",
+      "url": "/media/quotes/naturalWonderType/ouniangaOasis.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:nyiragongo",
+    "name": "Nyiragongo",
+    "concept": "conceptType:naturalWonder",
+    "description": "Nyiragongo is an active stratovolcano in the Virunga range of the eastern Democratic Republic of the Congo. It is noted for a persistent summit lava lake and highly fluid lavas that can move rapidly downslope. Mid-twentieth-century volcanologists, including Haroun Tazieff, carried out hazardous observations that clarified gas emissions, crater morphology, and lava lake dynamics. Major eruptions in 1977 and 2002 sent destructive flows through populated areas near Goma, damaging infrastructure and displacing residents. These events prompted the development of urban hazard mapping, evacuation planning, and cross-border monitoring with Rwanda. The Goma Volcano Observatory and international teams assembled seismic, thermal, and gas datasets that improved early warning. Field diaries, aerial imagery, and eyewitness accounts form a detailed chronology of activity. Nyiragongo’s record informs risk management for rift volcanoes and the challenges of maintaining surveillance near dense settlements.",
+    "category": "naturalWonderCategory:volcano",
+    "yields": [
+      {
+        "type": "yieldType:production",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:gold",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/nyiragongo.jpg",
+    "requires": [
+      "continentType:africa"
+    ],
+    "quote": {
+      "text": "A fearful and majestic sight, its lava lake a cauldron of fire.",
+      "source": "Haroun Tazieff, 1948",
+      "url": "/media/quotes/naturalWonderType/nyiragongo.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:victoriaFalls",
+    "name": "Victoria Falls",
+    "concept": "conceptType:naturalWonder",
+    "description": "Victoria Falls spans the Zambezi River between present-day Zambia and Zimbabwe. The Lozi name Mosi-oa-Tunya, meaning Smoke that Thunders, refers to the towering spray and roar that mark seasonal floods. David Livingstone visited in 1855 and publicized the site to European audiences, drawing surveyors, artists, and early travelers. By the early twentieth century, rail links and the 1905 bridge established a tourism corridor and facilitated regional trade. Colonial administrations assessed hydroelectric potential on the Zambezi while promoting hotels and viewpoints around the gorge. Photographers and geologists documented changing flow and cliff retreat through flood cycles. Guidebooks, postcards, and engineering reports created a layered archive of observation. The falls became a focal point for conservation proposals and cross-border coordination. Its historical record intertwines indigenous place knowledge, Victorian exploration, and the growth of southern African tourism and infrastructure.",
+    "category": "naturalWonderCategory:waterfall",
+    "yields": [
+      {
+        "type": "yieldType:culture",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:production",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/victoriaFalls.jpg",
+    "requires": [
+      "continentType:africa"
+    ],
+    "quote": {
+      "text": "The Smoke that Thunders.",
+      "source": "Lozi tradition",
+      "url": "/media/quotes/naturalWonderType/victoriaFalls.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:grandCanyon",
+    "name": "Grand Canyon",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Grand Canyon is a deep gorge carved by the Colorado River in northern Arizona. Indigenous peoples, including the Havasupai, Hualapai, Hopi, and Navajo, used the canyon and its rims for habitation, farming, and trade routes. Spanish scouts recorded distant views in the sixteenth century. Systematic exploration expanded in the nineteenth century with John Wesley Powell’s 1869 river expedition and later surveys. Artists and photographers produced images that brought the canyon to national attention. Geologists used its exposed strata to build North American stratigraphic frameworks. Theodore Roosevelt advocated preservation in the early twentieth century, leading to monument status in 1908 and national park designation in 1919. Roads, trails, and visitor facilities grew alongside scientific research stations. The canyon’s archives combine ranger reports, geologic maps, and ethnographies that document its dual histories of scientific inquiry and tourism development.",
+    "category": "naturalWonderCategory:canyon",
+    "yields": [
+      {
+        "type": "yieldType:culture",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:happiness",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/grandCanyon.jpg",
+    "requires": [
+      "continentType:america"
+    ],
+    "quote": {
+      "text": "Leave it as it is. You cannot improve upon it.",
+      "source": "Theodore Roosevelt, 1903",
+      "url": "/media/quotes/naturalWonderType/grandCanyon.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:sumideroCanyon",
+    "name": "Sumidero Canyon",
+    "concept": "conceptType:naturalWonder",
+    "description": "Sumidero Canyon is a steep gorge carved by the Grijalva River in Chiapas, Mexico. Sheer walls create a narrow passage that long served local communities as a transport route and fishing ground. John Lloyd Stephens described the canyon in 1841, adding it to nineteenth-century travel literature on southern Mexico. Regional authorities later charted the river for navigation and flood control. Twentieth-century conservation campaigns presented the gorge as a natural heritage site, while improved road access brought regular tourism. Boat excursions and overlook roads made the canyon a public attraction and a subject of landscape photography. Hydroelectric development on the Grijalva altered water levels and access patterns but also spurred ecological monitoring. The area’s historical record includes travel narratives, engineering reports, and park management plans that trace changing uses of a dramatic river corridor.",
+    "category": "naturalWonderCategory:canyon",
+    "yields": [
+      {
+        "type": "yieldType:faith",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:health",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/sumideroCanyon.jpg",
+    "requires": [
+      "continentType:america"
+    ],
+    "quote": {
+      "text": "The cliffs rise sheer and terrible, shutting in the river like walls.",
+      "source": "John Lloyd Stephens, 1841",
+      "url": "/media/quotes/naturalWonderType/sumideroCanyon.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:greatBlueHole",
+    "name": "Great Blue Hole",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Great Blue Hole is a near-circular marine sinkhole in Lighthouse Reef, Belize. It formed during Pleistocene low sea levels when karst caves collapsed and later flooded. Submerged stalactites and stratified carbonate walls confirm its speleological origin. Jacques-Yves Cousteau’s 1971 expedition publicized its scale and drew scientific interest to its geology and ecology. Subsequent surveys documented anoxic layers and distinct biological zones with reef species around the rim. From the late twentieth century it became a premier dive site and a focus of conservation tied to the Belize Barrier Reef Reserve System. Research has examined sediment cores for sea-level history and reef responses to climate variability. Management debates have addressed diver access, anchoring, and wildlife disturbance. The sinkhole remains a benchmark location for studying drowned karst systems and tropical marine biodiversity.",
+    "category": "naturalWonderCategory:coast",
+    "yields": [
+      {
+        "type": "yieldType:science",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:food",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/greatBlueHole.jpg",
+    "requires": [
+      "continentType:america"
+    ],
+    "quote": {
+      "text": "The most spectacular place for diving I have ever seen.",
+      "source": "Jacques-Yves Cousteau, 1971",
+      "url": "/media/quotes/naturalWonderType/greatBlueHole.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:puertoMosquito",
+    "name": "Puerto Mosquito",
+    "concept": "conceptType:naturalWonder",
+    "description": "Puerto Mosquito on Vieques, Puerto Rico, is a bioluminescent bay famed for intense nocturnal glow. The effect arises primarily from the dinoflagellate Pyrodinium bahamense concentrated in warm, nutrient-balanced waters protected by mangroves. Rachel Carson described such sea fire in 1951, and the bay became a noted example for naturalists and travelers. Local communities long fished the inlet and later guided small night tours. Scientific work has measured plankton density, salinity, and lunar-cycle effects on brightness. Conservation measures emphasize limits on boat traffic, lighting, and chemical runoff to preserve the habitat. Military use of Vieques affected access in the twentieth century, followed by restoration efforts. Today the bay serves as a living laboratory for bioluminescence and as a managed attraction that supports regional livelihoods.",
+    "category": "naturalWonderCategory:coast",
+    "yields": [
+      {
+        "type": "yieldType:gold",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:happiness",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/puertoMosquito.jpg",
+    "requires": [
+      "continentType:america"
+    ],
+    "quote": {
+      "text": "The water sparkles with light when disturbed, as if alive with fireflies.",
+      "source": "Rachel Carson, 1951",
+      "url": "/media/quotes/naturalWonderType/puertoMosquito.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:badlands",
+    "name": "Badlands",
+    "concept": "conceptType:naturalWonder",
+    "description": "Badlands are dissected, semi-arid landscapes carved in soft sedimentary strata by water and wind. The term entered English from French trappers describing country difficult to travel. Prominent examples occur in the Dakotas and Alberta. Their exposures reveal fossil-rich layers that fueled nineteenth- and twentieth-century paleontology. George Mercer Dawson’s 1875 surveys documented Canadian badlands during systematic geological mapping. In the United States, expeditions collected dinosaurs and mammals from badlands along the Missouri and in the West. Ranchers and homesteaders used adjacent grasslands while gulches and hoodoos limited settlement within the eroded zones. Parks and reserves, including Badlands National Park and Dinosaur Provincial Park, later protected key outcrops. The terrain continues to inform studies of erosion rates, ancient climates, and vertebrate evolution.",
+    "category": "naturalWonderCategory:hills",
+    "yields": [
+      {
+        "type": "yieldType:health",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:food",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/badlands.jpg",
+    "requires": [
+      "continentType:america"
+    ],
+    "quote": {
+      "text": "A weird, strange land, utterly unlike any other.",
+      "source": "George Mercer Dawson, 1875",
+      "url": "/media/quotes/naturalWonderType/badlands.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:monumentValley",
+    "name": "Monument Valley",
+    "concept": "conceptType:naturalWonder",
+    "description": "Monument Valley lies on Navajo Nation land along the Arizona–Utah border. Towering Permian sandstone buttes and mesas define its skyline. Frederick S. Dellenbaugh praised the landscape in 1905, framing it as natural sculpture. The Diné have longstanding cultural ties to the valley, with grazing, ceremony, and place-based knowledge shaping stewardship. In the 1930s the area entered global awareness through films directed by John Ford, which drew photographers and tourists. Local enterprises, notably the Gouldings, supported filming and guided visits. Mid-twentieth-century development created tribal park infrastructure and regulated access. Research and monitoring address erosion, visitor impacts, and preservation of sacred sites. The valley remains a controlled cultural landscape managed by the Navajo Nation with tourism as a major economic activity.",
+    "category": "naturalWonderCategory:hills",
+    "yields": [
+      {
+        "type": "yieldType:culture",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:faith",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/monumentValley.jpg",
+    "requires": [
+      "continentType:america"
+    ],
+    "quote": {
+      "text": "What nature has built here seems like a work of art on a Titanic scale.",
+      "source": "Frederick Samuel Dellenbaugh, 1905",
+      "url": "/media/quotes/naturalWonderType/monumentValley.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:volcanDeFuego",
+    "name": "Volcán de Fuego",
+    "concept": "conceptType:naturalWonder",
+    "description": "Volcán de Fuego in Guatemala is among Central America’s most active stratovolcanoes. Chronicler Bernal Díaz del Castillo noted its smoke and fire in 1568, reflecting continuous historical awareness of eruptions. The volcano towers above Antigua Guatemala and rural communities that rely on nearby soils for coffee and subsistence crops. Ash falls and lava flows have periodically damaged fields, roads, and settlements. Major events in 1932, 1974, and 2018 produced significant humanitarian crises. Modern monitoring by INSIVUMEH and international partners tracks seismicity, ash plumes, and lahars to inform evacuations. Long-term records from colonial times to the present aid hazard models. Fuego is central to regional volcanic studies focused on conduit dynamics, eruption precursors, and risk reduction for densely populated valleys.",
+    "category": "naturalWonderCategory:volcano",
+    "yields": [
+      {
+        "type": "yieldType:production",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:science",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/volcanDeFuego.jpg",
+    "requires": [
+      "continentType:america"
+    ],
+    "quote": {
+      "text": "The Fire Mountain is rarely quiet; it smokes and burns continually.",
+      "source": "Bernal Díaz del Castillo, 1568",
+      "url": "/media/quotes/naturalWonderType/volcanDeFuego.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:niagaraFalls",
+    "name": "Niagara Falls",
+    "concept": "conceptType:naturalWonder",
+    "description": "Niagara Falls spans the Niagara River between the United States and Canada. Its Horseshoe, American, and Bridal Veil falls have drawn visitors since the early nineteenth century. Charles Dickens in 1842 praised the spectacle during a period of growing excursion travel. Promenades, parks, and hotels soon lined both banks, as reformers argued for public access. Early conservation steps created the Niagara Reservation (1885) and Queen Victoria Park (1888). Engineers harnessed the drop for hydroelectric power, notably the 1895 Adams Power Plant using alternating current. By the early twentieth century the site mixed industry, tourism, and daredevil feats, including Annie Edson Taylor’s 1901 barrel plunge. Bilateral treaties later regulated water diversion and flow to balance scenery with power generation.",
+    "category": "naturalWonderCategory:waterfall",
+    "yields": [
+      {
+        "type": "yieldType:production",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:gold",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/niagaraFalls.jpg",
+    "requires": [
+      "continentType:america"
+    ],
+    "quote": {
+      "text": "It is the most sublime spectacle in nature.",
+      "source": "Charles Dickens, 1842",
+      "url": "/media/quotes/naturalWonderType/niagaraFalls.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:canoCristales",
+    "name": "Caño Cristales",
+    "concept": "conceptType:naturalWonder",
+    "description": "Caño Cristales flows through the Serranía de la Macarena in Colombia. During the low-water season its bed displays vivid reds, greens, yellows, and blues from the aquatic plant Macarenia clavigera against clear water and dark rock. Photographer and writer Andrés Hurtado García popularized it in the late twentieth century as the ‘river that escaped from paradise’. Scientific surveys documented the plant’s life cycle, water chemistry, and sunlight requirements that drive the colors. Decades of conflict limited access, preserving relative ecological integrity. As security improved, controlled ecotourism developed with guides, quotas, and designated trails. The river lies within a broader mosaic of protected areas and indigenous territories. Ongoing management addresses erosion, litter, and seasonal pressures while supporting local economies.",
+    "category": "naturalWonderCategory:canyon",
+    "yields": [
+      {
+        "type": "yieldType:health",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:happiness",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/canoCristales.jpg",
+    "requires": [
+      "continentType:andea"
+    ],
+    "quote": {
+      "text": "The river that escaped from paradise.",
+      "source": "Andrés Hurtado García, ca. 1980",
+      "url": "/media/quotes/naturalWonderType/canoCristales.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:galapagosIslands",
+    "name": "Galápagos Islands",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Galápagos archipelago, annexed by Ecuador in 1832, became central to evolutionary science after Charles Darwin’s 1835 visit aboard HMS Beagle. Nineteenth-century settlers and penal colonies exploited tortoises and sea lion rookeries, prompting early scientific concern. Naturalists and collecting expeditions returned through the late nineteenth and early twentieth centuries to document endemic life. In 1959 Ecuador established the Galápagos National Park and, in 1964, the Charles Darwin Research Station. UNESCO recognized the islands in 1978, reinforcing international conservation. Research across genetics, ecology, and geology has used the islands as a natural laboratory. Management plans regulate tourism, fishing, and invasive species, with community involvement on inhabited islands. The archipelago remains a benchmark for studies of speciation, isolation, and adaptive radiation.",
+    "category": "naturalWonderCategory:islands",
+    "yields": [
+      {
+        "type": "yieldType:food",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:science",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/galapagosIslands.jpg",
+    "requires": [
+      "continentType:andea"
+    ],
+    "quote": {
+      "text": "The natural history of this archipelago is very remarkable: it seems to be a little world within itself.",
+      "source": "Charles Darwin, 1839",
+      "url": "/media/quotes/naturalWonderType/galapagosIslands.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:malpeloIsland",
+    "name": "Malpelo Island",
+    "concept": "conceptType:naturalWonder",
+    "description": "Malpelo Island is a remote volcanic outcrop in the eastern Pacific, far off Colombia’s coast. A 1932 article in The Geographical Journal called it an austere sentinel, reflecting its steep walls and minimal vegetation. Sailors long used the rock as a landmark on regional shipping routes. Divers and biologists later documented large aggregations of sharks and pelagic species in surrounding waters. Colombia established the Malpelo Flora and Fauna Sanctuary in 1995 to protect the ecosystem. UNESCO added the sanctuary to the World Heritage List in 2006, citing its exceptional marine biodiversity. Scientific expeditions study shark movements, reef communities, and oceanographic dynamics. Access is tightly controlled, with enforcement supported by a small naval presence and collaborative patrols.",
+    "category": "naturalWonderCategory:islands",
+    "yields": [
+      {
+        "type": "yieldType:gold",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:food",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/malpeloIsland.jpg",
+    "requires": [
+      "continentType:andea"
+    ],
+    "quote": {
+      "text": "An austere sentinel, rising solitary.",
+      "source": "The Geographical Journal, 1932",
+      "url": "/media/quotes/naturalWonderType/malpeloIsland.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:mountRoraima",
+    "name": "Mount Roraima",
+    "concept": "conceptType:naturalWonder",
+    "description": "Mount Roraima is a sandstone tepui at the junction of Venezuela, Guyana, and Brazil. Sheer cliffs and a broad summit plateau host high rates of endemism. Charles Barrington Brown described the formation in 1876, building on earlier reports from the Guiana Highlands. The first recorded ascent in 1884 by Everard im Thurn and Harry Perkins opened the summit to scientific survey. Early collectors cataloged unique plants adapted to nutrient-poor, wet surfaces. The Pemon people regard the mountain as a powerful place within their cosmology and oral tradition. Twentieth-century writers drew on its isolation for adventure fiction, most famously in The Lost World. Modern trekking routes approach from Venezuela under regulated access. Research continues on biogeography, weathering, and plateau hydrology.",
+    "category": "naturalWonderCategory:mountain",
+    "yields": [
+      {
+        "type": "yieldType:happiness",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:faith",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/mountRoraima.jpg",
+    "requires": [
+      "continentType:andea"
+    ],
+    "quote": {
+      "text": "A colossal natural fortress.",
+      "source": "Charles Barrington Brown, 1876",
+      "url": "/media/quotes/naturalWonderType/mountRoraima.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:torresDelPaine",
+    "name": "Torres del Paine",
+    "concept": "conceptType:naturalWonder",
+    "description": "Torres del Paine is a glaciated massif in southern Chilean Patagonia, known for granite spires, icefields, and wind-shaped lakes. Tehuelche and Kawésqar communities used the peaks as reference points and attached cultural meaning to the landscape. Late nineteenth- and early twentieth-century travelers and guides promoted the area as a remote wonder; Charles Wellington Furlong mapped and described the towers in 1910. Chile established protected status in 1959, later expanding trail networks and ranger posts. In 1978 UNESCO designated a Biosphere Reserve, drawing scientific attention to Andean ecology, glaciology, and guanaco and puma habitats. Mountaineers opened routes on the Towers and Paine Grande from the 1960s. From the 1990s, rising visitation prompted regulations on camping, waste, and fire risk after damaging blazes. Today the W and O circuits structure access while conservation programs aim to balance tourism with restoration of steppe and lenga–ñire forests.",
+    "category": "naturalWonderCategory:mountain",
+    "yields": [
+      {
+        "type": "yieldType:culture",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:health",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/torresDelPaine.jpg",
+    "requires": [
+      "continentType:andea"
+    ],
+    "quote": {
+      "text": "The Torres stand alone, piercing the sky in solitary grandeur.",
+      "source": "Charles Wellington Furlong, 1910",
+      "url": "/media/quotes/naturalWonderType/torresDelPaine.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:vinicunca",
+    "name": "Vinicunca",
+    "concept": "conceptType:naturalWonder",
+    "description": "Vinicunca, the “Rainbow Mountain” of Peru’s Cusco Region, is an Andean summit marked by mineral banding of iron oxides, sulfates, and clays. Local Quechua communities long visited the slopes for offerings, seasonal herding, and access to salt and pasture. Oral traditions noted the mountain’s unusual colors, later remarked upon by travelers. In the early twenty-first century, receding snow cover exposed more strata and accelerated tourism growth. Footpaths expanded from shepherd tracks into guided routes connecting Ausangate pilgrimage circuits. Community associations introduced entry fees, horse support, and rotation systems to distribute income. Researchers and agencies monitor trail erosion, hypoxia risks at over 5,000 meters, and waste management. The site now forms part of regional cultural itineraries linking Quechua ritual landscapes, textile markets, and highland wetlands, while debates continue over road building, quarrying, and visitor caps to protect fragile soils.",
+    "category": "naturalWonderCategory:mountain",
+    "yields": [
+      {
+        "type": "yieldType:culture",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:faith",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/vinicunca.jpg",
+    "requires": [
+      "continentType:andea"
+    ],
+    "quote": {
+      "text": "As if the earth were woven in cloth.",
+      "source": "Quechua tradition",
+      "url": "/media/quotes/naturalWonderType/vinicunca.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:villarrica",
+    "name": "Villarrica",
+    "concept": "conceptType:naturalWonder",
+    "description": "Villarrica is an active stratovolcano in Chile’s Araucanía, known for persistent fumaroles and a frequently active lava lake. Mapuche communities have long ascribed spiritual force to the mountain and used surrounding soils for agriculture. Colonial chroniclers, including Alonso de Ovalle (1646), recorded constant smoke and used the peak for navigation. Recurrent eruptions shaped settlement patterns in Pucón and Villarrica, with evacuations and rebuilding after ashfall and lahars. Major events in 1964, 1971, and 2015 prompted improved hazard mapping and siren systems. Volcanic tephra enriched local fields and provided materials for masonry and roadwork. From the mid-twentieth century, ski facilities, hot springs, and lake tourism expanded. Chile’s SERNAGEOMIN and international partners now instrument the edifice with seismic, gas, and thermal monitoring. Public drills, exclusion zones, and lahar channels reflect a long history of coexistence with one of the Andes’ most closely watched volcanoes.",
+    "category": "naturalWonderCategory:volcano",
+    "yields": [
+      {
+        "type": "yieldType:production",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:science",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/villarrica.jpg",
+    "requires": [
+      "continentType:andea"
+    ],
+    "quote": {
+      "text": "The mountain smokes continually, a crown of eternal fire.",
+      "source": "Alonso de Ovalle, 1646",
+      "url": "/media/quotes/naturalWonderType/villarrica.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:iguazuFalls",
+    "name": "Iguazu Falls",
+    "concept": "conceptType:naturalWonder",
+    "description": "Iguazu Falls straddles Argentina and Brazil, forming a vast horseshoe of cataracts on the upper Paraná basin. Indigenous Guarani traditions placed the site within local cosmology and used downstream reaches for fishing and gathering. Jesuit missionaries and colonial reports in the eighteenth century described the spectacle and charted it on regional maps. Rail links and river steamers later drew travelers, with naturalists cataloging forest species and hydrology. Argentina created Iguazú National Park in 1934; Brazil followed with Iguaçu National Park in 1939. Both parks expanded trails, lookout platforms, and conservation services. UNESCO inscribed the Argentine park in 1984 and the Brazilian in 1986. The area supports research on subtropical forest ecology, pollination, and river dynamics. Park management addresses wildlife protection, cross-border tourism flows, and the effects of upstream dams on sediment and discharge patterns.",
+    "category": "naturalWonderCategory:waterfall",
+    "yields": [
+      {
+        "type": "yieldType:gold",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:production",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/iguazuFalls.jpg",
+    "requires": [
+      "continentType:andea"
+    ],
+    "quote": {
+      "text": "A most noble cataract, whose roar is heard leagues away.",
+      "source": "Jesuit mission report, ca. 1750",
+      "url": "/media/quotes/naturalWonderType/iguazuFalls.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:tigerLeapingGorge",
+    "name": "Tiger Leaping Gorge",
+    "concept": "conceptType:naturalWonder",
+    "description": "Tiger Leaping Gorge is a deep canyon of the upper Yangtze (Jinsha) in Yunnan, framed by the Haba and Jade Dragon Snow Mountains. Ming-era chronicles noted its treacherous rapids and narrow cliffs. Naxi and Tibetan communities maintained footpaths linking villages and seasonal pastures, with segments tied to trade itineraries of the Tea-Horse Road. Regional travelogues and poetry praised the scenery while warning of rockfall and floods. Twentieth-century surveys mapped trails and measured gradients for potential transport and hydropower schemes. From the 1980s, backpacking routes and guesthouses fostered community-based tourism. Proposals for large dams drew public criticism and were revised or postponed, reflecting concerns for heritage and landslide risks. Current management balances trail maintenance, hazard signage, and local tolls with protection of terraced fields, sacred sites, and rare flora in one of China’s most storied river gorges.",
+    "category": "naturalWonderCategory:canyon",
+    "yields": [
+      {
+        "type": "yieldType:science",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:happiness",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/tigerLeapingGorge.jpg",
+    "requires": [
+      "continentType:asia"
+    ],
+    "quote": {
+      "text": "The Yangtze roars through cliffs so high they pierce the sky.",
+      "source": "Ming dynasty chronicle, ca. 1450",
+      "url": "/media/quotes/naturalWonderType/tigerLeapingGorge.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:phangNgaBay",
+    "name": "Phang Nga Bay",
+    "concept": "conceptType:naturalWonder",
+    "description": "Phang Nga Bay is a coastal region in southern Thailand, situated between the island of Phuket and the mainland. Known for its dramatic limestone karsts, the bay features more than forty islands and cliffs rising steeply from emerald waters. These formations were shaped over millions of years through erosion and sea level changes, creating caves, lagoons, and mangrove ecosystems. Archaeological findings indicate prehistoric habitation, while the bay later became a zone of maritime trade in the Indian Ocean network. Today, it is famous for distinctive islands such as Ko Tapu and for traditional fishing villages built on stilts. Its ecological diversity includes coral reefs, seagrass beds, and tropical birdlife. The bay’s scenery has made it one of Southeast Asia’s most recognized coastal landscapes.",
+    "category": "naturalWonderCategory:coast",
+    "yields": [
+      {
+        "type": "yieldType:food",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:gold",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/phangNgaBay.jpg",
+    "requires": [
+      "continentType:asia"
+    ],
+    "quote": {
+      "text": "A bay of a thousand islands, each a tower of stone.",
+      "source": "Thai royal notes, ca. 1850",
+      "url": "/media/quotes/naturalWonderType/phangNgaBay.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:tharDesert",
+    "name": "Thar Desert",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Thar Desert, also called the Great Indian Desert, spans parts of India and Pakistan over an area of more than 200,000 square kilometers. It is one of the most densely populated deserts in the world, with communities sustaining themselves through pastoralism, limited agriculture, and trade. The region is known for its extreme climate, with scorching summers, scarce rainfall, and shifting sand dunes. Historically, the desert was crossed by caravan routes linking South Asia with Central Asia and the Middle East. Fortified cities such as Jaisalmer served as hubs for commerce and cultural exchange. Wildlife includes desert foxes, chinkara, and migratory birds, supported by occasional monsoon rains. Despite its arid nature, the Thar Desert has sustained resilient human settlements and distinctive architectural traditions, including stepwells and desert fortresses.",
+    "category": "naturalWonderCategory:desert",
+    "yields": [
+      {
+        "type": "yieldType:faith",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:production",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/tharDesert.jpg",
+    "requires": [
+      "continentType:asia"
+    ],
+    "quote": {
+      "text": "A sea of sand without water, cruel and vast.",
+      "source": "Abu Rayhan al-Biruni, ca. 1050",
+      "url": "/media/quotes/naturalWonderType/tharDesert.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:gangesDelta",
+    "name": "Ganges Delta",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Ganges Delta is the largest river delta on Earth, formed by the confluence of the Ganges, Brahmaputra, and Meghna rivers before they enter the Bay of Bengal. Covering more than 100,000 square kilometers, it supports a dense population and some of the world’s most fertile soils. Seasonal flooding deposits nutrient-rich silt that sustains rice paddies and jute cultivation. The delta is also a zone of diverse ecosystems, including the Sundarbans mangrove forest, home to the Bengal tiger. Historically, it was a key region for ancient kingdoms and colonial powers, who valued its agricultural output and access to maritime trade. However, the area is prone to cyclones, flooding, and tidal surges, making resilience and adaptation central to its history. It remains one of South Asia’s most productive yet vulnerable landscapes.",
+    "category": "naturalWonderCategory:floodPlains",
+    "yields": [
+      {
+        "type": "yieldType:gold",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:health",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/gangesDelta.jpg",
+    "requires": [
+      "continentType:asia"
+    ],
+    "quote": {
+      "text": "The delta is vast, a labyrinth of water.",
+      "source": "Megasthenes, ca. 300 BCE",
+      "url": "/media/quotes/naturalWonderType/gangesDelta.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:wulingyuanPillars",
+    "name": "Wulingyuan Pillars",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Wulingyuan Pillars are a landscape of towering sandstone formations in Hunan Province, China. Spread over 26,000 hectares, the area contains more than 3,000 narrow stone columns, some exceeding 200 meters in height. These pillars were shaped by millions of years of erosion, weathering, and tectonic activity. The region also features ravines, gorges, waterfalls, and caves, creating a highly diverse environment. Wulingyuan has long been part of Chinese cultural history, inspiring painters, poets, and local folklore. Designated a UNESCO World Heritage Site in 1992, it attracts international attention for both its natural beauty and its ecological richness, including subtropical forests with rare plant and animal species. The formations remain an important site for cultural tourism and conservation in China.",
+    "category": "naturalWonderCategory:hills",
+    "yields": [
+      {
+        "type": "yieldType:culture",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:happiness",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/wulingyuanPillars.jpg",
+    "requires": [
+      "continentType:asia"
+    ],
+    "quote": {
+      "text": "Thousands of stone pillars, as though a forest turned to stone.",
+      "source": "Qing dynasty diary, ca. 1750",
+      "url": "/media/quotes/naturalWonderType/wulingyuanPillars.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:ogasawaraIslands",
+    "name": "Ogasawara Islands",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Ogasawara Islands, also called the Bonin Islands, are an isolated archipelago located about 1,000 kilometers south of Tokyo. Comprising more than 30 subtropical islands, they were never connected to a continental landmass, giving rise to unique ecosystems with high levels of endemism. Species such as the Bonin flying fox and rare land snails evolved in isolation. First recorded by Europeans in the 16th century, the islands were later settled by a mixed community of Polynesian, European, and American descendants before Japan established sovereignty in the 19th century. During World War II, they were militarized, with Iwo Jima serving as a critical battlefield. Today, the Ogasawara Islands are recognized as a UNESCO World Natural Heritage Site for their ecological value, and access remains carefully managed to preserve their biodiversity.",
+    "category": "naturalWonderCategory:islands",
+    "yields": [
+      {
+        "type": "yieldType:science",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:health",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/ogasawaraIslands.jpg",
+    "requires": [
+      "continentType:asia"
+    ],
+    "quote": {
+      "text": "Uncharted on our maps, teeming with creatures unknown to our seas.",
+      "source": "Captain of whaling ship Transit, 1823",
+      "url": "/media/quotes/naturalWonderType/ogasawaraIslands.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:mountFuji",
+    "name": "Mount Fuji",
+    "concept": "conceptType:naturalWonder",
+    "description": "Mount Fuji is a stratovolcano on Honshu with a symmetrical cone rising above Suruga and Sagami Bays. It has served as a Shinto sacred mountain, with Sengen shrines and Fuji-ko confraternities organizing pilgrimages since medieval times. The last eruption, the Hōei event of 1707–1708, deposited ash across the region and stimulated early observations of volcanic effects. During the Edo period, artists such as Hokusai and Hiroshige made the mountain a central subject of print series, and poets and diarists recorded ascents. Meiji-era transport and twentieth-century roads expanded access, formalizing climbing routes and stations. In 2013 UNESCO recognized “Fujisan, sacred place and source of artistic inspiration.” Current management focuses on erosion control, trail quotas, and heritage interpretation, while monitoring tracks seismicity and gas emissions on one of Japan’s most studied volcanoes.",
+    "category": "naturalWonderCategory:mountain",
+    "yields": [
+      {
+        "type": "yieldType:faith",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:culture",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/mountFuji.jpg",
+    "requires": [
+      "continentType:asia"
+    ],
+    "quote": {
+      "text": "Fuji-san is the soul of Japan.",
+      "source": "Lafcadio Hearn, 1894",
+      "url": "/media/quotes/naturalWonderType/mountFuji.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:khonePhaphengFalls",
+    "name": "Khone Phapheng Falls",
+    "concept": "conceptType:naturalWonder",
+    "description": "Khone Phapheng is a broad series of Mekong rapids in southern Laos that prevents continuous navigation between Cambodia and upstream Laos. For centuries, traders and boatmen portaged goods around cataracts using island paths. Local Lao traditions recount the falls’ power and dangers. French colonial authorities surveyed the reach in the late nineteenth century and built the Don Det–Don Khon narrow-gauge railway to bypass the obstacle, operating into the mid-twentieth century. Hydrologists later assessed discharge and potential for power generation, while fisheries scientists documented remarkable migratory fish diversity. Modern development proposals weigh energy benefits against ecological and livelihood impacts. Today the site is a protected tourist destination within the Si Phan Don archipelago, where interpretive platforms, seasonal flow variations, and remnants of colonial infrastructure illustrate a long history of adapting to the Mekong’s largest cataracts.",
+    "category": "naturalWonderCategory:waterfall",
+    "yields": [
+      {
+        "type": "yieldType:production",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:food",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/khonePhaphengFalls.jpg",
+    "requires": [
+      "continentType:asia"
+    ],
+    "quote": {
+      "text": "A mighty fall, roaring endlessly.",
+      "source": "Lao tradition",
+      "url": "/media/quotes/naturalWonderType/khonePhaphengFalls.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:ironGateGorge",
+    "name": "Iron Gate Gorge",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Iron Gate is a constricted stretch of the Danube forming the border between modern Serbia and Romania. Romans engineered a cliffside road and erected the Tabula Traiana around 100 CE, marking riverine control and supply routes. Medieval polities built fortresses and watchtowers to tax shipping and defend passes. Shoals and whirlpools challenged navigation into the nineteenth century, prompting multinational works to blast reefs and improve channels. In the twentieth century, Yugoslavia and Romania constructed the Iron Gate I (1972) and Iron Gate II (1984) hydroelectric dams, transforming the gorge with large reservoirs, locks, and resettlements. Archaeological sites, including Lepenski Vir, were excavated or relocated. Today, power generation, shipping, and heritage tourism coexist with conservation of cliffs, islands, and fisheries in a river corridor long tied to Balkan trade and statecraft.",
+    "category": "naturalWonderCategory:canyon",
+    "yields": [
+      {
+        "type": "yieldType:production",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:gold",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/ironGateGorge.jpg",
+    "requires": [
+      "continentType:europe"
+    ],
+    "quote": {
+      "text": "A defile where the Danube roars between mountains, perilous to pass.",
+      "source": "Tabula Traiana, ca. 100 CE",
+      "url": "/media/quotes/naturalWonderType/ironGateGorge.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:rhineGorge",
+    "name": "Rhine Gorge",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Rhine Gorge, or Upper Middle Rhine Valley between Bingen and Koblenz, is a steep river corridor dotted with castles, towns, and terraced vineyards. From the High Middle Ages, lords erected toll castles such as Marksburg and Rheinfels to control traffic along a principal north–south artery. Wine cultivation shaped slopes and local economies, later recovering from phylloxera with grafted vines and cooperative cellars. Steam navigation, railways, and improved channels in the nineteenth century altered transport but preserved riverine trade. Poets and painters of Romanticism, including Heinrich Heine, fixed the Lorelei rock and castle silhouettes in European imagination, spurring tourism. Postwar restoration stabilized ruins and facades, and UNESCO inscribed the valley in 2002. Management now coordinates shipping, flood protection, heritage conservation, and viticulture within one of Europe’s most intensively documented river landscapes.",
+    "category": "naturalWonderCategory:canyon",
+    "yields": [
+      {
+        "type": "yieldType:gold",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:culture",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/rhineGorge.jpg",
+    "requires": [
+      "continentType:europe"
+    ],
+    "quote": {
+      "text": "Castles crown its banks, poetry flows in its waters.",
+      "source": "Heinrich Heine, 1824",
+      "url": "/media/quotes/naturalWonderType/rhineGorge.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:cliffsOfDover",
+    "name": "Cliffs of Dover",
+    "concept": "conceptType:naturalWonder",
+    "description": "The White Cliffs of Dover form a chalk escarpment facing the Strait of Dover. Their bright face, carved from Cretaceous limestone, has served as a seamark since classical antiquity; Roman writers noted the promontory when describing landfall in Britain. Medieval pilots and coastal watchmen used the heights for sighting and signaling. Dover Castle and later Western Heights fortifications guarded the adjacent port and Narrows, embedding the cliffs in centuries of channel defense. Lighthouses at South Foreland aided navigation from the early modern period. During the Napoleonic Wars the coast bristled with beacons and batteries. In the Second World War the cliffs neighbored tunnel networks, observation posts, and coastal artillery, while the nearby port supported evacuation and convoy operations. The formation endures as a terrestrial archive of maritime practice, coastal engineering, and English channel strategy.",
+    "category": "naturalWonderCategory:coast",
+    "yields": [
+      {
+        "type": "yieldType:culture",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:happiness",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/cliffsOfDover.jpg",
+    "requires": [
+      "continentType:europe"
+    ],
+    "quote": {
+      "text": "The cliffs gleam like a wall of light.",
+      "source": "Samuel Johnson, 1775",
+      "url": "/media/quotes/naturalWonderType/cliffsOfDover.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:giantsCauseway",
+    "name": "Giant’s Causeway",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Giant’s Causeway is a coastal rock formation in County Antrim, Northern Ireland, made up of about 40,000 interlocking basalt columns. The structures were formed by volcanic activity around 50 to 60 million years ago, when cooling lava contracted into hexagonal shapes. Rising directly from the sea, the causeway has long attracted both scientific and cultural interest. Folklore attributes the formation to the legendary giant Finn MacCool, who was said to have built a path across the sea to Scotland. The site has been studied since the 17th century, with naturalists using it to illustrate geological processes. Designated a UNESCO World Heritage Site in 1986, the Giant’s Causeway remains a major example of volcanic geomorphology and a notable cultural landmark in Ireland.",
+    "category": "naturalWonderCategory:coast",
+    "yields": [
+      {
+        "type": "yieldType:science",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:faith",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/giantsCauseway.jpg",
+    "requires": [
+      "continentType:europe"
+    ],
+    "quote": {
+      "text": "Causeway of the giants, wrought by Finn MacCool.",
+      "source": "Irish legend",
+      "url": "/media/quotes/naturalWonderType/giantsCauseway.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:lesCalanques",
+    "name": "Les Calanques",
+    "concept": "conceptType:naturalWonder",
+    "description": "Les Calanques are a series of steep-walled inlets and limestone cliffs stretching along the Mediterranean coast between Marseille and Cassis in southern France. The formations were shaped by river erosion during glacial periods, later flooded by rising sea levels. The cliffs drop sharply into turquoise waters, with narrow bays that provide natural harbors. Since antiquity, the region has been used for fishing, navigation, and small-scale settlement. The calanques are also home to diverse ecosystems, including rare plants adapted to rocky soil and seabirds nesting on cliff ledges. In 2012, the area was designated Calanques National Park to protect its fragile landscapes and biodiversity. Their combination of rugged cliffs and sheltered coves has made them one of the Mediterranean’s best-known coastal environments.",
+    "category": "naturalWonderCategory:coast",
+    "yields": [
+      {
+        "type": "yieldType:food",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:happiness",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/lesCalanques.jpg",
+    "requires": [
+      "continentType:europe"
+    ],
+    "quote": {
+      "text": "White cliffs plunge into a sea of sapphire.",
+      "source": "Revue des Deux Mondes, 1865",
+      "url": "/media/quotes/naturalWonderType/lesCalanques.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:blackForest",
+    "name": "Black Forest",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Black Forest, located in southwestern Germany, is a mountain range covered in dense coniferous woods, particularly spruce and fir. Its name derives from the dark appearance of the thick canopy. The region’s valleys and slopes have been inhabited since Roman times, with evidence of mining, glassmaking, and timber industries. By the medieval period, it was also known for monasteries and small farming villages. The forest has supplied wood, resin, and charcoal for centuries, feeding local crafts and early industrial activity. Cuckoo clocks and wood carving became associated with its cultural identity. The Black Forest has also been tied to folklore, forming the backdrop for stories collected by Jacob and Wilhelm Grimm. Today it remains a prominent cultural and ecological landscape of central Europe.",
+    "category": "naturalWonderCategory:forest",
+    "yields": [
+      {
+        "type": "yieldType:health",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:production",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/blackForest.jpg",
+    "requires": [
+      "continentType:europe"
+    ],
+    "quote": {
+      "text": "A dark forest of legend, where tales are born.",
+      "source": "Jacob Grimm, 1812",
+      "url": "/media/quotes/naturalWonderType/blackForest.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:montBlanc",
+    "name": "Mont Blanc",
+    "concept": "conceptType:naturalWonder",
+    "description": "Mont Blanc is the highest peak in the Alps, rising to 4,807 meters on the border between France and Italy. Covered in snow and glaciers, it has long been a reference point for Alpine exploration and scientific study. Horace-Bénédict de Saussure promoted its first recorded ascent in 1786, marking the beginning of mountaineering as a discipline. The massif is also a source of major glaciers such as the Mer de Glace, which attracted early naturalists studying geology and glaciology. Mont Blanc has been both a challenge for climbers and a site of tourism, with cable cars and tunnels later constructed to connect valleys. Its geology includes granite and gneiss, and its climate influences surrounding river systems. The mountain remains an enduring feature of European natural history.",
+    "category": "naturalWonderCategory:mountain",
+    "yields": [
+      {
+        "type": "yieldType:science",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:health",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/montBlanc.jpg",
+    "requires": [
+      "continentType:europe"
+    ],
+    "quote": {
+      "text": "A dome of snow rising to heaven.",
+      "source": "Horace-Bénédict de Saussure, 1786",
+      "url": "/media/quotes/naturalWonderType/montBlanc.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:plitviceLakes",
+    "name": "Plitvice Lakes",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Plitvice Lakes are a system of sixteen terraced lakes connected by waterfalls and streams in central Croatia. The lakes are formed through the deposition of travertine, a type of limestone that creates natural dams and constantly reshapes the watercourses. Their clear waters range in color from turquoise to emerald depending on minerals, algae, and light. The area has been inhabited since prehistoric times and lay along routes connecting the Adriatic coast with inland Europe. In 1949 it was established as Croatia’s first national park, and in 1979 it became a UNESCO World Heritage Site. The lakes host diverse flora and fauna, including bears, wolves, and rare bird species. Their constantly changing landscapes make them one of Europe’s most distinctive freshwater environments.",
+    "category": "naturalWonderCategory:waterfall",
+    "yields": [
+      {
+        "type": "yieldType:food",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:faith",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/plitviceLakes.jpg",
+    "requires": [
+      "continentType:europe"
+    ],
+    "quote": {
+      "text": "The lakes, emerald and clear, fall from terrace to terrace.",
+      "source": "Illustrierte Zeitung, 1893",
+      "url": "/media/quotes/naturalWonderType/plitviceLakes.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:euphratesGorge",
+    "name": "Euphrates Gorge",
+    "concept": "conceptType:naturalWonder",
+    "description": "Where the Euphrates cuts through the Taurus and adjacent uplands, the river forms narrow gorges that historically constrained movement between Anatolia and Mesopotamia. From the Iron Age onward these reaches acted as natural barriers, forcing armies and caravans onto limited crossings. States fortified key passages and taxed traffic; Carchemish and later Zeugma stood near important bridges and ferries. Assyrian, Hittite, and later Achaemenid and Seleucid regimes guarded the river line to secure trade and frontier control. Roman engineers improved approach roads and stationed troops at choke points. Classical authors, including Xenophon in the Anabasis, described the difficulty of fords, currents, and canyon walls. Medieval and Ottoman authorities continued to police the corridor, recognizing its leverage over north–south routes. The gorge thus framed diplomacy, logistics, and siegecraft along one of Western Asia’s principal arteries.",
+    "category": "naturalWonderCategory:canyon",
+    "yields": [
+      {
+        "type": "yieldType:gold",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:culture",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/euphratesGorge.jpg",
+    "requires": [
+      "continentType:levantica"
+    ],
+    "quote": {
+      "text": "The Euphrates breaks through mountains with might.",
+      "source": "Xenophon, ca. 350 BCE",
+      "url": "/media/quotes/naturalWonderType/euphratesGorge.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:dashtELutDesert",
+    "name": "Dasht-e Lut Desert",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Dasht-e Lut is a hyper‑arid basin in eastern Iran, dominated by salt flats, gravel plains, and wind‑sculpted ridges known as kaluts. Historical travel accounts portray the area as a feared void on long‑distance routes between Kerman, Sistan, and Yazd. Medieval geographers and caravan narratives recorded its lack of water, shifting sands, and extreme heat, steering traffic along margins and oases rather than through the core. Marco Polo and later travelers repeated its reputation as lifeless ground. Nomadic groups exploited peripheral pastures seasonally and used intimate knowledge of springs to cross select corridors. Imperial states maintained caravanserais and patrols at the rim settlements, not within the interior. Modern scientific surveys confirmed extraordinary surface temperatures and mapped large dune fields and yardangs. The Lut’s historical role lay in dictating detours, shaping the geography of Iranian trade and refuge.",
+    "category": "naturalWonderCategory:desert",
+    "yields": [
+      {
+        "type": "yieldType:science",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:happiness",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/dashtELutDesert.jpg",
+    "requires": [
+      "continentType:levantica"
+    ],
+    "quote": {
+      "text": "A desert of death, without water or life.",
+      "source": "Marco Polo, ca. 1270",
+      "url": "/media/quotes/naturalWonderType/dashtELutDesert.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:mesopotamia",
+    "name": "Mesopotamia",
+    "concept": "conceptType:naturalWonder",
+    "description": "Mesopotamia, the alluvial plain between the Tigris and Euphrates, fostered early irrigation agriculture and urban life. From the fourth to the third millennium BCE, Sumerian city‑states such as Uruk, Ur, and Eridu developed canals, temple economies, and cuneiform writing. The Akkadian Empire and the Ur III state consolidated larger territories, refining bureaucratic recordkeeping. Babylonian scholarship produced law collections, including the Code of Hammurabi, and advanced astronomy and mathematics. Assyrian power projected from northern cities like Ashur and Nineveh with road networks and garrisons. Grain surpluses supported craft specialization and long‑distance exchange across the Near East. Hydraulics shaped politics, as rulers organized labor for levees and canals while contending with salinization and flood risk. After Neo‑Babylonian rule, Achaemenid and Seleucid administrations integrated the region into imperial systems. Classical authors praised its productivity, linking the plain to the origins of complex statecraft.",
+    "category": "naturalWonderCategory:floodPlains",
+    "yields": [
+      {
+        "type": "yieldType:food",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:science",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/mesopotamia.jpg",
+    "requires": [
+      "continentType:levantica"
+    ],
+    "quote": {
+      "text": "A land between two rivers, cradle of civilization.",
+      "source": "Herodotus, ca. 450 BCE",
+      "url": "/media/quotes/naturalWonderType/mesopotamia.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:cedarsOfGod",
+    "name": "Cedars of God",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Cedars of God are remnants of ancient Cedrus libani forests on Mount Lebanon, near Bsharri. Their timber, valued for strength and aromatic qualities, entered regional commerce from the Bronze Age. Egyptian shipbuilders, Levantine mariners, and Mesopotamian courts sought the wood for hulls, palaces, and cult architecture. Assyrian inscriptions record royal expeditions to cut cedar on Lebanon’s slopes. Biblical tradition associates the wood with monumental construction, including the Temple in Jerusalem. Over centuries, intensive felling reduced the range, while local communities maintained sacred groves and customary protections. In the Ottoman period, imperial decrees attempted conservation; in 1876 a protective wall enclosed the core stand. Modern forestry and heritage efforts have expanded safeguarding and replanting. The grove endures as a witness to ancient shipbuilding, interregional trade, and the environmental impact of state projects around the eastern Mediterranean.",
+    "category": "naturalWonderCategory:forest",
+    "yields": [
+      {
+        "type": "yieldType:health",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:production",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/cedarsOfGod.jpg",
+    "requires": [
+      "continentType:levantica"
+    ],
+    "quote": {
+      "text": "The righteous shall flourish like the cedar of Lebanon.",
+      "source": "Psalms 92:12, ca. 550 BCE",
+      "url": "/media/quotes/naturalWonderType/cedarsOfGod.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:deadSea",
+    "name": "Dead Sea",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Dead Sea is an endorheic, hypersaline lake at the Jordan Rift’s lowest point. Its dense waters and bitumen deposits entered ancient economies early. Bronze and Iron Age polities exploited salt and asphalt for trade, medicine, and construction. Classical authors noted effortless flotation and sterile shores; Pliny and Strabo described bitumen collection. Herodian fortresses and settlements ringed nearby heights, and Essene communities occupied sites such as Qumran. Roman and Byzantine elites valued the area’s minerals and bathing practices, with installations at Ein Gedi and other springs. Medieval travelers repeated accounts of the lake’s salinity while regional powers taxed mineral extraction. Modern industry later targeted potash and bromine, but historical use centered on small‑scale gathering and spa culture. The lake’s fluctuating shoreline records long‑term climatic and human water use changes across the Levant.",
+    "category": "naturalWonderCategory:lake",
+    "yields": [
+      {
+        "type": "yieldType:health",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:gold",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/deadSea.jpg",
+    "requires": [
+      "continentType:levantica"
+    ],
+    "quote": {
+      "text": "A vast lake, bitter and deadly.",
+      "source": "Pliny the Elder, 77 CE",
+      "url": "/media/quotes/naturalWonderType/deadSea.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:mountDamavand",
+    "name": "Mount Damavand",
+    "concept": "conceptType:naturalWonder",
+    "description": "Mount Damavand is a stratovolcano rising above the Alborz range northeast of Tehran. Its snow cap, fumaroles, and commanding cone made it a fixed point for itineraries, pastoral circuits, and later surveys. Persian epic places key episodes on the mountain, and folklore locates refuges and feats on its slopes. Villages and summer pastures circle the base, supporting transhumant communities that used high meadows and sulfur springs. Qajar and early Pahlavi cartographers treated the summit as a triangulation station in national mapping. Nineteenth‑century scientific parties recorded one of the first documented ascents by outsiders; local climbs likely predated these notices. Twentieth‑century mountaineering routes stabilized around south and northeast ridges. Despite intermittent activity, the volcano has not erupted in historical time, allowing continuous human presence around its base and the growth of shrines, shelters, and waystations.",
+    "category": "naturalWonderCategory:mountain",
+    "yields": [
+      {
+        "type": "yieldType:production",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:faith",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/mountDamavand.jpg",
+    "requires": [
+      "continentType:levantica"
+    ],
+    "quote": {
+      "text": "A mountain of myth and majesty.",
+      "source": "Ferdowsi, ca. 1000 CE",
+      "url": "/media/quotes/naturalWonderType/mountDamavand.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:mountSinai",
+    "name": "Mount Sinai",
+    "concept": "conceptType:naturalWonder",
+    "description": "Mount Sinai is the traditional site of the theophany to Moses, long sought and venerated by Jewish, Christian, and Muslim pilgrims. Late antique monasticism anchored the location with the foundation of St. Catherine’s Monastery under Emperor Justinian in the sixth century. From the fourth century, itineraries, inscriptions, and chapels marked pilgrim paths on adjacent peaks such as Jebel Musa. Islamic tradition honored the mountain within Qur’anic narratives, and regional rulers issued protections for monastic and traveler communities. Medieval maps and travelogues fixed the Sinai massif as a sacred landscape, though alternate identifications persisted. Ottoman and modern surveys improved access via coastal and desert routes. The site’s enduring role rests on pilgrimage infrastructure, manuscript preservation at the monastery, and interfaith visitation practices that shaped the peninsula’s economy and memory.",
+    "category": "naturalWonderCategory:mountain",
+    "yields": [
+      {
+        "type": "yieldType:faith",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:culture",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/mountSinai.jpg",
+    "requires": [
+      "continentType:levantica"
+    ],
+    "quote": {
+      "text": "The Lord came down upon Mount Sinai, in fire and smoke.",
+      "source": "Exodus 19:18, ca. 550 BCE",
+      "url": "/media/quotes/naturalWonderType/mountSinai.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:siwaOasis",
+    "name": "Siwa Oasis",
+    "concept": "conceptType:naturalWonder",
+    "description": "Siwa Oasis lies in Egypt’s Western Desert near the Libyan frontier. Abundant springs and gardens supported a Berber‑speaking community and a renowned Oracle of Amun. In 332 BCE Alexander the Great consulted the oracle, linking the oasis to Macedonian and Egyptian dynastic claims. Herodotus noted its cultic significance earlier in the classical period. Ptolemaic and Roman authorities integrated Siwa into desert garrisons and caravan exchanges, exporting dates, olives, and salt. The medieval town of Shali, built in the 13th century from salt‑mud brick, consolidated settlement around fortified lanes. Isolation preserved distinctive dress, ritual, and architecture well into the modern era. Nineteenth‑ and early twentieth‑century travelers revived broader interest, while new roads tied Siwa to Nile markets. Archaeological work has documented temples, tombs, and hydraulic systems that sustained life in an otherwise harsh environment.",
+    "category": "naturalWonderCategory:spring",
+    "yields": [
+      {
+        "type": "yieldType:food",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:happiness",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/siwaOasis.jpg",
+    "requires": [
+      "continentType:levantica"
+    ],
+    "quote": {
+      "text": "The oasis of Ammon, famed for its oracle.",
+      "source": "Herodotus, ca. 450 BCE",
+      "url": "/media/quotes/naturalWonderType/siwaOasis.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:amalfiCoast",
+    "name": "Amalfi Coast",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Amalfi Coast blends steep maritime terrain with a legacy of medieval trade. From the ninth to the twelfth century the city of Amalfi led a seafaring republic that brokered traffic between the Tyrrhenian, Byzantium, and North Africa. Its shipyards, pilotage, and commercial law—preserved in the Tavole Amalfitane—shaped Mediterranean practice. Coastal terraces produced citrus and wine; coves sheltered arsenals and quays. Pisa’s attack in 1137 and later Norman and Angevin politics curtailed Amalfi’s autonomy, yet maritime arts and craft guilds endured in towns along the littoral. Early modern travel writers praised the scenery, while local navigation remained central to regional exchange. In the nineteenth century the coast entered Grand Tour circuits, and road building further knit settlements. The landscape preserves medieval towers, Romanesque churches, and routes that once carried cargo and customs officers above the sea.",
+    "category": "naturalWonderCategory:coast",
+    "yields": [
+      {
+        "type": "yieldType:gold",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:food",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/amalfiCoast.jpg",
+    "requires": [
+      "continentType:mediterra"
+    ],
+    "quote": {
+      "text": "Amalfi, a piece of heaven fallen to earth.",
+      "source": "Italian proverb, ca. 1750",
+      "url": "/media/quotes/naturalWonderType/amalfiCoast.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:blueGrotto",
+    "name": "Blue Grotto",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Blue Grotto is a sea cave on the island of Capri noted since antiquity for its luminous interior. Tradition connects the cave to Roman-era leisure use, with local lore linking it to Emperor Tiberius’ residence on Capri. The optical effect arises when sunlight enters through an underwater aperture, scattering blue wavelengths and illuminating the chamber. After centuries of limited mention, the grotto gained new prominence in the early 19th century. Travel writers and guidebook authors, including John Murray in 1830, promoted it to European visitors. The site entered Romantic-era itineraries and inspired painters, poets, and early photographers. Boat access and organized visits turned the grotto into a standard stop on Mediterranean tours, anchoring Capri’s reputation as a landscape of dramatic coastal geology.",
+    "category": "naturalWonderCategory:coast",
+    "yields": [
+      {
+        "type": "yieldType:happiness",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:culture",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/blueGrotto.jpg",
+    "requires": [
+      "continentType:mediterra"
+    ],
+    "quote": {
+      "text": "A cavern of light where the sea turns sapphire.",
+      "source": "John Murray, 1830",
+      "url": "/media/quotes/naturalWonderType/blueGrotto.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:rockOfGibraltar",
+    "name": "Rock of Gibraltar",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Rock of Gibraltar is a limestone promontory that controls the narrow Strait of Gibraltar, the maritime passage linking the Atlantic and Mediterranean. Ancient sailors identified it with the western “Pillars of Hercules,” a boundary for Phoenician and Roman navigation. Fortification of the rock intensified in the early modern period. In 1704 Anglo-Dutch forces seized Gibraltar during the War of the Spanish Succession, and it remained a defended outpost through the Great Siege of 1779–1783. British administration developed it as a naval base overseeing convoy routes, coaling, and later oil-fueled fleets. Its harbor, tunnels, and gun batteries supported operations that tied Mediterranean access to Atlantic logistics. The promontory’s coastal topography and commanding height made it a continuous strategic point into the twentieth century.",
+    "category": "naturalWonderCategory:coast",
+    "yields": [
+      {
+        "type": "yieldType:gold",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:production",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/rockOfGibraltar.jpg",
+    "requires": [
+      "continentType:mediterra"
+    ],
+    "quote": {
+      "text": "The northern pillar of Hercules.",
+      "source": "Pomponius Mela, 43 CE",
+      "url": "/media/quotes/naturalWonderType/rockOfGibraltar.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:eyeOfSahara",
+    "name": "Eye of Sahara",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Eye of Sahara, also known as the Richat Structure, is a circular erosional feature in Mauritania measuring roughly 40 kilometers across. Its concentric rings of sedimentary rock were shaped by prolonged erosion of a domed uplift, a view refined through modern fieldwork and remote sensing. Apollo-era astronauts noted the formation as a prominent orbital landmark in the 1960s, and subsequent NASA imagery made it a reference point for Saharan mapping. Early impact-crater hypotheses gave way to interpretations involving differential erosion, hydrothermal alteration, and tectonic processes. The structure aids aerial navigation across central Mauritania and figures in regional geological surveys. Its scale and clarity from altitude turned it into a case study for desert geomorphology and satellite-based analysis of continental interiors.",
+    "category": "naturalWonderCategory:desert",
+    "yields": [
+      {
+        "type": "yieldType:science",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:faith",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/eyeOfSahara.jpg",
+    "requires": [
+      "continentType:mediterra"
+    ],
+    "quote": {
+      "text": "A great circle in the desert, visible even from the heavens.",
+      "source": "NASA Apollo transcript, 1965",
+      "url": "/media/quotes/naturalWonderType/eyeOfSahara.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:meteoraPillars",
+    "name": "Meteora Pillars",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Meteora Pillars are sandstone and conglomerate towers in Thessaly, Greece, formed by fluvial deposits and uplift followed by intense erosion. From the 14th century, Orthodox monastic communities established cliff-top monasteries such as Great Meteoron and Varlaam. These complexes functioned as refuges for hermits and cenobitic groups during periods of political upheaval. Access relied on rope nets, pulleys, and retractable ladders, which secured seclusion and protected manuscripts and relics. The monasteries became pilgrimage destinations and centers of copying, icon production, and liturgical practice through the late Byzantine and Ottoman periods. Over time, bridges and steps replaced improvised systems, but the vertical isolation remained central to monastic life. Meteora’s built fabric preserves a record of ascetic tradition set within a striking erosional landscape.",
+    "category": "naturalWonderCategory:hills",
+    "yields": [
+      {
+        "type": "yieldType:faith",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:culture",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/meteoraPillars.jpg",
+    "requires": [
+      "continentType:mediterra"
+    ],
+    "quote": {
+      "text": "Rocks suspended in air, the work of God.",
+      "source": "Athanasios the Meteorite, ca. 1350",
+      "url": "/media/quotes/naturalWonderType/meteoraPillars.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:mountOlympus",
+    "name": "Mount Olympus",
+    "concept": "conceptType:naturalWonder",
+    "description": "Mount Olympus is the highest mountain in Greece and a defining landmark of the northern Aegean region. In classical literature it is the dwelling place of the Olympian gods, central to Homeric poetry and later mythography. Sanctuaries at the mountain’s foothills supported regional cult activity, while the massif served as a fixed point in ancient geographic writing. Classical authors referenced its storms, peaks, and inaccessibility to evoke divine space. The mountain’s cultural role persisted through Hellenistic and Roman periods, when pilgrimage and local festivals reinforced its sacred status. Modern exploration in the 19th and early 20th centuries documented the routes and summits, integrating Olympus into national mountaineering. The site today combines mythic associations with a long record of observation by travelers and scholars.",
+    "category": "naturalWonderCategory:mountain",
+    "yields": [
+      {
+        "type": "yieldType:health",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:happiness",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/mountOlympus.jpg",
+    "requires": [
+      "continentType:mediterra"
+    ],
+    "quote": {
+      "text": "Olympus, seat of the gods.",
+      "source": "Homer, ca. 750 BCE",
+      "url": "/media/quotes/naturalWonderType/mountOlympus.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:picosDeEuropa",
+    "name": "Picos de Europa",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Picos de Europa are rugged limestone ranges in northern Spain, long used for seasonal pastoralism and mountain refuge. Medieval sources connect the Covadonga area with early resistance during the Asturian phase of the Reconquista. Shepherding communities practiced transhumance, moving flocks between high pastures and valleys, and producing distinctive cheeses such as Cabrales. The terrain offered isolated settlements and defensible routes through gorges and high cols. Monasteries, hermitages, and small forts occupied strategic sites from the Middle Ages onward. Early modern travelers noted the massif’s abrupt relief above the Atlantic plain. Later road building and mapping opened the ranges to scientific study of karst systems, glaciated cirques, and alpine flora. The Picos remain a landscape shaped by herding, local trade, and mountain passage.",
+    "category": "naturalWonderCategory:mountain",
+    "yields": [
+      {
+        "type": "yieldType:health",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:food",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/picosDeEuropa.jpg",
+    "requires": [
+      "continentType:mediterra"
+    ],
+    "quote": {
+      "text": "Peaks like a jagged crown above Asturias.",
+      "source": "Ambrosio de Morales, ca. 1575",
+      "url": "/media/quotes/naturalWonderType/picosDeEuropa.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:mountEtna",
+    "name": "Mount Etna",
+    "concept": "conceptType:naturalWonder",
+    "description": "Mount Etna is an active stratovolcano on Sicily’s east coast with a long record of observed eruptions. Greek and Roman authors, including Pliny in the 1st century CE, described its activity, ash falls, and flows that altered settlements and fields. Towns around the mountain relied on fertile volcanic soils for vineyards, orchards, and grain. Prehistoric communities drew on regional volcanic resources for tool-making and exchange networks. Historical eruptions prompted relocation, terrace building, and lava diversion works. Etna’s slopes supported trade in wine, fruit, and timber routed through Catania and coastal ports. From the Enlightenment onward, naturalists and geologists studied its craters, parasitic cones, and mantle-derived lavas, making the volcano a key site for understanding effusive activity in the Mediterranean.",
+    "category": "naturalWonderCategory:volcano",
+    "yields": [
+      {
+        "type": "yieldType:production",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:science",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/mountEtna.jpg",
+    "requires": [
+      "continentType:mediterra"
+    ],
+    "quote": {
+      "text": "The loftiest and most fiery mountain in Europe.",
+      "source": "Pliny the Elder, 77 CE",
+      "url": "/media/quotes/naturalWonderType/mountEtna.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:greatBarrierReef",
+    "name": "Great Barrier Reef",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Great Barrier Reef is the world’s largest coral reef system along Australia’s northeast coast. For millennia, Indigenous communities fished, gathered shellfish, and navigated reefs and lagoons with detailed ecological knowledge. European charting intensified after James Cook’s 1770 voyage, which recorded hazards and passages along the ribbon reefs and cays. Nineteenth-century naturalists described coral growth, reef zonation, and tidal flats, while hydrographic surveys refined navigation. The reef supported small-scale beche-de-mer and pearling industries, and later became a focus for marine biology, including notable early twentieth-century expeditions. Research on coral bleaching, symbiosis, and reef geomorphology built on this historical base. Its scale and complexity made it central to discussions of tropical oceanography and coastal management in the modern period.",
+    "category": "naturalWonderCategory:coast",
+    "yields": [
+      {
+        "type": "yieldType:food",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:science",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/greatBarrierReef.jpg",
+    "requires": [
+      "continentType:oceania"
+    ],
+    "quote": {
+      "text": "A labyrinth of living coral, stretching for leagues.",
+      "source": "James Cook, 1770",
+      "url": "/media/quotes/naturalWonderType/greatBarrierReef.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:halongBay",
+    "name": "Halong Bay",
+    "concept": "conceptType:naturalWonder",
+    "description": "Halong Bay in northern Vietnam is a drowned karst landscape with hundreds of limestone islets, caves, and sheltered inlets. Vietnamese tradition preserves a late medieval legend of a dragon creating the bay’s broken coastline. Historically, the area offered fishing grounds, storm refuge, and seasonal anchorages for coastal communities. Small harbors and coves served local trade moving salt, fish sauce, ceramics, and timber along the Gulf of Tonkin. Mariners used the bay’s towers and channels for short-haul routes and evasion during regional conflicts. French colonial mapping and photography in the nineteenth and early twentieth centuries cataloged its formations and tidal patterns. The bay’s geomorphology and cultural narratives later drew travelers, linking seascape tourism to a long record of subsistence and navigation.",
+    "category": "naturalWonderCategory:coast",
+    "yields": [
+      {
+        "type": "yieldType:health",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:happiness",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/halongBay.jpg",
+    "requires": [
+      "continentType:oceania"
+    ],
+    "quote": {
+      "text": "The dragon descended, and with its tail carved the bay.",
+      "source": "Vietnamese legend, ca. 1450",
+      "url": "/media/quotes/naturalWonderType/halongBay.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:pearlHarbor",
+    "name": "Pearl Harbor",
+    "concept": "conceptType:naturalWonder",
+    "description": "Pearl Harbor on Oahu is a natural lagoon and deep-water anchorage known in Hawaiian as Wai Momi, a place of pearl gathering and canoe landings. Indigenous communities used its sheltered waters for fishing and interisland travel. During the nineteenth century, whaling, missionary activity, and shifting Pacific trade increased maritime traffic around the islands. Agreements in the late 1800s enabled U.S. use and development of the harbor for coal and repair facilities. Construction of dry docks and channel improvements in the early twentieth century transformed it into a major naval base. On 7 December 1941, a Japanese air attack on the fleet stationed there marked a decisive entry of the United States into World War II. The harbor remains a key Pacific logistics hub.",
+    "category": "naturalWonderCategory:coast",
+    "yields": [
+      {
+        "type": "yieldType:production",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:gold",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/pearlHarbor.jpg",
+    "requires": [
+      "continentType:oceania"
+    ],
+    "quote": {
+      "text": "Wai Momi — waters of pearl.",
+      "source": "Hawaiian tradition",
+      "url": "/media/quotes/naturalWonderType/pearlHarbor.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:mekongDelta",
+    "name": "Mekong Delta",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Mekong Delta is the alluvial terminus of the Mekong River in southern Vietnam. Vietnamese tradition calls it the Nine Dragons, reflecting its branching distributaries. Archaeology links the delta to the Oc Eo culture and early Funan trade between the first and seventh centuries. Khmer polities later controlled the region and its wet-rice landscapes. From the seventeenth century, Nguyen expansion brought canals, new settlements, and intensified paddy farming. The Vinh Te and other canals improved transport and irrigation. Under French Cochinchina, dredging and embankments turned the delta into a major rice-export zone. Seasonal fisheries and floating markets supported dense rural populations. The waterways tied Cambodia’s interior to the South China Sea and coastal trade. During the Vietnam War, the delta’s maze of channels shaped logistics, insurgency, and riverine operations. Today it remains a core rice bowl and a historic corridor of Southeast Asian exchange.",
+    "category": "naturalWonderCategory:floodPlains",
+    "yields": [
+      {
+        "type": "yieldType:food",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:gold",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/mekongDelta.jpg",
+    "requires": [
+      "continentType:oceania"
+    ],
+    "quote": {
+      "text": "The Nine Dragons, where the river meets the sea.",
+      "source": "Vietnamese tradition",
+      "url": "/media/quotes/naturalWonderType/mekongDelta.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:sigiriya",
+    "name": "Sigiriya",
+    "concept": "conceptType:naturalWonder",
+    "description": "Sigiriya is a fifth-century rock fortress and palace atop a granite monolith in central Sri Lanka. King Kassapa I (r. 477–495) established a citadel with defensive walls, a lion-gate approach, and royal quarters. The site integrates advanced hydraulic works, including moats, reservoirs, sluices, and symmetrically planned water gardens. Frescoes of celestial maidens and a polished “Mirror Wall” with later visitor graffiti attest to courtly and monastic use. After Kassapa’s death, Sigiriya declined as a royal center and from the seventh century functioned as a Buddhist monastery. The site’s terraces, boulder gardens, and summit platform preserved its monumental plan. British antiquarians and archaeologists documented Sigiriya in the nineteenth century, prompting systematic study and conservation. Its blend of geomorphology, landscape engineering, and painted program provides a key record of early medieval Sri Lankan kingship, ritual, and technology.",
+    "category": "naturalWonderCategory:hills",
+    "yields": [
+      {
+        "type": "yieldType:culture",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:faith",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/sigiriya.jpg",
+    "requires": [
+      "continentType:oceania"
+    ],
+    "quote": {
+      "text": "A palace in the sky, built upon the Lion Rock.",
+      "source": "Cūḷavaṃsa, ca. 1150",
+      "url": "/media/quotes/naturalWonderType/sigiriya.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:torajaHighlands",
+    "name": "Toraja Highlands",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Toraja Highlands of Sulawesi constitute a mountainous cultural landscape of rice terraces, cliff burials, and village compounds. Torajan communities developed elaborate funerary rites that culminate in multi-day ceremonies. The dead are interred in cliff tombs or hanging graves, often guarded by carved tau-tau effigies. Tongkonan ancestral houses mark social status and lineage. Wet-rice cultivation on steep slopes sustained dense settlements and ritual economies. Dutch colonial incursions in the early twentieth century brought pacification, mission activity, and administrative reforms. These changes coexisted with enduring ritual frameworks known as aluk to dolo. Coffee and other cash crops expanded during the colonial and postcolonial periods. From the 1970s cultural tourism increased, bringing preservation efforts and staged performances alongside ongoing rites. The highlands remain a distinctive case of mountain agriculture linked to mortuary architecture, wooden sculpture, and regional trade.",
+    "category": "naturalWonderCategory:hills",
+    "yields": [
+      {
+        "type": "yieldType:culture",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:health",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/torajaHighlands.jpg",
+    "requires": [
+      "continentType:oceania"
+    ],
+    "quote": {
+      "text": "People of the sky, dwelling among mountains.",
+      "source": "Toraja tradition",
+      "url": "/media/quotes/naturalWonderType/torajaHighlands.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:sriPada",
+    "name": "Sri Pada",
+    "concept": "conceptType:naturalWonder",
+    "description": "Sri Pada, also known as Adam’s Peak, is a conical mountain in Sri Lanka long revered by multiple faiths. Pilgrims ascend to a summit shrine that enshrines a sacred footprint. Buddhists associate it with the Buddha, Hindus with Shiva, Muslims with Adam, and some Christians with St. Thomas. Pilgrimage is recorded from early medieval times. Sinhala chronicles, South Asian traditions, and Arab and European travelers noted the mountain’s sanctity and ascent routes. Ibn Battuta described the climb and chains affixed to steep sections in the fourteenth century. Kandyan rulers maintained steps, rest houses, and shrines. The pilgrimage season follows the dry months when beacon lights and processions guide climbers. Sri Pada’s cult linked lowland temples, monastic networks, and highland communities, creating a shared ritual geography over many centuries.",
+    "category": "naturalWonderCategory:mountain",
+    "yields": [
+      {
+        "type": "yieldType:faith",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:happiness",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/sriPada.jpg",
+    "requires": [
+      "continentType:oceania"
+    ],
+    "quote": {
+      "text": "The sacred footprint crowns its summit.",
+      "source": "Mahavamsa, ca. 450 CE",
+      "url": "/media/quotes/naturalWonderType/sriPada.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:krakatoa",
+    "name": "Krakatoa",
+    "concept": "conceptType:naturalWonder",
+    "description": "Krakatoa is a volcanic island in the Sunda Strait, known for the 1883 eruption and its global effects. Explosive activity on 26–27 August generated towering ash columns, caldera collapse, and tsunamis that killed tens of thousands along the coasts of Java and Sumatra. Barographs worldwide recorded atmospheric pressure waves that circled the globe multiple times. Sunsets and sky glows persisted for months due to high-altitude aerosols. Telegraph cables, lighthouses, and shipping reports provided unprecedented data on eruption dynamics and tsunami timing. The catastrophe prompted changes to maritime safety and stimulated volcanological research. In 1927 a new cone, Anak Krakatau, emerged in the caldera and grew episodically, posing recurrent hazards to the strait. Krakatoa remains a benchmark case for studying explosive volcanism, air–sea coupling, and risk along busy trade routes.",
+    "category": "naturalWonderCategory:volcano",
+    "yields": [
+      {
+        "type": "yieldType:production",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:science",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/krakatoa.jpg",
+    "requires": [
+      "continentType:oceania"
+    ],
+    "quote": {
+      "text": "A great darkness came, the sun was blotted out.",
+      "source": "Javanese chronicle, 1883",
+      "url": "/media/quotes/naturalWonderType/krakatoa.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:orkhonCanyon",
+    "name": "Orkhon Canyon",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Orkhon Canyon in central Mongolia is a core landscape of steppe polities. The eighth-century Orkhon inscriptions at Khöshöö Tsaidam commemorate Göktürk rulers such as Kül Tegin and Bilge Qağan. The Uighur Khaganate established the urban center of Ordu-Baliq nearby in the eighth and ninth centuries. In the thirteenth century the valley anchored Mongol imperial organization. Ögedei built Karakorum on the Orkhon as the empire’s capital. After the empire fragmented, Buddhist monasteries, including Erdene Zuu (founded 1585), drew on earlier ruins for building stone. Kurgans, balbals, and stelae mark elite burial and memorial practices across the valley. The canyon’s pastures and river corridor supported seasonal encampments, caravan traffic, and administrative camps. Archaeology and inscriptions make it a primary archive for Turkic runiform literacy, steppe urbanism, and nomadic statecraft.",
+    "category": "naturalWonderCategory:canyon",
+    "yields": [
+      {
+        "type": "yieldType:culture",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:happiness",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/orkhonCanyon.jpg",
+    "requires": [
+      "continentType:siberia"
+    ],
+    "quote": {
+      "text": "The sacred river Orkhon, lifeblood of the steppe.",
+      "source": "Orkhon Inscriptions, ca. 730 CE",
+      "url": "/media/quotes/naturalWonderType/orkhonCanyon.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:yarlungTsangpoCanyon",
+    "name": "Yarlung Tsangpo Canyon",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Yarlung Tsangpo Canyon cuts a vast arc around Namcha Barwa in Tibet, often cited for extreme vertical relief and formidable rapids. Tibetan traditions venerate the valley, and communities practiced transhumant herding and barter along side valleys. Nineteenth- and early twentieth-century mapping attempts by British and Indian surveyors sought to trace the Tsangpo’s course into the Brahmaputra; plant hunters such as Frank Kingdon-Ward later explored tributaries and recorded flora. The gorge’s remote terrain limited transport development and preserved extensive forest. Modern Chinese expeditions refined topographic and hydrological data, prompting debate over potential hydropower. Conservation proposals highlight biodiversity and geomorphology at the “Great Bend.” Today, restricted access, small-scale trekking, and scientific sampling define activity in the region, while local narratives and pilgrimage traditions continue to frame relationships with one of the Himalaya’s most dramatic river valleys.",
+    "category": "naturalWonderCategory:canyon",
+    "yields": [
+      {
+        "type": "yieldType:production",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:faith",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/yarlungTsangpoCanyon.jpg",
+    "requires": [
+      "continentType:siberia"
+    ],
+    "quote": {
+      "text": "A hidden valley of paradise, where the gods dwell.",
+      "source": "Tibetan tradition",
+      "url": "/media/quotes/naturalWonderType/yarlungTsangpoCanyon.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:garabogazkolLagoon",
+    "name": "Garabogazköl Lagoon",
+    "concept": "conceptType:naturalWonder",
+    "description": "Garabogazköl is a hypersaline lagoon on the eastern Caspian coast of Turkmenistan, long known for brines rich in mirabilite and other salts. Nineteenth-century explorer Grigory Karelin recorded descriptions and scientific notes. Local and regional workers gathered salt on a small scale before larger Soviet-era studies considered industrial extraction and hydrology. In 1980 the channel to the Caspian was dammed to slow sea-level decline, triggering rapid desiccation and salt storms; the barrier was removed in 1992, restoring water exchange. Subsequent operations resumed harvesting and chemical processing. The site serves as a case study in evaporite formation, basin–sea coupling, and environmental impacts of water diversions. Modern monitoring tracks salinity, inflow, and dust emissions, while access roads and settlements support periodic extraction cycles shaped by Caspian level fluctuations.",
+    "category": "naturalWonderCategory:coast",
+    "yields": [
+      {
+        "type": "yieldType:gold",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:science",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/garabogazkolLagoon.jpg",
+    "requires": [
+      "continentType:siberia"
+    ],
+    "quote": {
+      "text": "A sea of salt, stretching to the horizon.",
+      "source": "Grigory Karelin, ca. 1830",
+      "url": "/media/quotes/naturalWonderType/garabogazkolLagoon.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:cappadocia",
+    "name": "Cappadocia",
+    "concept": "conceptType:naturalWonder",
+    "description": "Cappadocia is a volcanic landscape of central Anatolia, carved into tuff cones, valleys, and pillars by wind and water. From late antiquity, inhabitants cut dwellings, stables, and cisterns into soft rock. Early Christian communities established rock-hewn churches and monasteries with fresco programs that survived through Byzantine periods. Underground cities such as Derinkuyu and Kaymaklı offered refuge during raids and frontier warfare. Ottoman-era villages continued to adapt rock shelters to agricultural needs. Western travelers and archaeologists in the nineteenth century documented churches and inscriptions, spurring systematic surveys in the twentieth century. Tourism grew around Göreme’s valleys and open-air museum after road improvements. In 1985 UNESCO listed the Göreme National Park and the Rock Sites of Cappadocia. Conservation now addresses erosion, visitor pressure, and stabilization of painted interiors while local economies integrate viticulture, pottery, and boutique lodging in cave spaces.",
+    "category": "naturalWonderCategory:hills",
+    "yields": [
+      {
+        "type": "yieldType:culture",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:food",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/cappadocia.jpg",
+    "requires": [
+      "continentType:siberia"
+    ],
+    "quote": {
+      "text": "Strange pinnacles and chimneys of stone, as if shaped by hand.",
+      "source": "Strabo, ca. 10 CE",
+      "url": "/media/quotes/naturalWonderType/cappadocia.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:lakeBaikal",
+    "name": "Lake Baikal",
+    "concept": "conceptType:naturalWonder",
+    "description": "Lake Baikal in Siberia is Earth’s deepest and one of its oldest freshwater basins, noted for clear, cold waters and high endemism, including the Baikal seal and omul. Indigenous groups used the lake for fishing and travel along winter ice. Nineteenth-century Russian expeditions measured depths, ice phenology, and fauna; later, steamers and the Trans-Siberian Railway linked settlements on the western shore. Soviet institutions established limnological stations that advanced studies of oligotrophy, endemic evolution, and seismicity. Industrial expansion raised concerns over pulp mill effluents and shoreline alteration, prompting national and international conservation efforts in the late twentieth century. UNESCO inscribed the lake in 1996. Current research addresses climate change effects on ice cover, endemic sponges, and introduced species, while protected areas, community initiatives, and wastewater upgrades aim to reduce pollution and safeguard a globally significant freshwater ecosystem.",
+    "category": "naturalWonderCategory:lake",
+    "yields": [
+      {
+        "type": "yieldType:food",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:science",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/lakeBaikal.jpg",
+    "requires": [
+      "continentType:siberia"
+    ],
+    "quote": {
+      "text": "The Pearl of Siberia.",
+      "source": "Russian proverb, ca. 1850",
+      "url": "/media/quotes/naturalWonderType/lakeBaikal.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:mountEverest",
+    "name": "Mount Everest",
+    "concept": "conceptType:naturalWonder",
+    "description": "Mount Everest, known as Chomolungma in Tibetan and Sagarmatha in Nepali, is the highest mountain above sea level at 8,848.86 meters. Sherpa and Tibetan traditions honor the peak with offerings and ritual observances. British reconnaissance in the 1920s mapped approach routes; attempts in 1922 and 1924 reached record altitudes without confirmed summits. In 1953 Tenzing Norgay and Edmund Hillary made the first verified ascent via the South Col. Subsequent milestones included the 1960 Chinese ascent from the north, 1963 American traverses, and winter and oxygen-free climbs. The Khumbu region developed lodges, rescue services, and national park protections. Modern seasons see guided expeditions, route fixing by Sherpa teams, and traffic management at bottlenecks. Environmental programs address waste, glacier change, and safety standards, reflecting a century of exploration, local labor, and evolving high-altitude ethics.",
+    "category": "naturalWonderCategory:mountain",
+    "yields": [
+      {
+        "type": "yieldType:faith",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:happiness",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/mountEverest.jpg",
+    "requires": [
+      "continentType:siberia"
+    ],
+    "quote": {
+      "text": "Chomolungma, goddess mother of the world.",
+      "source": "Tibetan tradition",
+      "url": "/media/quotes/naturalWonderType/mountEverest.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:pamirMountains",
+    "name": "Pamir Mountains",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Pamir Mountains form a high Central Asian knot linking the Tian Shan, Hindu Kush, and Karakoram. Caravans used Pamir passes to move between the Tarim Basin, Ferghana, and Badakhshan along Silk Road routes. Marco Polo crossed the region in the late thirteenth century and called it the Roof of the World. Kyrgyz and Tajik herders practiced seasonal pastoralism on summer pastures around alpine lakes and plateaus. In the nineteenth century, Russian and British expeditions mapped the high valleys during the Great Game. The Pamir Boundary Commission of 1895 fixed frontiers and created the Wakhan Corridor. Russian posts and later Soviet infrastructure tied the eastern Pamirs to Transoxiana. The range’s extreme altitude shaped transport, settlement, and trade, while its passes remained strategic connectors between Inner Asia and South Asia.",
+    "category": "naturalWonderCategory:mountain",
+    "yields": [
+      {
+        "type": "yieldType:production",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:health",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/pamirMountains.jpg",
+    "requires": [
+      "continentType:siberia"
+    ],
+    "quote": {
+      "text": "The Pamir is called the Roof of the World.",
+      "source": "Marco Polo, ca. 1270",
+      "url": "/media/quotes/naturalWonderType/pamirMountains.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:pamukkaleSprings",
+    "name": "Pamukkale Springs",
+    "concept": "conceptType:naturalWonder",
+    "description": "Pamukkale is a terraced complex of thermal springs depositing white travertine on a hillside in western Anatolia. The adjacent city of Hierapolis, founded in the Hellenistic period and later Romanized, developed extensive baths, nymphaea, and sanctuaries that drew on the hot waters. Inscriptions and archaeology record curative visits and ritual activity through Roman and Byzantine eras. Earthquakes periodically damaged and reshaped the site. Ottoman travelers around 1600 described the Cotton castles, noting the striking white cascades. Nineteenth-century European travelers and photographers publicized the terraces, prompting spa-oriented visits. Modern conservation has sought to restore natural flow patterns after periods of overuse. The springs exemplify long-standing healing pilgrimage linked to classical urban bathing cultures and later Ottoman and European travel circuits.",
+    "category": "naturalWonderCategory:spring",
+    "yields": [
+      {
+        "type": "yieldType:health",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:gold",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/pamukkaleSprings.jpg",
+    "requires": [
+      "continentType:siberia"
+    ],
+    "quote": {
+      "text": "Cotton castles of white, gleaming in the sun.",
+      "source": "Ottoman travel accounts, ca. 1600",
+      "url": "/media/quotes/naturalWonderType/pamukkaleSprings.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:dunajecCanyon",
+    "name": "Dunajec Canyon",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Dunajec Canyon is a narrow limestone gorge in the Pieniny range on the Polish–Slovak border. Its steep cliffs and meanders form a natural corridor long used by local communities. Wooden rafts carried goods and people along the river before evolving into organized rafting for visitors. Nineteenth-century writers, including Stanisław Dunin-Borkowski in 1822, praised its vistas. Castles at Czorsztyn and Niedzica guarded the gorge and controlled regional transit between Polish and Hungarian lands. Fishing and small-scale river trade sustained nearby villages. In 1932 Poland established Pieniny National Park, among the country’s earliest protected areas, formalizing landscape conservation and tourism. Today the traditional raft run preserves riverine skills shaped by transport needs and the canyon’s seasonal hydrology.",
+    "category": "naturalWonderCategory:canyon",
+    "yields": [
+      {
+        "type": "yieldType:science",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:gold",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/dunajecCanyon.jpg",
+    "requires": [
+      "continentType:taiga"
+    ],
+    "quote": {
+      "text": "The Dunajec winds through limestone cliffs, creating vistas of grandeur.",
+      "source": "Stanisław Dunin-Borkowski, 1822",
+      "url": "/media/quotes/naturalWonderType/dunajecCanyon.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:lenaPillars",
+    "name": "Lena Pillars",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Lena Pillars are towering rock columns along the middle Lena River in Siberia. Their stratified cliffs form prominent landmarks on a major fluvial highway. Yakut (Sakha) and Evenk oral traditions situate rituals and stories within this landscape. Russian expansion into the Lena basin in the seventeenth century relied on river navigation, with the pillars aiding orientation for Cossacks and fur traders. Yakutsk, founded in 1632, became a base for collecting yasak and for further exploration. Nineteenth-century scientists, including Alexander von Middendorff in the 1840s, documented the formations during Siberian expeditions. With the rise of steam navigation and hydrographic surveys, the pillars served as fixed reference points. The site preserves a record of river travel, indigenous cosmology, and imperial administration in subarctic Eurasia.",
+    "category": "naturalWonderCategory:canyon",
+    "yields": [
+      {
+        "type": "yieldType:faith",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:production",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/lenaPillars.jpg",
+    "requires": [
+      "continentType:taiga"
+    ],
+    "quote": {
+      "text": "Columns of stone rise like a petrified forest along the river.",
+      "source": "Alexander von Middendorff, ca. 1845",
+      "url": "/media/quotes/naturalWonderType/lenaPillars.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:naeroyfjord",
+    "name": "Nærøyfjord",
+    "concept": "conceptType:naturalWonder",
+    "description": "Nærøyfjord is a narrow branch of the Sognefjord in western Norway, noted for sheer rock walls and cascading waterfalls. Its confined channel and steep topography shaped a maritime economy. Farmsteads relied on boats to move fish, dairy, and timber to nearby markets. During the 19th century, local fisheries and small craft traffic linked scattered landings to Bergen’s coastal trade. Early travel writers and artists of the Romantic era recorded the scenery. Thomas Read Wilkinson in 1881 described the towering, vertical cliffs. Steamship routes later carried organized excursions. Hydrographic surveys and beacons improved navigation. The fjord entered Scandinavian painting and photography, and guidebooks promoted it during the tourism boom after 1870. In the 20th century, conservationists advocated protection, culminating in its inclusion in the West Norwegian Fjords World Heritage area. Settlements such as Gudvangen served as gateways for visitors, while local livelihoods continued to combine fishing, small-scale farming, and transport.",
+    "category": "naturalWonderCategory:coast",
+    "yields": [
+      {
+        "type": "yieldType:happiness",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:culture",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/naeroyfjord.jpg",
+    "requires": [
+      "continentType:taiga"
+    ],
+    "quote": {
+      "text": "Towering rocks, striking sheer downwards thousands of feet.",
+      "source": "Thomas Read Wilkinson, 1881",
+      "url": "/media/quotes/naturalWonderType/naeroyfjord.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:bialowiezaForest",
+    "name": "Białowieża Forest",
+    "concept": "conceptType:naturalWonder",
+    "description": "Białowieża Forest straddles the Polish–Belarusian border and preserves a remnant of primeval lowland woodland. Medieval rulers reserved parts of the forest for hunting. From the 16th to the 18th century it functioned as royal hunting grounds of the Polish–Lithuanian Commonwealth. Forest law protected bison, red deer, and valuable stands, and resident foresters maintained drives and enclosures. After the partitions, imperial administrators and naturalists surveyed the biota and compiled early inventories. The European bison became a focus of scientific attention and protective measures. Heavy exploitation during wars endangered the population. After 1918 the last wild bison vanished, prompting international breeding and reintroduction programs. Poland established one of its earliest national parks here in the interwar years. Twentieth-century reserves on both sides of the border secured core old-growth areas. Today the forest is a key reference site for European ecology and a record of historic governance of game and timber.",
+    "category": "naturalWonderCategory:forest",
+    "yields": [
+      {
+        "type": "yieldType:health",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:culture",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/bialowiezaForest.jpg",
+    "requires": [
+      "continentType:taiga"
+    ],
+    "quote": {
+      "text": "A forest primeval, untamed and vast.",
+      "source": "Władysław S. Jeż, 1863",
+      "url": "/media/quotes/naturalWonderType/bialowiezaForest.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:lofotenIslands",
+    "name": "Lofoten Islands",
+    "concept": "conceptType:naturalWonder",
+    "description": "The Lofoten archipelago in Nordland, Norway, is known for steep peaks, surf-battered coasts, and productive fishing banks. Norse settlements exploited winter cod runs, and stockfish from Lofoten moved along Viking and later Hanseatic trade routes via Bergen. Seasonal fisheries built shore stations and rorbu cabins for crews. Medieval law and later royal regulations organized gear, landing rights, and drying grounds. In the 19th century expanding markets and improved transport integrated Lofoten into North Atlantic commerce. Lighthouses and charts reduced risks on approach to the island sounds. Fishing villages such as Kabelvåg and Henningsvær grew as hubs for curing and export. Painters and photographers documented the landscape and working life, aiding early tourism. Despite occasional herring booms and busts, cod remained the economic base. Twentieth-century motorization, cooperatives, and state management altered the fishery but preserved the seasonal rhythm of the skrei cod campaign.",
+    "category": "naturalWonderCategory:islands",
+    "yields": [
+      {
+        "type": "yieldType:food",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:gold",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/lofotenIslands.jpg",
+    "requires": [
+      "continentType:taiga"
+    ],
+    "quote": {
+      "text": "Nowhere shows nature’s beauty like northern Norway—Lofoten most of all.",
+      "source": "Bjørnstjerne Bjørnson, ca. 1900",
+      "url": "/media/quotes/naturalWonderType/lofotenIslands.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:lakeLadoga",
+    "name": "Lake Ladoga",
+    "concept": "conceptType:naturalWonder",
+    "description": "Lake Ladoga, east of Finland and northeast of Saint Petersburg, is Europe’s largest lake. It connects the Neva River to the Baltic and the Volkhov to Novgorod, forming a key medieval waterway. Novgorodian traders moved furs, wax, and fish along these routes into Hanseatic networks. Fortresses such as Oreshek controlled the Neva outlet and guarded approaches during Swedish–Russian conflicts. Peter the Great ordered the Ladoga Canal in the early 18th century to bypass dangerous open water and stabilize transport to the new capital. Russian hydrographers charted the lake in the 18th and 19th centuries, and steam navigation linked ports on the southern shore. Naval and riverine actions occurred here during the Great Northern War and later campaigns. In 1941–1943 the “Road of Life” over the winter ice sustained besieged Leningrad. The lake remains central to regional navigation, fisheries, and hydropower systems.",
+    "category": "naturalWonderCategory:lake",
+    "yields": [
+      {
+        "type": "yieldType:food",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:production",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/lakeLadoga.jpg",
+    "requires": [
+      "continentType:taiga"
+    ],
+    "quote": {
+      "text": "Ladoga, the greatest of Europe’s lakes, like a sea without end.",
+      "source": "Peter Simon Pallas, 1793",
+      "url": "/media/quotes/naturalWonderType/lakeLadoga.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:benNevis",
+    "name": "Ben Nevis",
+    "concept": "conceptType:naturalWonder",
+    "description": "Ben Nevis, at 1,345 meters, is the highest summit in Britain. The massif preserves remnants of a collapsed Devonian volcano that drew early geological study. The first recorded ascent was made by the botanist James Robertson in 1771. During the Victorian period climbers and scientists established regular routes. The Ordnance Survey used the peak in 19th-century triangulation. A summit observatory operated from 1883 to 1904, gathering continuous meteorological data. A pony track built for the observatory remains the standard ascent. Harsh Atlantic weather, cornices, and complex cliffs shaped early mountaineering practice and rescue organization in the Highlands. Guidebooks, clubs, and rail access to Fort William turned the mountain into a center of leisure climbing by the late 19th century. Subsequent scientific work refined knowledge of its igneous structures and mountain climate.",
+    "category": "naturalWonderCategory:mountain",
+    "yields": [
+      {
+        "type": "yieldType:science",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:happiness",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/benNevis.jpg",
+    "requires": [
+      "continentType:taiga"
+    ],
+    "quote": {
+      "text": "A noble mountain, clothed in storms and mists.",
+      "source": "Dorothy Wordsworth, 1803",
+      "url": "/media/quotes/naturalWonderType/benNevis.mp3"
+    }
+  },
+  {
+    "key": "naturalWonderType:strokkurGeyser",
+    "name": "Strokkur Geyser",
+    "concept": "conceptType:naturalWonder",
+    "description": "Strokkur is an active geyser in the Haukadalur geothermal field of southwest Iceland. Regular eruptions send jets every few minutes from a silica-lined vent fed by shallow boiling aquifers. Travelers and naturalists described the valley’s hot springs in the 18th and 19th centuries, when Strokkur emerged as a reliable spectacle alongside the Great Geysir. Earthquakes periodically altered activity; the vent clogged in the 1890s and was reopened by local efforts in 1963. The site became a fixed stop on organized tours as roads and steamship routes brought visitors to Iceland. Icelandic communities used nearby hot water for bathing and washing, tying geothermal features to daily life and lore. Modern monitoring and protective measures regulate access while maintaining the field for study of hydrothermal processes and public interpretation.",
+    "category": "naturalWonderCategory:spring",
+    "yields": [
+      {
+        "type": "yieldType:health",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      },
+      {
+        "type": "yieldType:faith",
+        "amount": 5,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/naturalWonderType/strokkurGeyser.jpg",
+    "requires": [
+      "continentType:taiga"
+    ],
+    "quote": {
+      "text": "With a roar of rage, he throws a column of water forty feet high.",
+      "source": "Lord Dufferin, 1857",
+      "url": "/media/quotes/naturalWonderType/strokkurGeyser.mp3"
+    }
+  }
+]

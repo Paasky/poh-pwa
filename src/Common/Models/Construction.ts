@@ -1,4 +1,3 @@
-import { canHaveOne, hasMany, hasOne } from "@/Common/Models/_Relations";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { constructionYieldTypeKeys, Yield, Yields } from "@/Common/Objects/Yields";
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
@@ -23,14 +22,10 @@ export class Construction extends GameObject {
     public cityKey: GameKey | null = null,
     public health = 100,
     public progress = 0,
+    public completedAtTurn: number | null = null,
   ) {
     super(key);
     this.name = this.type.name;
-
-    canHaveOne<City>(this, "cityKey");
-    hasOne<Tile>(this, "tileKey");
-
-    hasMany<Citizen>(this, "citizenKeys");
   }
 
   static attrsConf: GameObjAttr[] = [
@@ -58,11 +53,17 @@ export class Construction extends GameObject {
    * Relations
    */
   citizenKeys = new Set<GameKey>();
-  declare citizens: Citizen[];
+  get citizens(): Map<GameKey, Citizen> {
+    return this.hasMany<Citizen>("citizenKeys");
+  }
 
-  declare city: City | null;
+  get city(): City | null {
+    return this.canHaveOne<City>("cityKey");
+  }
 
-  declare tile: Tile;
+  get tile(): Tile {
+    return this.hasOne<Tile>("tileKey");
+  }
 
   /*
    * Computed
@@ -72,28 +73,32 @@ export class Construction extends GameObject {
   }
 
   get types(): Set<TypeObject> {
-    return this.computed("_types", () => {
-      const types = new Set<TypeObject>([this.concept]);
-      if (this.progress < 100) return types;
+    return this.computed(
+      "types",
+      () => {
+        const types = new Set<TypeObject>([this.concept]);
+        if (this.progress < 100) return types;
 
-      types.add(this.type);
+        types.add(this.type);
 
-      if (
-        this.type.class === "buildingType" ||
-        this.type.class === "nationalWonderType" ||
-        this.type.class === "worldWonderType"
-      ) {
-        types.add(useDataBucket().getType("conceptType:urban"));
-      }
+        if (
+          this.type.class === "buildingType" ||
+          this.type.class === "nationalWonderType" ||
+          this.type.class === "worldWonderType"
+        ) {
+          types.add(useDataBucket().getType("conceptType:urban"));
+        }
 
-      return types;
-    });
+        return types;
+      },
+      { props: ["progress"] },
+    );
   }
 
   // My Yield output
   get yields(): Yields {
     return this.computed(
-      "_yields",
+      "yields",
       () => {
         // Must be completed and be alive to grant yields
         if (this.progress < 100 || this.health <= 0) return new Yields();
@@ -129,7 +134,10 @@ export class Construction extends GameObject {
         }
         return new Yields(damageYields).flatten();
       },
-      ["health", "progress", "cityKey"],
+      {
+        props: ["health", "progress"],
+        relations: [{ relName: "city", relProps: ["yieldMods"] }],
+      },
     );
   }
 

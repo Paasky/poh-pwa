@@ -18,7 +18,6 @@ export class UnitExplore implements ISimAction {
   }
 
   handleAction(): IMutation[] {
-    this.unit.action = { type: "explore", target: null };
     return [
       {
         type: "update",

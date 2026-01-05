@@ -1,10 +1,9 @@
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
-import { Yield, Yields } from "@/Common/Objects/Yields";
+import { unitYieldTypeKeys, Yield, Yields } from "@/Common/Objects/Yields";
 import { TypeObject } from "@/Common/Objects/TypeObject";
-import { canHaveOne, hasMany } from "@/Common/Models/_Relations";
 import type { Player } from "@/Common/Models/Player";
 import type { Unit } from "@/Common/Models/Unit";
-import { TypeKey } from "@/Common/Objects/Common";
+import { useDataBucket } from "@/Data/useDataBucket";
 
 export class UnitDesign extends GameObject {
   constructor(
@@ -18,18 +17,8 @@ export class UnitDesign extends GameObject {
   ) {
     super(key);
 
-    this.types = [this.platform, this.equipment];
-
-    const allYields = new Yields(this.types.flatMap((t) => t.yields.all()));
-    this.yields = allYields.not(["yieldType:productionCost"]);
-    this.productionCost = allYields
-      .only(["yieldType:productionCost"])
-      .flatten()
-      .getLumpAmount("yieldType:productionCost");
-
-    canHaveOne<Player>(this, "playerKey");
-
-    hasMany<Unit>(this, "unitKeys");
+    this.domain = this.getDomain();
+    this.types = new Set([this.concept, this.domain, this.platform, this.equipment]);
   }
 
   static attrsConf: GameObjAttr[] = [
@@ -48,32 +37,46 @@ export class UnitDesign extends GameObject {
   /*
    * Attributes
    */
-  productionCost: number;
+  domain: TypeObject;
   types: Set<TypeObject>;
-  yields: Yields;
 
   /*
    * Relations
    */
-  declare player: Player | null;
+  get player(): Player | null {
+    return this.canHaveOne<Player>("playerKey");
+  }
 
   unitKeys = new Set<GameKey>();
-  declare units: Unit[];
+  get units(): Map<GameKey, Unit> {
+    return this.hasMany<Unit>("unitKeys");
+  }
 
   /*
    * Computed
    */
-  get prodCostYield(): Yield {
-    return {
-      type: "yieldType:productionCost",
-      amount: this.productionCost,
-      method: "lump",
-      for: [],
-      vs: [],
-    };
+
+  // My Yield output
+  get yields(): Yields {
+    return this.computed(
+      "yields",
+      () => {
+        const yieldsForMe = (yields: Yields): Yield[] => {
+          return yields.only(unitYieldTypeKeys, new Set<TypeObject>([this.concept])).all();
+        };
+
+        // Design Yields are Platform + Equipment + Actor Mods
+        const yields = new Yields([...this.platform.yields.all(), ...this.equipment.yields.all()]);
+        if (this.player) yields.add(...yieldsForMe(this.player.yieldMods));
+
+        // Flatten Yields to apply modifiers
+        return yields.flatten();
+      },
+      { relations: [{ relName: "player", relProps: ["yieldMods"] }] },
+    );
   }
 
-  domainKey(): TypeKey {
+  private getDomain(): TypeObject {
     const cat = this.platform.category as string;
     if (
       [
@@ -82,7 +85,7 @@ export class UnitDesign extends GameObject {
         "platformCategory:submersible",
       ].includes(cat)
     ) {
-      return "domainType:water";
+      return useDataBucket().getType("domainType:water");
     }
 
     if (
@@ -92,14 +95,14 @@ export class UnitDesign extends GameObject {
         "platformCategory:missile",
       ].includes(cat)
     ) {
-      return "domainType:air";
+      return useDataBucket().getType("domainType:air");
     }
 
     if (["platformCategory:satellite"].includes(cat)) {
-      return "domainType:space";
+      return useDataBucket().getType("domainType:space");
     }
 
-    return "domainType:land";
+    return useDataBucket().getType("domainType:land");
   }
 
   /*

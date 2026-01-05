@@ -1,0 +1,1030 @@
+[
+  {
+    "key": "nationalWonderType:carnegieSteel",
+    "name": "Carnegie Steel",
+    "concept": "conceptType:nationalWonder",
+    "description": "Carnegie Steel was a late nineteenth-century American steel conglomerate built by Andrew Carnegie through vertical integration and aggressive cost control. It adopted the Bessemer and open-hearth processes at scale in Pittsburgh and the Monongahela Valley, including the Homestead Works. The firm supplied rail, plate, and structural steel for transcontinental railways, large bridges, and early skyscraper frames. Output growth rested on continuous-flow mills, scientific management, and reinvestment in converters and rolling stands. Labor relations were harsh, culminating in the 1892 Homestead Strike and renewed focus on security and strikebreaking. By 1900 the company dominated U.S. steel production and influenced global prices. In 1901 Carnegie sold to a J. P. Morgan syndicate, forming United States Steel, then the world’s largest corporation. The enterprise marked the transition to mass steel production and set standards for capacity planning, industrial finance, and modern metallurgy in North America.",
+    "category": "nationalWonderCategory:production",
+    "yields": [
+      {
+        "type": "yieldType:production",
+        "amount": 12
+      }
+    ],
+    "image": "/media/images/nationalWonderType/carnegieSteel.jpg",
+    "requires": [
+      "technologyType:steelMilling",
+      "goalType:industrialMight"
+    ],
+    "quote": {
+      "text": "Pittsburgh turns river, fire, and will into empire.",
+      "source": "Mother Jones, ca. 1890",
+      "url": "/media/quotes/nationalWonderType/carnegieSteel.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:industrialFund",
+    "name": "Industrial Fund",
+    "concept": "conceptType:nationalWonder",
+    "description": "An industrial fund is a pooled financing mechanism used to expand heavy industry and large manufacturing projects. It aggregates public or quasi-public capital, channels credit to priority sectors, and buffers risk over long payback horizons. In the United States the Reconstruction Finance Corporation underwrote plants and equipment in the 1930s and wartime 1940s. The Soviet Union directed plan funds to steel, machinery, and electrification during successive Five-Year Plans. Postwar Japan, through MITI and allied banks, steered subsidized loans and guarantees toward export industries. Such funds shaped national industrial structure, raised domestic capacity, and accelerated technology transfer.",
+    "category": "nationalWonderCategory:production",
+    "yields": [
+      {
+        "type": "yieldType:production",
+        "amount": 10,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/nationalWonderType/industrialFund.jpg",
+    "requires": [
+      "technologyType:stainlessSteel"
+    ],
+    "quote": {
+      "text": "To invest in machines is to invest in the people.",
+      "source": "Friedrich List, 1841",
+      "url": "/media/quotes/nationalWonderType/industrialFund.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:spaceport",
+    "name": "Spaceport",
+    "concept": "conceptType:nationalWonder",
+    "description": "A spaceport is a dedicated facility for launching rockets and supporting payload processing. It integrates launch pads, propellant storage, assembly hangars, tracking networks, and range safety. Early state ranges such as Baikonur and Cape Canaveral set the template. Commercial and mixed-use sites expanded the model in the twenty-first century. Mojave Air and Space Port hosted rocket-powered test flights and air-launch operations. Spaceport America pursued suborbital tourism and small payload missions. SpaceX’s Starbase at Boca Chica combined manufacturing, testing, and orbital-class launches on one site. Regulatory coordination, environmental mitigation, and emergency services are integral to operations. Spaceports anchor regional aerospace clusters and open access to orbit for state and private actors.",
+    "category": "nationalWonderCategory:production",
+    "yields": [
+      {
+        "type": "yieldType:production",
+        "amount": 50,
+        "method": "percent",
+        "for": [
+          "domainType:space"
+        ]
+      }
+    ],
+    "image": "/media/images/nationalWonderType/spaceport.jpg",
+    "requires": [
+      "technologyType:privateSpaceFlight"
+    ],
+    "quote": {
+      "text": "To boldly go where no man has gone before.",
+      "source": "William Shatner, 1966",
+      "url": "/media/quotes/nationalWonderType/spaceport.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:nationalBank",
+    "name": "National Bank",
+    "concept": "conceptType:nationalWonder",
+    "description": "A national bank is a state-chartered institution that manages currency issuance, reserves, public debt, payments, and lender-of-last-resort functions. The Bank of England, founded in 1694, evolved tools for discounting bills and stabilizing credit. The First Bank of the United States (1791) standardized federal receipts and backed the young republic’s finances. The Banque de France (1800) consolidated note issue and treasury operations under Napoleon. National banks coordinate monetary policy, supervise banks, and provide settlement infrastructure for the economy.",
+    "category": "nationalWonderCategory:gold",
+    "yields": [
+      {
+        "type": "yieldType:gold",
+        "amount": 10,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/nationalWonderType/nationalBank.jpg",
+    "requires": [
+      "technologyType:economics"
+    ],
+    "quote": {
+      "text": "A bank is not merely a vault, but a vessel of confidence.",
+      "source": "Alexander Hamilton, 1791",
+      "url": "/media/quotes/nationalWonderType/nationalBank.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:freeTradeZone",
+    "name": "Free Trade Zone",
+    "concept": "conceptType:nationalWonder",
+    "description": "A free trade zone is a designated area where imported inputs and exports move with reduced or suspended tariffs and simplified customs. Authorities use zones to attract foreign direct investment, test regulatory reforms, and build logistics capacity. Ireland’s Shannon Free Zone in 1959 pioneered airport-linked manufacturing and distribution. China’s Shenzhen Special Economic Zone in 1980 scaled export manufacturing and market experimentation. Dubai’s Jebel Ali Free Zone in 1985 integrated a major port with industrial estates. Outcomes vary by governance, but zones can accelerate trade, employment, and technology diffusion.",
+    "category": "nationalWonderCategory:gold",
+    "yields": [
+      {
+        "type": "yieldType:gold",
+        "amount": 3,
+        "for": [
+          "conceptType:tradeRoute"
+        ]
+      }
+    ],
+    "image": "/media/images/nationalWonderType/freeTradeZone.jpg",
+    "requires": [
+      "technologyType:globalization"
+    ],
+    "quote": {
+      "text": "A port without tariffs is a lighthouse to the world.",
+      "source": "Singaporean minister, ca. 1975",
+      "url": "/media/quotes/nationalWonderType/freeTradeZone.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:schoolOfSocrates",
+    "name": "School of Socrates",
+    "concept": "conceptType:nationalWonder",
+    "description": "The School of Socrates denotes the classical Athenian tradition shaped by Socrates’ inquiries into ethics, virtue, and civic duty. Socrates taught through dialogue in public spaces, posing questions that exposed contradictions and pressed for clear definitions. His trial and execution in 399 BCE turned his method and life into a touchstone for later thinkers. Plato systematized Socratic debates in dialogues and founded the Academy, where metaphysics and political theory were advanced. Aristotle, trained at the Academy, established the Lyceum and extended inquiry to biology, logic, and empirical observation. The Socratic method endured in rhetorical training, Roman schools, medieval disputation, and modern legal and educational practice, linking moral reasoning to disciplined argument.",
+    "category": "nationalWonderCategory:science",
+    "yields": [
+      {
+        "type": "yieldType:science",
+        "amount": 6
+      }
+    ],
+    "image": "/media/images/nationalWonderType/schoolOfSocrates.jpg",
+    "requires": [
+      "technologyType:philosophy",
+      "goalType:greatPhilosophers"
+    ],
+    "quote": {
+      "text": "I know that I know nothing.",
+      "source": "Socrates, 399 BCE",
+      "url": "/media/quotes/nationalWonderType/schoolOfSocrates.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:royalSociety",
+    "name": "Royal Society",
+    "concept": "conceptType:nationalWonder",
+    "description": "The Royal Society, chartered in London in 1662, became a central institution of the Scientific Revolution. It promoted experiment, measurement, and collective scrutiny of claims. The Philosophical Transactions, started in 1665, established sustained scientific publishing and peer evaluation. Robert Boyle’s chemical and pneumatic work circulated through its meetings and papers. Edmond Halley used its networks to pursue cometary orbits and to shepherd Isaac Newton’s Principia to publication. The Society fostered standards for instruments, meteorological records, and natural history. It advised government on navigation, longitude, and public health. By the eighteenth century it linked British and continental savants and provided a durable model for national academies.",
+    "category": "nationalWonderCategory:science",
+    "yields": [
+      {
+        "type": "yieldType:science",
+        "amount": 12
+      }
+    ],
+    "image": "/media/images/nationalWonderType/royalSociety.jpg",
+    "requires": [
+      "technologyType:scientificMethod",
+      "goalType:theEnlightenment"
+    ],
+    "quote": {
+      "text": "Nullius in verba — take no one’s word for it.",
+      "source": "Royal Society motto, 1663",
+      "url": "/media/quotes/nationalWonderType/royalSociety.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:nationalLibrary",
+    "name": "National Library",
+    "concept": "conceptType:nationalWonder",
+    "description": "A national library is the state’s principal repository for published heritage and scholarly reference. It acquires materials through legal deposit, builds catalogs and classification systems, and preserves rare and fragile collections. Reading rooms and bibliographic services support research across disciplines. The British Museum Reading Room became a nineteenth-century center for scholarship. The Library of Congress expanded in the industrial era, culminating in the Jefferson Building of 1897. The National Library of China began in 1909 and grew with modern cataloging and conservation programs. Contemporary national libraries digitize holdings, manage persistent identifiers, and coordinate standards with international partners.",
+    "category": "nationalWonderCategory:science",
+    "yields": [
+      {
+        "type": "yieldType:science",
+        "amount": 10,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/nationalWonderType/nationalLibrary.jpg",
+    "requires": [
+      "technologyType:universalSuffrage"
+    ],
+    "quote": {
+      "text": "A nation writes its soul on parchment and shelves it here.",
+      "source": "Victor Hugo, 1860",
+      "url": "/media/quotes/nationalWonderType/nationalLibrary.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:spaceProgram",
+    "name": "Space Program",
+    "concept": "conceptType:nationalWonder",
+    "description": "A space program is a government-led effort to develop rockets, satellites, and crewed flight for science, security, and economic aims. The Soviet launch of Sputnik in 1957 initiated global competition and collaboration. The United States achieved the Apollo Moon landings in 1969–1972 after Mercury and Gemini. Early human missions such as Vostok and Mercury proved orbital flight and reentry. Programs also built weather, communications, and navigation satellites. Over time agencies added international partnerships, reusable systems, and commercial procurement.",
+    "category": "nationalWonderCategory:science",
+    "image": "/media/images/nationalWonderType/spaceProgram.jpg",
+    "requires": [
+      "technologyType:spaceFlight"
+    ],
+    "quote": {
+      "text": "We choose to go to the moon—not because it is easy, but because it is hard.",
+      "source": "John F. Kennedy, 1962",
+      "url": "/media/quotes/nationalWonderType/spaceProgram.mp3"
+    },
+    "specials": [
+      "specialType:canBuildSatellites"
+    ]
+  },
+  {
+    "key": "nationalWonderType:largeLanguageModel",
+    "name": "Large Language Model",
+    "concept": "conceptType:nationalWonder",
+    "description": "A large language model is a neural network trained on large text corpora to predict tokens and generate coherent language. The 2017 Transformer architecture enabled scalable attention and parallel training. BERT in 2018 advanced bidirectional pretraining for understanding tasks. Autoregressive families such as GPT-3 and GPT-4 scaled parameters and data to achieve strong generation, reasoning, and coding assistance. Open research lines produced LLaMA and PaLM and broadened evaluation and safety methods. Training demands significant compute, energy, and data curation. Applications include search, drafting, tutoring, and software tooling. The field tracks scaling laws, alignment techniques, and deployment risks as capabilities expand.",
+    "category": "nationalWonderCategory:science",
+    "yields": [
+      {
+        "type": "yieldType:science",
+        "amount": 50,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/nationalWonderType/largeLanguageModel.jpg",
+    "requires": [
+      "technologyType:artificialIntelligence"
+    ],
+    "quote": {
+      "text": "It does not think as we do—it predicts what we might.",
+      "source": "AI researcher, ca. 2023",
+      "url": "/media/quotes/nationalWonderType/largeLanguageModel.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:foodProgram",
+    "name": "Food Program",
+    "concept": "conceptType:nationalWonder",
+    "description": "Twentieth-century food programs coordinated nutrition aid, fortification, and food security through state and multilateral agencies. Postwar school feeding, such as U.S. National School Lunch Program expansions after 1946, linked agricultural surpluses to child health. The United Nations created the World Food Programme in 1961 to deliver emergency relief and development logistics. Public health campaigns added vitamin fortification, deworming, and targeted supplementation to reduce deficiency diseases and stunting. Governments built grain reserves, subsidized staples, and refined ration systems during crises. Evaluation used metrics such as caloric availability, anthropometry, and mortality. Debates over targeting versus universal benefits shaped later conditional transfers and community nutrition interventions.",
+    "category": "nationalWonderCategory:growth",
+    "yields": [
+      {
+        "type": "yieldType:food",
+        "amount": 2,
+        "for": [
+          "conceptType:building"
+        ]
+      }
+    ],
+    "image": "/media/images/nationalWonderType/foodProgram.jpg",
+    "requires": [
+      "technologyType:antibiotics"
+    ],
+    "quote": {
+      "text": "There is no liberty for the hungry man.",
+      "source": "Franklin D. Roosevelt, 1933",
+      "url": "/media/quotes/nationalWonderType/foodProgram.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:geoglyph",
+    "name": "Geoglyph",
+    "concept": "conceptType:nationalWonder",
+    "description": "Ancient geoglyphs are large ground designs made by removing or arranging surface materials to create enduring figures and lines. The Nazca Lines in Peru, etched by scraping desert varnish, form animals, plants, and linear tracks visible from surrounding hills. The Uffington White Horse in Britain exposes chalk bedrock to outline an equine figure maintained by periodic scouring. In northern Chile, the Atacama Giant and related figures occupy slopes and pampas used by caravan routes. Construction relied on simple surveying, sightlines, and repeated maintenance rather than monumental masonry. Functions ranged from processional pathways and water rites to territorial and calendrical markers. Modern study applies aerial photography, lidar, optically stimulated luminescence, and microstratigraphy to date surfaces, reconstruct techniques, and map regional patterning.",
+    "category": "nationalWonderCategory:culture",
+    "yields": [
+      {
+        "type": "yieldType:culture",
+        "amount": 4
+      }
+    ],
+    "image": "/media/images/nationalWonderType/geoglyph.jpg",
+    "requires": [
+      "technologyType:tradition",
+      "goalType:firstCities"
+    ],
+    "quote": {
+      "text": "Only from above do the gods see what we have drawn.",
+      "source": "Nazca elder, ca. 500 CE",
+      "url": "/media/quotes/nationalWonderType/geoglyph.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:greatEpic",
+    "name": "Great Epic",
+    "concept": "conceptType:nationalWonder",
+    "description": "Great epics are long narrative poems that conserve myth, heroic deeds, and communal memory through formulaic verse and performance. In the Greek world, Homer's Iliad and Odyssey codified an oral tradition using dactylic hexameter, catalogues, and set scenes. Roman literature adapted that heritage in Virgil's Aeneid, linking Trojan migration to imperial destiny and offering a model for Augustan statecraft. In South Asia, classical Sanskrit epic recitations sustained extensive cycles with complex meter, framed storytelling, and didactic passages; court and temple milieus preserved performance and commentary. Epic composition moved between oral improvisation and written redaction, generating variant episodes and local continuations. Manuscripts, scholia, and later translations stabilized canons yet kept interpretive debates active. The genre shaped education, law, and political rhetoric, and inspired visual programs, from vase painting to imperial frescoes.",
+    "category": "nationalWonderCategory:culture",
+    "yields": [
+      {
+        "type": "yieldType:culture",
+        "amount": 6
+      }
+    ],
+    "image": "/media/images/nationalWonderType/greatEpic.jpg",
+    "requires": [
+      "technologyType:drama",
+      "goalType:wondersOfTheWorld"
+    ],
+    "quote": {
+      "text": "He who saw the deep, the foundation of the land, who knew the ways, was wise in all things.",
+      "source": "Tablet I, ca. 2100 BCE",
+      "url": "/media/quotes/nationalWonderType/greatEpic.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:codexManesse",
+    "name": "Codex Manesse",
+    "concept": "conceptType:nationalWonder",
+    "description": "The Codex Manesse is a lavish illuminated anthology of German Minnesang compiled in Zurich in the early fourteenth century, likely under the patronage of the Manesse family. It gathers lyrics by more than a hundred poets, each preceded by a heraldic portrait that situates the author within chivalric society. The manuscript standardizes dialect, melodies, and themes of courtly love, hunting, and fealty, offering a key witness to High German poetic language. Its miniatures document tournament culture, costume, and armorial bearings. Comparisons with chansonniers and the Nibelungenlied manuscript tradition reveal shared scribal practices and court networks. Rediscovery in the modern era shaped philology and musicology, guiding editions and performances of Minnesang. The codex's preservation history includes dispersal risks, later rebinding, and scholarly restorations that stabilized its foliation and iconography.",
+    "category": "nationalWonderCategory:culture",
+    "yields": [
+      {
+        "type": "yieldType:culture",
+        "amount": 8
+      }
+    ],
+    "image": "/media/images/nationalWonderType/codexManesse.jpg",
+    "requires": [
+      "technologyType:chivalry",
+      "goalType:tournaments"
+    ],
+    "quote": {
+      "text": "Love, like song, must be written and remembered.",
+      "source": "Manesse family motto, ca. 1300",
+      "url": "/media/quotes/nationalWonderType/codexManesse.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:nationalArtMuseum",
+    "name": "National Art Museum",
+    "concept": "conceptType:nationalWonder",
+    "description": "A national art museum emerged during the Enlightenment as a public institution charged with collecting, conserving, and exhibiting a canon of artworks for civic education. Revolutionary and reforming states opened royal holdings to citizens, most notably the Louvre in 1793 after the French monarchy's fall. The Hermitage's imperial collections, founded in 1764, expanded through acquisitions and later public access. In Italy, eighteenth-century Uffizi reforms created a managed gallery open to visitors and scholars. These museums professionalized curatorship, cataloging, and restoration, and developed chronological displays that narrated national schools. They organized salons and traveling exhibitions, built study rooms, and trained conservators. Their buildings, often neoclassical, anchored national cultural policy.",
+    "category": "nationalWonderCategory:culture",
+    "yields": [
+      {
+        "type": "yieldType:culture",
+        "amount": 12
+      }
+    ],
+    "image": "/media/images/nationalWonderType/nationalArtMuseum.jpg",
+    "requires": [
+      "technologyType:artHistory"
+    ],
+    "quote": {
+      "text": "The gallery is the soul of the nation framed in canvas and stone.",
+      "source": "John Ruskin, 1851",
+      "url": "/media/quotes/nationalWonderType/nationalArtMuseum.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:naturalHistoryMuseum",
+    "name": "Natural History Museum",
+    "concept": "conceptType:nationalWonder",
+    "description": "A natural history museum institutionalized the collection and study of biodiversity, geology, and paleontology during the industrial age. The Natural History Museum, London (1881), the American Museum of Natural History (1869), and Chicago's Field Museum (1894) organized global specimens for taxonomy, stratigraphy, and evolutionary research. Galleries combined dioramas, fossil halls, and mineral displays with laboratories, libraries, and expedition archives. Curators systematized classification, mounted large vertebrate skeletons, and developed public lectures and guidebooks. Colonial collecting networks and transatlantic exchanges supplied specimens and data, later recontextualized by repatriation and ethics debates. Education programs and traveling exhibits broadened access, while research divisions advanced systematics, biogeography, and conservation biology.",
+    "category": "nationalWonderCategory:culture",
+    "yields": [
+      {
+        "type": "yieldType:culture",
+        "amount": 15,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/nationalWonderType/naturalHistoryMuseum.jpg",
+    "requires": [
+      "technologyType:drilling"
+    ],
+    "quote": {
+      "text": "Let fossils teach what prophets never knew.",
+      "source": "O. C. Marsh, 1870",
+      "url": "/media/quotes/nationalWonderType/naturalHistoryMuseum.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:templeMount",
+    "name": "Temple Mount",
+    "concept": "conceptType:nationalWonder",
+    "description": "The Temple Mount is a walled hilltop in Jerusalem that served as the ritual center of ancient Israelite religion and remained a focal site for subsequent faiths. The First Temple, attributed to the reign of Solomon, housed the Ark narrative and a priestly cult focused on sacrifice and pilgrimage festivals. After Babylonian destruction, the Second Temple was rebuilt and later expanded on vast substructures under Herod, creating courts, porticoes, and monumental gates. Roman forces razed the sanctuary in 70 CE, leaving retaining walls preserved in later periods. The platform later hosted Islamic sanctuaries, including the Dome of the Rock and al-Aqsa Mosque, while nearby the Western Wall became a place of Jewish prayer. Archaeology documents drainage tunnels, paving, and ash layers, though excavation on the platform is restricted. Textual sources, from Josephus to rabbinic literature, guide reconstruction of rites, governance, and revenue. The site shaped imperial policy, pilgrimage, and urban form across millennia.",
+    "category": "nationalWonderCategory:faith",
+    "yields": [
+      {
+        "type": "yieldType:faith",
+        "amount": 6
+      }
+    ],
+    "image": "/media/images/nationalWonderType/templeMount.jpg",
+    "requires": [
+      "technologyType:organizedReligion",
+      "goalType:pantheonOfGods"
+    ],
+    "quote": {
+      "text": "This is the gate of heaven.",
+      "source": "Genesis 28:17",
+      "url": "/media/quotes/nationalWonderType/templeMount.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:royalPalace",
+    "name": "Royal Palace",
+    "concept": "conceptType:nationalWonder",
+    "description": "A medieval royal palace functioned as a fortified residence, administrative hub, and stage for ceremony and justice. The Aachen Palatine Chapel integrated a throne room and octagonal chapel that anchored Carolingian governance and liturgy. In Iberia, the Nasrid palaces of the Alhambra combined courts, waterworks, and inscriptions that ordered dynastic space. The Tower of London served as residence, treasury, and state prison within a concentric defensive complex. Palaces housed chancery offices, archives, and treasuries, and received embassies and fealty oaths. Architecture ranged from timber halls to masonry keeps with chapels and great chambers. Many courts were itinerant, yet palatial complexes fixed tribute collection and ritual calendars. Later transformations reoriented spaces to galleries and parade rooms.",
+    "category": "nationalWonderCategory:faith",
+    "yields": [
+      {
+        "type": "yieldType:faith",
+        "amount": 8
+      }
+    ],
+    "image": "/media/images/nationalWonderType/royalPalace.jpg",
+    "requires": [
+      "technologyType:buttress",
+      "goalType:mandateOfHeaven"
+    ],
+    "quote": {
+      "text": "This house is built not for man, but for a god among men.",
+      "source": "Court scribe, ca. 1400 BCE",
+      "url": "/media/quotes/nationalWonderType/royalPalace.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:nationalChurch",
+    "name": "National Church",
+    "concept": "conceptType:nationalWonder",
+    "description": "A national church in the twentieth century was a state-recognized body coordinating public worship, media outreach, and rites of passage within a defined jurisdiction. Vatican Radio, launched in 1931, broadcast liturgy and teaching with new communications technology. Lutheran state churches in Scandinavia managed parish registers, education, and welfare under established-church frameworks that later democratized. Orthodox national patriarchates navigated revolutions, occupation, and socialism while maintaining cathedrals, monastic networks, and calendrical authority. Concordats, constitutions, and disestablishment statutes set limits on taxation, property, and appointment rights. After mid-century, ecumenical councils, human rights debates, and mass media reshaped governance, catechesis, and public voice.",
+    "category": "nationalWonderCategory:faith",
+    "yields": [
+      {
+        "type": "yieldType:faith",
+        "amount": 15,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/nationalWonderType/nationalChurch.jpg",
+    "requires": [
+      "technologyType:radio"
+    ],
+    "quote": {
+      "text": "One faith, one throne, one people.",
+      "source": "Louis XIV, 1685",
+      "url": "/media/quotes/nationalWonderType/nationalChurch.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:nationalHealthService",
+    "name": "National Health Service",
+    "concept": "conceptType:nationalWonder",
+    "description": "A national health service delivers universal medical coverage funded by general taxation or public insurance, integrating hospitals, primary care, and public health. The United Kingdom created the NHS in 1948, establishing free-at-point-of-use treatment with salaried hospital consultants and contracted general practitioners. Nordic systems developed similar nationwide coverage with strong municipal roles. Canada's Medicare expanded nationally after provincial models, guaranteeing medically necessary services under federal standards. Governance evolved through regional authorities, performance targets, and cost-effectiveness assessment. Challenges included wait times, workforce planning, and aging populations. Preventive programs for vaccination, screening, and chronic disease management became central to outcomes.",
+    "category": "nationalWonderCategory:growth",
+    "yields": [
+      {
+        "type": "yieldType:health",
+        "amount": 20,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/nationalWonderType/nationalHealthService.jpg",
+    "requires": [
+      "technologyType:antibiotics"
+    ],
+    "quote": {
+      "text": "From cradle to grave, let no citizen fear illness.",
+      "source": "Aneurin Bevan, 1948",
+      "url": "/media/quotes/nationalWonderType/nationalHealthService.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:parliament",
+    "name": "Parliament",
+    "concept": "conceptType:nationalWonder",
+    "description": "Parliament is a national legislature that emerged from medieval assemblies of estates and towns. The Cortes of León in 1188 documented early consent to taxation and petitions. England’s Model Parliament of 1295 gathered clergy, nobles, and elected commons. Over time parliaments claimed authority to enact statutes, grant supplies, and scrutinize ministers. Conflicts over prerogative led to constitutional settlements in Britain and the growth of parliamentary sovereignty. In the nineteenth and twentieth centuries many states adopted elected chambers, party leadership, and committee systems. Modern parliaments legislate, approve budgets, ratify treaties, and investigate the executive.",
+    "category": "nationalWonderCategory:happiness",
+    "yields": [
+      {
+        "type": "yieldType:happiness",
+        "amount": 6,
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/nationalWonderType/parliament.jpg",
+    "requires": [
+      "technologyType:bureaucracy"
+    ],
+    "quote": {
+      "text": "Let every man have his say, and let the nation decide.",
+      "source": "William Pitt the Younger, ca. 1790",
+      "url": "/media/quotes/nationalWonderType/parliament.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:yellowstone",
+    "name": "Yellowstone",
+    "concept": "conceptType:nationalWonder",
+    "description": "Yellowstone National Park was created by the U.S. Congress in 1872 as the first large reserve set aside to safeguard geothermal wonders and wildlife. Reports from the Washburn and Hayden expeditions described geysers, hot springs, and dramatic canyons, prompting a preservation statute unprecedented in scope. Administration began under the Interior Department, with the U.S. Army enforcing rules from 1886 to 1918 against poaching and vandalism. The National Park Service took over in 1916 and promoted regulated tourism, roads, and interpretation. Early conservationists worked to restore bison herds and to manage predators, policies later revised toward ecological balance. The 1988 fires spurred advances in fire science and management doctrine. Yellowstone sits on lands long used by Indigenous peoples, including Crow, Shoshone, and Bannock communities, whose access was curtailed after designation. The park became a global model for protected areas and for scientific study of geothermal systems, megafauna dynamics, and reintroduction programs such as gray wolf recovery.",
+    "category": "nationalWonderCategory:happiness",
+    "yields": [
+      {
+        "type": "yieldType:happiness",
+        "amount": 2,
+        "for": [
+          "conceptType:building"
+        ]
+      }
+    ],
+    "image": "/media/images/nationalWonderType/yellowstone.jpg",
+    "requires": [
+      "technologyType:drilling"
+    ],
+    "quote": {
+      "text": "This land belongs to no man, yet to all.",
+      "source": "John Muir, 1901",
+      "url": "/media/quotes/nationalWonderType/yellowstone.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:highCourt",
+    "name": "High Court",
+    "concept": "conceptType:nationalWonder",
+    "description": "The High Court is the apex judicial authority entrusted with final appeals and uniform interpretation of law. Such courts gained prominence in the age of written constitutions and codification. The United States Supreme Court, established in 1789, asserted judicial review and built a national body of precedent. France’s Court of Cassation, created in 1790, unified legal practice by quashing improper judgments and ensuring consistent application of codes. High courts hear constitutional disputes, major civil and criminal cases, and administrative challenges. Their decisions shape rights, federal relations, and governance. Many systems require reasoned opinions, published reports, and collegial deliberation.",
+    "category": "nationalWonderCategory:order",
+    "yields": [
+      {
+        "type": "yieldType:order",
+        "amount": 6,
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/nationalWonderType/highCourt.jpg",
+    "requires": [
+      "technologyType:bureaucracy",
+      "goalType:urbanSociety"
+    ],
+    "quote": {
+      "text": "Justice must not only be done, but must be seen to be done.",
+      "source": "Lord Hewart, 1924",
+      "url": "/media/quotes/nationalWonderType/highCourt.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:statePolice",
+    "name": "State Police",
+    "concept": "conceptType:nationalWonder",
+    "description": "State police are centralized law enforcement bodies created to patrol wide territories, standardize training, and backstop local authorities. Pennsylvania formed a modern model in 1905 to combat mine violence and rural crime. Italy’s Carabinieri evolved through twentieth‑century reforms into a national gendarmerie with military status and civil security roles. The Soviet Militsiya structured policing along centralized lines within a single-party state. State police units typically manage highways, forensics, riot control, and specialized investigations. Radio networks, motorized patrols, and later databases enabled rapid response. Coordination with prosecutors and emergency services anchors their public safety mission.",
+    "category": "nationalWonderCategory:order",
+    "yields": [
+      {
+        "type": "yieldType:order",
+        "amount": 2,
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/nationalWonderType/statePolice.jpg",
+    "requires": [
+      "technologyType:civilDefense"
+    ],
+    "quote": {
+      "text": "Law must reach where the king’s eyes do not.",
+      "source": "German official, ca. 1700",
+      "url": "/media/quotes/nationalWonderType/statePolice.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:tournamentGrounds",
+    "name": "Tournament Grounds",
+    "concept": "conceptType:nationalWonder",
+    "description": "Tournament grounds were purpose-built spaces for jousts, mêlées, and ceremonial displays in medieval Europe. A tiltyard with a central barrier allowed mounted charges, while enclosed lists kept combatants and horses within bounds. Timber grandstands and pavilions accommodated rulers, heralds, and judges. Armour inspections, oaths, and heraldic announcements structured proceedings. Smithfield in London hosted famed jousts, as did circuits across France and the German principalities. Prizes, ransoms, and patronage attracted elite competitors and craftsmen. Urban authorities regulated safety and traffic, while rulers used events for musters and diplomacy. As firearms changed warfare, tournaments shifted toward pageantry and court festivals. Purpose-built tiltyards at royal palaces kept the ritual alive into the sixteenth century.",
+    "category": "nationalWonderCategory:influence",
+    "image": "/media/images/nationalWonderType/tournamentGrounds.jpg",
+    "requires": [
+      "technologyType:chivalry"
+    ],
+    "quote": {
+      "text": "A true knight is not made in court, but on the field of honor.",
+      "source": "French herald, ca. 1300",
+      "url": "/media/quotes/nationalWonderType/tournamentGrounds.mp3"
+    },
+    "specials": [
+      "specialType:canHoldTournaments"
+    ]
+  },
+  {
+    "key": "nationalWonderType:diplomacyInstitute",
+    "name": "Diplomacy Institute",
+    "concept": "conceptType:nationalWonder",
+    "description": "A diplomacy institute formalizes the training of envoys in language, law, and negotiation. Italian city-states pioneered permanent embassies and professional chancelleries in the fifteenth century. Venice cultivated long-term resident ambassadors, dispatch systems, and detailed relazioni. The Medici chancery in Florence trained secretaries in rhetoric, cryptography, account keeping, and ceremonial protocol. Such centers taught legal theory, geography, and court practice to prepare officials for complex bargaining among princes and republics. Graduates compiled dispatches, managed archives, and maintained networks with merchants and scholars. The model spread to princely and national foreign ministries, which later built academies and institutes to standardize methods, teach languages from Ottoman Turkish to Spanish, and codify etiquette and precedence.",
+    "category": "nationalWonderCategory:influence",
+    "yields": [
+      {
+        "type": "yieldType:influence",
+        "amount": 10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ],
+    "image": "/media/images/nationalWonderType/diplomacyInstitute.jpg",
+    "requires": [
+      "technologyType:diplomacy"
+    ],
+    "quote": {
+      "text": "A diplomat is an honest man sent to lie abroad for the good of his country.",
+      "source": "Sir Henry Wotton, 1604",
+      "url": "/media/quotes/nationalWonderType/diplomacyInstitute.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:intelligenceAgency",
+    "name": "Intelligence Agency",
+    "concept": "conceptType:nationalWonder",
+    "description": "An intelligence agency gathers, analyzes, and acts on information relevant to national security and foreign policy. In 1909 Britain formed the Secret Intelligence Service (MI6) to direct overseas espionage. The United States created the wartime Office of Strategic Services in 1942, followed by the Central Intelligence Agency in 1947 with analytic and covert action mandates. Soviet organs from the Cheka to the KGB integrated domestic security, foreign intelligence, and active measures. Agencies employ human sources, signals interception, imagery, and open-source research. They run clandestine networks, counterintelligence, and influence operations. Oversight varies, ranging from parliamentary committees to tight executive control.",
+    "category": "nationalWonderCategory:influence",
+    "yields": [
+      {
+        "type": "yieldType:influenceCost",
+        "amount": -25,
+        "method": "percent"
+      }
+    ],
+    "image": "/media/images/nationalWonderType/intelligenceAgency.jpg",
+    "requires": [
+      "technologyType:civilDefense"
+    ],
+    "quote": {
+      "text": "My name is Bond. James Bond.",
+      "source": "Ian Fleming, 1953",
+      "url": "/media/quotes/nationalWonderType/intelligenceAgency.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:hybridWarfareCenter",
+    "name": "Hybrid Warfare Center",
+    "concept": "conceptType:nationalWonder",
+    "description": "A hybrid warfare center concentrates expertise on blending cyber operations, information campaigns, electronic warfare, and conventional force design. Such facilities test doctrine, run simulations, and coordinate civil‑military responses to gray‑zone pressure. NATO founded the Strategic Communications Centre of Excellence in 2014 to study disinformation, audiences, and military messaging. National cyber commands built ranges for red‑teaming, malware analysis, and defensive exercises. Analysts drew lessons from Russia’s seizure of Crimea, which combined special forces, covert logistics, deniable proxies, and media manipulation. Centers publish handbooks, train officers and civilian officials, and connect academia with operational units. Their work feeds capability development, interagency planning, and alliance interoperability.",
+    "category": "nationalWonderCategory:influence",
+    "yields": [
+      {
+        "type": "yieldType:influenceCost",
+        "amount": 25,
+        "method": "percent",
+        "for": [
+          "specialType:againstYourIncident"
+        ]
+      }
+    ],
+    "image": "/media/images/nationalWonderType/hybridWarfareCenter.jpg",
+    "requires": [
+      "technologyType:virtualReality"
+    ],
+    "quote": {
+      "text": "A battlefield with no lines, no uniforms, no silence.",
+      "source": "Ukrainian analyst, ca. 2022",
+      "url": "/media/quotes/nationalWonderType/hybridWarfareCenter.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:campusMartius",
+    "name": "Campus Martius",
+    "concept": "conceptType:nationalWonder",
+    "description": "The Campus Martius was the open plain north of Rome’s sacred boundary where citizens mustered for war and assembled for civic rites. In the Republic, the comitia centuriata met there to vote on magistrates and laws under arms. Legions trained, consular armies mustered, and triumphal processions formed before entering the city. The field hosted horse exercises, athletic games, and public census rituals overseen by censors. From the late Republic and under Augustus the area filled with monuments that reframed its martial past. The Mausoleum of Augustus, the Ara Pacis, and later the Pantheon and baths remade the landscape with marble, gardens, and porticoes. Aqueducts and theaters made it a populous quarter while remaining a ceremonial mustering ground. The site linked military service, civic identity, and imperial ceremony in Roman political culture.",
+    "category": "nationalWonderCategory:military",
+    "yields": [
+      {
+        "type": "yieldType:production",
+        "amount": 6,
+        "for": [
+          "domainType:land"
+        ]
+      }
+    ],
+    "image": "/media/images/nationalWonderType/campusMartius.jpg",
+    "requires": [
+      "technologyType:militaryTraining",
+      "goalType:veniVidiVici"
+    ],
+    "quote": {
+      "text": "The Field of Mars, where Rome trains its sons for war.",
+      "source": "Livy, 25 BCE",
+      "url": "/media/quotes/nationalWonderType/campusMartius.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:militaryAcademy",
+    "name": "Military Academy",
+    "concept": "conceptType:nationalWonder",
+    "description": "A military academy provides systematic officer education in mathematics, engineering, fortification, and leadership. Enlightenment rulers founded schools to rationalize command and integrate scientific advances. Austria’s Theresian Military Academy opened in 1751 to train a professional, merit-based corps for the Habsburg Monarchy. In Paris the École Militaire, established in the 1750s, combined drill with courses in geometry, artillery, and topography. Cadets learned staff procedures, logistics, surveying, and the etiquette of service. Standardized curricula and examinations fostered a common doctrine across units and branches. The model spread globally in the nineteenth century and anchored modernization of armies that relied on trained engineers, gunners, and staff officers.",
+    "category": "nationalWonderCategory:military",
+    "yields": [
+      {
+        "type": "yieldType:strength",
+        "amount": 1,
+        "for": [
+          "domainType:land"
+        ]
+      }
+    ],
+    "image": "/media/images/nationalWonderType/militaryAcademy.jpg",
+    "requires": [
+      "technologyType:militaryTradition"
+    ],
+    "quote": {
+      "text": "The sword must be guided by the mind, not just the arm.",
+      "source": "Carl von Clausewitz, 1812",
+      "url": "/media/quotes/nationalWonderType/militaryAcademy.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:generalStaff",
+    "name": "General Staff",
+    "concept": "conceptType:nationalWonder",
+    "description": "A general staff is a professional headquarters that plans operations, logistics, and strategy for a nation’s armed forces. It matured in the late 19th and early 20th centuries as armies expanded and warfare grew complex. Staff officers developed campaign plans, coordinated mobilization and supply, produced intelligence estimates, and oversaw training and doctrine. The German General Staff influenced two world wars, refining war-gaming and railway timetables for rapid deployment. The Red Army General Staff guided vast operational campaigns on the Eastern Front and managed postwar modernization. Many states created staff colleges to standardize methods and cultivate a cadre of planners. The model shaped joint planning systems and fostered doctrine-driven, bureaucratic control of modern war.",
+    "category": "nationalWonderCategory:military",
+    "yields": [
+      {
+        "type": "yieldType:strength",
+        "amount": 1,
+        "for": [
+          "domainType:land"
+        ]
+      }
+    ],
+    "image": "/media/images/nationalWonderType/generalStaff.jpg",
+    "requires": [
+      "technologyType:repeatingRifles",
+      "goalType:worldWar"
+    ],
+    "quote": {
+      "text": "Plans are nothing, but planning is everything.",
+      "source": "Dwight D. Eisenhower, 1957",
+      "url": "/media/quotes/nationalWonderType/generalStaff.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:militaryPracticeRange",
+    "name": "Military Practice Range",
+    "concept": "conceptType:nationalWonder",
+    "description": "A military practice range is a controlled training area designed for live-fire marksmanship, maneuver drills, and tactical scenarios. Modern complexes combine ballistic ranges, shoot houses, urban operations sites, and instrumented fields. Safety arcs, impact berms, and environmental controls manage risk and contamination. Digital systems record accuracy and movement, while simulators such as Engagement Skills Trainers allow cost-effective repetition. Units rehearse night operations, sniper engagements, breaching, and combined arms coordination. Networking with unmanned systems, thermal sights, and laser-based force-on-force tools reflects current battlefield technology. Contemporary armies integrate ranges into larger training centers to certify readiness and validate tactics. These facilities underpin professional standards for small arms proficiency and unit cohesion.",
+    "category": "nationalWonderCategory:military",
+    "yields": [
+      {
+        "type": "yieldType:strength",
+        "amount": 1,
+        "for": [
+          "domainType:land"
+        ]
+      }
+    ],
+    "image": "/media/images/nationalWonderType/militaryPracticeRange.jpg",
+    "requires": [
+      "technologyType:rifleScopes"
+    ],
+    "quote": {
+      "text": "Train as you fight, or fight as you die.",
+      "source": "U.S. Army Field Manual 25-100, 1988",
+      "url": "/media/quotes/nationalWonderType/militaryPracticeRange.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:navalAcademy",
+    "name": "Naval Academy",
+    "concept": "conceptType:nationalWonder",
+    "description": "A naval academy is an institution that educates naval officers in seamanship, navigation, engineering, and naval warfare. The model took shape in the industrial era as steam power, iron hulls, and advanced gunnery demanded technical training. Cadets study celestial and electronic navigation, naval architecture, marine propulsion, weapons systems, and maritime law. Practical instruction occurs aboard training vessels and in engineering labs and simulators. The U.S. Naval Academy at Annapolis (1845), Britannia Royal Naval College at Dartmouth (1863), and the Imperial Japanese Naval Academy at Etajima (1869) produced officers for global fleets. Graduates led transition from sail to steam, managed complex ship systems, and commanded fleets in colonial, world, and Cold War conflicts.",
+    "category": "nationalWonderCategory:water",
+    "yields": [
+      {
+        "type": "yieldType:strength",
+        "amount": 1,
+        "for": [
+          "domainType:water"
+        ]
+      }
+    ],
+    "image": "/media/images/nationalWonderType/navalAcademy.jpg",
+    "requires": [
+      "technologyType:militaryTradition",
+      "terrainType:coast"
+    ],
+    "quote": {
+      "text": "In these halls, the Empire’s future admirals are forged not with swords, but with sextants and calculus.",
+      "source": "Captain Thomas Hurd, 1810",
+      "url": "/media/quotes/nationalWonderType/navalAcademy.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:greatMarket",
+    "name": "Great Market",
+    "concept": "conceptType:nationalWonder",
+    "description": "A Great Market is a centralized urban marketplace that concentrates exchange, crafts, and distribution. In classical cities it organized stalls, warehouses, and porticoes for regulated trade. The Athenian Agora hosted merchants, civic notices, and coin-based transactions under standardized weights. Roman Forum markets and macella combined retail, wholesale, and banking within magistrate oversight. Bazaars along Silk Road nodes linked regional producers to distant consumers, spreading goods and commercial norms. Guilds, money changers, and tax collectors operated amid intense foot traffic. The Great Market drove urban revenue and logistics, channeled imports to hinterlands, and supported craft specialization. Its spatial order and legal frameworks stabilized prices and credit in premodern economies.",
+    "category": "nationalWonderCategory:trade",
+    "yields": [
+      {
+        "type": "yieldType:gold",
+        "amount": 2,
+        "for": [
+          "conceptType:tradeRoute"
+        ]
+      }
+    ],
+    "image": "/media/images/nationalWonderType/greatMarket.jpg",
+    "requires": [
+      "technologyType:currency",
+      "goalType:tradeNetwork"
+    ],
+    "quote": {
+      "text": "Here, every tongue can be heard, every spice smelled, every coin weighed.",
+      "source": "Ibn Battuta, 1355",
+      "url": "/media/quotes/nationalWonderType/greatMarket.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:eastIndiaCompany",
+    "name": "East India Company",
+    "concept": "conceptType:nationalWonder",
+    "description": "East India companies were chartered joint-stock corporations that managed long-distance trade and colonial ventures. The English East India Company (1600) and the Dutch VOC (1602) secured monopolies over Asian commerce in spices, textiles, and tea. They operated fortified factories, maintained private armies, and negotiated treaties with local rulers. The VOC ran Batavia as a colonial hub and dominated Indonesian spice islands before declining in 1799. The English company expanded from trade to territorial rule in Bengal, built revenue systems, and fielded sepoy forces. After the 1857 revolt, the British Crown ended Company rule in India and dissolved the firm in 1874. These corporations advanced marine insurance, standardized accounting, and stock exchange practices while reshaping global trade routes and imperial governance.",
+    "category": "nationalWonderCategory:trade",
+    "yields": [
+      {
+        "type": "yieldType:tradeSlot",
+        "amount": 8
+      }
+    ],
+    "image": "/media/images/nationalWonderType/eastIndiaCompany.jpg",
+    "requires": [
+      "technologyType:colonialism",
+      "terrainType:coast"
+    ],
+    "quote": {
+      "text": "A corporation with the power of a kingdom.",
+      "source": "Edmund Burke, 1773",
+      "url": "/media/quotes/nationalWonderType/eastIndiaCompany.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:tradeDelegation",
+    "name": "Trade Delegation",
+    "concept": "conceptType:nationalWonder",
+    "description": "A trade delegation is an official mission sent to negotiate commercial agreements and promote national merchants abroad. In the Enlightenment era, states used delegations to fix tariffs, navigation rights, and consular protections under mercantilist policies. Envoys worked alongside resident ambassadors and consuls to secure market access and legal privileges. The Methuen Treaty of 1703 linked English woolens and Portuguese wine through reciprocal duties. European delegations concluded capitulations with the Ottoman Empire and negotiated port facilities worldwide. Over time, commercial attachés and chambers of commerce professionalized these efforts. Trade delegations laid the groundwork for modern bilateral treaties, most-favored-nation clauses, and multilateral commercial regimes.",
+    "category": "nationalWonderCategory:trade",
+    "yields": [
+      {
+        "type": "yieldType:tradeRange",
+        "amount": 25,
+        "method": "percent",
+        "for": [
+          "specialType:allCities"
+        ]
+      }
+    ],
+    "image": "/media/images/nationalWonderType/tradeDelegation.jpg",
+    "requires": [
+      "technologyType:economics"
+    ],
+    "quote": {
+      "text": "A handshake can be worth a thousand treaties.",
+      "source": "British envoy, ca. 1870",
+      "url": "/media/quotes/nationalWonderType/tradeDelegation.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:marineInstitute",
+    "name": "Marine Institute",
+    "concept": "conceptType:nationalWonder",
+    "description": "A marine institute is a research center focused on oceanography, fisheries science, and marine engineering. It operates research vessels, coastal laboratories, and instrument networks to study physical, chemical, and biological processes at sea. Scripps Institution of Oceanography (1903) and Woods Hole Oceanographic Institution (1930) pioneered deep-ocean exploration, sonar mapping, and submersible development. Their work advanced knowledge of plate tectonics, currents, and marine ecosystems. Institutes also support fisheries management and conservation policy through stock assessments and habitat studies. During wartime they contributed to anti-submarine warfare and acoustics. Today they integrate satellite data, autonomous platforms, and climate models to assess ocean warming, sea-level rise, and carbon cycles.",
+    "category": "nationalWonderCategory:water",
+    "yields": [
+      {
+        "type": "yieldType:food",
+        "amount": 20,
+        "method": "percent",
+        "for": [
+          "domainType:water"
+        ]
+      }
+    ],
+    "image": "/media/images/nationalWonderType/marineInstitute.jpg",
+    "requires": [
+      "technologyType:hydrodynamics",
+      "terrainType:coast"
+    ],
+    "quote": {
+      "text": "The sea is our last frontier—and our oldest.",
+      "source": "Jacques Cousteau, ca. 1950",
+      "url": "/media/quotes/nationalWonderType/marineInstitute.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:carcassonne",
+    "name": "Carcassonne",
+    "concept": "conceptType:nationalWonder",
+    "description": "Carcassonne is a fortified medieval city in Languedoc, France, noted for its concentric double walls, barbicans, and towers. The site guarded routes between the Atlantic and the Mediterranean and controlled the Aude valley. The citadel, or Cité, evolved from late Roman ramparts and expanded through the 12th to 14th centuries. It figured in the Albigensian Crusade and regional power struggles, serving as a royal fortress and customs post. Decline followed shifts in warfare and trade, but 19th-century restoration by Eugène Viollet-le-Duc stabilized the ensemble. The rebuilt crenellations and slate roofs remain debated yet preserved the fabric. Today Carcassonne is a UNESCO World Heritage site and a key case in medieval military architecture and conservation history.",
+    "category": "nationalWonderCategory:military",
+    "yields": [
+      {
+        "type": "yieldType:defense",
+        "amount": 12,
+        "for": [
+          "buildingCategory:defense"
+        ]
+      }
+    ],
+    "image": "/media/images/nationalWonderType/carcassonne.jpg",
+    "requires": [
+      "technologyType:castles",
+      "goalType:feudalLords"
+    ],
+    "quote": {
+      "text": "A citadel so strong, even time fears it.",
+      "source": "Occitan saying",
+      "url": "/media/quotes/nationalWonderType/carcassonne.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:voyageOfMagellan",
+    "name": "Voyage of Magellan",
+    "concept": "conceptType:nationalWonder",
+    "description": "The Magellan–Elcano expedition (1519–1522) achieved the first circumnavigation of the Earth. Commissioned by Spain to reach the Spice Islands by sailing west, the fleet found the strait at South America’s tip and crossed the Pacific. The passage, later named the Strait of Magellan, opened a viable but hazardous route. After famine and scurvy, the ships reached the Philippines, where Ferdinand Magellan was killed at Mactan in 1521. Juan Sebastián Elcano assumed command and returned via the Indian Ocean, bringing the ship Victoria and a handful of survivors to Spain. The voyage quantified global distances, validated oceanic connectivity, and proved westward access to Asia. It reshaped cartography, navigation practice, and imperial strategy.",
+    "category": "nationalWonderCategory:water",
+    "yields": [
+      {
+        "type": "yieldType:moves",
+        "amount": 1,
+        "for": [
+          "domainType:water"
+        ]
+      }
+    ],
+    "image": "/media/images/nationalWonderType/voyageOfMagellan.jpg",
+    "requires": [
+      "technologyType:carvelHulls",
+      "terrainType:coast",
+      "goalType:oceanVoyages"
+    ],
+    "quote": {
+      "text": "I am going where no map dares go.",
+      "source": "Ferdinand Magellan, 1519",
+      "url": "/media/quotes/nationalWonderType/voyageOfMagellan.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:manhattanProject",
+    "name": "Manhattan Project",
+    "concept": "conceptType:nationalWonder",
+    "description": "he Manhattan Project was the secret U.S. military research initiative that developed the first nuclear weapons during World War II. Motivated by the fear that Nazi Germany might develop atomic bombs first, the project brought together top scientists, including J. Robert Oppenheimer and Enrico Fermi, at various research sites, most notably Los Alamos. The project culminated in the successful Trinity test in July 1945, which confirmed the viability of nuclear explosions. The bombings of Hiroshima and Nagasaki followed soon after, leading to Japan’s surrender and the end of the war. The project marked a pivotal moment in scientific history, changing warfare and geopolitics, while raising ethical questions about nuclear power and its consequences.",
+    "category": "nationalWonderCategory:wMD",
+    "image": "/media/images/nationalWonderType/manhattanProject.jpg",
+    "requires": [
+      "technologyType:fission"
+    ],
+    "quote": {
+      "text": "Now I am become Death, the destroyer of worlds.",
+      "source": "J. Robert Oppenheimer, 1945",
+      "url": "/media/quotes/nationalWonderType/manhattanProject.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:operationIvy",
+    "name": "Operation Ivy",
+    "concept": "conceptType:nationalWonder",
+    "description": "Operation Ivy (1952) was the first successful U.S. test of a thermonuclear bomb, marking a significant leap from atomic to hydrogen weapons. Conducted on the Pacific island of Elugelab in the Eniwetok Atoll, Ivy’s two tests, 'Ivy Mike' and 'Ivy King,' were pivotal in demonstrating the destructive potential of fusion bombs. The 'Mike' test, a dry fuel hydrogen bomb, unleashed unprecedented power, producing an explosion 500 times more powerful than the atomic bomb dropped on Hiroshima. This test confirmed the viability of thermonuclear weapons and spurred the arms race during the Cold War, accelerating the development of nuclear arsenals worldwide.",
+    "category": "nationalWonderCategory:wMD",
+    "image": "/media/images/nationalWonderType/operationIvy.jpg",
+    "requires": [
+      "technologyType:thermonuclearDevice"
+    ],
+    "quote": {
+      "text": "We created a sun on Earth — and watched it burn.",
+      "source": "Eyewitness, 1952",
+      "url": "/media/quotes/nationalWonderType/operationIvy.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:tsarBomba",
+    "name": "Tsar Bomba",
+    "concept": "conceptType:nationalWonder",
+    "description": "Tsar Bomba (1961) was the largest and most powerful nuclear weapon ever detonated, developed by the Soviet Union during the Cold War. Tested over the Novaya Zemlya archipelago in the Arctic, the bomb had an estimated yield of 50 megatons of TNT, over 3,000 times more powerful than the Hiroshima bomb. The explosion created a mushroom cloud that reached 40 miles into the stratosphere, and shockwaves circled the Earth three times. Although the bomb was a demonstration of Soviet nuclear capability, it was impractical for military use due to its immense size. Tsar Bomba remains a symbol of the extreme destructive potential of nuclear weapons, highlighting the terrifying scale of the arms race during the Cold War.",
+    "category": "nationalWonderCategory:wMD",
+    "image": "/media/images/nationalWonderType/tsarBomba.jpg",
+    "requires": [
+      "technologyType:thermonuclearDevice"
+    ],
+    "quote": {
+      "text": "This is not a bomb. It is a device to intimidate.",
+      "source": "Nikita Khrushchev, 1961",
+      "url": "/media/quotes/nationalWonderType/tsarBomba.mp3"
+    }
+  },
+  {
+    "key": "nationalWonderType:fusionPowerPlant",
+    "name": "Fusion Power Plant",
+    "concept": "conceptType:nationalWonder",
+    "description": "A fusion plant is a power station designed to produce electricity from controlled nuclear fusion. Most designs use deuterium–tritium fuel heated to plasma conditions and confined in magnetic devices such as tokamaks or stellarators. High fields and advanced materials manage extreme heat loads and neutron flux. Key challenges include sustained net energy gain, tritium breeding, and component durability. Experimental programs like JET demonstrated significant fusion yields, while ITER aims to reach long-pulse power amplification. DEMO concepts and national pilot plants plan grid delivery once materials and breeding blankets mature. Private ventures pursue compact approaches with high-temperature superconductors and novel magnets. If realized, fusion would provide large-scale, low-carbon baseload power with minimal long-lived waste.",
+    "category": "nationalWonderCategory:production",
+    "image": "/media/images/nationalWonderType/fusionPowerPlant.jpg",
+    "requires": [
+      "technologyType:nuclearFusion"
+    ],
+    "gains": [
+      "resourceType:electricity"
+    ],
+    "quote": {
+      "text": "It provides an inexhaustible supply of energy, without pollution or global warming.",
+      "source": "Stephen Hawking, 2010",
+      "url": "/media/quotes/nationalWonderType/fusionPowerPlant.mp3"
+    }
+  }
+]

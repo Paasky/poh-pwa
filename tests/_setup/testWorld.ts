@@ -21,7 +21,7 @@ export function createTestWorld() {
   const cityKey = "city:1" as GameKey;
 
   const objects: any[] = [
-    // Player & Culture
+    // Actor & Culture
     {
       key: playerKey,
       name: "Test Player",

@@ -1,7 +1,7 @@
 // NEW FUNCTIONS MUST BE TESTED BY math.test.ts
 
 import { Coords, getCoordsFromTileKey } from "@/helpers/mapTools";
-import { type EngineCoords } from "@/Player/Human/Terrain/_terrainMeshTypes";
+import { type EngineCoords } from "@/Actor/Human/Terrain/_terrainMeshTypes";
 import { GameKey } from "@/Common/Models/_GameModel";
 import { clamp } from "@/helpers/basicMath";
 

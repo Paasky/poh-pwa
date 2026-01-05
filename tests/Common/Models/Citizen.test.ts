@@ -132,7 +132,7 @@ describe("Citizen", () => {
     useDataBucket().setObject(citizenCultureMissing);
     expectRelationToThrowMissing(citizenCultureMissing, "culture", "culture:99");
 
-    // Player missing
+    // Actor missing
     const citizenPlayerMissing = new Citizen(
       citizenKey,
       "city:1",

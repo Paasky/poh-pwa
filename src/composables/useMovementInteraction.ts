@@ -5,9 +5,9 @@ import { MovementManager } from "@/Simulation/Movement/MovementManager";
 import { UnitMovement } from "@/Simulation/Movement/UnitMovement";
 import { Pathfinder } from "@/Simulation/Movement/Pathfinder";
 import { Tile } from "@/Common/Models/Tile";
-import { EngineAlpha, EngineLayers, EnginePathStyles } from "@/Player/Human/EngineStyles";
+import { EngineAlpha, EngineLayers, EnginePathStyles } from "@/Actor/Human/EngineStyles";
 import { Unit } from "@/Common/Models/Unit";
-import { PohEngine } from "@/Player/Human/PohEngine";
+import { PohEngine } from "@/Actor/Human/PohEngine";
 
 /**
  * useMovementInteraction is an orchestrator that bridges player intent

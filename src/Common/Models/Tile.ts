@@ -128,7 +128,7 @@ export class Tile extends GameObject {
   // My Types (not inherited)
   get myTypes(): Set<TypeObject> {
     return this.computed(
-      "_myTypes",
+      "myTypes",
       () => {
         const types = new Set<TypeObject>([
           this.concept,
@@ -166,7 +166,7 @@ export class Tile extends GameObject {
   // Types a Citizen inherits from me
   get typesForCitizen(): Set<TypeObject> {
     return this.computed(
-      "_typesForCitizen",
+      "typesForCitizen",
       () => {
         const types = new Set<TypeObject>();
         if (this.naturalWonder) types.add(this.naturalWonder);
@@ -180,13 +180,13 @@ export class Tile extends GameObject {
   // My Yield output
   get yields(): Yields {
     return this.computed(
-      "_yields",
+      "yields",
       () => {
         const yieldsForMe = (yields: Yields): Yield[] => {
           return yields.only(tileYieldTypeKeys, this.myTypes).all();
         };
 
-        // Tile Yields are from my Types + Construction + Player Mods
+        // Tile Yields are from my Types + Construction + Actor Mods
         const yields = new Yields();
         this.myTypes.forEach((type) => yields.add(...yieldsForMe(type.yields)));
         if (this.construction) yields.add(...yieldsForMe(this.construction.yields));

@@ -29,7 +29,9 @@ export class Agenda extends GameObject {
   /*
    * Relations
    */
-  declare player: Player;
+  get player(): Player {
+    return this.hasOne<Player>("playerKey");
+  }
 
   /*
    * Computed
@@ -38,7 +40,7 @@ export class Agenda extends GameObject {
   // My Yield output
   get yields(): Yields {
     return this.computed(
-      "_yields",
+      "yields",
       () => {
         const yieldsForMe = (yields: Yields): Yield[] => {
           return yields.only(playerYieldTypeKeys, new Set<TypeObject>([this.concept])).all();
@@ -50,7 +52,7 @@ export class Agenda extends GameObject {
           0,
         );
 
-        // Agenda Yields are 30% of Player Influence (clamped 10-500) + Player Mods
+        // Agenda Yields are 30% of Actor Influence (clamped 10-500) + Actor Mods
         const yields = new Yields([
           {
             type: "yieldType:influenceCost",
@@ -66,7 +68,7 @@ export class Agenda extends GameObject {
         // Flatten Yields to apply modifiers
         return yields.flatten();
       },
-      ["playerKey"],
+      { relations: [{ relName: "player", relProps: ["cities"] }] },
     );
   }
 

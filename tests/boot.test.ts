@@ -214,10 +214,10 @@ function verifySharedInvariants(app: any, expectedWorld: any, expectedObjects: a
   const expectedPlayerCount = expectedObjects.filter((o) => o.class === "player").length;
   expect(players.size).toBe(expectedPlayerCount);
 
-  // 4. Player & Culture Integrity
+  // 4. Actor & Culture Integrity
   const currentPlayer = bucket.getObject<Player>(bucket.world.currentPlayerKey);
   expect(currentPlayer).toBeDefined();
-  expect(currentPlayer.name).toBe("Test Player");
+  expect(currentPlayer.name).toBe("Test Actor");
 
   const culture = bucket.getObject<Culture>(currentPlayer.cultureKey);
   expect(culture).toBeDefined();

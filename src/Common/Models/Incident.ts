@@ -1,6 +1,5 @@
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import type { Player } from "@/Common/Models/Player";
-import { hasOne } from "@/Common/Models/_Relations";
 import { playerYieldTypeKeys, Yield, Yields } from "@/Common/Objects/Yields";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 
@@ -10,8 +9,6 @@ export class Incident extends GameObject {
     public playerKey: GameKey,
   ) {
     super(key);
-
-    hasOne<Player>(this, "playerKey");
   }
 
   static attrsConf: GameObjAttr[] = [
@@ -26,7 +23,9 @@ export class Incident extends GameObject {
   /*
    * Relations
    */
-  declare player: Player;
+  get player(): Player {
+    return this.hasOne<Player>("playerKey");
+  }
 
   /*
    * Computed
@@ -34,18 +33,22 @@ export class Incident extends GameObject {
 
   // My Yield output
   get yields(): Yields {
-    return this.computed("_yields", () => {
-      const yieldsForMe = (yields: Yields): Yield[] => {
-        return yields.only(playerYieldTypeKeys, new Set<TypeObject>([this.concept])).all();
-      };
+    return this.computed(
+      "yields",
+      () => {
+        const yieldsForMe = (yields: Yields): Yield[] => {
+          return yields.only(playerYieldTypeKeys, new Set<TypeObject>([this.concept])).all();
+        };
 
-      // Incident Yields are just From Player Mods
-      const yields = new Yields();
-      yields.add(...yieldsForMe(this.player.yieldMods));
+        // Incident Yields are just From Actor Mods
+        const yields = new Yields();
+        yields.add(...yieldsForMe(this.player.yieldMods));
 
-      // Flatten Yields to apply modifiers
-      return yields.flatten();
-    });
+        // Flatten Yields to apply modifiers
+        return yields.flatten();
+      },
+      { relations: [{ relName: "player", relProps: ["yieldMods"] }] },
+    );
   }
 
   /*

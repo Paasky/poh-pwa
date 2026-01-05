@@ -1,9 +1,18 @@
-import { CatKey, roundToTenth, TypeKey } from "@/Common/Objects/Common";
+import { CatKey, ObjKey, roundToTenth, TypeKey } from "@/Common/Objects/Common";
 import { objectIsAnyOfKeys, TypeObject } from "@/Common/Objects/TypeObject";
 import { TypeStorage } from "@/Common/Objects/TypeStorage";
 import { has, reduce } from "@/helpers/collectionTools";
 
 export type YieldMethod = "lump" | "percent" | "set";
+
+export type RawYield = {
+  type: YieldTypeKey;
+  amount?: number;
+  method?: YieldMethod;
+  for?: ObjKey[];
+  vs?: ObjKey[];
+};
+
 export type Yield = {
   type: YieldTypeKey;
   amount: number;

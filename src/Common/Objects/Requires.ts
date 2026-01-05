@@ -2,15 +2,16 @@ import { ObjKey } from "@/Common/Objects/Common";
 import { TypeClass, TypeObject } from "@/Common/Objects/TypeObject";
 
 export class Requires {
-  private _requireAll: ObjKey[] = [];
-  private _requireAny: ObjKey[][] = [];
-  private _allTypes: ObjKey[] = [];
+  private _requireAll: Set<ObjKey> = new Set();
+  private _requireAny: Set<Set<ObjKey>> = new Set();
+  private _allTypes: Set<ObjKey> = new Set();
 
-  constructor(requires: ObjKey[] | ObjKey[][] = []) {
+  constructor(requires: (ObjKey | ObjKey[])[] = []) {
     for (const r of requires) {
       if (Array.isArray(r)) {
-        this._requireAny.add(r);
-        this._allTypes.add(...r);
+        const anySet = new Set(r);
+        this._requireAny.add(anySet);
+        r.forEach((item) => this._allTypes.add(item));
       } else {
         this._requireAll.add(r);
         this._allTypes.add(r);
@@ -18,7 +19,7 @@ export class Requires {
     }
   }
 
-  get allTypes(): ObjKey[] {
+  get allTypes(): Set<ObjKey> {
     return this._allTypes;
   }
 
@@ -26,11 +27,11 @@ export class Requires {
     return this._allTypes.size === 0;
   }
 
-  get requireAll(): ObjKey[] {
+  get requireAll(): Set<ObjKey> {
     return this._requireAll;
   }
 
-  get requireAny(): ObjKey[][] {
+  get requireAny(): Set<Set<ObjKey>> {
     return this._requireAny;
   }
 
@@ -39,16 +40,22 @@ export class Requires {
 
     // At least one of the given objects must match each "require all"-keys
     for (const require of this._requireAll) {
-      if (!types.some((t) => t.key === require || t.category === require || t.concept === require))
+      if (
+        ![...types].some(
+          (t) => t.key === require || t.category === require || t.concept === require,
+        )
+      )
         return false;
     }
 
     // At least one of the given objects must match any "require any"-key
-    for (const require of this._requireAny) {
+    for (const requireAnySet of this._requireAny) {
       if (
-        !types.some(
+        ![...types].some(
           (t) =>
-            require.has(t.key) || (t.category && require.has(t.category)) || require.has(t.concept),
+            requireAnySet.has(t.key) ||
+            (t.category && requireAnySet.has(t.category)) ||
+            requireAnySet.has(t.concept),
         )
       )
         return false;
@@ -64,19 +71,20 @@ export class Requires {
 
     for (const req of this._requireAll) {
       if (classes.some((c) => req.startsWith(`${c}:`))) {
-        all.add(req);
+        all.push(req);
       }
     }
 
-    for (const reqAny of this._requireAny) {
+    for (const reqAnySet of this._requireAny) {
+      const reqAny = [...reqAnySet];
       for (const req of reqAny) {
         if (classes.some((c) => req.startsWith(`${c}:`))) {
-          any.add(reqAny);
+          any.push(reqAny);
           break;
         }
       }
     }
 
-    return new Requires([...all, ...any] as ObjKey[] | ObjKey[][]);
+    return new Requires([...all, ...any]);
   }
 }

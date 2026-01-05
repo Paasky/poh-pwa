@@ -66,7 +66,7 @@ export class Simulation {
         );
         break;
 
-      // Player Actions
+      // Actor Actions
       case PlayerActionKeys.has(action.type):
         simAction = getPlayerAction(action.type, player, {
           type: action.typeKey ? bucket.getType(action.typeKey) : undefined,

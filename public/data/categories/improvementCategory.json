@@ -1,0 +1,80 @@
+[
+  {
+    "key": "improvementCategory:boats",
+    "name": "Boats",
+    "concept": "conceptType:improvement",
+    "description": ""
+  },
+  {
+    "key": "improvementCategory:camp",
+    "name": "Camp",
+    "concept": "conceptType:improvement",
+    "description": ""
+  },
+  {
+    "key": "improvementCategory:plantation",
+    "name": "Plantation",
+    "concept": "conceptType:improvement",
+    "description": ""
+  },
+  {
+    "key": "improvementCategory:mine",
+    "name": "Mine",
+    "concept": "conceptType:improvement",
+    "description": ""
+  },
+  {
+    "key": "improvementCategory:pasture",
+    "name": "Pasture",
+    "concept": "conceptType:improvement",
+    "description": ""
+  },
+  {
+    "key": "improvementCategory:farm",
+    "name": "Farm",
+    "concept": "conceptType:improvement",
+    "description": ""
+  },
+  {
+    "key": "improvementCategory:quarry",
+    "name": "Quarry",
+    "concept": "conceptType:improvement",
+    "description": ""
+  },
+  {
+    "key": "improvementCategory:sawmill",
+    "name": "Sawmill",
+    "concept": "conceptType:improvement",
+    "description": ""
+  },
+  {
+    "key": "improvementCategory:fort",
+    "name": "Fort",
+    "concept": "conceptType:improvement",
+    "description": ""
+  },
+  {
+    "key": "improvementCategory:outpost",
+    "name": "Outpost",
+    "concept": "conceptType:improvement",
+    "description": ""
+  },
+  {
+    "key": "improvementCategory:airfield",
+    "name": "Airfield",
+    "concept": "conceptType:improvement",
+    "description": ""
+  },
+  {
+    "key": "improvementCategory:well",
+    "name": "Well",
+    "concept": "conceptType:improvement",
+    "description": ""
+  },
+  {
+    "key": "improvementCategory:bridge",
+    "name": "Bridge",
+    "concept": "conceptType:improvement",
+    "description": ""
+  }
+]

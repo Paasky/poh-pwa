@@ -7,6 +7,8 @@ export type ActionType =
   | "actionType:attack"
   | "actionType:bombard"
   | "actionType:build"
+  | "actionType:clean"
+  | "actionType:clear"
   | "actionType:demobilize"
   | "actionType:disband"
   | "actionType:endTurn"
@@ -55,7 +57,7 @@ export type ActionType =
   | "actionType:approveDeal"
   | "actionType:rejectDeal"
 
-  // Player
+  // Actor
   | "actionType:selectHeritage"
   | "actionType:selectTrait"
   | "actionType:unselectTrait"
@@ -218,7 +220,7 @@ export type ApproveDeal = IAction & { type: "approveDeal"; dealKey: GameKey };
 export type NegotiateDeal = IAction & { type: "negotiateDeal"; dealKey: GameKey; payload: any }; // payload structure TBD
 export type RejectDeal = IAction & { type: "rejectDeal"; dealKey: GameKey };
 
-// Player
+// Actor
 export type SelectHeritage = IAction & { type: "selectHeritage"; typeKey: TypeKey };
 export type SelectTrait = IAction & { type: "selectTrait"; typeKey: TypeKey };
 export type SelectMyth = IAction & { type: "selectMyth"; typeKey: TypeKey };

@@ -1,0 +1,308 @@
+[
+  {
+    "key": "specialType:againstYourIncident",
+    "name": "Against your Incident",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:allCities",
+    "name": "All cities",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:allCitiesWithRailroad",
+    "name": "All cities with Railroad",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:allCitiesWithRiver",
+    "name": "All cities with River",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:allInTile",
+    "name": "All in tile",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:canBuildSatellites",
+    "name": "Can build Satellites",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:canCarryStockpile",
+    "name": "Can carry stockpile",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:canEnterIce",
+    "name": "Can enter Ice",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:canEnterMountains",
+    "name": "Can enter Mountains",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:canEnterOcean",
+    "name": "Can enter Ocean",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:canEnterSea",
+    "name": "Can enter Sea",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:canHoldTournaments",
+    "name": "Can hold tournaments",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:canLandOnCarrier",
+    "name": "Can land on Carrier",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:canLevy",
+    "name": "Can levy",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:canMobilize",
+    "name": "Can mobilize",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:canMoveAfterAttack",
+    "name": "Can move after attack",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:canSelectTarget",
+    "name": "Can select Target",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:cannotAttackWater",
+    "name": "Cannot attack Water",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:cannotBeAttacked",
+    "name": "Cannot be attacked",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:cannotBuildUnits",
+    "name": "Cannot build units",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:cannotBuyBuildings",
+    "name": "Cannot buy buildings",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:cannotDeclineTrade",
+    "name": "Cannot decline trade",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:cannotEnter",
+    "name": "Cannot Enter",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:cannotKillLandUnits",
+    "name": "Cannot kill Land Units",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:cannotTradeNonAllies",
+    "name": "Cannot trade non-allies",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:chooseFreeTechnology",
+    "name": "Choose Free Technology",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:damagesAllUnitsInTile",
+    "name": "Damages all Units in Tile",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:damagesBuildings",
+    "name": "Damages Buildings",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:damagesImprovements",
+    "name": "Damages Improvements",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:distanceFromCapital",
+    "name": "Distance from Capital",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:elections",
+    "name": "Elections",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:forceAutomaticBuildQueue",
+    "name": "Force automatic build queue",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:forcedStateReligion",
+    "name": "Forced state religion",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:ignoreMoveCost",
+    "name": "Ignore move cost",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:invisibleBeforeMove",
+    "name": "Invisible before move",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:landUnitsCanEnter",
+    "name": "Land units can enter",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:maxPerCity",
+    "name": "Max 2 per City",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:mustBeInAirbase",
+    "name": "Must be in airbase",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:nextToCoast",
+    "name": "Next to Coast",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:nextToNavigableRiver",
+    "name": "Next to Navigable River",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:noDefenseBonuses",
+    "name": "No defense bonuses",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:noDesertDamage",
+    "name": "No Desert damage",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:noJungleDamage",
+    "name": "No Jungle damage",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:noSnowDamage",
+    "name": "No Snow damage",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:noStateReligion",
+    "name": "No state religion",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:onlyOnResource",
+    "name": "Only on Resource",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:pillageRange",
+    "name": "Pillage Range 1",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:shipsCanEnter",
+    "name": "Ships can enter",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:singleUse",
+    "name": "Single use",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:startSize",
+    "name": "Start size",
+    "concept": "conceptType:special",
+    "description": ""
+  },
+  {
+    "key": "specialType:stockpiled",
+    "name": "Stockpiled",
+    "concept": "conceptType:special",
+    "description": ""
+  }
+]

@@ -168,7 +168,7 @@ describe("UnitMovement", () => {
     // Design special
     expect(unit.movement.specialTypeKeys.has("specialType:canEnterMountains")).toBe(true);
 
-    // Player research special
+    // Actor research special
     world.player.research.researched.push(
       initTypeObject({ key: "tech:1", specials: ["specialType:canEmbark"] }),
     );

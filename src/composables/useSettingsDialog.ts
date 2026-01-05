@@ -6,7 +6,7 @@ import {
   gameSettingKeys,
   graphicsSettingKeys,
   restartRequiredSettingKeys,
-} from "@/Player/Human/EngineSettings";
+} from "@/Actor/Human/EngineSettings";
 
 export function useSettingsDialog(onRequestReload: () => void) {
   const settings = useSettingsStore();

@@ -1,0 +1,366 @@
+[
+  {
+    "key": "godType:skyGod",
+    "name": "Sky God",
+    "concept": "conceptType:god",
+    "description": "A sky god governs the heavens, weather, and the sanction of rulers. Such deities often stand at the top of a pantheon and are invoked for law, victory, and oaths. In Greece, Zeus ruled at Olympia and presided over thunder, justice, and kingship. His Roman counterpart Jupiter, honored on the Capitoline Hill, anchored state ritual and military triumphs. Vedic hymns praise Indra as a storm-bringing leader who defeats chaos and receives soma offerings. In Norse tradition, Thor wields the hammer Mjölnir, protects communities, and controls storms. Cult practice included sacrifices, oracles, and festivals aligned with civic authority and seasonal weather.",
+    "category": "godCategory:kingOfGods",
+    "yields": [
+      {
+        "type": "yieldType:gold",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "godType:sunGod",
+    "name": "Sun God",
+    "concept": "conceptType:god",
+    "description": "Sun gods encode daily order, royal power, and agricultural timekeeping. In Egypt, Ra traveled the sky by solar barque and sustained creation; kings linked their rule to his cycle. Greek tradition placed Helios, and later Apollo, in the solar role, with the chariot image shaping cult and art. The Inca revered Inti as the dynastic patron of rulers and scheduled planting around his course, with Inti Raymi marking winter solstice renewal. In South Asia, Vedic hymns honor Surya for health and victory; later temples, such as Konark, show enduring solar devotion. Solar cults tied calendars, prophecy, and state ideology to celestial regularity.",
+    "category": "godCategory:kingOfGods",
+    "yields": [
+      {
+        "type": "yieldType:culture",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "godType:motherOfGods",
+    "name": "Mother of Gods",
+    "concept": "conceptType:god",
+    "description": "The “Mother of Gods” denotes a maternal source for divine lineages and civic protection. In Phrygia and Rome, Cybele (Magna Mater) received ecstatic rites, processions, and the taurobolium, linking fertility to urban security. Greek myth names Rhea as mother of the Olympians, a figure guarding succession and birth. Vedic texts describe Aditi as an expansive cosmic mother from whom the devas arise. Priesthoods, sanctuaries on hills, and drum-and-pipe music marked these cults. Their functions joined fertility, protection of cities and frontiers, and ritual renewal. Political authorities often imported or elevated such cults to stabilize rule and define communal origins.",
+    "category": "godCategory:godMother",
+    "yields": [
+      {
+        "type": "yieldType:faith",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "godType:motherEarth",
+    "name": "Mother Earth",
+    "concept": "conceptType:god",
+    "description": "Mother Earth personifies ground, fertility, and the sustenance of crops. Greek Gaia appears as a primordial being and ancestor of gods and mortals, central to cosmogonies and oath-taking. In the Andes, Pachamama receives offerings of coca, chicha, and llama fat to secure harvests and safe travel. Vedic tradition honors Prithvi as nourishing earth, paired in hymns with the sky and invoked for stability. Roman Terra held rural cults that framed sowing and boundary rites. Rituals commonly used libations, buried votives, and seasonal petitions. The figure links soil, kinship continuity, and the lawful use of land for agriculture.",
+    "category": "godCategory:godMother",
+    "yields": [
+      {
+        "type": "yieldType:health",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "godType:godOfTrade",
+    "name": "God of Trade",
+    "concept": "conceptType:god",
+    "description": "A god of trade protects merchants, travel, and the movement of goods and information. Greek Hermes and Roman Mercury oversaw markets, contracts, and road networks; herms and milestones marked protected routes. Tyrian Melqart supported Mediterranean ventures and colonial foundations such as Gades and Carthage, with shared cult ensuring trust among distant partners. In South Asia, Ganesha became the favored patron for shop openings and guild undertakings, invoked for auspicious beginnings and obstacle removal. Sacrifices at emporia, dedications in port sanctuaries, and merchant-funded festivals embedded commerce in ritual. Such cults facilitated credit, safe passage, and interstate exchange.",
+    "category": "godCategory:godOfTheSea",
+    "yields": [
+      {
+        "type": "yieldType:tradeSlot",
+        "amount": 2,
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ],
+    "requires": [
+      [
+        "godCategory:kingOfGods"
+      ]
+    ]
+  },
+  {
+    "key": "godType:godOfPlenty",
+    "name": "God of Plenty",
+    "concept": "conceptType:god",
+    "description": "A god of plenty governs agricultural yield, storage, and seasonal renewal. Greek Demeter presided over grain, with rites such as the Thesmophoria supporting civic fertility and women’s ritual roles. In Rome, Ceres ensured the grain supply and inspired legal protections for land and distribution. Egyptian cults linked Osiris to the Nile’s inundation and the rebirth of vegetation, mirrored in funerary beliefs and agrarian calendars. Ritual forms included first-fruits offerings, processions to fields, and thanksgiving at harvest. Iconography often used ears of wheat and the cornucopia. These cults tied food security to law, morality, and state provisioning.",
+    "category": "godCategory:godOfTheSea",
+    "yields": [
+      {
+        "type": "yieldType:food",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "requires": [
+      [
+        "godCategory:kingOfGods"
+      ]
+    ]
+  },
+  {
+    "key": "godType:godOfHealth",
+    "name": "God of Health",
+    "concept": "conceptType:god",
+    "description": "Healing deities regulated medical practice, ritual cleansing, and public health. Asclepius drew petitioners to sanctuaries such as Epidaurus, where incubation, dreams, and votive dedications recorded cures. Hygieia embodied prevention and sanitation, integrated with city regulations and gymnasium routines. In Egypt, Sekhmet held destructive and curative aspects; priests conducted rites to avert plague and restore balance. Sacred springs, inscriptions of healed ailments, and anatomical votives established trust in divine therapy. These cults worked alongside physicians, provided crisis relief during epidemics, and shaped medical ethics through prayer, purification, and communal thanksgiving for recovery.",
+    "category": "godCategory:godOfFertility",
+    "yields": [
+      {
+        "type": "yieldType:health",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "requires": [
+      [
+        "godCategory:kingOfGods",
+        "godCategory:godMother"
+      ]
+    ]
+  },
+  {
+    "key": "godType:godOfFamily",
+    "name": "God of Family",
+    "concept": "conceptType:god",
+    "description": "Family deities safeguard marriage, inheritance, and household order. Greek Hera governed nuptial bonds and legitimacy, with festivals and vows marking transitions to marriage. Norse Frigg oversaw kinship continuity and maternal protection within royal genealogies and homesteads. Greek Hestia embodied the hearth; city prytaneia maintained her fire as a civic center, while households offered first portions at meals. Rites included betrothal oaths, hearth lighting at new residences, and blessings for childbirth. Such cults enforced social norms, stabilized property transmission, and aligned domestic practice with wider civic ritual frameworks.",
+    "category": "godCategory:godOfFertility",
+    "yields": [
+      {
+        "type": "yieldType:order",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "requires": [
+      [
+        "godCategory:kingOfGods",
+        "godCategory:godMother"
+      ]
+    ]
+  },
+  {
+    "key": "godType:godOfFestivals",
+    "name": "God of Festivals",
+    "concept": "conceptType:god",
+    "description": "Festival deities structure civic calendars, public joy, and ritual excess. Greek Dionysus oversaw wine, dance, and theater, with the City Dionysia fostering dramatic competitions and communal identity. Roman Bacchus received processions that, at times, drew senatorial regulation due to ecstatic rites. Pan governed rustic celebrations, pipes, and herding dances tied to seasonal leisure. Sacrifices, choral performances, and civic dining created cohesion across classes and neighborhoods. Theatrical sponsorship, guild participation, and processional routes linked religion, politics, and urban spectacle. These cults balanced licensed revelry with public order and state display.",
+    "category": "godCategory:godOfTheMoon",
+    "yields": [
+      {
+        "type": "yieldType:happiness",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "requires": [
+      [
+        "godCategory:godMother"
+      ]
+    ]
+  },
+  {
+    "key": "godType:godOfSeasons",
+    "name": "God of Seasons",
+    "concept": "conceptType:god",
+    "description": "Seasonal deities regulate planting, fallow cycles, and ritual transitions. Greek myth pairs Persephone’s descent and return with Demeter’s grief and renewal, a frame for agricultural timing and the Eleusinian Mysteries. In Mesopotamia, Tammuz’s death and return structured laments and hopes for vegetation’s revival. Demeter’s annual rites coordinated sowing, fertility, and civic obligations tied to grain. Processions, mourning songs, and first-fruit offerings marked thresholds between wet and dry periods or winter and spring. Such cults embedded calendars in myth, aligning household labor, market supply, and state rituals with predictable natural rhythms.",
+    "category": "godCategory:godOfTheMoon",
+    "yields": [
+      {
+        "type": "yieldType:science",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "requires": [
+      [
+        "godCategory:godMother"
+      ]
+    ]
+  },
+  {
+    "key": "godType:godOfTheSpear",
+    "name": "God of the Spear",
+    "concept": "conceptType:god",
+    "description": "A maritime patron linked to spear-fishing, coastal strength, and safe passage. In Mediterranean ports, fishermen petitioned Poseidon and Neptune before dives and torch-lit hunts. Norse coastal groups appealed to Njord for calm seas and rich runs. Harbour sanctuaries received harpoons, spearheads, and miniature boats as vows. Ritual abstinence and tide-watching preceded expeditions. The cult often overlapped with storm and current control. In archaeology, seaside altars and piles of rusted points mark repeated offering. The deity framed fishing as skill, courage, and disciplined teamwork under divine oversight.",
+    "category": "godCategory:godOfFishing",
+    "yields": [
+      {
+        "type": "yieldType:strength",
+        "amount": 1,
+        "for": [
+          "conceptType:unit"
+        ]
+      }
+    ],
+    "requires": [
+      [
+        "godCategory:godOfTheSea"
+      ]
+    ]
+  },
+  {
+    "key": "godType:godOfTheNet",
+    "name": "God of the Net",
+    "concept": "conceptType:god",
+    "description": "Guardian of net-fishing and the coastal harvest. Gallo-Roman worshipers of Nehalennia on the North Sea left altars, reliefs, and inscribed net-weights thanking the goddess for safe returns. Along rivers and shores, fishers washed nets at shrines and dedicated the first catch. Temples staged seasonal rites to open the fishing year and close it. Magistrates and guilds coordinated offerings when shoals arrived. Archaeology records net sinkers, boathooks, and maritime motifs in votive deposits. The cult stressed cooperation, tides, and communal provisioning within a supervised ritual calendar.",
+    "category": "godCategory:godOfFishing",
+    "yields": [
+      {
+        "type": "yieldType:food",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "requires": [
+      [
+        "godCategory:godOfTheSea"
+      ]
+    ]
+  },
+  {
+    "key": "godType:godOfTheJavelin",
+    "name": "God of the Javelin",
+    "concept": "conceptType:god",
+    "description": "Patron of hunting with the throwing spear and accurate casts. Bronze and Iron Age communities deposited spearheads and boar tusks at groves and cairns after successful drives. Before stag or boar hunts, leaders sought dreams, auguries, and oaths for steady aim. Youth initiation sometimes paired javelin trials with sacrificial feasts. Local hunt-gods received portions of meat and the bloodied point. The cult framed the javelin as a lawful tool for provisioning, not raiding. Finds of socketed points and carved shafts in shrines trace its prestige.",
+    "category": "godCategory:godOfHunting",
+    "yields": [
+      {
+        "type": "yieldType:strength",
+        "amount": 1,
+        "for": [
+          "conceptType:unit"
+        ]
+      }
+    ],
+    "requires": [
+      [
+        "godCategory:godOfTheSea",
+        "godCategory:godOfFertility"
+      ]
+    ]
+  },
+  {
+    "key": "godType:godOfTheBow",
+    "name": "God of the Bow",
+    "concept": "conceptType:god",
+    "description": "Deity overseeing archery in hunt and war. Greek and Roman practice linked Artemis and Diana to woodland skill and protection of hunters. Apollo, as archer, was asked for precision on campaign. Sanctuaries kept butts for contests and accepted arrowheads as gifts. City militias trained with ritual salutes to the bow-god before sorties. Shrines near passes and forests paired hunting licenses with offerings. Literary sources and votive caches attest organized festivals with archery prizes. The cult fused technical mastery, quiet discipline, and divine sanction for ranged killing.",
+    "category": "godCategory:godOfHunting",
+    "yields": [
+      {
+        "type": "yieldType:tradeSlot",
+        "amount": 2,
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ],
+    "requires": [
+      [
+        "godCategory:godOfTheSea",
+        "godCategory:godOfFertility"
+      ]
+    ]
+  },
+  {
+    "key": "godType:godOfFaith",
+    "name": "God of Faith",
+    "concept": "conceptType:god",
+    "description": "Figure linking communal belief to agricultural security. In Greek and Roman contexts, Demeter and Ceres anchor the pattern through seasonal rites, including the Eleusinian Mysteries, that promised grain, continuity, and hope. States invested temple liturgies with legal force to stabilize granaries and civic order. Priests timed fasts, processions, and moon-marked ceremonies to promote fertility and social cohesion. Initiates swore secrecy and shared sacred meals. Inscriptions record vows for fields, marriages, and oaths of office. The cult formalized trust as a public resource grounded in ritual.",
+    "category": "godCategory:godOfTheHarvest",
+    "yields": [
+      {
+        "type": "yieldType:faith",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "requires": [
+      [
+        "godCategory:godOfFertility",
+        "godCategory:godOfTheMoon"
+      ]
+    ]
+  },
+  {
+    "key": "godType:godOfSacrifice",
+    "name": "God of Sacrifice",
+    "concept": "conceptType:god",
+    "description": "Deity presiding over offerings that bind community, field, and law. Agricultural calendars scheduled first-fruits, animal victims, and communal feasts to secure future crops. States used public rites at altars and city gates to legitimize rulers and sanctions. Boundary stones and rural shrines received blood and libations to guard fields. Priests audited portions and fines, tying justice to ritual purity. Archaeology shows ash pits, bone assemblages, and inscribed dedications across farm belts. The cult framed giving up life or produce as a regulated exchange with the divine.",
+    "category": "godCategory:godOfTheHarvest",
+    "yields": [
+      {
+        "type": "yieldType:order",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "requires": [
+      [
+        "godCategory:godOfFertility",
+        "godCategory:godOfTheMoon"
+      ]
+    ]
+  },
+  {
+    "key": "godType:godOfProduction",
+    "name": "God of Production",
+    "concept": "conceptType:god",
+    "description": "Fire-linked patron of crafts, workshops, and sustained output. Temple precincts hosted kilns, forges, and looms that produced tools, pottery, and weapons under sacred protection. Apprentices swore oaths before hearths and offered first-made items for quality and luck. Guild-like associations maintained altars, funded funerals, and enforced standards. At forges, workers poured oil and grain to keep the flame constant. Votive hammers, tongs, and molds occur in industrial quarters near shrines. The cult aligned labor rhythm, heat control, and market supply with ritual obligation.",
+    "category": "godCategory:godOfFire",
+    "yields": [
+      {
+        "type": "yieldType:production",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "requires": [
+      [
+        "godCategory:godOfTheMoon"
+      ]
+    ]
+  },
+  {
+    "key": "godType:godOfRenewal",
+    "name": "God of Renewal",
+    "concept": "conceptType:god",
+    "description": "Deity of cyclical rebirth and orderly change. New-year and spring rites opened agricultural and fiscal cycles with oaths, procession, and seed blessings. Communities rekindled sacred fires to mark a reset of time and hearth. After wars, plagues, or floods, authorities staged lustrations and healing ceremonies to restore civic integrity. Temples archived omens and reform edicts under this patronage. The cult taught that innovation followed purification, not rupture. Archaeology notes ash layers, renewal inscriptions, and foundation deposits that index repeated acts of communal restarting.",
+    "category": "godCategory:godOfFire",
+    "yields": [
+      {
+        "type": "yieldType:science",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "requires": [
+      [
+        "godCategory:godOfTheMoon"
+      ]
+    ]
+  }
+]

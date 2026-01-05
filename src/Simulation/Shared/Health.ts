@@ -13,7 +13,8 @@ export class Health {
       this.object instanceof Construction ? (this.object.citizenKeys.size ? 10 : -10) : 19;
 
     const damageAndHeal = this.object.yields.flatten(
-      ["yieldType:damage", "yieldType:heal"],
+      new Set(["yieldType:damage", "yieldType:heal"]),
+      this.object.types,
       this.object.types,
     );
 

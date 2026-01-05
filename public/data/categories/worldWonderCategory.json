@@ -1,0 +1,98 @@
+[
+  {
+    "key": "worldWonderCategory:production",
+    "name": "Production",
+    "concept": "conceptType:worldWonder",
+    "description": ""
+  },
+  {
+    "key": "worldWonderCategory:gold",
+    "name": "Gold",
+    "concept": "conceptType:worldWonder",
+    "description": ""
+  },
+  {
+    "key": "worldWonderCategory:science",
+    "name": "Science",
+    "concept": "conceptType:worldWonder",
+    "description": ""
+  },
+  {
+    "key": "worldWonderCategory:growth",
+    "name": "Growth",
+    "concept": "conceptType:worldWonder",
+    "description": ""
+  },
+  {
+    "key": "worldWonderCategory:culture",
+    "name": "Culture",
+    "concept": "conceptType:worldWonder",
+    "description": ""
+  },
+  {
+    "key": "worldWonderCategory:faith",
+    "name": "Faith",
+    "concept": "conceptType:worldWonder",
+    "description": ""
+  },
+  {
+    "key": "worldWonderCategory:health",
+    "name": "Health",
+    "concept": "conceptType:worldWonder",
+    "description": ""
+  },
+  {
+    "key": "worldWonderCategory:happiness",
+    "name": "Happiness",
+    "concept": "conceptType:worldWonder",
+    "description": ""
+  },
+  {
+    "key": "worldWonderCategory:order",
+    "name": "Order",
+    "concept": "conceptType:worldWonder",
+    "description": ""
+  },
+  {
+    "key": "worldWonderCategory:influence",
+    "name": "Influence",
+    "concept": "conceptType:worldWonder",
+    "description": ""
+  },
+  {
+    "key": "worldWonderCategory:milLand",
+    "name": "Mil Land",
+    "concept": "conceptType:worldWonder",
+    "description": ""
+  },
+  {
+    "key": "worldWonderCategory:milWater",
+    "name": "Mil Water",
+    "concept": "conceptType:worldWonder",
+    "description": ""
+  },
+  {
+    "key": "worldWonderCategory:trade",
+    "name": "Trade",
+    "concept": "conceptType:worldWonder",
+    "description": ""
+  },
+  {
+    "key": "worldWonderCategory:water",
+    "name": "Water",
+    "concept": "conceptType:worldWonder",
+    "description": ""
+  },
+  {
+    "key": "worldWonderCategory:defense",
+    "name": "Defense",
+    "concept": "conceptType:worldWonder",
+    "description": ""
+  },
+  {
+    "key": "worldWonderCategory:air",
+    "name": "Air",
+    "concept": "conceptType:worldWonder",
+    "description": ""
+  }
+]

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { Color4 } from "@babylonjs/core";
-import { buildHexGpuBuffer } from "../../../src/Player/Human/Terrain/buildHexGpuBuffer";
-import { TerrainTileBuffers } from "../../../src/Player/Human/Terrain/_terrainMeshTypes";
+import { buildHexGpuBuffer } from "@/Actor/Human/Terrain/buildHexGpuBuffer";
+import { TerrainTileBuffers } from "@/Actor/Human/Terrain/_terrainMeshTypes";
 import { validCenterData, validK1Data, validK2Data } from "./pointsInRing.test";
 import { expectFloatsToBeClose } from "../../_setup/testHelpers";
 

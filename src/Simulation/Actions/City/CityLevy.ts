@@ -4,8 +4,8 @@ import { City } from "@/Common/Models/City";
 import { IMutation } from "@/Common/IMutation";
 import { Citizen } from "@/Common/Models/Citizen";
 import { belongsToCity, belongsToPlayer } from "@/Simulation/Validator";
-import { CreateUnit } from "@/Simulation/CreateMutations/CreateUnit";
 import { getRandom } from "@/helpers/arrayTools";
+import { createUnit } from "@/Simulation/MutationFactory";
 
 export class CityLevy implements ISimAction {
   constructor(
@@ -22,7 +22,7 @@ export class CityLevy implements ISimAction {
         design.equipment.specials.includes("specialType:canLevy"),
       )
     ) {
-      throw new Error("Player has no levy designs");
+      throw new Error("Actor has no levy designs");
     }
 
     return this;
@@ -39,9 +39,12 @@ export class CityLevy implements ISimAction {
 
     return [
       { type: "remove", payload: { key: this.citizen.key } },
-      new CreateUnit(this.player, design, { cityKey: this.city.key, status: "levy" }).create(
-        this.city.tile,
-      ),
+      createUnit({
+        playerKey: this.player.key,
+        designKey: design.key,
+        cityKey: this.city.key,
+        status: "levy",
+      }),
     ];
   }
 

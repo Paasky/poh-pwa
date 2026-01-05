@@ -1,0 +1,760 @@
+[
+  {
+    "key": "policyType:federation",
+    "name": "Federation",
+    "concept": "conceptType:policy",
+    "description": "A federation joins semi-autonomous states under a common constitution and federal institutions. Authority is divided between central and regional governments, often protected by judicial review. The United States defined this model in 1789, balancing national powers with state sovereignty and testing the settlement in the Civil War. Switzerland consolidated its cantons under a federal constitution in 1848 and refined it by referendum and consensus practice. The Federal Republic of Germany rebuilt federalism after 1949 through the Basic Law and cooperative institutions. India formed a union of states after 1947, reorganizing linguistic boundaries and developing strong emergency provisions to manage diversity and crisis.",
+    "category": "policyCategory:leadership",
+    "yields": [
+      {
+        "type": "yieldType:tradeYield",
+        "amount": 10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:happiness",
+        "amount": 10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:order",
+        "amount": -20,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ],
+    "specials": [
+      "specialType:elections"
+    ]
+  },
+  {
+    "key": "policyType:republic",
+    "name": "Republic",
+    "concept": "conceptType:policy",
+    "description": "A republic is government by elected or appointed officials who rule under law for the public interest. The Roman Republic created a mixed constitution with magistrates, Senate, and popular assemblies, shaping later ideas on civic virtue and checks on power. Modern republics adopted representative institutions and written constitutions. The United States combined separation of powers with federalism. Revolutionary France moved through successive republican constitutions and expanded civic participation. The Weimar Republic attempted liberal democracy under proportional representation but faced polarization and crisis. Republicanism spread in the nineteenth and twentieth centuries as monarchies receded or adapted to constitutional limits.",
+    "category": "policyCategory:leadership",
+    "yields": [
+      {
+        "type": "yieldType:happiness",
+        "amount": 10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:order",
+        "amount": -10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ],
+    "specials": [
+      "specialType:elections"
+    ]
+  },
+  {
+    "key": "policyType:kingdom",
+    "name": "Kingdom",
+    "concept": "conceptType:policy",
+    "description": "A kingdom centers authority in a monarch, usually through hereditary succession, supported by aristocratic and court institutions. Medieval and early modern kingdoms built legitimacy through dynastic law, religion, and control of land and offices. The Kingdom of France under the Ancien Régime developed royal centralization and fiscal absolutism before 1789. The United Kingdom evolved from monarchical prerogative to parliamentary sovereignty after 1688 and through later reforms. Sweden shifted from estates politics to constitutional monarchy, culminating in the 1974 Instrument of Government. Saudi Arabia unified disparate regions in 1932 under an absolute monarchy linked to tribal alliances and religious authority.",
+    "category": "policyCategory:leadership",
+    "yields": [
+      {
+        "type": "yieldType:happiness",
+        "amount": 10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:gold",
+        "amount": -10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "policyType:oligarchy",
+    "name": "Oligarchy",
+    "concept": "conceptType:policy",
+    "description": "Oligarchy concentrates power in a small elite, often based on wealth, birth, or military control. Spartan governance combined dual kingship with the Gerousia and ephors, restricting citizenship and disciplining society. Venice institutionalized a mercantile oligarchy through the Great Council, Senate, and a constrained Doge, sustaining stability and maritime trade for centuries. The Late Roman Republic saw senatorial elites dominate policy through patronage and control of magistracies. Modern states sometimes exhibit oligarchic influence when concentrated economic power shapes policy outside broad democratic accountability. Mechanisms include restricted franchises, closed councils, party cartels, and financial capture of regulatory and media systems.",
+    "category": "policyCategory:leadership",
+    "yields": [
+      {
+        "type": "yieldType:gold",
+        "amount": -10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:order",
+        "amount": 10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "policyType:dictatorship",
+    "name": "Dictatorship",
+    "concept": "conceptType:policy",
+    "description": "Dictatorship consolidates authority in a single ruler or junta, using coercion, censorship, and control of institutions. Nazi Germany fused party and state, pursued total war, and committed genocidal crimes. Stalin’s Soviet Union enforced rapid industrialization and collectivization through terror and planned targets. North Korea entrenched dynastic rule, a command economy, and pervasive surveillance. Pinochet’s Chile installed military rule after a coup, repressing opposition while adopting neoliberal reforms. Dictatorships arise through coups, revolutions, or wartime states of emergency. They often claim order and modernization while curtailing rights. Endings include defeat in war, elite splits, popular uprisings, or negotiated transitions.",
+    "category": "policyCategory:leadership",
+    "yields": [
+      {
+        "type": "yieldType:happiness",
+        "amount": -20,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:order",
+        "amount": 10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:production",
+        "amount": 10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "policyType:laissezFaire",
+    "name": "Laissez-Faire",
+    "concept": "conceptType:policy",
+    "description": "Laissez-faire prescribes minimal state intervention in markets, limited taxation, and secure property rights. Rooted in classical political economy, it gained strength in nineteenth-century Britain with free trade, the gold standard, and light regulation during industrialization. The United States in the Gilded Age reduced barriers to enterprise, tolerated trusts until antitrust action, and relied on courts to settle labor and corporate conflicts. Pre-1997 Hong Kong maintained low taxes and few industrial policies while serving as a regional entrepôt. Laissez-faire often delivered rapid growth and capital accumulation but also sharp inequality and instability, prompting later regulatory and social policy responses.",
+    "category": "policyCategory:economy",
+    "yields": [
+      {
+        "type": "yieldType:gold",
+        "amount": 20,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:production",
+        "amount": -10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:happiness",
+        "amount": -10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ],
+    "specials": [
+      "specialType:forceAutomaticBuildQueue"
+    ]
+  },
+  {
+    "key": "policyType:regulated",
+    "name": "Regulated",
+    "concept": "conceptType:policy",
+    "description": "A regulated market economy retains private enterprise while subjecting it to public rules on finance, competition, labor, and safety. The United States expanded oversight in the 1930s with New Deal agencies such as the SEC and NLRB. After 2008, Dodd–Frank introduced capital and derivatives rules and systemic risk supervision. The European Union develops competition law, consumer protection, and data and environmental standards across member states. Regulatory regimes shift with political coalitions and crises, alternating between liberalization and tighter controls. The long-term pattern is a mixed economy that seeks to curb monopoly, financial excess, and hazardous practices without abolishing markets.",
+    "category": "policyCategory:economy",
+    "yields": [
+      {
+        "type": "yieldType:gold",
+        "amount": 10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:production",
+        "amount": -10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "policyType:feudal",
+    "name": "Feudal",
+    "concept": "conceptType:policy",
+    "description": "Feudalism organized medieval power through personal bonds and land tenure. Lords granted fiefs to vassals in exchange for military and court service. Peasants on manors owed rents and labor, often under serfdom. Authority was fragmented, with castle-based defense, private justice, and overlapping jurisdictions. Norman England documented holdings in the Domesday Book and bound nobles through fealty. In Japan, the shogunate structured the bakuhan system, with daimyo domains and samurai service under Tokugawa hegemony. Feudal relations declined with stronger monarchies, money rents replacing labor dues, urban growth, and military changes. The Black Death accelerated commutation and peasant bargaining power.",
+    "category": "policyCategory:economy",
+    "yields": [
+      {
+        "type": "yieldType:production",
+        "amount": -10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:food",
+        "amount": -10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:order",
+        "amount": 20,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "policyType:rationed",
+    "name": "Rationed",
+    "concept": "conceptType:policy",
+    "description": "Rationing allocates scarce goods through state quotas, coupons, and priority categories. It aims to sustain military supply, stabilize prices, and share shortages. Britain and the United States rationed food, fuel, and consumer goods during the Second World War, combining coupons with propaganda and price controls. The Soviet Union used card systems in 1941–1947 to manage wartime scarcity. Cuba introduced the libreta in the 1960s to guarantee basic staples amid trade and production shocks. Rationing often kept nutrition above crisis levels but encouraged black markets and substitution. Removal typically followed recovery, though some systems persisted during chronic shortages.",
+    "category": "policyCategory:economy",
+    "yields": [
+      {
+        "type": "yieldType:happiness",
+        "amount": -10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:production",
+        "amount": -10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:food",
+        "amount": 20,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "policyType:planned",
+    "name": "Planned",
+    "concept": "conceptType:policy",
+    "description": "Planned economies allocate resources through state targets and administrative orders rather than market prices. The Soviet Union’s Five-Year Plans directed heavy industry, electrification, and defense, coordinated by Gosplan and sector ministries. Eastern Bloc states adopted similar material-balance planning after 1945. The People’s Republic of China used comprehensive plans before 1978, later shifting to market reforms while retaining industrial policy tools. Planning achieved rapid industrial buildup and literacy gains but produced chronic shortages, soft budget constraints, and suppressed consumer welfare. Reform efforts introduced enterprise autonomy and indicative methods. Systemic limits persisted where prices and profit signals remained politically fixed.",
+    "category": "policyCategory:economy",
+    "yields": [
+      {
+        "type": "yieldType:gold",
+        "amount": -10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:food",
+        "amount": -10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:production",
+        "amount": 20,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ],
+    "specials": [
+      "specialType:cannotBuyBuildings"
+    ]
+  },
+  {
+    "key": "policyType:mercenary",
+    "name": "Mercenary",
+    "concept": "conceptType:policy",
+    "description": "Mercenaries are soldiers who contract for pay rather than allegiance to a polity. States and princes have hired them since antiquity to fill manpower gaps or gain specialist skills. Swiss pikemen and German Landsknechts dominated European battlefields in the fifteenth and sixteenth centuries. Italian city-states employed condottieri who negotiated detailed service contracts. During the Hundred Years’ War, Free Companies fought and pillaged between truces. The practice continued into the modern era with German auxiliaries in foreign service and colonial campaigns. In the late twentieth and early twenty-first centuries, private military companies revived the model, notably Executive Outcomes and the Wagner Group, raising accountability and sovereignty debates.",
+    "category": "policyCategory:military",
+    "yields": [
+      {
+        "type": "yieldType:strength",
+        "amount": 20,
+        "method": "percent",
+        "for": [
+          "conceptType:unit"
+        ]
+      },
+      {
+        "type": "yieldType:upkeep",
+        "amount": 20,
+        "method": "percent",
+        "for": [
+          "conceptType:unit"
+        ]
+      }
+    ],
+    "specials": [
+      "specialType:cannotBuildUnits"
+    ]
+  },
+  {
+    "key": "policyType:professional",
+    "name": "Professional",
+    "concept": "conceptType:policy",
+    "description": "Professional soldiers form standing forces maintained by the state as a career. They receive regular pay, standardized training, and a clear hierarchy. The Roman Imperial legions set an early model with long terms, pensions, and permanent camps. Early modern reforms built on this base. The New Model Army and later Prussian drill systems improved discipline and logistics. By the nineteenth century many European powers kept standing armies in peace and war. The British Army evolved into a permanent force after the eighteenth century. In the twentieth century, professionalization spread across industrial states and NATO members, supported by staff colleges, doctrine, and specialized branches.",
+    "category": "policyCategory:military",
+    "yields": [
+      {
+        "type": "yieldType:strength",
+        "amount": 10,
+        "method": "percent",
+        "for": [
+          "conceptType:unit"
+        ]
+      },
+      {
+        "type": "yieldType:upkeep",
+        "amount": 10,
+        "method": "percent",
+        "for": [
+          "conceptType:unit"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "policyType:conscription",
+    "name": "Conscription",
+    "concept": "conceptType:policy",
+    "description": "Conscription is compulsory military service imposed by law to expand forces quickly. It links citizenship to defense obligations and enables mass armies. Revolutionary France pioneered the levée en masse in 1793, feeding Napoleonic campaigns. Most belligerents relied on conscription in World War I and World War II to sustain industrial warfare. The United States used drafts during the Civil War and both world wars. Post‑1945, many states retained universal or selective service, including Israel and South Korea. Conscription remains politically contested. Supporters stress readiness and social cohesion. Critics cite inequities, economic disruption, and civil‑military friction.",
+    "category": "policyCategory:military",
+    "yields": [
+      {
+        "type": "yieldType:strength",
+        "amount": -10,
+        "method": "percent",
+        "for": [
+          "conceptType:unit"
+        ]
+      },
+      {
+        "type": "yieldType:upkeep",
+        "amount": -10,
+        "method": "percent",
+        "for": [
+          "conceptType:unit"
+        ]
+      }
+    ],
+    "specials": [
+      "specialType:canMobilize"
+    ]
+  },
+  {
+    "key": "policyType:draft",
+    "name": "Draft",
+    "concept": "conceptType:policy",
+    "description": "The draft is an emergency call‑up of civilians for short‑term service, often via registries and lotteries. It is used when volunteer numbers are insufficient during crises. The United States instituted federal drafts in the Civil War, prompting the 1863 New York Draft Riots. Selective Service operated in World War II and during the Vietnam era with varying deferments. Many belligerents issued wartime drafts in World Wars I and II to meet casualty replacement needs. The Soviet Union mobilized vast numbers during the Great Patriotic War. Draft systems invite legal exemptions, public protest, and administrative challenges in fast‑moving conflicts.",
+    "category": "policyCategory:military",
+    "yields": [
+      {
+        "type": "yieldType:strength",
+        "amount": -10,
+        "method": "percent",
+        "for": [
+          "conceptType:unit"
+        ]
+      },
+      {
+        "type": "yieldType:upkeep",
+        "amount": -20,
+        "method": "percent",
+        "for": [
+          "conceptType:unit"
+        ]
+      },
+      {
+        "type": "yieldType:happiness",
+        "amount": -10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ],
+    "specials": [
+      "specialType:canLevy"
+    ]
+  },
+  {
+    "key": "policyType:levied",
+    "name": "Levied",
+    "concept": "conceptType:policy",
+    "description": "Levied troops are locally raised forces mustered for a campaign and then disbanded. Authority flowed through lords, towns, or provinces rather than a central army. Medieval Europe relied on feudal levies of knights and peasant contingents bound by service days. The Anglo‑Saxon fyrd mobilized regional militia for defense. Early modern states still called county and provincial levies when emergencies arose. In Japan, ashigaru foot soldiers began as levied retainers before professionalization. Levies provided quick manpower but uneven training, limited endurance, and variable loyalty. As states centralized, levies yielded to standing troops and conscription systems.",
+    "category": "policyCategory:military",
+    "yields": [
+      {
+        "type": "yieldType:strength",
+        "amount": -20,
+        "method": "percent",
+        "for": [
+          "conceptType:unit"
+        ]
+      },
+      {
+        "type": "yieldType:upkeep",
+        "amount": -20,
+        "method": "percent",
+        "for": [
+          "conceptType:unit"
+        ]
+      }
+    ],
+    "specials": [
+      "specialType:canLevy"
+    ]
+  },
+  {
+    "key": "policyType:open",
+    "name": "Open",
+    "concept": "conceptType:policy",
+    "description": "Open trade policy lowers tariffs, quotas, and capital barriers to integrate with external markets. Advocates seek specialization, productivity gains, and consumer choice. Nineteenth‑century Britain moved toward free trade after the Corn Laws repeal and through the Cobden‑Chevalier Treaty network. After 1945, GATT and later the WTO reduced barriers worldwide. Regional projects such as the European Single Market removed internal customs checks and harmonized standards. Openness can accelerate growth and diffusion of ideas. It can also expose domestic sectors to shocks and dependence on foreign supply chains, spurring periodic protectionist backlashes.",
+    "category": "policyCategory:trade",
+    "yields": [
+      {
+        "type": "yieldType:tradeYield",
+        "amount": 20,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:happiness",
+        "amount": -20,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ],
+    "specials": [
+      "specialType:cannotDeclineTrade"
+    ]
+  },
+  {
+    "key": "policyType:duties",
+    "name": "Duties",
+    "concept": "conceptType:policy",
+    "description": "Duties are tariffs and excise taxes levied on imports and specific goods to protect producers and fund the state. They shaped industrial policy in many countries. The United States used high protective tariffs in the nineteenth century during rapid industrialization. The Smoot‑Hawley Tariff Act of 1930 raised rates sharply and met foreign retaliation. In the late twentieth century, some developing states applied moderate tariffs to shelter infant industries. Duties can guide revenue and bargaining power. They can also raise prices, reduce trade volumes, and trigger disputes under international agreements.",
+    "category": "policyCategory:trade",
+    "yields": [
+      {
+        "type": "yieldType:tradeYield",
+        "amount": -10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:gold",
+        "amount": 10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "policyType:mercantilism",
+    "name": "Mercantilism",
+    "concept": "conceptType:policy",
+    "description": "Mercantilism was an early modern doctrine that sought national power through controlled commerce and bullion accumulation. States granted monopolies to chartered companies, enforced navigation laws, and exploited colonies for raw materials. Spain drew silver and gold from the Americas to fund imperial commitments. England used the Navigation Acts and the East India Company to channel trade through English ships and ports. The Dutch VOC secured Asian spices under state-backed privileges. Mercantilism financed fleets and wars and aided state formation. Classical economists later criticized it for restraining competition and misallocating resources.",
+    "category": "policyCategory:trade",
+    "yields": [
+      {
+        "type": "yieldType:tradeYield",
+        "amount": -20,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:gold",
+        "amount": 20,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "policyType:selfReliant",
+    "name": "Self-Reliant",
+    "concept": "conceptType:policy",
+    "description": "Self‑reliant policy, or autarky, aims for strategic independence by substituting imports with domestic production and controlling key inputs. It spreads risk and reduces exposure to embargoes. The Soviet Union pursued planning and import substitution across heavy industry. Post‑independence India favored protected markets and licensing during the 1950s–1970s. North Korea’s Juche doctrine pushed extreme self‑reliance, with chronic shortages. Autarky can build capacities in defense and essentials. It often imposes high costs through inefficiency, limited technology transfer, and constrained consumer choice.",
+    "category": "policyCategory:trade",
+    "yields": [
+      {
+        "type": "yieldType:tradeYield",
+        "amount": -20,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:food",
+        "amount": 10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:production",
+        "amount": 10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "policyType:isolationist",
+    "name": "Isolationist",
+    "concept": "conceptType:policy",
+    "description": "Isolationism restricts foreign trade, alliances, and travel to preserve sovereignty and internal order. It shapes diplomacy through neutrality and limited ports of entry. Tokugawa Japan enforced sakoku from the seventeenth to nineteenth centuries with tightly controlled contacts at Nagasaki. The Qing dynasty’s Canton System confined European commerce to a single port with licensed intermediaries. The United States adopted neutrality laws and avoided entangling alliances in the interwar years. Isolation can stabilize regimes and reduce external entanglements. It can also slow innovation and leave states unprepared for systemic shocks.",
+    "category": "policyCategory:trade",
+    "yields": [
+      {
+        "type": "yieldType:tradeYield",
+        "amount": -40,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:faith",
+        "amount": 20,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:order",
+        "amount": 20,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ],
+    "specials": [
+      "specialType:cannotTradeNonAllies"
+    ]
+  },
+  {
+    "key": "policyType:fundamentalist",
+    "name": "Fundamentalist",
+    "concept": "conceptType:policy",
+    "description": "Fundamentalist policy fuses religious doctrine with governance and daily life. Authorities claim scriptural mandates for law, education, and social conduct. Enforcement targets blasphemy, moral offenses, and heterodox practice. Puritan New England legislated Sabbath keeping and communal discipline. Wahhabi movements in the Arabian Peninsula sought to purify worship and reorganize tribal politics under strict monotheism. After 1979, Iran institutionalized clerical oversight, Islamic courts, and religious vetting of officials. Taliban administrations enforced conservative dress codes, gender segregation, and religious schooling. Supporters frame the order as faithful restoration. Critics record curtailed civil liberties and suppression of minority sects. Outcomes depend on local institutions, clerical authority, and external pressure.",
+    "category": "policyCategory:faith",
+    "yields": [
+      {
+        "type": "yieldType:faith",
+        "amount": 20,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:happiness",
+        "amount": -10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:science",
+        "amount": -10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ],
+    "specials": [
+      "specialType:forcedStateReligion"
+    ]
+  },
+  {
+    "key": "policyType:dogmatic",
+    "name": "Dogmatic",
+    "concept": "conceptType:policy",
+    "description": "Dogmatic governance enforces a single orthodoxy and penalizes deviation. Institutions police doctrine through courts, censorship, and surveillance. The Spanish Inquisition pursued heresy cases and regulated printed matter. Confessional states in early modern Europe mandated uniform worship and punished dissenters. Stalinist purges fused ideology with security services, producing show trials, expulsions, and forced conformity in science and culture. Authoritarian religious councils have issued binding interpretations and sanctioned rivals. Dogmatism narrows debate, reduces experimental policy, and entrenches patronage networks. Stability can increase in the short term. Long-term effects often include intellectual stagnation, underground opposition, and brittle legitimacy when crises expose contradictions.",
+    "category": "policyCategory:faith",
+    "yields": [
+      {
+        "type": "yieldType:faith",
+        "amount": 10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:science",
+        "amount": -10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ],
+    "specials": [
+      "specialType:forcedStateReligion"
+    ]
+  },
+  {
+    "key": "policyType:stateReligion",
+    "name": "State Religion",
+    "concept": "conceptType:policy",
+    "description": "A state religion is an officially endorsed faith integrated into law, education, and ceremony. The state funds clergy, regulates doctrine, and often links officeholding to religious conformity. In Britain, the monarch is Supreme Governor of the Church of England, and ecclesiastical appointments historically intersected with politics. Lutheran state churches in Scandinavia shaped schooling, parish records, and welfare provision. The Ottoman Empire structured administration through Islamic law and a millet system for recognized minorities. Modern constitutions may retain establishment while expanding civil rights. Reforms commonly separate fiscal support from doctrine and remove legal disabilities for dissenters, yet ceremonial roles and concordats can persist.",
+    "category": "policyCategory:faith",
+    "yields": [
+      {
+        "type": "yieldType:faith",
+        "amount": 10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:happiness",
+        "amount": -10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ],
+    "specials": [
+      "specialType:forcedStateReligion"
+    ]
+  },
+  {
+    "key": "policyType:freedomOfReligion",
+    "name": "Freedom of Religion",
+    "concept": "conceptType:policy",
+    "description": "Freedom of religion denotes legal protection for belief, worship, and nonbelief. The policy limits government establishment and bans coercion in matters of conscience. Early precedents include the Edict of Nantes, which granted restricted toleration to French Protestants, and the pluralist Dutch Republic after the Reformation. The U.S. First Amendment created a durable model combining nonestablishment with free exercise. Contemporary secular constitutions protect minority communities and enable voluntary institutions. Implementation varies. Some states retain blasphemy laws or registration regimes that burden small groups. Durable pluralism tends to correlate with commercial openness, urbanization, and independent courts that enforce neutral rules.",
+    "category": "policyCategory:faith",
+    "yields": [
+      {
+        "type": "yieldType:faith",
+        "amount": -10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:happiness",
+        "amount": 10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ],
+    "specials": [
+      "specialType:noStateReligion"
+    ]
+  },
+  {
+    "key": "policyType:atheist",
+    "name": "Atheist",
+    "concept": "conceptType:policy",
+    "description": "Atheist policy seeks to exclude religious authority from the state and promote secular, often scientific, worldviews. The Soviet Union pursued state atheism, closed or repurposed houses of worship, and subordinated permitted activity to party oversight. Albania under Enver Hoxha declared itself an atheist state and banned public religious practice. During the French Revolution, dechristianization and civic cults challenged clerical power before later settlements. The People’s Republic of China encourages secular public life while licensing and supervising religious bodies. Measures range from education campaigns to legal restrictions on clergy and property. Outcomes include rapid secularization, diasporic religious resilience, and periodic accommodation.",
+    "category": "policyCategory:faith",
+    "yields": [
+      {
+        "type": "yieldType:faith",
+        "amount": -10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:happiness",
+        "amount": -10,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:science",
+        "amount": 20,
+        "method": "percent",
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ],
+    "specials": [
+      "specialType:noStateReligion"
+    ]
+  }
+]

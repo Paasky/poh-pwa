@@ -101,7 +101,7 @@ describe("GameDataLoader", () => {
     expect(city.health).toBe(50);
   });
 
-  it("should add single relation correctly (City -> Player)", () => {
+  it("should add single relation correctly (City -> Actor)", () => {
     const bucket = useDataBucket();
 
     bucket.setRawObjects([...playerRawData("player:1"), ...tileRawData(tileKey(0, 0))]);

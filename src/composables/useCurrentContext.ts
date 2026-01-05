@@ -10,12 +10,12 @@ const hover = ref<Tile | undefined>(undefined);
 const object = ref<GameObject | undefined>(undefined);
 const tile = ref<Tile | undefined>(undefined);
 
-// Context of what is the current Player doing right now
+// Context of what is the current Actor doing right now
 export function useCurrentContext() {
   return {
     actionMode,
     get currentPlayer() {
-      if (!currentPlayer.value) throw new Error("Current Player is not set in currentContext");
+      if (!currentPlayer.value) throw new Error("Current Actor is not set in currentContext");
       return currentPlayer.value;
     },
     hover,

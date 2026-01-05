@@ -3,7 +3,7 @@ import { City } from "@/Common/Models/City";
 import { createMutation, IMutation } from "@/Common/IMutation";
 import { getRandom } from "@/helpers/arrayTools";
 
-// Note: a Player cannot decide to starve a City,
+// Note: a Actor cannot decide to starve a City,
 // it only happens automatically if the City runs out of food in storage.
 export class CityStarve implements ISimAction {
   constructor(private readonly city: City) {}

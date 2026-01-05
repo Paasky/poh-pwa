@@ -21,7 +21,7 @@ import { getAllIcons } from "@/types/icons";
 import { registerSW } from "virtual:pwa-register";
 
 // App styles (import AFTER vuetify/styles so our overrides take precedence)
-import "@/Player/Human/Assets/main.css";
+import "@/Actor/Human/Assets/main.css";
 
 // Ensure all icons from our central icons.ts are registered
 library.add(...getAllIcons());

@@ -13,7 +13,7 @@ export class PlayerActionCrisis implements ISimAction {
 
   validateAction(): this {
     if (this.player.government.corruption + this.player.government.discontent < 200) {
-      throw new Error("Player is not in crisis");
+      throw new Error("Actor is not in crisis");
     }
     return this;
   }

@@ -6,9 +6,9 @@ import { CitizenPickTile } from "@/Simulation/Actions/City/CitizenPickTile";
 import { getRandom } from "@/helpers/arrayTools";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { UnitDesign } from "@/Common/Models/UnitDesign";
-import { CreateUnit } from "@/Simulation/CreateMutations/CreateUnit";
+import { createUnit } from "@/Simulation/MutationFactory";
 
-// Note: a Player cannot decide to migrate a citizen,
+// Note: a Actor cannot decide to migrate a citizen,
 // it only happens automatically if the city is full or very unhappy
 export class CitizenMigrate implements ISimAction {
   constructor(
@@ -45,7 +45,7 @@ export class CitizenMigrate implements ISimAction {
 
     // No city -> convert to Settler
     const settlerDesign =
-      // Player settler design with the highest prod cost
+      // Actor settler design with the highest prod cost
       this.citizen.player.activeDesigns
         .filter((design) => design.equipment.category === "equipmentCategory:settler")
         .sort((a, b) => b.productionCost - a.productionCost)[0] ??
@@ -58,7 +58,11 @@ export class CitizenMigrate implements ISimAction {
 
     return [
       { type: "remove", payload: { key: this.citizen.key } },
-      new CreateUnit(this.citizen.player, settlerDesign).create(this.citizen.city.tile),
+      createUnit({
+        playerKey: this.citizen.playerKey,
+        designKey: settlerDesign.key,
+        tileKey: this.citizen.city.tileKey,
+      }),
     ];
   }
 

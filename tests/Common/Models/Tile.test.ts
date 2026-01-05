@@ -75,7 +75,7 @@ describe("Tile", () => {
   it("throws correct message for invalid relations and types", () => {
     const tileKey = generateKey("tile");
 
-    // Player missing
+    // Actor missing
     const tilePlayerMissing = new Tile(
       tileKey,
       0,

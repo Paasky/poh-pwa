@@ -14,18 +14,13 @@ import type { GameClass, GameKey, GameObject, IRawGameObject } from "@/Common/Mo
 import { GameDataLoader } from "@/Data/GameDataLoader";
 import { setDataBucket } from "@/Data/useDataBucket";
 import type { Tile } from "@/Common/Models/Tile";
-import { fetchJSON } from "@/helpers/network";
+import { getStaticData, type RawStaticData } from "@/Data/StaticDataLoader";
 
-// todo create a IRawType & IRawCategory
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type RawStaticData = { categories: any[]; types: any[] };
 export type RawSaveData = {
   name: string; // "Leader Name - Culture Name" (user editable)
   time: number; // UTC timestamp (ms)
   version: string; // Schema version from package.json
-  // Use any so IDE doesn't complain (this is raw json data anyway)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  objects: (IRawGameObject | any)[];
+  objects: IRawGameObject[];
   world: WorldState;
 };
 
@@ -56,7 +51,7 @@ export class DataBucket {
   }
 
   static async init(rawStaticData?: RawStaticData): Promise<DataBucket> {
-    if (!rawStaticData) rawStaticData = await fetchJSON<RawStaticData>("/staticData.json");
+    if (!rawStaticData) rawStaticData = await getStaticData();
 
     return this.fromRaw(rawStaticData, {} as WorldState);
   }
@@ -64,8 +59,7 @@ export class DataBucket {
   static fromRaw(
     rawStaticData: RawStaticData,
     world: WorldState,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    rawObjects?: (IRawGameObject | any)[],
+    rawObjects?: IRawGameObject[],
   ): DataBucket {
     const types = new Map<TypeKey, TypeObject>();
     const categories = new Map<CatKey, CategoryObject>();

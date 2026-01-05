@@ -1,4 +1,3 @@
-import { hasMany, hasOne } from "@/Common/Models/_Relations";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { CatKey, TypeKey } from "@/Common/Objects/Common";
 import { Yields } from "@/Common/Objects/Yields";
@@ -21,10 +20,6 @@ export class Culture extends GameObject {
     public status: CultureStatus = "notSettled",
   ) {
     super(key);
-
-    hasOne<Player>(this, "playerKey");
-
-    hasMany<Citizen>(this, "citizenKeys");
   }
 
   static attrsConf: GameObjAttr[] = [
@@ -52,9 +47,13 @@ export class Culture extends GameObject {
    * Relations
    */
   citizenKeys = new Set<GameKey>();
-  declare citizens: Citizen[];
+  get citizens(): Map<GameKey, Citizen> {
+    return this.hasMany<Citizen>("citizenKeys");
+  }
 
-  declare player: Player;
+  get player(): Player {
+    return this.hasOne<Player>("playerKey");
+  }
 
   /*
    * Computed
@@ -224,22 +223,22 @@ export class Culture extends GameObject {
 
   get myTypes(): Set<TypeObject> {
     return this.computed(
-      "_myTypes",
+      "myTypes",
       () => new Set([...this.heritages, ...this.traits, this.type, this.concept]),
-      ["heritages", "traits", "type"],
+      { props: ["heritages", "traits", "type"] },
     );
   }
 
   // My Yield output
   get yields(): Yields {
     return this.computed(
-      "_yields",
+      "yields",
       () => {
         const yields = new Yields();
         this.myTypes.forEach((type) => yields.add(...type.yields.all()));
         return yields;
       },
-      ["heritages", "traits", "type"],
+      { props: ["heritages", "traits", "type"] },
     );
   }
 }

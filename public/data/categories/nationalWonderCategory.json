@@ -1,0 +1,80 @@
+[
+  {
+    "key": "nationalWonderCategory:production",
+    "name": "Production",
+    "concept": "conceptType:nationalWonder",
+    "description": ""
+  },
+  {
+    "key": "nationalWonderCategory:gold",
+    "name": "Gold",
+    "concept": "conceptType:nationalWonder",
+    "description": ""
+  },
+  {
+    "key": "nationalWonderCategory:science",
+    "name": "Science",
+    "concept": "conceptType:nationalWonder",
+    "description": ""
+  },
+  {
+    "key": "nationalWonderCategory:growth",
+    "name": "Growth",
+    "concept": "conceptType:nationalWonder",
+    "description": ""
+  },
+  {
+    "key": "nationalWonderCategory:culture",
+    "name": "Culture",
+    "concept": "conceptType:nationalWonder",
+    "description": ""
+  },
+  {
+    "key": "nationalWonderCategory:faith",
+    "name": "Faith",
+    "concept": "conceptType:nationalWonder",
+    "description": ""
+  },
+  {
+    "key": "nationalWonderCategory:happiness",
+    "name": "Happiness",
+    "concept": "conceptType:nationalWonder",
+    "description": ""
+  },
+  {
+    "key": "nationalWonderCategory:order",
+    "name": "Order",
+    "concept": "conceptType:nationalWonder",
+    "description": ""
+  },
+  {
+    "key": "nationalWonderCategory:influence",
+    "name": "Influence",
+    "concept": "conceptType:nationalWonder",
+    "description": ""
+  },
+  {
+    "key": "nationalWonderCategory:military",
+    "name": "Military",
+    "concept": "conceptType:nationalWonder",
+    "description": ""
+  },
+  {
+    "key": "nationalWonderCategory:water",
+    "name": "Water",
+    "concept": "conceptType:nationalWonder",
+    "description": ""
+  },
+  {
+    "key": "nationalWonderCategory:trade",
+    "name": "Trade",
+    "concept": "conceptType:nationalWonder",
+    "description": ""
+  },
+  {
+    "key": "nationalWonderCategory:wMD",
+    "name": "WMD",
+    "concept": "conceptType:nationalWonder",
+    "description": ""
+  }
+]

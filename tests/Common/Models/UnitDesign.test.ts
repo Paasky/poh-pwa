@@ -50,7 +50,7 @@ describe("UnitDesign", () => {
     expect(design1.playerKey).toBeNull();
     expect(design1.player).toBeNull();
 
-    expect(design2.name).toBe("Player Design");
+    expect(design2.name).toBe("Actor Design");
     expect(design2.platform.key).toBe("platformType:galley");
     expect(design2.equipment.key).toBe("equipmentType:bronzeAxe");
     expect(design2.isElite).toBe(true);
@@ -61,7 +61,7 @@ describe("UnitDesign", () => {
   it("throws correct message for invalid relations and types", () => {
     const designKey = generateKey("unitDesign");
 
-    // Player missing (when provided)
+    // Actor missing (when provided)
     const designPlayerMissing = new UnitDesign(
       designKey,
       useDataBucket().getType("platformType:raft"),

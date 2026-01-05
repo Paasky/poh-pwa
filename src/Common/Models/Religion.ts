@@ -1,4 +1,3 @@
-import { hasMany, hasOne } from "@/Common/Models/_Relations";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import { useDataBucket } from "@/Data/useDataBucket";
@@ -25,11 +24,6 @@ export class Religion extends GameObject {
     public knownByPlayerKeys = new Set<GameKey>(),
   ) {
     super(key);
-
-    hasOne<City>(this, "cityKey");
-    hasMany<Citizen>(this, "citizenKeys");
-    hasMany<Player>(this, "playerKeys");
-    hasMany<Player>(this, "knownByPlayerKeys");
   }
 
   static attrsConf: GameObjAttr[] = [
@@ -58,14 +52,22 @@ export class Religion extends GameObject {
    * Relations
    */
   citizenKeys = new Set<GameKey>();
-  declare citizens: Citizen[];
+  get citizens(): Map<GameKey, Citizen> {
+    return this.hasMany<Citizen>("citizenKeys");
+  }
 
-  declare city: City;
+  get city(): City {
+    return this.hasOne<City>("cityKey");
+  }
 
   playerKeys = new Set<GameKey>();
-  declare players: Player[];
+  get players(): Map<GameKey, Player> {
+    return this.hasMany<Player>("playerKeys");
+  }
 
-  declare knownByPlayers: Player[];
+  get knownByPlayers(): Map<GameKey, Player> {
+    return this.hasMany<Player>("knownByPlayerKeys");
+  }
 
   /*
    * Computed
@@ -216,22 +218,22 @@ export class Religion extends GameObject {
 
   get myTypes(): Set<TypeObject> {
     return this.computed(
-      "_myTypes",
+      "myTypes",
       () => new Set([...this.myths, ...this.gods, ...this.dogmas, this.concept]),
-      ["myths", "gods", "dogmas"],
+      { props: ["myths", "gods", "dogmas"] },
     );
   }
 
   // My Yield output
   get yields(): Yields {
     return this.computed(
-      "_yields",
+      "yields",
       () => {
         const yields = new Yields();
         this.myTypes.forEach((type) => yields.add(...type.yields.all()));
         return yields;
       },
-      ["myths", "gods", "dogmas"],
+      { props: ["myths", "gods", "dogmas"] },
     );
   }
 }

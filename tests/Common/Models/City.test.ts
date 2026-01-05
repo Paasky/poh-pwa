@@ -77,7 +77,7 @@ describe("City", () => {
   it("throws correct message for invalid relations", () => {
     const cityKey = generateKey("city");
 
-    // Player missing
+    // Actor missing
     const cityPlayerMissing = new City(cityKey, "player:99", tileKey(0, 0), "Test");
     useDataBucket().setObject(cityPlayerMissing);
     expectRelationToThrowMissing(cityPlayerMissing, "player", "player:99");

@@ -1,0 +1,74 @@
+[
+  {
+    "key": "naturalWonderCategory:canyon",
+    "name": "Canyon",
+    "concept": "conceptType:naturalWonder",
+    "description": ""
+  },
+  {
+    "key": "naturalWonderCategory:floodPlains",
+    "name": "Flood Plains",
+    "concept": "conceptType:naturalWonder",
+    "description": ""
+  },
+  {
+    "key": "naturalWonderCategory:hills",
+    "name": "Hills",
+    "concept": "conceptType:naturalWonder",
+    "description": ""
+  },
+  {
+    "key": "naturalWonderCategory:mountain",
+    "name": "Mountain",
+    "concept": "conceptType:naturalWonder",
+    "description": ""
+  },
+  {
+    "key": "naturalWonderCategory:spring",
+    "name": "Spring",
+    "concept": "conceptType:naturalWonder",
+    "description": ""
+  },
+  {
+    "key": "naturalWonderCategory:volcano",
+    "name": "Volcano",
+    "concept": "conceptType:naturalWonder",
+    "description": ""
+  },
+  {
+    "key": "naturalWonderCategory:waterfall",
+    "name": "Waterfall",
+    "concept": "conceptType:naturalWonder",
+    "description": ""
+  },
+  {
+    "key": "naturalWonderCategory:coast",
+    "name": "Coast",
+    "concept": "conceptType:naturalWonder",
+    "description": ""
+  },
+  {
+    "key": "naturalWonderCategory:islands",
+    "name": "Islands",
+    "concept": "conceptType:naturalWonder",
+    "description": ""
+  },
+  {
+    "key": "naturalWonderCategory:desert",
+    "name": "Desert",
+    "concept": "conceptType:naturalWonder",
+    "description": ""
+  },
+  {
+    "key": "naturalWonderCategory:forest",
+    "name": "Forest",
+    "concept": "conceptType:naturalWonder",
+    "description": ""
+  },
+  {
+    "key": "naturalWonderCategory:lake",
+    "name": "Lake",
+    "concept": "conceptType:naturalWonder",
+    "description": ""
+  }
+]

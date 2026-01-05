@@ -1,0 +1,412 @@
+[
+  {
+    "key": "traitType:cooperative",
+    "name": "Cooperative",
+    "concept": "conceptType:trait",
+    "description": "The cooperative trait refers to organized collaboration to secure mutual benefit through shared resources and decision-making. Medieval craft guilds coordinated training, quality standards, and mutual aid for members. In 1844 the Rochdale Society codified principles of democratic control and patronage dividends that shaped consumer co-ops and credit unions. Israeli kibbutzim practiced collective agriculture, childcare, and communal budgeting. Urban mutual aid societies aided migrants and workers with sickness funds and burials. Cooperative banking expanded access to credit for farmers and artisans. Across periods, cooperative structures buffered risk, facilitated learning, and increased bargaining power for participants facing volatile markets or state pressures.",
+    "category": "traitCategory:food",
+    "yields": [
+      {
+        "type": "yieldType:food",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "isPositive": true
+  },
+  {
+    "key": "traitType:gluttonous",
+    "name": "Gluttonous",
+    "concept": "conceptType:trait",
+    "description": "The gluttonous trait denotes repeated overconsumption of food and drink beyond need. Roman elites staged banquets with imported delicacies to affirm status and hospitality. Medieval theology listed gluttony among the seven deadly sins and warned of spiritual and social disorder from excess. Renaissance and early modern courts revived vast feasts with sugar sculptures and rare meats. Satirists from Rabelais to English caricaturists mocked waste and corpulence. Reformers promoted temperance and sumptuary rules to restrain lavish tables. Debates over gluttony linked diet, morality, health, and class display across European and Mediterranean societies.",
+    "category": "traitCategory:food",
+    "yields": [
+      {
+        "type": "yieldType:food",
+        "amount": -1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "isPositive": false
+  },
+  {
+    "key": "traitType:hardWorking",
+    "name": "Hard-Working",
+    "concept": "conceptType:trait",
+    "description": "The hard-working trait marks sustained, disciplined labor applied to production and service. Agrarian households in preindustrial societies timed sowing, harvest, and storage to seasonal cycles that demanded intense collective effort. In colonial North America a Puritan work ethic cast diligence as civic and religious duty. Nineteenth-century factories reorganized time with shifts and piece rates, creating dense routines for textiles, coal, and steel. Soviet campaigns, including the Stakhanovite movement, celebrated exemplary productivity to raise output targets. Across eras, institutions rewarded industry with wages, status, or land, while technologies and management shaped how effort translated into measurable results.",
+    "category": "traitCategory:production",
+    "yields": [
+      {
+        "type": "yieldType:production",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "isPositive": true
+  },
+  {
+    "key": "traitType:lazy",
+    "name": "Lazy",
+    "concept": "conceptType:trait",
+    "description": "The lazy trait denotes habitual avoidance of work or perceived idleness. Authorities often defined it legally and morally rather than empirically. Tudor and Stuart England enforced vagrancy statutes that punished wandering and begging while pushing the poor into labor. Medieval sermons condemned sloth as a spiritual failing. Early modern poor relief distinguished deserving and undeserving poor, guiding access to parish support. Eighteenth-century caricature depicted idlers in coffeehouses and streets. Such depictions served to police labor discipline and justify workhouse regimes, revealing the role of power in labeling individuals as idle.",
+    "category": "traitCategory:production",
+    "yields": [
+      {
+        "type": "yieldType:production",
+        "amount": -1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "isPositive": false
+  },
+  {
+    "key": "traitType:entrepreneuring",
+    "name": "Entrepreneuring",
+    "concept": "conceptType:trait",
+    "description": "Entrepreneuring refers to initiating ventures that accept risk to reorganize resources for profit. Medieval merchants used commenda contracts and guild networks to finance long-distance trade. Seventeenth-century joint-stock firms such as the Dutch and English East India Companies coordinated capital, fleets, and colonial outposts. Nineteenth-century industrial entrepreneurs built factories, railways, and telegraph lines, often backed by banks and protective tariffs. In the late twentieth century, venture capital funded high-growth technology startups. Legal innovations, from bankruptcy protection to limited liability, lowered risk thresholds and encouraged entry. Entrepreneurial waves often coincided with new markets and breakthrough technologies.",
+    "category": "traitCategory:gold",
+    "yields": [
+      {
+        "type": "yieldType:gold",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "isPositive": true
+  },
+  {
+    "key": "traitType:corrupt",
+    "name": "Corrupt",
+    "concept": "conceptType:trait",
+    "description": "Corrupt conduct is the abuse of entrusted power for private gain, which erodes state capacity and public trust. In the late Roman Republic and early Empire, some provincial governors extracted illicit taxes and gifts, prompting laws on extortion courts. Under the Ancien Régime, tax farming, sale of offices, and court patronage enabled rents and favoritism. In nineteenth-century New York, Tammany Hall combined electoral mobilization with graft and padded contracts. Reform waves followed these episodes, including civil service exams, transparency rules, and anti-bribery statutes. Patterns of corruption often track weak oversight, concentrated discretion, and lucrative resource flows.",
+    "category": "traitCategory:gold",
+    "yields": [
+      {
+        "type": "yieldType:gold",
+        "amount": -1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "isPositive": false
+  },
+  {
+    "key": "traitType:inquisitive",
+    "name": "Inquisitive",
+    "concept": "conceptType:trait",
+    "description": "The inquisitive trait favors curiosity, observation, and experimentation. Renaissance natural philosophers, including Leonardo da Vinci and Galileo Galilei, studied mechanics, anatomy, and astronomy with instruments and notebooks. Scholars during the Islamic Golden Age translated Greek texts and advanced algebra, optics, and medicine, exemplified by al-Khwarizmi and Ibn al-Haytham. Early modern Europe institutionalized inquiry through academies and journals, shaping the scientific method and standardizing peer scrutiny. Voyages of discovery expanded botanical and cartographic data. This disposition fostered systematic knowledge accumulation and the diffusion of technical skills across workshops, courts, and universities.",
+    "category": "traitCategory:science",
+    "yields": [
+      {
+        "type": "yieldType:science",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "isPositive": true
+  },
+  {
+    "key": "traitType:ignorant",
+    "name": "Ignorant",
+    "concept": "conceptType:trait",
+    "description": "The ignorant trait denotes a lack of knowledge or resistance to new information. States and communities have enforced ignorance through censorship, isolation, or persecution. Qin authorities burned heterodox texts and punished scholars to consolidate ideology. Early modern European witch trials drew on superstition and unreliable testimony, producing lethal miscarriages of justice. Tokugawa sakoku limited foreign contact and restricted the flow of books, though selective learning persisted. These episodes illustrate how institutional barriers and fear can delay scientific or legal reform. Counter-movements often emerged through clandestine study, print circulation, and legal codification of toleration.",
+    "category": "traitCategory:science",
+    "yields": [
+      {
+        "type": "yieldType:science",
+        "amount": -1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "isPositive": false
+  },
+  {
+    "key": "traitType:artistic",
+    "name": "Artistic",
+    "concept": "conceptType:trait",
+    "description": "The artistic trait favors skilled creation in visual, musical, and literary media. Renaissance workshops trained apprentices under masters who coordinated commissions for churches and courts, resulting in fresco cycles, altarpieces, and bronzes. Mughal emperors sponsored miniature painting, architecture, and luxury crafts that fused Persianate and South Asian techniques. European guilds and academies set standards for materials, composition, and patronage. Music and theater thrived under civic and noble support. Artistic labor relied on materials supply, specialized tools, and networks of patrons and dealers. Its products shaped ceremony, devotion, and urban prestige across regions.",
+    "category": "traitCategory:culture",
+    "yields": [
+      {
+        "type": "yieldType:culture",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "isPositive": true
+  },
+  {
+    "key": "traitType:traditional",
+    "name": "Traditional",
+    "concept": "conceptType:trait",
+    "description": "The traditional trait prioritizes continuity with inherited norms, rites, and social roles. Confucian doctrine structured kinship, education, and governance across East Asia through ritual propriety and examination systems. Tokugawa Japan reinforced status hierarchies and village compacts that regulated dress, weapons, and mobility. European guilds preserved craft techniques, apprenticeship sequences, and pricing rules across generations. Tradition maintained predictability and collective identity, but sometimes slowed institutional change when reforms threatened established privileges. Legal codes, festivals, and domestic rituals acted as carriers of continuity. Debates over tradition framed modernization in the nineteenth and twentieth centuries.",
+    "category": "traitCategory:culture",
+    "yields": [
+      {
+        "type": "yieldType:culture",
+        "amount": -1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "isPositive": false
+  },
+  {
+    "key": "traitType:spiritual",
+    "name": "Spiritual",
+    "concept": "conceptType:trait",
+    "description": "Spiritual life focuses on devotion, ritual, and the pursuit of transcendent experience. In medieval Europe, Christian monasticism organized prayer, study, and charity within monasteries that shaped intellectual and social life. In the Islamic world, Sufi orders taught remembrance of God through disciplined practice, poetry, and companionship, and spread across regions by lodge networks. Early modern and modern revivals in Protestant communities renewed lay piety through itinerant preaching and hymnody. Spiritual currents often intersected with education, care for the poor, and state policy. They produced notable literature, sacred architecture, and enduring communities that transmitted moral teaching, mysticism, and ordered communal living.",
+    "category": "traitCategory:faith",
+    "yields": [
+      {
+        "type": "yieldType:faith",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "isPositive": true
+  },
+  {
+    "key": "traitType:agnostic",
+    "name": "Agnostic",
+    "concept": "conceptType:trait",
+    "description": "Agnosticism holds that ultimate truths about the divine are unknown or unknowable. Thomas Huxley coined the term in 1869 to mark a cautious stance in debates stirred by Darwinian evolution. Its roots extend to Enlightenment skepticism, which questioned revealed authority and demanded empirical proof. During the nineteenth and twentieth centuries, freethought circles and secular humanists advanced arguments for methodological naturalism in science and ethics. Agnostic positions entered university curricula, periodical debates, and public lectures. They influenced legal and educational disputes over church and state. The stance persisted in modern philosophy of religion, where arguments address evidence, burden of proof, and limits of human reason.",
+    "category": "traitCategory:faith",
+    "yields": [
+      {
+        "type": "yieldType:faith",
+        "amount": -1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "isPositive": false
+  },
+  {
+    "key": "traitType:hygienic",
+    "name": "Hygienic",
+    "concept": "conceptType:trait",
+    "description": "Hygienic practice seeks to prevent disease through cleanliness, sanitation, and controlled environments. In the nineteenth century, Florence Nightingale reformed hospital design and nursing routines, reducing mortality with ventilation, laundering, and record-keeping. John Snow mapped cholera cases in London and linked outbreaks to contaminated water, guiding early epidemiology. Urban authorities built sewers and regulated water supplies as industrial cities expanded. Germ theory, public health boards, and vaccination campaigns reinforced preventive measures. Hygiene entered schools, factories, and military camps through inspection regimes and manuals. By the early twentieth century, sanitation infrastructure and professional public health reshaped urban life and lowered infectious disease burdens.",
+    "category": "traitCategory:health",
+    "yields": [
+      {
+        "type": "yieldType:health",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "isPositive": true
+  },
+  {
+    "key": "traitType:unsanitary",
+    "name": "Unsanitary",
+    "concept": "conceptType:trait",
+    "description": "Unsanitary conditions allow pathogens to spread through contaminated water, poor waste disposal, and crowding. Nineteenth-century industrial cities experienced recurrent cholera and typhoid due to polluted pumps and open sewers. Overcrowded tenements, sweatshops, and lodging houses fostered tuberculosis and other infections. Military camps and trenches in the First World War struggled with latrines, lice, and mud, which degraded health and morale. Before germ theory, miasma beliefs obscured causal chains, delaying effective interventions. Reformers used mortality data, inspections, and public inquiries to expose hazards. Legislated building codes, sewer construction, and clean water systems gradually curtailed the most lethal urban outbreaks.",
+    "category": "traitCategory:health",
+    "yields": [
+      {
+        "type": "yieldType:health",
+        "amount": -1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "isPositive": false
+  },
+  {
+    "key": "traitType:joyful",
+    "name": "Joyful",
+    "concept": "conceptType:trait",
+    "description": "Joyful culture appears in festivals, music, and communal gatherings that affirm social bonds. In premodern Europe, Carnival inverted hierarchies, mixed classes, and marked the calendar with processions, masks, and food. Religious holidays linked devotion to feasting and collective song. In the nineteenth century, music halls, fairs, and public parks provided affordable entertainment to growing urban populations. Organizers used parades, sports days, and civic anniversaries to strengthen local identity. Joyful occasions also accompanied rites of passage and seasonal labor cycles. They supported resilience during hardship and generated repertoire in song, dance, and costume that later historians and folklorists documented.",
+    "category": "traitCategory:happiness",
+    "yields": [
+      {
+        "type": "yieldType:happiness",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "isPositive": true
+  },
+  {
+    "key": "traitType:jealous",
+    "name": "Jealous",
+    "concept": "conceptType:trait",
+    "description": "Jealousy in politics and society often drives rivalry, suspicion, and punitive action. Dynastic competition between the Habsburg and Valois houses shaped sixteenth-century European wars and diplomacy. At the Ottoman court, succession anxieties produced intrigue, purges, and the confinement of potential heirs. Among Greek city-states, civic pride and envy fueled contests for prestige, alliances, and hegemony, most famously between Athens and Sparta. Courts monitored favorites and marriages to guard status and property. Laws of inheritance and dowry reflected attempts to channel jealousy into stable order. Chroniclers recorded jealous resentments as triggers for coups, vendettas, and prolonged interstate conflict.",
+    "category": "traitCategory:happiness",
+    "yields": [
+      {
+        "type": "yieldType:happiness",
+        "amount": -1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "isPositive": false
+  },
+  {
+    "key": "traitType:obedient",
+    "name": "Obedient",
+    "concept": "conceptType:trait",
+    "description": "Obedience underpins military discipline, bureaucratic order, and family hierarchy. Prussia cultivated drill, punctuality, and legal compliance to build an efficient army and state in the eighteenth and nineteenth centuries. In imperial China, Confucian teaching anchored filial piety and deference within households and officialdom. The Roman legion combined oath-bound service with harsh penalties, maintaining cohesion in campaigns across vast distances. Schools, churches, and civil codes taught deference to law and office. Obedience enabled tax collection, conscription, and standardized procedures. Critics warned that rigid conformity could suppress initiative, yet many states linked obedience to merit systems and predictable justice.",
+    "category": "traitCategory:order",
+    "yields": [
+      {
+        "type": "yieldType:order",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "isPositive": true
+  },
+  {
+    "key": "traitType:rebellious",
+    "name": "Rebellious",
+    "concept": "conceptType:trait",
+    "description": "Rebellious action challenges authority through protest, conspiracy, or open revolt. Spartacus led an armed slave uprising against the Roman Republic from 73 to 71 BCE, exposing structural dependence on enslaved labor. In 1381, English peasants attacked fiscal exactions and serfdom, prompting negotiated promises and swift repression. The German Peasants’ War of 1524–1525 combined religious and socioeconomic demands and met coordinated princely force. Later revolts drew on print, rumor, and clandestine networks to mobilize support. Authorities replied with amnesties, exemplary punishment, and administrative reform. Historians track grievance, leadership, and logistics to explain why some rebellions reshaped institutions while others failed.",
+    "category": "traitCategory:order",
+    "yields": [
+      {
+        "type": "yieldType:order",
+        "amount": -1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "isPositive": false
+  },
+  {
+    "key": "traitType:trading",
+    "name": "Trading",
+    "concept": "conceptType:trait",
+    "description": "Trading links distant regions through the exchange of goods, credit, and information. Phoenician mariners established coastal stations and carried timber, metals, and dyes across the Mediterranean. The Silk Road moved silk, horses, and ideas between China, Central Asia, and the Mediterranean through caravan hubs and oasis towns. Venice built a merchant republic on convoys, contracts, and partnerships, dominating late medieval sea-lanes. Bills of exchange, commenda contracts, and notarial records reduced risk and documented obligations. Trading cities brokered diplomatic privileges and safe-conducts to secure routes. Customs houses, fairs, and warehouses standardized transactions and financed states through duties and loans.",
+    "category": "traitCategory:trade",
+    "yields": [
+      {
+        "type": "yieldType:tradeSlot",
+        "amount": 1,
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ],
+    "isPositive": true
+  },
+  {
+    "key": "traitType:sedentary",
+    "name": "Sedentary",
+    "concept": "conceptType:trait",
+    "description": "Sedentary life emerges with permanent settlement, stored surplus, and fixed fields. After the Neolithic transition, farming villages expanded into towns, enabling craft specialization and population growth. Irrigation and granaries supported city-states in Mesopotamia, such as Ur and Babylon, where temples and palaces anchored administration. Writing, taxation, and codified law managed land, labor, and tribute. In medieval Europe, manorial villages organized agriculture around open fields, lordship, and parish institutions. Sedentism encouraged boundary making, fortifications, and long-term investment in terraces, wells, and roads. It also increased exposure to epidemics and environmental stress, driving innovations in governance and technology.",
+    "category": "traitCategory:trade",
+    "yields": [
+      {
+        "type": "yieldType:tradeSlot",
+        "amount": -1,
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ],
+    "isPositive": false
+  },
+  {
+    "key": "traitType:aggressive",
+    "name": "Aggressive",
+    "concept": "conceptType:trait",
+    "description": "Aggressive polities or leaders pursue goals through force and continual readiness for war. They privilege conquest, coercive diplomacy, and punitive expeditions over compromise. Such postures can yield rapid territorial expansion and institutional innovations in logistics, taxation, and command, yet they often bring devastation and overstretch. The Mongol conquests under Genghis Khan reshaped Eurasian power and mobility. Rome’s Republic and Empire fused aggression with citizenship and road networks to absorb rivals. Napoleon’s campaigns exported revolutionary legal codes while exhausting France. Aggressive systems cultivate elite warrior cultures and centralized decision-making, and they rely on propaganda to maintain morale and legitimacy during prolonged campaigns.",
+    "category": "traitCategory:strength",
+    "yields": [
+      {
+        "type": "yieldType:strength",
+        "amount": 10,
+        "method": "percent",
+        "for": [
+          "conceptType:unit"
+        ]
+      }
+    ],
+    "isPositive": true
+  },
+  {
+    "key": "traitType:peaceful",
+    "name": "Peaceful",
+    "concept": "conceptType:trait",
+    "description": "Peaceful societies or rulers seek stability through nonviolence, mediation, and restraint in foreign affairs. They favor arbitration, neutrality, and humanitarian norms, and invest in commerce, education, and infrastructure rather than conquest. Quaker communities in seventeenth‑century England developed pacifist ethics that guided relief and reform work. After the Kalinga war, Ashoka renounced expansion, promoted dhamma, and sponsored welfare and Buddhist missions. Several Scandinavian states practiced neutrality for long stretches, reducing military entanglements while deepening trade. Peaceful strategies can limit casualties and foster prosperity, but they depend on deterrence, reliable diplomacy, and domestic consensus to withstand external pressure.",
+    "category": "traitCategory:strength",
+    "yields": [
+      {
+        "type": "yieldType:strength",
+        "amount": -10,
+        "method": "percent",
+        "for": [
+          "conceptType:unit"
+        ]
+      }
+    ],
+    "isPositive": false
+  },
+  {
+    "key": "traitType:diplomatic",
+    "name": "Diplomatic",
+    "concept": "conceptType:trait",
+    "description": "Diplomatic actors prioritize negotiation, protocol, and alliance management to resolve disputes and shape balances of power. Courts employ resident ambassadors, congresses, and treaty systems to codify obligations and avoid escalation. The Venetian Republic built expertise in intelligence and ceremonial precedence to manage Italian rivalries. Tudor England used marriage alliances and treaties to offset continental threats. The Congress of Vienna reorganized Europe after Napoleon through multilateral bargaining and a concert system. Effective diplomacy requires information networks, skilled envoys, and credible promises. It can prolong peace and create durable frameworks, yet it may also freeze inequities and provoke revisionist challenges.",
+    "category": "traitCategory:influence",
+    "yields": [
+      {
+        "type": "yieldType:influence",
+        "amount": 1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "isPositive": true
+  },
+  {
+    "key": "traitType:blunt",
+    "name": "Blunt",
+    "concept": "conceptType:trait",
+    "description": "Blunt communication values direct, unadorned speech, even when abrasive. It rejects euphemism and elaborate rhetoric in favor of clarity and force. Spartan laconic sayings set a classical template for terse confidence. In Rome, some senators and tribunes used frank oratory to attack corruption and rally factions. Revolutionary pamphleteers employed plain language to mobilize readers and demand radical change. Bluntness can cut through ambiguity and deter opponents, but it risks insult, diplomatic breakdown, and hardened positions. Cultures that prize blunt speech often pair it with strict honor codes and a tolerance for public confrontation.",
+    "category": "traitCategory:influence",
+    "yields": [
+      {
+        "type": "yieldType:influence",
+        "amount": -1,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ],
+    "isPositive": false
+  }
+]

@@ -1,6 +1,5 @@
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import type { Tile } from "@/Common/Models/Tile";
-import { hasMany } from "@/Common/Models/_Relations";
 
 export class River extends GameObject {
   constructor(
@@ -9,8 +8,6 @@ export class River extends GameObject {
     public tileKeys: Set<GameKey>,
   ) {
     super(key);
-
-    hasMany<Tile>(this, "tileKeys");
   }
 
   static attrsConf: GameObjAttr[] = [
@@ -28,7 +25,9 @@ export class River extends GameObject {
   /*
    * Relations
    */
-  declare tiles: Tile[];
+  get tiles(): Map<GameKey, Tile> {
+    return this.hasMany<Tile>("tileKeys");
+  }
 
   /*
    * Computed

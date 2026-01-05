@@ -1,0 +1,62 @@
+[
+  {
+    "key": "minorCultureCategory:africa",
+    "name": "Africa",
+    "concept": "conceptType:minorCulture",
+    "description": ""
+  },
+  {
+    "key": "minorCultureCategory:america",
+    "name": "America",
+    "concept": "conceptType:minorCulture",
+    "description": ""
+  },
+  {
+    "key": "minorCultureCategory:andea",
+    "name": "Andea",
+    "concept": "conceptType:minorCulture",
+    "description": ""
+  },
+  {
+    "key": "minorCultureCategory:asia",
+    "name": "Asia",
+    "concept": "conceptType:minorCulture",
+    "description": ""
+  },
+  {
+    "key": "minorCultureCategory:europe",
+    "name": "Europe",
+    "concept": "conceptType:minorCulture",
+    "description": ""
+  },
+  {
+    "key": "minorCultureCategory:levantica",
+    "name": "Levantica",
+    "concept": "conceptType:minorCulture",
+    "description": ""
+  },
+  {
+    "key": "minorCultureCategory:mediterra",
+    "name": "Mediterra",
+    "concept": "conceptType:minorCulture",
+    "description": ""
+  },
+  {
+    "key": "minorCultureCategory:oceania",
+    "name": "Oceania",
+    "concept": "conceptType:minorCulture",
+    "description": ""
+  },
+  {
+    "key": "minorCultureCategory:siberia",
+    "name": "Siberia",
+    "concept": "conceptType:minorCulture",
+    "description": ""
+  },
+  {
+    "key": "minorCultureCategory:taiga",
+    "name": "Taiga",
+    "concept": "conceptType:minorCulture",
+    "description": ""
+  }
+]

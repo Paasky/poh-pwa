@@ -1,0 +1,164 @@
+[
+  {
+    "key": "mythType:godMother",
+    "name": "God Mother",
+    "concept": "conceptType:myth",
+    "description": "The God Mother is a primordial mother deity linked to creation, civic order, and authority. Founding rites for cities petitioned her to fix boundaries, law, and measure. Coronations held before her shrines conveyed lawful rule and continuity. Urban surveyors offered libations at key points to bind streets and walls to sacred order. Comparable cults appear with Ninhursag in Mesopotamia, Cybele in Anatolia, and Isis in Hellenistic states, where state festivals tied political power to maternal divinity. In many calendars her feast opened civic years, and guilds of midwives, magistrates, and builders kept altars in administrative quarters.",
+    "category": "mythCategory:creation",
+    "yields": [
+      {
+        "type": "yieldType:order",
+        "amount": 2,
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "mythType:greatBeast",
+    "name": "Great Beast",
+    "concept": "conceptType:myth",
+    "description": "The Great Beast denotes a primal creature associated with raw strength and combat. Armies painted or stitched its image on standards to stiffen ranks and project fear. Elite companies traced mythical descent to it and used totems in oath rites. Seasonal royal hunts of lions or bulls doubled as training and public theater, as in Neo-Assyrian campaigns. Greek narratives of Heracles and the Nemean lion furnished a heroic template. Chinese and steppe banners carried beast emblems to rally formations. Feasts followed successful hunts, linking martial prowess to civic protection and the provisioning of troops.",
+    "category": "mythCategory:creation",
+    "yields": [
+      {
+        "type": "yieldType:strength",
+        "amount": 1,
+        "for": [
+          "conceptType:unit"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "mythType:greatAnimal",
+    "name": "Great Animal",
+    "concept": "conceptType:myth",
+    "description": "The Great Animal refers to a sacred species linked to abundance and urban provisioning. States kept herds under temple or palace oversight to buffer lean seasons. Harvest rites dedicated prime animals to ensure continued fertility. Egypt offers a classic pattern in the Apis bull and the cow cult of Hathor. Roman suovetaurilia purified fields and affirmed plenty through the sacrifice of pig, sheep, and bull. In the Andes, state-managed llama and alpaca herds supported storehouses and redistribution. Granaries, markets, and weights often bore animal emblems to mark lawful measures and reliable supplies.",
+    "category": "mythCategory:creation",
+    "yields": [
+      {
+        "type": "yieldType:food",
+        "amount": 2,
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ]
+  },
+  {
+    "key": "mythType:gods",
+    "name": "Gods",
+    "concept": "conceptType:myth",
+    "description": "The Gods designate a celestial pantheon woven into civic institutions. Temple networks converted cosmogonic myths into calendars, taxes, and labor obligations. Priests mediated between rulers and populace through oracles, sacrifices, and processions. Mesopotamian cities anchored authority in patron deities and temple economies. Greek poleis coordinated loyalty through Panhellenic and local festivals. Rome fused republican rites with the imperial cult to bind provinces. Processions, choral poetry, and shared feasts created durable communal identity. Law codes, oaths, and treaties invoked divine names to sanction decisions and integrate conquered peoples.",
+    "category": "mythCategory:stars",
+    "yields": [
+      {
+        "type": "yieldType:faith",
+        "amount": 2,
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ],
+    "requires": [
+      "mythCategory:creation"
+    ]
+  },
+  {
+    "key": "mythType:elders",
+    "name": "Elders",
+    "concept": "conceptType:myth",
+    "description": "The Elders are venerated ancestors and senior custodians of law and memory. Councils of elders judged disputes, managed land, and preserved precedent. Oral experts recited genealogies, creation stories, and charter myths during assemblies and funerals. Comparative cases include the Spartan gerousia, the early Roman senate as a council of elders, West African griots as lineage historians, and village councils across the Pacific. Patronage by elders sustained craft lineages and canonical artistic forms. Their authority stabilized succession, shaped education, and offered continuity during crisis or migration.",
+    "category": "mythCategory:stars",
+    "yields": [
+      {
+        "type": "yieldType:culture",
+        "amount": 2,
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ],
+    "requires": [
+      "mythCategory:creation"
+    ]
+  },
+  {
+    "key": "mythType:created",
+    "name": "Created",
+    "concept": "conceptType:myth",
+    "description": "The Created covers myths detailing the origin of the world and humankind. Such narratives set cosmic time, assign roles to gods and rulers, and justify ritual order. They guide temple calendars and the layout of courts, altars, and markets. The Babylonian Enuma Elish framed royal power through Marduk’s victory and the building of Babylon. Genesis offered a seven-day schema and a moral cosmos under a single creator. Greek stories such as Prometheus molding humans from clay explained craft, fire, and punishment. These accounts anchored law, labor, and festival cycles.",
+    "category": "mythCategory:humans",
+    "yields": [
+      {
+        "type": "yieldType:gold",
+        "amount": 2,
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ],
+    "requires": [
+      "mythCategory:creation"
+    ]
+  },
+  {
+    "key": "mythType:descended",
+    "name": "Descended",
+    "concept": "conceptType:myth",
+    "description": "Descended beliefs assert genealogies from divine ancestors to legitimize rule and peoplehood. Courts staged rites that traced sovereigns to a founding deity, securing continuity in succession and diplomacy. Japan grounded imperial authority in descent from Amaterasu. Rome linked elite families and emperors to Aeneas and Venus. Egyptian pharaohs were styled the living son of Ra or Amun, with birth rooms and reliefs that narrate divine paternity. Such claims shaped marriage policy, adoption, and the placement of temples, and they supported imperial cults that fused political loyalty with ancestral worship.",
+    "category": "mythCategory:humans",
+    "yields": [
+      {
+        "type": "yieldType:science",
+        "amount": 2,
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ],
+    "requires": [
+      "mythCategory:creation"
+    ]
+  },
+  {
+    "key": "mythType:forever",
+    "name": "Forever",
+    "concept": "conceptType:myth",
+    "description": "The idea of Forever concerns immortality, unending life, or perpetual reward. It produced funerary architecture, mortuary texts, and techniques for preserving bodies or names. Egypt developed pyramids, tomb complexes, and Books of the Dead to secure an eternal estate. Norse traditions envisaged Valhalla for select warriors, with feasting and periodic battle. Chinese courts sponsored Taoist pursuits of longevity through alchemy, diet, and ritual ascent. Debates over soul, memory, and bodily integrity shaped burial laws, ancestor rites, and the patronage of monasteries and priesthoods.",
+    "category": "mythCategory:death",
+    "yields": [
+      {
+        "type": "yieldType:production",
+        "amount": 2,
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ],
+    "requires": [
+      "mythCategory:creation"
+    ]
+  },
+  {
+    "key": "mythType:reborn",
+    "name": "Reborn",
+    "concept": "conceptType:myth",
+    "description": "Reborn doctrines teach cyclical return through reincarnation. They link conduct to future births and propose paths to liberation. Hindu traditions systematized samsara and karma, guiding social duty and pilgrimage. Buddhist schools framed rebirth without a permanent self, with monastic discipline and meditation as the route to nirvana. Greek Orphic and Pythagorean circles adopted soul transmigration and offered purity rites and gold tablets for guidance after death. These views influenced kingship patronage, legal codes on animal sacrifice, and the circulation of ethical handbooks.",
+    "category": "mythCategory:death",
+    "yields": [
+      {
+        "type": "yieldType:happiness",
+        "amount": 2,
+        "for": [
+          "conceptType:city"
+        ]
+      }
+    ],
+    "requires": [
+      "mythCategory:creation"
+    ]
+  }
+]

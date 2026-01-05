@@ -6,6 +6,7 @@ import { City } from "@/Common/Models/City";
 import { Tile } from "@/Common/Models/Tile";
 import { Yields } from "@/Common/Objects/Yields";
 import { TypeObject } from "@/Common/Objects/TypeObject";
+import { UnitDesign } from "@/Common/Models/UnitDesign";
 
 export const belongsToCity = (
   city: City,
@@ -24,6 +25,12 @@ export const belongsToPlayer = (
 export const canAttack = (object: { canAttack: boolean }): void => {
   if (!object.canAttack) throw new Error("Cannot attack");
 };
+
+export const canStartAction(
+  unit: Unit
+): void => {
+  if (!unit.design.platform.)
+}
 
 export const doesNotBelongToPlayer = (
   player: Player,

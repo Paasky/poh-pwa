@@ -65,10 +65,6 @@ export function canHaveOne<T extends GameObject>(instance: any, relationKey: Rel
   });
 }
 
-export function onRelationUpdate(instance: any, relationKey: RelationKey) {
-  setPrivateProp(instance, relationKey);
-}
-
 export type RelationKey = `${string}Key` | `${string}Keys`;
 function getGetterName(relationKey: RelationKey): string {
   const name = relationKey.replace("Key", "");

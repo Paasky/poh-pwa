@@ -95,7 +95,7 @@ describe("Unit", () => {
   it("throws correct message for invalid relations", () => {
     const unitKey = generateKey("unit");
 
-    // Player missing
+    // Actor missing
     const unitPlayerMissing = new Unit(unitKey, "unitDesign:1", "player:99", tileKey(0, 0));
     useDataBucket().setObject(unitPlayerMissing);
     expectRelationToThrowMissing(unitPlayerMissing, "player", "player:99");

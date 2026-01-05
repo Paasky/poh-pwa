@@ -1,0 +1,74 @@
+[
+  {
+    "key": "traitCategory:food",
+    "name": "Food",
+    "concept": "conceptType:trait",
+    "description": ""
+  },
+  {
+    "key": "traitCategory:production",
+    "name": "Production",
+    "concept": "conceptType:trait",
+    "description": ""
+  },
+  {
+    "key": "traitCategory:gold",
+    "name": "Gold",
+    "concept": "conceptType:trait",
+    "description": ""
+  },
+  {
+    "key": "traitCategory:science",
+    "name": "Science",
+    "concept": "conceptType:trait",
+    "description": ""
+  },
+  {
+    "key": "traitCategory:culture",
+    "name": "Culture",
+    "concept": "conceptType:trait",
+    "description": ""
+  },
+  {
+    "key": "traitCategory:faith",
+    "name": "Faith",
+    "concept": "conceptType:trait",
+    "description": ""
+  },
+  {
+    "key": "traitCategory:health",
+    "name": "Health",
+    "concept": "conceptType:trait",
+    "description": ""
+  },
+  {
+    "key": "traitCategory:happiness",
+    "name": "Happiness",
+    "concept": "conceptType:trait",
+    "description": ""
+  },
+  {
+    "key": "traitCategory:order",
+    "name": "Order",
+    "concept": "conceptType:trait",
+    "description": ""
+  },
+  {
+    "key": "traitCategory:trade",
+    "name": "Trade",
+    "concept": "conceptType:trait",
+    "description": ""
+  },
+  {
+    "key": "traitCategory:strength",
+    "name": "Strength",
+    "concept": "conceptType:trait",
+    "description": ""
+  },
+  {
+    "key": "traitCategory:influence",
+    "name": "Influence",
+    "concept": "conceptType:trait",
+    "description": ""
+  }
+]

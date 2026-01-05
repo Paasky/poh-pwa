@@ -5,7 +5,7 @@ import {
   defaultEngineSettings,
   EngineSettings,
   gameSettingKeys,
-} from "@/Player/Human/EngineSettings";
+} from "@/Actor/Human/EngineSettings";
 
 const STORAGE_KEY = "poh.settings";
 const STORAGE_VERSION = pkg.version;

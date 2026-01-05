@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-import { canHaveOne, hasOne } from "@/Common/Models/_Relations";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { unitYieldTypeKeys, Yield, Yields } from "@/Common/Objects/Yields";
 import { roundToTenth } from "@/Common/Objects/Common";
@@ -51,15 +50,7 @@ export class Unit extends GameObject {
     this.movement = new UnitMovement(this);
     this.movement.moves = moves;
 
-    hasOne<UnitDesign>(this, "designKey");
-
-    hasOne<Player>(this, "origPlayerKey");
-    hasOne<Player>(this, "playerKey");
-    hasOne<Tile>(this, "tileKey");
-
     this.tradeRouteKey = null;
-    canHaveOne<City>(this, "cityKey");
-    canHaveOne<TradeRoute>(this, "tradeRouteKey");
   }
 
   static attrsConf: GameObjAttr[] = [
@@ -90,45 +81,57 @@ export class Unit extends GameObject {
    * Attributes
    */
   movement: UnitMovement;
-  unwatchers: (() => void)[] = [];
 
   /*
    * Relations
    */
-  declare city: City | null;
+  get city(): City | null {
+    return this.canHaveOne<City>("cityKey");
+  }
 
-  declare design: UnitDesign;
+  get design(): UnitDesign {
+    return this.hasOne<UnitDesign>("designKey");
+  }
 
-  declare player: Player;
+  get player(): Player {
+    return this.hasOne<Player>("playerKey");
+  }
 
-  declare origPlayer: Player;
+  get origPlayer(): Player {
+    return this.hasOne<Player>("origPlayerKey");
+  }
 
-  declare tile: Tile;
+  get tile(): Tile {
+    return this.hasOne<Tile>("tileKey");
+  }
 
   tradeRouteKey: GameKey | null;
-  declare tradeRoute: TradeRoute | null;
+  get tradeRoute(): TradeRoute | null {
+    return this.canHaveOne<TradeRoute>("tradeRouteKey");
+  }
 
   /*
    * Computed
    */
   get myTypes(): Set<TypeObject> {
-    return [this.concept, this.design.platform, this.design.equipment];
+    return new Set([this.concept, this.design.platform, this.design.equipment]);
   }
 
   get name(): string {
     return this.customName || this.design.name;
   }
 
-  get playerYields(): Yields {
-    return this.player.yields.only(this.concept.inheritYieldTypes!, this.types);
-  }
-
-  get tileYields(): Yields {
-    return this.tile.yields.only(this.concept.inheritYieldTypes!, this.types);
-  }
-
   get types(): Set<TypeObject> {
-    return this.myTypes.concat(this.tile.types);
+    return this.computed(
+      "types",
+      () => new Set([this.concept, ...this.design.types, ...this.tile.types]),
+      {
+        relations: [
+          { relName: "design", relProps: ["types"] },
+          { relName: "tile", relProps: ["types"] },
+        ],
+      },
+    );
   }
 
   get visibleTileKeys(): Set<GameKey> {
@@ -149,18 +152,18 @@ export class Unit extends GameObject {
         type: "yieldType:health",
         amount: this.health,
         method: "lump",
-        for: [],
-        vs: [],
+        for: new Set(),
+        vs: new Set(),
         max: 100,
-      },
+      } as Yield,
       {
         type: "yieldType:moves",
         amount: this.movement.moves,
         method: "lump",
-        for: [],
-        vs: [],
+        for: new Set(),
+        vs: new Set(),
         max: this.movement.maxMoves,
-      },
+      } as Yield,
     ]);
   }
 
@@ -170,7 +173,7 @@ export class Unit extends GameObject {
   modifyHealth(amount: number, reason: string) {
     this.health = Math.max(0, Math.min(100, roundToTenth(this.health + amount)));
 
-    const city = this.tile.city ?? this.tile.neighborTiles.find((t) => t.city)?.city;
+    const city = this.tile.city ?? [...this.tile.neighborTiles.values()].find((t) => t.city)?.city;
 
     if (this.health <= 0) {
       this.delete(reason, city);
@@ -258,21 +261,28 @@ export class Unit extends GameObject {
   // My Yield output
   get yields(): Yields {
     return this.computed(
-      "_yields",
+      "yields",
       () => {
         const yieldsForMe = (yields: Yields): Yield[] => {
-          return yields.only(unitYieldTypeKeys, new Set<TypeObject>(this.types)).all();
+          return yields.only(unitYieldTypeKeys, this.types).all();
         };
 
-        // Unit Yields are from Tile + Player YieldMods
+        // Unit Yields are from Design + Tile + Actor YieldMods
         const yields = new Yields();
+        yields.add(...this.design.yields.all());
         yields.add(...yieldsForMe(this.tile.yields));
         yields.add(...yieldsForMe(this.player.yieldMods));
 
         // Flatten Yields to apply modifiers
         return yields.flatten();
       },
-      ["designKey", "playerKey", "tileKey"],
+      {
+        relations: [
+          { relName: "design", relProps: ["yields"] },
+          { relName: "tile", relProps: ["yields"] },
+          { relName: "player", relProps: ["yieldMods"] },
+        ],
+      },
     );
   }
 }

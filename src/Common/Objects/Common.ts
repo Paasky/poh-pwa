@@ -27,17 +27,20 @@ export function classAndId(key: string): {
   return { class: c as CategoryClass | TypeClass | GameClass, id: i };
 }
 
-// eslint-disable-next-line
-export function initPohObject(objType: ObjType, data: any): PohObject {
+export function initPohObject(objType: ObjType, data: Record<string, unknown>): PohObject {
+  const key = data.key as string;
+  const concept = data.concept as `conceptType:${string}`;
+  const category = data.category as string | undefined;
+
   return {
     ...data,
     objType,
-    ...classAndId(data.key),
-    key: data.key,
-    name: data.name ?? "",
-    concept: data.concept,
-    icon: getObjectIcon(data.key, data.concept, data.category),
-  };
+    ...classAndId(key),
+    key: key as ObjKey,
+    name: (data.name as string) ?? "",
+    concept,
+    icon: getObjectIcon(key as ObjKey, concept, category),
+  } as PohObject;
 }
 
 export function isCategoryObject(o: GameObject | PohObject): o is CategoryObject {

@@ -9,7 +9,7 @@ import { Citizen } from "@/Common/Models/Citizen";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { CitizenMigrate } from "@/Simulation/Actions/City/CitizenMigrate";
 
-// Note: a Player cannot decide to expand a City,
+// Note: a Actor cannot decide to expand a City,
 // it only happens automatically if the City has enough culture in storage.
 export class CityGrow implements ISimAction {
   constructor(

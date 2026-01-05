@@ -63,7 +63,7 @@ describe("Culture", () => {
   it("throws correct message for invalid relations", () => {
     const cultureKey = generateKey("culture");
 
-    // Player missing
+    // Actor missing
     const culturePlayerMissing = new Culture(
       cultureKey,
       useDataBucket().getType("majorCultureType:mbuti"),

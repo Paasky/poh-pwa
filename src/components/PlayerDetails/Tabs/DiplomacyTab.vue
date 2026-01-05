@@ -11,7 +11,7 @@ import { useDiplomacyTabStore } from "@/components/PlayerDetails/Tabs/diplomacyT
 const store = useDiplomacyTabStore();
 
 function onRowClick(_e: unknown, payload: { item: { raw: Player } }) {
-  // IDE doesn't understand that both are Player
+  // IDE doesn't understand that both are Actor
   store.current = payload.item.raw as never;
 }
 

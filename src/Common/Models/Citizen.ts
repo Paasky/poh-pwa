@@ -1,4 +1,3 @@
-import { canHaveOne, hasOne } from "@/Common/Models/_Relations";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import type { City } from "@/Common/Models/City";
@@ -19,12 +18,6 @@ export class Citizen extends GameObject {
     public policy: TypeObject | null = null,
   ) {
     super(key);
-
-    hasOne<City>(this, "cityKey");
-    hasOne<Culture>(this, "cultureKey");
-    hasOne<Player>(this, "playerKey");
-    canHaveOne<Religion>(this, "religionKey");
-    hasOne<Tile>(this, "tileKey");
   }
 
   static attrsConf: GameObjAttr[] = [
@@ -47,11 +40,21 @@ export class Citizen extends GameObject {
   /*
    * Relations
    */
-  declare city: City;
-  declare culture: Culture;
-  declare player: Player;
-  declare religion: Religion | null;
-  declare tile: Tile;
+  get city(): City {
+    return this.hasOne<City>("cityKey");
+  }
+  get culture(): Culture {
+    return this.hasOne<Culture>("cultureKey");
+  }
+  get player(): Player {
+    return this.hasOne<Player>("playerKey");
+  }
+  get religion(): Religion | null {
+    return this.canHaveOne<Religion>("religionKey");
+  }
+  get tile(): Tile {
+    return this.hasOne<Tile>("tileKey");
+  }
 
   /*
    * Computed
@@ -59,19 +62,21 @@ export class Citizen extends GameObject {
 
   // Types I give to the City
   get typesForCity(): Set<TypeObject> {
-    return this.computed("_typesForCity", () => this.tile.typesForCitizen, ["tileKey"]);
+    return this.computed("typesForCity", () => this.tile.typesForCitizen, {
+      relations: [{ relName: "tile", relProps: ["typesForCitizen"] }],
+    });
   }
 
   // My Yield output
   get yields(): Yields {
     return this.computed(
-      "_yields",
+      "yields",
       () => {
         const yieldsForMe = (yields: Yields): Yield[] => {
           return yields.only(citizenYieldTypeKeys, new Set<TypeObject>([this.concept])).all();
         };
 
-        // Citizen Yields are Culture + Religion + Tile + Player Mods
+        // Citizen Yields are Culture + Religion + Tile + Actor Mods
         const yields = new Yields();
         yields.add(...yieldsForMe(this.culture.yields));
         if (this.religion) yields.add(...yieldsForMe(this.religion.yields));
@@ -81,7 +86,14 @@ export class Citizen extends GameObject {
         // Flatten Yields to apply modifiers
         return yields.flatten();
       },
-      ["cultureKey", "religionKey", "tileKey", "playerKey"],
+      {
+        relations: [
+          { relName: "culture", relProps: ["yields"] },
+          { relName: "religion", relProps: ["yields"] },
+          { relName: "tile", relProps: ["yields"] },
+          { relName: "city", relProps: ["yieldMods"] },
+        ],
+      },
     );
   }
 }

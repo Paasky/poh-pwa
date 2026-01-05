@@ -262,7 +262,7 @@ function conceptTitle(cls: string): string {
 /*
 const sectionMap = [
   {
-    name: "Player",
+    name: "Actor",
     icon: icons.user,
     concepts: [
       "conceptType:majorCulture",

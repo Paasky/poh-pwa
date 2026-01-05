@@ -54,7 +54,7 @@ describe("Player", () => {
     const player1 = useDataBucket().getObject<Player>(playerKey1);
     const player2 = useDataBucket().getObject<Player>(playerKey2);
 
-    expect(player1.name).toBe("Player 1");
+    expect(player1.name).toBe("Actor 1");
     expect(player1.isMinor).toBe(false);
     expect(player1.isCurrent).toBe(true);
     testOneToOneRelation(
@@ -65,7 +65,7 @@ describe("Player", () => {
     );
     expect(player1.religionKey).toBeNull();
 
-    expect(player2.name).toBe("Player 2");
+    expect(player2.name).toBe("Actor 2");
     expect(player2.isMinor).toBe(true);
     expect(player2.isCurrent).toBe(false);
     testOneToOneRelation(

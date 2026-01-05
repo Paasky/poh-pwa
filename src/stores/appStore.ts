@@ -4,7 +4,7 @@ import { markRaw, Ref } from "vue";
 import type { Router } from "vue-router";
 import { hasDataBucket, useDataBucket } from "@/Data/useDataBucket";
 import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
-import { PohEngine } from "@/Player/Human/PohEngine";
+import { PohEngine } from "@/Actor/Human/PohEngine";
 import { createWorld } from "@/factories/worldFactory";
 import { useGovernmentTabStore } from "@/components/PlayerDetails/Tabs/governmentTabStore";
 import { useCultureTabStore } from "@/components/PlayerDetails/Tabs/cultureTabStore";
