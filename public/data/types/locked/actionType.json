@@ -42,6 +42,20 @@
     "hotkey": "Shift+B"
   },
   {
+    "key": "actionType:clean",
+    "name": "Clean",
+    "concept": "conceptType:action",
+    "description": "Clean Pollution, 25% per turn",
+    "hotkey": "Shift+N"
+  },
+  {
+    "key": "actionType:clear",
+    "name": "Clear",
+    "concept": "conceptType:action",
+    "description": "Clear Feature, 25% per turn",
+    "hotkey": "Shift+C"
+  },
+  {
     "key": "actionType:repair",
     "name": "Repair",
     "concept": "conceptType:action",
