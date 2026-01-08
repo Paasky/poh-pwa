@@ -1,6 +1,6 @@
 // Type object definitions (encyclopedia/types dataset)
 import { CatKey, initPohObject, ObjKey, PohObject, TypeKey } from "./Common";
-import { Yields, YieldTypeKey } from "@/Common/Objects/Yields";
+import { Yield, Yields, YieldTypeKey } from "@/Common/Objects/Yields";
 import { Requires } from "@/Common/Objects/Requires";
 
 export type TypeClass =

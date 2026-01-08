@@ -407,7 +407,7 @@ function createMultiSparkleField(scene: Scene, cfg: MultiFieldConfig): SparkleFi
 
       const positions = wrapPositions([tx, ty], d.r);
       for (const [px, py] of positions) {
-        // Regional modulation based on transformed position
+        // Region modulation based on transformed position
         const cxIdx = Math.max(0, Math.min(gx - 1, Math.floor(wrapExclusive(px, 0, size) / cellW)));
         const cyIdx = Math.max(0, Math.min(gy - 1, Math.floor(wrapExclusive(py, 0, size) / cellH)));
         const f =
