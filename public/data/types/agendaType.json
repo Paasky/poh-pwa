@@ -1,0 +1,207 @@
+[
+  {
+    "key": "agendaType:promote",
+    "name": "Promote",
+    "category": "agendaCategory:minor",
+    "description": "Promote represents a non-coercive campaign to increase a target identity inside a population: a culture, a religion, or a policy preference. In game terms, a Promote agenda succeeds by converting a specified number of citizens over time. Conversion is gradual and visible, typically achieved through institutions, incentives, education, prestige, and messaging rather than force. Historically, promotion has many analogues: state-sponsored language and schooling programs, patronage of favored clerics and temples, civic rituals that normalize a creed, and ideological dissemination through newspapers, clubs, universities, and cultural diplomacy. Promotion can also operate abroad through tolerated missions, cultural institutes, or sympathetic elites, but at minor intensity it remains within the bounds of plausible deniability and diplomacy. Promote is the default tool for alignment: it builds long-run cohesion, reduces friction between ruler and ruled, and prepares the ground for more ambitious agendas without immediately inviting major retaliation.",
+    "requires": ["specialType:convertCitizen"],
+    "gains": [
+      "specialType:changeTrait",
+      "specialType:freeMythGodDogma",
+      "specialType:changePolicy"
+    ],
+    "targets": ["conceptType:culture", "conceptType:religion", "conceptType:policy"]
+  },
+  {
+    "key": "agendaType:suppress",
+    "name": "Suppress",
+    "category": "agendaCategory:major",
+    "description": "Suppress represents coercive internal action aimed at removing a target identity from a city’s population: a culture, a religion, or a policy preference. In game terms, a Suppress agenda succeeds by stripping the target attribute from citizens, often city-wide, in a short period. This is not persuasion; it is enforcement through law, police, surveillance, expulsions, censorship, forced assimilation, or purges. Historically, suppression appears in religious persecutions, confessional crackdowns, bans on minority languages and customs, ideological purges, and state campaigns to eliminate rival loyalties. Suppression can achieve rapid uniformity, but it reliably produces backlash: underground movements, martyr narratives, and legitimacy crises that can outlive the policy itself. In your systems, Suppress is a high-stakes lever used to prevent collapse or lock in an epoch direction. It trades immediate control for increased instability, making it powerful in emergencies but dangerous as a habit.",
+    "requires": ["specialType:convertCitizen"],
+    "gains": ["specialType:convertCity"],
+    "targets": ["conceptType:culture", "conceptType:religion", "conceptType:policy"]
+  },
+  {
+    "key": "agendaType:incite",
+    "name": "Incite",
+    "category": "agendaCategory:major",
+    "description": "Incite represents hostile external agitation designed to destabilize a target by inflaming identity divisions. In game terms, an Incite agenda succeeds by pushing a specified number of target-type citizens into unhappiness or unrest, creating crisis pressure and generating incidents. Incitement can take the form of propaganda, funding agitators, exploiting scandals, encouraging separatism, or amplifying religious and ideological polarization. Historically, states have used incitement as a tool of indirect warfare: fomenting revolts in rival borderlands, supporting dissident factions, or escalating communal tensions to justify intervention. Incitement is attractive because it can be deniable and cheaper than open war, but it is rarely contained: it raises suspicion, hardens alliances, and invites retaliation in kind. In your framework, Incite is the “push them over the edge” agenda—effective when timing is right, but politically explosive and likely to escalate beyond the initiator’s control if third parties intervene.",
+    "requires": ["specialType:inciteCitizen"],
+    "gains": ["specialType:rebellion"],
+    "targets": ["conceptType:culture", "conceptType:religion", "conceptType:policy"]
+  },
+  {
+    "key": "agendaType:removeSuspicion",
+    "name": "Remove Suspicion",
+    "category": "agendaCategory:minor",
+    "description": "Remove Suspicion represents an internal counter-influence campaign aimed at cleansing foreign pressure and restoring confidence in sovereignty. In game terms, it succeeds by reducing suspicion and dismantling ongoing hostile influence in targeted cities or regions. This can include tightening border controls, auditing institutions, counter-propaganda, rooting out clandestine networks, and reorganizing internal security. Historically, analogous efforts range from counter-espionage drives and loyalty campaigns to administrative purges of compromised officials and the suppression of foreign-funded organizations. Such campaigns are not purely defensive theater; they consume political capital and can polarize society, especially if they target minorities or opposition groups. In your escalation ladder, Remove Suspicion is the “we will tolerate no interference” signal that can naturally lead to harsher measures. It is valuable because it buys time and reduces vulnerability without immediate aggression, but if it fails or pressure continues, escalation to closure or confrontation becomes politically easier to justify.",
+    "requires": ["specialType:noSuspicion"],
+    "gains": ["specialType:bonusYieldTurn"],
+    "targets": []
+  },
+  {
+    "key": "agendaType:closeBorders",
+    "name": "Close Borders",
+    "category": "agendaCategory:major",
+    "description": "Close Borders represents a decisive move to restrict entry and activity by foreign actors. In game terms, it succeeds by enforcing border closure and removing or invalidating foreign diplomatic, missionary, or commercial presence, often under an ultimatum timeline (“leave now or else”). Historically, border closures appear as emergency security measures, quarantine and blockade policies, embargo enforcement, and isolationist turns during crises. Closing borders can reduce foreign meddling and simplify internal control, but it also imposes real costs: lost trade, diplomatic isolation, and a reputational shift toward pariah status. It is a clear escalation because it transforms disputes from negotiation to exclusion. In your systems, Close Borders is not a passive toggle; it is a political act that reshapes relationships, affects incidents, and creates a visible escalation point that other states can respond to with containment, coercive pacts, or direct confrontation.",
+    "requires": ["specialType:restrictAccess", "specialType:enforceExitUltimatum"],
+    "gains": ["specialType:freeMinorAgenda"],
+    "targets": []
+  },
+  {
+    "key": "agendaType:militaryAccess",
+    "name": "Military Access",
+    "category": "agendaCategory:minor",
+    "description": "Military Access represents a negotiated right to move forces through another state’s territory, ports, airspace, or logistics nodes. In game terms, it succeeds by granting transit permissions that reduce movement friction and enable regional operations without formal alliance. Historically, access agreements have been central to coalition warfare and power projection: staging rights, basing agreements, and transit corridors have decided campaigns from antiquity to modern times. Access is sensitive because it changes threat perception: neighbors may interpret it as preparation for encirclement or intervention, while the granting state risks domestic backlash for allowing foreign troops. In your framework, Military Access is a classic external minor agenda: cooperative on paper, destabilizing in context. It creates a coercive-pact signal that third parties can react to, and it provides a concrete lever for both diplomacy and escalation without immediately committing to full alliance or war.",
+    "requires": ["specialType:negotiateAccess"],
+    "gains": [],
+    "targets": ["conceptType:player"]
+  },
+  {
+    "key": "agendaType:vassalize",
+    "name": "Vassalize",
+    "category": "agendaCategory:major",
+    "description": "Vassalize represents an attempt to subordinate another polity under structured dependence. In game terms, it succeeds by converting the target into a vassal: limiting their autonomy, binding their wars, and shifting their foreign policy under the overlord’s umbrella. Historically, vassalage includes tribute systems, protectorates, client kingship, colonial dependencies, and modern spheres of influence enforced by treaty and threat. Vassalization is distinct from annexation: the target continues to exist, but sovereignty becomes conditional. This act reshapes regional order and invites systemic response because it sets precedent and concentrates power. In your incident ladder, vassalization is explicitly imperialist: even when achieved without immediate conquest, it creates long-term resentment, independence movements, and coalition incentives for other states to prevent further subjugations. In gameplay terms, Vassalize is a high-risk declaration that seeks durable leverage at the cost of global legitimacy and stability.",
+    "requires": ["specialType:subjugateTarget"],
+    "gains": [],
+    "targets": ["conceptType:player"]
+  },
+  {
+    "key": "agendaType:economicPact",
+    "name": "Economic Pact",
+    "category": "agendaCategory:minor",
+    "description": "Economic Pact represents a negotiated program of mutual economic benefit: preferential tariffs, shared infrastructure, coordinated industrial standards, or protected trade routes. In game terms, it succeeds by providing ongoing gains to both parties, typically improving gold and trade performance while creating stronger interdependence. Historically, economic pacts range from ancient trade privileges and medieval staple rights to modern customs unions and development agreements. Such cooperation is rarely neutral to outsiders: it can exclude rivals, redirect flows, and create dependency chains that translate into political leverage. In your system, an Economic Pact is a “soft alignment” tool: it strengthens relations and capacity without the explicit military commitments of an alliance, but it still signals bloc formation and can trigger coercive-pact reactions from threatened neighbors. It is a low-violence path to power that becomes strategically meaningful once trade and production scale in later eras.",
+    "requires": ["specialType:sharedYield"],
+    "gains": [],
+    "targets": ["conceptType:gold", "conceptType:trade", "conceptType:production"]
+  },
+  {
+    "key": "agendaType:increase",
+    "name": "Increase",
+    "category": "agendaCategory:minor",
+    "description": "Increase represents a focused internal program to improve a state output such as gold, production, science, trade capacity, or aggregate military power. In game terms, success is measured as a sustained net gain per turn above baseline, reflecting reforms, investment, and efficiency improvements rather than extraordinary mobilization. Historically, increases resemble tax reforms that stabilize revenue, administrative rationalization, early industrial upgrades, educational reforms that raise literacy and innovation, and professional military reforms that improve readiness without mass conscription. Increase agendas are dependable and less politically alarming than surges; they build resilience and help a player recover after crisis or war. In your design, Increase is the “steady hand” option that competes with escalation: it improves capacity while keeping diplomatic temperature lower, and it supports a playstyle where long-term stability and gradual advantage matter more than short-lived spikes.",
+    "requires": ["specialType:increaseYield", "specialType:sustainedYield"],
+    "gains": ["specialType:bonusYieldTurn"],
+    "targets": [
+      "conceptType:gold",
+      "conceptType:production",
+      "conceptType:science",
+      "conceptType:trade",
+      "conceptType:military"
+    ]
+  },
+  {
+    "key": "agendaType:surge",
+    "name": "Surge",
+    "category": "agendaCategory:major",
+    "description": "Surge represents exceptional mobilization to achieve rapid, above-normal gains in a chosen domain: treasury extraction, industrial output, scientific throughput, trade reach, or aggregate military power. In game terms, success is measured as a higher sustained delta than Increase, typically over a shorter time window, with visible political signaling and higher international sensitivity. Historically, surges correspond to war mobilization, crash industrialization, arms races, emergency taxation, and moonshot programs. Such efforts can be decisive, but they are costly: they stress institutions, increase corruption and discontent pressure, and prompt external reactions as rivals interpret the surge as preparation for coercion. In your systems, Surge is deliberately a geopolitical event, not a private optimization: it invites containment, coercive pacts, and escalation into incidents. It is strongest when timed to exploit windows—before coalitions form or before internal crisis forces a reset.",
+    "requires": ["specialType:surgeYield", "specialType:exceptionalOutput"],
+    "gains": ["specialType:bonusYieldSurge"],
+    "targets": [
+      "conceptType:gold",
+      "conceptType:production",
+      "conceptType:science",
+      "conceptType:trade",
+      "conceptType:military"
+    ]
+  },
+  {
+    "key": "agendaType:sabotage",
+    "name": "Sabotage",
+    "category": "agendaCategory:major",
+    "description": "Sabotage represents deliberate disruption of a rival’s capacity through covert action, economic interference, or targeted destruction. In game terms, sabotage aims to reduce the target’s production, infrastructure, or strategic readiness, often accelerating incident escalation by forcing decisions under pressure. Historically, sabotage ranges from destroying bridges and rail lines during conflicts, to industrial disruption and clandestine attacks on supply chains, to intelligence operations that cripple critical projects. Sabotage is attractive because it can be cheaper than open war and may be framed as accident or internal failure, but it reliably increases tension and invites retaliation. In your design, Sabotage is the archetypal “incursion without declaration” move: it generates strong justification for escalation, triggers counter-espionage and border actions, and can transform a cold dispute into a forced settlement or war if both sides refuse to de-escalate.",
+    "requires": ["specialType:sabotage"],
+    "gains": [],
+    "targets": ["conceptType:production"]
+  },
+  {
+    "key": "agendaType:steal",
+    "name": "Steal",
+    "category": "agendaCategory:major",
+    "description": "Steal represents hostile extraction of value from another state: financial theft, resource seizure, or technology espionage. In game terms, success transfers a defined benefit to the initiator while imposing a loss or denial on the target. Historically, stealing value has ranged from tribute and forced indemnities to industrial espionage and the appropriation of inventions, to coercive concessions under unequal treaties. Because it directly harms the target, theft rapidly becomes a political issue rather than a quiet optimization; it undermines trust, encourages containment, and legitimizes retaliation. In your framework, Steal is designed to be tempting but costly: it can swing a strategic race (especially science), but it pushes the victim and observers toward escalation. It also integrates naturally with your agent system, making espionage feel like a core strategic lever rather than a side mechanic.",
+    "requires": ["specialType:steal"],
+    "gains": [],
+    "targets": ["conceptType:gold", "conceptType:science"]
+  },
+  {
+    "key": "agendaType:defensivePact",
+    "name": "Defensive Pact",
+    "category": "agendaCategory:minor",
+    "description": "Defensive Pact represents a limited security agreement where parties commit to mutual defense if attacked, without necessarily coordinating offensive operations. In game terms, it creates deterrence and increases the political cost of aggression for third parties. Historically, defensive pacts have been common instruments of balance-of-power politics: city leagues, mutual-defense treaties among states, and modern security guarantees. While often framed as purely protective, defensive commitments reshape regional calculations: they may embolden smaller states and alarm rivals, especially if formed near contested borders. In your incident vocabulary, defensive pacts function as coercive pacts: they signal alignment and constrain others’ options. This agenda is a key diplomatic tool for preventing opportunistic strikes, buying time for internal recovery, and forming the basis for larger blocs when tensions rise.",
+    "requires": ["specialType:defensePact"],
+    "gains": [],
+    "targets": ["conceptType:player"]
+  },
+  {
+    "key": "agendaType:alliance",
+    "name": "Alliance",
+    "category": "agendaCategory:major",
+    "description": "Alliance represents a deep strategic alignment that goes beyond defense into coordinated policy, shared war aims, and bloc formation. In game terms, alliances lock parties into collective commitments that alter incident dynamics, escalation thresholds, and coalition behavior. Historically, alliances have shaped major conflicts by creating cascading obligations, from classical leagues to early modern grand alliances and twentieth-century treaty systems. Alliances can provide decisive leverage, but they also reduce flexibility: allies inherit each other’s enemies, incidents propagate faster, and backing down becomes politically costly. In your systems, Alliance maps to the “aggressive block” incident class because it is a hard signal of power consolidation. It is the natural culmination of coercive pacts and the clearest path to domino effects when crises erupt.",
+    "requires": ["specialType:alliance"],
+    "gains": [],
+    "targets": ["conceptType:player"]
+  },
+  {
+    "key": "agendaType:improve",
+    "name": "Improve",
+    "category": "agendaCategory:minor",
+    "description": "Improve represents targeted development of land or resources under a player’s control. In game terms, it succeeds by completing a specified number of tile improvements or upgrading resource exploitation, increasing long-term yields and logistical strength. Historically, improvements include irrigation works, terracing, drainage, roads, canals, mines, and port facilities—investments that convert territory into reliable capacity. Such programs are often incremental, labor-intensive, and politically popular when they raise welfare, but they can also be tied to state consolidation and the extension of administrative reach. Improve agendas are the quiet foundation of power: they do not provoke neighbors directly, but they raise the baseline that later makes surges, wars, and diplomacy more effective. In your design, Improve is a stable way to progress during calm periods and a common recovery path after collapse or conflict.",
+    "requires": [],
+    "gains": ["specialType:increaseResourceYield"],
+    "targets": ["conceptType:resource"]
+  },
+  {
+    "key": "agendaType:discover",
+    "name": "Discover",
+    "category": "agendaCategory:major",
+    "description": "Discover represents a deliberate push to unlock and exploit new strategic resources through exploration, science, and industrial adaptation. In game terms, it succeeds by unlocking a new resource category and enabling or completing improvements on newly relevant tiles. Historically, discovery can mean literal resource finds (goldfields, oil, rare minerals), technological breakthroughs that make extraction viable, or geographic exploration that brings new commodities into the economy. The process often triggers competition, speculation, and geopolitical interest, as strategic resources reshape military and industrial capabilities. In your systems, Discover is a major commitment because it can shift power balances quickly: it changes what is valuable on the map and can create new choke points and dependencies. It is especially potent when timed with trade networks and diplomacy, but it also attracts containment or market manipulation from rivals who fear the advantage.",
+    "requires": ["specialType:unlockResource", "specialType:buildImprovement"],
+    "gains": ["specialType:placeResourceOnMap"],
+    "targets": ["conceptType:resource"]
+  },
+  {
+    "key": "agendaType:acquire",
+    "name": "Acquire",
+    "category": "agendaCategory:minor",
+    "description": "Acquire represents obtaining access to a specific resource through trade, concession, or negotiated control rather than conquest. In game terms, it succeeds by securing a defined resource supply relationship or rights to exploit a resource controlled by another party. Historically, acquisition includes long-term supply contracts, mining concessions, leaseholds, company-charter privileges, and purchase agreements where influence substitutes for force. Such arrangements can be mutually beneficial, but they often create dependency, local resentment, and disputes over sovereignty—especially if the acquiring power is perceived as extractive. In your incident taxonomy, Acquire maps to colonialist behavior when it becomes asymmetrical: access is “legal,” but the relationship shifts power and may be resisted. In gameplay, Acquire is a lower-heat route to strategic resources that still signals intent and can be contested diplomatically.",
+    "requires": [],
+    "gains": ["specialType:increaseResourceYield"],
+    "targets": ["conceptType:resource"]
+  },
+  {
+    "key": "agendaType:cornerMarket",
+    "name": "Corner Market",
+    "category": "agendaCategory:major",
+    "description": "Corner Market represents an attempt to dominate global supply of a resource or commodity to gain leverage over competitors. In game terms, it succeeds by controlling enough production, routes, or contracts that rivals experience shortages, price pressure, or strategic dependence. Historically, market cornering appears in monopolistic charters, cartel-like coordination, and the capture of critical chokepoints, as well as modern cases where resource exporters use supply as political leverage. Cornering a market is not merely economic; it is geopolitical coercion: states respond because strategic industries and military supply chains are at stake. In your systems, Corner Market is categorized as market manipulation: it invites coordinated containment and countermeasures, and it can force incidents that escalate into embargoes or conflict. It is most effective when combined with trade reach and diplomatic insulation, and most dangerous when it galvanizes a coalition against the monopolist.",
+    "requires": [],
+    "gains": ["specialType:placeResourceOnMap"],
+    "targets": ["conceptType:resource"]
+  },
+  {
+    "key": "agendaType:expand",
+    "name": "Expand",
+    "category": "agendaCategory:major",
+    "description": "Expand represents territorial growth through border pressure, administration, and settlement pull rather than immediate conquest. In game terms, it succeeds by gaining a specified number of tiles via border expansion mechanics, strengthening claims and consolidating control. Historically, expansion often occurred through frontier administration, land grants, migration incentives, and gradual encroachment, where legal claims and demographic change preceded open conflict. Such growth can be perceived as organic by the expanding state but threatening by neighbors, especially where borders are contested or resources are valuable. In your incident system, expansion is a major internal commitment because it changes facts on the ground and can provoke pariah or imperialist reactions depending on context. Expand is the “slow conquest” path: less explosive than war, but still a decisive assertion of long-term intent.",
+    "requires": ["specialType:expandBorder"],
+    "gains": ["specialType:freeSettler"],
+    "targets": []
+  },
+  {
+    "key": "agendaType:settle",
+    "name": "Settle",
+    "category": "agendaCategory:minor",
+    "description": "Settle represents establishing a new city in a targeted region to secure access, claims, and long-term presence. In game terms, it succeeds by founding a settlement where specified, creating a durable anchor for culture, trade, and military logistics. Historically, settlement has been one of the most effective tools of power: colonization waves, frontier towns, trading posts that become cities, and state-sponsored migration all convert space into governance. Settlement can be cooperative or extractive; it may be invited, tolerated, or resisted depending on local and international politics. In your taxonomy, settlement is colonialist behavior when it imposes asymmetric presence and resource control. It is less overt than conquest but still a geopolitical act that can trigger disputes and escalation if it blocks access or threatens balance. Settle is best understood as “occupation by permanence.”",
+    "requires": ["conceptType:city"],
+    "gains": ["specialType:doubleCityPopulation"],
+    "targets": ["conceptType:tile"]
+  },
+  {
+    "key": "agendaType:conquer",
+    "name": "Conquer",
+    "category": "agendaCategory:major",
+    "description": "Conquer represents the overt seizure of territory or cities by force. In game terms, it succeeds by capturing specified targets, immediately altering sovereignty and triggering the highest diplomatic consequences. Historically, conquest is the classic instrument of state expansion, from ancient city-taking and imperial annexations to modern wars of occupation. Conquest is rarely a single event; it requires administration, pacification, and integration, and it often generates resistance and long-term instability in occupied areas. In your systems, conquest maps to imperialist incidents because it explicitly denies sovereignty and sets precedent for further aggression. It invites coalition response and frequently accelerates global tension toward systemic wars. Conquer is therefore not merely “military progress”; it is a political declaration that the existing order is subordinate to force, making it the most escalatory territorial agenda in your list.",
+    "requires": ["specialType:captureCity"],
+    "gains": [],
+    "targets": ["conceptType:city"]
+  }
+]

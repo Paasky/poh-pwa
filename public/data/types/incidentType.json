@@ -1,0 +1,44 @@
+[
+  {
+    "key": "incidentType:oppression",
+    "name": "Oppression",
+    "category": "incidentCategory:major",
+    "description": "Oppression refers to sustained internal policies that forcibly suppress cultural, religious, or ideological identities within a state. Such measures include purges, forced assimilation, censorship, religious persecution, and political repression enforced through law, police, or military authority. Historically, oppression has appeared in many forms: Roman crackdowns on religious sects, early modern confessional states enforcing uniform belief, revolutionary regimes eliminating perceived counterrevolutionaries, and modern authoritarian systems suppressing dissent. While oppression can temporarily impose unity or control, it consistently generates resistance, underground movements, and legitimacy crises. In game terms, Oppression represents a sharp internal escalation that increases instability and crisis pressure, often serving as a precursor to revolt, civil war, or epochal transformation.",
+    "requires": ["agendaType:suppress"]
+  },
+  {
+    "key": "incidentType:meddling",
+    "name": "Meddling",
+    "category": "incidentCategory:minor",
+    "description": "Meddling describes low-intensity foreign interference conducted through cultural influence, religious missions, ideological advocacy, or political persuasion rather than overt force. Historically, states have meddled by sponsoring missionaries, funding newspapers and parties abroad, supporting cultural institutions, or quietly backing sympathetic elites. Examples include confessional competition in early modern Europe, Great Power influence in Ottoman internal affairs, and twentieth-century ideological outreach through media and education. Meddling rarely justifies immediate retaliation, but it erodes trust, raises suspicion, and reframes relationships as competitive rather than neutral. In game terms, Meddling represents soft external pressure that signals intent, creates diplomatic friction, and can escalate if ignored or countered improperly.",
+    "requires": ["agendaType:promote"]
+  },
+  {
+    "key": "incidentType:incursion",
+    "name": "Incursion",
+    "category": "incidentCategory:major",
+    "description": "Incursion denotes hostile action taken against another state without a formal declaration of war. Such actions include sabotage, covert operations, proxy violence, economic theft, engineered unrest, or limited military actions framed as accidents or internal affairs. Historically, incursions range from border raids and false-flag operations to industrial espionage and revolutionary agitation backed by foreign powers. Examples include prewar sabotage campaigns, Cold War proxy interventions, and undeclared clashes designed to test resolve. Incursions are deliberately ambiguous yet unmistakably aggressive, often forcing affected states and third parties to reassess security commitments. In game terms, Incursion represents a sharp escalation that legitimizes retaliation, coalition building, or open conflict.",
+    "requires": ["agendaType:incite", "agendaType:steal", "agendaType:sabotage"]
+  },
+  {
+    "key": "incidentType:containment",
+    "name": "Containment",
+    "category": "incidentCategory:major",
+    "description": "Containment refers to coordinated efforts by one or more states to limit the expansion, influence, or power of a perceived threat without immediate resort to war. Historically, containment has taken economic, technological, diplomatic, and strategic forms, including embargoes, sanctions, alliance networks, arms limitations, and exclusion from markets or institutions. The concept is most famously associated with Cold War strategy, but earlier examples include balance-of-power coalitions and trade restrictions against rising powers. Containment pressures the target over time, constraining growth and forcing strategic choices. In game terms, Containment represents systemic external opposition that increases costs, restricts options, and often precedes either accommodation or escalation.",
+    "requires": ["agendaType:surge", "agendaType:steal"]
+  },
+  {
+    "key": "incidentType:pariah",
+    "name": "Pariah",
+    "category": "incidentCategory:major",
+    "description": "Pariah status arises when a state becomes diplomatically isolated due to actions widely regarded as illegitimate, destabilizing, or unacceptable. Historically, pariah states have faced exclusion from alliances, trade restrictions, sanctions, and coordinated hostility, as seen in cases of revolutionary regimes, apartheid states, or governments violating widely accepted norms. Pariah status does not imply weakness; isolated states may remain powerful, but their actions are interpreted through a lens of suspicion and hostility. In game terms, Pariah represents a collapse of diplomatic goodwill, making cooperation difficult and opposition more likely across multiple actors.",
+    "requires": ["agendaType:closeBorders"]
+  },
+  {
+    "key": "incidentType:imperialist",
+    "name": "Imperialist",
+    "category": "incidentCategory:major",
+    "description": "Imperialist incidents occur when a state openly denies the sovereignty of another through conquest, forced subordination, or permanent control over territory, policy, or foreign relations. Historically, imperialism has taken many forms, from ancient tribute systems and colonial empires to modern client states and enforced dependencies. Such actions restructure regional and global power balances, compelling other states to respond due to precedent and self-interest. Imperialist acts are rarely treated as isolated disputes; they redefine the political order. In game terms, Imperialist incidents represent the highest level of geopolitical provocation short of total war, almost always triggering coalitions, prolonged conflict, or systemic realignment.",
+    "requires": ["agendaType:vassalize"]
+  }
+]
