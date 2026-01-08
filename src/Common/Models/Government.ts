@@ -150,65 +150,46 @@ export class Government extends GameObject {
     this.policies = newPolicies;
     this.discontent = roundToTenth(this.discontent + policies.size * 100);
   }
-
-  runElections() {
-    if (!this.hasElections) throw new Error(`Player ${this.player.name} cannot run elections`);
-    if (this.nextElection > 0)
-      throw new Error(`Player ${this.player.name} cannot run elections yet`);
-
-    // Find the top policy per category (top = most citizens with policy)
-    const countedPolicies = {} as Record<
-      CatKey,
-      Record<TypeKey, { policy: TypeObject; citizens: number }>
-    >;
-    this.selectablePolicies.forEach((p) => {
-      const cat = p.category as CatKey;
-      if (!countedPolicies[cat]) countedPolicies[cat] = {};
-      countedPolicies[cat][p.key] = {
-        policy: p as TypeObject,
-        citizens: this.player.citizens.filter((c) => c.policy === p).size,
-      };
-    });
-    const topPolicies = {} as Record<CatKey, TypeObject>;
-    for (const cat in countedPolicies) {
-      const sorted = Object.values(countedPolicies[cat as CatKey]).sort(
-        (a, b) => b.citizens - a.citizens,
-      );
-      topPolicies[cat as CatKey] = sorted[0].policy;
-    }
-
-    // Filter out top policies that are already selected and set those
-    this.setPolicies(Object.values(topPolicies).filter((p) => !this.policies.has(p)));
-
-    // Remove up to 100% discontent
-    this.discontent = Math.max(0, roundToTenth(this.discontent - 100));
-
-    // Set next elections in 25 turns
-    this.nextElection = 25;
-  }
-
-  startTurn() {
-    // Corruption (negative disorder)
-    // Elections: Go up +1%/t for 1st 100t, then speed up to +3%/t
-    // Authoritarian: Go up +2%/t for 1st 100t, then speed up to +4%/t
-    const slow = this.hasElections ? 1 : 2;
-    const quick = this.hasElections ? 3 : 4;
-    this.corruption = roundToTenth(this.corruption + (this.corruption < slow * 100 ? slow : quick));
-
-    if (this.hasElections) {
-      this.nextElection = Math.max(0, this.nextElection - 1);
-
-      // Disorder (negative happiness)
-      if (this.nextElection > 0) {
-        // Discontent increases slowly (+2%/t)
-        this.discontent = roundToTenth(this.discontent + 2);
-      } else {
-        // Discontent increases quickly (+20%/t) if ignoring elections
-        this.discontent = roundToTenth(this.discontent + 20);
-      }
-    } else {
-      // No elections -> Discontent disappears slowly (2%/t)
-      this.discontent = Math.max(0, roundToTenth(this.discontent - 2));
-    }
-  }
 }
+
+export const GovernmentConfig = {
+  // Has Elections: Go up +1%/t for 1st 100t, then speed up to +3%/t
+  // Authoritarian: Go up +2%/t for 1st 100t, then speed up to +4%/t
+  corruption: {
+    turnsToFast: 100,
+    electedSlowPerTurn: 1,
+    electedFastPerTurn: 2,
+    authoritarianSlowPerTurn: 3,
+    authoritarianFastPerTurn: 4,
+    getAmount(hasElections: boolean, currentCorruption: number): number {
+      const slow = hasElections ? 1 : 2;
+      const quick = hasElections ? 3 : 4;
+      const isInFirst100 = currentCorruption < slow * GovernmentConfig.corruption.turnsToFast;
+      return isInFirst100 ? slow : quick;
+    },
+  },
+
+  // Has Elections: Go up +2%/t, but speed up to +20%/t if ignoring elections (elections every 25t)
+  // Authoritarian: Go down -2%/t (changing policies bumps up +50% per change)
+  discontent: {
+    electedPerTurn: 2,
+    electedIgnoringElectionsPerTurn: 2,
+    authoritarianPerTurn: -2,
+    getAmount(hasElections: boolean, isIgnoringElections: boolean): number {
+      return hasElections
+        ? isIgnoringElections
+          ? GovernmentConfig.discontent.electedIgnoringElectionsPerTurn
+          : GovernmentConfig.discontent.electedPerTurn
+        : GovernmentConfig.discontent.authoritarianPerTurn;
+    },
+  },
+
+  authoritarian: {
+    discontentPerPolicy: 50,
+  },
+
+  elections: {
+    everyNthTurn: 25,
+    removeDiscontent: 100,
+  },
+};

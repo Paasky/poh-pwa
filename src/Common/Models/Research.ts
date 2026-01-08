@@ -5,13 +5,14 @@ import { useDataBucket } from "@/Data/useDataBucket";
 import { sort } from "@/helpers/collectionTools";
 import { Yields, YieldTypeKey } from "@/Common/Objects/Yields";
 import { Player } from "@/Common/Models/Player";
+import { TypeStorage } from "@/Common/Objects/TypeStorage";
 
 export class Research extends GameObject {
   constructor(
     key: GameKey,
     public playerKey: GameKey,
     public researched: Set<TypeObject> = new Set(),
-    public researching: Record<TypeKey, { progress: number; target: TypeObject }> = {},
+    public storage: TypeStorage = new TypeStorage(),
     public queue: TypeObject[] = [],
   ) {
     super(key);
@@ -105,43 +106,12 @@ export class Research extends GameObject {
     if (!this.current) this.current = unique[0];
   }
 
-  complete(tech: TypeObject) {
-    if (this.researched.has(tech)) return;
-
-    // It's now researched
-    this.researched.add(tech);
-    delete this.researching[tech.key];
-
-    // Remove from current and queue if it was in either
-    if (this.current === tech) this.current = null;
-    this.queue = this.queue.filter((t) => t !== tech);
-
-    // Not researching anything anymore, and there is something in the queue: start next in the queue
-    if (!this.current && this.queue.length) this.current = this.queue[0];
-  }
-
   getEra(tech: TypeObject): TypeObject {
     return useDataBucket().getType(tech.category as TypeKey);
   }
 
   getProgress(tech: TypeObject) {
-    return this.researching[tech.key]?.progress ?? 0;
-  }
-
-  addProgress(tech: TypeObject, amount: number) {
-    if (!this.researching[tech.key]) {
-      this.researching[tech.key] = { progress: 0, target: tech };
-    }
-    const progress = this.researching[tech.key].progress;
-    this.researching[tech.key].progress = Math.round(progress + amount);
-
-    // Did it complete?
-    if (progress >= tech.scienceCost!) {
-      this.complete(tech);
-
-      // Add overflow to player storage
-      this.player.storage.add("yieldType:science", progress - tech.scienceCost!);
-    }
+    return this.storage.get(tech.key)?.progress ?? 0;
   }
 
   private collectRequired(target: TypeObject, acc: Set<TypeObject>): void {
@@ -190,11 +160,5 @@ export class Research extends GameObject {
     const costLeft = this.current.scienceCost! - this.getProgress(this.current as TypeObject);
 
     return Math.ceil(costLeft / sciencePerTurn);
-  }
-
-  startTurn() {
-    if (!this.current) return;
-
-    this.addProgress(this.current as TypeObject, this.player.storage.takeAll("yieldType:science"));
   }
 }

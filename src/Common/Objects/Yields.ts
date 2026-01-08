@@ -211,12 +211,20 @@ export class Yields {
     return new Yields(this._all).add(...yields.all());
   }
 
-  toStorage(): TypeStorage {
+  toStorage(allowNegative = true): TypeStorage {
     // Only return lump
     const storage = new TypeStorage();
 
     Array.from(this._lump.values()).forEach((yields) =>
-      yields.forEach((y) => (y.method === "lump" ? storage.add(y.type, y.amount) : null)),
+      yields.forEach((y) => {
+        if (y.method!== "lump") return;
+
+        if (allowNegative) {
+          storage.add(y.type, y.amount);
+        } else {
+          storage.add(y.type, Math.max(0, y.amount));
+        }
+      }),
     );
 
     return storage;

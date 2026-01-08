@@ -1,30 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { GameKey, IRawGameObject } from "@/Common/Models/_GameModel";
 
-export interface IMutation {
+export interface IMutation<PayloadT> {
   type: MutationType;
   action?: MutationAction;
-  payload: IRawGameObject | any;
+  payload: Partial<PayloadT> & { key: GameKey };
 }
 
-export type MutationType = "create" | "update" | "remove" | "action";
-export type MutationAction = "selectType" | "unselectType" | "actionCrisis";
+export type MutationType = "create" | "update" | "remove" | "append" | "filter" | "setKeys" | "action";
+export type MutationAction = "actionCrisis";
 
-export function createMutation(type: "create" | "update" | "remove", key: GameKey): IMutation {
-  return {
-    type,
-    payload: { key },
-  };
-}
-
-export function mergeMutations(mutations: IMutation[]): IMutation[] {
+export function mergeMutations<PayloadT>(mutations: IMutation<PayloadT>[]): IMutation<PayloadT>[] {
   const removedKeys = new Set<GameKey>();
   const createdPayloads = new Map<GameKey, IRawGameObject | any>();
   const updatedPayloads = new Map<GameKey, IRawGameObject | any>();
 
   mutations.forEach((mutation) => {
     // If it's been removed, no further processing required
-    if (removedKeys.has(mutation.payload)) {
+    if (removedKeys.has(mutation.payload.key)) {
       return;
     }
 
@@ -57,7 +50,7 @@ export function mergeMutations(mutations: IMutation[]): IMutation[] {
     }
   });
 
-  const out = [] as IMutation[];
+  const out = [] as IMutation<PayloadT>[];
 
   createdPayloads.forEach((payload) => {
     out.push({
@@ -74,7 +67,7 @@ export function mergeMutations(mutations: IMutation[]): IMutation[] {
   removedKeys.forEach((key) => {
     out.push({
       type: "remove",
-      payload: { key },
+      payload: { key } as any,
     });
   });
 

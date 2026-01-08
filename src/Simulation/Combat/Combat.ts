@@ -4,7 +4,7 @@ import { Construction } from "@/Common/Models/Construction";
 import { attackStrength, calcDamage, defenseStrength } from "@/Simulation/Combat/Strength";
 import { createMutation, IMutation, mergeMutations } from "@/Common/IMutation";
 import { MovementManager } from "@/Simulation/Movement/MovementManager";
-import { Health } from "@/Simulation/Shared/Health";
+import { Health } from "@/Simulation/Common/Health";
 
 export class Combat {
   constructor(

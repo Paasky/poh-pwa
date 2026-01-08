@@ -8,8 +8,4 @@ export class Diplomacy {
   }
 
   declare player: Player;
-
-  startTurn(): void {
-    //
-  }
 }
