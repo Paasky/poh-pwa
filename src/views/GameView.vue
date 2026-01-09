@@ -15,12 +15,15 @@ import UiUnitCard from "@/components/Ui/UiUnitCard.vue";
 import { useMovementInteraction } from "@/composables/useMovementInteraction";
 import { useCurrentContext } from "@/composables/useCurrentContext";
 import { Unit } from "@/Common/Models/Unit";
+import { HotkeyManager } from "@/Actor/Human/HotkeyManager";
 
 const app = useAppStore();
 const context = useCurrentContext();
 const gameRootEl = ref<HTMLElement | null>(null);
 
 onMounted(async () => {
+  // Global Hotkeys
+  HotkeyManager.init();
   // Warn/prevent accidental unloads (refresh/close tab) while in the game view
   window.addEventListener("beforeunload", onBeforeUnload);
 
@@ -39,7 +42,7 @@ onMounted(async () => {
 
 onUnmounted(() => {
   window.removeEventListener("beforeunload", onBeforeUnload);
-  app.engineService.dispose();
+  app.pohEngine.dispose();
   destroyFullscreen();
 });
 

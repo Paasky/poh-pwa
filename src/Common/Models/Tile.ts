@@ -199,6 +199,8 @@ export class Tile extends GameObject {
     );
   }
 
+  warmUp(): void {}
+
   // Used all over to always generate standard tile ID
   static getKey(x: number, y: number): GameKey {
     return tileKey(x, y);

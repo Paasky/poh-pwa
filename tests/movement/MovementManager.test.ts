@@ -72,14 +72,14 @@ describe("MovementManager", () => {
     const app = useAppStore();
 
     const setLayerSpy = vi.fn().mockReturnThis();
-    app.engineService = {
+    app.pohEngine = {
       contextOverlay: { setLayer: setLayerSpy },
       guidanceOverlay: { setLayer: setLayerSpy },
       detailOverlay: { setLayer: setLayerSpy },
       pathOverlay: { setLayer: setLayerSpy },
     } as unknown as PohEngine;
 
-    MovementManager.moveTo(unit, target, undefined, app.engineService as PohEngine);
+    MovementManager.moveTo(unit, target, undefined, app.pohEngine as PohEngine);
 
     // Verify unit moved
     expect(unit.tileKey.value).toBe(target.key);
@@ -97,14 +97,14 @@ describe("MovementManager", () => {
     const app = useAppStore();
 
     const setLayerSpy = vi.fn().mockReturnThis();
-    app.engineService = {
+    app.pohEngine = {
       contextOverlay: { setLayer: setLayerSpy },
       guidanceOverlay: { setLayer: setLayerSpy },
       detailOverlay: { setLayer: setLayerSpy },
       pathOverlay: { setLayer: setLayerSpy },
     } as unknown as PohEngine;
 
-    MovementManager.refreshMovementOverlays(app.engineService as PohEngine, unit);
+    MovementManager.refreshMovementOverlays(app.pohEngine as PohEngine, unit);
 
     // 1. Verify context overlay called for range (includes valid and danger colors)
     expect(setLayerSpy).toHaveBeenCalledWith(

@@ -1,30 +1,27 @@
-export async function asyncProcess<T>(
-  objs: readonly T[],
-  process: (obj: T, index: number) => void | Promise<void>,
-  onProgress?: (percent: number | true) => void,
-  batchSize: number = 1,
-  yieldEveryMs: number = 1,
+export async function asyncProcess(
+  tasks: readonly Task[],
+  process: (task: Task, index: number) => void | Promise<void>,
+  onProgress?: ProgressCallback,
 ): Promise<void> {
-  const total = objs.length;
-  let i = 0;
-  let lastYield = performance.now();
+  const total = tasks.length;
+  for (const [i, task] of tasks.entries()) {
+    await process(task, i);
 
-  while (i < total) {
-    const end = Math.min(i + batchSize, total);
+    onProgress?.(task, Math.floor(((i + 1) / total) * 100));
 
-    for (; i < end; i++) {
-      await process(objs[i], i);
-    }
-
-    onProgress?.(Math.floor((i / total) * 100));
-
-    if (performance.now() - lastYield >= yieldEveryMs) {
-      await new Promise<void>((resolve) => {
-        requestAnimationFrame(() => resolve());
-      });
-      lastYield = performance.now();
-    }
+    await new Promise<void>((resolve) => {
+      requestAnimationFrame(() => resolve());
+    });
   }
 
-  onProgress?.(true);
+  onProgress?.({ title: "Ready", fn: () => {} }, true);
+}
+
+export interface Task {
+  title: string;
+  fn: () => void | Promise<void>;
+}
+
+export interface ProgressCallback {
+  (task: Task, percent: number | true): void;
 }

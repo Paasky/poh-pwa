@@ -2,10 +2,9 @@ import { Engine } from "@babylonjs/core";
 import { defineStore } from "pinia";
 import { markRaw, Ref } from "vue";
 import type { Router } from "vue-router";
-import { hasDataBucket, useDataBucket } from "@/Data/useDataBucket";
+import { useDataBucket } from "@/Data/useDataBucket";
 import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStore";
 import { PohEngine } from "@/Actor/Human/PohEngine";
-import { createWorld } from "@/factories/worldFactory";
 import { useGovernmentTabStore } from "@/components/PlayerDetails/Tabs/governmentTabStore";
 import { useCultureTabStore } from "@/components/PlayerDetails/Tabs/cultureTabStore";
 import { useResearchTabStore } from "@/components/PlayerDetails/Tabs/researchTabStore";
@@ -16,28 +15,22 @@ import { useUnitsTabStore } from "@/components/PlayerDetails/Tabs/unitsTabStore"
 import { useCitiesTabStore } from "@/components/PlayerDetails/Tabs/citiesTabStore";
 import { useTradeTabStore } from "@/components/PlayerDetails/Tabs/tradeTabStore";
 import { useSettingsStore } from "@/stores/settingsStore";
-import { asyncProcess } from "@/helpers/asyncProcess";
-import { Tile } from "@/Common/Models/Tile";
+import { Task } from "@/helpers/asyncProcess";
 import { Player } from "@/Common/Models/Player";
-import { Unit } from "@/Common/Models/Unit";
-import { City } from "@/Common/Models/City";
-import { DataStore } from "@/Data/DataStore";
 import { saveManager } from "@/utils/saveManager";
+import { SaveAction } from "@/Actor/Human/Actions/SaveAction";
+import { setCurrentPlayer } from "@/composables/useCurrentContext";
+import { CurrentGame } from "@/Conductor/CurrentGame";
 import { useMapGenStore } from "@/stores/mapGenStore";
-import pkg from "../../package.json";
-import { setCurrentPlayer, useCurrentContext } from "@/composables/useCurrentContext";
-import { DataBucket } from "@/Data/DataBucket";
-
-const APP_VERSION = pkg.version;
 
 export const useAppStore = defineStore("app", {
   state: () => ({
-    engineService: markRaw({}) as PohEngine,
+    pohEngine: markRaw({}) as PohEngine,
     loaded: false,
     loadTitle: "",
     loadPercent: "",
     uiStateListeners: markRaw({}) as Record<string, UiStateConfig>,
-    store: {} as DataStore,
+    currentGame: {} as CurrentGame,
 
     // This will be filled in by `src/router/index.ts` using setRouter()
     _router: markRaw({}) as Ref<Router>,
@@ -46,106 +39,30 @@ export const useAppStore = defineStore("app", {
     async init(saveId?: string, engine?: Engine) {
       if (this.ready) return; // Happens on hot-reload
 
-      type TaskDefinition = () => void | Promise<void>;
-
-      const loadGame = async (saveId: string): Promise<void> => {
-        const rawSaveData = saveManager.load(saveId);
-        const dataBucket = useDataBucket();
-        dataBucket.setWorld(rawSaveData.world);
-        dataBucket.setRawObjects(rawSaveData.objects);
-
-        this.store = markRaw(new DataStore(dataBucket));
-      };
-
-      const createGame = async (): Promise<void> => {
-        const dataBucket = useDataBucket();
-        const worldConfig = useMapGenStore().getResolvedConfig();
-
-        // Set a partial World (used by World Factory)
-        dataBucket.setWorld(worldConfig.worldState);
-
-        const worldBundle = createWorld(worldConfig);
-
-        // Set the full World State and Objects from the generated bundle
-        dataBucket.setWorld(worldBundle.world);
-        dataBucket.setRawObjects(worldBundle.objects);
-
-        this.store = markRaw(new DataStore(dataBucket));
-      };
-
+      // Prep: Logic to hook DOM -> PohEngine -> appStore
       const createEngine = (): void => {
         const engineCanvas = document.getElementById("engine-canvas") as HTMLCanvasElement | null;
         if (!engineCanvas) throw new Error("PohEngine canvas `#engine-canvas` not found");
         const minimapCanvas = document.getElementById("minimap-canvas") as HTMLCanvasElement | null;
         if (!minimapCanvas) throw new Error("Minimap canvas `#minimap-canvas` not found");
 
-        this.engineService = markRaw(
+        this.pohEngine = markRaw(
           new PohEngine(useDataBucket().world.size, engineCanvas, minimapCanvas),
         );
       };
 
-      // PHASE 1: Data & Settings
-      // Data-layer completion is a hard precondition for Phase 2.
-      const dataTasks: { title: string; fn: TaskDefinition }[] = [
-        {
-          title: "Load Static Data",
-          fn: () => {
-            if (!hasDataBucket()) {
-              DataBucket.init();
-            }
-          },
-        },
+      // Prep: Once the Current Game is ready, perform these UI tasks
+      const tasks: Task[] = [
         { title: "Load Settings", fn: () => useSettingsStore().init() },
         {
-          title: saveId ? "Load Saved Game" : "Create New World",
-          fn: async () => {
-            if (saveId) {
-              await loadGame(saveId);
-            } else {
-              await createGame();
-            }
+          title: "Set Current Player",
+          fn: (): void => {
+            const bucket = useDataBucket();
+            setCurrentPlayer(bucket.getObject<Player>(bucket.world.currentPlayerKey));
           },
         },
-      ];
-
-      await asyncProcess(
-        dataTasks,
-        async (task) => {
-          this.loadTitle = task.title;
-          await task.fn();
-        },
-        (progress) => {
-          this.loadPercent = typeof progress === "number" ? progress + "%" : "Data Ready";
-        },
-      );
-
-      // Set current player context
-      const bucket = useDataBucket();
-      setCurrentPlayer(bucket.getObject<Player>(bucket.world.currentPlayerKey));
-
-      // Initialize Engine Service (Data is now available for map size)
-      createEngine();
-
-      // PHASE 2: Graphics & UI
-      // engineService.initOrder() exposes boot sequencing intentionally.
-      const engineTasks = [
-        ...this.engineService.initOrder(engine),
-        {
-          title: "Load Tiles",
-          fn: () => bucket.getClassObjects<Tile>("tile").forEach((t) => t.warmUp()),
-        },
-        {
-          title: "Load Players",
-          fn: () => bucket.getClassObjects<Player>("player").forEach((p) => p.warmUp()),
-        },
-        {
-          title: "Load Cities",
-          fn: () => bucket.getClassObjects<City>("city").forEach((c) => c.warmUp()),
-        },
-        {
-          title: "Load Units",
-          fn: () => bucket.getClassObjects<Unit>("unit").forEach((u) => u.warmUp()),
-        },
+        { title: "Start Engine", fn: createEngine.bind(this) },
+        ...this.pohEngine.initOrder(engine),
         { title: "Initialize Encyclopedia", fn: () => useEncyclopediaStore().init() },
         { title: "Initialize Cities Tab", fn: () => useCitiesTabStore().init() },
         { title: "Initialize Culture Tab", fn: () => useCultureTabStore().init() },
@@ -158,26 +75,30 @@ export const useAppStore = defineStore("app", {
         { title: "Initialize Units Tab", fn: () => useUnitsTabStore().init() },
       ];
 
-      await asyncProcess(
-        engineTasks,
-        (task) => {
-          this.loadTitle = task.title;
-          task.fn();
-        },
-        (progress) => {
-          this.loadPercent = typeof progress === "number" ? progress + "%" : "Ready!";
-        },
+      // Action: Boot up the Current Game
+      this.currentGame = markRaw(
+        new CurrentGame(
+          saveId
+            ? CurrentGame.loadGameTask(saveManager.load(saveId))
+            : CurrentGame.newGameTask(useMapGenStore().getResolvedConfig()),
+          {
+            id: saveId,
+            extraTasks: tasks,
+            progressCallback: (task, progress) => {
+              this.loadTitle = task.title;
+              this.loadPercent = typeof progress === "number" ? progress + "%" : "Ready!";
+            },
+          },
+        ),
       );
 
+      // Signal to Vue that the app is ready and sync URL <-> UI
       this.loaded = true;
       this.syncUiStateFromNav();
     },
-    async saveGame(isAutosave = false) {
-      const bucket = useDataBucket();
-      const currentPlayer = useCurrentContext().currentPlayer;
 
-      const name = `${currentPlayer.leader.name} - ${currentPlayer.culture.type.name}`;
-      saveManager.save(bucket.toSaveData(name, APP_VERSION), isAutosave);
+    async saveGame(name?: string, isAutosave = false) {
+      SaveAction.save(name, isAutosave);
     },
 
     // Process for UI event -> sync to URL (URL is the source of truth for UI state)

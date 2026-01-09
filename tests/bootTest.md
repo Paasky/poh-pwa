@@ -39,7 +39,7 @@ sequence.
   test intentionally fails if a template or `v-if` regression removes them.
 - **Authoritative Orchestrator**: `appStore` is the deliberate central boot orchestrator. Boot logic must not be reused
   outside initialization.
-- **Boot Sequence Contract**: `engineService.initOrder()` exposes tasks for boot-only purposes. It is not a public
+- **Boot Sequence Contract**: `pohEngine.initOrder()` exposes tasks for boot-only purposes. It is not a public
   lifecycle API. Data-layer completion is a hard precondition for engine initialization.
 
 ---
@@ -124,7 +124,7 @@ initEngineAndScene(customEngine?: BabylonEngine): this {
 
 ## Step 3: Refactor `appStore.init()`
 
-Split initialization into two phases to fix the timing bug where `engineService.initOrder()` is evaluated too early.
+Split initialization into two phases to fix the timing bug where `pohEngine.initOrder()` is evaluated too early.
 
 ### 3.1 Update `src/stores/appStore.ts`
 
@@ -167,9 +167,9 @@ actions: {
     createEngine();
 
     // PHASE 2: Graphics & UI
-    // engineService.initOrder() exposes boot sequencing intentionally.
+    // pohEngine.initOrder() exposes boot sequencing intentionally.
     const engineTasks = [
-      ...this.engineService.initOrder(),
+      ...this.pohEngine.initOrder(),
       {
         title: "Load Tiles",
         fn: () => useDataBucket().getClassObjects<Tile>("tile").forEach((t) => t.warmUp()),
@@ -270,8 +270,8 @@ describe('Game Boot Sequence', () => {
 
     // Structural Invariants
     expect(app.loaded).toBe(true);
-    expect(app.engineService.engine).toBeDefined();
-    expect(app.engineService.scene).toBeDefined();
+    expect(app.pohEngine.engine).toBeDefined();
+    expect(app.pohEngine.scene).toBeDefined();
     
     const bucket = useDataBucket();
     expect(bucket.world).toBeDefined();

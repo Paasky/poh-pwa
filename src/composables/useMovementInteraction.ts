@@ -22,13 +22,10 @@ export function useMovementInteraction() {
     current.object,
     (obj) => {
       if (obj?.class === "unit") {
-        MovementManager.refreshMovementOverlays(
-          app.engineService as PohEngine,
-          obj as unknown as Unit,
-        );
+        MovementManager.refreshMovementOverlays(app.pohEngine as PohEngine, obj as unknown as Unit);
       } else {
         // Clear all movement visuals when no unit is selected
-        MovementManager.clearMovementOverlays(app.engineService as PohEngine);
+        MovementManager.clearMovementOverlays(app.pohEngine as PohEngine);
       }
     },
     { immediate: true },
@@ -36,7 +33,7 @@ export function useMovementInteraction() {
 
   // Watch for hover changes to update the potential path preview
   watch(current.hover, (hoverTile) => {
-    const { pathOverlay } = app.engineService;
+    const { pathOverlay } = app.pohEngine;
 
     const selectedObject = current.object;
     if (selectedObject?.class === "unit" && hoverTile) {

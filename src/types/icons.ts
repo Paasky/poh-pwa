@@ -195,6 +195,8 @@ export const icons = {
   objectGroup: { icon: faObjectGroup, color: colors.default },
   upload: { icon: faFileImport, color: colors.default },
   save: { icon: faFloppyDisk, color: colors.default },
+  download: { icon: faFileDownload, color: colors.default },
+  trash: { icon: faTrash, color: colors.default },
   check: { icon: faCircleCheck, color: colors.default },
   alert: { icon: faCircleExclamation, color: colors.default },
 };

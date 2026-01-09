@@ -4,11 +4,15 @@ import { useEncyclopediaStore } from "@/components/Encyclopedia/encyclopediaStor
 import { toggleFullscreen } from "@/helpers/fullscreen";
 import UiButton from "@/components/Ui/UiButton.vue";
 import SettingsDialog from "@/components/Settings/SettingsDialog.vue";
+import SaveDialog from "@/components/Saves/SaveDialog.vue";
 import { useSettingsStore } from "@/stores/settingsStore";
+import { SaveAction } from "@/Actor/Human/Actions/SaveAction";
+import { getHotkeyLabel } from "@/Actor/Human/HotkeyManager";
 
 defineEmits(["quit", "reload"]);
 const showQuitConfirm = ref(false);
 const showSettings = ref(false);
+const showSaveModal = ref(false);
 
 const settings = useSettingsStore();
 
@@ -59,13 +63,22 @@ onBeforeUnmount(() => {
     <UiButton id="menu-btn" icon="menu" type="secondary" rounded="b-lg" tooltip="Menu" />
     <v-menu activator="#menu-btn" transition="slide-y-transition">
       <v-list density="comfortable">
-        <v-list-item value="save" title="Save" />
-        <v-list-item value="load" title="Load" />
+        <v-list-item
+          value="quick-save"
+          title="Quick Save"
+          :subtitle="getHotkeyLabel('S', ['ctrl'])"
+          @click="SaveAction.quickSave()"
+        />
+        <v-list-item value="save" title="Save / Load Game" @click="showSaveModal = true" />
+        <v-divider class="my-1" />
         <v-list-item value="settings" title="Settings" @click="showSettings = true" />
         <v-divider class="my-1" />
         <v-list-item value="quit" title="Quit" @click="showQuitConfirm = true" />
       </v-list>
     </v-menu>
+
+    <!-- Modals -->
+    <SaveDialog v-model="showSaveModal" />
 
     <!-- Settings dialog -->
     <SettingsDialog v-model="showSettings" @request-reload="$emit('reload')" />

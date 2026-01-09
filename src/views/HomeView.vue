@@ -3,7 +3,7 @@ import { computed, ref } from "vue";
 import { saveManager } from "@/utils/saveManager";
 import { formatSaveDate } from "@/helpers/timeFormatter";
 import TerraConfigDialog from "./Home/TerraConfigDialog.vue";
-import SaveBrowserDialog from "./Home/SaveBrowserDialog.vue";
+import SaveDialog from "@/components/Saves/SaveDialog.vue";
 import SettingsDialog from "@/components/Settings/SettingsDialog.vue";
 import UiButton from "@/components/Ui/UiButton.vue";
 import UiIcon from "@/components/Ui/UiIcon.vue";
@@ -110,7 +110,7 @@ useAppStore().syncUiStateFromNav();
 
     <!-- Dialogs -->
     <EncyclopediaDialog />
-    <SaveBrowserDialog v-model="showLoadGame" />
+    <SaveDialog v-model="showLoadGame" />
     <SettingsDialog v-model="showSettings" />
     <TerraConfigDialog v-model="showNewGame" />
   </v-main>

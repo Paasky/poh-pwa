@@ -1,6 +1,6 @@
 import { ActionReport, Difficulty, Note, Priority, Region } from "@/Actor/Ai/AiTypes";
 import { Player } from "@/Common/Models/Player";
-import { LocalAction } from "@/Actor/Ai/Action/LocalAction";
+import { LocalAction } from "@/Actor/Ai/Actions/LocalAction";
 import { Action } from "@/Common/IAction";
 import { prioritiesById } from "@/Actor/Ai/Helpers/prioritiesById";
 

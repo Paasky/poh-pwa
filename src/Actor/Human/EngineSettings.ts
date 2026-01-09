@@ -4,6 +4,7 @@ export type EngineSettings = {
   // Save Management
   autoSaveFrequency: number;
   maxAutoSaves: number;
+  autoDownloadSaves: boolean;
 
   // Camera UX
   manualTilt: boolean; // Allow user to tilt manually (otherwise auto-tilt by zoom)
@@ -43,6 +44,7 @@ export type EngineSettings = {
 export const gameSettingKeys: (keyof EngineSettings)[] = [
   "autoSaveFrequency",
   "maxAutoSaves",
+  "autoDownloadSaves",
   "manualTilt",
   "showGrid",
   "showClock",
@@ -83,6 +85,7 @@ export const restartRequiredSettingKeys: (keyof EngineSettings)[] = [
 export const defaultEngineSettings: Required<EngineSettings> = {
   autoSaveFrequency: 1,
   maxAutoSaves: 10,
+  autoDownloadSaves: true,
   manualTilt: false,
   showGrid: true,
   showClock: true,

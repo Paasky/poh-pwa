@@ -195,8 +195,8 @@ function verifySharedInvariants(app: any, expectedWorld: any, expectedObjects: a
 
   // 1. App State
   expect(app.loaded).toBe(true);
-  expect(app.engineService.engine).toBeDefined();
-  expect(app.engineService.scene).toBeDefined();
+  expect(app.pohEngine.engine).toBeDefined();
+  expect(app.pohEngine.scene).toBeDefined();
 
   // 2. World Data
   expect(bucket.world).toBeDefined();

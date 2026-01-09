@@ -16,6 +16,9 @@ export interface MapGenConfig {
   majorsPerContinent: number;
   minorsPerPlayer: number;
   worldState: Partial<WorldState>;
+  flipX: boolean;
+  flipY: boolean;
+  flipClimate: boolean;
 }
 
 const alignmentPresets: Record<

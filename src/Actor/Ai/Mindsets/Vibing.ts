@@ -1,9 +1,10 @@
-import { Difficulty, Locality, MilitaryAction, Note, Priority, Region } from "@/Actor/Ai/AiTypes";
+import { Difficulty, Locality, Note, Priority, Region } from "@/Actor/Ai/AiTypes";
 import { Player } from "@/Common/Models/Player";
-import { IAnalysisMindset } from "@/Actor/Ai/Analysis/_IAnalysisMindset";
+import { IAnalysisMindset } from "@/Actor/Ai/Mindsets/_IAnalysisMindset";
 import { Memory } from "@/Actor/Ai/Memory";
 
-export class PreSettled implements IAnalysisMindset {
+// No specific plans or threats, just vibing!
+export class Vibing implements IAnalysisMindset {
   constructor(
     public readonly player: Player,
     public readonly difficulty: Difficulty,
@@ -12,23 +13,9 @@ export class PreSettled implements IAnalysisMindset {
   ) {}
 
   analyzeLocality(locality: Locality): Note[] {
-    let militaryAction: MilitaryAction = "reduce";
+    // todo: analyze Locality
 
-    // If any tile has an unknown neighbor, recommend militaryAction: Explore
-    for (const tile of locality.tiles) {
-      for (const neighbor of tile.neighborTiles) {
-        if (!this.player.knownTileKeys.has(neighbor.key)) {
-          militaryAction = "explore";
-        }
-      }
-    }
-
-    return [
-      {
-        name: locality.name,
-        militaryAction,
-      },
-    ];
+    return [];
   }
 
   analyzeRegion(region: Region): Note[] {

@@ -219,7 +219,7 @@ export class DataBucket {
     const { created, updated } = this.dataLoader.setFromRaw(objects, this.objects);
     created.forEach((obj) => {
       this.buildObjectIndex(obj);
-      obj.onCreated();
+      obj.onCreate();
     });
     updated.forEach((obj) => {
       this.buildObjectIndex(obj);

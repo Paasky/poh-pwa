@@ -47,6 +47,20 @@ export const saveManager = {
     return JSON.parse(raw) as RawSaveData;
   },
 
+  download(id: string) {
+    const data = this.load(id);
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    // data.name is required in RawSaveData, so we use it directly.
+    // We sanitize it just in case to be a valid filename.
+    const safeName = data.name.replace(/[/\\?%*:|"<>]/g, "-");
+    a.download = `${safeName}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  },
+
   delete(id: string) {
     localStorage.removeItem(`${SAVE_PREFIX}${id}`);
     const index = this.getIndex();

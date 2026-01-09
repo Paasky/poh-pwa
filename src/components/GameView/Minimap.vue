@@ -11,10 +11,10 @@ function onClick(ev: MouseEvent) {
   const xPercent = (ev.clientX - rect.left) / rect.width;
   const yPercent = (ev.clientY - rect.top) / rect.height;
 
-  const { minX, maxX, minZ, maxZ } = app.engineService.minimap!.bounds;
+  const { minX, maxX, minZ, maxZ } = app.pohEngine.minimap!.bounds;
 
   // Map percentages to the zoomed-in bounding box
-  app.engineService.flyTo({
+  app.pohEngine.flyTo({
     x: minX + xPercent * (maxX - minX),
     z: maxZ - yPercent * (maxZ - minZ), // Flip Y because canvas 0 is top
   });

@@ -99,7 +99,7 @@ export class PohEngine {
     this.scene.clearColor = new Color4(0.63, 0.63, 0.63, 1); // Same-ish as snow
 
     // Allow for easy debugging
-    (window as unknown as { engineService: PohEngine }).engineService = this;
+    (window as unknown as { pohEngine: PohEngine }).pohEngine = this;
 
     // Watch for non-restart settings changes
     this.applyRenderScale(settings.renderScale);
