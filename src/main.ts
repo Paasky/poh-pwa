@@ -22,6 +22,7 @@ import { registerSW } from "virtual:pwa-register";
 
 // App styles (import AFTER vuetify/styles so our overrides take precedence)
 import "@/Actor/Human/Assets/main.css";
+import { errorService } from "@/services/errorService";
 
 // Ensure all icons from our central icons.ts are registered
 library.add(...getAllIcons());
@@ -29,6 +30,17 @@ library.add(...getAllIcons());
 registerSW({ immediate: true });
 
 const app = createApp(App);
+
+// 1. Vue-specific errors
+app.config.errorHandler = (err, instance, info) => {
+  errorService.handle(err, { source: "Vue", info });
+};
+
+// 2. Global Unhandled Rejections (Async/Promise errors)
+window.addEventListener("unhandledrejection", (event) => {
+  errorService.handle(event.reason, { source: "Promise" });
+});
+
 const vuetify = createVuetify({
   icons: {
     defaultSet: "fa",

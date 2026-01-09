@@ -1,13 +1,19 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
-import { saveManager, SaveMeta } from "@/utils/saveManager";
+import router from "@/router";
+import pkg from "../../../package.json";
+
+// Utils & Stores
+import { saveManager, type SaveMeta } from "@/utils/saveManager";
 import { SaveAction } from "@/Actor/Human/Actions/SaveAction";
 import { hasDataBucket } from "@/Data/useDataBucket";
 import { useCurrentContext } from "@/composables/useCurrentContext";
+
+// Helpers
 import { formatSaveDate } from "@/helpers/timeFormatter";
 import { formatYear } from "@/Common/Objects/Common";
-import router from "@/router";
-import pkg from "../../../package.json";
+
+// Components
 import UiButton from "@/components/Ui/UiButton.vue";
 import UiIcon from "@/components/Ui/UiIcon.vue";
 import UiCols from "@/components/Ui/UiCols.vue";
@@ -16,48 +22,40 @@ const APP_VERSION = pkg.version;
 
 const open = defineModel<boolean>({ required: true });
 
+// -- State --
 const saves = ref<SaveMeta[]>([]);
 const selectedId = ref<string | null>(null);
 const saveName = ref("");
 const fileInput = ref<HTMLInputElement | null>(null);
+const showDeleteConfirm = ref(false);
+const saveToDelete = ref<string | null>(null);
 
+// -- Computed --
 const selectedSave = computed(() => saves.value.find((s) => s.id === selectedId.value) || null);
 
+// -- Methods --
 function refreshSaves() {
   saves.value = saveManager.getIndex().sort((a, b) => b.time - a.time);
+
+  // Auto-select latest if nothing selected
   if (saves.value.length > 0 && !selectedId.value) {
     selectedId.value = saves.value[0].id;
   }
 }
 
-onMounted(() => {
-  refreshSaves();
-});
-
-watch(open, (val) => {
-  if (val) {
-    refreshSaves();
-    if (hasDataBucket()) {
-      const { currentPlayer } = useCurrentContext();
-      saveName.value = `${currentPlayer.leader.name} - ${currentPlayer.culture.type.name}`;
-    }
-  }
-});
-
 function doSave() {
-  if (!saveName.value.trim()) return;
-  SaveAction.save(saveName.value);
+  const name = saveName.value.trim();
+  if (!name) return;
+
+  SaveAction.save(name);
   saveName.value = "";
   refreshSaves();
 }
 
 async function loadSave(id: string) {
   open.value = false;
-  router.push({ path: "/game", query: { saveId: id } });
+  await router.push({ path: "/game", query: { saveId: id } });
 }
-
-const showDeleteConfirm = ref(false);
-const saveToDelete = ref<string | null>(null);
 
 function requestDelete(id: string) {
   saveToDelete.value = id;
@@ -67,7 +65,9 @@ function requestDelete(id: string) {
 function confirmDelete() {
   if (saveToDelete.value) {
     saveManager.delete(saveToDelete.value);
-    if (selectedId.value === saveToDelete.value) selectedId.value = null;
+    if (selectedId.value === saveToDelete.value) {
+      selectedId.value = saves.value.find((s) => s.id !== saveToDelete.value)?.id || null;
+    }
     refreshSaves();
     saveToDelete.value = null;
   }
@@ -79,15 +79,36 @@ async function onFileUpload(event: Event) {
   const file = target.files?.[0];
   if (!file) return;
 
-  const text = await file.text();
-  const data = JSON.parse(text);
+  try {
+    const text = await file.text();
+    const data = JSON.parse(text);
 
-  if (!data.world || !data.objects) throw new Error("Invalid save file: missing world or objects.");
+    if (!data.world || !data.objects) {
+      throw new Error("Invalid save file: missing world or objects.");
+    }
 
-  saveManager.save(data);
-  refreshSaves();
-  target.value = "";
+    saveManager.save(data);
+    refreshSaves();
+  } finally {
+    target.value = "";
+  }
 }
+
+// -- Lifecycles / Watches --
+onMounted(() => {
+  refreshSaves();
+});
+
+watch(open, (isOpen) => {
+  if (!isOpen) return;
+
+  refreshSaves();
+
+  if (hasDataBucket()) {
+    const { currentPlayer } = useCurrentContext();
+    saveName.value = `${currentPlayer.leader.name} - ${currentPlayer.culture.type.name}`;
+  }
+});
 </script>
 
 <template>
@@ -101,7 +122,6 @@ async function onFileUpload(event: Event) {
           text="Upload Save"
           icon="upload"
           @click="fileInput?.click()"
-          size="default"
         />
         <input
           ref="fileInput"
@@ -125,7 +145,12 @@ async function onFileUpload(event: Event) {
             @keyup.enter="doSave"
           >
             <template #append-inner>
-              <UiButton type="primary" text="Save" @click="doSave" :disabled="!saveName.trim()" />
+              <UiButton
+                type="primary"
+                text="Save"
+                :disabled="!saveName.trim()"
+                @click="doSave"
+              />
             </template>
           </v-text-field>
         </div>
@@ -160,9 +185,9 @@ async function onFileUpload(event: Event) {
                 </v-list-item>
 
                 <v-list-item v-if="saves.length === 0">
-                  <v-list-item-title class="text-center opacity-50"
-                    >No saves found</v-list-item-title
-                  >
+                  <v-list-item-title class="text-center opacity-50">
+                    No saves found
+                  </v-list-item-title>
                 </v-list-item>
               </v-list>
             </template>
@@ -214,21 +239,18 @@ async function onFileUpload(event: Event) {
                       icon="trash"
                       tooltip="Delete Save"
                       @click="requestDelete(selectedSave.id)"
-                      size="default"
                     />
                     <UiButton
                       type="secondary"
                       icon="download"
                       tooltip="Download Save"
                       @click="saveManager.download(selectedSave.id)"
-                      size="default"
                     />
                     <v-spacer />
                     <UiButton
                       type="primary"
                       text="Load Game"
                       @click="loadSave(selectedSave.id)"
-                      size="default"
                     />
                   </div>
                 </template>
@@ -246,22 +268,22 @@ async function onFileUpload(event: Event) {
 
       <v-card-actions>
         <v-spacer />
-        <UiButton type="text" text="Close" @click="open = false" size="default" />
+        <UiButton type="text" text="Close" @click="open = false" />
       </v-card-actions>
     </v-card>
-  </v-dialog>
 
-  <!-- Delete confirmation dialog -->
-  <v-dialog v-model="showDeleteConfirm" max-width="400">
-    <v-card rounded="lg">
-      <v-card-title class="text-h6">Delete Save</v-card-title>
-      <v-card-text>
-        Are you sure you want to delete this save? This action cannot be undone.
-      </v-card-text>
-      <v-card-actions class="justify-end ga-2">
-        <UiButton type="text" text="Cancel" @click="showDeleteConfirm = false" size="default" />
-        <UiButton type="danger" text="Delete" @click="confirmDelete" size="default" />
-      </v-card-actions>
-    </v-card>
+    <!-- Delete confirmation dialog -->
+    <v-dialog v-model="showDeleteConfirm" max-width="400">
+      <v-card rounded="lg">
+        <v-card-title class="text-h6">Delete Save</v-card-title>
+        <v-card-text>
+          Are you sure you want to delete this save? This action cannot be undone.
+        </v-card-text>
+        <v-card-actions class="justify-end ga-2">
+          <UiButton type="text" text="Cancel" @click="showDeleteConfirm = false" />
+          <UiButton type="danger" text="Delete" @click="confirmDelete" />
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-dialog>
 </template>

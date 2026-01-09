@@ -70,12 +70,20 @@ If a request or change conflicts with this document, **stop immediately and push
 
     * Always verify all imports exist in all modified files
 
-10. **Mandatory Pushback Rule**
+0**Mandatory Pushback Rule**
     If a request violates any rule in this document:
 
 * Stop immediately
 * Explicitly state which rule would be broken
 * Especially enforce KISS and common practices
+
+1**Error Handling & Console Discipline**
+
+* `console.error` is forbidden.
+* Do not swallow errors in `try-catch` blocks for the sake of logging.
+* Prefer `throw new Error("...")` and let the global `ErrorService` handle the user notification (Toaster).
+* If you must catch an error to recover, ensure the user is still informed if the failure affects their intent.
+* `console.warn` and `console.log` are permitted for development but must not be used for flow-breaking errors.
 
 ---
 

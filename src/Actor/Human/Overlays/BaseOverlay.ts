@@ -45,9 +45,6 @@ export abstract class BaseOverlay<T> implements IOverlay<T> {
     Promise.resolve().then(() => {
       try {
         this.onRefresh();
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.error(`Error in ${this.constructor.name}.onRefresh:`, e);
       } finally {
         this._refreshPending = false;
         this.dirtyLayers.clear();
