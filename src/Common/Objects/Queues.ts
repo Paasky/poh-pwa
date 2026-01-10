@@ -1,5 +1,5 @@
 import { TypeClass } from "@/Common/Objects/TypeObject";
-import { Yield, Yields } from "@/Common/Objects/Yields";
+import { Yield, Yields } from "@/Common/Static/Yields";
 import { CatKey, roundToTenth, TypeKey } from "@/Common/Objects/Common";
 import { TypeStorage } from "@/Common/Objects/TypeStorage";
 import { Construction } from "@/Common/Models/Construction";

@@ -4,7 +4,7 @@ import type { IMutation } from "@/Common/IMutation";
 import { DataBucket } from "@/Data/DataBucket";
 import type { GameKey, GameObject, IRawGameObject } from "@/Common/Models/_GameModel";
 import type { IEvent } from "@/Common/IEvent";
-import { publishEvents } from "@/Common/EventBus";
+import { publishEvents } from "@/Common/Buses/EventBus";
 import type { Agenda } from "@/Common/Models/Agenda";
 import type { Citizen } from "@/Common/Models/Citizen";
 import type { City } from "@/Common/Models/City";

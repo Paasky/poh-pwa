@@ -1,4 +1,4 @@
-import { CompassHexCorner, CompassHexEdge } from "@/helpers/mapTools";
+import { CompassHexCorner, CompassHexEdge } from "@/Common/Helpers/mapTools";
 import { Color4 } from "@babylonjs/core";
 import {
   EngineCoords,

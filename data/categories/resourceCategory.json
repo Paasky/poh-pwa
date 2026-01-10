@@ -1,0 +1,67 @@
+[
+  {
+    "key": "resourceCategory:fruit",
+    "name": "Fruit",
+    "concept": "conceptType:resource"
+  },
+  {
+    "key": "resourceCategory:spice",
+    "name": "Spice",
+    "concept": "conceptType:resource"
+  },
+  {
+    "key": "resourceCategory:fish",
+    "name": "Fish",
+    "concept": "conceptType:resource"
+  },
+  {
+    "key": "resourceCategory:cattleGame",
+    "name": "Cattle/Game",
+    "concept": "conceptType:resource"
+  },
+  {
+    "key": "resourceCategory:cloth",
+    "name": "Cloth",
+    "concept": "conceptType:resource"
+  },
+  {
+    "key": "resourceCategory:grain",
+    "name": "Grain",
+    "concept": "conceptType:resource"
+  },
+  {
+    "key": "resourceCategory:vegetable",
+    "name": "Vegetable",
+    "concept": "conceptType:resource"
+  },
+  {
+    "key": "resourceCategory:mineral",
+    "name": "Mineral",
+    "concept": "conceptType:resource"
+  },
+  {
+    "key": "resourceCategory:marine",
+    "name": "Marine",
+    "concept": "conceptType:resource"
+  },
+  {
+    "key": "resourceCategory:manufactured",
+    "name": "Manufactured",
+    "concept": "conceptType:resource"
+  },
+  {
+    "key": "resourceCategory:beanNut",
+    "name": "Bean/Nut",
+    "concept": "conceptType:resource"
+  },
+  {
+    "key": "resourceCategory:plant",
+    "name": "Plant",
+    "concept": "conceptType:resource"
+  },
+  {
+    "key": "resourceCategory:strategic",
+    "name": "Strategic",
+    "concept": "conceptType:resource"
+  }
+]

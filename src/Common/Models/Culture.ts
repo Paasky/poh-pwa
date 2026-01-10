@@ -1,14 +1,14 @@
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { CatKey, TypeKey } from "@/Common/Objects/Common";
-import { Yields } from "@/Common/Objects/Yields";
+import { Yields } from "@/Common/Static/Yields";
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import { useDataBucket } from "@/Data/useDataBucket";
 import type { Citizen } from "@/Common/Models/Citizen";
 import type { Player } from "@/Common/Models/Player";
 import type { Tile } from "@/Common/Models/Tile";
-import { useEventStore } from "@/stores/eventStore";
-import { CultureHasNewType, CultureHasSettled } from "@/events/Culture";
-import { has } from "@/helpers/collectionTools";
+import { useEventStore } from "@/App/stores/eventStore";
+import { CultureHasNewType, CultureHasSettled } from "@/Common/events/Culture";
+import { has } from "@/Common/Helpers/collectionTools";
 
 export type CultureStatus = "notSettled" | "canSettle" | "mustSettle" | "settled";
 
@@ -238,7 +238,10 @@ export class Culture extends GameObject {
         this.myTypes.forEach((type) => yields.add(...type.yields.all()));
         return yields;
       },
-      { props: ["heritages", "traits", "type"] },
+      {
+        props: ["heritages", "traits", "type"],
+        relations: [{ relName: "myTypes", relProps: ["yields"] }],
+      },
     );
   }
 }

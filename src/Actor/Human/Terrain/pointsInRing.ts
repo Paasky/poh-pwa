@@ -1,5 +1,5 @@
-import { CompassHexCorner, CompassHexEdge } from "@/helpers/mapTools";
-import { degToRad, pointInDir, xInDir, zInDir } from "@/helpers/math";
+import { CompassHexCorner, CompassHexEdge } from "@/Common/Helpers/mapTools";
+import { degToRad, pointInDir, xInDir, zInDir } from "@/Common/Helpers/math";
 import { PointData } from "@/Actor/Human/Terrain/_terrainMeshTypes";
 
 /**

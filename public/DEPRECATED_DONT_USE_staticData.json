@@ -630,15 +630,15 @@
           "for": ["conceptType:building"]
         }
       ],
-      "upgradesTo": ["buildingType:fullfillmentCenter"],
+      "upgradesTo": ["buildingType:fulfillmentCenter"],
       "upgradesFrom": ["buildingType:dispensary"],
       "image": "\/media\/images\/buildingType\/metroSystem.jpg",
       "audio": [],
       "requires": ["technologyType:combustion", ["conceptType:flatLand", "elevationType:hill"]]
     },
     {
-      "key": "buildingType:fullfillmentCenter",
-      "name": "Fullfillment Center",
+      "key": "buildingType:fulfillmentCenter",
+      "name": "fulfillment Center",
       "concept": "conceptType:building",
       "description": "Fulfillment centers are large distribution warehouses that store inventory, pick orders, pack goods, and dispatch parcels for rapid delivery. Their roots lie in postwar catalog houses and regional logistics depots. From the late 20th century, e-commerce scaled the model with conveyorized sortation, barcode tracking, and real-time inventory control. Amazon pioneered high-throughput designs using zone picking and robotics such as Kiva-style mobile units. In China, Alibaba\u2019s Cainiao and JD.com operate automated hubs linking vendors to nationwide courier networks. Europe\u2019s Ocado developed grid robots for grocery fulfillment. India and Southeast Asia host multi-tenant sites serving marketplace sellers. Proximity to airports and highways reduces cycle times. Continuous optimization in slotting, packaging, and last-mile routing underpins same-day and next-day delivery promises.",
       "category": "buildingCategory:growth",
@@ -654,7 +654,7 @@
         }
       ],
       "upgradesFrom": ["buildingType:metroSystem"],
-      "image": "\/media\/images\/buildingType\/fullfillmentCenter.jpg",
+      "image": "\/media\/images\/buildingType\/fulfillmentCenter.jpg",
       "audio": [],
       "requires": [
         "technologyType:deliveryServices",
@@ -2526,7 +2526,7 @@
         "buildingType:windmill",
         "buildingType:dispensary",
         "buildingType:metroSystem",
-        "buildingType:fullfillmentCenter",
+        "buildingType:fulfillmentCenter",
         "heritageType:settledII",
         "nationalWonderType:foodProgram",
         "nationalWonderType:yellowstone",
@@ -4043,7 +4043,7 @@
         "buildingType:windmill",
         "buildingType:dispensary",
         "buildingType:metroSystem",
-        "buildingType:fullfillmentCenter",
+        "buildingType:fulfillmentCenter",
         "buildingType:obelisk",
         "buildingType:amphitheater",
         "buildingType:theater",
@@ -33214,7 +33214,7 @@
       "x": 0,
       "y": 121,
       "category": "eraType:postIndustrial",
-      "allows": ["buildingType:fullfillmentCenter", "technologyType:virtualReality"],
+      "allows": ["buildingType:fulfillmentCenter", "technologyType:virtualReality"],
       "yields": [
         {
           "type": "yieldType:scienceCost",
@@ -36358,7 +36358,7 @@
         "buildingType:windmill",
         "buildingType:dispensary",
         "buildingType:metroSystem",
-        "buildingType:fullfillmentCenter"
+        "buildingType:fulfillmentCenter"
       ]
     },
     {

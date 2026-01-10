@@ -2,7 +2,7 @@ import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
 import { City } from "@/Common/Models/City";
 import { Tile } from "@/Common/Models/Tile";
 import { IMutation } from "@/Common/IMutation";
-import { getRandom } from "@/helpers/arrayTools";
+import { getRandom } from "@/Common/Helpers/arrayTools";
 import { belongsToCity } from "@/Simulation/Validator";
 import { generateKey } from "@/Common/Models/_GameTypes";
 import { Citizen } from "@/Common/Models/Citizen";

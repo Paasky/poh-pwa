@@ -10,3 +10,8 @@
 /*.log
 pnpm-debug.log*
 vite.config.timestamp-*.
+
+# Static Data Forge Assets
+/public/data/staticData.json
+/public/data/staticAnalysis.json
+/public/data/manifest.json

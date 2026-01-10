@@ -8,14 +8,14 @@ import {
   maxWaterHeight,
   tileHeight,
   waterLevel,
-} from "@/helpers/mapTools";
-import { range } from "@/helpers/arrayTools";
+} from "@/Common/Helpers/mapTools";
+import { range } from "@/Common/Helpers/arrayTools";
 import { pointsInRing } from "@/Actor/Human/Terrain/pointsInRing";
 import { hexTrianglesFromPoints } from "@/Actor/Human/Terrain/hexTrianglesFromPoints";
 import { colorOf, terrainColorMap } from "@/Actor/Human/Assets/materials/terrains";
 import { Color4, Mesh, Scene, TransformNode } from "@babylonjs/core";
 import { EngineLayers } from "@/Actor/Human/EngineStyles";
-import { avg, clamp, tileCenter } from "@/helpers/math";
+import { avg, clamp, tileCenter } from "@/Common/Helpers/math";
 import { buildHexGpuBuffer } from "@/Actor/Human/Terrain/buildHexGpuBuffer";
 import {
   HexMeshConf,

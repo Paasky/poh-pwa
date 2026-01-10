@@ -3,24 +3,32 @@
 import { DataBucket, RawSaveData } from "@/Data/DataBucket";
 import { GameKey } from "@/Common/Models/_GameTypes";
 import { Brain } from "@/Actor/Ai/Brain";
-import { asyncProcess, ProgressCallback, Task } from "@/helpers/asyncProcess";
+import { asyncProcess, ProgressCallback, Task } from "@/Common/Helpers/asyncProcess";
 import { hasDataBucket, useDataBucket } from "@/Data/useDataBucket";
 import { Tile } from "@/Common/Models/Tile";
 import { Player } from "@/Common/Models/Player";
 import { City } from "@/Common/Models/City";
 import { Unit } from "@/Common/Models/Unit";
-import { MapGenConfig } from "@/stores/mapGenStore";
-import { createWorld } from "@/factories/worldFactory";
+import { MapGenConfig } from "@/App/stores/mapGenStore";
+import { createWorld } from "@/Common/factories/worldFactory";
+import { Difficulty } from "@/Actor/Ai/AiTypes";
+import { Memory } from "@/Actor/Ai/Memory";
+import { rng } from "@/Common/Helpers/Rng";
 
 export class CurrentGame {
   bucket!: DataBucket;
   readonly id: string;
   currentPlayer?: Player;
-  aiBrains?: Map<GameKey, Brain>;
+  readonly aiBrains: Map<GameKey, Brain> = new Map();
 
   constructor(
     initGame: Task, // title = Loading Game / Creating World
-    props?: { extraTasks?: Task[]; id?: string; progressCallback?: ProgressCallback },
+    props?: {
+      extraTasks?: Task[];
+      id?: string;
+      progressCallback?: ProgressCallback;
+      difficulty?: Difficulty;
+    },
   ) {
     this.id = props?.id ?? crypto.randomUUID();
 
@@ -30,6 +38,8 @@ export class CurrentGame {
         fn: async () => {
           if (!hasDataBucket()) {
             this.bucket = await DataBucket.init();
+          } else {
+            this.bucket = useDataBucket();
           }
         },
       },
@@ -50,24 +60,38 @@ export class CurrentGame {
         title: "Loading Units",
         fn: () => this.bucket.getClassObjects<Unit>("unit").forEach((u) => u.warmUp()),
       },
+      {
+        title: "Initializing Actors",
+        fn: () => {
+          const players = this.bucket.getClassObjects<Player>("player");
+          const world = this.bucket.world;
+          const difficulty = props?.difficulty ?? "regular";
+
+          for (const player of players) {
+            if (player.key === world.currentPlayerKey) {
+              this.currentPlayer = player;
+            }
+
+            if (!player.isHuman) {
+              this.aiBrains.set(player.key, new Brain(player, difficulty, new Memory(), new Set()));
+            }
+          }
+        },
+      },
       ...(props?.extraTasks ?? []),
     ];
 
     asyncProcess(tasks, (task) => task.fn(), props?.progressCallback);
   }
 
-  loadActors(currentPlayer: Player, aiBrains: Map<GameKey, Brain>): void {
-    this.currentPlayer = currentPlayer;
-    this.aiBrains = aiBrains;
-  }
-
   static newGameTask = (mapGenConfig: MapGenConfig): Task => {
     return {
       title: "Creating World",
       fn: () => {
+        rng.seed(mapGenConfig.seed);
         const dataBucket = useDataBucket();
         // Set a partial World (used by World Factory)
-        dataBucket.setWorld(mapGenConfig.worldState);
+        dataBucket.setWorld({ ...mapGenConfig.worldState, seed: mapGenConfig.seed });
 
         const worldBundle = createWorld(mapGenConfig);
 
@@ -82,6 +106,12 @@ export class CurrentGame {
     return {
       title: "Loading Game",
       fn: () => {
+        if (rawSaveData.rngState) {
+          rng.setState(rawSaveData.rngState);
+        } else if (rawSaveData.world.seed) {
+          rng.seed(rawSaveData.world.seed);
+        }
+
         const dataBucket = useDataBucket();
         dataBucket.setWorld(rawSaveData.world);
         dataBucket.setRawObjects(rawSaveData.objects);

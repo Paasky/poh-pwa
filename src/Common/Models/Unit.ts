@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import { TypeObject } from "@/Common/Objects/TypeObject";
-import { unitYieldTypeKeys, Yield, Yields } from "@/Common/Objects/Yields";
+import { unitYieldTypeKeys, Yield, Yields } from "@/Common/Static/Yields";
 import { roundToTenth } from "@/Common/Objects/Common";
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import { useDataBucket } from "@/Data/useDataBucket";
@@ -9,9 +9,9 @@ import type { City } from "@/Common/Models/City";
 import type { Player } from "@/Common/Models/Player";
 import type { TradeRoute } from "@/Common/Models/TradeRoute";
 import { type Tile } from "@/Common/Models/Tile";
-import { useEventStore } from "@/stores/eventStore";
-import { UnitCreated, UnitHealed, UnitLost } from "@/events/Unit";
-import { getCoordsFromTileKey, getHexNeighborCoords, tileKey } from "@/helpers/mapTools";
+import { useEventStore } from "@/App/stores/eventStore";
+import { UnitCreated, UnitHealed, UnitLost } from "@/Common/events/Unit";
+import { getCoordsFromTileKey, getHexNeighborCoords, tileKey } from "@/Common/Helpers/mapTools";
 import { UnitMovement } from "@/Simulation/Movement/UnitMovement";
 import { ActionType } from "@/Common/IAction";
 
@@ -114,11 +114,18 @@ export class Unit extends GameObject {
    * Computed
    */
   get myTypes(): Set<TypeObject> {
-    return new Set([this.concept, this.design.platform, this.design.equipment]);
+    return this.computed(
+      "myTypes",
+      () => new Set([this.concept, this.design.platform, this.design.equipment]),
+      { relations: [{ relName: "design", relProps: ["platform", "equipment"] }] },
+    );
   }
 
   get name(): string {
-    return this.customName || this.design.name;
+    return this.computed("name", () => this.customName || this.design.name, {
+      props: ["customName"],
+      relations: [{ relName: "design", relProps: ["name"] }],
+    });
   }
 
   get types(): Set<TypeObject> {
@@ -135,41 +142,76 @@ export class Unit extends GameObject {
   }
 
   get visibleTileKeys(): Set<GameKey> {
-    const store = useDataBucket();
-    const center = getCoordsFromTileKey(this.tileKey);
-    const neighbors = getHexNeighborCoords(store.world.size, center, 2);
-    const keys = new Set<GameKey>();
-    keys.add(this.tileKey);
-    for (const c of neighbors) {
-      keys.add(tileKey(c.x, c.y));
-    }
-    return keys;
+    return this.computed(
+      "visibleTileKeys",
+      () => {
+        const store = useDataBucket();
+        const center = getCoordsFromTileKey(this.tileKey);
+        const neighbors = getHexNeighborCoords(store.world.size, center, 2);
+        const keys = new Set<GameKey>();
+        keys.add(this.tileKey);
+        for (const c of neighbors) {
+          keys.add(tileKey(c.x, c.y));
+        }
+        return keys;
+      },
+      { props: ["tileKey"] },
+    );
   }
 
   get vitals(): Yields {
-    return new Yields([
+    return this.computed(
+      "vitals",
+      () =>
+        new Yields([
+          {
+            type: "yieldType:health",
+            amount: this.health,
+            method: "lump",
+            for: new Set(),
+            vs: new Set(),
+            max: 100,
+          } as Yield,
+          {
+            type: "yieldType:moves",
+            amount: this.movement.moves,
+            method: "lump",
+            for: new Set(),
+            vs: new Set(),
+            max: this.movement.maxMoves,
+          } as Yield,
+        ]),
       {
-        type: "yieldType:health",
-        amount: this.health,
-        method: "lump",
-        for: new Set(),
-        vs: new Set(),
-        max: 100,
-      } as Yield,
-      {
-        type: "yieldType:moves",
-        amount: this.movement.moves,
-        method: "lump",
-        for: new Set(),
-        vs: new Set(),
-        max: this.movement.maxMoves,
-      } as Yield,
-    ]);
+        props: ["health"],
+        relations: [{ relName: "movement", relProps: ["moves", "maxMoves"] }],
+      },
+    );
   }
 
   /*
    * Actions
    */
+  get actions(): Set<TypeObject> {
+    return this.computed(
+      "actions",
+      () => {
+        return this.design.actions;
+      },
+      { relations: [{ relName: "design", relProps: ["actions"] }] },
+    );
+  }
+
+  get availableActions(): Set<TypeObject> {
+    return this.computed(
+      "availableActions",
+      () => {
+        // todo filter available
+        return this.actions;
+      },
+      { props: ["actions"] },
+    );
+  }
+
   modifyHealth(amount: number, reason: string) {
     this.health = Math.max(0, Math.min(100, roundToTenth(this.health + amount)));
 

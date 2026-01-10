@@ -2,9 +2,9 @@ import { TypeKey } from "@/Common/Objects/Common";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { Player } from "@/Common/Models/Player";
 import { PlayerAutomation } from "@/Simulation/AutomatedActions/PlayerAutomation";
-import { map, takeRandomItem } from "@/helpers/collectionTools";
+import { map, takeRandomItem } from "@/Common/Helpers/collectionTools";
 import { CityStartTurn } from "@/Simulation/AutomatedActions/CityStartTurn";
-import { asyncProcess } from "@/helpers/asyncProcess";
+import { asyncProcess } from "@/Common/Helpers/asyncProcess";
 import { Construction } from "@/Common/Models/Construction";
 
 // Most top-level Manager that deals with the game's turn-cycle

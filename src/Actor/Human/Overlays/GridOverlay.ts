@@ -8,10 +8,10 @@ import {
 } from "@babylonjs/core";
 import { Tile } from "@/Common/Models/Tile";
 import { GameKey } from "@/Common/Models/_GameModel";
-import { Coords } from "@/helpers/mapTools";
-import { tileCenter } from "@/helpers/math";
+import { Coords } from "@/Common/Helpers/mapTools";
+import { tileCenter } from "@/Common/Helpers/math";
 import { EngineAlpha, EngineColors, EngineLayers, toColor3 } from "@/Actor/Human/EngineStyles";
-import { useSettingsStore } from "@/stores/settingsStore";
+import { useSettingsStore } from "@/App/stores/settingsStore";
 import { BaseOverlay } from "./BaseOverlay";
 
 // ---- Tuning constants (adjust freely) ----

@@ -1,12 +1,11 @@
 // noinspection JSUnusedGlobalSymbols
 
-import type { CatKey, TypeKey, WorldState } from "@/Common/Objects/Common";
+import { type CatKey, formatYear, type TypeKey, type WorldState } from "@/Common/Objects/Common";
+import { rng } from "@/Common/Helpers/Rng";
 import {
   CatData,
   type CategoryClass,
   type CategoryObject,
-  initCategoryObject,
-  initTypeObject,
   type TypeClass,
   type TypeObject,
 } from "@/Common/Objects/TypeObject";
@@ -14,7 +13,7 @@ import type { GameClass, GameKey, GameObject, IRawGameObject } from "@/Common/Mo
 import { GameDataLoader } from "@/Data/GameDataLoader";
 import { setDataBucket } from "@/Data/useDataBucket";
 import type { Tile } from "@/Common/Models/Tile";
-import { getStaticData, type RawStaticData } from "@/Data/StaticDataLoader";
+import { getStaticData, parseAndValidate, type ParsedStaticData } from "@/Data/StaticDataLoader";
 
 export type RawSaveData = {
   name: string; // "Leader Name - Culture Name" (user editable)
@@ -22,6 +21,7 @@ export type RawSaveData = {
   version: string; // Schema version from package.json
   objects: IRawGameObject[];
   world: WorldState;
+  rngState?: object;
 };
 
 export class DataBucket {
@@ -50,33 +50,26 @@ export class DataBucket {
     this.objects.forEach((o) => this.buildObjectIndex(o));
   }
 
-  static async init(rawStaticData?: RawStaticData): Promise<DataBucket> {
+  static async init(rawStaticData?: ParsedStaticData): Promise<DataBucket> {
     if (!rawStaticData) rawStaticData = await getStaticData();
 
     return this.fromRaw(rawStaticData, {} as WorldState);
   }
 
   static fromRaw(
-    rawStaticData: RawStaticData,
+    rawStaticData: ParsedStaticData,
     world: WorldState,
     rawObjects?: IRawGameObject[],
   ): DataBucket {
-    const types = new Map<TypeKey, TypeObject>();
-    const categories = new Map<CatKey, CategoryObject>();
+    const { types, categories } = parseAndValidate(rawStaticData);
 
-    for (const data of rawStaticData.types) {
-      types.set(data.key as TypeKey, Object.freeze(initTypeObject(data)) as TypeObject);
-    }
+    // 5. Freeze & Finalize
+    types.forEach((obj) => Object.freeze(obj));
+    categories.forEach((cat) => Object.freeze(cat));
 
-    for (const data of rawStaticData.categories) {
-      categories.set(data.key as CatKey, Object.freeze(initCategoryObject(data)) as CategoryObject);
-    }
-
-    // All static data initialized, now create the DataBucket instance
     const instance = new DataBucket(types, categories, world);
     setDataBucket(instance);
 
-    // Finally, initialize the raw objects
     if (rawObjects) {
       instance.setRawObjects(rawObjects);
     }
@@ -96,6 +89,7 @@ export class DataBucket {
       // Special case for Eras: eraType is used as category for techs
       if (key.startsWith("eraType:")) {
         const era = this.types.get(key as TypeKey);
+        // Special exception (no casting rule): Era is a Type, but is used as a Technology Category to avoid duplication of the same data
         if (era) return era as unknown as CategoryObject;
       }
 
@@ -194,6 +188,10 @@ export class DataBucket {
     return this._world;
   }
 
+  get year(): string {
+    return formatYear(this.world.year);
+  }
+
   removeObject(key: GameKey): void {
     const object = this.getObject(key);
     this.dataLoader.removeRelations(object, this.objects);
@@ -242,6 +240,7 @@ export class DataBucket {
         (o) => o.toJSON() as unknown as IRawGameObject,
       ),
       world: JSON.parse(JSON.stringify(this._world)),
+      rngState: rng.getState(),
     };
   }
 

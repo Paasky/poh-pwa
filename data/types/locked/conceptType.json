@@ -1,0 +1,317 @@
+[
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:action",
+    "name": "Action"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:agenda",
+    "name": "Agenda"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:building",
+    "name": "Building"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:construction",
+    "name": "Construction"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:citizen",
+    "name": "Citizen"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:city",
+    "name": "City"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:climate",
+    "name": "Climate"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:concept",
+    "name": "Concept"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:continent",
+    "name": "Continent"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:culture",
+    "name": "Culture"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:deal",
+    "name": "Deal"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:dogma",
+    "name": "Dogma"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:domain",
+    "name": "Domain"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:elevation",
+    "name": "Elevation"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:equipment",
+    "name": "Equipment"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:era",
+    "name": "Era"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:event",
+    "name": "Event"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:feature",
+    "name": "Feature"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:flatLand",
+    "name": "Flat Land",
+    "requires": ["elevationType:flat", "domainType:land"]
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:freshWater",
+    "name": "Fresh Water"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:goal",
+    "name": "Goal"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:god",
+    "name": "God"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:heritage",
+    "name": "Heritage"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:improvement",
+    "name": "Improvement"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:incident",
+    "name": "Incident"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:interaction",
+    "name": "Interaction"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:majorCulture",
+    "name": "Major Culture"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:majorLeader",
+    "name": "Major Leader"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:minorCulture",
+    "name": "Minor Culture"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:minorLeader",
+    "name": "Minor Leader"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:mountains",
+    "name": "Mountains",
+    "requires": [["elevationType:mountain", "elevationType:snowMountain"]]
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:myth",
+    "name": "Myth"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:nationalWonder",
+    "name": "National Wonder"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:naturalWonder",
+    "name": "Natural Wonder"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:navigableRiver",
+    "name": "Navigable River"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:ocean",
+    "name": "Ocean"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:platform",
+    "name": "Platform"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:player",
+    "name": "Player"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:policy",
+    "name": "Policy"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:region",
+    "name": "Region"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:religion",
+    "name": "Religion"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:resource",
+    "name": "Resource"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:revolution",
+    "name": "Revolution"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:river",
+    "name": "River"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:route",
+    "name": "Route"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:special",
+    "name": "Special"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:stockpile",
+    "name": "Stockpile"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:technology",
+    "name": "Technology"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:terrain",
+    "name": "Terrain"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:tension",
+    "name": "Tension"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:tile",
+    "name": "Tile"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:tradeRoute",
+    "name": "Trade Route"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:trait",
+    "name": "Trait"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:turn",
+    "name": "Turn"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:turnStart",
+    "name": "Turn Start"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:unit",
+    "name": "Unit"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:unitDesign",
+    "name": "Unit Design"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:urban",
+    "name": "Urban",
+    "requires": [
+      [
+        "conceptType:city",
+        "conceptType:building",
+        "conceptType:nationalWonder",
+        "conceptType:worldWonder"
+      ]
+    ]
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:world",
+    "name": "World"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:worldWonder",
+    "name": "World Wonder"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:yield",
+    "name": "Yield"
+  }
+]

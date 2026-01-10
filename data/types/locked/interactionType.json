@@ -1,0 +1,52 @@
+[
+  {
+    "concept": "conceptType:interaction",
+    "key": "interactionType:changeReligion",
+    "name": "Change Religion"
+  },
+  {
+    "concept": "conceptType:interaction",
+    "key": "interactionType:citizen",
+    "name": "Citizen"
+  },
+  {
+    "concept": "conceptType:interaction",
+    "key": "interactionType:city",
+    "name": "City"
+  },
+  {
+    "concept": "conceptType:interaction",
+    "key": "interactionType:startMission",
+    "name": "Start Mission"
+  },
+  {
+    "concept": "conceptType:interaction",
+    "key": "interactionType:updateCulture",
+    "name": "Update Culture"
+  },
+  {
+    "concept": "conceptType:interaction",
+    "key": "interactionType:updateDiplomacy",
+    "name": "Update Diplomacy"
+  },
+  {
+    "concept": "conceptType:interaction",
+    "key": "interactionType:updateGovernment",
+    "name": "Update Government"
+  },
+  {
+    "concept": "conceptType:interaction",
+    "key": "interactionType:updateReligion",
+    "name": "Update Religion"
+  },
+  {
+    "concept": "conceptType:interaction",
+    "key": "interactionType:updateResearch",
+    "name": "Update Research"
+  },
+  {
+    "concept": "conceptType:interaction",
+    "key": "interactionType:unit",
+    "name": "Unit"
+  }
+]

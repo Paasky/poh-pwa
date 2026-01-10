@@ -1,0 +1,210 @@
+[
+  {
+    "category": "stockpileCategory:biological",
+    "concept": "conceptType:stockpile",
+    "description": "Disease projectiles were medieval siege munitions that used corpses, offal, or contaminated materials to degrade defenders’ health and morale. Sources describe besiegers loading trebuchets with carcasses or waste and hurling them over walls. The best known episode occurred at Caffa in 1346, when attacking forces reportedly threw plague-infected bodies into the Genoese-held city during the Black Death. Earlier and later sieges also employed animal carcasses to foul water and spread putrefaction. The tactic relied on fear and unsanitary conditions rather than controlled epidemiology, and its direct role in transmitting specific diseases remains debated. With the rise of early modern military hygiene and emerging international norms, such practices declined. Twentieth-century treaties, including the 1925 Geneva Protocol and later the Biological Weapons Convention, codified prohibitions on biological methods of warfare.",
+    "key": "stockpileType:diseaseProjectile",
+    "name": "Disease Projectile",
+    "requires": [
+      "technologyType:castles"
+    ],
+    "specials": [
+      "specialType:stockpiled"
+    ],
+    "yields": [
+      {
+        "type": "yieldType:productionCost",
+        "amount": 160
+      },
+      {
+        "type": "yieldType:damage",
+        "amount": 20,
+        "method": "percent",
+        "for": [
+          "specialType:allInTile"
+        ],
+        "vs": [
+          "conceptType:citizen",
+          "conceptType:unit"
+        ]
+      }
+    ]
+  },
+  {
+    "category": "stockpileCategory:biological",
+    "concept": "conceptType:stockpile",
+    "description": "Gas projectiles are artillery shells or mortars designed to disseminate toxic chemical agents on detonation. During the First World War, after initial cloud releases, belligerents adopted shells to deliver chlorine, phosgene, and mustard agents with greater precision and persistence. Major offensives from 1915 to 1918 saw extensive shelling with gas munitions on the Western and Eastern Fronts, prompting rapid development of masks, filters, and protective drills. Shell-based delivery enabled mixed barrages that combined high explosive and chemical effects against trenches and artillery positions. Postwar condemnation shaped the 1925 Geneva Protocol, which banned chemical warfare. States nevertheless retained stockpiles for decades, though battlefield use dwindled under legal and strategic constraints. By the late twentieth century, international regimes sought verified destruction of chemical munitions under the Chemical Weapons Convention.",
+    "key": "stockpileType:gasProjectile",
+    "name": "Gas Projectile",
+    "requires": [
+      "technologyType:chemistry"
+    ],
+    "specials": [
+      "specialType:stockpiled"
+    ],
+    "yields": [
+      {
+        "type": "yieldType:productionCost",
+        "amount": 400
+      },
+      {
+        "type": "yieldType:damage",
+        "amount": 33,
+        "method": "percent",
+        "for": [
+          "specialType:allInTile"
+        ],
+        "vs": [
+          "conceptType:citizen",
+          "conceptType:unit"
+        ]
+      }
+    ]
+  },
+  {
+    "category": "stockpileCategory:biological",
+    "concept": "conceptType:stockpile",
+    "description": "Virus bombs are a speculative class of warheads designed to disperse engineered viruses as aerosols over wide areas. The concept appears in late twentieth- and twenty-first-century fiction and policy debates about emerging biotechnology. Proposed mechanisms envision tailored pathogens, genetic payloads, or delivery systems optimized for environmental stability and transmission, often invoking CRISPR-era modification. No state has acknowledged such weapons, and practical barriers remain high, including agent survivability, control of spread, and unpredictable epidemiology. International law prohibits development and possession under the Biological Weapons Convention, reinforced by biosafety standards and export controls. Public discourse treats the idea as a cautionary scenario about dual-use research and biodefense. Notable cultural treatments include novels and games that examine strategic and ethical consequences rather than technical feasibility.",
+    "key": "stockpileType:virusBomb",
+    "name": "Virus Bomb",
+    "requires": [
+      "technologyType:genetics"
+    ],
+    "specials": [
+      "specialType:stockpiled"
+    ],
+    "yields": [
+      {
+        "type": "yieldType:productionCost",
+        "amount": 1000
+      },
+      {
+        "type": "yieldType:hitRadius",
+        "amount": 1
+      },
+      {
+        "type": "yieldType:damage",
+        "amount": 33,
+        "method": "percent",
+        "for": [
+          "specialType:allInTile"
+        ],
+        "vs": [
+          "conceptType:citizen",
+          "conceptType:unit"
+        ]
+      }
+    ]
+  },
+  {
+    "category": "stockpileCategory:nuclear",
+    "concept": "conceptType:stockpile",
+    "description": "An atom bomb is a fission weapon that releases energy by rapidly splitting heavy nuclei, producing blast, heat, and ionizing radiation. The United States built the first devices during the Manhattan Project, culminating in the Trinity test in July 1945. Days later, atomic bombs destroyed Hiroshima and Nagasaki, prompting Japan’s surrender and ending the Second World War in the Pacific. Early designs used gun-type and implosion assemblies with uranium-235 or plutonium-239. Postwar programs in the Soviet Union, United Kingdom, France, and China expanded nuclear arsenals and delivery systems. The technology reshaped strategy through deterrence doctrines and civil defense planning. Arms control efforts, including the Partial Test Ban Treaty and the Nuclear Non-Proliferation Treaty, sought to limit testing, spread, and deployment while maintaining safeguards and verification.",
+    "key": "stockpileType:atomBomb",
+    "name": "Atom Bomb",
+    "requires": [
+      "technologyType:fission"
+    ],
+    "specials": [
+      "specialType:stockpiled"
+    ],
+    "yields": [
+      {
+        "type": "yieldType:productionCost",
+        "amount": 520
+      },
+      {
+        "type": "yieldType:hitRadius",
+        "amount": 1
+      },
+      {
+        "type": "yieldType:damage",
+        "amount": 33,
+        "method": "percent",
+        "for": [
+          "specialType:allInTile"
+        ],
+        "vs": [
+          "conceptType:building",
+          "conceptType:citizen",
+          "conceptType:improvement",
+          "conceptType:unit"
+        ]
+      }
+    ]
+  },
+  {
+    "category": "stockpileCategory:nuclear",
+    "concept": "conceptType:stockpile",
+    "description": "A hydrogen bomb is a thermonuclear weapon that uses a fission primary to drive fusion in a secondary stage, yielding far greater energy than pure fission devices. The United States tested the first thermonuclear design in 1952, followed by the Soviet Union in 1953. Subsequent advances produced lighter, deliverable warheads and very high-yield tests, such as the Soviet Tsar Bomba in 1961. In the twenty-first century, several nuclear states have maintained and modernized thermonuclear arsenals, focusing on safety, reliability, and miniaturization for varied delivery systems. North Korea announced thermonuclear tests in 2016 and 2017, intensifying proliferation concerns and sanctions. Contemporary policy centers on deterrence postures, test moratoria, and stockpile stewardship programs, alongside efforts to prevent further spread under the Nuclear Non-Proliferation Treaty.",
+    "key": "stockpileType:hydrogenBomb",
+    "name": "Hydrogen Bomb",
+    "requires": [
+      "technologyType:thermonuclearDevice"
+    ],
+    "specials": [
+      "specialType:stockpiled"
+    ],
+    "yields": [
+      {
+        "type": "yieldType:productionCost",
+        "amount": 720
+      },
+      {
+        "type": "yieldType:hitRadius",
+        "amount": 2
+      },
+      {
+        "type": "yieldType:damage",
+        "amount": 50,
+        "method": "percent",
+        "for": [
+          "specialType:allInTile"
+        ],
+        "vs": [
+          "conceptType:building",
+          "conceptType:citizen",
+          "conceptType:improvement",
+          "conceptType:unit"
+        ]
+      }
+    ]
+  },
+  {
+    "category": "stockpileCategory:nuclear",
+    "concept": "conceptType:stockpile",
+    "description": "A planet buster is a hypothetical doomsday device capable of inflicting planet-scale devastation through staged thermonuclear fusion with multi-gigaton yields. The idea belongs to science fiction and speculative military thought rather than practicable engineering. Writers and designers have posited chained fusion stages, antimatter triggers, or asteroid-delivery hybrids to bridge the gap between known weapons and extinction-level effects. No technology approaches such performance; even the largest historical test, the 1961 Tsar Bomba, remained many orders of magnitude below global destruction. Discussions often compare required energies to major impact events, such as the Chicxulub asteroid. The concept serves as a narrative tool for exploring ethics, deterrence, and catastrophe in literature, film, and games, while underscoring the limits and dangers of nuclear escalation.",
+    "key": "stockpileType:planetBuster",
+    "name": "Planet Buster",
+    "requires": [
+      "technologyType:nuclearFusion"
+    ],
+    "specials": [
+      "specialType:stockpiled"
+    ],
+    "yields": [
+      {
+        "type": "yieldType:productionCost",
+        "amount": 1500
+      },
+      {
+        "type": "yieldType:hitRadius",
+        "amount": 3
+      },
+      {
+        "type": "yieldType:damage",
+        "amount": 50,
+        "method": "percent",
+        "for": [
+          "specialType:allInTile"
+        ],
+        "vs": [
+          "conceptType:building",
+          "conceptType:citizen",
+          "conceptType:improvement",
+          "conceptType:unit"
+        ]
+      }
+    ]
+  }
+]

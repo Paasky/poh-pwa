@@ -4,10 +4,10 @@ import { useDataBucket } from "@/Data/useDataBucket";
 import type { Citizen } from "@/Common/Models/Citizen";
 import type { Player } from "@/Common/Models/Player";
 import type { City } from "@/Common/Models/City";
-import { useEventStore } from "@/stores/eventStore";
-import { ReligionHasEvolved, ReligionHasNewType } from "@/events/Religion";
-import { Yields } from "@/Common/Objects/Yields";
-import { has } from "@/helpers/collectionTools";
+import { useEventStore } from "@/App/stores/eventStore";
+import { ReligionHasEvolved, ReligionHasNewType } from "@/Common/events/Religion";
+import { Yields } from "@/Common/Static/Yields";
+import { has } from "@/Common/Helpers/collectionTools";
 
 export type ReligionStatus = "myths" | "gods" | "dogmas";
 
@@ -233,7 +233,10 @@ export class Religion extends GameObject {
         this.myTypes.forEach((type) => yields.add(...type.yields.all()));
         return yields;
       },
-      { props: ["myths", "gods", "dogmas"] },
+      {
+        props: ["myths", "gods", "dogmas"],
+        relations: [{ relName: "myTypes", relProps: ["yields"] }],
+      },
     );
   }
 }

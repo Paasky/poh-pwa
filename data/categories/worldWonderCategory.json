@@ -1,0 +1,82 @@
+[
+  {
+    "key": "worldWonderCategory:production",
+    "name": "Production",
+    "concept": "conceptType:worldWonder"
+  },
+  {
+    "key": "worldWonderCategory:gold",
+    "name": "Gold",
+    "concept": "conceptType:worldWonder"
+  },
+  {
+    "key": "worldWonderCategory:science",
+    "name": "Science",
+    "concept": "conceptType:worldWonder"
+  },
+  {
+    "key": "worldWonderCategory:growth",
+    "name": "Growth",
+    "concept": "conceptType:worldWonder"
+  },
+  {
+    "key": "worldWonderCategory:culture",
+    "name": "Culture",
+    "concept": "conceptType:worldWonder"
+  },
+  {
+    "key": "worldWonderCategory:faith",
+    "name": "Faith",
+    "concept": "conceptType:worldWonder"
+  },
+  {
+    "key": "worldWonderCategory:health",
+    "name": "Health",
+    "concept": "conceptType:worldWonder"
+  },
+  {
+    "key": "worldWonderCategory:happiness",
+    "name": "Happiness",
+    "concept": "conceptType:worldWonder"
+  },
+  {
+    "key": "worldWonderCategory:order",
+    "name": "Order",
+    "concept": "conceptType:worldWonder"
+  },
+  {
+    "key": "worldWonderCategory:influence",
+    "name": "Influence",
+    "concept": "conceptType:worldWonder"
+  },
+  {
+    "key": "worldWonderCategory:milLand",
+    "name": "Mil Land",
+    "concept": "conceptType:worldWonder"
+  },
+  {
+    "key": "worldWonderCategory:milWater",
+    "name": "Mil Water",
+    "concept": "conceptType:worldWonder"
+  },
+  {
+    "key": "worldWonderCategory:trade",
+    "name": "Trade",
+    "concept": "conceptType:worldWonder"
+  },
+  {
+    "key": "worldWonderCategory:water",
+    "name": "Water",
+    "concept": "conceptType:worldWonder"
+  },
+  {
+    "key": "worldWonderCategory:defense",
+    "name": "Defense",
+    "concept": "conceptType:worldWonder"
+  },
+  {
+    "key": "worldWonderCategory:air",
+    "name": "Air",
+    "concept": "conceptType:worldWonder"
+  }
+]

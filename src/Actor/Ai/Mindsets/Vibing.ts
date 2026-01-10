@@ -1,10 +1,11 @@
-import { Difficulty, Locality, Note, Priority, Region } from "@/Actor/Ai/AiTypes";
+import { Difficulty, Priority, Region } from "@/Actor/Ai/AiTypes";
 import { Player } from "@/Common/Models/Player";
-import { IAnalysisMindset } from "@/Actor/Ai/Mindsets/_IAnalysisMindset";
+import { IMindset } from "@/Actor/Ai/Mindsets/_IMindset";
 import { Memory } from "@/Actor/Ai/Memory";
+import { IEvent } from "@/Common/IEvent";
 
 // No specific plans or threats, just vibing!
-export class Vibing implements IAnalysisMindset {
+export class Vibing implements IMindset {
   constructor(
     public readonly player: Player,
     public readonly difficulty: Difficulty,
@@ -12,30 +13,8 @@ export class Vibing implements IAnalysisMindset {
     public readonly regions: Set<Region>,
   ) {}
 
-  analyzeLocality(locality: Locality): Note[] {
-    // todo: analyze Locality
-
-    return [];
-  }
-
-  analyzeRegion(region: Region): Note[] {
-    const notes = [] as Note[];
-    region.localities.forEach((locality) => {
-      notes.push(...this.analyzeLocality(locality));
-    });
-
-    // todo: analyze Region
-
-    return [];
-  }
-
-  analyzeStrategy(memory: Memory): Priority[] {
-    const notes = [] as Note[];
-    this.regions.forEach((region) => {
-      notes.push(...this.analyzeRegion(region));
-    });
-
-    // todo analyze Global Strategy
+  analyzeStrategy(events: IEvent[]): Priority[] {
+    // todo
 
     return [];
   }

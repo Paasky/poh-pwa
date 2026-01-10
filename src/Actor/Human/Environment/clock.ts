@@ -1,6 +1,6 @@
 import { ref } from "vue";
 import { defaultTimeOfDay2400 } from "@/Actor/Human/Environment/timeOfDay";
-import { wrapInclusive } from "@/helpers/math";
+import { wrapInclusive } from "@/Common/Helpers/math";
 
 /**
  * Ultra‑simple shared clock state for the environment.

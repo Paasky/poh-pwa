@@ -1,4 +1,5 @@
 import { fileURLToPath, URL } from "node:url";
+import path from "node:path";
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import vuetify from "vite-plugin-vuetify";
@@ -51,6 +52,26 @@ export default defineConfig(async ({ command }) => {
       // DevTools first so it can hook into Vue plugin if needed
       VueDevTools() as any,
     );
+
+    // Data Forge Watcher
+    plugins.push({
+      name: "watch-static-data",
+      configureServer(server) {
+        server.watcher.add(path.resolve(process.cwd(), "data"));
+      },
+      async handleHotUpdate({ file, server }) {
+        if (file.includes("/data/") && file.endsWith(".json")) {
+          console.log(`\n⚒ Data changed: ${path.relative(process.cwd(), file)}. Reforging...`);
+          try {
+            const { StaticDataCompiler } = await import("./scripts/deployment/StaticDataCompiler");
+            await new StaticDataCompiler().compile();
+            server.ws.send({ type: "full-reload" });
+          } catch (err) {
+            // Errors already logged by compiler
+          }
+        }
+      },
+    });
   }
 
   // noinspection JSUnusedGlobalSymbols
@@ -95,7 +116,7 @@ export default defineConfig(async ({ command }) => {
     },
     test: {
       environment: "happy-dom",
-      setupFiles: ["./tests/_setup/vitest-canvas-mock.ts"],
+      setupFiles: ["./tests/_setup/vitest-canvas-mock.ts", "./tests/_setup/staticDataGlobal.ts"],
     },
   };
 });

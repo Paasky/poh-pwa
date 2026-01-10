@@ -3,7 +3,7 @@ import { createPinia, setActivePinia } from "pinia";
 import { flushPromises } from "@vue/test-utils";
 import { setupServer } from "msw/node";
 import { http, HttpResponse } from "msw";
-import { useAppStore } from "@/stores/appStore";
+import { useAppStore } from "@/App/stores/appStore";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { NullEngine } from "@babylonjs/core";
 import type { Tile } from "@/Common/Models/Tile";
@@ -12,12 +12,21 @@ import type { Culture } from "@/Common/Models/Culture";
 import type { RawSaveData } from "@/Data/DataBucket";
 import type { GameKey } from "@/Common/Models/_GameModel";
 import type { Router } from "vue-router";
-import staticData from "../public/staticData.json";
+import fs from "fs";
+import path from "path";
 
 const server = setupServer(
-  http.get("/staticData.json", () => {
-    // If this breaks, boot contract has changed
-    return HttpResponse.json(staticData);
+  http.get("/data/*", ({ request }) => {
+    const url = new URL(request.url);
+    const relativePath = url.pathname.startsWith("/") ? url.pathname.slice(1) : url.pathname;
+    const dataPath = path.resolve(process.cwd(), "public", relativePath);
+
+    if (!fs.existsSync(dataPath)) {
+      return new HttpResponse(null, { status: 404 });
+    }
+
+    const content = fs.readFileSync(dataPath, "utf-8");
+    return HttpResponse.json(JSON.parse(content));
   }),
   http.get("/env/environment.env", () => {
     return new HttpResponse(null, { status: 404 });
@@ -50,17 +59,28 @@ const sharedObjects = [
     type: "majorCultureType:viking",
     playerKey: "player:1",
   },
-  { key: "player:1", class: "player", name: "Test Player", cultureKey: "culture:1" },
+  {
+    key: "player:1",
+    class: "player",
+    userName: "Test Player",
+    cultureKey: "culture:1",
+    diplomacyKey: "diplomacy:1",
+    governmentKey: "government:1",
+    researchKey: "research:1",
+  },
+  { key: "diplomacy:1", class: "diplomacy", playerKey: "player:1" },
+  { key: "government:1", class: "government", playerKey: "player:1" },
+  { key: "research:1", class: "research", playerKey: "player:1" },
   {
     key: "tile:x0,y0",
     class: "tile",
     x: 0,
     y: 0,
     domain: "domainType:land",
-    area: "continentType:taiga",
-    climate: "climateType:cold",
-    terrain: "terrainType:tundra",
-    elevation: "elevationType:hill",
+    area: "continentType:europe",
+    climate: "climateType:temperate",
+    terrain: "terrainType:grass",
+    elevation: "elevationType:flat",
   },
   {
     key: "tile:x1,y0",
@@ -68,8 +88,8 @@ const sharedObjects = [
     x: 1,
     y: 0,
     domain: "domainType:land",
-    area: "continentType:taiga",
-    climate: "climateType:cold",
+    area: "continentType:europe",
+    climate: "climateType:temperate",
     terrain: "terrainType:grass",
     elevation: "elevationType:mountain",
   },
@@ -130,7 +150,7 @@ interface RouterStub {
 }
 
 describe("Game Boot Sequence", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     // 1. Reset Pinia
     setActivePinia(createPinia());
 
@@ -217,7 +237,7 @@ function verifySharedInvariants(app: any, expectedWorld: any, expectedObjects: a
   // 4. Actor & Culture Integrity
   const currentPlayer = bucket.getObject<Player>(bucket.world.currentPlayerKey);
   expect(currentPlayer).toBeDefined();
-  expect(currentPlayer.name).toBe("Test Actor");
+  expect(currentPlayer.name).toBe("Ragnar Lodbrok - Viking [Test Player]");
 
   const culture = bucket.getObject<Culture>(currentPlayer.cultureKey);
   expect(culture).toBeDefined();

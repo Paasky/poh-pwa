@@ -3,7 +3,7 @@ import { Tile } from "@/Common/Models/Tile";
 import { roundToTenth, TypeKey } from "@/Common/Objects/Common";
 import { MoveContext } from "./MoveContext";
 import { PathStep } from "@/Simulation/Movement/Pathfinder";
-import { useMoveCostCache } from "@/composables/useMoveCostCache";
+import { useMoveCostCache } from "@/Common/composables/useMoveCostCache";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { GameKey } from "@/Common/Models/_GameModel";
 

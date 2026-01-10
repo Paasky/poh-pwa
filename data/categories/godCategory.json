@@ -1,0 +1,47 @@
+[
+  {
+    "key": "godCategory:kingOfGods",
+    "name": "King of Gods",
+    "concept": "conceptType:god"
+  },
+  {
+    "key": "godCategory:godMother",
+    "name": "God Mother",
+    "concept": "conceptType:god"
+  },
+  {
+    "key": "godCategory:godOfTheSea",
+    "name": "God of the Sea",
+    "concept": "conceptType:god"
+  },
+  {
+    "key": "godCategory:godOfFertility",
+    "name": "God of Fertility",
+    "concept": "conceptType:god"
+  },
+  {
+    "key": "godCategory:godOfTheMoon",
+    "name": "God of the Moon",
+    "concept": "conceptType:god"
+  },
+  {
+    "key": "godCategory:godOfFishing",
+    "name": "God of Fishing",
+    "concept": "conceptType:god"
+  },
+  {
+    "key": "godCategory:godOfHunting",
+    "name": "God of Hunting",
+    "concept": "conceptType:god"
+  },
+  {
+    "key": "godCategory:godOfTheHarvest",
+    "name": "God of the Harvest",
+    "concept": "conceptType:god"
+  },
+  {
+    "key": "godCategory:godOfFire",
+    "name": "God of Fire",
+    "concept": "conceptType:god"
+  }
+]

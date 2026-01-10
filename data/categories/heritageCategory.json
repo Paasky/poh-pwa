@@ -1,0 +1,52 @@
+[
+  {
+    "key": "heritageCategory:arctic",
+    "name": "Arctic",
+    "concept": "conceptType:heritage"
+  },
+  {
+    "key": "heritageCategory:bedouin",
+    "name": "Bedouin",
+    "concept": "conceptType:heritage"
+  },
+  {
+    "key": "heritageCategory:equatorial",
+    "name": "Equatorial",
+    "concept": "conceptType:heritage"
+  },
+  {
+    "key": "heritageCategory:seafarer",
+    "name": "Seafarer",
+    "concept": "conceptType:heritage"
+  },
+  {
+    "key": "heritageCategory:engineer",
+    "name": "Engineer",
+    "concept": "conceptType:heritage"
+  },
+  {
+    "key": "heritageCategory:fisher",
+    "name": "Fisher",
+    "concept": "conceptType:heritage"
+  },
+  {
+    "key": "heritageCategory:herder",
+    "name": "Herder",
+    "concept": "conceptType:heritage"
+  },
+  {
+    "key": "heritageCategory:nomad",
+    "name": "Nomad",
+    "concept": "conceptType:heritage"
+  },
+  {
+    "key": "heritageCategory:settled",
+    "name": "Settled",
+    "concept": "conceptType:heritage"
+  },
+  {
+    "key": "heritageCategory:trader",
+    "name": "Trader",
+    "concept": "conceptType:heritage"
+  }
+]

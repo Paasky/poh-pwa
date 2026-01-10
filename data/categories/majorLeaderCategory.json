@@ -1,0 +1,52 @@
+[
+  {
+    "key": "majorLeaderCategory:africa",
+    "name": "Africa",
+    "concept": "conceptType:majorLeader"
+  },
+  {
+    "key": "majorLeaderCategory:america",
+    "name": "America",
+    "concept": "conceptType:majorLeader"
+  },
+  {
+    "key": "majorLeaderCategory:andea",
+    "name": "Andea",
+    "concept": "conceptType:majorLeader"
+  },
+  {
+    "key": "majorLeaderCategory:asia",
+    "name": "Asia",
+    "concept": "conceptType:majorLeader"
+  },
+  {
+    "key": "majorLeaderCategory:europe",
+    "name": "Europe",
+    "concept": "conceptType:majorLeader"
+  },
+  {
+    "key": "majorLeaderCategory:levantica",
+    "name": "Levantica",
+    "concept": "conceptType:majorLeader"
+  },
+  {
+    "key": "majorLeaderCategory:mediterra",
+    "name": "Mediterra",
+    "concept": "conceptType:majorLeader"
+  },
+  {
+    "key": "majorLeaderCategory:oceania",
+    "name": "Oceania",
+    "concept": "conceptType:majorLeader"
+  },
+  {
+    "key": "majorLeaderCategory:siberia",
+    "name": "Siberia",
+    "concept": "conceptType:majorLeader"
+  },
+  {
+    "key": "majorLeaderCategory:taiga",
+    "name": "Taiga",
+    "concept": "conceptType:majorLeader"
+  }
+]

@@ -1,6 +1,6 @@
 import { canHaveOne, hasMany } from "@/Common/Models/_Relations";
 import { TypeObject } from "@/Common/Objects/TypeObject";
-import { tileYieldTypeKeys, Yield, Yields } from "@/Common/Objects/Yields";
+import { tileYieldTypeKeys, Yield, Yields } from "@/Common/Static/Yields";
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import { useDataBucket } from "@/Data/useDataBucket";
 import type { River } from "@/Common/Models/River";
@@ -10,9 +10,9 @@ import type { City } from "@/Common/Models/City";
 import type { Player } from "@/Common/Models/Player";
 import type { TradeRoute } from "@/Common/Models/TradeRoute";
 import type { Unit } from "@/Common/Models/Unit";
-import { getNeighbors, tileHeight, tileKey } from "@/helpers/mapTools";
+import { getNeighbors, tileHeight, tileKey } from "@/Common/Helpers/mapTools";
 import { Vector3 } from "@babylonjs/core";
-import { tileCenter } from "@/helpers/math";
+import { tileCenter } from "@/Common/Helpers/math";
 
 // TODO: Centralize tile mutations in a TileManager to trigger useMoveCostCache().resetCache([tile.key])
 export class Tile extends GameObject {
@@ -159,7 +159,10 @@ export class Tile extends GameObject {
 
         return types;
       },
-      ["feature", "resource", "pollution", "constructionKey"],
+      {
+        props: ["feature", "resource", "pollution", "constructionKey"],
+        relations: [{ relName: "construction", relProps: ["types"] }],
+      },
     );
   }
 
@@ -173,7 +176,10 @@ export class Tile extends GameObject {
         if (this.construction) this.construction.types.forEach((type) => types.add(type));
         return types;
       },
-      ["constructionKey"],
+      {
+        props: ["constructionKey"],
+        relations: [{ relName: "construction", relProps: ["types"] }],
+      },
     );
   }
 
@@ -195,7 +201,13 @@ export class Tile extends GameObject {
         // Flatten Yields to apply modifiers
         return yields.flatten();
       },
-      ["feature", "resource", "pollution", "constructionKey", "playerKey"],
+      {
+        props: ["feature", "resource", "pollution", "constructionKey", "playerKey"],
+        relations: [
+          { relName: "construction", relProps: ["yields"] },
+          { relName: "city", relProps: ["yieldMods"] },
+        ],
+      },
     );
   }
 

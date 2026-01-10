@@ -1,0 +1,249 @@
+[
+  {
+    "concept": "conceptType:era",
+    "description": "The Neolithic marked the shift from foraging to farming between roughly 10,000 and 4000 BCE, with dates varying by region. Communities domesticated wheat and barley and herded goats and sheep. Permanent villages formed, supported by food storage and seasonal planning. Pottery and polished stone axes improved household work and land clearing. Sites such as Çatalhöyük in Anatolia and Jericho in the Levant show dense settlement and ritual practice. Late Neolithic monuments, including Stonehenge in Britain, indicate coordinated labor and communal belief. The period established durable social frameworks and technologies that underpinned later complex societies.",
+    "image": "/media/images/eraType/neolithic.jpg",
+    "intro": "You have entered the Neolithic Era!",
+    "key": "eraType:neolithic",
+    "name": "Neolithic",
+    "p1": "Tribes settle, taming soil and beasts. Hearths replace wandering, and fragile communities spark the first hints of permanence, tradition, and destiny.",
+    "p2": "Yet storms, famine, and rivals threaten survival. Tools are crude, but they mark humanity’s first claim upon the earth—a fragile step toward greatness or ruin.",
+    "quote": {
+      "url": "/media/quotes/eraType/neolithic.mp3"
+    }
+  },
+  {
+    "concept": "conceptType:era",
+    "description": "The Copper Age, or Chalcolithic, saw the first widespread use of native copper for tools and ornament, beginning in the fifth and fourth millennia BCE. Artisans cold-hammered and annealed copper, while early smelting emerged in some regions. Stone tools remained dominant, creating a hybrid toolkit. Long-distance exchange moved raw copper and finished objects. The Varna Necropolis in Bulgaria reveals rich burials with metal prestige goods. Ötzi the Iceman carried a copper-bladed axe, showing practical use alongside status display. Ritual sites and shrines often included copper artifacts, marking new social differentiation tied to metallurgy.",
+    "image": "/media/images/eraType/copper.jpg",
+    "intro": "You have entered the Copper Era!",
+    "key": "eraType:copper",
+    "name": "Copper",
+    "p1": "From ore and fire comes copper, gleaming with promise. Tools harden, farms expand, and artisans craft symbols of rising status and power.",
+    "p2": "But rivalry sharpens with every blade. Metal grants dominance, dividing rulers from ruled. Innovation thrives, but conquest and inequality are born alongside it.",
+    "quote": {
+      "url": "/media/quotes/eraType/copper.mp3"
+    }
+  },
+  {
+    "concept": "conceptType:era",
+    "description": "The Bronze Age began when metalworkers alloyed copper with tin to create a harder metal, typically with about ten percent tin. This innovation supported urban growth, specialized labor, and state administration from around 3300 BCE in many regions. Sumer and Mesopotamian city-states adopted bronze tools and weapons and developed cuneiform writing. Ancient Egypt used bronze in construction and crafts while organizing large-scale projects. Minoan and Mycenaean palaces coordinated maritime trade in metals. The Indus Valley built planned cities such as Harappa and Mohenjo-daro. Chariots, swords, and standardized tools spread with the new alloy and complex governance.",
+    "image": "/media/images/eraType/bronze.jpg",
+    "intro": "You have entered the Bronze Era!",
+    "key": "eraType:bronze",
+    "name": "Bronze",
+    "p1": "Bronze transforms the world with strength. Cities rise, temples tower, and writing preserves memory and law, binding people into the first great civilizations.",
+    "p2": "Yet ambition echoes in the forge. Armies march, empires blaze brightly, but famine and rebellion stir beneath the brilliance. Power is fleeting, even when hammered from bronze.",
+    "quote": {
+      "url": "/media/quotes/eraType/bronze.mp3"
+    }
+  },
+  {
+    "concept": "conceptType:era",
+    "description": "The Late Bronze Age, about 1550 to 1200 BCE, formed a connected diplomatic and trade system across the Eastern Mediterranean. New Kingdom Egypt, the Hittite Empire, Mycenaean Greece, and Levantine ports such as Ugarit exchanged gifts, letters, and commodities. Palatial economies managed storage, textiles, and metalwork. Chariot warfare dominated elite military organization. This network ended in a widespread collapse around 1200 BCE. Many sites were destroyed, and archives ceased. Explanations include invasions by Sea Peoples, internal strife, drought, and earthquakes. The aftermath ushered in decentralized societies and the Early Iron Age.",
+    "image": "/media/images/eraType/lateBronze.jpg",
+    "intro": "You have entered the Late Bronze Era!",
+    "key": "eraType:lateBronze",
+    "name": "Late Bronze",
+    "p1": "Palaces shine, ships cross wide seas, and kings weave gods into rule. Trade and diplomacy connect far horizons into a dazzling web of splendor.",
+    "p2": "Yet greatness is fragile. Crops fail, invaders march, and rebellion grows. The brilliance of bronze trembles on the edge of collapse, disaster always near.",
+    "quote": {
+      "url": "/media/quotes/eraType/lateBronze.mp3"
+    }
+  },
+  {
+    "concept": "conceptType:era",
+    "description": "The Iron Age saw the broad replacement of bronze by wrought iron and early steels from about 1200 to 500 BCE, with regional variation. Bloomery smelting produced workable metal that was abundant and versatile. Iron ploughs and axes expanded agriculture and woodland clearance. Mass-produced tools lowered costs and widened access to metal goods. The Neo-Assyrian Empire used iron weapons in disciplined armies. Zhou China applied iron to farming and infrastructure. Celtic Europe forged distinctive swords and brooches and built hillforts. Adoption by Levantine and Anatolian kingdoms accelerated political consolidation and population growth.",
+    "image": "/media/images/eraType/iron.jpg",
+    "intro": "You have entered the Iron Era!",
+    "key": "eraType:iron",
+    "name": "Iron",
+    "p1": "Iron eclipses bronze with abundance and strength. Empires rise, cities expand, and heroes carve destiny in fire and unbreakable blades.",
+    "p2": "But wars grow bloodier and conquest more ruthless. Iron rewards ambition yet devours the unprepared. Progress and destruction march together, bound in unforgiving steel.",
+    "quote": {
+      "url": "/media/quotes/eraType/iron.mp3"
+    }
+  },
+  {
+    "concept": "conceptType:era",
+    "description": "The Classical era, roughly 500 BCE to 500 CE, consolidated enduring models of law, governance, and scholarship. Greek city-states advanced philosophy, drama, and political thought, with Athens developing a form of democracy. Rome moved from Republic to Empire, building roads, aqueducts, and a legal tradition that shaped later Europe. The Maurya and Gupta polities in India fostered administration, literature, and mathematics. Han China established a merit-based bureaucracy and technical innovation. The Silk Road linked these centers through trade and ideas. In the Americas, Teotihuacan displayed urban planning and monumental architecture on a grand scale.",
+    "image": "/media/images/eraType/classical.jpg",
+    "intro": "You have entered the Classical Era!",
+    "key": "eraType:classical",
+    "name": "Classical",
+    "p1": "Philosophers question, generals conquer, and artists shape monuments. Civilizations strive for greatness beyond survival, chasing legacies of knowledge, law, and order.",
+    "p2": "Yet pride and ambition undo brilliance. Kingdoms fracture, citizens revolt, and decadence spreads. The Classical promise of eternity lies only with those who endure.",
+    "quote": {
+      "url": "/media/quotes/eraType/classical.mp3"
+    }
+  },
+  {
+    "concept": "conceptType:era",
+    "description": "The Medieval period, about 500 to 1500 CE, followed the Western Roman Empire’s fragmentation. European societies organized around feudal bonds and manorial economies. Castles, fortified towns, and knightly warfare structured power. Monasteries preserved learning and produced illuminated manuscripts. Gothic cathedrals expressed theological vision and technical skill. Islamic Caliphates fostered science, philosophy, and trade across Afro-Eurasia. The Crusades connected Europe and the Levant through conflict and exchange. The Black Death in the fourteenth century caused severe mortality and labor shifts. By the late period, commercial growth and stronger monarchies reshaped political life.",
+    "image": "/media/images/eraType/medieval.jpg",
+    "intro": "You have entered the Medieval Era!",
+    "key": "eraType:medieval",
+    "name": "Medieval",
+    "p1": "Kingdoms rise from fallen empires. Castles crown hills, cathedrals reach skyward, and loyalty binds warriors to lords and kings under faith and fealty.",
+    "p2": "But plague, invasion, and betrayal haunt every throne. The Medieval world is one of spirit and steel, where loyalty saves and treachery destroys.",
+    "quote": {
+      "url": "/media/quotes/eraType/medieval.mp3"
+    }
+  },
+  {
+    "concept": "conceptType:era",
+    "description": "The Renaissance, from the fourteenth to sixteenth centuries, renewed interest in classical texts and human-centered inquiry. Italian cities, especially Florence, financed art and study through merchant wealth and court patronage. The Medici supported artists and scholars. Leonardo da Vinci and Michelangelo advanced naturalistic art and technical investigation. Gutenberg’s printing press around 1450 multiplied books and standardized learning. Architecture and painting reached new scales in works such as the Sistine Chapel. Humanist education spread across Europe, encouraging philology, mathematics, and observational science. The movement provided intellectual tools for later religious reform and scientific revolution.",
+    "image": "/media/images/eraType/renaissance.jpg",
+    "intro": "You have entered the Renaissance Era!",
+    "key": "eraType:renaissance",
+    "name": "Renaissance",
+    "p1": "Knowledge reborn, art flourishes, and invention spreads. Courts glitter with discovery, and humanity rediscovers its boundless potential through science, beauty, and daring thought.",
+    "p2": "Yet ambition grows unchecked. Old powers resist, new voices demand change, and rivalries spark war. The Renaissance is both rebirth and struggle intertwined.",
+    "quote": {
+      "url": "/media/quotes/eraType/renaissance.mp3"
+    }
+  },
+  {
+    "concept": "conceptType:era",
+    "description": "The Age of Exploration connected distant regions by sea from the fifteenth to seventeenth centuries. Iberian monarchies backed oceanic ventures seeking spices, gold, and new routes. Christopher Columbus reached the Caribbean in 1492. Vasco da Gama rounded Africa to India in 1498. Earlier, Zheng He led large Ming fleets across the Indian Ocean. Mariners refined charts, compasses, and ship design. New global trade circuits emerged. The Columbian Exchange moved crops, animals, and diseases between hemispheres, reshaping diets and populations. Exploration also opened paths for conquest, missionary work, and intensified competition among European powers.",
+    "image": "/media/images/eraType/exploration.jpg",
+    "intro": "You have entered the Exploration Era!",
+    "key": "eraType:exploration",
+    "name": "Exploration",
+    "p1": "Ships sail beyond horizons, charting lands unknown. New alliances, riches, and wonders beckon, expanding ambition across oceans and continents.",
+    "p2": "Yet discovery brings peril. Peoples clash, fortunes vanish, and entire worlds change. The Exploration Era promises opportunity, but always at a dangerous cost.",
+    "quote": {
+      "url": "/media/quotes/eraType/exploration.mp3"
+    }
+  },
+  {
+    "concept": "conceptType:era",
+    "description": "Colonization expanded European control overseas from the sixteenth century onward. Spanish and Portuguese conquests in the Americas imposed encomienda labor and new religious regimes. The Atlantic slave trade supplied plantation economies in the Caribbean and the Americas. The British Empire extended rule across North America, India, and Australia. The Belgian Congo became a site of extreme violence and extraction. Indigenous societies faced dispossession, forced labor, and demographic collapse. Resistance persisted through revolts and state-building. The Haitian Revolution and Latin American wars of independence broke parts of the system. Later decolonization reshaped global politics and borders.",
+    "image": "/media/images/eraType/colonial.jpg",
+    "intro": "You have entered the Colonial Era!",
+    "key": "eraType:colonial",
+    "name": "Colonial",
+    "p1": "Colonies spread across oceans, feeding empires with wealth and ambition. Trade routes bind continents into fragile webs of power.",
+    "p2": "Yet rebellion brews, rivals strike, and locals resist. Riches flow, but risk multiplies. Colonization is a gamble—glory and ruin side by side.",
+    "quote": {
+      "url": "/media/quotes/eraType/colonial.mp3"
+    }
+  },
+  {
+    "concept": "conceptType:era",
+    "description": "The Enlightenment was an eighteenth-century intellectual movement that privileged reason, empirical science, and individual rights over inherited authority. Thinkers such as John Locke, Voltaire, and Jean-Jacques Rousseau debated sovereignty, tolerance, and education. Newton’s Principia offered a model of natural law and method. Salons in Paris, including those hosted by Madame Geoffrin, fostered exchange among savants and philosophes. The Encyclopédie edited by Diderot and d’Alembert aimed to catalog knowledge and challenge superstition. Ideas moved through print and coffeehouses. Reformers used these currents to critique church and crown. The American Revolution and the French Revolution drew on Enlightenment principles to recast politics and citizenship.",
+    "image": "/media/images/eraType/enlightenment.jpg",
+    "intro": "You have entered the Enlightenment Era!",
+    "key": "eraType:enlightenment",
+    "name": "Enlightenment",
+    "p1": "Reason spreads, challenging tradition. Philosophy, science, and bold ideas ripple across salons and streets, reshaping how people live and rule.",
+    "p2": "Yet ideas burn like fire. Monarchs tremble, revolts ignite, and order strains. Enlightenment offers freedom, but upheaval is its inevitable companion.",
+    "quote": {
+      "url": "/media/quotes/eraType/enlightenment.mp3"
+    }
+  },
+  {
+    "concept": "conceptType:era",
+    "description": "The Industrial era began in late eighteenth-century Britain and spread across Europe, North America, and beyond. Mechanization transformed textile production through the spinning jenny and water-powered then steam-powered mills. James Watt’s improvements to the steam engine enabled factory systems and mining. Railroads and steamships integrated markets and accelerated migration. Cities such as Manchester grew around mills and foundries. Mass production altered work discipline and time. Exhibitions like London’s Great Exhibition of 1851 celebrated invention and imperial resources. Workers formed unions and sometimes resisted mechanization, as with the Luddites. Industrialization reshaped landscapes, social classes, and global trade.",
+    "image": "/media/images/eraType/industrial.jpg",
+    "intro": "You have entered the Industrial Era!",
+    "key": "eraType:industrial",
+    "name": "Industrial",
+    "p1": "Smoke and steam rise. Machines thunder, cities swell, and inventions multiply. Progress reshapes economies, work, and daily life.",
+    "p2": "Yet factories breed unrest and weapons of ruin. Industry lifts humanity but divides it. Each innovation builds empires—or fuels collapse.",
+    "quote": {
+      "url": "/media/quotes/eraType/industrial.mp3"
+    }
+  },
+  {
+    "concept": "conceptType:era",
+    "description": "The Imperial era spanned the late nineteenth and early twentieth centuries, when industrial power intertwined with empire, nationalism, and cultural confidence. European empires expanded across Africa and Asia, while the United States and Japan asserted global ambitions. Steamships, telegraphs, and railways bound colonies to metropoles. Cities such as London, Paris, and New York became centers of wealth, spectacle, and inequality. Art Nouveau and Impressionism flourished amid optimism, while social critics warned of decadence and unrest. The era’s progress—electric light, steel towers, and modern medicine—was shadowed by imperial rivalries and the coming storm of total war.",
+    "image": "/media/images/eraType/imperial.jpg",
+    "intro": "You have entered the Imperial Era!",
+    "key": "eraType:imperial",
+    "name": "Imperial",
+    "p1": "Empires glitter and expand. Steam and steel knit continents together, and cities blaze with light and ambition. Science, art, and conquest stride hand in hand.",
+    "p2": "But beneath the grandeur lies tension. Colonies strain, nations compete, and progress hides peril. The Imperial dream reaches its zenith—just before the fall.",
+    "quote": {
+      "url": "/media/quotes/eraType/imperial.mp3"
+    }
+  },
+  {
+    "concept": "conceptType:era",
+    "description": "The Modern era unfolded across the early to mid twentieth century, defined by mass politics, nationalism, and accelerating technology. World War I toppled empires and redrew borders. Modernist art and literature, from Picasso to Woolf, questioned tradition. Radio and cinema created new publics and propaganda tools. World War II mobilized industry and science on an unprecedented scale. It ended with global institutions such as the United Nations. Decolonization reshaped Africa, Asia, and the Middle East as new nation-states emerged. Treaties such as Versailles and later settlements attempted to stabilize order but also sowed disputes that continued to shape geopolitics.",
+    "image": "/media/images/eraType/modern.jpg",
+    "intro": "You have entered the Modern Era!",
+    "key": "eraType:modern",
+    "name": "Modern",
+    "p1": "Engines roar, ideologies harden, and wars engulf continents. Technology advances faster than leaders can grasp, reshaping battlefields and societies alike.",
+    "p2": "Yet resilience emerges. From ruins come alliances, rebuilding, and renewal. The Modern world balances catastrophe with hope, demanding both steel and spirit.",
+    "quote": {
+      "url": "/media/quotes/eraType/modern.mp3"
+    }
+  },
+  {
+    "concept": "conceptType:era",
+    "description": "The Atomic era began with the Manhattan Project and the Trinity test in 1945, followed by the bombings of Hiroshima and Nagasaki. Nuclear weapons set the strategic framework of the Cold War through deterrence and arms races. The Cuban Missile Crisis of 1962 brought superpowers to the brink of war. Civil nuclear power promised abundant energy but revealed risks in accidents such as Three Mile Island and Chernobyl. The period also saw the Space Race, from Sputnik to Apollo, as a technological and ideological contest. Arms control agreements and nonproliferation efforts attempted to limit dangers while retaining strategic stability.",
+    "image": "/media/images/eraType/atomic.jpg",
+    "intro": "You have entered the Atomic Era!",
+    "key": "eraType:atomic",
+    "name": "Atomic",
+    "p1": "The atom splits, unleashing terrible power. Nuclear fire promises salvation or annihilation, while rockets and satellites launch humanity into the stars.",
+    "p2": "Yet triumph trembles on annihilation’s edge. Fear governs decisions, and rivals clash in shadow. The Atomic Era balances wonder against silence everlasting.",
+    "quote": {
+      "url": "/media/quotes/eraType/atomic.mp3"
+    }
+  },
+  {
+    "concept": "conceptType:era",
+    "description": "The Digital era centers on electronic computing and networks. Early mainframes linked by ARPANET established packet switching and remote collaboration. Personal computers in the late twentieth century, including the IBM PC and Apple Macintosh, moved computation into homes and offices. The World Wide Web launched at CERN enabled hypertext publishing and global access. Silicon Valley firms advanced microprocessors, software, and user interfaces. Smartphones integrated communication and computing, while social networks reshaped information flows and social life. Digital systems restructured finance, logistics, and media, and created new vulnerabilities in cybersecurity and privacy.",
+    "image": "/media/images/eraType/digital.jpg",
+    "intro": "You have entered the Digital Era!",
+    "key": "eraType:digital",
+    "name": "Digital",
+    "p1": "Circuits hum, computers shrink, and information flows faster than armies. Invisible networks reshape life, culture, and power.",
+    "p2": "Yet every link is vulnerable. Surveillance grows, cyber conflict spreads, and borders blur. Digital revolutions bring opportunity but also unseen dangers.",
+    "quote": {
+      "url": "/media/quotes/eraType/digital.mp3"
+    }
+  },
+  {
+    "concept": "conceptType:era",
+    "description": "The Information era is defined by data-driven economies and decision-making. Search engines scaled retrieval across the web, with firms such as Google and Baidu centralizing advertising and analytics. Cloud computing and global data centers enabled big data processing for commerce, science, and government. Social media magnified influence operations and misinformation, seen in episodes surrounding the 2016 elections and the Cambridge Analytica affair. Edward Snowden’s 2013 disclosures exposed mass surveillance architectures. Open-access movements, including Wikipedia, expanded collaborative knowledge. Debates over privacy, algorithmic bias, and platform governance became core political and regulatory issues.",
+    "image": "/media/images/eraType/information.jpg",
+    "intro": "You have entered the Information Era!",
+    "key": "eraType:information",
+    "name": "Information",
+    "p1": "Knowledge floods the world, connecting billions. Nations rise or fall on the tide of ideas, and truth becomes a weapon.",
+    "p2": "Yet abundance overwhelms. Lies and truths intertwine, eroding trust. Control of perception becomes the ultimate power in the Information Age.",
+    "quote": {
+      "url": "/media/quotes/eraType/information.mp3"
+    }
+  },
+  {
+    "concept": "conceptType:era",
+    "description": "The Post-Industrial era describes the shift from manufacturing to services and knowledge work. Deindustrialization hit regions such as the US Rust Belt, while finance and producer services concentrated in hubs like New York and London. Global supply chains and outsourcing redirected factory production to East Asia. Education, healthcare, and technology grew as primary employers and sources of growth. Automation reduced labor demand in routine tasks. The gig economy introduced flexible but precarious work. Policy focused on retraining, regional development, and adapting welfare systems to new labor market risks.",
+    "image": "/media/images/eraType/postIndustrial.jpg",
+    "intro": "You have entered the Post-Industrial Era!",
+    "key": "eraType:postIndustrial",
+    "name": "Post-Industrial",
+    "p1": "Old engines falter, replaced by automation, climate struggle, and fragile systems. Humanity faces challenges growth alone cannot solve.",
+    "p2": "Yet reinvention sparks opportunity. New alliances form, and resilience, not strength, defines survival. Adaptation becomes the greatest triumph of the age.",
+    "quote": {
+      "url": "/media/quotes/eraType/postIndustrial.mp3"
+    }
+  },
+  {
+    "concept": "conceptType:era",
+    "description": "The Nano era focuses on engineering at atomic and molecular scales. Richard Feynman’s 1959 lecture framed the scientific imagination for miniaturization. Instruments such as the scanning tunneling and atomic force microscopes enabled manipulation and imaging of surfaces atom by atom. Discoveries of fullerenes and carbon nanotubes expanded materials science. Nanomedicine pursued targeted drug delivery and diagnostic particles. Nanomaterials entered electronics, coatings, photovoltaics, and batteries. Since the 1990s, national initiatives supported research and commercialization while raising questions about toxicity, measurement standards, and ethical oversight.",
+    "image": "/media/images/eraType/nano.jpg",
+    "intro": "You have entered the Nano Era!",
+    "key": "eraType:nano",
+    "name": "Nano",
+    "p1": "Matter bends to will. Machines smaller than sight heal, build, and destroy. Medicine, industry, and warfare are reborn atom by atom.",
+    "p2": "Yet power blurs creation and ruin. A cure may destroy, progress may consume. The Nano Age holds infinite promise—and peril.",
+    "quote": {
+      "url": "/media/quotes/eraType/nano.mp3"
+    }
+  }
+]

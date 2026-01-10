@@ -1,0 +1,423 @@
+[
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:againstYourIncident",
+    "name": "Against your Incident"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:allCities",
+    "name": "All cities"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:allCitiesWithRailroad",
+    "name": "All cities with Railroad"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:allCitiesWithRiver",
+    "name": "All cities with River"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:alliance",
+    "name": "Alliance"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:allInTile",
+    "name": "All in tile"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:bonusYieldSurge",
+    "name": "Bonus Yield Surge",
+    "description": "Double Yield for 5 turns."
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:bonusYieldTurn",
+    "name": "Bonus Yield Turn",
+    "description": "Double Yield for 1 turn."
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:buildImprovement",
+    "name": "Build Improvement"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:canBuildSatellites",
+    "name": "Can build Satellites"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:canCarryStockpile",
+    "name": "Can carry stockpile"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:canEnterIce",
+    "name": "Can enter Ice"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:canEnterMountains",
+    "name": "Can enter Mountains"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:canEnterOcean",
+    "name": "Can enter Ocean"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:canEnterSea",
+    "name": "Can enter Sea"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:canHoldTournaments",
+    "name": "Can hold tournaments"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:canLandOnCarrier",
+    "name": "Can land on Carrier"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:canLevy",
+    "name": "Can levy"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:canMobilize",
+    "name": "Can mobilize"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:canMoveAfterAttack",
+    "name": "Can move after attack"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:canSelectTarget",
+    "name": "Can select Target"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:cannotAttackWater",
+    "name": "Cannot attack Water"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:cannotBeAttacked",
+    "name": "Cannot be attacked"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:cannotBuildUnits",
+    "name": "Cannot build units"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:cannotBuyBuildings",
+    "name": "Cannot buy buildings"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:cannotDeclineTrade",
+    "name": "Cannot decline trade"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:cannotEnter",
+    "name": "Cannot Enter"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:cannotKillLandUnits",
+    "name": "Cannot kill Land Units"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:cannotTradeNonAllies",
+    "name": "Cannot trade non-allies"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:captureCity",
+    "name": "Capture City"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:changePolicy",
+    "name": "Change Policy"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:changeTrait",
+    "name": "Change Trait"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:chooseFreeTechnology",
+    "name": "Choose Free Technology"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:convertCitizen",
+    "name": "Convert Citizen"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:convertCity",
+    "name": "Convert City"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:damagesAllUnitsInTile",
+    "name": "Damages all Units in Tile"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:damagesBuildings",
+    "name": "Damages Buildings"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:damagesImprovements",
+    "name": "Damages Improvements"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:defensePact",
+    "name": "Defense Pact"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:distanceFromCapital",
+    "name": "Distance from Capital"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:doubleCityPopulation",
+    "name": "Double City Population"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:elections",
+    "name": "Elections"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:enforceExitUltimatum",
+    "name": "Enforce Exit Ultimatum"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:exceptionalOutput",
+    "name": "Exceptional Output",
+    "description": "A requirement of exceptional output over time."
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:extraOutput",
+    "name": "Extra Output",
+    "description": "A requirement of extra output over time."
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:extraResources",
+    "name": "Extra Resources",
+    "description": "A requirement of acquiring extra resources over time."
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:expandBorder",
+    "name": "Expand Border"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:forceAutomaticBuildQueue",
+    "name": "Force automatic build queue"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:forcedStateReligion",
+    "name": "Forced state religion"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:freeMinorAgenda",
+    "name": "Free Minor Agenda"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:freeMythGodDogma",
+    "name": "Free Myth God Dogma"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:freeSettler",
+    "name": "Free Settler"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:ignoreMoveCost",
+    "name": "Ignore move cost"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:inciteCitizen",
+    "name": "Incite Citizen"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:increaseResourceYield",
+    "name": "Increase Resource Yield",
+    "description": "1 extra resource per turn."
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:invisibleBeforeMove",
+    "name": "Invisible before move"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:landUnitsCanEnter",
+    "name": "Land units can enter"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:maxPerCity",
+    "name": "Max 2 per City"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:mustBeInAirbase",
+    "name": "Must be in airbase"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:negotiateAccess",
+    "name": "Negotiate Access"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:nextToCoast",
+    "name": "Next to Coast"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:nextToNavigableRiver",
+    "name": "Next to Navigable River"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:noDefenseBonuses",
+    "name": "No defense bonuses"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:noDesertDamage",
+    "name": "No Desert damage"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:noJungleDamage",
+    "name": "No Jungle damage"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:noSnowDamage",
+    "name": "No Snow damage"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:noStateReligion",
+    "name": "No state religion"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:noSuspicion",
+    "name": "No Suspicion"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:onlyOnResource",
+    "name": "Only on Resource"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:pillageRange",
+    "name": "Pillage Range 1"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:placeResourceOnMap",
+    "name": "Place Resource On Map"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:rebellion",
+    "name": "Rebellion"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:restrictAccess",
+    "name": "Restrict Access"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:sabotage",
+    "name": "Sabotage"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:shipsCanEnter",
+    "name": "Ships can enter"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:signEconomicPact",
+    "name": "Sign Economic Pact"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:singleUse",
+    "name": "Single use"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:startSize",
+    "name": "Start size"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:steal",
+    "name": "Steal"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:stockpiled",
+    "name": "Stockpiled"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:subjugateTarget",
+    "name": "Subjugate Target"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:sustainedYield",
+    "name": "Sustained Yield"
+  },
+  {
+    "concept": "conceptType:special",
+    "key": "specialType:unlockResource",
+    "name": "Unlock Resource"
+  }
+]

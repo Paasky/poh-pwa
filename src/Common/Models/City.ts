@@ -7,14 +7,14 @@ import type { TradeRoute } from "@/Common/Models/TradeRoute";
 import { Unit } from "@/Common/Models/Unit";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { Construction } from "@/Common/Models/Construction";
-import { useEventStore } from "@/stores/eventStore";
-import { getRandom } from "@/helpers/arrayTools";
+import { useEventStore } from "@/App/stores/eventStore";
+import { getRandom } from "@/Common/Helpers/arrayTools";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { UnitDesign } from "@/Common/Models/UnitDesign";
-import { getNeighbors } from "@/helpers/mapTools";
+import { getNeighbors } from "@/Common/Helpers/mapTools";
 import { ConstructionQueue, TrainingQueue } from "@/Common/Objects/Queues";
 import { TypeStorage } from "@/Common/Objects/TypeStorage";
-import { cityYieldTypeKeys, Yield, Yields } from "@/Common/Objects/Yields";
+import { cityYieldTypeKeys, Yield, Yields } from "@/Common/Static/Yields";
 
 export class City extends GameObject {
   constructor(
@@ -85,6 +85,30 @@ export class City extends GameObject {
   unitKeys = new Set<GameKey>();
   get units(): Map<GameKey, Unit> {
     return this.hasMany<Unit>("unitKeys");
+  }
+
+  /*
+   * Actions
+   */
+  get actions(): Set<TypeObject> {
+    return this.computed(
+      "actions",
+      () => {
+        return new Set<TypeObject>([useDataBucket().getType("actionType:bombard")]);
+      },
+      {},
+    );
+  }
+
+  get availableActions(): Set<TypeObject> {
+    return this.computed(
+      "availableActions",
+      () => {
+        // todo filter available
+        return this.actions;
+      },
+      { props: ["actions"] },
+    );
   }
 
   /*
@@ -207,7 +231,7 @@ export class City extends GameObject {
         });
         return types;
       },
-      ["citizenKeys"],
+      { props: ["citizenKeys"] },
     );
   }
 
@@ -240,7 +264,7 @@ export class City extends GameObject {
 
         return yieldMods;
       },
-      ["citizenKeys", "playerKey"],
+      { props: ["citizenKeys", "playerKey"] },
     );
   }
 
@@ -300,7 +324,7 @@ export class City extends GameObject {
         // Flatten Yields to apply modifiers
         return yields.flatten();
       },
-      ["citizenKeys", "playerKey"],
+      { props: ["citizenKeys", "playerKey"] },
     );
   }
 }

@@ -1,7 +1,7 @@
 import { useDataBucket } from "@/Data/useDataBucket";
 import { TypeClass, TypeObject } from "@/Common/Objects/TypeObject";
 import { TypeKey } from "@/Common/Objects/Common";
-import { filter, map } from "@/helpers/collectionTools";
+import { filter, map } from "@/Common/Helpers/collectionTools";
 
 export interface WorldLinkFilters {
   typeClasses?: TypeClass[];
@@ -161,38 +161,38 @@ export class WorldLinks {
     const bucket = useDataBucket();
     const allTypes = bucket.getTypes();
 
+    const typeClasses = filters.typeClasses ? new Set(filters.typeClasses) : null;
+    const continents = filters.continents ? new Set(filters.continents) : null;
+    const regions = filters.regions ? new Set(filters.regions) : null;
+    const cultures = filters.cultures ? new Set(filters.cultures) : null;
+    const leaders = filters.leaders ? new Set(filters.leaders) : null;
+    const eras = filters.eras ? new Set(filters.eras) : null;
+
     return filter(allTypes, (obj) => {
       const meta = this.registry.get(obj.key);
 
-      if (filters.typeClasses && !filters.typeClasses.has(obj.class)) return false;
-      if (filters.continents && (!meta?.continent || !filters.continents.has(meta.continent)))
-        return false;
-      if (filters.regions && (!meta?.region || !filters.regions.has(meta.region))) return false;
-      if (
-        filters.cultures &&
-        ((!meta?.culture && obj.class !== "majorCultureType" && obj.class !== "minorCultureType") ||
-          (meta?.culture ? !filters.cultures.has(meta.culture) : !filters.cultures.has(obj.key)))
-      )
-        return false;
+      if (typeClasses && !typeClasses.has(obj.class as TypeClass)) return false;
+      if (continents && (!meta?.continent || !continents.has(meta.continent))) return false;
+      if (regions && (!meta?.region || !regions.has(meta.region))) return false;
 
       // Handle cultures filter specifically: if obj is a culture, check its key. If it's a leader, check its culture link.
-      if (filters.cultures) {
+      if (cultures) {
         const cultureKey =
           obj.class === "majorCultureType" || obj.class === "minorCultureType"
             ? obj.key
             : meta?.culture;
-        if (!cultureKey || !filters.cultures.has(cultureKey)) return false;
+        if (!cultureKey || !cultures.has(cultureKey)) return false;
       }
 
-      if (filters.leaders) {
+      if (leaders) {
         const leaderKey =
           obj.class === "majorLeaderType" || obj.class === "minorLeaderType"
             ? obj.key
             : meta?.leader;
-        if (!leaderKey || !filters.leaders.has(leaderKey)) return false;
+        if (!leaderKey || !leaders.has(leaderKey)) return false;
       }
 
-      if (filters.eras && (!meta?.era || !filters.eras.has(meta.era))) return false;
+      if (eras && (!meta?.era || !eras.has(meta.era))) return false;
       return !(filters.isMinor !== undefined && meta?.isMinor !== filters.isMinor);
     });
   }

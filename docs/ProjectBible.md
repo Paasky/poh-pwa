@@ -15,8 +15,10 @@ If a request or change conflicts with this document, **stop immediately and push
 
 ## 1. Core Principles
 
-1. **KISS, DRY & Performance**
+1. **KISS, DRY, SOLID & Performance**
    Simplicity is beauty. Prefer clear, boring solutions that perform well.
+   Allowed anti-SOLID: The `DataBucket` is a global requirement. Tests must use the real `DataBucket` and
+   `useDataBucket()` helper to ensure they reflect real behavior.
 
 2. **Industry Standards First**
    Follow common, battle‑tested practices unless there is a strong reason not to.
@@ -59,6 +61,8 @@ If a request or change conflicts with this document, **stop immediately and push
 
     * No mocking by default
     * Tests must reflect real behavior
+    * Tests must cover both happy paths and failure paths (expected errors)
+    * Verify state and side effects, never mock game logic
 
    Allowed exceptions:
 
@@ -71,7 +75,7 @@ If a request or change conflicts with this document, **stop immediately and push
     * Always verify all imports exist in all modified files
 
 0**Mandatory Pushback Rule**
-    If a request violates any rule in this document:
+If a request violates any rule in this document:
 
 * Stop immediately
 * Explicitly state which rule would be broken

@@ -1,0 +1,42 @@
+[
+  {
+    "key": "goalCategory:growth",
+    "name": "Growth",
+    "concept": "conceptType:goal"
+  },
+  {
+    "key": "goalCategory:trade",
+    "name": "Trade",
+    "concept": "conceptType:goal"
+  },
+  {
+    "key": "goalCategory:faith",
+    "name": "Faith",
+    "concept": "conceptType:goal"
+  },
+  {
+    "key": "goalCategory:culture",
+    "name": "Culture",
+    "concept": "conceptType:goal"
+  },
+  {
+    "key": "goalCategory:science",
+    "name": "Science",
+    "concept": "conceptType:goal"
+  },
+  {
+    "key": "goalCategory:influence",
+    "name": "Influence",
+    "concept": "conceptType:goal"
+  },
+  {
+    "key": "goalCategory:military",
+    "name": "Military",
+    "concept": "conceptType:goal"
+  },
+  {
+    "key": "goalCategory:victory",
+    "name": "Victory",
+    "concept": "conceptType:goal"
+  }
+]

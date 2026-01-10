@@ -12,14 +12,14 @@ import {
   Vector4,
 } from "@babylonjs/core";
 import { watchEffect } from "vue";
-import { getMapBounds } from "@/helpers/math";
-import type { Coords } from "@/helpers/mapTools";
+import { getMapBounds } from "@/Common/Helpers/math";
+import type { Coords } from "@/Common/Helpers/mapTools";
 import { Tile } from "@/Common/Models/Tile";
 import type { GameKey } from "@/Common/Models/_GameModel";
-import { useSettingsStore } from "@/stores/settingsStore";
+import { useSettingsStore } from "@/App/stores/settingsStore";
 import { BaseOverlay } from "./BaseOverlay";
 import { EngineGroups, EngineOverlayColors } from "@/Actor/Human/EngineStyles";
-import { useCurrentContext } from "@/composables/useCurrentContext";
+import { useCurrentContext } from "@/Common/composables/useCurrentContext";
 
 export type ContextHighlight = { tile: Tile; colorId: string; alpha: number };
 export type ContextPayload = { items: ContextHighlight[] };

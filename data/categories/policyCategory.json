@@ -1,0 +1,27 @@
+[
+  {
+    "key": "policyCategory:leadership",
+    "name": "Leadership",
+    "concept": "conceptType:policy"
+  },
+  {
+    "key": "policyCategory:economy",
+    "name": "Economy",
+    "concept": "conceptType:policy"
+  },
+  {
+    "key": "policyCategory:military",
+    "name": "Military",
+    "concept": "conceptType:policy"
+  },
+  {
+    "key": "policyCategory:trade",
+    "name": "Trade",
+    "concept": "conceptType:policy"
+  },
+  {
+    "key": "policyCategory:faith",
+    "name": "Faith",
+    "concept": "conceptType:policy"
+  }
+]

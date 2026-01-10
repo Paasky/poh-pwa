@@ -1,5 +1,5 @@
 import { Color4 } from "@babylonjs/core";
-import { CompassHexCorner, CompassHexEdge } from "@/helpers/mapTools";
+import { CompassHexCorner, CompassHexEdge } from "@/Common/Helpers/mapTools";
 
 export type EngineCoords = {
   x: number;

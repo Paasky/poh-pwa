@@ -5,7 +5,7 @@ import { TypeObject } from "@/Common/Objects/TypeObject";
 import { Tile } from "@/Common/Models/Tile";
 import { IMutation } from "@/Common/IMutation";
 import { createConstruction } from "@/Simulation/MutationFactory";
-import { clamp } from "@/helpers/basicMath";
+import { clamp } from "@/Common/Helpers/basicMath";
 import { useDataBucket } from "@/Data/useDataBucket";
 
 export class Construct {

@@ -1,7 +1,7 @@
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { UnitStatus } from "@/Common/Models/Unit";
-import { Yield, Yields } from "@/Common/Objects/Yields";
-import { CatKey, roundToTenth, TypeKey } from "@/Common/Objects/Common";
+import { Yield, Yields } from "@/Common/Static/Yields";
+import { roundToTenth, TypeKey } from "@/Common/Objects/Common";
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { Player } from "@/Common/Models/Player";
@@ -52,7 +52,10 @@ export class Government extends GameObject {
 
         return types;
       },
-      { props: ["policies"] },
+      {
+        props: ["policies"],
+        relations: [{ relName: "policies", relProps: ["specials"] }],
+      },
     );
   }
 
@@ -86,43 +89,87 @@ export class Government extends GameObject {
 
         return yields;
       },
-      { props: ["policies", "corruption", "discontent"] },
+      {
+        props: ["policies", "corruption", "discontent"],
+        relations: [{ relName: "policies", relProps: ["yields"] }],
+      },
     );
   }
 
   get selectablePolicies(): Set<TypeObject> {
-    return this.player.knownTypes.filter((t) => t.class === "policyType");
+    return this.computed(
+      "selectablePolicies",
+      () => this.player.knownTypes.filter((t) => t.class === "policyType"),
+      { relations: [{ relName: "player", relProps: ["knownTypes"] }] },
+    );
   }
 
   get hasElections(): boolean {
-    return this.policies.some((p) => p.specials.includes("specialType:elections"));
+    return this.computed(
+      "hasElections",
+      () => this.policies.some((p) => p.specials.includes("specialType:elections")),
+      { props: ["policies"] },
+    );
   }
 
   get canBuyBuildings(): boolean {
-    return !this.policies.some((p) => p.specials.includes("specialType:cannotBuyBuildings"));
+    return this.computed(
+      "canBuyBuildings",
+      () => !this.policies.some((p) => p.specials.includes("specialType:cannotBuyBuildings")),
+      { props: ["policies"] },
+    );
   }
   get canControlConstruction(): boolean {
-    return !this.policies.some((p) => p.specials.includes("specialType:forceAutomaticBuildQueue"));
+    return this.computed(
+      "canControlConstruction",
+      () => !this.policies.some((p) => p.specials.includes("specialType:forceAutomaticBuildQueue")),
+      { props: ["policies"] },
+    );
   }
   get canControlTraining(): boolean {
-    return !this.policies.some((p) => p.specials.includes("specialType:cannotBuildUnits"));
+    return this.computed(
+      "canControlTraining",
+      () => !this.policies.some((p) => p.specials.includes("specialType:cannotBuildUnits")),
+      { props: ["policies"] },
+    );
   }
   get canDeclineTrade(): boolean {
-    return !this.policies.some((p) => p.specials.includes("specialType:cannotDeclineTrade"));
+    return this.computed(
+      "canDeclineTrade",
+      () => !this.policies.some((p) => p.specials.includes("specialType:cannotDeclineTrade")),
+      { props: ["policies"] },
+    );
   }
   get canLevyUnits(): boolean {
-    return this.policies.some((p) => p.specials.includes("specialType:canLevy"));
+    return this.computed(
+      "canLevyUnits",
+      () => this.policies.some((p) => p.specials.includes("specialType:canLevy")),
+      { props: ["policies"] },
+    );
   }
   get canTradeNonAllies(): boolean {
-    return !this.policies.some((p) => p.specials.includes("specialType:cannotTradeNonAllies"));
+    return this.computed(
+      "canTradeNonAllies",
+      () => !this.policies.some((p) => p.specials.includes("specialType:cannotTradeNonAllies")),
+      { props: ["policies"] },
+    );
   }
   get hasStateReligion(): boolean {
-    return this.policies.some((p) => p.specials.includes("specialType:forcedStateReligion"));
+    return this.computed(
+      "hasStateReligion",
+      () => this.policies.some((p) => p.specials.includes("specialType:forcedStateReligion")),
+      { props: ["policies"] },
+    );
   }
   get unitStartStatus(): UnitStatus {
-    return this.policies.some((p) => p.specials.includes("specialType:canMobilize"))
-      ? "reserve"
-      : "regular";
+    return this.computed(
+      "unitStartStatus",
+      () =>
+        this.policies.some((p) => p.specials.includes("specialType:canMobilize"))
+          ? "reserve"
+          : "regular",
+      { props: ["policies"] },
+    );
   }
 
   /*

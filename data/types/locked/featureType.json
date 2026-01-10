@@ -1,0 +1,257 @@
+[
+  {
+    "concept": "conceptType:feature",
+    "description": "Pine forests are coniferous woodlands spread across boreal and montane zones. They supplied straight timbers for building and ship masts, and resin, tar, and pitch for sealing and waterproofing. Norse and Viking communities felled pine for longships, halls, and farmsteads. Siberian peoples harvested resin and relied on pine for shelter and fuel. Early modern navies drew naval stores from Baltic and North American pines. Industrial logging fostered rail-linked sawmills and tar distilleries. Reforestation and plantation forestry reshaped landscapes in Sweden, Scotland, and Japan during the 19th and 20th centuries. Fire, pests, and climate variability drove new silviculture practices. Today pine forests are managed for timber, pulp, carbon storage, and watershed protection while sustaining local crafts and subsistence.",
+    "key": "featureType:pineForest",
+    "name": "Pine Forest",
+    "requires": [
+      "terrainType:tundra",
+      [
+        "elevationType:flat",
+        "elevationType:hill"
+      ]
+    ],
+    "yields": [
+      {
+        "type": "yieldType:production",
+        "amount": 1
+      },
+      {
+        "type": "yieldType:moveCost",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "concept": "conceptType:feature",
+    "description": "Forests are tree-dominated ecosystems that have supported human subsistence, industry, and belief for millennia. They supplied timber, game, fodder, medicines, and charcoal for metalwork and glassmaking. Medieval forest law regulated access and hunting across Europe. The Black Forest furnished timber and charcoal and shaped regional crafts and folklore. The Amazon rainforest sustained Indigenous societies with agroforestry and terra preta soils. Colonial extraction and road building accelerated clearing. Conservation, sustainable forestry, and protected areas emerged in response to deforestation and habitat loss. Modern management balances production with biodiversity and watershed protection.",
+    "key": "featureType:forest",
+    "name": "Forest",
+    "requires": [
+      "terrainType:grass",
+      "climateType:temperate",
+      [
+        "elevationType:flat",
+        "elevationType:hill"
+      ]
+    ],
+    "yields": [
+      {
+        "type": "yieldType:production",
+        "amount": 1
+      },
+      {
+        "type": "yieldType:moveCost",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "concept": "conceptType:feature",
+    "description": "Jungle denotes dense tropical rainforest with heavy undergrowth, difficult terrain, and high biodiversity. Thick vegetation, disease, and humidity challenged explorers, surveyors, and armies. Colonial narratives and adventure literature spread tales of hidden kingdoms and lost cities. Jungle terrain served as natural refuge, aiding guerrilla forces and displaced communities. Campaigns in Southeast Asia and Central Africa illustrated the logistical demands of such environments. Scientific expeditions cataloged species and mapped watersheds, while resource extraction opened interior routes. Conservation now addresses habitat fragmentation and Indigenous land rights.",
+    "key": "featureType:jungle",
+    "name": "Jungle",
+    "requires": [
+      "terrainType:grass",
+      "climateType:equatorial",
+      "elevationType:flat"
+    ],
+    "yields": [
+      {
+        "type": "yieldType:production",
+        "amount": 1
+      },
+      {
+        "type": "yieldType:science",
+        "amount": 1
+      },
+      {
+        "type": "yieldType:damage",
+        "amount": 25,
+        "method": "percent"
+      },
+      {
+        "type": "yieldType:moveCost",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "concept": "conceptType:feature",
+    "description": "Shrublands are landscapes dominated by hardy woody plants adapted to arid or seasonal climates. They provide forage, browse, fuelwood, and soil stabilization. Mediterranean maquis supplied grazing, tannins, and brush fuel for lime kilns and pottery. The African bush shaped herding routes, dry-season fodder reserves, and mobile subsistence practices. Fire and grazing regimes have long governed composition and productivity. Colonial forestry often suppressed burning; later policies reintroduced controlled fire to reduce fuel loads. Shrub encroachment and desertification remain management challenges under changing climates.",
+    "key": "featureType:shrubs",
+    "name": "Shrubs",
+    "requires": [
+      "terrainType:plains",
+      [
+        "elevationType:flat",
+        "elevationType:hill"
+      ]
+    ],
+    "yields": [
+      {
+        "type": "yieldType:production",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "concept": "conceptType:feature",
+    "description": "An oasis forms where groundwater or springs surface in deserts, creating reliable water and fertile soils. Date palms, cereals, and garden crops thrived under shade-based irrigation. Caravan hubs grew around wells and pools, supporting trans-Saharan and Silk Road traffic. Fortified ksour and caravanserais protected stores and animals. Technologies such as qanats and foggaras tapped aquifers and stabilized supply. Settlements clustered along these nodes, organizing labor for maintenance and harvests. Oases served as diplomatic and commercial waypoints between steppe, savanna, and coast. Modern pumping and salinization threaten many systems, prompting restoration and water-sharing accords.",
+    "key": "featureType:oasis",
+    "name": "Oasis",
+    "requires": [
+      "terrainType:desert",
+      "elevationType:flat"
+    ],
+    "yields": [
+      {
+        "type": "yieldType:food",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "concept": "conceptType:feature",
+    "description": "A flood plain is lowland along a river that receives periodic overbank flooding. Silt deposition renews soils, enabling intensive agriculture. Early states relied on flood cycles, levees, and canals to regulate fields and store grain. The Nile Delta supported dynastic Egypt with basin irrigation; later dams altered seasonal silt delivery. The Tigris–Euphrates floodplain fostered Mesopotamian cities, writing, and temple economies, but faced salinization under long-term irrigation. Indus Valley floodplains sustained Harappan urbanism with planned drainage. Modern engineering built levees, spillways, and reservoirs to reduce risk yet shifted hazards downstream. Oxbow lakes, natural levees, and backswamps record the changing river courses over time.",
+    "key": "featureType:floodPlain",
+    "name": "Flood Plain",
+    "requires": [
+      "elevationType:flat"
+    ],
+    "specials": [
+      "specialType:nextToNavigableRiver"
+    ],
+    "yields": [
+      {
+        "type": "yieldType:food",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "concept": "conceptType:feature",
+    "description": "Swamps are forested wetlands where slow water and saturated soils support diverse flora and fauna. They offered fish, game, timber, and peat, and often served as refuges from state control. The Mesopotamian Marshes sustained reed architecture, fishing, and water buffalo herding. The Florida Everglades formed a vast subtropical mosaic altered by canals and flood control. The Okefenokee Swamp preserved extensive peat domes and distinctive culture at the Georgia–Florida border. Drainage schemes in many regions created farmland but degraded habitats. Restoration now targets hydrology, fire regimes, and species recovery while recognizing traditional livelihoods.",
+    "key": "featureType:swamp",
+    "name": "Swamp",
+    "requires": [
+      "elevationType:flat",
+      [
+        "terrainType:grass",
+        "terrainType:tundra"
+      ]
+    ],
+    "yields": [
+      {
+        "type": "yieldType:culture",
+        "amount": 1
+      },
+      {
+        "type": "yieldType:moveCost",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "concept": "conceptType:feature",
+    "description": "Persistent ice at poles and high mountains shapes climate, sea level, and landscapes. The Greenland and Antarctic ice sheets store most of Earth’s freshwater and archive past atmospheres in ice cores. Alpine glaciers carved U-shaped valleys and moraines that structure settlement and transport routes. Polar expeditions advanced navigation and science, from Nansen and Amundsen to satellite-era surveys. Glaciology links mass balance to ocean circulation and albedo feedbacks. Industrial-era warming has driven widespread retreat, exposing archaeology and altering water supplies. Ice monitoring now integrates field stations, radar, and gravimetry to track change and assess risk.",
+    "key": "featureType:ice",
+    "name": "Ice",
+    "requires": [
+      "elevationType:flat",
+      "climateType:frozen"
+    ],
+    "specials": [
+      "specialType:cannotEnter"
+    ]
+  },
+  {
+    "concept": "conceptType:feature",
+    "description": "Kelp forests are underwater stands of large brown algae that form complex habitats. They buffer coasts, cycle nutrients, and support fisheries. California’s Channel Islands sustained abalone and rockfish fisheries and modern marine reserves. Norwegian kelp beds underpin coastal ecosystems and small-boat fisheries. Chilean kelp ecosystems in Patagonia support productive cold-water food webs. Historical kelp burning produced potash and iodine, fueling 18th–19th century industries in Scotland and beyond. The alginate industry later commercialized kelp derivatives. Warming seas and sea urchin outbreaks have caused declines, prompting restoration and predator recovery programs.",
+    "key": "featureType:kelp",
+    "name": "Kelp",
+    "requires": [
+      [
+        "terrainType:coast",
+        "terrainType:lake"
+      ],
+      [
+        "climateType:cold",
+        "climateType:temperate"
+      ]
+    ],
+    "yields": [
+      {
+        "type": "yieldType:food",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "concept": "conceptType:feature",
+    "description": "A lagoon is a shallow coastal basin separated from the sea by barriers or reefs. Brackish waters nurture fisheries, salt pans, and sheltered harbors. The Venice Lagoon supported maritime trade, shipyards, and complex hydraulic works to manage silt and tides. Chilika Lagoon sustained rich fisheries and a major stopover for migratory birds. The Banc d’Arguin lagoons provided critical nurseries for fish and supported traditional fishing communities. Many lagoons saw land reclamation, dredging, and urban expansion. Modern management balances navigation, flood defense, and biodiversity through zoning, gates, and protected areas.",
+    "key": "featureType:lagoon",
+    "name": "Lagoon",
+    "requires": [
+      [
+        "terrainType:coast",
+        "terrainType:lake"
+      ],
+      [
+        "climateType:hot",
+        "climateType:equatorial"
+      ]
+    ],
+    "yields": [
+      {
+        "type": "yieldType:food",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "concept": "conceptType:feature",
+    "description": "An atoll is a ring-shaped coral island enclosing a shallow lagoon, formed as reef-building corals grow upward around a sinking volcanic edifice. Most occur in warm, clear tropical oceans. Narrow motu and reef flats offer passes that serve as harbors yet pose navigational risks. Freshwater is scarce and stored in thin lenses, so subsistence depended on fishing, coconut cultivation, and rain collection. The Maldives comprise dozens of inhabited atolls that sustained maritime trade and cowrie exchange. In Polynesia, atolls anchored long-distance voyaging and maintained ritual spaces. The Tuamotu Archipelago supported copra and pearl fisheries and later cultured pearls. Bikini Atoll became a site of U.S. nuclear testing in the mid-twentieth century, causing displacement and environmental contamination that shaped global debates on nuclear safety.",
+    "key": "featureType:atoll",
+    "name": "Atoll",
+    "requires": [
+      [
+        "terrainType:sea",
+        "terrainType:ocean"
+      ],
+      [
+        "climateType:hot",
+        "climateType:equatorial"
+      ]
+    ],
+    "yields": [
+      {
+        "type": "yieldType:food",
+        "amount": 1
+      },
+      {
+        "type": "yieldType:production",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "concept": "conceptType:feature",
+    "description": "Trade winds are persistent low-latitude easterlies driven by Hadley cell circulation and the Coriolis effect. Their reliability shaped early oceanic navigation. In the Atlantic, mariners of the fifteenth and sixteenth centuries used the northeast trades to cross toward the Caribbean and South America, then returned via mid-latitude westerlies. This enabled Iberian exploration and empire and supported transatlantic merchant traffic and the triangular trade. Polynesian navigators exploited Pacific trade wind bands for voyages between archipelagos. In the nineteenth century, clipper ships timed passages to seasonal trade wind strengths. They achieved fast routes for tea, guano, and mail. Steam power reduced reliance, but trade winds remain central to sailing and to modern climate and dust transport studies.",
+    "key": "featureType:tradeWind",
+    "name": "Trade Wind",
+    "requires": [
+      "terrainType:ocean",
+      [
+        "climateType:hot",
+        "climateType:equatorial"
+      ]
+    ],
+    "yields": [
+      {
+        "type": "yieldType:moveCost",
+        "amount": -0.5
+      }
+    ]
+  }
+]

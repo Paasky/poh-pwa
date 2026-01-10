@@ -17,7 +17,7 @@ import {
   Vector3,
 } from "@babylonjs/core";
 import { watch } from "vue";
-import { useSettingsStore } from "@/stores/settingsStore";
+import { useSettingsStore } from "@/App/stores/settingsStore";
 import { EnvironmentHelper } from "@babylonjs/core/Helpers/environmentHelper";
 import { DefaultRenderingPipeline } from "@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/defaultRenderingPipeline";
 
@@ -31,7 +31,7 @@ import {
   wrapTime2400,
 } from "@/Actor/Human/Environment/clock";
 import { EngineSettings } from "@/Actor/Human/EngineSettings";
-import { clamp, wrapInclusive } from "@/helpers/math";
+import { clamp, wrapInclusive } from "@/Common/Helpers/math";
 
 export { WeatherType };
 
@@ -230,7 +230,7 @@ export class Environment {
     this.hemisphericAmbientLight.dispose();
   }
 
-  // ----- Internal setup helpers -----
+  // ----- Internal setup Helpers -----
 
   private setupEnvironmentSkyboxAndTexture(): void {
     if (!this.configuration.environmentTextureUrl.trim()) return;
@@ -339,7 +339,7 @@ export class Environment {
     }
   }
 
-  // ----- Static helpers (validation and clamping) -----
+  // ----- Static Helpers (validation and clamping) -----
 
   private applyWeatherPreset(weatherType: WeatherType): void {
     const scene = this.scene;

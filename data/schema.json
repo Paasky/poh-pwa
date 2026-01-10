@@ -1,0 +1,241 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "types": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "concept": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "audio": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "image": {
+            "type": "string"
+          },
+          "quote": {
+            "type": "object",
+            "properties": {
+              "greeting": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string"
+              }
+            },
+            "required": ["greeting", "text", "source", "url"],
+            "additionalProperties": false
+          },
+          "intro": {
+            "type": "string"
+          },
+          "p1": {
+            "type": "string"
+          },
+          "p2": {
+            "type": "string"
+          },
+          "x": {
+            "type": "number"
+          },
+          "y": {
+            "type": "number"
+          },
+          "hotkey": {
+            "type": "string"
+          },
+          "moves": {
+            "type": "number"
+          },
+          "heritagePointCost": {
+            "type": "number"
+          },
+          "influenceCost": {
+            "type": "number"
+          },
+          "moveCost": {
+            "type": "number"
+          },
+          "productionCost": {
+            "type": "number"
+          },
+          "scienceCost": {
+            "type": "number"
+          },
+          "isPositive": {
+            "type": "boolean"
+          },
+          "names": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "allows": {
+            "default": [],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "requires": {
+            "default": [],
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
+            }
+          },
+          "yields": {
+            "default": [],
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "method": {
+                  "default": "lump",
+                  "type": "string",
+                  "enum": ["lump", "percent", "set"]
+                },
+                "amount": {
+                  "default": 0,
+                  "type": "number"
+                },
+                "for": {
+                  "default": [],
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "vs": {
+                  "default": [],
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": ["type", "method", "amount", "for", "vs"],
+              "additionalProperties": false
+            }
+          },
+          "gains": {
+            "default": [],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "upgradesTo": {
+            "default": [],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "upgradesFrom": {
+            "default": [],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "specials": {
+            "default": [],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "relatesTo": {
+            "default": [],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "key",
+          "name",
+          "concept",
+          "allows",
+          "requires",
+          "yields",
+          "gains",
+          "upgradesTo",
+          "upgradesFrom",
+          "specials",
+          "relatesTo"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "categories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "concept": {
+            "type": "string"
+          },
+          "relatesTo": {
+            "default": [],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["key", "name", "concept", "relatesTo"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["types", "categories"],
+  "additionalProperties": false
+}

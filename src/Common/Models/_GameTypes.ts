@@ -4,6 +4,7 @@ export type GameClass =
   | "city"
   | "construction"
   | "culture"
+  | "diplomacy"
   | "deal"
   | "government"
   | "incident"

@@ -1,6 +1,6 @@
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { TypeStorage } from "@/Common/Objects/TypeStorage";
-import { playerYieldTypeKeys, Yield, Yields } from "@/Common/Objects/Yields";
+import { playerYieldTypeKeys, Yield, Yields } from "@/Common/Static/Yields";
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import type { UnitDesign } from "@/Common/Models/UnitDesign";
 import type { City } from "@/Common/Models/City";
@@ -15,7 +15,6 @@ import type { Tile } from "@/Common/Models/Tile";
 import type { TradeRoute } from "@/Common/Models/TradeRoute";
 import type { Unit } from "@/Common/Models/Unit";
 import { Diplomacy } from "@/Common/Objects/Diplomacy";
-import { UnitMovement } from "@/Simulation/Movement/UnitMovement";
 import { Construction } from "@/Common/Models/Construction";
 import { Incident } from "@/Common/Models/Incident";
 
@@ -26,7 +25,8 @@ export class Player extends GameObject {
     public diplomacyKey: GameKey,
     public governmentKey: GameKey,
     public researchKey: GameKey,
-    public name: string,
+    public userName?: string,
+    public isHuman = false,
     public isCurrent = false,
     public isMinor = false,
     public religionKey: GameKey | null = null,
@@ -35,8 +35,6 @@ export class Player extends GameObject {
     public knownTileKeys = new Set<GameKey>(),
   ) {
     super(key);
-
-    this.diplomacy = new Diplomacy(key);
   }
 
   static attrsConf: GameObjAttr[] = [
@@ -56,7 +54,8 @@ export class Player extends GameObject {
       attrName: "researchKey",
       related: { theirKeyAttr: "playerKey", isOne: true },
     },
-    { attrName: "name" },
+    { attrName: "userName", isOptional: true },
+    { attrName: "isHuman", isOptional: true },
     { attrName: "isCurrent", isOptional: true },
     { attrName: "isMinor", isOptional: true },
     {
@@ -177,41 +176,43 @@ export class Player extends GameObject {
     return this.culture.leader;
   }
 
-  get visibleTileKeys(): Set<GameKey> {
-    const keys = new Set<GameKey>(this.tileKeys);
+  get name(): string {
+    return this.computed(
+      "name",
+      () => {
+        const userName = this.userName || (this.isHuman ? "Human" : "AI");
+        return `${this.leader.name} - ${this.culture.type.name} [${userName}]`;
+      },
+      {
+        props: ["userName", "isHuman"],
+        relations: [{ relName: "culture", relProps: ["type"] }],
+      },
+    );
+  }
 
-    this.units.forEach((u) => u.visibleTileKeys.forEach((k) => keys.add(k)));
-    return keys;
+  get visibleTileKeys(): Set<GameKey> {
+    return this.computed(
+      "visibleTileKeys",
+      () => {
+        const keys = new Set<GameKey>(this.tileKeys);
+
+        this.units.forEach((u) => u.visibleTileKeys.forEach((k) => keys.add(k)));
+        return keys;
+      },
+      {
+        props: ["tileKeys"],
+        relations: [{ relName: "units", relProps: ["visibleTileKeys"] }],
+      },
+    );
   }
 
   /*
    * Actions
    */
-  startTurn(): void {
-    // Load the yields from the end of the prev turn into storage
-    this.storage.load(this.yields.toStorage().all());
 
-    this.cities.forEach((c) => c.startTurn());
-    this.units.forEach((u) => u.startTurn());
-
-    this.culture.startTurn();
-    this.diplomacy.startTurn();
-    this.government.startTurn();
-    if (this.religion) this.religion.startTurn();
-    this.research.startTurn();
+  warmUp(): void {
+    // todo warm up computed fields by calling them
   }
-
-  endTurn(): boolean {
-    // Try to move remaining auto-moves (units on multi-turn move + units on trade routes)
-    // On refusal, return false
-    // After all done, return true
-    for (const unit of this.units) {
-      if (unit.movement.move(UnitMovement.getMoveContext(unit)) === false) return false;
-    }
-    return true;
-  }
-
-  warmUp(): void {}
 
   ////// v0.1
 
@@ -263,6 +264,8 @@ export class Player extends GameObject {
       },
       {
         relations: [
+          { relName: "government", relProps: ["yields"] },
+          { relName: "research", relProps: ["yields"] },
           { relName: "culture", relProps: ["yields"] },
           { relName: "religion", relProps: ["yields"] },
           { relName: "cities", relProps: ["yields"] },
@@ -301,15 +304,14 @@ export class Player extends GameObject {
       },
       {
         relations: [
-          { relName: "agendas", relProps: ["yields"] },
-          { relName: "culture", relProps: ["yields"] },
-          { relName: "cities", relProps: ["yields"] },
-          { relName: "diplomacy", relProps: ["yields"] },
-          { relName: "deals", relProps: ["yields"] },
           { relName: "government", relProps: ["yields"] },
-          { relName: "incidents", relProps: ["yields"] },
-          { relName: "religion", relProps: ["yields"] },
           { relName: "research", relProps: ["yields"] },
+          { relName: "culture", relProps: ["yields"] },
+          { relName: "religion", relProps: ["yields"] },
+          { relName: "agendas", relProps: ["yields"] },
+          { relName: "cities", relProps: ["yields"] },
+          { relName: "deals", relProps: ["yields"] },
+          { relName: "incidents", relProps: ["yields"] },
           { relName: "tradeRoutes", relProps: ["yields"] },
           { relName: "units", relProps: ["yields"] },
         ],

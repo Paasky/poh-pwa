@@ -1,0 +1,92 @@
+[
+  {
+    "key": "buildingCategory:production",
+    "name": "Production",
+    "concept": "conceptType:building"
+  },
+  {
+    "key": "buildingCategory:gold",
+    "name": "Gold",
+    "concept": "conceptType:building"
+  },
+  {
+    "key": "buildingCategory:science",
+    "name": "Science",
+    "concept": "conceptType:building"
+  },
+  {
+    "key": "buildingCategory:growth",
+    "name": "Growth",
+    "concept": "conceptType:building"
+  },
+  {
+    "key": "buildingCategory:culture",
+    "name": "Culture",
+    "concept": "conceptType:building"
+  },
+  {
+    "key": "buildingCategory:faith",
+    "name": "Faith",
+    "concept": "conceptType:building"
+  },
+  {
+    "key": "buildingCategory:health",
+    "name": "Health",
+    "concept": "conceptType:building"
+  },
+  {
+    "key": "buildingCategory:happiness",
+    "name": "Happiness",
+    "concept": "conceptType:building"
+  },
+  {
+    "key": "buildingCategory:order",
+    "name": "Order",
+    "concept": "conceptType:building"
+  },
+  {
+    "key": "buildingCategory:influence",
+    "name": "Influence",
+    "concept": "conceptType:building"
+  },
+  {
+    "key": "buildingCategory:milLand",
+    "name": "Mil Land",
+    "concept": "conceptType:building"
+  },
+  {
+    "key": "buildingCategory:milWater",
+    "name": "Mil Water",
+    "concept": "conceptType:building"
+  },
+  {
+    "key": "buildingCategory:trade",
+    "name": "Trade",
+    "concept": "conceptType:building"
+  },
+  {
+    "key": "buildingCategory:water",
+    "name": "Water",
+    "concept": "conceptType:building"
+  },
+  {
+    "key": "buildingCategory:defense",
+    "name": "Defense",
+    "concept": "conceptType:building"
+  },
+  {
+    "key": "buildingCategory:unitProduction",
+    "name": "Unit Production",
+    "concept": "conceptType:building"
+  },
+  {
+    "key": "buildingCategory:resourceProduction",
+    "name": "Resource Production",
+    "concept": "conceptType:building"
+  },
+  {
+    "key": "buildingCategory:powerPlant",
+    "name": "Power Plant",
+    "concept": "conceptType:building"
+  }
+]

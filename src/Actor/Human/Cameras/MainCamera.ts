@@ -6,9 +6,9 @@ import {
   Vector3,
 } from "@babylonjs/core";
 import { watch } from "vue";
-import { useSettingsStore } from "@/stores/settingsStore";
-import { Coords } from "@/helpers/mapTools";
-import { clamp, clampCoordsToBoundaries, type OrthoBounds } from "@/helpers/math";
+import { useSettingsStore } from "@/App/stores/settingsStore";
+import { Coords } from "@/Common/Helpers/mapTools";
+import { clamp, clampCoordsToBoundaries, type OrthoBounds } from "@/Common/Helpers/math";
 import GridOverlay from "@/Actor/Human/Overlays/GridOverlay";
 import { ContextOverlay } from "@/Actor/Human/Overlays/ContextOverlay";
 import { PathOverlay } from "@/Actor/Human/Overlays/PathOverlay";

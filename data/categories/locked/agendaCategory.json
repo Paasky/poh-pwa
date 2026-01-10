@@ -1,0 +1,14 @@
+[
+  {
+    "key": "agendaCategory:minor",
+    "name": "Minor",
+    "concept": "conceptType:agenda",
+    "description": ""
+  },
+  {
+    "key": "agendaCategory:major",
+    "name": "Major",
+    "concept": "conceptType:agenda",
+    "description": ""
+  }
+]

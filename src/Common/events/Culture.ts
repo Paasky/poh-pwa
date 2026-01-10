@@ -1,0 +1,40 @@
+import { PohEvent } from "@/Common/events/_Event";
+import { Culture } from "@/Common/Models/Culture";
+import { TypeObject } from "@/Common/Objects/TypeObject";
+
+export class CultureCanSelect extends PohEvent {
+  constructor(culture: Culture) {
+    const typeWord = culture.status.value === "settled" ? "traits" : "heritages";
+    super(`select new ${typeWord} for ${culture.type.name}`);
+
+    this.subject = culture;
+    this.player = culture.player;
+  }
+}
+export class CultureCanSettle extends PohEvent {
+  constructor(culture: Culture) {
+    super(`settle down`);
+
+    this.subject = culture;
+    this.player = culture.player;
+  }
+}
+
+export class CultureHasSettled extends PohEvent {
+  constructor(culture: Culture) {
+    super(`settled down`);
+
+    this.subject = culture;
+    this.player = culture.player;
+  }
+}
+
+export class CultureHasNewType extends PohEvent {
+  constructor(culture: Culture, type: TypeObject) {
+    super(`selected ${type.name} for ${culture.type.name}`);
+
+    this.subject = culture;
+    this.typeObj = type;
+    this.player = culture.player;
+  }
+}

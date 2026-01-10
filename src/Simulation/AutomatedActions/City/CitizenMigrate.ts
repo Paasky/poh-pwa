@@ -3,7 +3,7 @@ import { City } from "@/Common/Models/City";
 import { IMutation } from "@/Common/IMutation";
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
 import { CitizenPickTile } from "@/Simulation/ActorActions/City/CitizenPickTile";
-import { getRandom } from "@/helpers/arrayTools";
+import { getRandom } from "@/Common/Helpers/arrayTools";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { UnitDesign } from "@/Common/Models/UnitDesign";
 import { createUnit } from "@/Simulation/MutationFactory";

@@ -1,0 +1,14 @@
+[
+  {
+    "key": "incidentCategory:minor",
+    "name": "Minor",
+    "concept": "conceptType:incident",
+    "description": ""
+  },
+  {
+    "key": "incidentCategory:major",
+    "name": "Major",
+    "concept": "conceptType:incident",
+    "description": ""
+  }
+]

@@ -1,7 +1,7 @@
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
 import { City } from "@/Common/Models/City";
 import { createMutation, IMutation } from "@/Common/IMutation";
-import { getRandom } from "@/helpers/arrayTools";
+import { getRandom } from "@/Common/Helpers/arrayTools";
 
 // Note: a Actor cannot decide to starve a City,
 // it only happens automatically if the City runs out of food in storage.

@@ -1,0 +1,725 @@
+[
+  {
+    "category": "heritageCategory:arctic",
+    "concept": "conceptType:heritage",
+    "description": "Arctic I refers to cold-region subsistence systems built on hunting, fishing, and durable settlement patterns. Communities balanced seasonal mobility with fixed caches and winter houses. Techniques included seal and whale hunting at polynyas, river and ice fishing, and reindeer management where feasible. Inuit groups organized coastal and inland rounds that matched animal migrations. Sámi herders developed flexible camps and sled transport across tundra. Russian Pomor communities exploited Arctic coasts through sea-mammal hunting and fur gathering. Tools such as harpoons, qajaq and umiak, fish weirs, and snow architecture reduced risk. Knowledge of ice, weather, and daylight cycles governed survival.",
+    "key": "heritageType:arcticI",
+    "name": "Arctic I",
+    "requires": [
+      [
+        "terrainType:tundra",
+        "featureType:pineForest"
+      ]
+    ],
+    "specials": [
+      "specialType:noSnowDamage"
+    ],
+    "yields": [
+      {
+        "type": "yieldType:heritagePointCost",
+        "amount": 10
+      },
+      {
+        "type": "yieldType:food",
+        "amount": 1,
+        "for": [
+          "terrainType:tundra"
+        ]
+      },
+      {
+        "type": "yieldType:production",
+        "amount": 1,
+        "for": [
+          "featureType:pineForest"
+        ]
+      },
+      {
+        "type": "yieldType:health",
+        "amount": -1,
+        "for": [
+          "featureType:jungle",
+          "terrainType:desert"
+        ]
+      }
+    ]
+  },
+  {
+    "category": "heritageCategory:arctic",
+    "concept": "conceptType:heritage",
+    "description": "Arctic II covers trapping and fur-harvesting economies that supported trade, tribute, and survival. Siberian hunters supplied sable, ermine, and fox to Russian markets under yasak and later commercial contracts. In North America, the Hudson’s Bay Company organized wide trapline systems for beaver and other pelts from 1670 onward. Indigenous trappers combined traditional snares with iron traps and barter posts. Winter travel by snowshoe and sled enabled long-range collection. Furs moved by river and sea to European and Asian consumers. Market cycles, overharvest, and regulation reshaped practices, yet local subsistence trapping continued as part of mixed Arctic livelihoods.",
+    "gains": [
+      "technologyType:trapping"
+    ],
+    "key": "heritageType:arcticII",
+    "name": "Arctic II",
+    "requires": [
+      [
+        "terrainType:tundra",
+        "featureType:pineForest"
+      ]
+    ],
+    "yields": [
+      {
+        "type": "yieldType:heritagePointCost",
+        "amount": 25
+      },
+      {
+        "type": "yieldType:food",
+        "amount": 1,
+        "for": [
+          "featureType:pineForest"
+        ]
+      }
+    ]
+  },
+  {
+    "category": "heritageCategory:bedouin",
+    "concept": "conceptType:heritage",
+    "description": "Bedouin I describes nomadic desert pastoralism structured around camels, seasonal migration, and tribal autonomy. Herding routes followed rains and pasture, linking steppe margins, wadis, and desert interiors. Camels provided transport, milk, meat, and status. Tents of woven goat hair allowed rapid movement and shelter. Customary law and clan alliances managed grazing rights and conflict. Caravan guiding and raiding formed additional income. Arabian and Sinai groups maintained detailed knowledge of wells and tracks. Oral poetry and lineage memory preserved agreements and history. The system endured from late antiquity into the twentieth century, adapting to borders, firearms, and motor transport.",
+    "key": "heritageType:bedouinI",
+    "name": "Bedouin I",
+    "requires": [
+      [
+        "terrainType:desert",
+        "improvementCategory:camp"
+      ]
+    ],
+    "specials": [
+      "specialType:noDesertDamage"
+    ],
+    "yields": [
+      {
+        "type": "yieldType:heritagePointCost",
+        "amount": 10
+      },
+      {
+        "type": "yieldType:food",
+        "amount": 1,
+        "for": [
+          "terrainType:desert",
+          "improvementCategory:camp"
+        ]
+      },
+      {
+        "type": "yieldType:health",
+        "amount": -1,
+        "for": [
+          "featureType:jungle",
+          "terrainType:tundra"
+        ]
+      }
+    ]
+  },
+  {
+    "category": "heritageCategory:bedouin",
+    "concept": "conceptType:heritage",
+    "description": "Bedouin II denotes desert communities that combined oasis agriculture with caravan trade networks. Date palms, cereals, and garden crops at oases supported travelers and residents. Pastoralists exchanged animal products and services for grain, tools, and textiles. Caravans carried incense, spices, slaves, and later manufactured goods across Arabian and Saharan routes. Caravanserai provided security, fodder, and taxation points. Guides negotiated water access and tribal tolls. Seasonal fairs linked towns to hinterlands. Hajj caravans and Red Sea ports tied local systems to wider markets. The rise of steamships, railways, and motor roads shifted routes but many oasis towns persisted.",
+    "gains": [
+      "technologyType:trapping"
+    ],
+    "key": "heritageType:bedouinII",
+    "name": "Bedouin II",
+    "requires": [
+      [
+        "terrainType:desert",
+        "improvementCategory:camp"
+      ]
+    ],
+    "yields": [
+      {
+        "type": "yieldType:heritagePointCost",
+        "amount": 25
+      },
+      {
+        "type": "yieldType:food",
+        "amount": 1,
+        "for": [
+          "featureType:oasis"
+        ]
+      },
+      {
+        "type": "yieldType:production",
+        "amount": 1,
+        "for": [
+          "featureType:oasis"
+        ]
+      },
+      {
+        "type": "yieldType:gold",
+        "amount": 1,
+        "for": [
+          "featureType:oasis"
+        ]
+      }
+    ]
+  },
+  {
+    "category": "heritageCategory:equatorial",
+    "concept": "conceptType:heritage",
+    "description": "Equatorial I outlines tropical jungle economies centered on plantations, spice production, and fruit cultivation. In Island Southeast Asia, cloves and nutmeg from the Moluccas drew Asian and European traders from the medieval period onward. Agroforestry mixed tree crops, tubers, and palms near villages. Colonial regimes expanded sugar, cocoa, coffee, and rubber on estates, often with coerced or migrant labor. Disease, monsoon timing, and soil fertility shaped yields. Ports integrated interior gardens with long-distance trade. Botanical acclimatization moved crops across oceans, creating new zones in the Caribbean and West Africa. Market booms and busts drove cycles of land clearing and consolidation.",
+    "key": "heritageType:equatorialI",
+    "name": "Equatorial I",
+    "requires": [
+      [
+        "featureType:jungle",
+        "resourceCategory:fruit",
+        "resourceCategory:spice"
+      ]
+    ],
+    "specials": [
+      "specialType:noJungleDamage"
+    ],
+    "yields": [
+      {
+        "type": "yieldType:heritagePointCost",
+        "amount": 10
+      },
+      {
+        "type": "yieldType:food",
+        "amount": 1,
+        "for": [
+          "improvementCategory:plantation"
+        ]
+      },
+      {
+        "type": "yieldType:health",
+        "amount": -1,
+        "for": [
+          "terrainType:desert",
+          "terrainType:tundra"
+        ]
+      }
+    ]
+  },
+  {
+    "category": "heritageCategory:equatorial",
+    "concept": "conceptType:heritage",
+    "description": "Equatorial II addresses heritage that enhanced rainforest resource use and early agricultural technologies. Austronesian communities developed spice gardens, sago processing, and arboriculture across the Malay Archipelago. Indigenous Amazonian groups practiced managed forests, polyculture orchards, and soil improvement, creating productive mosaics near settlements. In Southeast Asia, precolonial trade in cloves and nutmeg linked interior producers to coastal entrepôts. Tools included digging sticks, bark-beaters, and later metal blades. River canoes and portage trails connected fields to markets. Knowledge of phenology, canopy dynamics, and fallow cycles guided cultivation. Many practices survived colonial extraction and informed modern agroforestry experiments.",
+    "gains": [
+      "technologyType:agriculture"
+    ],
+    "key": "heritageType:equatorialII",
+    "name": "Equatorial II",
+    "requires": [
+      [
+        "featureType:jungle",
+        "resourceCategory:fruit",
+        "resourceCategory:spice"
+      ]
+    ],
+    "yields": [
+      {
+        "type": "yieldType:heritagePointCost",
+        "amount": 25
+      },
+      {
+        "type": "yieldType:culture",
+        "amount": 1,
+        "for": [
+          "featureType:jungle"
+        ]
+      },
+      {
+        "type": "yieldType:moveCost",
+        "amount": -1,
+        "for": [
+          "featureType:jungle"
+        ]
+      }
+    ]
+  },
+  {
+    "category": "heritageCategory:seafarer",
+    "concept": "conceptType:heritage",
+    "description": "Seafarer I characterizes maritime lifeways based on coastal foraging, boatbuilding, and open-water navigation. Early shore communities harvested shellfish, fish, and sea mammals while moving seasonally along littorals. Austronesian peoples expanded across island Southeast Asia using outriggers and sailing canoes. Polynesians crossed vast Pacific distances in double-hulled vessels. Navigation relied on stars, swell patterns, winds, and bird behavior. Fishing gear included nets, hooks, and traps suited to reefs and pelagic zones. Settlement spread followed safe anchorages and freshwater access. Maritime exchange linked islands and coasts through obsidian, ceramics, and foodstuffs long before state-backed fleets emerged.",
+    "key": "heritageType:seafarerI",
+    "name": "Seafarer I",
+    "requires": [
+      [
+        "terrainType:sea",
+        "featureType:atoll",
+        "featureType:tradeWind"
+      ]
+    ],
+    "yields": [
+      {
+        "type": "yieldType:heritagePointCost",
+        "amount": 10
+      },
+      {
+        "type": "yieldType:food",
+        "amount": 1,
+        "for": [
+          "terrainType:sea"
+        ]
+      },
+      {
+        "type": "yieldType:moves",
+        "amount": 1,
+        "for": [
+          "domainType:water"
+        ]
+      },
+      {
+        "type": "yieldType:strength",
+        "amount": -10,
+        "method": "percent",
+        "for": [
+          "domainType:land"
+        ]
+      }
+    ]
+  },
+  {
+    "category": "heritageCategory:seafarer",
+    "concept": "conceptType:heritage",
+    "description": "Seafarer II traces advances in sailing technology and the mobility of seafaring societies. Phoenician mariners used early sailing craft and coastal pilotage to knit a Mediterranean trade web. Viking shipwrights developed clinker-built longships and sails for raiding, commerce, and colonization. Later innovators refined rigs, hull forms, and navigation, enabling the Age of Sail. Lateen and square sails, sternpost rudders, and improved compasses extended range and speed. Oceanic crossings brought botanical exchanges and new ports into global circuits. Naval warfare and convoy systems evolved in parallel. These tools widened access to resources, routes, and distant settlements.",
+    "gains": [
+      "technologyType:sailing"
+    ],
+    "key": "heritageType:seafarerII",
+    "name": "Seafarer II",
+    "requires": [
+      [
+        "terrainType:sea",
+        "terrainType:ocean",
+        "featureType:atoll",
+        "featureType:tradeWind"
+      ]
+    ],
+    "specials": [
+      "specialType:canEnterSea"
+    ],
+    "yields": [
+      {
+        "type": "yieldType:heritagePointCost",
+        "amount": 25
+      }
+    ]
+  },
+  {
+    "category": "heritageCategory:engineer",
+    "concept": "conceptType:heritage",
+    "description": "Engineer I concerns adaptation to rugged mountains through access routes, mining, and land engineering. Classical states cut roads, tunnels, and adits to reach ores and passes. Romans and Greeks deployed hydraulic mining, ventilation shafts, and paved ways in high terrain. In the Andes, the Inca built terraces, rope bridges, and storehouses that stabilized slopes and fed labor. Medieval Alpine miners opened silver and salt works with galleries, water-powered pumps, and pack trails. Surveying, stonework, and timbering mitigated hazards such as rockfall and avalanches. These systems tied uplands to lowland markets and state extraction.",
+    "key": "heritageType:engineerI",
+    "name": "Engineer I",
+    "requires": [
+      [
+        "conceptType:mountains",
+        "improvementCategory:mine"
+      ]
+    ],
+    "specials": [
+      "specialType:canEnterMountains"
+    ],
+    "yields": [
+      {
+        "type": "yieldType:heritagePointCost",
+        "amount": 10
+      },
+      {
+        "type": "yieldType:food",
+        "amount": 1,
+        "for": [
+          "conceptType:mountains"
+        ]
+      },
+      {
+        "type": "yieldType:production",
+        "amount": 1,
+        "for": [
+          "improvementCategory:mine"
+        ]
+      },
+      {
+        "type": "yieldType:strength",
+        "amount": -10,
+        "method": "percent",
+        "for": [
+          "domainType:water"
+        ]
+      }
+    ]
+  },
+  {
+    "category": "heritageCategory:engineer",
+    "concept": "conceptType:heritage",
+    "description": "Engineer II covers animal husbandry and logistics that sustained mountain mining and settlement. Andean societies bred llamas for pack transport of ore, tools, and food between high camps and valleys. Transhumant shepherds in Europe moved flocks seasonally while supplying wool, meat, and traction animals to towns and mines. Mule and horse caravans linked smelters, adits, and markets along narrow paths. Fodder production, corrals, and waystations supported the flows. Agreements governed pasture rights and maintenance of trails. Livestock enabled steady provisioning of remote sites and lowered transport costs. These practices persisted into the industrial era in many regions.",
+    "gains": [
+      "technologyType:animalHusbandry"
+    ],
+    "key": "heritageType:engineerII",
+    "name": "Engineer II",
+    "requires": [
+      [
+        "conceptType:mountains",
+        "improvementCategory:mine"
+      ]
+    ],
+    "specials": [
+      "specialType:canEnterMountains"
+    ],
+    "yields": [
+      {
+        "type": "yieldType:heritagePointCost",
+        "amount": 25
+      }
+    ]
+  },
+  {
+    "category": "heritageCategory:fisher",
+    "concept": "conceptType:heritage",
+    "description": "Fisher I covers inshore fishing and shoreline gathering practiced by early coastal communities. People used simple nets, hooks, traps, and weirs. Boats were small and stayed close to land. Kelp, shellfish, and lagoon fish formed a major share of diet and trade. Drying and smoking preserved catches. Shell middens, fish bones, and net weights mark these economies archaeologically. Ancient Mediterranean villagers, Norse and Viking coastal households, and Polynesian lagoon fishers followed seasonal cycles and local tides. Knowledge of reefs, currents, and spawning grounds guided effort. Labor was family based. Exchange linked fishing hamlets with inland farmers for grain, pottery, and tools.",
+    "key": "heritageType:fisherI",
+    "name": "Fisher I",
+    "requires": [
+      [
+        "featureType:kelp",
+        "featureType:lagoon",
+        "resourceCategory:fish"
+      ]
+    ],
+    "yields": [
+      {
+        "type": "yieldType:heritagePointCost",
+        "amount": 10
+      },
+      {
+        "type": "yieldType:food",
+        "amount": 1,
+        "for": [
+          "improvementCategory:boats"
+        ]
+      },
+      {
+        "type": "yieldType:production",
+        "amount": 1,
+        "for": [
+          "featureType:kelp",
+          "featureType:lagoon"
+        ]
+      },
+      {
+        "type": "yieldType:resourceYield",
+        "amount": -25,
+        "method": "percent",
+        "for": [
+          "domainType:land"
+        ]
+      }
+    ]
+  },
+  {
+    "category": "heritageCategory:fisher",
+    "concept": "conceptType:heritage",
+    "description": "Fisher II reflects sailing and coastal navigation that widened fishing range and volume. Crews reached offshore grounds and followed seasonal migrations. Longlines, drift nets, and larger holds increased throughput. Preservation by salting and drying supported regional markets. Ports developed jetties, fish stalls, and storage sheds. Phoenician and Greek sailors worked the Mediterranean for tuna and mackerel. Polynesian voyagers used outriggers and sails for deep-sea trolling and netting. Medieval European fleets operated sail-powered boats along Atlantic and North Sea coasts. Coastal pilotage, star reading, and simple charts guided routes. Fishing joined maritime trade, taxation, and urban provisioning.",
+    "gains": [
+      "technologyType:sailing"
+    ],
+    "key": "heritageType:fisherII",
+    "name": "Fisher II",
+    "requires": [
+      [
+        "featureType:kelp",
+        "featureType:lagoon",
+        "resourceCategory:fish"
+      ]
+    ],
+    "yields": [
+      {
+        "type": "yieldType:heritagePointCost",
+        "amount": 25
+      },
+      {
+        "type": "yieldType:food",
+        "amount": 0.5,
+        "for": [
+          "terrainType:coast"
+        ]
+      }
+    ]
+  },
+  {
+    "category": "heritageCategory:herder",
+    "concept": "conceptType:heritage",
+    "description": "Herder I describes early pastoral subsistence on hills and open pastures. Communities managed cattle, sheep, goats, or camelids for meat, milk, hides, and wool. Mobility followed water and seasonal forage. Neolithic and Bronze Age groups in the Fertile Crescent grazed flocks near village fields. Steppe herders moved across grasslands with corrals and tents. In the Andes, llama and alpaca supported transport and textiles on highland ranges. Herding shaped kin groups, grazing rights, and seasonal camps. Milk processing into yoghurt and cheese extended storage. Pathways of transhumance linked uplands and lowlands. Exchange traded wool, hides, and animals for grain and metal tools.",
+    "key": "heritageType:herderI",
+    "name": "Herder I",
+    "requires": [
+      [
+        "elevationType:hill",
+        "resourceCategory:cattleGame",
+        "resourceCategory:cloth"
+      ]
+    ],
+    "yields": [
+      {
+        "type": "yieldType:heritagePointCost",
+        "amount": 10
+      },
+      {
+        "type": "yieldType:food",
+        "amount": 1,
+        "for": [
+          "improvementCategory:pasture"
+        ]
+      },
+      {
+        "type": "yieldType:production",
+        "amount": 0.5,
+        "for": [
+          "elevationType:hill"
+        ]
+      },
+      {
+        "type": "yieldType:resourceYield",
+        "amount": -25,
+        "method": "percent",
+        "for": [
+          "domainType:water"
+        ]
+      }
+    ]
+  },
+  {
+    "category": "heritageCategory:herder",
+    "concept": "conceptType:heritage",
+    "description": "Herder II marks advances in breeding, management, and animal power. Selective pairing improved wool, milk yield, and temperament. Corrals, branding, and fodder stores sustained larger herds. Draft and riding animals expanded transport and warfare. Horses transformed steppe mobility and raiding. Oxen and onagers pulled carts and ards. In the Ancient Near East, managed stud lines supported cattle and sheep quality. Indo-European groups refined horse use for travel and combat. Medieval dairying improved churns, presses, and curing spaces for butter and cheese. Pastoral economies supplied textiles, dairy, and remounts to towns and armies. Droving routes connected pastures to markets.",
+    "gains": [
+      "technologyType:animalHusbandry"
+    ],
+    "key": "heritageType:herderII",
+    "name": "Herder II",
+    "requires": [
+      [
+        "elevationType:hill",
+        "resourceCategory:cattleGame",
+        "resourceCategory:cloth"
+      ]
+    ],
+    "yields": [
+      {
+        "type": "yieldType:heritagePointCost",
+        "amount": 25
+      },
+      {
+        "type": "yieldType:moveCost",
+        "amount": -1,
+        "for": [
+          "elevationType:hill"
+        ]
+      }
+    ]
+  },
+  {
+    "category": "heritageCategory:nomad",
+    "concept": "conceptType:heritage",
+    "description": "Nomad I covers seasonal mobile lifeways on plains and shrublands. Groups moved camps to match water, pasture, and game. Livestock herding, hunting, and caravan service combined in flexible economies. Scythian and related steppe peoples used composite bows and carts on grassland routes. Bedouin clans crossed Arabian deserts with camels and tents. Native American Plains communities traced bison migrations and managed trade and ritual gatherings. Portable dwellings, herd guards, and strict grazing customs organized daily work. Mobility reduced risk from drought and disease. Alliances and feuds shaped access to wells and pastures. Goods moved between farmers, towns, and camps.",
+    "key": "heritageType:nomadI",
+    "name": "Nomad I",
+    "requires": [
+      [
+        "terrainType:plains",
+        "featureType:shrubs"
+      ]
+    ],
+    "yields": [
+      {
+        "type": "yieldType:heritagePointCost",
+        "amount": 10
+      },
+      {
+        "type": "yieldType:food",
+        "amount": 1,
+        "for": [
+          "terrainType:plains"
+        ]
+      },
+      {
+        "type": "yieldType:production",
+        "amount": 1,
+        "for": [
+          "featureType:shrubs"
+        ]
+      },
+      {
+        "type": "yieldType:order",
+        "amount": -0.5,
+        "for": [
+          "conceptType:citizen"
+        ]
+      }
+    ]
+  },
+  {
+    "category": "heritageCategory:nomad",
+    "concept": "conceptType:heritage",
+    "description": "Nomad II emphasizes mounted pastoralism and high-speed movement across wide ranges. Herds of horses, camels, or mixed stock supported transport, warfare, and trade escort. Scythians and later Sarmatians developed archery, saddles, and steppe logistics. Bedouin mounted units guided caravans and controlled desert corridors. Mongol tribes built disciplined columns, relay stations, and tribute networks. Seasonal pastures and wintering grounds structured routes. Leadership balanced clan autonomy and confederation councils. Raiding, hire as scouts, and guarding merchants generated income. Mobile courts and herds supplied armies in the field. Conquered towns paid taxes for protection and access to safe passage.",
+    "gains": [
+      "technologyType:animalHusbandry"
+    ],
+    "key": "heritageType:nomadII",
+    "name": "Nomad II",
+    "requires": [
+      [
+        "terrainType:plains",
+        "featureType:shrubs"
+      ]
+    ],
+    "yields": [
+      {
+        "type": "yieldType:heritagePointCost",
+        "amount": 25
+      },
+      {
+        "type": "yieldType:production",
+        "amount": 25,
+        "method": "percent",
+        "for": [
+          "platformCategory:mounted"
+        ]
+      }
+    ]
+  },
+  {
+    "category": "heritageCategory:settled",
+    "concept": "conceptType:heritage",
+    "description": "Settled I marks early sedentary villages with basic farming and nearby resource use. Families built mudbrick or wattle houses near water and arable soils. Simple irrigation, hand tools, and digging sticks supported cereals and pulses. Storage pits, granaries, and pottery stabilized food supply. Neolithic Levantine sites show plant and animal domestication. Small Nile floodplain hamlets grew grains in receding soils. Mesopotamian villages combined fields with fishing and reed gathering. Kin elders coordinated labor and defense. Ritual spaces and burial grounds anchored identity. Paths linked farms, herds, and fishing spots. Surplus enabled craft niches such as pottery and weaving.",
+    "key": "heritageType:settledI",
+    "name": "Settled I",
+    "requires": [
+      [
+        "resourceCategory:grain",
+        "resourceCategory:vegetable",
+        "resourceCategory:mineral"
+      ]
+    ],
+    "yields": [
+      {
+        "type": "yieldType:heritagePointCost",
+        "amount": 10
+      },
+      {
+        "type": "yieldType:food",
+        "amount": 0.5,
+        "for": [
+          "improvementCategory:farm"
+        ]
+      },
+      {
+        "type": "yieldType:production",
+        "amount": 1,
+        "for": [
+          "improvementCategory:quarry"
+        ]
+      },
+      {
+        "type": "yieldType:order",
+        "amount": -5,
+        "method": "percent",
+        "for": [
+          "specialType:distanceFromCapital"
+        ]
+      }
+    ]
+  },
+  {
+    "category": "heritageCategory:settled",
+    "concept": "conceptType:heritage",
+    "description": "Settled II denotes organized agrarian states with systematic farming and technology. Irrigation canals, levees, and fields under bureaucratic oversight raised yields. Ards and later plows expanded cultivation. Surplus grain funded administrators, soldiers, and builders. In Sumer, temple and palace estates managed labor and rations. Egypt synchronized sowing and harvest with Nile floods and state storage. The Indus Valley planned cities with drains, standardized weights, and agricultural hinterlands. Records, scribes, and calendars coordinated taxes and corvée. Rural villages fed urban workshops and merchants. Law codes regulated land, water, and tenancy. Trade exported grain, textiles, and craft goods.",
+    "gains": [
+      "technologyType:agriculture"
+    ],
+    "key": "heritageType:settledII",
+    "name": "Settled II",
+    "requires": [
+      [
+        "resourceCategory:grain",
+        "resourceCategory:vegetable",
+        "resourceCategory:mineral"
+      ]
+    ],
+    "yields": [
+      {
+        "type": "yieldType:heritagePointCost",
+        "amount": 25
+      },
+      {
+        "type": "yieldType:production",
+        "amount": 10,
+        "method": "percent",
+        "for": [
+          "conceptType:building"
+        ]
+      }
+    ]
+  },
+  {
+    "category": "heritageCategory:trader",
+    "concept": "conceptType:heritage",
+    "description": "Trader I focuses on local river and coastal exchange by small boats. Dugouts, reed craft, and barges moved grain, fish, timber, and pottery between settlements. Cabotage kept vessels within sight of land and predictable currents. Mesopotamian traffic linked towns along the Tigris and Euphrates. Egyptian Nile boats carried food and stone between Upper and Lower Egypt. Early Phoenician coastal merchants joined villages through short hops. Harbors grew from natural coves with simple quays. Tolls and market days structured commerce. Tokens and early tablets recorded deliveries. Boatbuilding, rope making, and pilotage formed durable skills within these communities.",
+    "key": "heritageType:traderI",
+    "name": "Trader I",
+    "requires": [
+      [
+        "conceptType:river",
+        "resourceCategory:marine"
+      ]
+    ],
+    "yields": [
+      {
+        "type": "yieldType:heritagePointCost",
+        "amount": 10
+      },
+      {
+        "type": "yieldType:gold",
+        "amount": 1,
+        "for": [
+          "improvementCategory:boats"
+        ]
+      },
+      {
+        "type": "yieldType:tradeSlot",
+        "amount": 1,
+        "for": [
+          "conceptType:city"
+        ]
+      },
+      {
+        "type": "yieldType:production",
+        "amount": -20,
+        "method": "percent",
+        "for": [
+          "equipmentCategory:settler"
+        ]
+      }
+    ]
+  },
+  {
+    "category": "heritageCategory:trader",
+    "concept": "conceptType:heritage",
+    "description": "Trader II captures long-distance maritime commerce driven by sail. Rigs and hulls carried heavier cargo across seas and monsoon routes. Crews used stars, winds, and coastal landmarks to plan voyages. Phoenician merchants linked the Levant to Iberia and North Africa. Austronesian seafarers reached Madagascar and the Pacific with outriggers and lashed-lug hulls. Classical Greek shippers spread amphora-borne wine and oil between emporia. Ports developed warehouses, lighthouses, and customs posts. Coinage, weights, and contracts standardized exchange. Colonies and trading stations secured supplies and safe anchorages. Ideas, crops, and technologies moved with cargo, reshaping economies and cuisines.",
+    "gains": [
+      "technologyType:sailing"
+    ],
+    "key": "heritageType:traderII",
+    "name": "Trader II",
+    "requires": [
+      [
+        "conceptType:river",
+        "resourceCategory:marine"
+      ]
+    ],
+    "yields": [
+      {
+        "type": "yieldType:tradeRange",
+        "amount": 25,
+        "method": "percent"
+      },
+      {
+        "type": "yieldType:heritagePointCost",
+        "amount": 25
+      }
+    ]
+  }
+]

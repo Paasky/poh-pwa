@@ -1,17 +1,17 @@
 import { TypeObject } from "@/Common/Objects/TypeObject";
-import { constructionYieldTypeKeys, Yield, Yields } from "@/Common/Objects/Yields";
+import { constructionYieldTypeKeys, Yield, Yields } from "@/Common/Static/Yields";
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import type { Citizen } from "@/Common/Models/Citizen";
 import type { Tile } from "@/Common/Models/Tile";
 import { City } from "@/Common/Models/City";
 import { useDataBucket } from "@/Data/useDataBucket";
-import { useEventStore } from "@/stores/eventStore";
+import { useEventStore } from "@/App/stores/eventStore";
 import {
   ConstructionAbandoned,
   ConstructionCancelled,
   ConstructionCompleted,
   ConstructionLost,
-} from "@/events/Construction";
+} from "@/Common/events/Construction";
 import { Player } from "@/Common/Models/Player";
 
 export class Construction extends GameObject {
@@ -91,7 +91,7 @@ export class Construction extends GameObject {
 
         return types;
       },
-      { props: ["progress"] },
+      { props: ["progress", "type"] },
     );
   }
 
@@ -135,7 +135,7 @@ export class Construction extends GameObject {
         return new Yields(damageYields).flatten();
       },
       {
-        props: ["health", "progress"],
+        props: ["health", "progress", "type"],
         relations: [{ relName: "city", relProps: ["yieldMods"] }],
       },
     );

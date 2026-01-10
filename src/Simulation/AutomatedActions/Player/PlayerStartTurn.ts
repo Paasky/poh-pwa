@@ -1,5 +1,5 @@
 import { Player } from "@/Common/Models/Player";
-import { map } from "@/helpers/collectionTools";
+import { map } from "@/Common/Helpers/collectionTools";
 import { Construction } from "@/Common/Models/Construction";
 import { ResearchStartTurn } from "@/Simulation/AutomatedActions/Player/ResearchStartTurn";
 import { GovernmentStartTurn } from "@/Simulation/AutomatedActions/Player/GovernmentStartTurn";
@@ -8,7 +8,7 @@ import { IMutation } from "@/Common/IMutation";
 import { Diplomacy } from "@/Common/Objects/Diplomacy";
 import { Government } from "@/Common/Models/Government";
 import { Research } from "@/Common/Models/Research";
-import { YieldTypeKey } from "@/Common/Objects/Yields";
+import { YieldTypeKey } from "@/Common/Static/Yields";
 import { CityStartTurn } from "@/Simulation/AutomatedActions/City/CityStartTurn";
 
 export class PlayerStartTurn {
@@ -78,6 +78,6 @@ export class PlayerStartTurn {
 }
 
 export type PlayerCompleted = {
-  mutations: IMutation<Diplomacy|Government|Player|Research>[];
+  mutations: IMutation<Diplomacy | Government | Player | Research>[];
   worldWonders?: Construction[];
 };

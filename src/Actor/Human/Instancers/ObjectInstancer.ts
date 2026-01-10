@@ -1,4 +1,4 @@
-import { Coords, tileHeight } from "@/helpers/mapTools";
+import { Coords, tileHeight } from "@/Common/Helpers/mapTools";
 import { GameKey } from "@/Common/Models/_GameModel";
 import { InstancedMesh, Matrix, Mesh, Scene, TransformNode, Vector3 } from "@babylonjs/core";
 import { TypeKey } from "@/Common/Objects/Common";
@@ -7,7 +7,7 @@ import { objectBaseMesh } from "@/Actor/Human/Assets/meshes/objects";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { Unit } from "@/Common/Models/Unit";
 import { Construction } from "@/Common/Models/Construction";
-import { tileCenter } from "@/helpers/math";
+import { tileCenter } from "@/Common/Helpers/math";
 import { Tile } from "@/Common/Models/Tile";
 import { EngineLayers } from "@/Actor/Human/EngineStyles";
 

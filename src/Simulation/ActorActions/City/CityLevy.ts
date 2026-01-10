@@ -4,7 +4,7 @@ import { City } from "@/Common/Models/City";
 import { IMutation } from "@/Common/IMutation";
 import { Citizen } from "@/Common/Models/Citizen";
 import { belongsToCity, belongsToPlayer } from "@/Simulation/Validator";
-import { getRandom } from "@/helpers/arrayTools";
+import { getRandom } from "@/Common/Helpers/arrayTools";
 import { createUnit } from "@/Simulation/MutationFactory";
 
 export class CityLevy implements ISimAction {

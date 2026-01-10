@@ -1,46 +1,15 @@
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { CategoryClass, CategoryObject, TypeClass, TypeObject } from "@/Common/Objects/TypeObject";
-import { GameClass, GameKey, GameObject } from "@/Common/Models/_GameModel";
-import { Coords } from "@/helpers/mapTools";
-import { getObjectIcon } from "@/types/icons";
+import { GameKey, GameObject } from "@/Common/Models/_GameModel";
+import { Coords } from "@/Common/Helpers/mapTools";
+import { ConceptTypeKey, StaticKey } from "@/Common/Static/StaticEnums";
 
-export type ObjType = "TypeObject" | "CategoryObject" | "GameObject";
-export type CatKey = `${CategoryClass}:${string}`;
-export type TypeKey = `${TypeClass}:${string}`;
-export type ObjKey = CatKey | TypeKey | GameKey;
-
-export interface PohObject {
-  objType: ObjType;
-  class: CategoryClass | TypeClass | GameClass;
-  id: string;
-  key: ObjKey;
-  name: string;
-  concept: `conceptType:${string}`;
-  icon: ObjectIcon;
-}
-
-export function classAndId(key: string): {
-  class: CategoryClass | TypeClass | GameClass;
-  id: string;
+export function getClassAndConcept(key: StaticKey): {
+  class: CategoryClass | TypeClass;
+  concept: ConceptTypeKey;
 } {
-  const [c, i] = key.split(":");
-  return { class: c as CategoryClass | TypeClass | GameClass, id: i };
-}
-
-export function initPohObject(objType: ObjType, data: Record<string, unknown>): PohObject {
-  const key = data.key as string;
-  const concept = data.concept as `conceptType:${string}`;
-  const category = data.category as string | undefined;
-
-  return {
-    ...data,
-    objType,
-    ...classAndId(key),
-    key: key as ObjKey,
-    name: (data.name as string) ?? "",
-    concept,
-    icon: getObjectIcon(key as ObjKey, concept, category),
-  } as PohObject;
+  const className = key.split(":")[0] as CategoryClass | TypeClass;
+  return { class: className, concept: `conceptType:${className}` as ConceptTypeKey };
 }
 
 export function isCategoryObject(o: GameObject | PohObject): o is CategoryObject {
@@ -62,7 +31,8 @@ export type WorldState = {
   size: Coords;
   turn: number;
   year: number;
-  currentPlayerKey: GameKey;
+  currentPlayerKey?: GameKey;
+  seed?: string | number;
 };
 
 export type ObjectIcon = {
@@ -122,10 +92,10 @@ export function formatYear(year: number): string {
   const fullYear = Math.round(year);
   if (fullYear < 0) return `${-fullYear} BCE`;
   // Switch to just the year at year 1000
-  if (fullYear < 1000) return `${-fullYear} CE`;
+  if (fullYear < 1000) return `${fullYear} CE`;
 
   // Switch to seasons at the year 1950 (starts to have half/third years)
-  if (fullYear < 1950) return `${-fullYear}`;
+  if (fullYear < 1950) return `${fullYear}`;
 
   // Round to season based on fractional part of the year
   //  .875 to .125 = Winter

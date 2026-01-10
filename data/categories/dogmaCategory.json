@@ -1,0 +1,77 @@
+[
+  {
+    "key": "dogmaCategory:gods",
+    "name": "Gods",
+    "concept": "conceptType:dogma"
+  },
+  {
+    "key": "dogmaCategory:authority",
+    "name": "Authority",
+    "concept": "conceptType:dogma"
+  },
+  {
+    "key": "dogmaCategory:afterlife",
+    "name": "Afterlife",
+    "concept": "conceptType:dogma"
+  },
+  {
+    "key": "dogmaCategory:support",
+    "name": "Support",
+    "concept": "conceptType:dogma"
+  },
+  {
+    "key": "dogmaCategory:outreach",
+    "name": "Outreach",
+    "concept": "conceptType:dogma"
+  },
+  {
+    "key": "dogmaCategory:deathRites",
+    "name": "Death Rites",
+    "concept": "conceptType:dogma"
+  },
+  {
+    "key": "dogmaCategory:practice",
+    "name": "Practice",
+    "concept": "conceptType:dogma"
+  },
+  {
+    "key": "dogmaCategory:devotion",
+    "name": "Devotion",
+    "concept": "conceptType:dogma"
+  },
+  {
+    "key": "dogmaCategory:belief",
+    "name": "Belief",
+    "concept": "conceptType:dogma"
+  },
+  {
+    "key": "dogmaCategory:monuments",
+    "name": "Monuments",
+    "concept": "conceptType:dogma"
+  },
+  {
+    "key": "dogmaCategory:expression",
+    "name": "Expression",
+    "concept": "conceptType:dogma"
+  },
+  {
+    "key": "dogmaCategory:journey",
+    "name": "Journey",
+    "concept": "conceptType:dogma"
+  },
+  {
+    "key": "dogmaCategory:identity",
+    "name": "Identity",
+    "concept": "conceptType:dogma"
+  },
+  {
+    "key": "dogmaCategory:texts",
+    "name": "Texts",
+    "concept": "conceptType:dogma"
+  },
+  {
+    "key": "dogmaCategory:service",
+    "name": "Service",
+    "concept": "conceptType:dogma"
+  }
+]

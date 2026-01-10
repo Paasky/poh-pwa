@@ -1,7 +1,7 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 import App from "./App.vue";
-import router from "./router";
+import router from "./App/router";
 
 // Vuetify
 import "vuetify/styles";
@@ -15,14 +15,14 @@ import "@fontsource/poiret-one/400.css";
 // Font Awesome setup
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { getAllIcons } from "@/types/icons";
+import { getAllIcons } from "@/Common/types/icons";
 
 // PWA service worker registration (auto updates)
 import { registerSW } from "virtual:pwa-register";
 
 // App styles (import AFTER vuetify/styles so our overrides take precedence)
 import "@/Actor/Human/Assets/main.css";
-import { errorService } from "@/services/errorService";
+import { errorService } from "@/App/services/errorService";
 
 // Ensure all icons from our central icons.ts are registered
 library.add(...getAllIcons());
@@ -79,7 +79,9 @@ const vuetify = createVuetify({
     },
   },
 });
-app.use(createPinia());
+const pinia = createPinia();
+pinia.use(piniaPluginPersistedstate);
+app.use(pinia);
 app.use(router);
 app.use(vuetify);
 app.component("FontAwesomeIcon", FontAwesomeIcon);

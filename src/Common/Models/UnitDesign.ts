@@ -1,5 +1,5 @@
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
-import { unitYieldTypeKeys, Yield, Yields } from "@/Common/Objects/Yields";
+import { unitYieldTypeKeys, Yield, Yields } from "@/Common/Static/Yields";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import type { Player } from "@/Common/Models/Player";
 import type { Unit } from "@/Common/Models/Unit";
@@ -108,5 +108,30 @@ export class UnitDesign extends GameObject {
   /*
    * Actions
    */
-  // todo add here
+  get actions(): Set<TypeObject> {
+    return this.computed(
+      "actions",
+      () => {
+        const actions = new Set<TypeObject>();
+        const db = useDataBucket();
+
+        this.platform.actions.forEach((key) => actions.add(db.getType(key)));
+        this.equipment.actions.forEach((key) => actions.add(db.getType(key)));
+
+        return actions;
+      },
+      { props: ["platform", "equipment"] },
+    );
+  }
+
+  get availableActions(): Set<TypeObject> {
+    return this.computed(
+      "availableActions",
+      () => {
+        // todo filter available
+        return this.actions;
+      },
+      { props: ["actions"] },
+    );
+  }
 }

@@ -5,7 +5,7 @@ import { createMutation, IMutation } from "@/Common/IMutation";
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
 import { belongsToCity, belongsToPlayer } from "@/Simulation/Validator";
 import { City } from "@/Common/Models/City";
-import { getRandom } from "@/helpers/arrayTools";
+import { getRandom } from "@/Common/Helpers/arrayTools";
 
 export class CitizenPickTile implements ISimAction {
   constructor(

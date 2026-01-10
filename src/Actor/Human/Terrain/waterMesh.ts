@@ -1,5 +1,5 @@
 import { asColor3, terrainColorMap } from "@/Actor/Human/Assets/materials/terrains";
-import { getWorldDepth, getWorldWidth, wrapExclusive } from "@/helpers/math";
+import { getWorldDepth, getWorldWidth, wrapExclusive } from "@/Common/Helpers/math";
 import {
   Color3,
   DynamicTexture,
@@ -11,7 +11,7 @@ import {
   TransformNode,
 } from "@babylonjs/core";
 
-import { Coords, waterLevel } from "@/helpers/mapTools";
+import { Coords, waterLevel } from "@/Common/Helpers/mapTools";
 
 export type WaterMeshHandle = {
   mesh: Mesh;
@@ -160,7 +160,7 @@ export function createWaterMesh(
   // Animate UV offsets to fake water movement and sparkling
   const startT = performance.now();
   const beforeRender = () => {
-    // Time helpers
+    // Time Helpers
     const now = performance.now();
     const dt = (now - startT) / 100000; // legacy scaling for offsets
     const tSec = (now - startT) / 1000; // seconds for pulsation

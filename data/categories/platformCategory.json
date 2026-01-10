@@ -1,0 +1,52 @@
+[
+  {
+    "key": "platformCategory:mounted",
+    "name": "Mounted",
+    "concept": "conceptType:platform"
+  },
+  {
+    "key": "platformCategory:vehicle",
+    "name": "Vehicle",
+    "concept": "conceptType:platform"
+  },
+  {
+    "key": "platformCategory:human",
+    "name": "Human",
+    "concept": "conceptType:platform"
+  },
+  {
+    "key": "platformCategory:sailHull",
+    "name": "Sail Hull",
+    "concept": "conceptType:platform"
+  },
+  {
+    "key": "platformCategory:poweredHull",
+    "name": "Powered Hull",
+    "concept": "conceptType:platform"
+  },
+  {
+    "key": "platformCategory:submersible",
+    "name": "Submersible",
+    "concept": "conceptType:platform"
+  },
+  {
+    "key": "platformCategory:aircraft",
+    "name": "Aircraft",
+    "concept": "conceptType:platform"
+  },
+  {
+    "key": "platformCategory:helicopter",
+    "name": "Helicopter",
+    "concept": "conceptType:platform"
+  },
+  {
+    "key": "platformCategory:missile",
+    "name": "Missile",
+    "concept": "conceptType:platform"
+  },
+  {
+    "key": "platformCategory:satellite",
+    "name": "Satellite",
+    "concept": "conceptType:platform"
+  }
+]

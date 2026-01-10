@@ -1,0 +1,32 @@
+[
+  {
+    "key": "tensionType:trust",
+    "name": "Trust",
+    "concept": "conceptType:tension",
+    "description": "Trust means the area is calm and is surrounded by calm or trusted neighbors."
+  },
+  {
+    "key": "tensionType:calm",
+    "name": "Calm",
+    "concept": "conceptType:tension",
+    "description": "Calm means there is no reported suspicious activity in the area, or the area has been verified by a counter-intelligence sweep."
+  },
+  {
+    "key": "tensionType:suspicion",
+    "name": "Suspicion",
+    "concept": "conceptType:tension",
+    "description": "Suspicion means there is reported suspicious activity in the area."
+  },
+  {
+    "key": "tensionType:alarm",
+    "name": "Alarm",
+    "concept": "conceptType:tension",
+    "description": "Alarm means the area is in danger."
+  },
+  {
+    "key": "tensionType:violence",
+    "name": "Violence",
+    "concept": "conceptType:tension",
+    "description": "Violence means the area is in immediate danger or has enemy units nearby."
+  }
+]

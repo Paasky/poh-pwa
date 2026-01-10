@@ -2,8 +2,8 @@ import { TypeObject } from "@/Common/Objects/TypeObject";
 import { TypeKey } from "@/Common/Objects/Common";
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import { useDataBucket } from "@/Data/useDataBucket";
-import { sort } from "@/helpers/collectionTools";
-import { Yields, YieldTypeKey } from "@/Common/Objects/Yields";
+import { sort } from "@/Common/Helpers/collectionTools";
+import { Yields, YieldTypeKey } from "@/Common/Static/Yields";
 import { Player } from "@/Common/Models/Player";
 import { TypeStorage } from "@/Common/Objects/TypeStorage";
 
@@ -77,14 +77,20 @@ export class Research extends GameObject {
   }
 
   get era(): TypeObject | null {
-    if (!this.researched.size) return null;
+    return this.computed(
+      "era",
+      () => {
+        if (!this.researched.size) return null;
 
-    let highestYTech = null as TypeObject | null;
-    for (const tech of this.researched) {
-      if (!highestYTech || tech.y! > highestYTech.y!) highestYTech = tech;
-    }
+        let highestYTech = null as TypeObject | null;
+        for (const tech of this.researched) {
+          if (!highestYTech || tech.y! > highestYTech.y!) highestYTech = tech;
+        }
 
-    return highestYTech ? this.getEra(highestYTech) : null;
+        return highestYTech ? this.getEra(highestYTech) : null;
+      },
+      { props: ["researched"] },
+    );
   }
 
   addToQueue(tech: TypeObject, reset = true) {
@@ -151,14 +157,23 @@ export class Research extends GameObject {
   }
 
   get turnsLeft(): number {
-    if (!this.current) return 0;
+    return this.computed(
+      "turnsLeft",
+      () => {
+        if (!this.current) return 0;
 
-    const sciencePerTurn = this.player.yields.getLumpAmount("yieldType:science");
+        const sciencePerTurn = this.player.yields.getLumpAmount("yieldType:science");
 
-    if (sciencePerTurn <= 0) return Infinity;
+        if (sciencePerTurn <= 0) return Infinity;
 
-    const costLeft = this.current.scienceCost! - this.getProgress(this.current as TypeObject);
+        const costLeft = this.current.scienceCost! - this.getProgress(this.current as TypeObject);
 
-    return Math.ceil(costLeft / sciencePerTurn);
+        return Math.ceil(costLeft / sciencePerTurn);
+      },
+      {
+        props: ["current"],
+        relations: [{ relName: "player", relProps: ["yields"] }],
+      },
+    );
   }
 }

@@ -1,5 +1,5 @@
 import { expect } from "vitest";
-import { crawl } from "../../src/helpers/arrayTools";
+import { crawl } from "@/Common/Helpers/arrayTools";
 import { GameObject } from "../../src/Common/Models/_GameModel";
 
 export const mockRandom = (...values: number[]) => {

@@ -1,0 +1,18 @@
+// Vuetify Sass configuration
+// Reference: https://vuetifyjs.com/features/sass-variables/
+
+@use "settings" with (
+  // Set global body font for Vuetify to DM Sans
+  $body-font-family: ("DM Sans", sans-serif),
+  // Keep headers on Poiret One (falls back to body font)
+  $heading-font-family: ("Poiret One", sans-serif),
+  // Make body text default to weight 200
+  $typography: (
+      "body-1": (
+        "font-weight": 400,
+      ),
+      "body-2": (
+        "font-weight": 400,
+      )
+    )
+);

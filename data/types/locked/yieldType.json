@@ -1,0 +1,202 @@
+[
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:airSlot",
+    "name": "Air Slot"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:attack",
+    "name": "Attack"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:citizenSlot",
+    "name": "Citizen Slot"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:culture",
+    "name": "Culture"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:damage",
+    "name": "Damage"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:defense",
+    "name": "Defense"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:designPoints",
+    "name": "Design Points"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:evasion",
+    "name": "Evasion"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:faith",
+    "name": "Faith"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:food",
+    "name": "Food"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:goalPoints",
+    "name": "Goal Points"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:gold",
+    "name": "Gold"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:happiness",
+    "name": "Happiness"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:heal",
+    "name": "Heal"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:health",
+    "name": "Health"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:heritagePoint",
+    "name": "Heritage Point"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:heritagePointCost",
+    "name": "Heritage Point Cost"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:hitRadius",
+    "name": "Hit Radius"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:influence",
+    "name": "Influence"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:influenceCost",
+    "name": "Influence Cost"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:intercept",
+    "name": "Intercept"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:missileSlot",
+    "name": "Missile Slot"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:moves",
+    "name": "Moves"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:moveCost",
+    "name": "Move Cost"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:order",
+    "name": "Order"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:paradropRange",
+    "name": "Paradrop Range"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:production",
+    "name": "Production"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:productionCost",
+    "name": "Production Cost"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:range",
+    "name": "Range"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:resourceYield",
+    "name": "Resource Yield"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:science",
+    "name": "Science"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:scienceCost",
+    "name": "Science Cost"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:sightRadius",
+    "name": "Sight Radius"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:span",
+    "name": "Span"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:settleSize",
+    "name": "Settle size"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:strength",
+    "name": "Strength"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:tradeRange",
+    "name": "Trade Range"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:tradeSlot",
+    "name": "Trade Slot"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:tradeYield",
+    "name": "Trade Yield"
+  },
+  {
+    "concept": "conceptType:yield",
+    "key": "yieldType:upkeep",
+    "name": "Upkeep"
+  }
+]

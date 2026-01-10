@@ -1,6 +1,6 @@
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import type { Player } from "@/Common/Models/Player";
-import { playerYieldTypeKeys, Yield, Yields } from "@/Common/Objects/Yields";
+import { playerYieldTypeKeys, Yield, Yields } from "@/Common/Static/Yields";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 
 export class Incident extends GameObject {
@@ -47,7 +47,9 @@ export class Incident extends GameObject {
         // Flatten Yields to apply modifiers
         return yields.flatten();
       },
-      { relations: [{ relName: "player", relProps: ["yieldMods"] }] },
+      {
+        relations: [{ relName: "player", relProps: ["yieldMods"] }],
+      },
     );
   }
 

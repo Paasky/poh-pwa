@@ -1,9 +1,18 @@
-import { Difficulty, Locality, MilitaryAction, Note, Priority, Region } from "@/Actor/Ai/AiTypes";
+import {
+  CategoryEmphasis,
+  Difficulty,
+  EmphasisCategory,
+  Priority,
+  Region,
+} from "@/Actor/Ai/AiTypes";
 import { Player } from "@/Common/Models/Player";
-import { IAnalysisMindset } from "@/Actor/Ai/Mindsets/_IAnalysisMindset";
+import { IMindset } from "@/Actor/Ai/Mindsets/_IMindset";
 import { Memory } from "@/Actor/Ai/Memory";
+import { IEvent } from "@/Common/IEvent";
+import { regionEmphasis } from "@/Actor/Ai/Emphasis/RegionEmphasis";
 
-export class PreSettled implements IAnalysisMindset {
+// Player doesn't have any cities yet, just Exploring
+export class PreSettled implements IMindset {
   constructor(
     public readonly player: Player,
     public readonly difficulty: Difficulty,
@@ -11,44 +20,31 @@ export class PreSettled implements IAnalysisMindset {
     public readonly regions: Set<Region>,
   ) {}
 
-  analyzeLocality(locality: Locality): Note[] {
-    let militaryAction: MilitaryAction = "reduce";
+  analyzeStrategy(events: IEvent[]): Priority[] {
+    let bestRegion: Region | undefined;
+    let bestEmphasis: Map<EmphasisCategory, CategoryEmphasis> | undefined;
+    let bestScore = -Infinity;
 
-    // If any tile has an unknown neighbor, recommend militaryAction: Explore
-    for (const tile of locality.tiles) {
-      for (const neighbor of tile.neighborTiles) {
-        if (!this.player.knownTileKeys.has(neighbor.key)) {
-          militaryAction = "explore";
-        }
+    for (const region of this.regions) {
+      const regionalEmphasis = regionEmphasis(this.player, region);
+
+      // Region Score = Gain + Reward - Risk
+      const score =
+        regionalEmphasis.get("gain")!.value +
+        regionalEmphasis.get("reward")!.value -
+        regionalEmphasis.get("risk")!.value;
+
+      if (score > bestScore) {
+        bestScore = score;
+        bestRegion = region;
+        bestEmphasis = regionalEmphasis;
       }
     }
 
-    return [
-      {
-        name: locality.name,
-        militaryAction,
-      },
-    ];
-  }
-
-  analyzeRegion(region: Region): Note[] {
-    const notes = [] as Note[];
-    region.localities.forEach((locality) => {
-      notes.push(...this.analyzeLocality(locality));
-    });
-
-    // todo: analyze Region
-
-    return [];
-  }
-
-  analyzeStrategy(memory: Memory): Priority[] {
-    const notes = [] as Note[];
-    this.regions.forEach((region) => {
-      notes.push(...this.analyzeRegion(region));
-    });
-
-    // todo analyze Global Strategy
+    // Should be impossible, but keeps TS happy
+    if (!bestRegion || !bestEmphasis) {
+      throw new Error("PreSettled.analyzeStrategy(): failed to select best region");
+    }
 
     return [];
   }

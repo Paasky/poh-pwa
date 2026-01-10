@@ -1,14 +1,17 @@
-import staticData from "../../public/staticData.json";
 import { GameKey, IRawGameObject } from "@/Common/Models/_GameTypes";
 import { WorldState } from "@/Common/Objects/Common";
 import { setDataBucket } from "@/Data/useDataBucket";
-import { DataBucket, RawStaticData } from "@/Data/DataBucket";
+import { DataBucket } from "@/Data/DataBucket";
 import { TestWorldState } from "./testWorld";
-import { tileKey } from "@/helpers/mapTools";
+import { tileKey } from "@/Common/Helpers/mapTools";
+import { getCachedStaticData } from "./staticDataGlobal";
 
-export function initTestDataBucket(gameData?: IRawGameObject[], world?: WorldState): DataBucket {
-  const rawStaticData = staticData as RawStaticData;
-  return setDataBucket(DataBucket.fromRaw(rawStaticData, world ?? TestWorldState, gameData));
+export async function initTestDataBucket(
+  gameData?: IRawGameObject[],
+  world?: WorldState,
+): Promise<DataBucket> {
+  const rawData = await getCachedStaticData();
+  return setDataBucket(DataBucket.fromRaw(rawData, world ?? TestWorldState, gameData));
 }
 
 // NOTE: using any is allowed here as otherwise TS will complain about nonexistent properties
@@ -24,11 +27,19 @@ export function cultureRawData(key: GameKey = "culture:1", overrides: any = {}):
 }
 
 export function playerRawData(key: GameKey = "player:1", overrides: any = {}): IRawGameObject[] {
-  // Use player ID as culture ID by default
-  const cultureKey = (overrides.cultureKey ?? `culture:${key.split(":")[1]}`) as GameKey;
+  // Use player ID for default relation keys
+  const id = key.split(":")[1];
+  const cultureKey = (overrides.cultureKey ?? `culture:${id}`) as GameKey;
+  const diplomacyKey = (overrides.diplomacyKey ?? `diplomacy:${id}`) as GameKey;
+  const governmentKey = (overrides.governmentKey ?? `government:${id}`) as GameKey;
+  const researchKey = (overrides.researchKey ?? `research:${id}`) as GameKey;
+
   const data = {
     key,
     cultureKey,
+    diplomacyKey,
+    governmentKey,
+    researchKey,
     name: "Test Player",
     isCurrent: false,
     isMinor: false,
@@ -41,7 +52,13 @@ export function playerRawData(key: GameKey = "player:1", overrides: any = {}): I
 
   if (data.religionKey === null) delete data.religionKey;
 
-  return [...cultureRawData(cultureKey, { playerKey: key }), data];
+  return [
+    ...cultureRawData(cultureKey, { playerKey: key }),
+    { key: diplomacyKey, playerKey: key } as any,
+    { key: governmentKey, playerKey: key } as any,
+    { key: researchKey, playerKey: key } as any,
+    data,
+  ];
 }
 
 export function tileRawData(key: GameKey = tileKey(0, 0), overrides: any = {}): IRawGameObject[] {

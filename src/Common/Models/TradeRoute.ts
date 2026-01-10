@@ -2,7 +2,7 @@ import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import type { City } from "@/Common/Models/City";
 import type { Unit } from "@/Common/Models/Unit";
 import type { Tile } from "@/Common/Models/Tile";
-import { tradeRouteYieldTypeKeys, Yield, Yields } from "@/Common/Objects/Yields";
+import { tradeRouteYieldTypeKeys, Yield, Yields } from "@/Common/Static/Yields";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 
 export class TradeRoute extends GameObject {

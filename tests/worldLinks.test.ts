@@ -5,9 +5,9 @@ import { worldLinks } from "@/Common/WorldLinks";
 import { initTestDataBucket } from "./_setup/dataHelpers";
 
 describe("WorldLinks", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     setActivePinia(createPinia());
-    initTestDataBucket();
+    await initTestDataBucket();
 
     // Reset the singleton
     (worldLinks as any).initialized = false;
@@ -27,10 +27,12 @@ describe("WorldLinks", () => {
       const errors: string[] = [];
 
       continents.forEach((continent) => {
-        const regions = worldLinks.only({
-          continents: [continent.key],
-          typeClasses: ["regionType"],
-        });
+        const regions = Array.from(
+          worldLinks.only({
+            continents: [continent.key],
+            typeClasses: ["regionType"],
+          }),
+        );
 
         // Each continent has 4 regions
         if (regions.length !== 4) {
@@ -38,10 +40,12 @@ describe("WorldLinks", () => {
         }
 
         regions.forEach((region) => {
-          const regionCultures = worldLinks.only({
-            regions: [region.key],
-            typeClasses: ["majorCultureType", "minorCultureType"],
-          });
+          const regionCultures = Array.from(
+            worldLinks.only({
+              regions: [region.key],
+              typeClasses: ["majorCultureType", "minorCultureType"],
+            }),
+          );
 
           const majorCultures = regionCultures.filter((c) => c.class === "majorCultureType");
           const minorCultures = regionCultures.filter((c) => c.class === "minorCultureType");
@@ -113,7 +117,7 @@ describe("WorldLinks", () => {
   describe("only()", () => {
     it("should filter by continent", () => {
       // Use real data keys from staticData.json
-      const results = worldLinks.only({ continents: ["continentType:america"] });
+      const results = Array.from(worldLinks.only({ continents: ["continentType:america"] }));
       const keys = results.map((r) => r.key);
       expect(keys).toContain("regionType:greatLakes");
       // With real data, we just check if it contains some expected items
@@ -122,7 +126,7 @@ describe("WorldLinks", () => {
     });
 
     it("should filter by region", () => {
-      const results = worldLinks.only({ regions: ["regionType:greatLakes"] });
+      const results = Array.from(worldLinks.only({ regions: ["regionType:greatLakes"] }));
       const keys = results.map((r) => r.key);
       expect(keys.some((k) => k.startsWith("majorCultureType:"))).toBe(true);
       expect(keys.some((k) => k.startsWith("minorCultureType:"))).toBe(true);
@@ -131,21 +135,21 @@ describe("WorldLinks", () => {
     });
 
     it("should filter by culture", () => {
-      const results = worldLinks.only({ cultures: ["majorCultureType:hopewell"] });
+      const results = Array.from(worldLinks.only({ cultures: ["majorCultureType:hopewell"] }));
       const keys = results.map((r) => r.key);
       expect(keys).toContain("majorCultureType:hopewell");
       expect(keys.some((k) => k.startsWith("majorLeaderType:"))).toBe(true);
     });
 
     it("should filter by leader", () => {
-      const results = worldLinks.only({ leaders: ["majorLeaderType:sakima"] });
+      const results = Array.from(worldLinks.only({ leaders: ["majorLeaderType:sakima"] }));
       const keys = results.map((r) => r.key);
       expect(keys).toContain("majorCultureType:hopewell");
       expect(keys).toContain("majorLeaderType:sakima");
     });
 
     it("should filter by era", () => {
-      const era1 = worldLinks.only({ eras: [1] });
+      const era1 = Array.from(worldLinks.only({ eras: [1] }));
       expect(era1.length).toBeGreaterThan(0);
       expect(
         era1.every((obj) => {
@@ -154,7 +158,7 @@ describe("WorldLinks", () => {
         }),
       ).toBe(true);
 
-      const era5 = worldLinks.only({ eras: [5] });
+      const era5 = Array.from(worldLinks.only({ eras: [5] }));
       expect(era5.length).toBeGreaterThan(0);
       expect(
         era5.every((obj) => {
@@ -165,17 +169,19 @@ describe("WorldLinks", () => {
     });
 
     it("should filter by isMinor", () => {
-      const minors = worldLinks.only({ isMinor: true });
+      const minors = Array.from(worldLinks.only({ isMinor: true }));
       expect(minors.length).toBeGreaterThan(0);
       expect(minors.every((m) => m.class.startsWith("minor"))).toBe(true);
     });
 
     it("should combine filters", () => {
-      const results = worldLinks.only({
-        continents: ["continentType:america"],
-        typeClasses: ["majorLeaderType"],
-        eras: [1],
-      });
+      const results = Array.from(
+        worldLinks.only({
+          continents: ["continentType:america"],
+          typeClasses: ["majorLeaderType"],
+          eras: [1],
+        }),
+      );
       expect(results.length).toBeGreaterThan(0);
       expect(results.every((r) => r.class === "majorLeaderType")).toBe(true);
     });

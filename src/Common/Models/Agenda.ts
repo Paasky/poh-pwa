@@ -1,10 +1,10 @@
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import type { Player } from "@/Common/Models/Player";
 import { hasOne } from "@/Common/Models/_Relations";
-import { playerYieldTypeKeys, Yield, Yields } from "@/Common/Objects/Yields";
+import { playerYieldTypeKeys, Yield, Yields } from "@/Common/Static/Yields";
 import { TypeObject } from "@/Common/Objects/TypeObject";
-import { clamp } from "@/helpers/basicMath";
-import { reduce } from "@/helpers/collectionTools";
+import { clamp } from "@/Common/Helpers/basicMath";
+import { reduce } from "@/Common/Helpers/collectionTools";
 import { roundToTenth } from "@/Common/Objects/Common";
 
 export class Agenda extends GameObject {
@@ -68,7 +68,12 @@ export class Agenda extends GameObject {
         // Flatten Yields to apply modifiers
         return yields.flatten();
       },
-      { relations: [{ relName: "player", relProps: ["cities"] }] },
+      {
+        relations: [
+          { relName: "player", relProps: ["cities"] },
+          { relName: "player", relProps: ["yieldMods"] },
+        ],
+      },
     );
   }
 

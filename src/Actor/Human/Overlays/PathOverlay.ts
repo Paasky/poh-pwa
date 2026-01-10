@@ -13,8 +13,8 @@ import {
   EngineOverlayColors,
   EngineOverlaySettings,
 } from "@/Actor/Human/EngineStyles";
-import { Coords } from "@/helpers/mapTools";
-import { getMapBounds } from "@/helpers/math";
+import { Coords } from "@/Common/Helpers/mapTools";
+import { getMapBounds } from "@/Common/Helpers/math";
 
 export type PathStyle = {
   colorId: string;

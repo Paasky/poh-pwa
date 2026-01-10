@@ -1,0 +1,162 @@
+[
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:buildingComplete",
+    "name": "Building Complete"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:continentDiscovered",
+    "name": "Continent Discovered"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:cultureUpdated",
+    "name": "Culture Updated"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:dealDemanded",
+    "name": "Deal Demanded"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:dealProposed",
+    "name": "Deal Proposed"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:dogmaAvailable",
+    "name": "Dogma Available"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:embassyCreated",
+    "name": "Embassy Created"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:embassyRequested",
+    "name": "Embassy Requested"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:goalCompleted",
+    "name": "Goal Completed"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:goalFailed",
+    "name": "Goal Failed"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:godAvailable",
+    "name": "God Available"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:heritageAvailable",
+    "name": "Heritage Available"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:incidentLost",
+    "name": "Incident Lost"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:incidentStarted",
+    "name": "Incident Started"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:incidentWon",
+    "name": "Incident Won"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:improvementComplete",
+    "name": "Improvement Complete"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:missionStarted",
+    "name": "Mission Started"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:mythAvailable",
+    "name": "Myth Available"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:nationalWonderComplete",
+    "name": "National Wonder Complete"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:naturalWonderDiscovered",
+    "name": "Natural Wonder Discovered"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:oceanDiscovered",
+    "name": "Ocean Discovered"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:policyAvailable",
+    "name": "Policy Available"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:religionUpdated",
+    "name": "Religion Updated"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:resourceDiscovered",
+    "name": "Resource Discovered"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:technologyDiscovered",
+    "name": "Technology Discovered"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:unitActionComplete",
+    "name": "Unit Action Complete"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:unitCreated",
+    "name": "Unit Created"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:unitDesignAvailable",
+    "name": "Unit Design Available"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:unitDamaged",
+    "name": "Unit Damaged"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:unitKilled",
+    "name": "Unit Killed"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:warDeclared",
+    "name": "War Declared"
+  },
+  {
+    "concept": "conceptType:event",
+    "key": "eventType:worldWonderComplete",
+    "name": "World Wonder Complete"
+  }
+]

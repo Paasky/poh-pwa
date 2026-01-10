@@ -1,0 +1,22 @@
+[
+  {
+    "key": "mythCategory:creation",
+    "name": "Creation",
+    "concept": "conceptType:myth"
+  },
+  {
+    "key": "mythCategory:stars",
+    "name": "Stars",
+    "concept": "conceptType:myth"
+  },
+  {
+    "key": "mythCategory:humans",
+    "name": "Humans",
+    "concept": "conceptType:myth"
+  },
+  {
+    "key": "mythCategory:death",
+    "name": "Death",
+    "concept": "conceptType:myth"
+  }
+]

@@ -6,7 +6,7 @@ import {
   getEngineCoordsFromPercent,
   type OrthoBounds,
   tileCenter,
-} from "@/helpers/math";
+} from "@/Common/Helpers/math";
 import { TerrainMesh } from "@/Actor/Human/Terrain/TerrainMesh";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { Environment } from "@/Actor/Human/Environment/Environment";
@@ -20,11 +20,11 @@ import type { Tile } from "@/Common/Models/Tile";
 import type { Unit } from "@/Common/Models/Unit";
 import type { Construction } from "@/Common/Models/Construction";
 import type { GameKey } from "@/Common/Models/_GameModel";
-import { Coords, getCoordsFromTileKey } from "@/helpers/mapTools";
+import { Coords, getCoordsFromTileKey } from "@/Common/Helpers/mapTools";
 import { EngineCoords } from "@/Actor/Human/Terrain/_terrainMeshTypes";
-import { useCurrentContext } from "@/composables/useCurrentContext";
+import { useCurrentContext } from "@/Common/composables/useCurrentContext";
 import { Pathfinder } from "@/Simulation/Movement/Pathfinder";
-import { useSettingsStore } from "@/stores/settingsStore";
+import { useSettingsStore } from "@/App/stores/settingsStore";
 import { watch } from "vue";
 import { AdvancedDynamicTexture } from "@babylonjs/gui";
 import { ContextOverlay } from "@/Actor/Human/Overlays/ContextOverlay";

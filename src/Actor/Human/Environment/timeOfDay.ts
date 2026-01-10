@@ -1,5 +1,5 @@
 /**
- * Time-of-day lighting configuration and helpers.
+ * Time-of-day lighting configuration and Helpers.
  * KISS: one place with simple, verbose names; EnvironmentService only applies values.
  */
 import { Color3, Vector3 } from "@babylonjs/core";

@@ -13,9 +13,9 @@ import {
   calculateMinimapCameraBounds,
   getFullWorldOrthoBounds,
   type OrthoBounds,
-} from "@/helpers/math";
+} from "@/Common/Helpers/math";
 import { ContextOverlay } from "@/Actor/Human/Overlays/ContextOverlay";
-import { Coords } from "@/helpers/mapTools";
+import { Coords } from "@/Common/Helpers/mapTools";
 import { rotNorth } from "@/Actor/Human/Cameras/MainCamera";
 
 export class Minimap {

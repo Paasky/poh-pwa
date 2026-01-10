@@ -1,8 +1,8 @@
 // Imports are kept at the top of the file for clarity, tree‑shaking, and bundler friendliness.
 // If we ever need code‑splitting or optional dependencies, we will use dynamic imports in a
 // very targeted manner. This file does not require them.
-import { tileCenter, wrapExclusive } from "@/helpers/math";
-import type { Coords } from "@/helpers/mapTools";
+import { tileCenter, wrapExclusive } from "@/Common/Helpers/math";
+import type { Coords } from "@/Common/Helpers/mapTools";
 import { Tile } from "@/Common/Models/Tile";
 import type { GameKey } from "@/Common/Models/_GameModel";
 import { EngineLayers } from "@/Actor/Human/EngineStyles";
@@ -17,9 +17,9 @@ import {
   Vector3,
   VertexData,
 } from "@babylonjs/core";
-import { useSettingsStore } from "@/stores/settingsStore";
+import { useSettingsStore } from "@/App/stores/settingsStore";
 import { watch } from "vue";
-import { useCurrentContext } from "@/composables/useCurrentContext";
+import { useCurrentContext } from "@/Common/composables/useCurrentContext";
 import type { Unit } from "@/Common/Models/Unit";
 import { MovementManager } from "@/Simulation/Movement/MovementManager";
 import type { PohEngine } from "@/Actor/Human/PohEngine";

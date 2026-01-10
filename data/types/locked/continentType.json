@@ -1,0 +1,122 @@
+[
+  {
+    "concept": "conceptType:continent",
+    "description": "America, in this context, spans from the Arctic to the Caribbean. Indigenous societies shaped the region long before European arrival. The Mississippi valley hosted mound-building polities. Cahokia was a major urban and ceremonial center. In Mesoamerica, the Maya built cities such as Tikal and Chichen Itza. The Mexica established Tenochtitlan on Lake Texcoco. The Rocky Mountains, Great Plains, and extensive forests guided migration, trade, and subsistence. After 1492, Spanish, French, and British empires imposed new regimes. The Atlantic slave trade transformed Caribbean and mainland societies and created plantation economies. Independence movements unfolded between the late eighteenth and early nineteenth centuries. The United States, Haiti, and Mexico led early examples. Railways and resource frontiers reshaped the interior in the nineteenth century. In the twentieth century, urban growth and continental trade integrated Canada, the United States, Mexico, and the Caribbean into complex economic networks.",
+    "image": "/media/images/continentType/america.jpg",
+    "key": "continentType:america",
+    "name": "America",
+    "quote": {
+      "text": "The soil is fertile, and the climate is mild. The rivers are filled with fish, and the forest teems with game. It is a land of promise.",
+      "source": "Jacques Cartier, 1535",
+      "url": "/media/quotes/continentType/america.mp3"
+    }
+  },
+  {
+    "concept": "conceptType:continent",
+    "description": "Andea denotes South America anchored by the Andes, the Amazon Basin, and the southern pampas. Early complex societies arose on coasts and highlands. Caral developed on the Peruvian littoral. Tiwanaku flourished near Lake Titicaca. The Inca created an imperial system with roads, terrace agriculture, and administrative centers such as Cusco and Machu Picchu. The Atacama formed a hyper-arid barrier yet hosted mining and caravan routes. The Argentine pampas fostered ranching economies and the gaucho tradition. Spanish and Portuguese conquest in the sixteenth century integrated the region into Atlantic circuits. Languages, religion, and land tenure shifted under colonial rule. Silver and later rubber, guano, and nitrates drove export cycles. Nineteenth-century independence produced republics with distinct Andean, coastal, and southern identities. Twentieth-century urban growth in Lima, Buenos Aires, Sao Paulo, and Santiago altered political power. Conservation and indigenous movements confront pressures from Amazonian and mountain resource extraction.",
+    "image": "/media/images/continentType/andea.jpg",
+    "key": "continentType:andea",
+    "name": "Andea",
+    "quote": {
+      "text": "The people of this land are in great number, and their cities and temples are of such grandeur that I can hardly express it.",
+      "source": "Francisco Pizarro, 1533",
+      "url": "/media/quotes/continentType/andea.mp3"
+    }
+  },
+  {
+    "concept": "conceptType:continent",
+    "description": "The taiga is the boreal and subarctic zone across Scandinavia, Russia, and the North Atlantic fringe. Conifer forests, fjords, and long winters define its ecology. Communities adapted through fishing, hunting, and reindeer herding. In Scandinavia, Norse seafarers used sheltered fjords to launch trade and settlement from the eighth to eleventh centuries. Iceland's volcanic landscapes and saga literature preserve early medieval society at the margins of Europe. The Scottish Highlands retained clan structures into the early modern era. In Russia and Siberia, fur frontiers advanced eastward under Muscovite and imperial rule. Polar night and midnight sun constrain agriculture but enable winter transport. Modern industries include forestry, hydropower, and mining. Protected areas and cultural rights for Sami and other northern peoples frame contemporary policy.",
+    "image": "/media/images/continentType/taiga.jpg",
+    "key": "continentType:taiga",
+    "name": "Taiga",
+    "quote": {
+      "text": "The people here are as resilient as the land itself—frigid, yet full of untapped energy and strength. They live off the land, and their loyalty is to the land, not to kings.",
+      "source": "Paulus Jovius, 1550",
+      "url": "/media/quotes/continentType/taiga.mp3"
+    }
+  },
+  {
+    "concept": "conceptType:continent",
+    "description": "Europe is a densely settled peninsula with strong river systems and varied relief. Classical antiquity centered on Greece and the Roman Empire. Roman law, urbanism, and infrastructure endured across the Mediterranean and beyond. After Rome, medieval kingdoms formed amid feudal institutions and monastic networks. The Rhine and Danube acted as commercial corridors between the North Sea, the Alps, and the Black Sea. Italian city-states led the Renaissance, with Florence as a major artistic and financial center. The Reformation and scientific inquiry reshaped belief and knowledge. In the eighteenth century, Britain pioneered the Industrial Revolution. Mechanization, coal power, and factory labor spread quickly. Overseas empires extended European influence on a global scale. The twentieth century brought two world wars, decolonization, and reconstruction. Postwar integration produced the Council of Europe and the European Union.",
+    "image": "/media/images/continentType/europe.jpg",
+    "key": "continentType:europe",
+    "name": "Europe",
+    "quote": {
+      "text": "In these lands, they have great knowledge of medicine, and the people are healthy and long-lived. The architecture is so grand it astonishes the senses.",
+      "source": "John Mandeville, 1356",
+      "url": "/media/quotes/continentType/europe.mp3"
+    }
+  },
+  {
+    "concept": "conceptType:continent",
+    "description": "The Mediterranean basin forms a linked maritime environment that sustained ancient states and trade. Along the Nile, Egyptian dynasties built monumental architecture and irrigated agriculture. In Greece, classical Athens fostered philosophy, theater, and civic institutions. Phoenician mariners established ports and island stations and diffused alphabetic writing. Carthage and Rome contested supremacy until Roman expansion unified much of the sea. After late antiquity, the Byzantine and Islamic polities maintained commerce and scholarship around its shores. Al-Andalus, with cities such as Cordoba, blended Arabic, Latin, and Jewish traditions. Olive cultivation and small coastal city-states underpinned regional economies. From the fifteenth century, Ottoman and European powers reshaped routes and naval power. The nineteenth and twentieth centuries saw canal building, colonial competition, and nation-state formation. Today the sea remains a corridor linking Southern Europe, North Africa, and the Levant.",
+    "image": "/media/images/continentType/mediterra.jpg",
+    "key": "continentType:mediterra",
+    "name": "Mediterra",
+    "quote": {
+      "text": "The cities along the coast are filled with great wealth, and the merchants trade in spices, silk, and jewels. The Mediterranean Sea is the lifeblood of this world.",
+      "source": "Ibn Battuta, 1332",
+      "url": "/media/quotes/continentType/mediterra.mp3"
+    }
+  },
+  {
+    "concept": "conceptType:continent",
+    "description": "Africa encompasses deserts, savannas, forests, and river basins that nurtured many societies. Trans-Saharan routes linked the Mediterranean to West African polities. Salt, gold, and ideas moved across the desert. The Mali Empire and Timbuktu became renowned for scholarship and trade. In the Horn and Ethiopian highlands, Axum and later Solomonic kingdoms forged Christian institutions and regional commerce. Along the southeast, the Swahili coast connected the continent to the Indian Ocean world. In southern Africa, Great Zimbabwe built monumental stone complexes tied to gold and cattle. The Niger and Congo systems supported dense settlements and political networks. From the fifteenth century, Atlantic commerce and the slave trade altered demographics and power. Nineteenth-century partition by European empires imposed new borders and economies. Decolonization after 1945 produced independent states. Heritage sites such as Victoria Falls and the Serengeti coexist with growing cities and resource industries.",
+    "image": "/media/images/continentType/africa.jpg",
+    "key": "continentType:africa",
+    "name": "Africa",
+    "quote": {
+      "text": "Africa is vast and varied. From the desert sands to the lush jungles, it is a place of extremes, but also of boundless riches.",
+      "source": "Hannibal, ca. 200 BCE",
+      "url": "/media/quotes/continentType/africa.mp3"
+    }
+  },
+  {
+    "concept": "conceptType:continent",
+    "description": "Levantica designates the corridor linking the Nile valley, Mesopotamia, Persia, and the Mediterranean. Early city-states in the Fertile Crescent advanced writing, law, and astronomy. Babylon was a major center. Successive empires, including Assyrian and Achaemenid Persian, built roads and administrative systems across the region. Jerusalem emerged as a focal city for Judaism, Christianity, and Islam. Hellenistic rule after Alexander the Great connected local elites to wider cultural currents. Roman and Byzantine governance integrated ports and caravan hubs into imperial networks. From the seventh century, Islamic caliphates redirected trade and scholarship toward the Mediterranean and the Indian Ocean. Overland Silk Road branches and Red Sea routes carried textiles, spices, and ideas. Crusader states, Mamluk rule, and the Ottoman Empire added new layers. European intervention, railways, and canal corridors marked the modern period. The region retains dense archaeological landscapes and contested sacred sites.",
+    "image": "/media/images/continentType/levantica.jpg",
+    "key": "continentType:levantica",
+    "name": "Levantica",
+    "quote": {
+      "text": "They are a noble and industrious people. The grandeur of their cities astounds me — the walls are thick, the gates like giants, and the Euphrates flows through them like a lifeblood.",
+      "source": "Herodotus, 450 BCE",
+      "url": "/media/quotes/continentType/levantica.mp3"
+    }
+  },
+  {
+    "concept": "conceptType:continent",
+    "description": "Here, Siberia denotes the wider Eurasian steppe and high mountain arc that enabled long-distance mobility. Pastoral nomads developed cavalry warfare and transhumant economies suited to grasslands from the Altai to the Black Sea. Turkic migrations spread languages and polities across Central Asia and into Anatolia. The Mongol Empire unified steppe and sedentary zones in the thirteenth century. Caravan routes and relay posts secured movement of goods and envoys. Oasis cities on Silk Road corridors mediated exchange between China, India, the Middle East, and Europe. The Pamir and Altai ranges formed strategic passes and contact zones. On the Tibetan plateau, monasteries anchored Buddhist learning and regional authority. Early modern gunpowder empires and later Russian expansion altered steppe power balances. Railways and borders in the nineteenth and twentieth centuries constrained nomadism. Transregional linkages persisted through markets and pilgrimage.",
+    "image": "/media/images/continentType/siberia.jpg",
+    "key": "continentType:siberia",
+    "name": "Siberia",
+    "quote": {
+      "text": "The steppe stretches before me like an endless sea of grass. It is a land of extremes, where one day you may encounter biting winds, and the next, scorching heat.",
+      "source": "Nikolai Przhevalsky, 1879",
+      "url": "/media/quotes/continentType/siberia.mp3"
+    }
+  },
+  {
+    "concept": "conceptType:continent",
+    "description": "Asia is the largest continent, spanning arctic coasts, deserts, monsoon plains, and tropical archipelagos. South Asia saw urbanism along the Indus and later religious and political centers on the Ganges. In East Asia, Chinese dynasties developed bureaucracy, hydraulic works, and literati culture. Japan's warrior governments patronized arts and codified landholding under samurai elites. Southeast Asian empires, including Angkor, Srivijaya, and Majapahit, organized rice agriculture and maritime tolls across straits. Overland and maritime Silk Roads transmitted goods, paper, gunpowder, Buddhism, Islam, and other ideas. The early modern era witnessed Ming and Qing expansion, Mughal synthesis, and the growth of Tokugawa cities. Nineteenth-century imperialism and internal reform produced new states and industries. In the twentieth century, decolonization, revolution, and rapid economic development reshaped demography and urban networks.",
+    "image": "/media/images/continentType/asia.jpg",
+    "key": "continentType:asia",
+    "name": "Asia",
+    "quote": {
+      "text": "I have seen nothing like it, with its wealth and grand architecture. The people here live in luxury beyond measure, and yet they are a people proud of their ancient traditions.",
+      "source": "Marco Polo, 1298",
+      "url": "/media/quotes/continentType/asia.mp3"
+    }
+  },
+  {
+    "concept": "conceptType:continent",
+    "description": "Oceania comprises Pacific and adjacent island regions shaped by seafaring and distinct ecologies. Austronesian expansion carried crops, languages, and canoe technology across vast distances. Polynesian navigators used stars, swell patterns, and bird routes to settle Hawaii, Samoa, Tonga, and New Zealand. Exchange networks linked archipelagos. Lapita pottery marks early cultural spread in Melanesia and western Polynesia. Coral atolls and high islands required careful water and land management. To the west, maritime Southeast Asian polities interacted with Indian Ocean circuits; centers such as Angkor influenced regional trade. Madagascar, settled by Austronesian and African peoples, shows blended cultures and unique fauna. European exploration, missionization, and colonial rule altered political structures and demography. Twentieth-century mandates, nuclear testing zones, and later independence movements shaped modern geopolitics. Cultural revival, diaspora, and sea-level rise define current debates.",
+    "image": "/media/images/continentType/oceania.jpg",
+    "key": "continentType:oceania",
+    "name": "Oceania",
+    "quote": {
+      "text": "The islands are like paradises on earth. The people are peaceful, living in harmony with the land and sea. The coral reefs are full of life, and the forests stretch thick and green.",
+      "source": "James Cook, 1770",
+      "url": "/media/quotes/continentType/oceania.mp3"
+    }
+  }
+]

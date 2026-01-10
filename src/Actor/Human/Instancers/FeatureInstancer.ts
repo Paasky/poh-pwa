@@ -1,10 +1,10 @@
-import { tileCenter } from "@/helpers/math";
-import { Coords, tileHeight } from "@/helpers/mapTools";
+import { tileCenter } from "@/Common/Helpers/math";
+import { Coords, tileHeight } from "@/Common/Helpers/mapTools";
 import type { GameKey } from "@/Common/Models/_GameModel";
 import type { Tile } from "@/Common/Models/Tile";
 import { Matrix, Mesh, Quaternion, Scene, TransformNode, Vector3 } from "@babylonjs/core";
 import { FeatureGroup, featureMeshMap } from "@/Actor/Human/Assets/meshes/features";
-import { buildRandomPointsInHex } from "@/helpers/hexPointSampling";
+import { buildRandomPointsInHex } from "@/Common/Helpers/hexPointSampling";
 import { EngineLayers } from "@/Actor/Human/EngineStyles";
 
 export default class FeatureInstancer {
@@ -231,5 +231,5 @@ export default class FeatureInstancer {
     return null;
   }
 
-  // Thin instances do not require per-group initialization helpers
+  // Thin instances do not require per-group initialization Helpers
 }
