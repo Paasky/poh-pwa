@@ -6,7 +6,7 @@ import type { Player } from "@/Common/Models/Player";
 import type { City } from "@/Common/Models/City";
 import { useEventStore } from "@/App/stores/eventStore";
 import { ReligionHasEvolved, ReligionHasNewType } from "@/Common/events/Religion";
-import { Yields } from "@/Common/Static/Yields";
+import { Yields } from "@/Common/Static/Objects/Yields";
 import { has } from "@/Common/Helpers/collectionTools";
 
 export type ReligionStatus = "myths" | "gods" | "dogmas";

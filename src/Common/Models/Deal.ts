@@ -1,6 +1,6 @@
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import type { Player } from "@/Common/Models/Player";
-import { playerYieldTypeKeys, Yield, Yields } from "@/Common/Static/Yields";
+import { playerYieldTypeKeys, Yield, Yields } from "@/Common/Static/Objects/Yields";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 
 export class Deal extends GameObject {

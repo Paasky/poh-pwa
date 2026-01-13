@@ -10,7 +10,7 @@ import { useMoveCostCache } from "@/Common/composables/useMoveCostCache";
 import { UnitDesign } from "@/Common/Models/UnitDesign";
 import { Construction } from "@/Common/Models/Construction";
 import { GameKey } from "@/Common/Models/_GameModel";
-import { TypeKey } from "@/Common/Objects/Common";
+import { TypeKey } from "@/Common/Objects/World";
 
 describe("UnitMovement", () => {
   let world: ReturnType<typeof createTestWorld>;

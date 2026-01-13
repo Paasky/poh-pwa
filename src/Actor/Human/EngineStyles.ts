@@ -21,7 +21,7 @@ export const EngineLayers = {
   grid: { id: "grid", group: EngineGroups.guidance, offset: 0 }, // togglable visual hex grid
   guidance: { id: "guidance", group: EngineGroups.guidance, offset: 1 }, // paths, selection markers, etc
   units: { id: "units", group: EngineGroups.units, offset: 0 },
-  details: { id: "details", group: EngineGroups.details, offset: 0 }, // health bars, tile icons, etc
+  details: { id: "details", group: EngineGroups.details, offset: 0 }, // health bars, tile icon, etc
 
   // Tactical Layer IDs (for setLayer calls)
   movementRange: "movementRange",

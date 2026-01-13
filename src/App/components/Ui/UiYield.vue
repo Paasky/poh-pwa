@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { Yield } from "@/Common/Static/Yields";
+import { Yield } from "@/Common/Static/Objects/Yields";
 import { useDataBucket } from "@/Data/useDataBucket";
 import UiObjectChips from "@/App/components/Ui/UiObjectChips.vue";
 import UiIcon from "@/App/components/Ui/UiIcon.vue";

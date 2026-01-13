@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { DataBucket } from "../../src/Data/DataBucket";
 import type { ParsedStaticData } from "../../src/Data/StaticDataLoader";
-import type { WorldState } from "../../src/Common/Objects/Common";
+import type { WorldState } from "@/Common/Objects/World";
 
 describe("DataBucket Unit Tests", () => {
   const mockRawData: ParsedStaticData = {

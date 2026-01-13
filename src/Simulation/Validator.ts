@@ -4,7 +4,7 @@ import { Unit } from "@/Common/Models/Unit";
 import { Construction } from "@/Common/Models/Construction";
 import { City } from "@/Common/Models/City";
 import { Tile } from "@/Common/Models/Tile";
-import { Yields } from "@/Common/Static/Yields";
+import { Yields } from "@/Common/Static/Objects/Yields";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 
 export const belongsToCity = (

@@ -4,7 +4,7 @@ import { type Construction } from "@/Common/Models/Construction";
 import { type Citizen } from "@/Common/Models/Citizen";
 import { type Unit } from "@/Common/Models/Unit";
 import { type PohEvent } from "@/Common/events/_Event";
-import { type TypeKey } from "@/Common/Objects/Common";
+import { type TypeKey } from "@/Common/Objects/World";
 
 export const useEventStore = defineStore("events", {
   state: () => ({

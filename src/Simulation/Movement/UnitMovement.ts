@@ -1,6 +1,6 @@
 import { Unit } from "@/Common/Models/Unit";
 import { Tile } from "@/Common/Models/Tile";
-import { roundToTenth, TypeKey } from "@/Common/Objects/Common";
+import { roundToTenth, TypeKey } from "@/Common/Objects/World";
 import { MoveContext } from "./MoveContext";
 import { PathStep } from "@/Simulation/Movement/Pathfinder";
 import { useMoveCostCache } from "@/Common/composables/useMoveCostCache";

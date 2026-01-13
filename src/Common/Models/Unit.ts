@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import { TypeObject } from "@/Common/Objects/TypeObject";
-import { unitYieldTypeKeys, Yield, Yields } from "@/Common/Static/Yields";
-import { roundToTenth } from "@/Common/Objects/Common";
+import { unitYieldTypeKeys, Yield, Yields } from "@/Common/Static/Objects/Yields";
+import { roundToTenth } from "@/Common/Objects/World";
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import { useDataBucket } from "@/Data/useDataBucket";
 import type { UnitDesign } from "@/Common/Models/UnitDesign";

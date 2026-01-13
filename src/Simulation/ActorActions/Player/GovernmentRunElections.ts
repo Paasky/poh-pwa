@@ -1,7 +1,7 @@
 import { Government, GovernmentConfig } from "@/Common/Models/Government";
 import { IMutation } from "@/Common/IMutation";
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
-import { CatKey, roundToTenth, TypeKey } from "@/Common/Objects/Common";
+import { CatKey, roundToTenth, TypeKey } from "@/Common/Objects/World";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { filter } from "@/Common/Helpers/collectionTools";
 

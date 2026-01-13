@@ -1,6 +1,6 @@
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { TypeStorage } from "@/Common/Objects/TypeStorage";
-import { playerYieldTypeKeys, Yield, Yields } from "@/Common/Static/Yields";
+import { playerYieldTypeKeys, Yield, Yields } from "@/Common/Static/Objects/Yields";
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import type { UnitDesign } from "@/Common/Models/UnitDesign";
 import type { City } from "@/Common/Models/City";

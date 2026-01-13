@@ -1,5 +1,5 @@
 import { Color3, Color4, Scene, StandardMaterial, Texture } from "@babylonjs/core";
-import { TypeKey } from "@/Common/Objects/Common";
+import { TypeKey } from "@/Common/Objects/World";
 import { Tile } from "@/Common/Models/Tile";
 import { EngineColors, toColor4 } from "@/Actor/Human/EngineStyles";
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { Yields } from "@/Common/Static/Yields";
+import { Yields } from "@/Common/Static/Objects/Yields";
 import UiYield, { yieldProps } from "@/App/components/Ui/UiYield.vue";
 
 const props = defineProps<{ yields: Yields } & yieldProps>();

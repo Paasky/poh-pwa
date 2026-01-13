@@ -3,7 +3,7 @@ import { GameKey, GameObject } from "../../src/Common/Models/_GameModel";
 import { Player } from "../../src/Common/Models/Player";
 import { Unit } from "../../src/Common/Models/Unit";
 import { City } from "../../src/Common/Models/City";
-import { WorldState } from "../../src/Common/Objects/Common";
+import { WorldState } from "@/Common/Objects/World";
 import { useDataBucket } from "../../src/Data/useDataBucket";
 
 export const TestWorldState = {

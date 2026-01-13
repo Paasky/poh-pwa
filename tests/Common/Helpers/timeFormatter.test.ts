@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatSaveDate } from "@/Common/Helpers/timeFormatter";
+import { formatSaveDate } from "@/Common/Helpers/time";
 
 describe("timeFormatter", () => {
   it("formatSaveDate returns correctly formatted date", () => {

@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "typecheck": "vue-tsc --noEmit -p tsconfig.json",
     "rename:media": "node scripts/maintenance/rename-media.mjs",
-    "data:bake": "tsx scripts/deployment/StaticDataCompiler.ts",
+    "data:bake": "tsx src/Data/StaticDataCompiler.ts",
     "data:schema": "tsx scripts/tools/generateSchema.ts",
     "data:update": "pnpm data:bake && pnpm data:schema",
     "test": "vitest run",

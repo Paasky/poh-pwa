@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { WorldSize, worldSizes } from "@/Common/factories/worldFactory";
-import { WorldState } from "@/Common/Objects/Common";
+import { WorldState } from "@/Common/Objects/World";
 
 export type AlignmentLabel = "Earth-like" | "Mirror X" | "Mirror Y" | "Mirror Both" | "Random";
 

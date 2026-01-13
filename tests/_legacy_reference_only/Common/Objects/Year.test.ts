@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatYear } from "@/Common/Objects/Common";
+import { formatYear } from "@/Common/Objects/World";
 import { initTestDataBucket } from "../../../_setup/dataHelpers";
 import { destroyDataBucket } from "@/Data/useDataBucket";
 

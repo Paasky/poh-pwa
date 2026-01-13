@@ -1,7 +1,7 @@
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { UnitStatus } from "@/Common/Models/Unit";
-import { Yield, Yields } from "@/Common/Static/Yields";
-import { roundToTenth, TypeKey } from "@/Common/Objects/Common";
+import { Yield, Yields } from "@/Common/Static/Objects/Yields";
+import { roundToTenth, TypeKey } from "@/Common/Objects/World";
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { Player } from "@/Common/Models/Player";

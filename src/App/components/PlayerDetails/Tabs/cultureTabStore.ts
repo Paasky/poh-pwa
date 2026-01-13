@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { useCurrentContext } from "@/Common/composables/useCurrentContext";
 import { CatData } from "@/Common/Objects/TypeObject";
-import { CatKey } from "@/Common/Objects/Common";
+import { CatKey } from "@/Common/Objects/World";
 
 export const useCultureTabStore = defineStore("cultureTabStore", () => {
   const bucket = useDataBucket();

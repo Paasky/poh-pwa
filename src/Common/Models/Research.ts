@@ -1,9 +1,9 @@
 import { TypeObject } from "@/Common/Objects/TypeObject";
-import { TypeKey } from "@/Common/Objects/Common";
+import { TypeKey } from "@/Common/Objects/World";
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { sort } from "@/Common/Helpers/collectionTools";
-import { Yields, YieldTypeKey } from "@/Common/Static/Yields";
+import { Yields, YieldTypeKey } from "@/Common/Static/Objects/Yields";
 import { Player } from "@/Common/Models/Player";
 import { TypeStorage } from "@/Common/Objects/TypeStorage";
 

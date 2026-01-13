@@ -3,7 +3,7 @@ import { destroyDataBucket, useDataBucket } from "@/Data/useDataBucket";
 import { CurrentGame } from "@/Conductor/CurrentGame";
 import { playerRawData, tileRawData } from "../../_setup/dataHelpers";
 import { Task } from "@/Common/Helpers/asyncProcess";
-import { WorldState } from "@/Common/Objects/Common";
+import { WorldState } from "@/Common/Objects/World";
 import { GameKey } from "@/Common/Models/_GameTypes";
 
 describe("CurrentGame", () => {

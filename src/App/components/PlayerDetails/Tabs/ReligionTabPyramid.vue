@@ -2,7 +2,7 @@
 import { computed } from "vue";
 import UiObjectCards from "@/App/components/Ui/UiObjectCards.vue";
 import { Religion } from "@/Common/Models/Religion";
-import { CatKey } from "@/Common/Objects/Common";
+import { CatKey } from "@/Common/Objects/World";
 import { CatData, TypeObject } from "@/Common/Objects/TypeObject";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { filter, has } from "@/Common/Helpers/collectionTools";

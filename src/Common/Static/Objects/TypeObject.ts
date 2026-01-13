@@ -1,19 +1,27 @@
-import { getClassAndConcept, ObjectIcon } from "@/Common/Objects/Common";
-import { Requires } from "@/Common/Static/Requires";
-import { Yields } from "@/Common/Static/Yields";
-import { ConceptTypeKey, StaticKey, TypeClass, TypeKey } from "@/Common/Static/StaticEnums";
-import { CompiledTypeData } from "../../../scripts/deployment/StaticDataCompiler";
-import { getObjectIcon } from "@/Common/types/icons";
+import { ObjectIcon } from "@/Common/Objects/World";
+import { Requires } from "@/Common/Static/Objects/Requires";
+import { Yields } from "@/Common/Static/Objects/Yields";
+import {
+  ActionTypeKey,
+  ConceptTypeKey,
+  SpecialTypeKey,
+  StaticKey,
+  TypeClass,
+  TypeKey,
+} from "@/Common/Static/StaticEnums";
+import { getObjectIcon } from "@/Common/Static/Icon";
+import { CompiledTypeData } from "@/Data/StaticDataCompiler";
+import { getClassAndConcept, IStaticObject } from "@/Common/Static/Objects/_StaticObject";
 
-export interface TypeObject {
-  objType: "TypeObject";
+export type TypeObject = IStaticObject & {
+  // Duplicate IStaticObject attributes for clarity
   class: TypeClass;
   key: TypeKey;
   concept: ConceptTypeKey;
   name: string;
+  description: string;
   icon: ObjectIcon;
   category?: StaticKey;
-  description?: string;
   audio?: string[];
   image?: string;
   quote?: {
@@ -37,19 +45,19 @@ export interface TypeObject {
   isPositive?: boolean;
   names?: Record<string, string>; // uses platform.name as the key
 
-  actions: TypeKey[];
+  actions: ActionTypeKey[];
   allows: TypeKey[];
   requires: Requires;
   yields: Yields;
   gains: TypeKey[];
   upgradesTo: TypeKey[];
   upgradesFrom: TypeKey[];
-  specials: TypeKey[];
-  relatesTo: TypeKey[];
-}
+  specials: SpecialTypeKey[];
+  relatesTo: StaticKey[];
+};
 
 export function initTypeObject(data: CompiledTypeData): TypeObject {
-  const classAndConcept = getClassAndConcept(data.key);
+  const classAndConcept = getClassAndConcept<TypeClass>(data.key);
 
   const yields = new Yields(
     (data.yields ?? []).map((compiledYield) => ({
@@ -65,7 +73,6 @@ export function initTypeObject(data: CompiledTypeData): TypeObject {
     ...data,
 
     // Add/init extra data
-    objType: "TypeObject",
     ...classAndConcept,
     icon: getObjectIcon(data.key, classAndConcept.concept, data.category),
     requires: new Requires(data.requires),

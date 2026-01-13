@@ -3,7 +3,7 @@ import { computed, ref } from "vue";
 import { defineStore } from "pinia";
 import { useDataBucket } from "@/Data/useDataBucket";
 import type { Player } from "@/Common/Models/Player";
-import { TypeKey } from "@/Common/Objects/Common";
+import { TypeKey } from "@/Common/Objects/World";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { TableColumn } from "@/Common/types/uiComponents";
 import { useCurrentContext } from "@/Common/composables/useCurrentContext";

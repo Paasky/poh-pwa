@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IconKey } from "@/Common/types/icons";
+import type { IconKey } from "@/Common/Static/Icon";
 import UiButton from "@/App/components/Ui/UiButton.vue";
 
 const modelValue = defineModel<string | number>();

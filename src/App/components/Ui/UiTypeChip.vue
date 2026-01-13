@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { ObjKey, PohObject, TypeKey } from "@/Common/Objects/Common";
+import { ObjKey, PohObject, TypeKey } from "@/Common/Objects/World";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { useEncyclopediaStore } from "@/App/components/Encyclopedia/encyclopediaStore";

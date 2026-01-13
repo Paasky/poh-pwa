@@ -1,6 +1,6 @@
 import { TypeObject } from "@/Common/Objects/TypeObject";
-import { CatKey, TypeKey } from "@/Common/Objects/Common";
-import { Yields } from "@/Common/Static/Yields";
+import { CatKey, TypeKey } from "@/Common/Objects/World";
+import { Yields } from "@/Common/Static/Objects/Yields";
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import { useDataBucket } from "@/Data/useDataBucket";
 import type { Citizen } from "@/Common/Models/Citizen";

@@ -3,7 +3,7 @@ import { computed, ref } from "vue";
 import { defineStore } from "pinia";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { Religion } from "@/Common/Models/Religion";
-import type { CatKey } from "@/Common/Objects/Common";
+import type { CatKey } from "@/Common/Objects/World";
 import { Citizen } from "@/Common/Models/Citizen";
 
 export const useReligionTabStore = defineStore("religionTabStore", () => {

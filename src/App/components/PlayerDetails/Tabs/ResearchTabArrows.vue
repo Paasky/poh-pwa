@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useDataBucket } from "@/Data/useDataBucket";
-import { TypeKey } from "@/Common/Objects/Common";
+import { TypeKey } from "@/Common/Objects/World";
 
 const props = defineProps<{
   strokeColorRgb: string;

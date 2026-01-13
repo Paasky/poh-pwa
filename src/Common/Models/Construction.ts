@@ -1,5 +1,5 @@
 import { TypeObject } from "@/Common/Objects/TypeObject";
-import { constructionYieldTypeKeys, Yield, Yields } from "@/Common/Static/Yields";
+import { constructionYieldTypeKeys, Yield, Yields } from "@/Common/Static/Objects/Yields";
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import type { Citizen } from "@/Common/Models/Citizen";
 import type { Tile } from "@/Common/Models/Tile";

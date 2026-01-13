@@ -2,7 +2,7 @@ import { Scene, TransformNode } from "@babylonjs/core";
 import { AdvancedDynamicTexture, Control, StackPanel, TextBlock } from "@babylonjs/gui";
 import { BaseOverlay } from "./BaseOverlay";
 import { Tile } from "@/Common/Models/Tile";
-import getIcon from "@/Common/types/icons";
+import getIcon from "@/Common/Static/Icon";
 import { EngineOverlaySettings } from "@/Actor/Human/EngineStyles";
 
 export type DetailItem = {
@@ -15,7 +15,7 @@ export type DetailItem = {
 export type DetailPayload = { items: DetailItem[] };
 
 /**
- * DetailOverlay handles drawing 2D GUI elements (labels, icons) linked to 3D positions.
+ * DetailOverlay handles drawing 2D GUI elements (labels, icon) linked to 3D positions.
  * It uses a 'ghost' TransformNode to anchor the GUI elements in the scene.
  */
 export class DetailOverlay extends BaseOverlay<DetailPayload> {

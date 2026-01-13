@@ -1,6 +1,6 @@
 import { Government, GovernmentConfig } from "@/Common/Models/Government";
 import { IMutation } from "@/Common/IMutation";
-import { roundToTenth } from "@/Common/Objects/Common";
+import { roundToTenth } from "@/Common/Objects/World";
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
 
 export class GovernmentStartTurn implements ISimAction {

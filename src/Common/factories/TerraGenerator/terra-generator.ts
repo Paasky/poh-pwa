@@ -1,4 +1,4 @@
-import { TypeKey } from "@/Common/Objects/Common";
+import { TypeKey } from "@/Common/Objects/World";
 import { TypeClass, TypeObject } from "@/Common/Objects/TypeObject";
 import { WorldSize } from "@/Common/factories/worldFactory";
 import { useDataBucket } from "@/Data/useDataBucket";

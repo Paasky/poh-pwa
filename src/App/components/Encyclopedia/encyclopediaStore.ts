@@ -263,7 +263,7 @@ function conceptTitle(cls: string): string {
 const sectionMap = [
   {
     name: "Player",
-    icon: icons.user,
+    icon: icon.user,
     concepts: [
       "conceptType:majorCulture",
       "conceptType:minorCulture",
@@ -280,7 +280,7 @@ const sectionMap = [
   },
   {
     name: "Cities",
-    icon: icons.city,
+    icon: icon.city,
     concepts: [
       "conceptType:building",
       "conceptType:improvement",
@@ -291,7 +291,7 @@ const sectionMap = [
   },
   {
     name: "Units",
-    icon: icons.unit,
+    icon: icon.unit,
     concepts: [
       "conceptType:equipment",
       "conceptType:platform",
@@ -300,12 +300,12 @@ const sectionMap = [
   },
   {
     name: "Technology",
-    icon: icons.tech,
+    icon: icon.tech,
     concepts: ["conceptType:era", "conceptType:technology"] as TypeKey[],
   },
   {
     name: "WorldState",
-    icon: icons.world,
+    icon: icon.world,
     concepts: [
       "conceptType:domain",
       "conceptType:continent",
@@ -321,7 +321,7 @@ const sectionMap = [
   },
   {
     name: "Other",
-    icon: icons.concept,
+    icon: icon.concept,
     concepts: [] as TypeKey[],
   },
 ];

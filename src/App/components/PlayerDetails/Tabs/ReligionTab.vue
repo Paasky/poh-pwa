@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { formatYear, getYearFromTurn } from "@/Common/Objects/Common";
+import { formatYear, getYearFromTurn } from "@/Common/Objects/World";
 import { ref } from "vue";
 import { Religion } from "@/Common/Models/Religion";
 import UiCols from "@/App/components/Ui/UiCols.vue";

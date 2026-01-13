@@ -42,21 +42,21 @@ Raw Vuetify usage is allowed **only** in spike / prototype work, or by explicit 
 ### ✅ 3.1 Icon System Consolidation
 
 **What**
-Centralize all system‑level icons behind semantic keys.
+Centralize all system‑level icon behind semantic keys.
 
 **Why**
 
-* Prevent missing or inconsistent icons
+* Prevent missing or inconsistent icon
 * Decouple UI code from icon libraries
 * Enable global icon changes
 
 **Where**
-`src/types/icons.ts`
+`src/types/icon.ts`
 
 **Tasks**
 
-* Audit all icons currently in use
-* Register missing system icons (e.g. save, load, undo, redo, close, settings, menu, search)
+* Audit all icon currently in use
+* Register missing system icon (e.g. save, load, undo, redo, close, settings, menu, search)
 * Ensure no feature code references raw icon strings
 
 ---
@@ -76,13 +76,13 @@ A strict wrapper around icon rendering.
 
 **Rules**
 
-* Must resolve icons via `getIcon(iconKey)`
+* Must resolve icon via `getIcon(iconKey)`
 * Must emit `console.warn` if an icon key is missing or resolves to fallback
 * **Implementation:** Use `v-icon` internally but do not expose raw `v-icon` props.
 
 **API**
 
-* `icon`: `IconKey` (from `src/types/icons.ts`, required)
+* `icon`: `IconKey` (from `src/types/Icon.ts`, required)
 * `size`: `xs | sm | md | lg`
 * `color`: `string` (Vuetify color or hex)
 
@@ -273,7 +273,7 @@ A minimal wrapper for flat lists.
 
 * Wrap dialog with UiDialog
 * Move toolbar, chips, and actions into UiDialog slots
-* Replace icons with UiIcon
+* Replace icon with UiIcon
 * Keep recursion and data logic local
 
 Search result limiting (e.g. top 25) remains feature‑specific.
@@ -310,7 +310,7 @@ Search result limiting (e.g. top 25) remains feature‑specific.
 ### 6.1 Global Icon Replacement
 
 * Replace all `<v-icon>` usage with `<UiIcon>`
-* Ensure all referenced icons exist in `icons.ts`
+* Ensure all referenced icon exist in `icon.ts`
 
 ---
 

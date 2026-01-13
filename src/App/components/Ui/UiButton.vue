@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import type { IconKey } from "@/Common/types/icons";
-import type { ObjectIcon } from "@/Common/Objects/Common";
+import type { IconKey } from "@/Common/Static/Icon";
+import type { ObjectIcon } from "@/Common/Objects/World";
 import UiIcon from "@/App/components/Ui/UiIcon.vue";
 import UiTooltip from "@/App/components/Ui/UiTooltip.vue";
 

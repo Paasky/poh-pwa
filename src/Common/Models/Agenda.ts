@@ -1,11 +1,11 @@
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import type { Player } from "@/Common/Models/Player";
 import { hasOne } from "@/Common/Models/_Relations";
-import { playerYieldTypeKeys, Yield, Yields } from "@/Common/Static/Yields";
+import { playerYieldTypeKeys, Yield, Yields } from "@/Common/Static/Objects/Yields";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { clamp } from "@/Common/Helpers/basicMath";
 import { reduce } from "@/Common/Helpers/collectionTools";
-import { roundToTenth } from "@/Common/Objects/Common";
+import { roundToTenth } from "@/Common/Objects/World";
 
 export class Agenda extends GameObject {
   constructor(

@@ -1,5 +1,5 @@
 import { GameKey, IRawGameObject } from "@/Common/Models/_GameTypes";
-import { WorldState } from "@/Common/Objects/Common";
+import { WorldState } from "@/Common/Objects/World";
 import { setDataBucket } from "@/Data/useDataBucket";
 import { DataBucket } from "@/Data/DataBucket";
 import { TestWorldState } from "./testWorld";

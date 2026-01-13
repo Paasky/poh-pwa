@@ -1,7 +1,8 @@
-export type ObjType = "TypeObject" | "CategoryObject";
-
 //////////////////////////////////
 // Class enums
+
+import { CategoryObject } from "@/Common/Static/Objects/CategoryObject";
+import { TypeObject } from "@/Common/Static/Objects/TypeObject";
 
 export type CategoryClass =
   | "buildingCategory"
@@ -206,3 +207,8 @@ export type SpecialTypeKey =
   | "specialType:singleUse"
   | "specialType:startSize"
   | "specialType:stockpiled";
+
+export type CatData = {
+  category: CategoryObject;
+  types: Set<TypeObject>;
+};

@@ -1,44 +1,8 @@
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import { CategoryClass, CategoryObject, TypeClass, TypeObject } from "@/Common/Objects/TypeObject";
-import { GameKey, GameObject } from "@/Common/Models/_GameModel";
-import { Coords } from "@/Common/Helpers/mapTools";
-import { ConceptTypeKey, StaticKey } from "@/Common/Static/StaticEnums";
-
-export function getClassAndConcept(key: StaticKey): {
-  class: CategoryClass | TypeClass;
-  concept: ConceptTypeKey;
-} {
-  const className = key.split(":")[0] as CategoryClass | TypeClass;
-  return { class: className, concept: `conceptType:${className}` as ConceptTypeKey };
+export function formatSaveDate(ms: number): string {
+  const d = new Date(ms);
+  const p = (n: number) => n.toString().padStart(2, "0");
+  return `${p(d.getDate())}.${p(d.getMonth() + 1)}.${d.getFullYear()} ${p(d.getHours())}:${p(d.getMinutes())}`;
 }
-
-export function isCategoryObject(o: GameObject | PohObject): o is CategoryObject {
-  return o.objType === "CategoryObject";
-}
-
-export function isTypeObject(o: GameObject | PohObject): o is TypeObject {
-  return o.objType === "TypeObject";
-}
-
-export function isGameObject(o: string | ObjKey | PohObject | GameObject): o is GameObject {
-  return typeof o === "string"
-    ? !o.includes("Category:") && !o.includes("Type:")
-    : o.objType === "GameObject";
-}
-
-export type WorldState = {
-  id: string;
-  size: Coords;
-  turn: number;
-  year: number;
-  currentPlayerKey?: GameKey;
-  seed?: string | number;
-};
-
-export type ObjectIcon = {
-  icon: IconDefinition;
-  color: string;
-};
 
 export const yearsPerTurnConfig = [
   { start: -10000, end: -7000, yearsPerTurn: 60 },
@@ -113,8 +77,4 @@ export function formatYear(year: number): string {
   else season = "Autumn";
 
   return `${season} ${fullYear}`;
-}
-
-export function roundToTenth(v: number): number {
-  return Math.round(v * 10) / 10;
 }

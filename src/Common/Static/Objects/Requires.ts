@@ -1,4 +1,4 @@
-import { ObjKey } from "@/Common/Objects/Common";
+import { ObjKey } from "@/Common/Objects/World";
 import { TypeClass, TypeObject } from "@/Common/Objects/TypeObject";
 
 export class Requires {

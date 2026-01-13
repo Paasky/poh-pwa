@@ -7,6 +7,10 @@ export const degToRad = (deg: number) => deg * (Math.PI / 180);
 
 export const radToDeg = (rad: number) => rad * (180 / Math.PI);
 
+export const roundToTenth = (v: number): number => {
+  return Math.round(v * 10) / 10;
+};
+
 export const sum = (vals: number[]): number => vals.reduce((acc, val) => acc + val, 0);
 
 /**

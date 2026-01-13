@@ -1,6 +1,6 @@
 import { canHaveOne, hasMany } from "@/Common/Models/_Relations";
 import { TypeObject } from "@/Common/Objects/TypeObject";
-import { tileYieldTypeKeys, Yield, Yields } from "@/Common/Static/Yields";
+import { tileYieldTypeKeys, Yield, Yields } from "@/Common/Static/Objects/Yields";
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import { useDataBucket } from "@/Data/useDataBucket";
 import type { River } from "@/Common/Models/River";

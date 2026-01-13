@@ -63,7 +63,7 @@ export default defineConfig(async ({ command }) => {
         if (file.includes("/data/") && file.endsWith(".json")) {
           console.log(`\n⚒ Data changed: ${path.relative(process.cwd(), file)}. Reforging...`);
           try {
-            const { StaticDataCompiler } = await import("./scripts/deployment/StaticDataCompiler");
+            const { StaticDataCompiler } = await import("./src/Data/StaticDataCompiler");
             await new StaticDataCompiler().compile();
             server.ws.send({ type: "full-reload" });
           } catch (err) {

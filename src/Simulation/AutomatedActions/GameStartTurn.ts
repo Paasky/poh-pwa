@@ -1,4 +1,4 @@
-import { TypeKey } from "@/Common/Objects/Common";
+import { TypeKey } from "@/Common/Objects/World";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { Player } from "@/Common/Models/Player";
 import { PlayerAutomation } from "@/Simulation/AutomatedActions/PlayerAutomation";

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { saveManager } from "@/Common/utils/saveManager";
-import { formatSaveDate } from "@/Common/Helpers/timeFormatter";
+import { formatSaveDate } from "@/Common/Helpers/time";
 import TerraConfigDialog from "./Home/TerraConfigDialog.vue";
 import SaveDialog from "@/App/components/Saves/SaveDialog.vue";
 import SettingsDialog from "@/App/components/Settings/SettingsDialog.vue";

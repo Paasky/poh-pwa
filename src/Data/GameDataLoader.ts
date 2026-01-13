@@ -19,7 +19,7 @@ import { Tile } from "@/Common/Models/Tile";
 import { TradeRoute } from "@/Common/Models/TradeRoute";
 import { Unit } from "@/Common/Models/Unit";
 import { UnitDesign } from "@/Common/Models/UnitDesign";
-import type { TypeKey } from "@/Common/Objects/Common";
+import type { TypeKey } from "@/Common/Objects/World";
 import type { DataBucket } from "@/Data/DataBucket"; // Constructor type that also exposes the static attrsConf declared on each GameObject subclass
 
 // Constructor type that also exposes the static attrsConf declared on each GameObject subclass

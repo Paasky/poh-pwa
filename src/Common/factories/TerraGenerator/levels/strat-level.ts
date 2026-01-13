@@ -1,6 +1,6 @@
 import { TerraGenerator } from "@/Common/factories/TerraGenerator/terra-generator";
 import { TypeClass } from "@/Common/Objects/TypeObject";
-import { TypeKey } from "@/Common/Objects/Common";
+import { TypeKey } from "@/Common/Objects/World";
 import { Tile } from "@/Common/Models/Tile";
 import { GenTile } from "@/Common/factories/TerraGenerator/gen-tile";
 import { removeOrphanArea } from "@/Common/factories/TerraGenerator/helpers/post-processors";

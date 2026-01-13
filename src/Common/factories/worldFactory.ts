@@ -1,4 +1,4 @@
-import { ObjKey, WorldState, yearsPerTurnConfig } from "@/Common/Objects/Common";
+import { ObjKey, WorldState, yearsPerTurnConfig } from "@/Common/Objects/World";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { TerraGenerator } from "@/Common/factories/TerraGenerator/terra-generator";
 import { shuffle, takeRandom } from "@/Common/Helpers/arrayTools";

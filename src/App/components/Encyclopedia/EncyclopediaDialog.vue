@@ -7,11 +7,11 @@ import { useDataBucket } from "@/Data/useDataBucket";
 import { useAudioStore } from "@/App/stores/audioStore";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import UiYields from "@/App/components/Ui/UiYields.vue";
-import { Yields } from "@/Common/Static/Yields";
+import { Yields } from "@/Common/Static/Objects/Yields";
 import { useEncyclopediaStore } from "@/App/components/Encyclopedia/encyclopediaStore";
 import UiDialog from "@/App/components/Ui/UiDialog.vue";
 import UiIcon from "@/App/components/Ui/UiIcon.vue";
-import { TypeKey } from "@/Common/Objects/Common";
+import { TypeKey } from "@/Common/Objects/World";
 
 const store = useEncyclopediaStore();
 const audio = useAudioStore();

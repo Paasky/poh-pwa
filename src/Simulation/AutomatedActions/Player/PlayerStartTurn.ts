@@ -8,7 +8,7 @@ import { IMutation } from "@/Common/IMutation";
 import { Diplomacy } from "@/Common/Objects/Diplomacy";
 import { Government } from "@/Common/Models/Government";
 import { Research } from "@/Common/Models/Research";
-import { YieldTypeKey } from "@/Common/Static/Yields";
+import { YieldTypeKey } from "@/Common/Static/Objects/Yields";
 import { CityStartTurn } from "@/Simulation/AutomatedActions/City/CityStartTurn";
 
 export class PlayerStartTurn {

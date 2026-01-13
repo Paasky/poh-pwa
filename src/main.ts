@@ -15,7 +15,7 @@ import "@fontsource/poiret-one/400.css";
 // Font Awesome setup
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { getAllIcons } from "@/Common/types/icons";
+import { getAllIcons } from "@/Common/Static/Icon";
 
 // PWA service worker registration (auto updates)
 import { registerSW } from "virtual:pwa-register";
@@ -24,7 +24,7 @@ import { registerSW } from "virtual:pwa-register";
 import "@/Actor/Human/Assets/main.css";
 import { errorService } from "@/App/services/errorService";
 
-// Ensure all icons from our central icons.ts are registered
+// Ensure all icon from our central icon.ts are registered
 library.add(...getAllIcons());
 
 registerSW({ immediate: true });

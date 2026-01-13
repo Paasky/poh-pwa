@@ -1,5 +1,5 @@
 import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
-import { unitYieldTypeKeys, Yield, Yields } from "@/Common/Static/Yields";
+import { unitYieldTypeKeys, Yield, Yields } from "@/Common/Static/Objects/Yields";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import type { Player } from "@/Common/Models/Player";
 import type { Unit } from "@/Common/Models/Unit";

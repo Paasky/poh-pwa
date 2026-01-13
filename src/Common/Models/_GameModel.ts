@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { TypeObject } from "@/Common/Objects/TypeObject";
-import { ObjType } from "@/Common/Objects/Common";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { GameClass, GameKey, parseKey } from "@/Common/Models/_GameTypes";
+import { TypeObject } from "@/Common/Static/Objects/TypeObject";
 
 export * from "@/Common/Models/_GameTypes";
 
@@ -23,8 +22,6 @@ export type GameObjAttr = {
 };
 
 export class GameObject {
-  // noinspection JSUnusedGlobalSymbols
-  objType: ObjType = "GameObject";
   key: GameKey;
   class: GameClass;
   concept: TypeObject;

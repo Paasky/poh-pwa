@@ -122,7 +122,6 @@ import {
   faWind,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { ObjectIcon } from "@/Common/Objects/Common";
 
 const colors = {
   default: "#f1f5f9", // slate-100
@@ -140,7 +139,7 @@ const colors = {
   health: "#f43f5e", // rose-500
 };
 
-export const icons = {
+export const icon = {
   building: { icon: faHouse, color: colors.default },
   city: { icon: faHouse, color: colors.default },
   close: { icon: faXmark, color: colors.danger },
@@ -569,12 +568,12 @@ const keys: Record<string, ObjectIcon> = {
   "yieldType:upkeep": { icon: faCoins, color: colors.gold },
 };
 
-export type IconKey = keyof typeof icons;
+export type IconKey = keyof typeof icon;
 
 export function getIcon(iconKey: IconKey | ObjectIcon): ObjectIcon {
   if (typeof iconKey === "object") return iconKey;
-  if (iconKey in icons) {
-    return icons[iconKey];
+  if (iconKey in icon) {
+    return icon[iconKey as keyof typeof icon];
   }
   if (iconKey in categoryKeys) {
     return categoryKeys[iconKey];
@@ -616,8 +615,8 @@ export function getObjectIcon(
 
 export default getIcon;
 
-// Helper: expose the set of Font Awesome icons used by yieldType mappings
-// Helper: expose the set of Font Awesome icons used by all mappings
+// Helper: expose the set of Font Awesome icon used by yieldType mappings
+// Helper: expose the set of Font Awesome icon used by all mappings
 export function getAllIcons(): IconDefinition[] {
   const set = new Set<IconDefinition>();
   const collect = (obj: Record<string, ObjectIcon>) => {
@@ -627,7 +626,7 @@ export function getAllIcons(): IconDefinition[] {
       }
     }
   };
-  collect(icons);
+  collect(icon);
   collect(categoryKeys);
   collect(conceptKeys);
   collect(keys);
@@ -643,3 +642,8 @@ export function getYieldTypeFaIcons(): IconDefinition[] {
   }
   return Array.from(set.values());
 }
+
+export type ObjectIcon = {
+  icon: IconDefinition;
+  color: string;
+};

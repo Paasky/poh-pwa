@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { isGameObject, ObjKey, PohObject } from "@/Common/Objects/Common";
+import { isGameObject, ObjKey, PohObject } from "@/Common/Objects/World";
 import { GameObject } from "@/Common/Models/_GameModel";
 import UiTypeChip from "@/App/components/Ui/UiTypeChip.vue";
 import UiGameObjChip from "@/App/components/Ui/UiGameObjChip.vue";

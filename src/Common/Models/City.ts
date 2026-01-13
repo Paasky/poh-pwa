@@ -14,7 +14,7 @@ import { UnitDesign } from "@/Common/Models/UnitDesign";
 import { getNeighbors } from "@/Common/Helpers/mapTools";
 import { ConstructionQueue, TrainingQueue } from "@/Common/Objects/Queues";
 import { TypeStorage } from "@/Common/Objects/TypeStorage";
-import { cityYieldTypeKeys, Yield, Yields } from "@/Common/Static/Yields";
+import { cityYieldTypeKeys, Yield, Yields } from "@/Common/Static/Objects/Yields";
 
 export class City extends GameObject {
   constructor(

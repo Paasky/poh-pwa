@@ -9,7 +9,7 @@ import {
   spreadSalt,
 } from "@/Common/factories/TerraGenerator/helpers/post-processors";
 import { getNeighborCoords } from "@/Common/Helpers/mapTools";
-import { TypeKey } from "@/Common/Objects/Common";
+import { TypeKey } from "@/Common/Objects/World";
 import { River } from "@/Common/Models/River";
 
 export class GameLevel {

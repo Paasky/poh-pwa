@@ -5,7 +5,7 @@ import type { Player } from "@/Common/Models/Player";
 import type { Culture } from "@/Common/Models/Culture";
 import type { Religion } from "@/Common/Models/Religion";
 import type { Tile } from "@/Common/Models/Tile";
-import { citizenYieldTypeKeys, Yield, Yields } from "@/Common/Static/Yields";
+import { citizenYieldTypeKeys, Yield, Yields } from "@/Common/Static/Objects/Yields";
 
 export class Citizen extends GameObject {
   constructor(

@@ -1,7 +1,7 @@
 import { Coords, tileHeight } from "@/Common/Helpers/mapTools";
 import { GameKey } from "@/Common/Models/_GameModel";
 import { InstancedMesh, Matrix, Mesh, Scene, TransformNode, Vector3 } from "@babylonjs/core";
-import { TypeKey } from "@/Common/Objects/Common";
+import { TypeKey } from "@/Common/Objects/World";
 import { UnitDesign } from "@/Common/Models/UnitDesign";
 import { objectBaseMesh } from "@/Actor/Human/Assets/meshes/objects";
 import { TypeObject } from "@/Common/Objects/TypeObject";

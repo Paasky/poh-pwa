@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { initTestDataBucket } from "../../../_setup/dataHelpers";
 import { destroyDataBucket, useDataBucket } from "@/Data/useDataBucket";
-import { Yield, Yields } from "@/Common/Static/Yields";
+import { Yield, Yields } from "@/Common/Static/Objects/Yields";
 
 describe("Yields", () => {
   beforeEach(async () => {

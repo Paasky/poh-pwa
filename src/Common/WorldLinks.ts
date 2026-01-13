@@ -1,6 +1,6 @@
 import { useDataBucket } from "@/Data/useDataBucket";
 import { TypeClass, TypeObject } from "@/Common/Objects/TypeObject";
-import { TypeKey } from "@/Common/Objects/Common";
+import { TypeKey } from "@/Common/Objects/World";
 import { filter, map } from "@/Common/Helpers/collectionTools";
 
 export interface WorldLinkFilters {

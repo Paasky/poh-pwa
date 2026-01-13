@@ -2,7 +2,7 @@ import { Tile } from "@/Common/Models/Tile";
 import { Memory } from "@/Actor/Ai/Memory";
 import { IAction } from "@/Common/IAction";
 import { GameKey } from "@/Common/Models/_GameTypes";
-import { Requires } from "@/Common/Static/Requires";
+import { Requires } from "@/Common/Static/Objects/Requires";
 
 export type CityAction = "start" | "hurry" | "queue" | "prioritize";
 export type MapAction =

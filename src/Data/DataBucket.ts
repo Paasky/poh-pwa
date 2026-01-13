@@ -1,6 +1,6 @@
 // noinspection JSUnusedGlobalSymbols
 
-import { type CatKey, formatYear, type TypeKey, type WorldState } from "@/Common/Objects/Common";
+import { type CatKey, formatYear, type TypeKey, type WorldState } from "@/Common/Objects/World";
 import { rng } from "@/Common/Helpers/Rng";
 import {
   CatData,

@@ -8,7 +8,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { initTestPinia, loadStaticData } from "../_setup/pinia";
 import { useMoveCostCache } from "@/Common/composables/useMoveCostCache";
 import { createTestDesign } from "../../_setup/gameHelpers";
-import type { TypeKey } from "@/Common/Objects/Common";
+import type { TypeKey } from "@/Common/Objects/World";
 import type { TurnEnd } from "@/Simulation/Movement/UnitMovement";
 import type { GameKey } from "@/Common/Models/_GameModel";
 

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type { IconKey } from "@/Common/types/icons";
+import type { IconKey } from "@/Common/Static/Icon";
 
 export type TabId =
   | "economy"

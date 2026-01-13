@@ -1,24 +1,18 @@
-import { CatKey, ObjKey, roundToTenth, TypeKey } from "@/Common/Objects/Common";
-import { objectIsAnyOfKeys, TypeObject } from "@/Common/Objects/TypeObject";
 import { TypeStorage } from "@/Common/Objects/TypeStorage";
 import { has, reduce } from "@/Common/Helpers/collectionTools";
+import { CategoryObject } from "@/Common/Static/Objects/CategoryObject";
+import { StaticKey, TypeKey } from "@/Common/Static/StaticEnums";
+import { TypeObject } from "@/Common/Static/Objects/TypeObject";
+import { roundToTenth } from "@/Common/Objects/World";
 
 export type YieldMethod = "lump" | "percent" | "set";
-
-export type RawYield = {
-  type: YieldTypeKey;
-  amount?: number;
-  method?: YieldMethod;
-  for?: ObjKey[];
-  vs?: ObjKey[];
-};
 
 export type Yield = {
   type: YieldTypeKey;
   amount: number;
   method: YieldMethod;
-  for: Set<TypeKey | CatKey>;
-  vs: Set<TypeKey | CatKey>;
+  for: Set<StaticKey>;
+  vs: Set<StaticKey>;
   max?: number;
 };
 
@@ -427,3 +421,20 @@ export const unitYieldTypeKeys = new Set<YieldTypeKey>([
   "yieldType:tradeRange",
   "yieldType:upkeep",
 ]);
+
+function objectIsAnyOfKeys(
+  object: TypeObject | CategoryObject,
+  anyOfKeys: Set<StaticKey>,
+): boolean {
+  for (const key of anyOfKeys) {
+    // I'm in any of the objects
+    if (object.key === key) return true;
+
+    // My category is in any of the objects
+    if ((object as TypeObject).category === key) return true;
+
+    // My concept is in any of the objects
+    if (object.concept === key) return true;
+  }
+  return false;
+}

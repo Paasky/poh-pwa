@@ -2,7 +2,7 @@ import { Construction } from "@/Common/Models/Construction";
 import { Unit } from "@/Common/Models/Unit";
 import { City } from "@/Common/Models/City";
 import { TypeObject } from "@/Common/Objects/TypeObject";
-import { roundToTenth } from "@/Common/Objects/Common";
+import { roundToTenth } from "@/Common/Objects/World";
 import { clamp } from "@/Common/Helpers/basicMath";
 
 export const attackStrength = (
