@@ -1,19 +1,24 @@
 // noinspection JSUnusedGlobalSymbols
 
-import { type CatKey, formatYear, type TypeKey, type WorldState } from "@/Common/Objects/World";
 import { rng } from "@/Common/Helpers/Rng";
-import {
-  CatData,
-  type CategoryClass,
-  type CategoryObject,
-  type TypeClass,
-  type TypeObject,
-} from "@/Common/Objects/TypeObject";
 import type { GameClass, GameKey, GameObject, IRawGameObject } from "@/Common/Models/_GameModel";
 import { GameDataLoader } from "@/Data/GameDataLoader";
 import { setDataBucket } from "@/Data/useDataBucket";
 import type { Tile } from "@/Common/Models/Tile";
-import { getStaticData, parseAndValidate, type ParsedStaticData } from "@/Data/StaticDataLoader";
+import { getStaticData, load } from "@/Data/StaticDataLoader";
+import { WorldState } from "@/Common/Objects/World";
+import {
+  CatData,
+  CategoryClass,
+  CatKey,
+  StaticKey,
+  TypeClass,
+  TypeKey,
+} from "@/Common/Static/StaticEnums";
+import { TypeObject } from "@/Common/Static/Objects/TypeObject";
+import { CategoryObject } from "@/Common/Static/Objects/CategoryObject";
+import { CompiledStaticData } from "@/Data/StaticDataCompiler";
+import { formatYear } from "@/Common/Helpers/time";
 
 export type RawSaveData = {
   name: string; // "Leader Name - Culture Name" (user editable)
@@ -26,9 +31,9 @@ export type RawSaveData = {
 
 export class DataBucket {
   // Static Types and Categories
-  private readonly categoryTypesIndex = new Map<CatKey, Set<TypeKey>>();
+  private readonly categoryTypesIndex = new Map<StaticKey, Set<TypeKey>>();
   private readonly classTypesIndex = new Map<TypeClass, Set<TypeKey>>();
-  private readonly classCatsIndex = new Map<CategoryClass, Set<CatKey>>();
+  private readonly classCatsIndex = new Map<CategoryClass, Set<StaticKey>>();
 
   // Dynamic Game Objects
   private readonly classObjectsIndex = new Map<GameClass, Set<GameKey>>();
@@ -37,7 +42,7 @@ export class DataBucket {
 
   private constructor(
     private readonly types: Map<TypeKey, TypeObject>,
-    private readonly categories: Map<CatKey, CategoryObject>,
+    private readonly categories: Map<StaticKey, CategoryObject>,
     private readonly _world: WorldState,
     private readonly objects: Map<GameKey, GameObject> = new Map(),
     dataLoader?: GameDataLoader,
@@ -50,18 +55,16 @@ export class DataBucket {
     this.objects.forEach((o) => this.buildObjectIndex(o));
   }
 
-  static async init(rawStaticData?: ParsedStaticData): Promise<DataBucket> {
-    if (!rawStaticData) rawStaticData = await getStaticData();
-
-    return this.fromRaw(rawStaticData, {} as WorldState);
+  static async init(compiledStaticData?: CompiledStaticData): Promise<DataBucket> {
+    return this.fromRaw(compiledStaticData ?? await getStaticData(), {} as WorldState);
   }
 
   static fromRaw(
-    rawStaticData: ParsedStaticData,
+    compiledStaticData: CompiledStaticData,
     world: WorldState,
     rawObjects?: IRawGameObject[],
   ): DataBucket {
-    const { types, categories } = parseAndValidate(rawStaticData);
+    const { types, categories } = load(compiledStaticData);
 
     // 5. Freeze & Finalize
     types.forEach((obj) => Object.freeze(obj));
@@ -83,7 +86,7 @@ export class DataBucket {
     return type;
   }
 
-  getCategory(key: CatKey): CategoryObject {
+  getCategory(key: StaticKey): CategoryObject {
     const category = this.categories.get(key);
     if (!category) {
       // Special case for Eras: eraType is used as category for techs
@@ -124,13 +127,13 @@ export class DataBucket {
     return out;
   }
 
-  getClassTypesPerCategory(classKey: TypeClass): Map<CatKey, CatData> {
+  getClassTypesPerCategory(classKey: TypeClass): Map<StaticKey, CatData> {
     const classTypes = this.getClassTypes(classKey);
     if (!classTypes) throw new Error(`DataBucket.getClassTypes(${classKey}) does not exist!`);
 
-    const out = new Map<CatKey, CatData>();
+    const out = new Map<StaticKey, CatData>();
     classTypes.forEach((type) => {
-      const categoryKey = type.category;
+      const categoryKey = type.category!;
       if (categoryKey) {
         const catData = out.get(categoryKey);
         if (catData) {

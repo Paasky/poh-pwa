@@ -14,10 +14,10 @@ validates them, and builds rich back-relations.
 ## 2. Implementation of Loader & Validation
 
 - [x] Create `src/Data/StaticDataLoader.ts`.
-    - Implement `getStaticData(): Promise<RawStaticData>`.
+    - Implement `getStaticData(): Promise<CompiledStaticData>`.
     - It should first fetch `public/data/manifest.json`.
     - Then concurrently fetch all JSON files listed.
-    - Merge results into a single `RawStaticData` object.
+    - Merge results into a single `CompiledStaticData` object.
 - [x] Implement Validation using `zod` (install, required for prod).
     - Define schemas for `TypeObject` and `CategoryObject`.
     - Validate data after loading.
