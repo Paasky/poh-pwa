@@ -3,489 +3,741 @@
     "agendaType": {
       "key": 21,
       "name": 21,
+      "concept": 21,
       "category": 21,
       "description": 21,
       "requires": 21,
+      "yields": 21,
       "gains": 21,
-      "targets": 21
+      "upgradesFrom": 21,
+      "specials": 21,
+      "actions": 21,
+      "allows": 8
     },
     "buildingType": {
-      "category": 103,
-      "concept": 103,
-      "description": 103,
-      "image": 103,
       "key": 103,
       "name": 103,
+      "concept": 103,
+      "category": 103,
+      "description": 103,
+      "image": 103,
       "requires": 103,
       "yields": 103,
-      "upgradesFrom": 78,
-      "gains": 10
+      "gains": 103,
+      "upgradesFrom": 103,
+      "specials": 103,
+      "actions": 103,
+      "upgradesTo": 78
     },
     "dogmaType": {
-      "category": 30,
-      "concept": 30,
-      "description": 30,
       "key": 30,
       "name": 30,
-      "yields": 29
+      "concept": 30,
+      "category": 30,
+      "description": 30,
+      "requires": 30,
+      "yields": 30,
+      "gains": 30,
+      "upgradesFrom": 30,
+      "specials": 30,
+      "actions": 30
     },
     "equipmentType": {
-      "category": 105,
-      "concept": 105,
-      "description": 105,
-      "image": 105,
       "key": 105,
       "name": 105,
+      "concept": 105,
+      "category": 105,
+      "description": 105,
       "names": 105,
-      "requires": 102,
+      "requires": 105,
       "yields": 105,
-      "upgradesFrom": 84,
-      "specials": 62
+      "gains": 105,
+      "upgradesFrom": 105,
+      "specials": 105,
+      "actions": 105,
+      "upgradesTo": 84
     },
     "godType": {
-      "category": 18,
-      "concept": 18,
-      "description": 18,
       "key": 18,
       "name": 18,
+      "concept": 18,
+      "category": 18,
+      "description": 18,
+      "requires": 18,
       "yields": 18,
-      "requires": 14
+      "gains": 18,
+      "upgradesFrom": 18,
+      "specials": 18,
+      "actions": 18
     },
     "heritageType": {
-      "category": 20,
-      "concept": 20,
-      "description": 20,
       "key": 20,
       "name": 20,
+      "concept": 20,
+      "category": 20,
+      "description": 20,
       "requires": 20,
-      "specials": 6,
       "yields": 20,
-      "gains": 10
+      "gains": 20,
+      "upgradesFrom": 20,
+      "specials": 20,
+      "actions": 20
     },
     "improvementType": {
-      "category": 66,
-      "concept": 66,
-      "description": 66,
       "key": 66,
       "name": 66,
+      "concept": 66,
+      "category": 66,
+      "description": 66,
       "requires": 66,
       "yields": 66,
-      "upgradesFrom": 53,
-      "specials": 31
+      "gains": 66,
+      "upgradesFrom": 66,
+      "specials": 66,
+      "actions": 66,
+      "upgradesTo": 53,
+      "relatesTo": 2
     },
     "incidentType": {
       "key": 6,
       "name": 6,
-      "category": 6,
-      "description": 6,
-      "requires": 6
-    },
-    "majorCultureType": {
-      "category": 200,
-      "concept": 200,
-      "description": 200,
-      "key": 200,
-      "name": 200,
-      "requires": 200,
-      "upgradesFrom": 160
-    },
-    "majorLeaderType": {
-      "category": 192,
-      "concept": 192,
-      "description": 191,
-      "gender": 192,
-      "image": 192,
-      "key": 192,
-      "name": 192,
-      "quote": 192,
-      "requires": 192
-    },
-    "minorCultureType": {
-      "category": 160,
-      "concept": 160,
-      "description": 160,
-      "key": 160,
-      "name": 160,
-      "requires": 160,
-      "upgradesFrom": 80
-    },
-    "minorLeaderType": {
-      "category": 158,
-      "concept": 158,
-      "description": 158,
-      "gender": 158,
-      "image": 158,
-      "key": 158,
-      "name": 158,
-      "quote": 158,
-      "requires": 158
-    },
-    "mythType": {
-      "category": 9,
-      "concept": 9,
-      "description": 9,
-      "key": 9,
-      "name": 9,
-      "yields": 9,
-      "requires": 6
-    },
-    "nationalWonderType": {
-      "category": 43,
-      "concept": 43,
-      "description": 43,
-      "image": 43,
-      "key": 43,
-      "name": 43,
-      "quote": 43,
-      "requires": 43,
-      "yields": 37,
-      "specials": 2,
-      "gains": 1
-    },
-    "naturalWonderType": {
-      "category": 80,
-      "concept": 80,
-      "description": 80,
-      "image": 80,
-      "key": 80,
-      "name": 80,
-      "quote": 80,
-      "requires": 80,
-      "yields": 80
-    },
-    "platformType": {
-      "category": 34,
-      "concept": 34,
-      "description": 34,
-      "image": 34,
-      "key": 34,
-      "name": 34,
-      "yields": 34,
-      "requires": 33,
-      "specials": 31
-    },
-    "policyType": {
-      "category": 25,
-      "concept": 25,
-      "description": 25,
-      "key": 25,
-      "name": 25,
-      "specials": 15,
-      "yields": 25
-    },
-    "resourceType": {
-      "category": 133,
-      "concept": 133,
-      "description": 133,
-      "key": 133,
-      "name": 133,
-      "improvementCategories": 126,
-      "requires": 126,
-      "yields": 126
-    },
-    "routeType": {
-      "concept": 5,
-      "description": 5,
-      "key": 5,
-      "name": 5,
-      "requires": 5,
-      "yields": 5,
-      "specials": 1
-    },
-    "stockpileType": {
-      "category": 6,
       "concept": 6,
+      "category": 6,
       "description": 6,
-      "key": 6,
-      "name": 6,
       "requires": 6,
+      "yields": 6,
+      "gains": 6,
+      "upgradesFrom": 6,
       "specials": 6,
-      "yields": 6
-    },
-    "technologyType": {
-      "category": 164,
-      "concept": 164,
-      "description": 164,
-      "image": 164,
-      "key": 164,
-      "name": 164,
-      "quote": 164,
-      "x": 164,
-      "y": 164,
-      "yields": 164,
-      "requires": 160
-    },
-    "traitType": {
-      "category": 24,
-      "concept": 24,
-      "description": 24,
-      "isPositive": 24,
-      "key": 24,
-      "name": 24,
-      "yields": 24
-    },
-    "worldWonderType": {
-      "category": 88,
-      "concept": 88,
-      "description": 88,
-      "image": 88,
-      "key": 88,
-      "name": 88,
-      "quote": 88,
-      "requires": 88,
-      "yields": 80,
-      "specials": 3,
-      "gains": 5
+      "actions": 6
     },
     "actionType": {
+      "key": 18,
+      "name": 18,
       "concept": 18,
       "description": 18,
       "hotkey": 18,
-      "key": 18,
-      "name": 18
+      "requires": 18,
+      "yields": 18,
+      "gains": 18,
+      "upgradesFrom": 18,
+      "specials": 18,
+      "actions": 18
     },
     "climateType": {
+      "key": 6,
+      "name": 6,
       "concept": 6,
       "description": 6,
-      "key": 6,
-      "name": 6
+      "requires": 6,
+      "yields": 6,
+      "gains": 6,
+      "upgradesFrom": 6,
+      "specials": 6,
+      "actions": 6,
+      "allows": 6
     },
     "conceptType": {
-      "concept": 59,
-      "key": 59,
-      "name": 59,
-      "requires": 3
+      "key": 61,
+      "name": 61,
+      "concept": 61,
+      "description": 61,
+      "requires": 61,
+      "yields": 61,
+      "gains": 61,
+      "upgradesFrom": 61,
+      "specials": 61,
+      "actions": 61,
+      "relatesTo": 10,
+      "allows": 9
     },
     "continentType": {
+      "key": 10,
+      "name": 10,
       "concept": 10,
       "description": 10,
       "image": 10,
-      "key": 10,
-      "name": 10,
-      "quote": 10
+      "quote": 10,
+      "requires": 10,
+      "yields": 10,
+      "gains": 10,
+      "upgradesFrom": 10,
+      "specials": 10,
+      "actions": 10,
+      "allows": 10
     },
     "domainType": {
-      "concept": 4,
-      "description": 4,
-      "key": 4,
-      "name": 4
-    },
-    "elevationType": {
-      "concept": 4,
-      "description": 4,
       "key": 4,
       "name": 4,
-      "yields": 3,
-      "specials": 2
+      "concept": 4,
+      "description": 4,
+      "requires": 4,
+      "yields": 4,
+      "gains": 4,
+      "upgradesFrom": 4,
+      "specials": 4,
+      "actions": 4,
+      "allows": 2,
+      "relatesTo": 4
+    },
+    "elevationType": {
+      "key": 4,
+      "name": 4,
+      "concept": 4,
+      "description": 4,
+      "requires": 4,
+      "yields": 4,
+      "gains": 4,
+      "upgradesFrom": 4,
+      "specials": 4,
+      "actions": 4,
+      "allows": 4,
+      "relatesTo": 1
     },
     "eraType": {
+      "key": 19,
+      "name": 19,
       "concept": 19,
       "description": 19,
       "image": 19,
+      "quote": 19,
       "intro": 19,
-      "key": 19,
-      "name": 19,
       "p1": 19,
       "p2": 19,
-      "quote": 19
+      "requires": 19,
+      "yields": 19,
+      "gains": 19,
+      "upgradesFrom": 19,
+      "specials": 19,
+      "actions": 19,
+      "relatesTo": 19
     },
     "eventType": {
-      "concept": 32,
       "key": 32,
-      "name": 32
+      "name": 32,
+      "concept": 32,
+      "description": 32,
+      "requires": 32,
+      "yields": 32,
+      "gains": 32,
+      "upgradesFrom": 32,
+      "specials": 32,
+      "actions": 32
     },
     "featureType": {
-      "concept": 12,
-      "description": 12,
       "key": 12,
       "name": 12,
+      "concept": 12,
+      "description": 12,
       "requires": 12,
-      "yields": 11,
-      "specials": 2
+      "yields": 12,
+      "gains": 12,
+      "upgradesFrom": 12,
+      "specials": 12,
+      "actions": 12,
+      "allows": 9,
+      "relatesTo": 6
     },
     "goalType": {
-      "category": 27,
-      "concept": 27,
-      "description": 24,
-      "image": 27,
       "key": 27,
       "name": 27,
+      "concept": 27,
+      "category": 27,
+      "description": 27,
+      "image": 27,
       "quote": 27,
-      "requires": 19,
+      "requires": 27,
+      "yields": 27,
+      "gains": 27,
+      "upgradesFrom": 27,
+      "specials": 27,
+      "actions": 27,
+      "allows": 14,
       "p1": 6
     },
     "interactionType": {
-      "concept": 10,
       "key": 10,
-      "name": 10
+      "name": 10,
+      "concept": 10,
+      "description": 10,
+      "requires": 10,
+      "yields": 10,
+      "gains": 10,
+      "upgradesFrom": 10,
+      "specials": 10,
+      "actions": 10
     },
     "oceanType": {
-      "concept": 7,
-      "description": 7,
       "key": 7,
       "name": 7,
+      "concept": 7,
+      "description": 7,
       "quote": 7,
-      "requires": 7
+      "requires": 7,
+      "yields": 7,
+      "gains": 7,
+      "upgradesFrom": 7,
+      "specials": 7,
+      "actions": 7
     },
     "regionType": {
-      "category": 40,
-      "concept": 40,
-      "description": 40,
       "key": 40,
       "name": 40,
-      "requires": 40
+      "concept": 40,
+      "category": 40,
+      "description": 40,
+      "requires": 40,
+      "yields": 40,
+      "gains": 40,
+      "upgradesFrom": 40,
+      "specials": 40,
+      "actions": 40,
+      "allows": 40
     },
     "specialType": {
-      "concept": 51,
-      "key": 51,
-      "name": 51
+      "key": 83,
+      "name": 83,
+      "concept": 83,
+      "description": 83,
+      "requires": 83,
+      "yields": 83,
+      "gains": 83,
+      "upgradesFrom": 83,
+      "specials": 83,
+      "actions": 83,
+      "relatesTo": 61,
+      "allows": 20
     },
     "tensionType": {
       "key": 5,
       "name": 5,
       "concept": 5,
-      "description": 5
+      "description": 5,
+      "requires": 5,
+      "yields": 5,
+      "gains": 5,
+      "upgradesFrom": 5,
+      "specials": 5,
+      "actions": 5
     },
     "terrainType": {
-      "concept": 10,
-      "description": 10,
       "key": 10,
       "name": 10,
-      "requires": 5,
-      "yields": 8,
-      "specials": 4
+      "concept": 10,
+      "description": 10,
+      "requires": 10,
+      "yields": 10,
+      "gains": 10,
+      "upgradesFrom": 10,
+      "specials": 10,
+      "actions": 10,
+      "allows": 8,
+      "relatesTo": 5
     },
     "yieldType": {
-      "concept": 40,
       "key": 40,
-      "name": 40
+      "name": 40,
+      "concept": 40,
+      "description": 40,
+      "requires": 40,
+      "yields": 40,
+      "gains": 40,
+      "upgradesFrom": 40,
+      "specials": 40,
+      "actions": 40,
+      "allows": 1
+    },
+    "majorCultureType": {
+      "key": 200,
+      "name": 200,
+      "concept": 200,
+      "category": 200,
+      "description": 200,
+      "requires": 200,
+      "yields": 200,
+      "gains": 200,
+      "upgradesFrom": 200,
+      "specials": 200,
+      "actions": 200,
+      "upgradesTo": 159,
+      "allows": 200
+    },
+    "majorLeaderType": {
+      "key": 192,
+      "name": 192,
+      "concept": 192,
+      "category": 192,
+      "description": 192,
+      "image": 192,
+      "quote": 192,
+      "requires": 192,
+      "yields": 192,
+      "gains": 192,
+      "upgradesFrom": 192,
+      "specials": 192,
+      "actions": 192
+    },
+    "minorCultureType": {
+      "key": 160,
+      "name": 160,
+      "concept": 160,
+      "category": 160,
+      "description": 160,
+      "requires": 160,
+      "yields": 160,
+      "gains": 160,
+      "upgradesFrom": 160,
+      "specials": 160,
+      "actions": 160,
+      "upgradesTo": 80,
+      "allows": 160
+    },
+    "minorLeaderType": {
+      "key": 158,
+      "name": 158,
+      "concept": 158,
+      "category": 158,
+      "description": 158,
+      "image": 158,
+      "quote": 158,
+      "requires": 158,
+      "yields": 158,
+      "gains": 158,
+      "upgradesFrom": 158,
+      "specials": 158,
+      "actions": 158
+    },
+    "mythType": {
+      "key": 9,
+      "name": 9,
+      "concept": 9,
+      "category": 9,
+      "description": 9,
+      "requires": 9,
+      "yields": 9,
+      "gains": 9,
+      "upgradesFrom": 9,
+      "specials": 9,
+      "actions": 9
+    },
+    "nationalWonderType": {
+      "key": 43,
+      "name": 43,
+      "concept": 43,
+      "category": 43,
+      "description": 43,
+      "image": 43,
+      "quote": 43,
+      "requires": 43,
+      "yields": 43,
+      "gains": 43,
+      "upgradesFrom": 43,
+      "specials": 43,
+      "actions": 43
+    },
+    "naturalWonderType": {
+      "key": 80,
+      "name": 80,
+      "concept": 80,
+      "category": 80,
+      "description": 80,
+      "image": 80,
+      "quote": 80,
+      "requires": 80,
+      "yields": 80,
+      "gains": 80,
+      "upgradesFrom": 80,
+      "specials": 80,
+      "actions": 80
+    },
+    "platformType": {
+      "key": 34,
+      "name": 34,
+      "concept": 34,
+      "category": 34,
+      "description": 34,
+      "requires": 34,
+      "yields": 34,
+      "gains": 34,
+      "upgradesFrom": 34,
+      "specials": 34,
+      "actions": 34,
+      "relatesTo": 3
+    },
+    "policyType": {
+      "key": 25,
+      "name": 25,
+      "concept": 25,
+      "category": 25,
+      "description": 25,
+      "requires": 25,
+      "yields": 25,
+      "gains": 25,
+      "upgradesFrom": 25,
+      "specials": 25,
+      "actions": 25
+    },
+    "resourceType": {
+      "key": 133,
+      "name": 133,
+      "concept": 133,
+      "category": 133,
+      "description": 133,
+      "requires": 133,
+      "yields": 133,
+      "gains": 133,
+      "upgradesFrom": 133,
+      "specials": 133,
+      "actions": 133,
+      "relatesTo": 5,
+      "allows": 17
+    },
+    "routeType": {
+      "key": 5,
+      "name": 5,
+      "concept": 5,
+      "description": 5,
+      "requires": 5,
+      "yields": 5,
+      "gains": 5,
+      "upgradesFrom": 5,
+      "specials": 5,
+      "actions": 5
+    },
+    "stockpileType": {
+      "key": 6,
+      "name": 6,
+      "concept": 6,
+      "category": 6,
+      "description": 6,
+      "requires": 6,
+      "yields": 6,
+      "gains": 6,
+      "upgradesFrom": 6,
+      "specials": 6,
+      "actions": 6
+    },
+    "technologyType": {
+      "key": 164,
+      "name": 164,
+      "concept": 164,
+      "category": 164,
+      "description": 164,
+      "image": 164,
+      "quote": 164,
+      "x": 164,
+      "y": 164,
+      "requires": 164,
+      "yields": 164,
+      "gains": 164,
+      "upgradesFrom": 164,
+      "specials": 164,
+      "actions": 164,
+      "allows": 163,
+      "relatesTo": 4
+    },
+    "traitType": {
+      "key": 24,
+      "name": 24,
+      "concept": 24,
+      "category": 24,
+      "description": 24,
+      "isPositive": 24,
+      "requires": 24,
+      "yields": 24,
+      "gains": 24,
+      "upgradesFrom": 24,
+      "specials": 24,
+      "actions": 24
+    },
+    "worldWonderType": {
+      "key": 88,
+      "name": 88,
+      "concept": 88,
+      "category": 88,
+      "description": 88,
+      "image": 88,
+      "quote": 88,
+      "requires": 88,
+      "yields": 88,
+      "gains": 88,
+      "upgradesFrom": 88,
+      "specials": 88,
+      "actions": 88
     }
   },
   "categories": {
     "buildingCategory": {
       "key": 18,
       "name": 18,
-      "concept": 18
+      "concept": 18,
+      "description": 18,
+      "relatesTo": 18
     },
     "dogmaCategory": {
       "key": 15,
       "name": 15,
-      "concept": 15
+      "concept": 15,
+      "description": 15,
+      "relatesTo": 15
     },
     "equipmentCategory": {
       "key": 26,
       "name": 26,
-      "concept": 26
-    },
-    "featureCategory": {
-      "key": 2,
-      "name": 2,
-      "concept": 2,
-      "description": 1
-    },
-    "goalCategory": {
-      "key": 16,
-      "name": 16,
-      "concept": 16,
-      "description": 8
+      "concept": 26,
+      "description": 26,
+      "relatesTo": 26
     },
     "godCategory": {
       "key": 9,
       "name": 9,
-      "concept": 9
+      "concept": 9,
+      "description": 9,
+      "relatesTo": 9,
+      "allows": 5
     },
     "heritageCategory": {
       "key": 10,
       "name": 10,
-      "concept": 10
+      "concept": 10,
+      "description": 10,
+      "relatesTo": 10
     },
     "improvementCategory": {
       "key": 13,
       "name": 13,
-      "concept": 13
-    },
-    "majorCultureCategory": {
-      "key": 10,
-      "name": 10,
-      "concept": 10
-    },
-    "majorLeaderCategory": {
-      "key": 10,
-      "name": 10,
-      "concept": 10
-    },
-    "minorCultureCategory": {
-      "key": 10,
-      "name": 10,
-      "concept": 10
-    },
-    "minorLeaderCategory": {
-      "key": 10,
-      "name": 10,
-      "concept": 10
-    },
-    "mythCategory": {
-      "key": 4,
-      "name": 4,
-      "concept": 4
-    },
-    "nationalWonderCategory": {
-      "key": 13,
-      "name": 13,
-      "concept": 13
-    },
-    "naturalWonderCategory": {
-      "key": 12,
-      "name": 12,
-      "concept": 12
-    },
-    "platformCategory": {
-      "key": 10,
-      "name": 10,
-      "concept": 10
-    },
-    "policyCategory": {
-      "key": 5,
-      "name": 5,
-      "concept": 5
-    },
-    "regionCategory": {
-      "key": 20,
-      "name": 20,
-      "concept": 20,
-      "description": 10
-    },
-    "resourceCategory": {
-      "key": 13,
-      "name": 13,
-      "concept": 13
-    },
-    "stockpileCategory": {
-      "key": 2,
-      "name": 2,
-      "concept": 2
-    },
-    "traitCategory": {
-      "key": 12,
-      "name": 12,
-      "concept": 12
-    },
-    "worldWonderCategory": {
-      "key": 16,
-      "name": 16,
-      "concept": 16
+      "concept": 13,
+      "description": 13,
+      "relatesTo": 13,
+      "allows": 2
     },
     "agendaCategory": {
       "key": 2,
       "name": 2,
       "concept": 2,
-      "description": 2
+      "description": 2,
+      "relatesTo": 2
+    },
+    "featureCategory": {
+      "key": 1,
+      "name": 1,
+      "concept": 1,
+      "description": 1,
+      "allows": 1
+    },
+    "goalCategory": {
+      "key": 8,
+      "name": 8,
+      "concept": 8,
+      "description": 8,
+      "relatesTo": 8
     },
     "incidentCategory": {
       "key": 2,
       "name": 2,
       "concept": 2,
-      "description": 2
+      "description": 2,
+      "relatesTo": 2
+    },
+    "regionCategory": {
+      "key": 10,
+      "name": 10,
+      "concept": 10,
+      "description": 10,
+      "relatesTo": 10
+    },
+    "majorCultureCategory": {
+      "key": 10,
+      "name": 10,
+      "concept": 10,
+      "description": 10,
+      "relatesTo": 10
+    },
+    "majorLeaderCategory": {
+      "key": 10,
+      "name": 10,
+      "concept": 10,
+      "description": 10,
+      "relatesTo": 10
+    },
+    "minorCultureCategory": {
+      "key": 10,
+      "name": 10,
+      "concept": 10,
+      "description": 10,
+      "relatesTo": 10
+    },
+    "minorLeaderCategory": {
+      "key": 10,
+      "name": 10,
+      "concept": 10,
+      "description": 10,
+      "relatesTo": 10
+    },
+    "mythCategory": {
+      "key": 4,
+      "name": 4,
+      "concept": 4,
+      "description": 4,
+      "relatesTo": 4,
+      "allows": 1
+    },
+    "nationalWonderCategory": {
+      "key": 13,
+      "name": 13,
+      "concept": 13,
+      "description": 13,
+      "relatesTo": 13
+    },
+    "naturalWonderCategory": {
+      "key": 12,
+      "name": 12,
+      "concept": 12,
+      "description": 12,
+      "relatesTo": 12
+    },
+    "platformCategory": {
+      "key": 10,
+      "name": 10,
+      "concept": 10,
+      "description": 10,
+      "relatesTo": 10
+    },
+    "policyCategory": {
+      "key": 5,
+      "name": 5,
+      "concept": 5,
+      "description": 5,
+      "relatesTo": 5
+    },
+    "resourceCategory": {
+      "key": 13,
+      "name": 13,
+      "concept": 13,
+      "description": 13,
+      "allows": 9,
+      "relatesTo": 13
+    },
+    "stockpileCategory": {
+      "key": 2,
+      "name": 2,
+      "concept": 2,
+      "description": 2,
+      "relatesTo": 2
+    },
+    "traitCategory": {
+      "key": 12,
+      "name": 12,
+      "concept": 12,
+      "description": 12,
+      "relatesTo": 12
+    },
+    "worldWonderCategory": {
+      "key": 16,
+      "name": 16,
+      "concept": 16,
+      "description": 16,
+      "relatesTo": 16
     }
   }
 }

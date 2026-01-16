@@ -1,4 +1,3 @@
-import { ObjectIcon } from "@/Common/Objects/World";
 import { Requires } from "@/Common/Static/Objects/Requires";
 import { Yields } from "@/Common/Static/Objects/Yields";
 import {
@@ -9,7 +8,7 @@ import {
   TypeClass,
   TypeKey,
 } from "@/Common/Static/StaticEnums";
-import { getObjectIcon } from "@/Common/Static/Icon";
+import { getObjectIcon, ObjectIcon } from "@/Common/Static/Icon";
 import { CompiledTypeData } from "@/Data/StaticDataCompiler";
 import { getClassAndConcept, IStaticObject } from "@/Common/Static/Objects/_StaticObject";
 

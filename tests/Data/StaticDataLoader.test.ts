@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { load } from "@/Data/StaticDataLoader";
 import { CompiledStaticData } from "@/Data/StaticDataCompiler";
 import { Yields } from "@/Common/Static/Objects/Yields";
@@ -39,16 +40,15 @@ describe("StaticDataLoader", () => {
           upgradesTo: ["buildingType:new"],
           actions: ["actionType:move"],
           // Exception: Testing runtime validation of invalid types
-          // @ts-expect-error - testing invalid data
-          specials: ["specialType:test" as any],
+          specials: ["specialType:againstYourIncident"],
           gains: [],
         },
         {
-          key: "unitType:minimal",
-          name: "Minimal Unit",
+          key: "equipmentType:minimal",
+          description: "Description",
+          name: "Minimal Equipment",
           // Exception: Testing runtime validation of invalid types
-          // @ts-expect-error - testing invalid data
-          concept: "conceptType:unit" as any,
+          concept: "conceptType:equipment",
           allows: [],
           relatesTo: [],
           upgradesTo: [],
@@ -88,8 +88,8 @@ describe("StaticDataLoader", () => {
         expect(building.actions).toEqual(["actionType:move"]);
         expect(building.specials).toEqual(["specialType:test"]);
 
-        // Assert that 'unitType:minimal' is loaded correctly
-        const minimal = types.get("unitType:minimal")!;
+        // Assert that 'equipmentType:minimal' is loaded correctly
+        const minimal = types.get("equipmentType:minimal")!;
         expect(minimal).toBeDefined();
         expect(minimal.name).toBe("Minimal Unit");
         expect(minimal.allows).toEqual([]);
@@ -176,14 +176,16 @@ describe("StaticDataLoader", () => {
           categories: [],
           types: [
             // Exception: Testing runtime validation of invalid types
-            // @ts-expect-error - testing invalid data
-            { key: "invalidKey" as any, name: "Bad", concept: "conceptType:test" as any } as any,
+            { key: "invalidKey", name: "Bad", concept: "conceptType:test" },
             // Exception: Testing runtime validation of invalid types
-            // @ts-expect-error - testing invalid data
-            { key: "wrongType:key" as any, name: "Bad2", concept: "conceptType:test" as any } as any,
+            {
+              key: "wrongType:key",
+              name: "Bad2",
+              concept: "conceptType:test",
+            },
           ],
         };
-        
+
         expect(() => load(badData)).toThrow();
         try {
           load(badData);
@@ -198,13 +200,12 @@ describe("StaticDataLoader", () => {
           categories: [],
           types: [
             // Exception: Testing runtime validation of invalid types
-            // @ts-expect-error - testing invalid data
             {
               key: "buildingType:minimal",
               name: "Minimal",
               concept: "conceptType:building",
               // missing yields, actions, etc.
-            } as any,
+            },
           ],
         };
 
@@ -215,7 +216,7 @@ describe("StaticDataLoader", () => {
         expect(minimal.yields.all()).toEqual([]);
         expect(minimal.actions).toEqual([]);
         expect(minimal.specials).toEqual([]);
-        
+
         // Assert Yields defaults
         expect(minimal.productionCost).toBe(0);
       });

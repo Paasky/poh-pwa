@@ -5,10 +5,9 @@ import {
   StaticKey,
   TypeKey,
 } from "@/Common/Static/StaticEnums";
-import { ObjectIcon } from "@/Common/Objects/World";
 import { getClassAndConcept, IStaticObject } from "@/Common/Static/Objects/_StaticObject";
 import { CompiledCategoryData } from "@/Data/StaticDataCompiler";
-import { getObjectIcon } from "@/Common/Static/Icon";
+import { getObjectIcon, ObjectIcon } from "@/Common/Static/Icon";
 
 export type CategoryObject = IStaticObject & {
   // Duplicate IStaticObject attributes for clarity

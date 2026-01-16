@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+
 import fs from "fs";
 import path from "path";
 import { CatKey, StaticKey, TypeKey } from "@/Common/Static/StaticEnums";
@@ -24,8 +25,13 @@ export class StaticDataCompiler {
   private typeRegistry = new Map<TypeKey, CompiledTypeData>();
   private categoryRegistry = new Map<CatKey, CompiledCategoryData>();
 
-  private sourceDir = path.join(process.cwd(), "data");
-  private outputDir = path.join(process.cwd(), "public", "data");
+  private sourceDir: string;
+  private outputDir: string;
+
+  constructor(sourceDir?: string, outputDir?: string) {
+    this.sourceDir = sourceDir || path.join(process.cwd(), "data");
+    this.outputDir = outputDir || path.join(process.cwd(), "public", "data");
+  }
 
   public compile() {
     console.log("Starting Static Data Compiler...");
@@ -37,9 +43,7 @@ export class StaticDataCompiler {
     this.ingest();
 
     // 2. Relational Baking
-    if (this.allErrors.length === 0) {
-      this.process();
-    }
+    this.process();
 
     // 3. Report & Emit
     if (this.allErrors.length > 0) {
@@ -100,7 +104,7 @@ export class StaticDataCompiler {
             continue;
           }
 
-          // key is either CatKey or TypeKey but IDE doesn't know it's fine
+          // Type assertion for registry key
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const key = item.key as any;
 
@@ -110,8 +114,7 @@ export class StaticDataCompiler {
             continue;
           }
 
-          // Valid & Unique: Add to registry.
-          // the result.data is valid now but IDE doesn't know it's fine
+          // Validated data is added to the registry
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           registry.set(key, result.data as any);
         }
@@ -228,7 +231,7 @@ export class StaticDataCompiler {
   }
 
   private analyze() {
-    // Any-rule-exception: Analysis is just a dev-helper file we never use in-code
+    // Analysis helper for development
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const analysis: any = { types: {}, categories: {} };
 
@@ -250,7 +253,7 @@ export class StaticDataCompiler {
 
     fs.writeFileSync(
       path.join(this.outputDir, "staticAnalysis.json"),
-      JSON.stringify(analysis, null, 2), // todo minify for prod
+      JSON.stringify(analysis, null, 2), // TODO: Minify for production
     );
     console.log("✓ Analysis staticAnalysis.json generated");
   }

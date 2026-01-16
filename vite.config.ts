@@ -63,11 +63,16 @@ export default defineConfig(async ({ command }) => {
         if (file.includes("/data/") && file.endsWith(".json")) {
           console.log(`\n⚒ Data changed: ${path.relative(process.cwd(), file)}. Reforging...`);
           try {
-            const { StaticDataCompiler } = await import("./src/Data/StaticDataCompiler");
-            await new StaticDataCompiler().compile();
+            // We import child_process dynamically to keep it out of the global scope
+            const { execSync } = await import("node:child_process");
+
+            // Execute the existing bake script.
+            // { stdio: "inherit" } ensures you see the compiler's output in your terminal.
+            execSync("pnpm data:bake", { stdio: "inherit" });
+
             server.ws.send({ type: "full-reload" });
           } catch (err) {
-            // Errors already logged by compiler
+            // The error is already logged to the terminal by the inherited stdio
           }
         }
       },
