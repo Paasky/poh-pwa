@@ -1,12 +1,12 @@
-import { ObjKey } from "@/Common/Objects/World";
-import { TypeClass, TypeObject } from "@/Common/Objects/TypeObject";
+import { StaticKey, TypeClass } from "@/Common/Static/StaticEnums";
+import { TypeObject } from "@/Common/Static/Objects/TypeObject";
 
 export class Requires {
-  private _requireAll: Set<ObjKey> = new Set();
-  private _requireAny: Set<Set<ObjKey>> = new Set();
-  private _allTypes: Set<ObjKey> = new Set();
+  private _requireAll: Set<StaticKey> = new Set();
+  private _requireAny: Set<Set<StaticKey>> = new Set();
+  private _allTypes: Set<StaticKey> = new Set();
 
-  constructor(requires: (ObjKey | ObjKey[])[] = []) {
+  constructor(requires: (StaticKey | StaticKey[])[] = []) {
     for (const r of requires) {
       if (Array.isArray(r)) {
         const anySet = new Set(r);
@@ -19,7 +19,7 @@ export class Requires {
     }
   }
 
-  get allTypes(): Set<ObjKey> {
+  get allTypes(): Set<StaticKey> {
     return this._allTypes;
   }
 
@@ -27,11 +27,11 @@ export class Requires {
     return this._allTypes.size === 0;
   }
 
-  get requireAll(): Set<ObjKey> {
+  get requireAll(): Set<StaticKey> {
     return this._requireAll;
   }
 
-  get requireAny(): Set<Set<ObjKey>> {
+  get requireAny(): Set<Set<StaticKey>> {
     return this._requireAny;
   }
 
@@ -66,8 +66,8 @@ export class Requires {
   }
 
   filter(classes: TypeClass[]): Requires {
-    const all: ObjKey[] = [];
-    const any: ObjKey[][] = [];
+    const all: StaticKey[] = [];
+    const any: StaticKey[][] = [];
 
     for (const req of this._requireAll) {
       if (classes.some((c) => req.startsWith(`${c}:`))) {

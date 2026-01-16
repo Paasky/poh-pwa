@@ -1,5 +1,5 @@
 import { GameKey } from "@/Common/Models/_GameModel";
-import { TypeKey } from "@/Common/Objects/World";
+import { TypeKey } from "@/Common/Static/StaticEnums";
 
 export type ActionType =
   // Units

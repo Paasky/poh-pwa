@@ -633,16 +633,6 @@ export function getAllIcons(): IconDefinition[] {
   return Array.from(set.values());
 }
 
-export function getYieldTypeFaIcons(): IconDefinition[] {
-  const set = new Set<IconDefinition>();
-  for (const [key, val] of Object.entries(keys)) {
-    if (key.startsWith("yieldType:")) {
-      set.add(val.icon as IconDefinition);
-    }
-  }
-  return Array.from(set.values());
-}
-
 export type ObjectIcon = {
   icon: IconDefinition;
   color: string;

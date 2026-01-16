@@ -6,8 +6,8 @@ import {
   SpecialTypeKey,
   StaticKey,
   TypeKey,
-} from "@/Common/Static/StaticEnums";
-import { YieldTypeKey } from "@/Common/Static/Objects/Yields";
+} from "./StaticEnums";
+import { YieldTypeKey } from "./Objects/Yields";
 
 export const RequiresSchema = z
   .array(

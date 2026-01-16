@@ -3,7 +3,7 @@ import { has, reduce } from "@/Common/Helpers/collectionTools";
 import { CategoryObject } from "@/Common/Static/Objects/CategoryObject";
 import { StaticKey, TypeKey } from "@/Common/Static/StaticEnums";
 import { TypeObject } from "@/Common/Static/Objects/TypeObject";
-import { roundToTenth } from "@/Common/Objects/World";
+import { roundToTenth } from "@/Common/Helpers/basicMath";
 
 export type YieldMethod = "lump" | "percent" | "set";
 

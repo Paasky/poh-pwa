@@ -1,7 +1,7 @@
 import { useDataBucket } from "@/Data/useDataBucket";
-import { TypeClass, TypeObject } from "@/Common/Objects/TypeObject";
-import { TypeKey } from "@/Common/Objects/World";
 import { filter, map } from "@/Common/Helpers/collectionTools";
+import { TypeClass, TypeKey } from "@/Common/Static/StaticEnums";
+import { TypeObject } from "@/Common/Static/Objects/TypeObject";
 
 export interface WorldLinkFilters {
   typeClasses?: TypeClass[];

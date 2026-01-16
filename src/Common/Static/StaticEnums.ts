@@ -1,8 +1,8 @@
 //////////////////////////////////
 // Class enums
 
-import { CategoryObject } from "@/Common/Static/Objects/CategoryObject";
-import { TypeObject } from "@/Common/Static/Objects/TypeObject";
+import { CategoryObject } from "./Objects/CategoryObject";
+import { TypeObject } from "./Objects/TypeObject";
 
 export type CategoryClass =
   | "buildingCategory"
