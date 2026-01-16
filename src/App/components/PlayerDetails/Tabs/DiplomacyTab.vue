@@ -6,6 +6,7 @@ import UiTypeChip from "@/App/components/Ui/UiTypeChip.vue";
 import UiObjectChips from "@/App/components/Ui/UiObjectChips.vue";
 import UiYields from "@/App/components/Ui/UiYields.vue";
 import UiCols from "@/App/components/Ui/UiCols.vue";
+import UiTimeline from "@/App/components/Ui/UiTimeline.vue";
 import { useDiplomacyTabStore } from "@/App/components/PlayerDetails/Tabs/diplomacyTabStore";
 
 const store = useDiplomacyTabStore();
@@ -50,16 +51,7 @@ function searchPlayer(p: Player, term: string): boolean {
         <!-- Leader -->
         <div class="d-flex flex-column ga-4">
           <h2>Leader</h2>
-          <div class="d-flex align-center ga-2" style="font-size: 1rem">
-            <template v-for="(type, i) in store.leaderTimeline" :key="type.key">
-              <UiIcon v-if="i > 0" icon="chevronRight" color="grey" size="xs" />
-              <UiTypeChip
-                :type="type"
-                :size="store.current.leader.key === type.key ? 'large' : 'x-small'"
-                color="secondary"
-              />
-            </template>
-          </div>
+          <UiTimeline :type="store.current.leader" horizontal />
           <v-img
             v-if="store.current.leader.image"
             :src="store.current.leader.image"
@@ -73,16 +65,7 @@ function searchPlayer(p: Player, term: string): boolean {
         <!-- Culture -->
         <div class="d-flex flex-column ga-4">
           <h2>Culture</h2>
-          <div class="d-flex align-center ga-2" style="font-size: 1rem">
-            <template v-for="(type, i) in store.cultureTimeline" :key="type.key">
-              <UiIcon v-if="i > 0" icon="chevronRight" color="grey" size="xs" />
-              <UiTypeChip
-                :type="type"
-                :size="store.current.culture.type.key === type.key ? 'large' : 'x-small'"
-                color="secondary"
-              />
-            </template>
-          </div>
+          <UiTimeline :type="store.current.culture.type" horizontal />
 
           <!-- Sub Headers -->
           <div class="d-flex ga-2">

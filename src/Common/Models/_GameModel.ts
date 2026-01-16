@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useDataBucket } from "@/Data/useDataBucket";
-import { GameClass, GameKey, parseKey } from "@/Common/Models/_GameTypes";
-import { TypeObject } from "@/Common/Static/Objects/TypeObject";
+import { useDataBucket } from "../../Data/useDataBucket";
+import { TypeObject } from "../Static/Objects/TypeObject";
 
-export * from "@/Common/Models/_GameTypes";
+export { GameClass, GameKey, parseKey } from "./_GameTypes";
+
+export * from "./_GameTypes";
 
 export interface ObjectWithProps {
   updateWatchers: ((changes: Partial<ObjectWithProps>) => void)[];

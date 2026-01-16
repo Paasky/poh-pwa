@@ -1,9 +1,9 @@
-import { type Unit } from "@/Common/Models/Unit";
-import { PohEvent } from "@/Common/events/_Event";
-import { City } from "@/Common/Models/City";
-import { Tile } from "@/Common/Models/Tile";
-import { Player } from "@/Common/Models/Player";
-import { aWord } from "@/Common/Helpers/textTools";
+import { type Unit } from "../Models/Unit";
+import { PohEvent } from "./_Event";
+import { City } from "../Models/City";
+import { Tile } from "../Models/Tile";
+import { Player } from "../Models/Player";
+import { aWord } from "../Helpers/textTools";
 
 export class UnitAttacked extends PohEvent {
   constructor(unit: Unit) {

@@ -3,7 +3,7 @@ import { GameKey } from "@/Common/Models/_GameModel";
 
 const listeners = new Map<GameKey, (events: IEvent[]) => void>();
 
-export function subscribe(playerKey: GameKey, callback: (events: IEvent[]) => void) {
+export function subscribeToEvents(playerKey: GameKey, callback: (events: IEvent[]) => void) {
   listeners.set(playerKey, callback);
 }
 

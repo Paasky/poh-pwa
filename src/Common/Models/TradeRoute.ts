@@ -1,9 +1,9 @@
-import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
-import type { City } from "@/Common/Models/City";
-import type { Unit } from "@/Common/Models/Unit";
-import type { Tile } from "@/Common/Models/Tile";
-import { tradeRouteYieldTypeKeys, Yield, Yields } from "@/Common/Static/Objects/Yields";
-import { TypeObject } from "@/Common/Objects/TypeObject";
+import { GameKey, GameObjAttr, GameObject } from "./_GameModel";
+import type { City } from "./City";
+import type { Unit } from "./Unit";
+import type { Tile } from "./Tile";
+import { tradeRouteYieldTypeKeys, Yield, Yields } from "../Static/Objects/Yields";
+import { TypeObject } from "../Static/Objects/TypeObject";
 
 export class TradeRoute extends GameObject {
   constructor(

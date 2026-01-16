@@ -286,6 +286,7 @@
       "concept": 40,
       "category": 40,
       "description": 40,
+      "cities": 40,
       "requires": 40,
       "yields": 40,
       "gains": 40,
@@ -359,7 +360,7 @@
       "upgradesFrom": 200,
       "specials": 200,
       "actions": 200,
-      "upgradesTo": 159,
+      "upgradesTo": 160,
       "allows": 200
     },
     "majorLeaderType": {
@@ -383,6 +384,7 @@
       "concept": 160,
       "category": 160,
       "description": 160,
+      "cities": 160,
       "requires": 160,
       "yields": 160,
       "gains": 160,

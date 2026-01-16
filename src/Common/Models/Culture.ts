@@ -1,14 +1,14 @@
-import { TypeObject } from "@/Common/Objects/TypeObject";
-import { CatKey, TypeKey } from "@/Common/Objects/World";
-import { Yields } from "@/Common/Static/Objects/Yields";
-import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
-import { useDataBucket } from "@/Data/useDataBucket";
-import type { Citizen } from "@/Common/Models/Citizen";
-import type { Player } from "@/Common/Models/Player";
-import type { Tile } from "@/Common/Models/Tile";
-import { useEventStore } from "@/App/stores/eventStore";
-import { CultureHasNewType, CultureHasSettled } from "@/Common/events/Culture";
-import { has } from "@/Common/Helpers/collectionTools";
+import { TypeObject } from "../Static/Objects/TypeObject";
+import { CatKey, TypeKey } from "../Static/StaticEnums";
+import { Yields } from "../Static/Objects/Yields";
+import { GameKey, GameObjAttr, GameObject } from "./_GameModel";
+import { useDataBucket } from "../../Data/useDataBucket";
+import type { Citizen } from "./Citizen";
+import type { Player } from "./Player";
+import type { Tile } from "./Tile";
+import { useEventStore } from "../../App/stores/eventStore";
+import { CultureHasNewType, CultureHasSettled } from "../events/Culture";
+import { has } from "../Helpers/collectionTools";
 
 export type CultureStatus = "notSettled" | "canSettle" | "mustSettle" | "settled";
 

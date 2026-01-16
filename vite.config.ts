@@ -121,7 +121,7 @@ export default defineConfig(async ({ command }) => {
     },
     test: {
       environment: "happy-dom",
-      setupFiles: ["./tests/_setup/vitest-canvas-mock.ts", "./tests/_setup/staticDataGlobal.ts"],
+      setupFiles: ["./tests/_setup/vitest-canvas-mock.ts"],
     },
   };
 });

@@ -19,6 +19,7 @@ import { TypeObject } from "@/Common/Static/Objects/TypeObject";
 import { CategoryObject } from "@/Common/Static/Objects/CategoryObject";
 import { CompiledStaticData } from "@/Data/StaticDataCompiler";
 import { formatYear } from "@/Common/Helpers/time";
+import { WorldLinks } from "@/Data/WorldLinks";
 
 export type RawSaveData = {
   name: string; // "Leader Name - Culture Name" (user editable)
@@ -30,6 +31,8 @@ export type RawSaveData = {
 };
 
 export class DataBucket {
+  public readonly links: WorldLinks;
+
   // Static Types and Categories
   private readonly categoryTypesIndex = new Map<StaticKey, Set<TypeKey>>();
   private readonly classTypesIndex = new Map<TypeClass, Set<TypeKey>>();
@@ -47,6 +50,7 @@ export class DataBucket {
     private readonly objects: Map<GameKey, GameObject> = new Map(),
     dataLoader?: GameDataLoader,
   ) {
+    this.links = new WorldLinks(this);
     this.dataLoader = dataLoader ?? new GameDataLoader(this);
 
     // Build indexes
@@ -56,7 +60,7 @@ export class DataBucket {
   }
 
   static async init(compiledStaticData?: CompiledStaticData): Promise<DataBucket> {
-    return this.fromRaw(compiledStaticData ?? await getStaticData(), {} as WorldState);
+    return this.fromRaw(compiledStaticData ?? (await getStaticData()), {} as WorldState);
   }
 
   static fromRaw(

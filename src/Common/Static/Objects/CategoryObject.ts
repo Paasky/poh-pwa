@@ -5,7 +5,7 @@ import {
   StaticKey,
   TypeKey,
 } from "@/Common/Static/StaticEnums";
-import { getClassAndConcept, IStaticObject } from "@/Common/Static/Objects/_StaticObject";
+import { getClass, IStaticObject } from "@/Common/Static/Objects/_StaticObject";
 import { CompiledCategoryData } from "@/Data/StaticDataCompiler";
 import { getObjectIcon, ObjectIcon } from "@/Common/Static/Icon";
 
@@ -23,13 +23,13 @@ export type CategoryObject = IStaticObject & {
 };
 
 export function initCategoryObject(data: CompiledCategoryData): CategoryObject {
-  const classAndConcept = getClassAndConcept<CategoryClass>(data.key);
-
   return {
     ...data,
 
     // Add/init extra data
-    ...classAndConcept,
-    icon: getObjectIcon(data.key, classAndConcept.concept),
+    class: getClass<CategoryClass>(data.key),
+    icon: getObjectIcon(data.key, data.concept),
+    allows: data.allows ?? [],
+    relatesTo: data.relatesTo ?? [],
   };
 }

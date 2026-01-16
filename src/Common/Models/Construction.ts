@@ -1,18 +1,18 @@
-import { TypeObject } from "@/Common/Objects/TypeObject";
-import { constructionYieldTypeKeys, Yield, Yields } from "@/Common/Static/Objects/Yields";
-import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
-import type { Citizen } from "@/Common/Models/Citizen";
-import type { Tile } from "@/Common/Models/Tile";
-import { City } from "@/Common/Models/City";
-import { useDataBucket } from "@/Data/useDataBucket";
-import { useEventStore } from "@/App/stores/eventStore";
+import { TypeObject } from "../Static/Objects/TypeObject";
+import { constructionYieldTypeKeys, Yield, Yields } from "../Static/Objects/Yields";
+import { GameKey, GameObjAttr, GameObject } from "./_GameModel";
+import type { Citizen } from "./Citizen";
+import type { Tile } from "./Tile";
+import { City } from "./City";
+import { useDataBucket } from "../../Data/useDataBucket";
+import { useEventStore } from "../../App/stores/eventStore";
 import {
   ConstructionAbandoned,
   ConstructionCancelled,
   ConstructionCompleted,
   ConstructionLost,
-} from "@/Common/events/Construction";
-import { Player } from "@/Common/Models/Player";
+} from "../events/Construction";
+import { Player } from "./Player";
 
 export class Construction extends GameObject {
   constructor(
@@ -46,7 +46,6 @@ export class Construction extends GameObject {
   /*
    * Attributes
    */
-  completedAtTurn: number | null = null;
   name: string;
 
   /*

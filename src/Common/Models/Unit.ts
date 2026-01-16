@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-import { TypeObject } from "@/Common/Objects/TypeObject";
-import { unitYieldTypeKeys, Yield, Yields } from "@/Common/Static/Objects/Yields";
-import { roundToTenth } from "@/Common/Objects/World";
-import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
-import { useDataBucket } from "@/Data/useDataBucket";
-import type { UnitDesign } from "@/Common/Models/UnitDesign";
-import type { City } from "@/Common/Models/City";
-import type { Player } from "@/Common/Models/Player";
-import type { TradeRoute } from "@/Common/Models/TradeRoute";
-import { type Tile } from "@/Common/Models/Tile";
-import { useEventStore } from "@/App/stores/eventStore";
-import { UnitCreated, UnitHealed, UnitLost } from "@/Common/events/Unit";
-import { getCoordsFromTileKey, getHexNeighborCoords, tileKey } from "@/Common/Helpers/mapTools";
-import { UnitMovement } from "@/Simulation/Movement/UnitMovement";
-import { ActionType } from "@/Common/IAction";
+import { TypeObject } from "../Static/Objects/TypeObject";
+import { unitYieldTypeKeys, Yield, Yields } from "../Static/Objects/Yields";
+import { roundToTenth } from "../Helpers/basicMath";
+import { GameKey, GameObjAttr, GameObject } from "./_GameModel";
+import { useDataBucket } from "../../Data/useDataBucket";
+import type { UnitDesign } from "./UnitDesign";
+import type { City } from "./City";
+import type { Player } from "./Player";
+import type { TradeRoute } from "./TradeRoute";
+import { type Tile } from "./Tile";
+import { useEventStore } from "../../App/stores/eventStore";
+import { UnitCreated, UnitHealed, UnitLost } from "../events/Unit";
+import { getCoordsFromTileKey, getHexNeighborCoords, tileKey } from "../Helpers/mapTools";
+import { UnitMovement } from "../../Simulation/Movement/UnitMovement";
+import { ActionType } from "../IAction";
 
 // mercenary: +10% strength, +50% upkeep, 1/city/t;
 // regular: no effects

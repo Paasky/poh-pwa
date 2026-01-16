@@ -3,7 +3,7 @@
 import fs from "fs";
 import path from "path";
 import { CatKey, StaticKey, TypeKey } from "@/Common/Static/StaticEnums";
-import { CategoryObjectSchema, RawCategoryData, RawTypeData, TypeObjectSchema, } from "@/Common/Static/Validation";
+import { CategoryObjectSchema, RawCategoryData, RawTypeData, TypeObjectSchema, } from "@/Common/Validation";
 
 export type CompiledCategoryData = RawCategoryData & {
   allows: TypeKey[];

@@ -1,9 +1,9 @@
-import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
-import { unitYieldTypeKeys, Yield, Yields } from "@/Common/Static/Objects/Yields";
-import { TypeObject } from "@/Common/Objects/TypeObject";
-import type { Player } from "@/Common/Models/Player";
-import type { Unit } from "@/Common/Models/Unit";
-import { useDataBucket } from "@/Data/useDataBucket";
+import { GameKey, GameObjAttr, GameObject } from "./_GameModel";
+import { unitYieldTypeKeys, Yield, Yields } from "../Static/Objects/Yields";
+import { TypeObject } from "../Static/Objects/TypeObject";
+import type { Player } from "./Player";
+import type { Unit } from "./Unit";
+import { useDataBucket } from "../../Data/useDataBucket";
 
 export class UnitDesign extends GameObject {
   constructor(

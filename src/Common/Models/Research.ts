@@ -1,11 +1,11 @@
-import { TypeObject } from "@/Common/Objects/TypeObject";
-import { TypeKey } from "@/Common/Objects/World";
-import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
+import { TypeObject } from "../Static/Objects/TypeObject";
+import { TypeKey } from "../Static/StaticEnums";
+import { GameKey, GameObjAttr, GameObject } from "./_GameModel";
 import { useDataBucket } from "@/Data/useDataBucket";
-import { sort } from "@/Common/Helpers/collectionTools";
-import { Yields, YieldTypeKey } from "@/Common/Static/Objects/Yields";
-import { Player } from "@/Common/Models/Player";
-import { TypeStorage } from "@/Common/Objects/TypeStorage";
+import { sort } from "../Helpers/collectionTools";
+import { Yields, YieldTypeKey } from "../Static/Objects/Yields";
+import { Player } from "./Player";
+import { TypeStorage } from "../Objects/TypeStorage";
 
 export class Research extends GameObject {
   constructor(
@@ -117,7 +117,7 @@ export class Research extends GameObject {
   }
 
   getProgress(tech: TypeObject) {
-    return this.storage.get(tech.key)?.progress ?? 0;
+    return this.storage.amount(tech.key);
   }
 
   private collectRequired(target: TypeObject, acc: Set<TypeObject>): void {

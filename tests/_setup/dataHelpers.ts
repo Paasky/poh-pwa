@@ -4,14 +4,35 @@ import { setDataBucket } from "@/Data/useDataBucket";
 import { DataBucket } from "@/Data/DataBucket";
 import { TestWorldState } from "./testWorld";
 import { tileKey } from "@/Common/Helpers/mapTools";
-import { getCachedStaticData } from "./staticDataGlobal";
+import fs from "fs";
+import path from "path";
+import { execSync } from "child_process";
+import { CompiledStaticData } from "@/Data/StaticDataCompiler";
+
+let rawDataCache: CompiledStaticData | null = null;
+
+export function getRawStaticData(): CompiledStaticData {
+  if (rawDataCache) return rawDataCache;
+
+  const filePath = path.join(process.cwd(), "public", "data", "staticData.json");
+
+  if (!fs.existsSync(filePath)) {
+    execSync("pnpm data:bake", { stdio: "inherit" });
+
+    if (!fs.existsSync(filePath)) {
+      throw new Error(`staticData.json still missing after pnpm data:bake at ${filePath}`);
+    }
+  }
+
+  rawDataCache = JSON.parse(fs.readFileSync(filePath, "utf8"));
+  return rawDataCache!;
+}
 
 export async function initTestDataBucket(
   gameData?: IRawGameObject[],
   world?: WorldState,
 ): Promise<DataBucket> {
-  const rawData = await getCachedStaticData();
-  return setDataBucket(DataBucket.fromRaw(rawData, world ?? TestWorldState, gameData));
+  return setDataBucket(DataBucket.fromRaw(getRawStaticData(), world ?? TestWorldState, gameData));
 }
 
 // NOTE: using any is allowed here as otherwise TS will complain about nonexistent properties

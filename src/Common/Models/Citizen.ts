@@ -1,11 +1,11 @@
-import { TypeObject } from "@/Common/Objects/TypeObject";
-import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
-import type { City } from "@/Common/Models/City";
-import type { Player } from "@/Common/Models/Player";
-import type { Culture } from "@/Common/Models/Culture";
-import type { Religion } from "@/Common/Models/Religion";
-import type { Tile } from "@/Common/Models/Tile";
-import { citizenYieldTypeKeys, Yield, Yields } from "@/Common/Static/Objects/Yields";
+import { TypeObject } from "../Static/Objects/TypeObject";
+import { GameKey, GameObjAttr, GameObject } from "./_GameModel";
+import type { City } from "./City";
+import type { Player } from "./Player";
+import type { Culture } from "./Culture";
+import type { Religion } from "./Religion";
+import type { Tile } from "./Tile";
+import { citizenYieldTypeKeys, Yield, Yields } from "../Static/Objects/Yields";
 
 export class Citizen extends GameObject {
   constructor(

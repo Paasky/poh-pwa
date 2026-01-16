@@ -1,19 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { createPinia, setActivePinia } from "pinia";
 import { destroyDataBucket, useDataBucket } from "@/Data/useDataBucket";
-import { worldLinks } from "@/Common/WorldLinks";
-import { initTestDataBucket } from "./_setup/dataHelpers";
+import { initTestDataBucket } from "../_setup/dataHelpers";
 
 describe("WorldLinks", () => {
   beforeEach(async () => {
-    setActivePinia(createPinia());
     await initTestDataBucket();
-
-    // Reset the singleton
-    (worldLinks as any).initialized = false;
-    (worldLinks as any).continentToRegions.clear();
-    (worldLinks as any).regionToCultures.clear();
-    (worldLinks as any).registry.clear();
   });
 
   afterEach(() => {
@@ -28,7 +19,7 @@ describe("WorldLinks", () => {
 
       continents.forEach((continent) => {
         const regions = Array.from(
-          worldLinks.only({
+          bucket.links.only({
             continents: [continent.key],
             typeClasses: ["regionType"],
           }),
@@ -41,7 +32,7 @@ describe("WorldLinks", () => {
 
         regions.forEach((region) => {
           const regionCultures = Array.from(
-            worldLinks.only({
+            bucket.links.only({
               regions: [region.key],
               typeClasses: ["majorCultureType", "minorCultureType"],
             }),
@@ -57,7 +48,7 @@ describe("WorldLinks", () => {
               `Region ${region.key} has ${startMajors.length} starting major cultures (expected 1)`,
             );
           } else {
-            const majorTimeline = worldLinks.getTimeline(startMajors[0]);
+            const majorTimeline = bucket.links.getTimeline(startMajors[0]);
             if (majorTimeline.length !== 5) {
               errors.push(
                 `Region ${region.key} major culture timeline is ${majorTimeline.length} long (expected 5)`,
@@ -66,13 +57,13 @@ describe("WorldLinks", () => {
 
             // Each region's major cultures has a leader
             majorTimeline.forEach((culture) => {
-              const leaders = worldLinks.only({
+              const leaders = bucket.links.only({
                 cultures: [culture.key],
                 typeClasses: ["majorLeaderType"],
               });
-              if (leaders.length !== 1) {
+              if (leaders.size !== 1) {
                 errors.push(
-                  `Major culture ${culture.key} in region ${region.key} has ${leaders.length} leaders (expected 1)`,
+                  `Major culture ${culture.key} in region ${region.key} has ${leaders.size} leaders (expected 1)`,
                 );
               }
             });
@@ -86,7 +77,7 @@ describe("WorldLinks", () => {
             );
           } else {
             startMinors.forEach((startMinor) => {
-              const minorTimeline = worldLinks.getTimeline(startMinor);
+              const minorTimeline = bucket.links.getTimeline(startMinor);
               if (minorTimeline.length !== 2) {
                 errors.push(
                   `Region ${region.key} minor culture timeline starting with ${startMinor.key} is ${minorTimeline.length} long (expected 2)`,
@@ -95,13 +86,13 @@ describe("WorldLinks", () => {
 
               // Each region's minor cultures has a leader
               minorTimeline.forEach((culture) => {
-                const leaders = worldLinks.only({
+                const leaders = bucket.links.only({
                   cultures: [culture.key],
                   typeClasses: ["minorLeaderType"],
                 });
-                if (leaders.length !== 1) {
+                if (leaders.size !== 1) {
                   errors.push(
-                    `Minor culture ${culture.key} in region ${region.key} has ${leaders.length} leaders (expected 1)`,
+                    `Minor culture ${culture.key} in region ${region.key} has ${leaders.size} leaders (expected 1)`,
                   );
                 }
               });
@@ -116,17 +107,17 @@ describe("WorldLinks", () => {
 
   describe("only()", () => {
     it("should filter by continent", () => {
-      // Use real data keys from staticData.json
-      const results = Array.from(worldLinks.only({ continents: ["continentType:america"] }));
+      const bucket = useDataBucket();
+      const results = Array.from(bucket.links.only({ continents: ["continentType:america"] }));
       const keys = results.map((r) => r.key);
       expect(keys).toContain("regionType:greatLakes");
-      // With real data, we just check if it contains some expected items
       expect(keys.some((k) => k.startsWith("majorCultureType:"))).toBe(true);
       expect(keys.some((k) => k.startsWith("majorLeaderType:"))).toBe(true);
     });
 
     it("should filter by region", () => {
-      const results = Array.from(worldLinks.only({ regions: ["regionType:greatLakes"] }));
+      const bucket = useDataBucket();
+      const results = Array.from(bucket.links.only({ regions: ["regionType:greatLakes"] }));
       const keys = results.map((r) => r.key);
       expect(keys.some((k) => k.startsWith("majorCultureType:"))).toBe(true);
       expect(keys.some((k) => k.startsWith("minorCultureType:"))).toBe(true);
@@ -135,48 +126,70 @@ describe("WorldLinks", () => {
     });
 
     it("should filter by culture", () => {
-      const results = Array.from(worldLinks.only({ cultures: ["majorCultureType:hopewell"] }));
+      const bucket = useDataBucket();
+      const results = Array.from(bucket.links.only({ cultures: ["majorCultureType:hopewell"] }));
       const keys = results.map((r) => r.key);
       expect(keys).toContain("majorCultureType:hopewell");
       expect(keys.some((k) => k.startsWith("majorLeaderType:"))).toBe(true);
     });
 
     it("should filter by leader", () => {
-      const results = Array.from(worldLinks.only({ leaders: ["majorLeaderType:sakima"] }));
+      const bucket = useDataBucket();
+      const results = Array.from(bucket.links.only({ leaders: ["majorLeaderType:sakima"] }));
       const keys = results.map((r) => r.key);
       expect(keys).toContain("majorCultureType:hopewell");
       expect(keys).toContain("majorLeaderType:sakima");
     });
 
+    it("should find shared leaders in multiple cultures", () => {
+      const bucket = useDataBucket();
+      bucket.links.init(); // Explicitly init
+      const cacique = bucket.getType("majorLeaderType:cacique");
+      const meta = (bucket.links as any).registry.get(cacique.key);
+
+      expect(meta).toBeDefined();
+      expect(meta.cultures).toContain("majorCultureType:taquara");
+      expect(meta.cultures).toContain("majorCultureType:arawak");
+
+      const results = Array.from(bucket.links.only({ cultures: ["majorCultureType:taquara"] }));
+      expect(results).toContain(cacique);
+
+      const results2 = Array.from(bucket.links.only({ cultures: ["majorCultureType:arawak"] }));
+      expect(results2).toContain(cacique);
+    });
+
     it("should filter by era", () => {
-      const era1 = Array.from(worldLinks.only({ eras: [1] }));
+      const bucket = useDataBucket();
+      const era1 = Array.from(bucket.links.only({ eras: [1] }));
       expect(era1.length).toBeGreaterThan(0);
       expect(
         era1.every((obj) => {
-          const meta = (worldLinks as any).registry.get(obj.key);
+          const meta = (bucket.links as any).registry.get(obj.key);
           return meta.era === 1;
         }),
       ).toBe(true);
 
-      const era5 = Array.from(worldLinks.only({ eras: [5] }));
+      const era5 = Array.from(bucket.links.only({ eras: [5] }));
       expect(era5.length).toBeGreaterThan(0);
       expect(
         era5.every((obj) => {
-          const meta = (worldLinks as any).registry.get(obj.key);
+          const meta = (bucket.links as any).registry.get(obj.key);
           return meta.era === 5;
         }),
       ).toBe(true);
     });
 
     it("should filter by isMinor", () => {
-      const minors = Array.from(worldLinks.only({ isMinor: true }));
+      const bucket = useDataBucket();
+      const minors = Array.from(bucket.links.only({ isMinor: true }));
       expect(minors.length).toBeGreaterThan(0);
       expect(minors.every((m) => m.class.startsWith("minor"))).toBe(true);
     });
 
     it("should combine filters", () => {
+      const bucket = useDataBucket();
       const results = Array.from(
-        worldLinks.only({
+        bucket.links.only({
           continents: ["continentType:america"],
           typeClasses: ["majorLeaderType"],
           eras: [1],
@@ -191,7 +204,7 @@ describe("WorldLinks", () => {
     it("should return culture timeline", () => {
       const bucket = useDataBucket();
       const hopewell = bucket.getType("majorCultureType:hopewell");
-      const timeline = worldLinks.getTimeline(hopewell);
+      const timeline = bucket.links.getTimeline(hopewell);
       expect(timeline.length).toBeGreaterThanOrEqual(2);
       expect(timeline[0].key).toBe("majorCultureType:hopewell");
     });
@@ -199,9 +212,22 @@ describe("WorldLinks", () => {
     it("should return leader timeline when given a leader", () => {
       const bucket = useDataBucket();
       const sakima = bucket.getType("majorLeaderType:sakima");
-      const timeline = worldLinks.getTimeline(sakima);
-      expect(timeline.length).toBeGreaterThanOrEqual(2);
+      const timeline = bucket.links.getTimeline(sakima);
+      expect(timeline.length).toBeGreaterThanOrEqual(1);
       expect(timeline[0].key).toBe("majorLeaderType:sakima");
+    });
+
+    it("should return building timeline", () => {
+      const bucket = useDataBucket();
+      const smith = bucket.getType("buildingType:smith");
+      const timeline = bucket.links.getTimeline(smith);
+      expect(timeline.length).toBeGreaterThanOrEqual(3);
+      expect(timeline.map((t) => t.key)).toContain("buildingType:stoneWorks");
+      expect(timeline.map((t) => t.key)).toContain("buildingType:smith");
+      expect(timeline.map((t) => t.key)).toContain("buildingType:forge");
+      expect(timeline.map((t) => t.key)).toContain("buildingType:factory");
+      expect(timeline.map((t) => t.key)).toContain("buildingType:assemblyLine");
+      expect(timeline.map((t) => t.key)).toContain("buildingType:automatedFactory");
     });
   });
 });

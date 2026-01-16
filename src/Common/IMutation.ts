@@ -1,14 +1,44 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { GameKey, IRawGameObject } from "@/Common/Models/_GameModel";
+import z from "zod";
+import { GameKey, GameObject, IRawGameObject } from "@/Common/Models/_GameModel";
+import { gameKeySchema } from "@/Common/Validation";
+
+export type MutationType = "create" | "update" | "remove" | "append" | "filter" | "setKeys";
+export type MutationAction = "actionCrisis";
+
+export const PohMutationSchema = z.object({
+  type: z.enum(["create", "update", "remove", "append", "filter", "setKeys"]),
+  payload: z.object({ key: gameKeySchema() }),
+});
+
+export type PohMutationData = z.infer<typeof PohMutationSchema>;
+
+export class PohMutation<PayloadT extends GameObject> {
+  type: MutationType;
+  payload: { key: GameKey } & Partial<PayloadT>;
+
+  constructor(type: MutationType, payload: { key: GameKey } & Partial<PayloadT>) {
+    this.type = type;
+    this.payload = payload;
+  }
+
+  static fromData<PayloadT extends GameObject>(data: PohMutationData): PohMutation<PayloadT> {
+    return new PohMutation<PayloadT>(data.type, data.payload as PayloadT);
+  }
+
+  toData(): PohMutationData {
+    return {
+      type: this.type,
+      payload: this.payload,
+    };
+  }
+}
 
 export interface IMutation<PayloadT> {
   type: MutationType;
   action?: MutationAction;
   payload: Partial<PayloadT> & { key: GameKey };
 }
-
-export type MutationType = "create" | "update" | "remove" | "append" | "filter" | "setKeys" | "action";
-export type MutationAction = "actionCrisis";
 
 export function mergeMutations<PayloadT>(mutations: IMutation<PayloadT>[]): IMutation<PayloadT>[] {
   const removedKeys = new Set<GameKey>();

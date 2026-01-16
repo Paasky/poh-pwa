@@ -1,5 +1,5 @@
-import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
-import type { Tile } from "@/Common/Models/Tile";
+import { GameKey, GameObjAttr, GameObject } from "./_GameModel";
+import type { Tile } from "./Tile";
 
 export class River extends GameObject {
   constructor(

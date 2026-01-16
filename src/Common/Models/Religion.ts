@@ -1,13 +1,13 @@
-import { TypeObject } from "@/Common/Objects/TypeObject";
-import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
-import { useDataBucket } from "@/Data/useDataBucket";
-import type { Citizen } from "@/Common/Models/Citizen";
-import type { Player } from "@/Common/Models/Player";
-import type { City } from "@/Common/Models/City";
-import { useEventStore } from "@/App/stores/eventStore";
-import { ReligionHasEvolved, ReligionHasNewType } from "@/Common/events/Religion";
-import { Yields } from "@/Common/Static/Objects/Yields";
-import { has } from "@/Common/Helpers/collectionTools";
+import { TypeObject } from "../Static/Objects/TypeObject";
+import { GameKey, GameObjAttr, GameObject } from "./_GameModel";
+import { useDataBucket } from "../../Data/useDataBucket";
+import type { Citizen } from "./Citizen";
+import type { Player } from "./Player";
+import type { City } from "./City";
+import { useEventStore } from "../../App/stores/eventStore";
+import { ReligionHasEvolved, ReligionHasNewType } from "../events/Religion";
+import { Yields } from "../Static/Objects/Yields";
+import { has } from "../Helpers/collectionTools";
 
 export type ReligionStatus = "myths" | "gods" | "dogmas";
 

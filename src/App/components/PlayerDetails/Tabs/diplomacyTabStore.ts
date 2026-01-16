@@ -1,12 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
 import { useDataBucket } from "@/Data/useDataBucket";
 import type { Player } from "@/Common/Models/Player";
-import { TypeKey } from "@/Common/Objects/World";
-import { TypeObject } from "@/Common/Objects/TypeObject";
 import { TableColumn } from "@/Common/types/uiComponents";
-import { useCurrentContext } from "@/Common/composables/useCurrentContext";
 
 export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
   const bucket = useDataBucket();
@@ -41,28 +37,12 @@ export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
     { title: "Units", key: "units", align: "end", value: (p: Player) => p.unitKeys.size },
   ]);
 
-  const cultureTimeline = computed(() => {
-    if (!current.value?.culture.type) return [];
-    return worldLinks.getTimeline(current.value.culture.type as TypeObject);
-  });
-
-  const leaderTimeline = computed(() => {
-    return cultureTimeline.value.map((c) =>
-      bucket.getType(c.allows.find((a: string) => a.startsWith("majorLeaderType:")) as TypeKey),
-    );
-  });
-
   function init() {
     if (initialized.value) return;
     current.value = useCurrentContext().currentPlayer;
 
-    // Warm up computed values
-    players;
-    cultureTimeline;
-    leaderTimeline;
-
     initialized.value = true;
   }
 
-  return { initialized, players, current, columns, cultureTimeline, leaderTimeline, init };
+  return { initialized, players, current, columns, init };
 });

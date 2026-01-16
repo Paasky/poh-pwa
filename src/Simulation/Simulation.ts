@@ -1,4 +1,4 @@
-import { subscribe } from "@/Common/Buses/ActionBus";
+import { subscribeToActions } from "@/Common/Buses/ActionBus";
 import { IAction } from "@/Common/IAction";
 import { GameKey } from "@/Common/Models/_GameModel";
 import { useDataBucket } from "@/Data/useDataBucket";
@@ -20,7 +20,7 @@ export class Simulation {
 
   constructor() {
     this.dataStore = new DataStore();
-    subscribe(this.onAction.bind(this));
+    subscribeToActions(this.onAction.bind(this));
   }
 
   /**

@@ -1,22 +1,22 @@
-import { TypeObject } from "@/Common/Objects/TypeObject";
-import { TypeStorage } from "@/Common/Objects/TypeStorage";
-import { playerYieldTypeKeys, Yield, Yields } from "@/Common/Static/Objects/Yields";
-import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
-import type { UnitDesign } from "@/Common/Models/UnitDesign";
-import type { City } from "@/Common/Models/City";
-import type { Agenda } from "@/Common/Models/Agenda";
-import type { Deal } from "@/Common/Models/Deal";
-import type { Culture } from "@/Common/Models/Culture";
-import { Government } from "@/Common/Models/Government";
-import { Research } from "@/Common/Models/Research";
-import type { Citizen } from "@/Common/Models/Citizen";
-import type { Religion } from "@/Common/Models/Religion";
-import type { Tile } from "@/Common/Models/Tile";
-import type { TradeRoute } from "@/Common/Models/TradeRoute";
-import type { Unit } from "@/Common/Models/Unit";
-import { Diplomacy } from "@/Common/Objects/Diplomacy";
-import { Construction } from "@/Common/Models/Construction";
-import { Incident } from "@/Common/Models/Incident";
+import { TypeObject } from "../Static/Objects/TypeObject";
+import { TypeStorage } from "../Objects/TypeStorage";
+import { playerYieldTypeKeys, Yield, Yields } from "../Static/Objects/Yields";
+import { GameKey, GameObjAttr, GameObject } from "./_GameModel";
+import type { UnitDesign } from "./UnitDesign";
+import type { City } from "./City";
+import type { Agenda } from "./Agenda";
+import type { Deal } from "./Deal";
+import type { Culture } from "./Culture";
+import { Government } from "./Government";
+import { Research } from "./Research";
+import type { Citizen } from "./Citizen";
+import type { Religion } from "./Religion";
+import type { Tile } from "./Tile";
+import type { TradeRoute } from "./TradeRoute";
+import type { Unit } from "./Unit";
+import { Diplomacy } from "../Objects/Diplomacy";
+import { Construction } from "./Construction";
+import { Incident } from "./Incident";
 
 export class Player extends GameObject {
   constructor(

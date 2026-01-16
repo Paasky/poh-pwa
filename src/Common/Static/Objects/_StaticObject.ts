@@ -5,7 +5,7 @@ import {
   TypeClass,
   TypeKey,
 } from "@/Common/Static/StaticEnums";
-import { ObjectIcon } from "@/Common/Objects/World";
+import { ObjectIcon } from "@/Common/Static/Icon";
 
 export interface IStaticObject {
   class: CategoryClass | TypeClass;
@@ -19,27 +19,6 @@ export interface IStaticObject {
   relatesTo: StaticKey[];
 }
 
-export function getClassAndConcept<ClassT extends CategoryClass | TypeClass>(
-  key: StaticKey,
-): {
-  class: ClassT;
-  concept: ConceptTypeKey;
-} {
-  const className = key.split(":")[0] as ClassT;
-  if (className.endsWith("Category")) {
-    return {
-      class: className,
-      concept: `conceptType:${className.substring(0, key.length - 8)}` as ConceptTypeKey,
-    };
-  }
-  if (className.endsWith("Type")) {
-    return {
-      class: className,
-      concept: `conceptType:${className.substring(0, key.length - 4)}` as ConceptTypeKey,
-    };
-  }
-
-  throw new Error(
-    `Invalid key "${key}": must be format {class}:{id} and class must end in Category or Type`,
-  );
+export function getClass<ClassT extends CategoryClass | TypeClass>(concept: StaticKey): ClassT {
+  return concept.split(":")[0] as ClassT;
 }

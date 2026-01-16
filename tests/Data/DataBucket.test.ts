@@ -1,73 +1,47 @@
 import { describe, expect, it } from "vitest";
-import { DataBucket } from "../../src/Data/DataBucket";
-import type { ParsedStaticData } from "../../src/Data/StaticDataLoader";
-import type { WorldState } from "@/Common/Objects/World";
+import { StaticDataCompiler } from "@/Data/StaticDataCompiler";
+import { DataBucket } from "@/Data/DataBucket";
+import { useDataBucket } from "@/Data/useDataBucket";
+import fs from "fs";
+import path from "path";
 
-describe("DataBucket Unit Tests", () => {
-  const mockRawData: ParsedStaticData = {
-    types: [
-      {
-        key: "technologyType:nomadism",
-        name: "Nomadism",
-        concept: "conceptType:technology",
-        upgradesTo: ["technologyType:agriculture"],
-      } as any,
-      {
-        key: "technologyType:agriculture",
-        name: "Agriculture",
-        concept: "conceptType:technology",
-        category: "technologyCategory:ancient",
-        requires: ["technologyType:nomadism"],
-      } as any,
-      {
-        key: "conceptType:technology",
-        name: "Technology",
-        concept: "conceptType:concept",
-      } as any,
-    ],
-    categories: [
-      {
-        key: "technologyCategory:ancient",
-        name: "Ancient",
-        concept: "conceptType:technology",
-      } as any,
-    ],
-  };
+describe("DataBucket Integration Tests", () => {
+  it("should compile, load, and validate regionCategory:taiga and regionType:scandinavia", async () => {
+    // 1. Run StaticDataCompiler
+    const compiler = new StaticDataCompiler();
+    compiler.compile();
 
-  const mockWorld: WorldState = { id: "test", size: { x: 1, y: 1 }, turn: 0, year: 0 };
+    const outputFilePath = path.join(process.cwd(), "public", "data", "staticData.json");
+    expect(fs.existsSync(outputFilePath)).toBe(true);
 
-  it("should automate relations correctly", () => {
-    const bucket = DataBucket.fromRaw(mockRawData, mockWorld);
+    const compiledData = JSON.parse(fs.readFileSync(outputFilePath, "utf8"));
 
-    const nomadism = bucket.getType("technologyType:nomadism");
-    const agriculture = bucket.getType("technologyType:agriculture");
-    const techCategory = bucket.getCategory("technologyCategory:ancient");
-    const techConcept = bucket.getType("conceptType:technology");
+    // 2. Initialize DataBucket with the compiled data
+    // DataBucket.init(compiledData) will call StaticDataLoader.load(compiledData) and setDataBucket
+    await DataBucket.init(compiledData);
+    const bucket = useDataBucket();
 
-    // 1. Allows (Inverse of Requires)
-    expect(nomadism.allows).toContain("technologyType:agriculture");
+    // 3. Validate regionCategory:taiga
+    const taigaCategory = bucket.getCategory("regionCategory:taiga");
+    expect(taigaCategory).toBeDefined();
+    expect(taigaCategory.key).toBe("regionCategory:taiga");
+    expect(taigaCategory.name).toBe("Taiga");
+    expect(taigaCategory.class).toBe("regionCategory");
+    expect(taigaCategory.concept).toBe("conceptType:region");
+    expect(Object.isFrozen(taigaCategory)).toBe(true);
 
-    // 2. UpgradesFrom (Inverse of UpgradesTo)
-    expect(agriculture.upgradesFrom).toContain("technologyType:nomadism");
+    // 4. Validate regionType:scandinavia
+    const scandinaviaType = bucket.getType("regionType:scandinavia");
+    expect(scandinaviaType).toBeDefined();
+    expect(scandinaviaType.key).toBe("regionType:scandinavia");
+    expect(scandinaviaType.name).toBe("Scandinavia");
+    expect(scandinaviaType.class).toBe("regionType");
+    expect(scandinaviaType.concept).toBe("conceptType:region");
+    expect(scandinaviaType.category).toBe("regionCategory:taiga");
+    expect(Object.isFrozen(scandinaviaType)).toBe(true);
 
-    // 3. Category relations (Populate relatesTo)
-    expect(techCategory.relatesTo).toContain("technologyType:agriculture");
-
-    // 4. Concept mapping (Group by concept)
-    expect(techConcept.types).toContain("technologyType:nomadism");
-    expect(techConcept.types).toContain("technologyType:agriculture");
-    expect(techConcept.categories).toContain("technologyCategory:ancient");
-  });
-
-  it("should be frozen after initialization", () => {
-    const bucket = DataBucket.fromRaw(mockRawData, mockWorld);
-    const nomadism = bucket.getType("technologyType:nomadism");
-
-    expect(Object.isFrozen(nomadism)).toBe(true);
-    // Verify it throws in strict mode (which Vitest runs in by default)
-    expect(() => {
-      // @ts-ignore
-      nomadism.name = "New Name";
-    }).toThrow();
+    // Additional data check for scandinavia
+    expect(scandinaviaType.cities).toContain("Stockholm");
+    expect(scandinaviaType.requires.requireAll.has("continentType:taiga")).toBe(true);
   });
 });

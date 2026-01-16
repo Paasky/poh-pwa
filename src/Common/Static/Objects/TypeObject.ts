@@ -10,7 +10,7 @@ import {
 } from "@/Common/Static/StaticEnums";
 import { getObjectIcon, ObjectIcon } from "@/Common/Static/Icon";
 import { CompiledTypeData } from "@/Data/StaticDataCompiler";
-import { getClassAndConcept, IStaticObject } from "@/Common/Static/Objects/_StaticObject";
+import { getClass, IStaticObject } from "@/Common/Static/Objects/_StaticObject";
 
 export type TypeObject = IStaticObject & {
   // Duplicate IStaticObject attributes for clarity
@@ -43,6 +43,7 @@ export type TypeObject = IStaticObject & {
   scienceCost?: number;
   isPositive?: boolean;
   names?: Record<string, string>; // uses platform.name as the key
+  cities?: string[];
 
   actions: ActionTypeKey[];
   allows: TypeKey[];
@@ -56,8 +57,6 @@ export type TypeObject = IStaticObject & {
 };
 
 export function initTypeObject(data: CompiledTypeData): TypeObject {
-  const classAndConcept = getClassAndConcept<TypeClass>(data.key);
-
   const yields = new Yields(
     (data.yields ?? []).map((compiledYield) => ({
       type: compiledYield.type,
@@ -72,10 +71,18 @@ export function initTypeObject(data: CompiledTypeData): TypeObject {
     ...data,
 
     // Add/init extra data
-    ...classAndConcept,
-    icon: getObjectIcon(data.key, classAndConcept.concept, data.category),
+    class: getClass<TypeClass>(data.key),
+    icon: getObjectIcon(data.key, data.concept, data.category),
     requires: new Requires(data.requires),
     yields,
+
+    allows: data.allows ?? [],
+    upgradesTo: data.upgradesTo ?? [],
+    upgradesFrom: data.upgradesFrom ?? [],
+    actions: data.actions ?? [],
+    specials: data.specials ?? [],
+    gains: data.gains ?? [],
+    relatesTo: data.relatesTo ?? [],
 
     // Add costs
     heritagePointCost: yields.getLumpAmount("yieldType:heritagePointCost"),

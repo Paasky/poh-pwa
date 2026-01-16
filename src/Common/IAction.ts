@@ -1,5 +1,10 @@
-import { GameKey } from "@/Common/Models/_GameModel";
+import z from "zod";
+import { GameKey, GameObject } from "@/Common/Models/_GameModel";
 import { TypeKey } from "@/Common/Static/StaticEnums";
+import { Player } from "@/Common/Models/Player";
+import { TypeObject } from "@/Common/Static/Objects/TypeObject";
+import { useDataBucket } from "@/Data/useDataBucket";
+import { gameKeySchema, typeKeySchema } from "@/Common/Validation";
 
 export type ActionType =
   // Units
@@ -91,6 +96,81 @@ export const ActionHotkey = {
   enter: "actionType:endTurn",
   space: "actionType:skipTurn",
 } as Record<string, ActionType>;
+
+export class PohAction {
+  readonly actionType: ActionType;
+  readonly player: Player;
+  readonly subject: GameObject;
+  readonly timestamp: number;
+  readonly turn: number;
+
+  readonly index?: number;
+  readonly name?: string;
+  readonly target?: GameObject;
+  readonly toIndex?: number;
+  readonly type?: TypeObject;
+  readonly types?: TypeObject[];
+
+  constructor(
+    actionType: ActionType,
+    player: Player,
+    subject: GameObject,
+    timestamp: number,
+    turn: number,
+    opts?: {
+      index?: number;
+      name?: string;
+      target?: GameObject;
+      toIndex?: number;
+      type?: TypeObject;
+    },
+  ) {
+    this.actionType = actionType;
+    this.player = player;
+    this.turn = turn;
+    this.timestamp = timestamp;
+    this.subject = subject;
+    this.index = opts?.index;
+    this.name = opts?.name;
+    this.target = opts?.target;
+    this.toIndex = opts?.toIndex;
+    this.type = opts?.type;
+  }
+
+  static fromData(data: PohActionData): PohAction {
+    const bucket = useDataBucket();
+
+    return new PohAction(
+      data.actionType as ActionType,
+      bucket.getObject<Player>(data.playerKey),
+      bucket.getObject(data.subjectKey),
+      data.timestamp,
+      data.turn,
+      {
+        index: data.index,
+        name: data.name,
+        target: data.targetKey ? bucket.getObject(data.targetKey) : undefined,
+        toIndex: data.toIndex,
+        type: data.typeKey ? bucket.getType(data.typeKey) : undefined,
+      },
+    );
+  }
+}
+
+export const PohActionSchema = z.object({
+  actionType: typeKeySchema(["actionType"]),
+  playerKey: gameKeySchema(["player"]),
+  turn: z.number().int(),
+  timestamp: z.number(),
+  subjectKey: gameKeySchema(),
+  index: z.number().int().optional(),
+  name: z.string().optional(),
+  targetKey: gameKeySchema().optional(),
+  toIndex: z.number().int().optional(),
+  typeKey: typeKeySchema().optional(),
+});
+
+export type PohActionData = z.infer<typeof PohActionSchema>;
 
 export interface IAction {
   type: ActionType;

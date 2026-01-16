@@ -1,20 +1,21 @@
-import { GameKey, GameObjAttr, GameObject, generateKey } from "@/Common/Models/_GameModel";
-import { Citizen } from "@/Common/Models/Citizen";
-import type { Player } from "@/Common/Models/Player";
-import type { Religion } from "@/Common/Models/Religion";
-import type { Tile } from "@/Common/Models/Tile";
-import type { TradeRoute } from "@/Common/Models/TradeRoute";
-import { Unit } from "@/Common/Models/Unit";
-import { useDataBucket } from "@/Data/useDataBucket";
-import { Construction } from "@/Common/Models/Construction";
-import { useEventStore } from "@/App/stores/eventStore";
-import { getRandom } from "@/Common/Helpers/arrayTools";
-import { TypeObject } from "@/Common/Objects/TypeObject";
-import { UnitDesign } from "@/Common/Models/UnitDesign";
-import { getNeighbors } from "@/Common/Helpers/mapTools";
-import { ConstructionQueue, TrainingQueue } from "@/Common/Objects/Queues";
-import { TypeStorage } from "@/Common/Objects/TypeStorage";
-import { cityYieldTypeKeys, Yield, Yields } from "@/Common/Static/Objects/Yields";
+import { GameKey, GameObjAttr, GameObject } from "./_GameModel";
+import { generateKey } from "./_GameTypes";
+import { Citizen } from "./Citizen";
+import type { Player } from "./Player";
+import type { Religion } from "./Religion";
+import type { Tile } from "./Tile";
+import type { TradeRoute } from "./TradeRoute";
+import { Unit } from "./Unit";
+import { useDataBucket } from "../../Data/useDataBucket";
+import { Construction } from "./Construction";
+import { useEventStore } from "../../App/stores/eventStore";
+import { getRandom } from "../Helpers/arrayTools";
+import { TypeObject } from "../Static/Objects/TypeObject";
+import { UnitDesign } from "./UnitDesign";
+import { getNeighbors } from "../Helpers/mapTools";
+import { ConstructionQueue, TrainingQueue } from "../Objects/Queues";
+import { TypeStorage } from "../Objects/TypeStorage";
+import { cityYieldTypeKeys, Yield, Yields } from "../Static/Objects/Yields";
 
 export class City extends GameObject {
   constructor(

@@ -1,4 +1,5 @@
-import { roundToTenth, TypeKey } from "@/Common/Objects/World";
+import { TypeKey } from "@/Common/Static/StaticEnums";
+import { roundToTenth } from "@/Common/Helpers/basicMath";
 
 export class TypeStorage {
   private _items: Record<TypeKey, number> = {};

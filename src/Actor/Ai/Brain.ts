@@ -2,7 +2,7 @@ import { Player } from "@/Common/Models/Player";
 import { Difficulty, Note, Priority, Region } from "@/Actor/Ai/AiTypes";
 import { StrategyCommand } from "@/Actor/Ai/Commands/StrategyCommand";
 import { Memory } from "@/Actor/Ai/Memory";
-import { subscribe } from "@/Common/Buses/EventBus";
+import { subscribeToEvents } from "@/Common/Buses/EventBus";
 import { IEvent } from "@/Common/IEvent";
 import { pushActions } from "@/Common/Buses/ActionBus";
 import { IMindset } from "@/Actor/Ai/Mindsets/_IMindset";
@@ -21,7 +21,7 @@ export class Brain {
     public readonly regions: Set<Region>,
   ) {
     this.strategyCommand = new StrategyCommand(player, difficulty, memory, regions);
-    subscribe(player.key, this.onEvents.bind(this));
+    subscribeToEvents(player.key, this.onEvents.bind(this));
   }
 
   runTurn(): void {

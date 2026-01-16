@@ -1,10 +1,11 @@
-import { TypeObject } from "@/Common/Objects/TypeObject";
-import { UnitStatus } from "@/Common/Models/Unit";
-import { Yield, Yields } from "@/Common/Static/Objects/Yields";
-import { roundToTenth, TypeKey } from "@/Common/Objects/World";
-import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
-import { useDataBucket } from "@/Data/useDataBucket";
-import { Player } from "@/Common/Models/Player";
+import { TypeObject } from "../Static/Objects/TypeObject";
+import { UnitStatus } from "./Unit";
+import { Yield, Yields } from "../Static/Objects/Yields";
+import { roundToTenth } from "../Helpers/basicMath";
+import { TypeKey } from "../Static/StaticEnums";
+import { GameKey, GameObjAttr, GameObject } from "./_GameModel";
+import { useDataBucket } from "../../Data/useDataBucket";
+import { Player } from "./Player";
 
 export class Government extends GameObject {
   constructor(

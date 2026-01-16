@@ -1,6 +1,3 @@
-// noinspection JSUnusedGlobalSymbols
-
-import type { IMutation } from "@/Common/IMutation";
 import { DataBucket } from "@/Data/DataBucket";
 import type { GameKey, GameObject, IRawGameObject } from "@/Common/Models/_GameModel";
 import type { IEvent } from "@/Common/IEvent";
@@ -18,6 +15,7 @@ import type { TradeRoute } from "@/Common/Models/TradeRoute";
 import type { Unit } from "@/Common/Models/Unit";
 import type { UnitDesign } from "@/Common/Models/UnitDesign";
 import { useDataBucket } from "@/Data/useDataBucket";
+import { PohMutation } from "@/Common/IMutation";
 
 export class DataStore {
   readonly dataBucket: DataBucket;
@@ -26,7 +24,7 @@ export class DataStore {
     this.dataBucket = dataBucket ?? useDataBucket();
   }
 
-  set(mutations: IMutation[]): void {
+  set(mutations: PohMutation<GameObject>[]): void {
     const set = [] as IRawGameObject[];
     const remove = [] as GameKey[];
     const events = [] as IEvent[];
@@ -72,7 +70,11 @@ export class DataStore {
     }
   }
 
-  private eventFromMutation(mutation: IMutation, object: GameObject, players: Set<Player>): IEvent {
+  private eventFromMutation(
+    mutation: PohMutation<GameObject>,
+    object: GameObject,
+    players: Set<Player>,
+  ): IEvent {
     const eventPlayerKeys = new Set<GameKey>();
 
     switch (object.class) {

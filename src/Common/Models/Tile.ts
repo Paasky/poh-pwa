@@ -1,18 +1,18 @@
-import { canHaveOne, hasMany } from "@/Common/Models/_Relations";
-import { TypeObject } from "@/Common/Objects/TypeObject";
-import { tileYieldTypeKeys, Yield, Yields } from "@/Common/Static/Objects/Yields";
-import { GameKey, GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
-import { useDataBucket } from "@/Data/useDataBucket";
-import type { River } from "@/Common/Models/River";
-import type { Construction } from "@/Common/Models/Construction";
-import type { Citizen } from "@/Common/Models/Citizen";
-import type { City } from "@/Common/Models/City";
-import type { Player } from "@/Common/Models/Player";
-import type { TradeRoute } from "@/Common/Models/TradeRoute";
-import type { Unit } from "@/Common/Models/Unit";
-import { getNeighbors, tileHeight, tileKey } from "@/Common/Helpers/mapTools";
+import { canHaveOne, hasMany } from "./_Relations";
+import { TypeObject } from "../Static/Objects/TypeObject";
+import { tileYieldTypeKeys, Yield, Yields } from "../Static/Objects/Yields";
+import { GameKey, GameObjAttr, GameObject } from "./_GameModel";
+import { useDataBucket } from "../../Data/useDataBucket";
+import type { River } from "./River";
+import type { Construction } from "./Construction";
+import type { Citizen } from "./Citizen";
+import type { City } from "./City";
+import type { Player } from "./Player";
+import type { TradeRoute } from "./TradeRoute";
+import type { Unit } from "./Unit";
+import { getNeighbors, tileHeight, tileKey } from "../Helpers/mapTools";
 import { Vector3 } from "@babylonjs/core";
-import { tileCenter } from "@/Common/Helpers/math";
+import { tileCenter } from "../Helpers/math";
 
 // TODO: Centralize tile mutations in a TileManager to trigger useMoveCostCache().resetCache([tile.key])
 export class Tile extends GameObject {

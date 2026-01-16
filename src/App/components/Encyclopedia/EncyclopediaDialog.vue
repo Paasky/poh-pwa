@@ -11,6 +11,7 @@ import { Yields } from "@/Common/Static/Objects/Yields";
 import { useEncyclopediaStore } from "@/App/components/Encyclopedia/encyclopediaStore";
 import UiDialog from "@/App/components/Ui/UiDialog.vue";
 import UiIcon from "@/App/components/Ui/UiIcon.vue";
+import UiTimeline from "@/App/components/Ui/UiTimeline.vue";
 import { TypeKey } from "@/Common/Objects/World";
 
 const store = useEncyclopediaStore();
@@ -252,14 +253,14 @@ onBeforeUnmount(() => audio.stopQuote());
                 <UiObjectChips :types="store.current.type.allows" />
               </div>
 
-              <div v-if="store.current.type.upgradesFrom.length" class="d-flex flex-column ga-1">
-                <h3>Upgrades From</h3>
-                <UiObjectChips :types="store.current.type.upgradesFrom" />
-              </div>
-
-              <div v-if="store.current.type.upgradesTo.length" class="d-flex flex-column ga-1">
-                <h3>Upgrades To</h3>
-                <UiObjectChips :types="store.current.type.upgradesTo" />
+              <div
+                v-if="
+                  store.current.type.upgradesFrom.length || store.current.type.upgradesTo.length
+                "
+                class="d-flex flex-column ga-1"
+              >
+                <h3>Timeline</h3>
+                <UiTimeline :type="store.current.type" />
               </div>
 
               <div v-if="store.current.type.relatesTo.length" class="d-flex flex-column ga-1">
