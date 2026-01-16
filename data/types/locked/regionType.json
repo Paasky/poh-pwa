@@ -72,9 +72,9 @@
   {
     "category": "regionCategory:america",
     "concept": "conceptType:region",
-    "description": "The central belt of North America stretches from the arid Mojave to the forested Appalachians and the Atlantic coast. Rivers and fertile plains supported Indigenous agriculture, mound-building cultures, and extensive trade networks linking the Gulf, Great Lakes, and interior. Later European colonies established settlements along the coast, introducing new technologies and economic systems that reshaped the landscape. The blending of Native, African, and European traditions created a complex cultural and industrial region that has remained central to continental development.",
-    "key": "regionType:northAmerica",
-    "name": "North America",
+    "description": "The central belt of the North American Interior stretches from the arid Mojave to the forested Appalachians and the Atlantic coast. Rivers and fertile plains supported Indigenous agriculture, mound-building cultures, and extensive trade networks linking the Gulf, Great Lakes, and interior. Later European colonies established settlements along the coast, introducing new technologies and economic systems that reshaped the landscape. The blending of Native, African, and European traditions created a complex cultural and industrial region that has remained central to continental development.",
+    "key": "regionType:interiorAmerica",
+    "name": "Interior America",
     "requires": [
       "continentType:america"
     ]
@@ -262,9 +262,9 @@
   {
     "category": "regionCategory:mediterra",
     "concept": "conceptType:region",
-    "description": "Hispania encompasses the Iberian Peninsula’s mountains, plateaus, and coasts shaped by Atlantic and Mediterranean climates. Agriculture, metallurgy, and seafaring supported early regional networks. Trade routes carried tin, gold, and agricultural products across Europe and North Africa. Over millennia, successive migrations and cultural contacts layered languages, beliefs, and artistic traditions. Mountainous interiors offered local autonomy, while coastal zones facilitated maritime exchange, producing a historically diverse and interconnected landscape.",
-    "key": "regionType:hispania",
-    "name": "Hispania",
+    "description": "Iberia encompasses the Iberian Peninsula’s mountains, plateaus, and coasts shaped by Atlantic and Mediterranean climates. Agriculture, metallurgy, and seafaring supported early regional networks. Trade routes carried tin, gold, and agricultural products across Europe and North Africa. Over millennia, successive migrations and cultural contacts layered languages, beliefs, and artistic traditions. Mountainous interiors offered local autonomy, while coastal zones facilitated maritime exchange, producing a historically diverse and interconnected landscape.",
+    "key": "regionType:iberia",
+    "name": "Iberia",
     "requires": [
       "continentType:mediterra"
     ]
@@ -372,9 +372,9 @@
   {
     "category": "regionCategory:taiga",
     "concept": "conceptType:region",
-    "description": "East Europe stretches from forest-steppe zones to broad plains with extensive river systems flowing toward the Baltic, Black Sea, and Arctic. Agriculture, pastoralism, and foraging supported diverse communities. The region’s open terrain facilitated migrations, trade, and the rise of expansive polities. Long-distance routes connected it to steppe, Baltic, and Byzantine worlds. Over millennia, these ecological and cultural interactions produced a mosaic of societies and enduring patterns of settlement and exchange.",
-    "key": "regionType:eastEurope",
-    "name": "East Europe",
+    "description": "Eastern Europe stretches from forest-steppe zones to broad plains with extensive river systems flowing toward the Baltic, Black Sea, and Arctic. Agriculture, pastoralism, and foraging supported diverse communities. The region’s open terrain facilitated migrations, trade, and the rise of expansive polities. Long-distance routes connected it to steppe, Baltic, and Byzantine worlds. Over millennia, these ecological and cultural interactions produced a mosaic of societies and enduring patterns of settlement and exchange.",
+    "key": "regionType:easternEurope",
+    "name": "Eastern Europe",
     "requires": [
       "continentType:taiga"
     ]

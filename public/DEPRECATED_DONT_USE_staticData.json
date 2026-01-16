@@ -3082,7 +3082,7 @@
         "regionType:greatLakes",
         "regionType:caribbean",
         "regionType:mesoamerica",
-        "regionType:northAmerica",
+        "regionType:interiorAmerica",
         "resourceType:maize",
         "resourceType:kidneyBeans",
         "resourceType:pumpkin",
@@ -3154,7 +3154,7 @@
         "naturalWonderType:benNevis",
         "naturalWonderType:strokkurGeyser",
         "regionType:centralEurope",
-        "regionType:eastEurope",
+        "regionType:easternEurope",
         "regionType:highlands",
         "regionType:scandinavia",
         "resourceType:rye",
@@ -3229,7 +3229,7 @@
         "naturalWonderType:mountEtna",
         "regionType:aegean",
         "regionType:apennine",
-        "regionType:hispania",
+        "regionType:iberia",
         "regionType:maghreb",
         "resourceType:durum",
         "resourceType:olives",
@@ -11596,7 +11596,7 @@
       "category": "majorCultureCategory:america",
       "allows": ["majorLeaderType:kikmongwi"],
       "upgradesTo": ["majorCultureType:pueblo"],
-      "requires": ["regionType:northAmerica"]
+      "requires": ["regionType:interiorAmerica"]
     },
     {
       "key": "majorCultureType:pueblo",
@@ -11607,7 +11607,7 @@
       "allows": ["majorLeaderType:popay"],
       "upgradesTo": ["majorCultureType:apache"],
       "upgradesFrom": ["majorCultureType:mogollon"],
-      "requires": ["regionType:northAmerica"]
+      "requires": ["regionType:interiorAmerica"]
     },
     {
       "key": "majorCultureType:apache",
@@ -11618,7 +11618,7 @@
       "allows": ["majorLeaderType:geronimo"],
       "upgradesTo": ["majorCultureType:unitedStatesEnlightenment"],
       "upgradesFrom": ["majorCultureType:pueblo"],
-      "requires": ["regionType:northAmerica"]
+      "requires": ["regionType:interiorAmerica"]
     },
     {
       "key": "majorCultureType:unitedStatesEnlightenment",
@@ -11629,7 +11629,7 @@
       "allows": ["majorLeaderType:benFranklin"],
       "upgradesTo": ["majorCultureType:unitedStatesModern"],
       "upgradesFrom": ["majorCultureType:apache"],
-      "requires": ["regionType:northAmerica"]
+      "requires": ["regionType:interiorAmerica"]
     },
     {
       "key": "majorCultureType:unitedStatesModern",
@@ -11639,7 +11639,7 @@
       "category": "majorCultureCategory:america",
       "allows": ["majorLeaderType:theodoreRoosevelt"],
       "upgradesFrom": ["majorCultureType:unitedStatesEnlightenment"],
-      "requires": ["regionType:northAmerica"]
+      "requires": ["regionType:interiorAmerica"]
     },
     {
       "key": "majorCultureType:taquara",
@@ -12603,7 +12603,7 @@
       "category": "majorCultureCategory:mediterra",
       "allows": ["majorLeaderType:arganthonius"],
       "upgradesTo": ["majorCultureType:iberian"],
-      "requires": ["regionType:hispania"]
+      "requires": ["regionType:iberia"]
     },
     {
       "key": "majorCultureType:iberian",
@@ -12614,7 +12614,7 @@
       "allows": ["majorLeaderType:indibilis"],
       "upgradesTo": ["majorCultureType:castille"],
       "upgradesFrom": ["majorCultureType:tartessian"],
-      "requires": ["regionType:hispania"]
+      "requires": ["regionType:iberia"]
     },
     {
       "key": "majorCultureType:castille",
@@ -12625,7 +12625,7 @@
       "allows": ["majorLeaderType:isabella"],
       "upgradesTo": ["majorCultureType:spainKingdom"],
       "upgradesFrom": ["majorCultureType:iberian"],
-      "requires": ["regionType:hispania"]
+      "requires": ["regionType:iberia"]
     },
     {
       "key": "majorCultureType:spainKingdom",
@@ -12636,7 +12636,7 @@
       "allows": ["majorLeaderType:charlesIII"],
       "upgradesTo": ["majorCultureType:spainModern"],
       "upgradesFrom": ["majorCultureType:castille"],
-      "requires": ["regionType:hispania"]
+      "requires": ["regionType:iberia"]
     },
     {
       "key": "majorCultureType:spainModern",
@@ -12646,7 +12646,7 @@
       "category": "majorCultureCategory:mediterra",
       "allows": ["majorLeaderType:franciscoFranco"],
       "upgradesFrom": ["majorCultureType:spainKingdom"],
-      "requires": ["regionType:hispania"]
+      "requires": ["regionType:iberia"]
     },
     {
       "key": "majorCultureType:phoenicia",
@@ -13186,7 +13186,7 @@
       "category": "majorCultureCategory:taiga",
       "allows": ["majorLeaderType:knyaz"],
       "upgradesTo": ["majorCultureType:antes"],
-      "requires": ["regionType:eastEurope"]
+      "requires": ["regionType:easternEurope"]
     },
     {
       "key": "majorCultureType:antes",
@@ -13197,7 +13197,7 @@
       "allows": ["majorLeaderType:boz"],
       "upgradesTo": ["majorCultureType:muscovy"],
       "upgradesFrom": ["majorCultureType:slavs"],
-      "requires": ["regionType:eastEurope"]
+      "requires": ["regionType:easternEurope"]
     },
     {
       "key": "majorCultureType:muscovy",
@@ -13208,7 +13208,7 @@
       "allows": ["majorLeaderType:ivanTheGreat"],
       "upgradesTo": ["majorCultureType:russia"],
       "upgradesFrom": ["majorCultureType:antes"],
-      "requires": ["regionType:eastEurope"]
+      "requires": ["regionType:easternEurope"]
     },
     {
       "key": "majorCultureType:russia",
@@ -13219,7 +13219,7 @@
       "allows": ["majorLeaderType:catherineTheGreat"],
       "upgradesTo": ["majorCultureType:sovietUnion"],
       "upgradesFrom": ["majorCultureType:muscovy"],
-      "requires": ["regionType:eastEurope"]
+      "requires": ["regionType:easternEurope"]
     },
     {
       "key": "majorCultureType:sovietUnion",
@@ -13229,7 +13229,7 @@
       "category": "majorCultureCategory:taiga",
       "allows": ["majorLeaderType:nikitaKhrushchev"],
       "upgradesFrom": ["majorCultureType:russia"],
-      "requires": ["regionType:eastEurope"]
+      "requires": ["regionType:easternEurope"]
     },
     {
       "key": "majorCultureType:caledonia",
@@ -16515,7 +16515,7 @@
       "category": "minorCultureCategory:america",
       "allows": ["minorLeaderType:kanati"],
       "upgradesTo": ["minorCultureType:muskogee"],
-      "requires": ["regionType:northAmerica"]
+      "requires": ["regionType:interiorAmerica"]
     },
     {
       "key": "minorCultureType:muskogee",
@@ -16525,7 +16525,7 @@
       "category": "minorCultureCategory:america",
       "allows": ["minorLeaderType:opothleyahola"],
       "upgradesFrom": ["minorCultureType:cherokee"],
-      "requires": ["regionType:northAmerica"]
+      "requires": ["regionType:interiorAmerica"]
     },
     {
       "key": "minorCultureType:sahaptin",
@@ -16535,7 +16535,7 @@
       "category": "minorCultureCategory:america",
       "allows": ["minorLeaderType:spilyay"],
       "upgradesTo": ["minorCultureType:umatilla"],
-      "requires": ["regionType:northAmerica"]
+      "requires": ["regionType:interiorAmerica"]
     },
     {
       "key": "minorCultureType:umatilla",
@@ -16545,7 +16545,7 @@
       "category": "minorCultureCategory:america",
       "allows": ["minorLeaderType:wenapSnoot"],
       "upgradesFrom": ["minorCultureType:sahaptin"],
-      "requires": ["regionType:northAmerica"]
+      "requires": ["regionType:interiorAmerica"]
     },
     {
       "key": "minorCultureType:tupi",
@@ -17275,7 +17275,7 @@
       "category": "minorCultureCategory:mediterra",
       "allows": ["minorLeaderType:aitor"],
       "upgradesTo": ["minorCultureType:basque"],
-      "requires": ["regionType:hispania"]
+      "requires": ["regionType:iberia"]
     },
     {
       "key": "minorCultureType:basque",
@@ -17285,7 +17285,7 @@
       "category": "minorCultureCategory:mediterra",
       "allows": ["minorLeaderType:joseAntonioAguirre"],
       "upgradesFrom": ["minorCultureType:euskadi"],
-      "requires": ["regionType:hispania"]
+      "requires": ["regionType:iberia"]
     },
     {
       "key": "minorCultureType:lusitanian",
@@ -17295,7 +17295,7 @@
       "category": "minorCultureCategory:mediterra",
       "allows": ["minorLeaderType:viriathus"],
       "upgradesTo": ["minorCultureType:portugal"],
-      "requires": ["regionType:hispania"]
+      "requires": ["regionType:iberia"]
     },
     {
       "key": "minorCultureType:portugal",
@@ -17305,7 +17305,7 @@
       "category": "minorCultureCategory:mediterra",
       "allows": ["minorLeaderType:antonioDeOliveiraSalazar"],
       "upgradesFrom": ["minorCultureType:lusitanian"],
-      "requires": ["regionType:hispania"]
+      "requires": ["regionType:iberia"]
     },
     {
       "key": "minorCultureType:gymnesiae",
@@ -17715,7 +17715,7 @@
       "category": "minorCultureCategory:taiga",
       "allows": ["minorLeaderType:rurik"],
       "upgradesTo": ["minorCultureType:ukraine"],
-      "requires": ["regionType:eastEurope"]
+      "requires": ["regionType:easternEurope"]
     },
     {
       "key": "minorCultureType:ukraine",
@@ -17725,7 +17725,7 @@
       "category": "minorCultureCategory:taiga",
       "allows": ["minorLeaderType:mykhailoHrushevsky"],
       "upgradesFrom": ["minorCultureType:kyiv"],
-      "requires": ["regionType:eastEurope"]
+      "requires": ["regionType:easternEurope"]
     },
     {
       "key": "minorCultureType:finns",
@@ -17735,7 +17735,7 @@
       "category": "minorCultureCategory:taiga",
       "allows": ["minorLeaderType:vainamoinen"],
       "upgradesTo": ["minorCultureType:finland"],
-      "requires": ["regionType:eastEurope"]
+      "requires": ["regionType:easternEurope"]
     },
     {
       "key": "minorCultureType:finland",
@@ -17745,7 +17745,7 @@
       "category": "minorCultureCategory:taiga",
       "allows": ["minorLeaderType:cGEMannerheim"],
       "upgradesFrom": ["minorCultureType:finns"],
-      "requires": ["regionType:eastEurope"]
+      "requires": ["regionType:easternEurope"]
     },
     {
       "key": "minorCultureType:papar",
@@ -25377,7 +25377,7 @@
       "requires": ["continentType:america"]
     },
     {
-      "key": "regionType:northAmerica",
+      "key": "regionType:interiorAmerica",
       "name": "North America",
       "concept": "conceptType:region",
       "description": "The central belt of North America stretches from the arid Mojave to the forested Appalachians and the Atlantic coast. Rivers and fertile plains supported Indigenous agriculture, mound-building cultures, and extensive trade networks linking the Gulf, Great Lakes, and interior. Later European colonies established settlements along the coast, introducing new technologies and economic systems that reshaped the landscape. The blending of Native, African, and European traditions created a complex cultural and industrial region that has remained central to continental development.",
@@ -25738,7 +25738,7 @@
       "requires": ["continentType:mediterra"]
     },
     {
-      "key": "regionType:hispania",
+      "key": "regionType:iberia",
       "name": "Hispania",
       "concept": "conceptType:region",
       "description": "Hispania encompasses the Iberian Peninsula\u2019s mountains, plateaus, and coasts shaped by Atlantic and Mediterranean climates. Agriculture, metallurgy, and seafaring supported early regional networks. Trade routes carried tin, gold, and agricultural products across Europe and North Africa. Over millennia, successive migrations and cultural contacts layered languages, beliefs, and artistic traditions. Mountainous interiors offered local autonomy, while coastal zones facilitated maritime exchange, producing a historically diverse and interconnected landscape.",
@@ -25947,7 +25947,7 @@
       "requires": ["continentType:taiga"]
     },
     {
-      "key": "regionType:eastEurope",
+      "key": "regionType:easternEurope",
       "name": "East Europe",
       "concept": "conceptType:region",
       "description": "East Europe stretches from forest-steppe zones to broad plains with extensive river systems flowing toward the Baltic, Black Sea, and Arctic. Agriculture, pastoralism, and foraging supported diverse communities. The region\u2019s open terrain facilitated migrations, trade, and the rise of expansive polities. Long-distance routes connected it to steppe, Baltic, and Byzantine worlds. Over millennia, these ecological and cultural interactions produced a mosaic of societies and enduring patterns of settlement and exchange.",
@@ -38956,7 +38956,7 @@
         "regionType:greatLakes",
         "regionType:caribbean",
         "regionType:mesoamerica",
-        "regionType:northAmerica"
+        "regionType:interiorAmerica"
       ]
     },
     {
@@ -39015,7 +39015,7 @@
       "relatesTo": [
         "regionType:aegean",
         "regionType:apennine",
-        "regionType:hispania",
+        "regionType:iberia",
         "regionType:maghreb"
       ]
     },
@@ -39050,7 +39050,7 @@
       "description": "",
       "relatesTo": [
         "regionType:centralEurope",
-        "regionType:eastEurope",
+        "regionType:easternEurope",
         "regionType:highlands",
         "regionType:scandinavia"
       ]

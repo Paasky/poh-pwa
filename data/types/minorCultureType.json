@@ -328,7 +328,7 @@
     "key": "minorCultureType:cherokee",
     "name": "Cherokee",
     "requires": [
-      "regionType:northAmerica"
+      "regionType:interiorAmerica"
     ]
   },
   {
@@ -338,7 +338,7 @@
     "key": "minorCultureType:muskogee",
     "name": "Muskogee",
     "requires": [
-      "regionType:northAmerica"
+      "regionType:interiorAmerica"
     ],
     "upgradesFrom": [
       "minorCultureType:cherokee"
@@ -351,7 +351,7 @@
     "key": "minorCultureType:sahaptin",
     "name": "Sahaptin",
     "requires": [
-      "regionType:northAmerica"
+      "regionType:interiorAmerica"
     ]
   },
   {
@@ -361,7 +361,7 @@
     "key": "minorCultureType:umatilla",
     "name": "Umatilla",
     "requires": [
-      "regionType:northAmerica"
+      "regionType:interiorAmerica"
     ],
     "upgradesFrom": [
       "minorCultureType:sahaptin"
@@ -1202,7 +1202,7 @@
     "key": "minorCultureType:euskadi",
     "name": "Euskadi",
     "requires": [
-      "regionType:hispania"
+      "regionType:iberia"
     ]
   },
   {
@@ -1212,7 +1212,7 @@
     "key": "minorCultureType:basque",
     "name": "Basque",
     "requires": [
-      "regionType:hispania"
+      "regionType:iberia"
     ],
     "upgradesFrom": [
       "minorCultureType:euskadi"
@@ -1225,7 +1225,7 @@
     "key": "minorCultureType:lusitanian",
     "name": "Lusitanian",
     "requires": [
-      "regionType:hispania"
+      "regionType:iberia"
     ]
   },
   {
@@ -1235,7 +1235,7 @@
     "key": "minorCultureType:portugal",
     "name": "Portugal",
     "requires": [
-      "regionType:hispania"
+      "regionType:iberia"
     ],
     "upgradesFrom": [
       "minorCultureType:lusitanian"
@@ -1708,7 +1708,7 @@
     "key": "minorCultureType:kyiv",
     "name": "Kyiv",
     "requires": [
-      "regionType:eastEurope"
+      "regionType:easternEurope"
     ]
   },
   {
@@ -1718,7 +1718,7 @@
     "key": "minorCultureType:ukraine",
     "name": "Ukraine",
     "requires": [
-      "regionType:eastEurope"
+      "regionType:easternEurope"
     ],
     "upgradesFrom": [
       "minorCultureType:kyiv"
@@ -1731,7 +1731,7 @@
     "key": "minorCultureType:finns",
     "name": "Finns",
     "requires": [
-      "regionType:eastEurope"
+      "regionType:easternEurope"
     ]
   },
   {
@@ -1741,7 +1741,7 @@
     "key": "minorCultureType:finland",
     "name": "Finland",
     "requires": [
-      "regionType:eastEurope"
+      "regionType:easternEurope"
     ],
     "upgradesFrom": [
       "minorCultureType:finns"

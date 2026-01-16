@@ -440,7 +440,7 @@
     "key": "majorCultureType:mogollon",
     "name": "Mogollon",
     "requires": [
-      "regionType:northAmerica"
+      "regionType:interiorAmerica"
     ]
   },
   {
@@ -450,7 +450,7 @@
     "key": "majorCultureType:pueblo",
     "name": "Pueblo",
     "requires": [
-      "regionType:northAmerica"
+      "regionType:interiorAmerica"
     ],
     "upgradesFrom": [
       "majorCultureType:mogollon"
@@ -463,7 +463,7 @@
     "key": "majorCultureType:apache",
     "name": "Apache",
     "requires": [
-      "regionType:northAmerica"
+      "regionType:interiorAmerica"
     ],
     "upgradesFrom": [
       "majorCultureType:pueblo"
@@ -476,7 +476,7 @@
     "key": "majorCultureType:unitedStatesEnlightenment",
     "name": "United States (Enlightenment)",
     "requires": [
-      "regionType:northAmerica"
+      "regionType:interiorAmerica"
     ],
     "upgradesFrom": [
       "majorCultureType:apache"
@@ -489,7 +489,7 @@
     "key": "majorCultureType:unitedStatesModern",
     "name": "United States (Modern)",
     "requires": [
-      "regionType:northAmerica"
+      "regionType:interiorAmerica"
     ],
     "upgradesFrom": [
       "majorCultureType:unitedStatesEnlightenment"
@@ -1618,7 +1618,7 @@
     "key": "majorCultureType:tartessian",
     "name": "Tartessian",
     "requires": [
-      "regionType:hispania"
+      "regionType:iberia"
     ]
   },
   {
@@ -1628,7 +1628,7 @@
     "key": "majorCultureType:iberian",
     "name": "Iberian",
     "requires": [
-      "regionType:hispania"
+      "regionType:iberia"
     ],
     "upgradesFrom": [
       "majorCultureType:tartessian"
@@ -1641,7 +1641,7 @@
     "key": "majorCultureType:castille",
     "name": "Castille",
     "requires": [
-      "regionType:hispania"
+      "regionType:iberia"
     ],
     "upgradesFrom": [
       "majorCultureType:iberian"
@@ -1654,7 +1654,7 @@
     "key": "majorCultureType:spainKingdom",
     "name": "Spain (Kingdom)",
     "requires": [
-      "regionType:hispania"
+      "regionType:iberia"
     ],
     "upgradesFrom": [
       "majorCultureType:castille"
@@ -1667,7 +1667,7 @@
     "key": "majorCultureType:spainModern",
     "name": "Spain (Modern)",
     "requires": [
-      "regionType:hispania"
+      "regionType:iberia"
     ],
     "upgradesFrom": [
       "majorCultureType:spainKingdom"
@@ -2300,7 +2300,7 @@
     "key": "majorCultureType:slavs",
     "name": "Slavs",
     "requires": [
-      "regionType:eastEurope"
+      "regionType:easternEurope"
     ]
   },
   {
@@ -2310,7 +2310,7 @@
     "key": "majorCultureType:antes",
     "name": "Antes",
     "requires": [
-      "regionType:eastEurope"
+      "regionType:easternEurope"
     ],
     "upgradesFrom": [
       "majorCultureType:slavs"
@@ -2323,7 +2323,7 @@
     "key": "majorCultureType:muscovy",
     "name": "Muscovy",
     "requires": [
-      "regionType:eastEurope"
+      "regionType:easternEurope"
     ],
     "upgradesFrom": [
       "majorCultureType:antes"
@@ -2336,7 +2336,7 @@
     "key": "majorCultureType:russia",
     "name": "Russia",
     "requires": [
-      "regionType:eastEurope"
+      "regionType:easternEurope"
     ],
     "upgradesFrom": [
       "majorCultureType:muscovy"
@@ -2349,7 +2349,7 @@
     "key": "majorCultureType:sovietUnion",
     "name": "Soviet Union",
     "requires": [
-      "regionType:eastEurope"
+      "regionType:easternEurope"
     ],
     "upgradesFrom": [
       "majorCultureType:russia"
