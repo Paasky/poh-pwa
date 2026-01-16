@@ -7,6 +7,9 @@
     "name": "San",
     "requires": [
       "regionType:centralAfrica"
+    ],
+    "cities": [
+      "Tsodilo"
     ]
   },
   {
@@ -20,6 +23,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:san"
+    ],
+    "cities": [
+      "Windhoek"
     ]
   },
   {
@@ -30,6 +36,9 @@
     "name": "Ziwa",
     "requires": [
       "regionType:centralAfrica"
+    ],
+    "cities": [
+      "Ziway"
     ]
   },
   {
@@ -43,6 +52,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:ziwa"
+    ],
+    "cities": [
+      "Harare"
     ]
   },
   {
@@ -53,6 +65,9 @@
     "name": "Swahili",
     "requires": [
       "regionType:eastAfrica"
+    ],
+    "cities": [
+      "Mombasa"
     ]
   },
   {
@@ -66,6 +81,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:swahili"
+    ],
+    "cities": [
+      "Nairobi"
     ]
   },
   {
@@ -76,6 +94,9 @@
     "name": "Saba",
     "requires": [
       "regionType:eastAfrica"
+    ],
+    "cities": [
+      "Marib"
     ]
   },
   {
@@ -89,6 +110,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:saba"
+    ],
+    "cities": [
+      "Sana’a"
     ]
   },
   {
@@ -99,6 +123,9 @@
     "name": "Guanche",
     "requires": [
       "regionType:northAfrica"
+    ],
+    "cities": [
+      "Tenerife"
     ]
   },
   {
@@ -112,6 +139,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:guanche"
+    ],
+    "cities": [
+      "Las Palmas"
     ]
   },
   {
@@ -122,6 +152,9 @@
     "name": "Bafour",
     "requires": [
       "regionType:northAfrica"
+    ],
+    "cities": [
+      "Chinguetti"
     ]
   },
   {
@@ -135,6 +168,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:bafour"
+    ],
+    "cities": [
+      "Nouakchott"
     ]
   },
   {
@@ -145,6 +181,9 @@
     "name": "Tubu",
     "requires": [
       "regionType:westAfrica"
+    ],
+    "cities": [
+      "Kawar"
     ]
   },
   {
@@ -158,6 +197,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:tubu"
+    ],
+    "cities": [
+      "N’Djamena"
     ]
   },
   {
@@ -168,6 +210,9 @@
     "name": "Takrur",
     "requires": [
       "regionType:westAfrica"
+    ],
+    "cities": [
+      "Podor"
     ]
   },
   {
@@ -181,6 +226,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:takrur"
+    ],
+    "cities": [
+      "Dakar"
     ]
   },
   {
@@ -191,6 +239,9 @@
     "name": "Lakota",
     "requires": [
       "regionType:greatLakes"
+    ],
+    "cities": [
+      "Paha Sapa"
     ]
   },
   {
@@ -204,6 +255,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:lakota"
+    ],
+    "cities": [
+      "Fort Laramie"
     ]
   },
   {
@@ -214,6 +268,9 @@
     "name": "Inuit",
     "requires": [
       "regionType:greatLakes"
+    ],
+    "cities": [
+      "Igloolik"
     ]
   },
   {
@@ -227,6 +284,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:inuit"
+    ],
+    "cities": [
+      "Iqaluit"
     ]
   },
   {
@@ -237,6 +297,9 @@
     "name": "Redware",
     "requires": [
       "regionType:caribbean"
+    ],
+    "cities": [
+      "Baní"
     ]
   },
   {
@@ -250,6 +313,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:redware"
+    ],
+    "cities": [
+      "Kingston"
     ]
   },
   {
@@ -260,6 +326,9 @@
     "name": "Lucaya",
     "requires": [
       "regionType:caribbean"
+    ],
+    "cities": [
+      "Guanahani"
     ]
   },
   {
@@ -273,6 +342,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:lucaya"
+    ],
+    "cities": [
+      "Nassau"
     ]
   },
   {
@@ -283,6 +355,9 @@
     "name": "Nahua",
     "requires": [
       "regionType:mesoamerica"
+    ],
+    "cities": [
+      "Tenochtitlan"
     ]
   },
   {
@@ -296,6 +371,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:nahua"
+    ],
+    "cities": [
+      "Managua"
     ]
   },
   {
@@ -306,6 +384,9 @@
     "name": "Chorotega",
     "requires": [
       "regionType:mesoamerica"
+    ],
+    "cities": [
+      "Nicoya"
     ]
   },
   {
@@ -319,6 +400,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:chorotega"
+    ],
+    "cities": [
+      "Guatemala City"
     ]
   },
   {
@@ -329,6 +413,9 @@
     "name": "Cherokee",
     "requires": [
       "regionType:interiorAmerica"
+    ],
+    "cities": [
+      "New Echota"
     ]
   },
   {
@@ -342,6 +429,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:cherokee"
+    ],
+    "cities": [
+      "Coweta"
     ]
   },
   {
@@ -352,6 +442,9 @@
     "name": "Sahaptin",
     "requires": [
       "regionType:interiorAmerica"
+    ],
+    "cities": [
+      "Celilo"
     ]
   },
   {
@@ -365,6 +458,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:sahaptin"
+    ],
+    "cities": [
+      "Pendleton"
     ]
   },
   {
@@ -375,6 +471,9 @@
     "name": "Tupi",
     "requires": [
       "regionType:amazonia"
+    ],
+    "cities": [
+      "São Vicente"
     ]
   },
   {
@@ -388,7 +487,8 @@
     ],
     "upgradesFrom": [
       "minorCultureType:tupi"
-    ]
+    ],
+    "cities": []
   },
   {
     "category": "minorCultureCategory:andea",
@@ -398,6 +498,9 @@
     "name": "Wai-wai",
     "requires": [
       "regionType:amazonia"
+    ],
+    "cities": [
+      "Mapuera"
     ]
   },
   {
@@ -411,6 +514,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:waiWai"
+    ],
+    "cities": [
+      "Georgetown"
     ]
   },
   {
@@ -421,6 +527,9 @@
     "name": "Chono",
     "requires": [
       "regionType:southAndes"
+    ],
+    "cities": [
+      "Chiloé"
     ]
   },
   {
@@ -434,6 +543,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:chono"
+    ],
+    "cities": [
+      "Buenos Aires"
     ]
   },
   {
@@ -444,6 +556,9 @@
     "name": "Rapa Nui (Ancient)",
     "requires": [
       "regionType:southAndes"
+    ],
+    "cities": [
+      "Anakena"
     ]
   },
   {
@@ -457,6 +572,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:rapaNuiAncient"
+    ],
+    "cities": [
+      "Hanga Roa"
     ]
   },
   {
@@ -467,6 +585,9 @@
     "name": "Chibcha",
     "requires": [
       "regionType:northAndes"
+    ],
+    "cities": [
+      "Bacatá"
     ]
   },
   {
@@ -480,6 +601,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:chibcha"
+    ],
+    "cities": [
+      "Caracas"
     ]
   },
   {
@@ -490,6 +614,9 @@
     "name": "Cueva",
     "requires": [
       "regionType:northAndes"
+    ],
+    "cities": [
+      "Acla"
     ]
   },
   {
@@ -503,6 +630,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:cueva"
+    ],
+    "cities": [
+      "Panama City"
     ]
   },
   {
@@ -513,6 +643,9 @@
     "name": "Pano-Tacana",
     "requires": [
       "regionType:centralAndes"
+    ],
+    "cities": [
+      "Atalaya"
     ]
   },
   {
@@ -526,6 +659,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:panoTacana"
+    ],
+    "cities": [
+      "Quito"
     ]
   },
   {
@@ -536,6 +672,9 @@
     "name": "Valdivia",
     "requires": [
       "regionType:centralAndes"
+    ],
+    "cities": [
+      "Valdivia"
     ]
   },
   {
@@ -549,6 +688,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:valdivia"
+    ],
+    "cities": [
+      "La Paz"
     ]
   },
   {
@@ -559,6 +701,9 @@
     "name": "Mon",
     "requires": [
       "regionType:zhonghua"
+    ],
+    "cities": [
+      "Thaton"
     ]
   },
   {
@@ -572,6 +717,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:mon"
+    ],
+    "cities": [
+      "Yangon"
     ]
   },
   {
@@ -582,6 +730,9 @@
     "name": "Dapenkeng",
     "requires": [
       "regionType:zhonghua"
+    ],
+    "cities": [
+      "Tapenkeng"
     ]
   },
   {
@@ -595,6 +746,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:dapenkeng"
+    ],
+    "cities": [
+      "Taipei"
     ]
   },
   {
@@ -605,6 +759,9 @@
     "name": "Gopala",
     "requires": [
       "regionType:bharat"
+    ],
+    "cities": [
+      "Pataliputra"
     ]
   },
   {
@@ -618,6 +775,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:gopala"
+    ],
+    "cities": [
+      "Kathmandu"
     ]
   },
   {
@@ -628,6 +788,9 @@
     "name": "Punjab",
     "requires": [
       "regionType:bharat"
+    ],
+    "cities": [
+      "Taxila"
     ]
   },
   {
@@ -641,6 +804,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:punjab"
+    ],
+    "cities": [
+      "Karachi"
     ]
   },
   {
@@ -651,6 +817,9 @@
     "name": "Gojoseon",
     "requires": [
       "regionType:nippon"
+    ],
+    "cities": [
+      "Pyongyang"
     ]
   },
   {
@@ -664,6 +833,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:gojoseon"
+    ],
+    "cities": [
+      "Seoul"
     ]
   },
   {
@@ -674,6 +846,9 @@
     "name": "Ryukyu",
     "requires": [
       "regionType:nippon"
+    ],
+    "cities": [
+      "Shuri"
     ]
   },
   {
@@ -687,6 +862,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:ryukyu"
+    ],
+    "cities": [
+      "Naha"
     ]
   },
   {
@@ -697,6 +875,9 @@
     "name": "Khmer",
     "requires": [
       "regionType:chaoPhraya"
+    ],
+    "cities": [
+      "Angkor"
     ]
   },
   {
@@ -710,6 +891,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:khmer"
+    ],
+    "cities": [
+      "Phnom Penh"
     ]
   },
   {
@@ -720,6 +904,9 @@
     "name": "Bắc Sơn",
     "requires": [
       "regionType:chaoPhraya"
+    ],
+    "cities": [
+      "Lạng Sơn"
     ]
   },
   {
@@ -733,6 +920,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:bacSon"
+    ],
+    "cities": [
+      "Vientiane"
     ]
   },
   {
@@ -743,6 +933,9 @@
     "name": "Kernewek",
     "requires": [
       "regionType:britannia"
+    ],
+    "cities": [
+      "Tintagel"
     ]
   },
   {
@@ -756,6 +949,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:kernewek"
+    ],
+    "cities": [
+      "Truro"
     ]
   },
   {
@@ -766,6 +962,9 @@
     "name": "Cymru",
     "requires": [
       "regionType:britannia"
+    ],
+    "cities": [
+      "Caerleon"
     ]
   },
   {
@@ -779,6 +978,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:cymru"
+    ],
+    "cities": [
+      "Cardiff"
     ]
   },
   {
@@ -789,6 +991,9 @@
     "name": "Helvetii",
     "requires": [
       "regionType:gallia"
+    ],
+    "cities": [
+      "Aventicum"
     ]
   },
   {
@@ -802,6 +1007,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:helvetii"
+    ],
+    "cities": [
+      "Bern"
     ]
   },
   {
@@ -812,6 +1020,9 @@
     "name": "Ausci",
     "requires": [
       "regionType:gallia"
+    ],
+    "cities": [
+      "Auch"
     ]
   },
   {
@@ -825,6 +1036,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:ausci"
+    ],
+    "cities": [
+      "Bordeaux"
     ]
   },
   {
@@ -835,6 +1049,9 @@
     "name": "Belgica",
     "requires": [
       "regionType:germania"
+    ],
+    "cities": [
+      "Tongeren"
     ]
   },
   {
@@ -848,6 +1065,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:belgica"
+    ],
+    "cities": [
+      "Amsterdam"
     ]
   },
   {
@@ -858,6 +1078,9 @@
     "name": "Allemanni",
     "requires": [
       "regionType:germania"
+    ],
+    "cities": [
+      "Vindelicorum"
     ]
   },
   {
@@ -871,6 +1094,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:allemanni"
+    ],
+    "cities": [
+      "Munich"
     ]
   },
   {
@@ -881,6 +1107,9 @@
     "name": "Dacia",
     "requires": [
       "regionType:balkans"
+    ],
+    "cities": [
+      "Sarmizegetusa"
     ]
   },
   {
@@ -894,6 +1123,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:dacia"
+    ],
+    "cities": [
+      "Bucharest"
     ]
   },
   {
@@ -904,6 +1136,9 @@
     "name": "Magyar",
     "requires": [
       "regionType:balkans"
+    ],
+    "cities": [
+      "Esztergom"
     ]
   },
   {
@@ -917,6 +1152,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:magyar"
+    ],
+    "cities": [
+      "Budapest"
     ]
   },
   {
@@ -927,6 +1165,9 @@
     "name": "Cyrenaica",
     "requires": [
       "regionType:nileValley"
+    ],
+    "cities": [
+      "Cyrene"
     ]
   },
   {
@@ -940,6 +1181,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:cyrenaica"
+    ],
+    "cities": [
+      "Tripoli"
     ]
   },
   {
@@ -950,6 +1194,9 @@
     "name": "Nubia",
     "requires": [
       "regionType:nileValley"
+    ],
+    "cities": [
+      "Napata"
     ]
   },
   {
@@ -963,6 +1210,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:nubia"
+    ],
+    "cities": [
+      "Khartoum"
     ]
   },
   {
@@ -973,6 +1223,9 @@
     "name": "Helmand",
     "requires": [
       "regionType:persia"
+    ],
+    "cities": [
+      "Zaranj"
     ]
   },
   {
@@ -986,6 +1239,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:helmand"
+    ],
+    "cities": [
+      "Kandahar"
     ]
   },
   {
@@ -996,7 +1252,8 @@
     "name": "Mannaeans",
     "requires": [
       "regionType:persia"
-    ]
+    ],
+    "cities": []
   },
   {
     "category": "minorCultureCategory:levantica",
@@ -1009,7 +1266,8 @@
     ],
     "upgradesFrom": [
       "minorCultureType:mannaeans"
-    ]
+    ],
+    "cities": []
   },
   {
     "category": "minorCultureCategory:levantica",
@@ -1019,6 +1277,9 @@
     "name": "Israelites",
     "requires": [
       "regionType:mesopotamia"
+    ],
+    "cities": [
+      "Jerusalem"
     ]
   },
   {
@@ -1032,6 +1293,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:israelites"
+    ],
+    "cities": [
+      "Tel Aviv"
     ]
   },
   {
@@ -1042,6 +1306,9 @@
     "name": "Canaanite",
     "requires": [
       "regionType:mesopotamia"
+    ],
+    "cities": [
+      "Tyre"
     ]
   },
   {
@@ -1055,6 +1322,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:canaanite"
+    ],
+    "cities": [
+      "Beirut"
     ]
   },
   {
@@ -1065,6 +1335,9 @@
     "name": "Nabataeans",
     "requires": [
       "regionType:levant"
+    ],
+    "cities": [
+      "Petra"
     ]
   },
   {
@@ -1078,7 +1351,8 @@
     ],
     "upgradesFrom": [
       "minorCultureType:nabataeans"
-    ]
+    ],
+    "cities": []
   },
   {
     "category": "minorCultureCategory:levantica",
@@ -1088,6 +1362,9 @@
     "name": "Kata",
     "requires": [
       "regionType:levant"
+    ],
+    "cities": [
+      "Qatna"
     ]
   },
   {
@@ -1101,6 +1378,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:kata"
+    ],
+    "cities": [
+      "Muscat"
     ]
   },
   {
@@ -1111,6 +1391,9 @@
     "name": "Macedonia (Ancient)",
     "requires": [
       "regionType:aegean"
+    ],
+    "cities": [
+      "Aigai"
     ]
   },
   {
@@ -1124,6 +1407,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:macedoniaAncient"
+    ],
+    "cities": [
+      "Thessaloniki"
     ]
   },
   {
@@ -1134,6 +1420,9 @@
     "name": "Salamis",
     "requires": [
       "regionType:aegean"
+    ],
+    "cities": [
+      "Salamis"
     ]
   },
   {
@@ -1147,6 +1436,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:salamis"
+    ],
+    "cities": [
+      "Nicosia"
     ]
   },
   {
@@ -1157,6 +1449,9 @@
     "name": "Sicani",
     "requires": [
       "regionType:apennine"
+    ],
+    "cities": [
+      "Kamicos"
     ]
   },
   {
@@ -1170,6 +1465,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:sicani"
+    ],
+    "cities": [
+      "Palermo"
     ]
   },
   {
@@ -1180,6 +1478,9 @@
     "name": "Illyria",
     "requires": [
       "regionType:apennine"
+    ],
+    "cities": [
+      "Scodra"
     ]
   },
   {
@@ -1193,6 +1494,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:illyria"
+    ],
+    "cities": [
+      "Zagreb"
     ]
   },
   {
@@ -1203,6 +1507,9 @@
     "name": "Euskadi",
     "requires": [
       "regionType:iberia"
+    ],
+    "cities": [
+      "Bilbao"
     ]
   },
   {
@@ -1216,6 +1523,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:euskadi"
+    ],
+    "cities": [
+      "Pamplona"
     ]
   },
   {
@@ -1226,6 +1536,9 @@
     "name": "Lusitanian",
     "requires": [
       "regionType:iberia"
+    ],
+    "cities": [
+      "Olisipo"
     ]
   },
   {
@@ -1239,6 +1552,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:lusitanian"
+    ],
+    "cities": [
+      "Lisbon"
     ]
   },
   {
@@ -1249,6 +1565,9 @@
     "name": "Gymnesiae",
     "requires": [
       "regionType:maghreb"
+    ],
+    "cities": [
+      "Talayotic"
     ]
   },
   {
@@ -1262,6 +1581,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:gymnesiae"
+    ],
+    "cities": [
+      "Palma"
     ]
   },
   {
@@ -1272,6 +1594,9 @@
     "name": "Numidia",
     "requires": [
       "regionType:maghreb"
+    ],
+    "cities": [
+      "Cirta"
     ]
   },
   {
@@ -1285,6 +1610,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:numidia"
+    ],
+    "cities": [
+      "Algiers"
     ]
   },
   {
@@ -1295,6 +1623,9 @@
     "name": "Malay",
     "requires": [
       "regionType:malay"
+    ],
+    "cities": [
+      "Palembang"
     ]
   },
   {
@@ -1308,6 +1639,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:malay"
+    ],
+    "cities": [
+      "Kuala Lumpur"
     ]
   },
   {
@@ -1318,6 +1652,9 @@
     "name": "Asmat",
     "requires": [
       "regionType:malay"
+    ],
+    "cities": [
+      "Agats"
     ]
   },
   {
@@ -1331,6 +1668,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:asmat"
+    ],
+    "cities": [
+      "Port Moresby"
     ]
   },
   {
@@ -1341,6 +1681,9 @@
     "name": "Arrernte",
     "requires": [
       "regionType:polynesia"
+    ],
+    "cities": [
+      "Mparntwe"
     ]
   },
   {
@@ -1354,6 +1697,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:arrernte"
+    ],
+    "cities": [
+      "Canberra"
     ]
   },
   {
@@ -1364,6 +1710,9 @@
     "name": "Hawaii (Ancient)",
     "requires": [
       "regionType:polynesia"
+    ],
+    "cities": [
+      "Hilo"
     ]
   },
   {
@@ -1377,6 +1726,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:hawaiiAncient"
+    ],
+    "cities": [
+      "Honolulu"
     ]
   },
   {
@@ -1387,6 +1739,9 @@
     "name": "Malagasy",
     "requires": [
       "regionType:lanka"
+    ],
+    "cities": [
+      "Ambohimanga"
     ]
   },
   {
@@ -1400,6 +1755,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:malagasy"
+    ],
+    "cities": [
+      "Antananarivo"
     ]
   },
   {
@@ -1410,6 +1768,9 @@
     "name": "Tamil",
     "requires": [
       "regionType:lanka"
+    ],
+    "cities": [
+      "Kaveripattinam"
     ]
   },
   {
@@ -1423,6 +1784,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:tamil"
+    ],
+    "cities": [
+      "Hampi"
     ]
   },
   {
@@ -1433,6 +1797,9 @@
     "name": "Baiyue",
     "requires": [
       "regionType:indochina"
+    ],
+    "cities": [
+      "Panyu"
     ]
   },
   {
@@ -1446,6 +1813,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:baiyue"
+    ],
+    "cities": [
+      "Haikou"
     ]
   },
   {
@@ -1456,7 +1826,8 @@
     "name": "Luzones",
     "requires": [
       "regionType:indochina"
-    ]
+    ],
+    "cities": []
   },
   {
     "category": "minorCultureCategory:oceania",
@@ -1469,6 +1840,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:luzones"
+    ],
+    "cities": [
+      "Manila"
     ]
   },
   {
@@ -1479,6 +1853,9 @@
     "name": "Tatars",
     "requires": [
       "regionType:centralSteppe"
+    ],
+    "cities": [
+      "Bolghar"
     ]
   },
   {
@@ -1492,6 +1869,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:tatars"
+    ],
+    "cities": [
+      "Novocherkassk"
     ]
   },
   {
@@ -1502,6 +1882,9 @@
     "name": "Ymyakhtakh",
     "requires": [
       "regionType:centralSteppe"
+    ],
+    "cities": [
+      "Belkachi"
     ]
   },
   {
@@ -1515,6 +1898,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:ymyakhtakh"
+    ],
+    "cities": [
+      "Yakutsk"
     ]
   },
   {
@@ -1525,6 +1911,9 @@
     "name": "Monpa",
     "requires": [
       "regionType:himalaya"
+    ],
+    "cities": [
+      "Tawang"
     ]
   },
   {
@@ -1538,6 +1927,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:monpa"
+    ],
+    "cities": [
+      "Thimphu"
     ]
   },
   {
@@ -1548,6 +1940,9 @@
     "name": "Uyghur",
     "requires": [
       "regionType:himalaya"
+    ],
+    "cities": [
+      "Ordu-Baliq"
     ]
   },
   {
@@ -1561,6 +1956,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:uyghur"
+    ],
+    "cities": [
+      "Urumqi"
     ]
   },
   {
@@ -1571,6 +1969,9 @@
     "name": "Mitanni",
     "requires": [
       "regionType:anatolia"
+    ],
+    "cities": [
+      "Washukanni"
     ]
   },
   {
@@ -1584,6 +1985,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:mitanni"
+    ],
+    "cities": [
+      "Yerevan"
     ]
   },
   {
@@ -1594,6 +1998,9 @@
     "name": "Colchis",
     "requires": [
       "regionType:anatolia"
+    ],
+    "cities": [
+      "Phasis"
     ]
   },
   {
@@ -1607,6 +2014,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:colchis"
+    ],
+    "cities": [
+      "Tbilisi"
     ]
   },
   {
@@ -1617,6 +2027,9 @@
     "name": "Kipchak",
     "requires": [
       "regionType:centralAsia"
+    ],
+    "cities": [
+      "Sarai"
     ]
   },
   {
@@ -1630,6 +2043,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:kipchak"
+    ],
+    "cities": [
+      "Astana"
     ]
   },
   {
@@ -1640,6 +2056,9 @@
     "name": "Kyrgyz",
     "requires": [
       "regionType:centralAsia"
+    ],
+    "cities": [
+      "Balasagun"
     ]
   },
   {
@@ -1653,6 +2072,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:kyrgyz"
+    ],
+    "cities": [
+      "Bishkek"
     ]
   },
   {
@@ -1663,6 +2085,9 @@
     "name": "Balts",
     "requires": [
       "regionType:centralEurope"
+    ],
+    "cities": [
+      "Kernavė"
     ]
   },
   {
@@ -1676,6 +2101,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:balts"
+    ],
+    "cities": [
+      "Vilnius"
     ]
   },
   {
@@ -1686,6 +2114,9 @@
     "name": "Bohemia",
     "requires": [
       "regionType:centralEurope"
+    ],
+    "cities": [
+      "Vyšehrad"
     ]
   },
   {
@@ -1699,6 +2130,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:bohemia"
+    ],
+    "cities": [
+      "Prague"
     ]
   },
   {
@@ -1709,6 +2143,9 @@
     "name": "Kyiv",
     "requires": [
       "regionType:easternEurope"
+    ],
+    "cities": [
+      "Kyiv"
     ]
   },
   {
@@ -1722,6 +2159,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:kyiv"
+    ],
+    "cities": [
+      "Kyiv"
     ]
   },
   {
@@ -1732,6 +2172,9 @@
     "name": "Finns",
     "requires": [
       "regionType:easternEurope"
+    ],
+    "cities": [
+      "Turku"
     ]
   },
   {
@@ -1745,6 +2188,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:finns"
+    ],
+    "cities": [
+      "Helsinki"
     ]
   },
   {
@@ -1755,6 +2201,9 @@
     "name": "Papar",
     "requires": [
       "regionType:highlands"
+    ],
+    "cities": [
+      "Papa Stour"
     ]
   },
   {
@@ -1768,6 +2217,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:papar"
+    ],
+    "cities": [
+      "Reykjavík"
     ]
   },
   {
@@ -1778,6 +2230,9 @@
     "name": "Éire",
     "requires": [
       "regionType:highlands"
+    ],
+    "cities": [
+      "Tara"
     ]
   },
   {
@@ -1791,6 +2246,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:eire"
+    ],
+    "cities": [
+      "Dublin"
     ]
   },
   {
@@ -1801,6 +2259,9 @@
     "name": "Jutes",
     "requires": [
       "regionType:scandinavia"
+    ],
+    "cities": [
+      "Jelling"
     ]
   },
   {
@@ -1814,6 +2275,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:jutes"
+    ],
+    "cities": [
+      "Copenhagen"
     ]
   },
   {
@@ -1824,6 +2288,9 @@
     "name": "Sami",
     "requires": [
       "regionType:scandinavia"
+    ],
+    "cities": [
+      "Kautokeino"
     ]
   },
   {
@@ -1837,6 +2304,9 @@
     ],
     "upgradesFrom": [
       "minorCultureType:sami"
+    ],
+    "cities": [
+      "Karasjok"
     ]
   }
 ]

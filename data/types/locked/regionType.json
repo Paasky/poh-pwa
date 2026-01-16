@@ -5,6 +5,23 @@
     "description": "Central Africa centers on the Congo Basin, a vast region of tropical forest, broad rivers, and fertile uplands. Its environment has supported continuous human occupation, from forest communities practicing hunting, gathering, and early farming to the large agricultural populations that spread with Bantu languages. Iron production and regional trade grew along river corridors, connecting interior settlements with Atlantic and Indian Ocean routes. Kingdoms developed around resource zones of copper, salt, and ivory, while spiritual and artistic traditions reflected the close relationship between people and forest. The region’s history shows enduring adaptation to humid ecosystems and long interconnection among its many cultures.",
     "key": "regionType:centralAfrica",
     "name": "Central Africa",
+    "cities": [
+      "Kinshasa",
+      "Luanda",
+      "Brazzaville",
+      "Douala",
+      "Lubumbashi",
+      "Mbanza Kongo",
+      "Kisangani",
+      "Yaoundé",
+      "Goma",
+      "Kananga",
+      "Libreville",
+      "Bangui",
+      "Boma",
+      "Bukavu",
+      "Mwene-Ditu"
+    ],
     "requires": [
       "continentType:africa"
     ]
@@ -15,6 +32,23 @@
     "description": "East Africa rises from high plateaus and rift valleys to a long monsoon coast on the Indian Ocean. The region’s fertile soils, variable climates, and access to maritime routes encouraged early agriculture, herding, and settlement growth. Inland societies organized around cattle and grain farming, while coastal ports became major centers of trade linking Africa, Arabia, and Asia. Languages and beliefs moved along these corridors, producing a deep blend of cultural traditions. From highland kingdoms to Swahili city-states, East Africa has maintained a continuous record of innovation in farming, navigation, and scholarship shaped by its diverse landscapes.",
     "key": "regionType:eastAfrica",
     "name": "East Africa",
+    "cities": [
+      "Addis Ababa",
+      "Zanzibar",
+      "Lalibela",
+      "Harar",
+      "Axum",
+      "Gondar",
+      "Dar es Salaam",
+      "Mogadishu",
+      "Kampala",
+      "Adulis",
+      "Asmara",
+      "Massawa",
+      "Dire Dawa",
+      "Jimma",
+      "Mekelle"
+    ],
     "requires": [
       "continentType:africa"
     ]
@@ -25,6 +59,22 @@
     "description": "North Africa spans the Mediterranean coast, the Atlas Mountains, and the northern Sahara. Its mixture of fertile plains, oases, and desert routes supported farming, herding, and extensive trade networks. Indigenous communities built local systems of agriculture and exchange that later connected with Phoenician, Roman, and Arab expansions across the region. Caravans moved gold, salt, and textiles across the Sahara, while coastal cities grew into centers of commerce and learning. The interplay between settled and nomadic societies, together with contact between Europe, Africa, and the Middle East, has given North Africa a distinctive historical continuity shaped by movement and adaptation.",
     "key": "regionType:northAfrica",
     "name": "North Africa",
+    "cities": [
+      "Casablanca",
+      "Rabat",
+      "Marrakesh",
+      "Tangier",
+      "Fez",
+      "Volubilis",
+      "Essaouira",
+      "Meknes",
+      "Agadir",
+      "Sala Colonia",
+      "Laayoune",
+      "Dakhla",
+      "Smara",
+      "Tarfaya"
+    ],
     "requires": [
       "continentType:africa"
     ]
@@ -35,6 +85,23 @@
     "description": "West Africa extends from the Atlantic coast through forest zones and savannas to the Sahel. River systems such as the Niger and Senegal supported dense settlement, farming, and early metallurgy. Trade in gold, salt, and agricultural goods linked inland kingdoms with trans-Saharan and coastal routes. Urban centers grew along these corridors, fostering scholarship, craft specialization, and artistic traditions in bronze, terracotta, and wood. Distinct linguistic and cultural regions developed across forest and savanna belts, shaped by long interaction between local innovation and external exchange.",
     "key": "regionType:westAfrica",
     "name": "West Africa",
+    "cities": [
+      "Lagos",
+      "Kumasi",
+      "Timbuktu",
+      "Accra",
+      "Abidjan",
+      "Benin City",
+      "Ife",
+      "Djenné",
+      "Ibadan",
+      "Kano",
+      "Oyo",
+      "Gao",
+      "Kumbi Saleh",
+      "Nok",
+      "Katsina"
+    ],
     "requires": [
       "continentType:africa"
     ]
@@ -45,6 +112,23 @@
     "description": "The Great Lakes region of North America includes vast freshwater basins surrounded by forest, prairie, and river valleys. Its rich ecosystems supported farming, fishing, and trade among Indigenous societies connected by canoe routes that served as major transport networks. Communities exchanged copper, shells, and agricultural products, while mound-building traditions reflected organized social and ceremonial life. Later confederacies maintained wide diplomatic and trade systems linking the interior to Atlantic and Arctic worlds. The region’s history illustrates sustained ecological adaptation and interregional communication.",
     "key": "regionType:greatLakes",
     "name": "Great Lakes",
+    "cities": [
+      "Chicago",
+      "Toronto",
+      "Montreal",
+      "Winnipeg",
+      "Detroit",
+      "Minneapolis",
+      "Cleveland",
+      "Milwaukee",
+      "Madison",
+      "Green Bay",
+      "Sault Ste. Marie",
+      "Cahokia",
+      "Chillicothe",
+      "Saskatoon",
+      "Regina"
+    ],
     "requires": [
       "continentType:america"
     ]
@@ -55,6 +139,22 @@
     "description": "The Caribbean consists of island chains and surrounding seas formed by coral and volcanic activity. Its fertile coasts and diverse climates supported communities skilled in navigation, fishing, and mixed farming. Maritime routes tied the islands into regional trade in pottery, food crops, and ritual goods long before European contact. Cultural traditions drew on Arawakan, Cariban, and other influences, reflecting constant movement between islands. Later integration into Atlantic trade created new mixtures of language, religion, and identity that continue to define the region.",
     "key": "regionType:caribbean",
     "name": "Caribbean",
+    "cities": [
+      "Havana",
+      "Santiago de Cuba",
+      "Caguana",
+      "Tibes",
+      "Port of Spain",
+      "Bridgetown",
+      "Willemstad",
+      "Fort-de-France",
+      "Xaragua",
+      "Oranjestad",
+      "Basseterre",
+      "Castries",
+      "Road Town",
+      "St. George’s"
+    ],
     "requires": [
       "continentType:america"
     ]
@@ -65,6 +165,23 @@
     "description": "Mesoamerica covers the uplands and lowlands from central Mexico to western Central America. The region’s fertile valleys supported the domestication of maize, beans, and squash, leading to the rise of complex urban societies. Cities such as Teotihuacan, Monte Albán, and Tikal developed monumental architecture, writing, and scientific observation. Trade networks moved jade, obsidian, cacao, and textiles across diverse ecological zones. Periods of growth and reorganization produced a continuous tradition of innovation, artistic expression, and regional integration.",
     "key": "regionType:mesoamerica",
     "name": "Mesoamerica",
+    "cities": [
+      "Mexico City",
+      "Teotihuacan",
+      "Chichén Itzá",
+      "Tikal",
+      "Monte Albán",
+      "Calakmul",
+      "Cholula",
+      "Tula",
+      "Palenque",
+      "Copán",
+      "Uxmal",
+      "San Lorenzo",
+      "La Venta",
+      "Tres Zapotes",
+      "Mitla"
+    ],
     "requires": [
       "continentType:america"
     ]
@@ -75,6 +192,23 @@
     "description": "The central belt of the North American Interior stretches from the arid Mojave to the forested Appalachians and the Atlantic coast. Rivers and fertile plains supported Indigenous agriculture, mound-building cultures, and extensive trade networks linking the Gulf, Great Lakes, and interior. Later European colonies established settlements along the coast, introducing new technologies and economic systems that reshaped the landscape. The blending of Native, African, and European traditions created a complex cultural and industrial region that has remained central to continental development.",
     "key": "regionType:interiorAmerica",
     "name": "Interior America",
+    "cities": [
+      "New York",
+      "New Orleans",
+      "Philadelphia",
+      "Washington",
+      "Boston",
+      "San Francisco",
+      "Santa Fe",
+      "Chaco Canyon",
+      "Mesa Verde",
+      "Los Angeles",
+      "Atlanta",
+      "Denver",
+      "Phoenix",
+      "Taos",
+      "Tucson"
+    ],
     "requires": [
       "continentType:america"
     ]
@@ -85,6 +219,23 @@
     "description": "Amazonia spans the world’s largest tropical rainforest, shaped by dense waterways, seasonal flooding, and exceptional biodiversity. Indigenous societies developed sustainable systems of cultivation, fishing, and forest management, including the creation of fertile “terra preta” soils. Networks of villages and ceremonial centers maintained trade in pottery, feathers, and stone tools along major rivers. Though largely decentralized, the region supported complex social and ritual organization adapted to varied ecological zones.",
     "key": "regionType:amazonia",
     "name": "Amazonia",
+    "cities": [
+      "São Paulo",
+      "Rio de Janeiro",
+      "Manaus",
+      "Belém",
+      "Santarém",
+      "Brasília",
+      "Iquitos",
+      "Kuhikugu",
+      "Porto Velho",
+      "Macapá",
+      "Rio Branco",
+      "Altamira",
+      "Alter do Chão",
+      "Tefé",
+      "Boa Vista"
+    ],
     "requires": [
       "continentType:andea"
     ]
@@ -95,6 +246,23 @@
     "description": "The southern Andes include mountain valleys, high plateaus, and Pacific coastal deserts. Terraced farming, camelid herding, and irrigation supported enduring settlement despite arid and rugged terrain. Pre-Columbian cultures built road networks and ceremonial centers linking highland and coastal zones, later unified under imperial systems such as the Inca. Regional societies combined engineering skill, agricultural diversity, and political organization suited to extreme altitudes and shifting climates.",
     "key": "regionType:southAndes",
     "name": "South Andes",
+    "cities": [
+      "Santiago",
+      "Valparaíso",
+      "Temuco",
+      "El Molle",
+      "La Serena",
+      "Antofagasta",
+      "Concepción",
+      "Punta Arenas",
+      "Arica",
+      "Iquique",
+      "Copiapó",
+      "Puerto Montt",
+      "Calama",
+      "Osorno",
+      "Coyhaique"
+    ],
     "requires": [
       "continentType:andea"
     ]
@@ -105,6 +273,23 @@
     "description": "The North Andes link volcanic mountain ranges, cloud forests, and deep valleys that descend toward the Caribbean and Amazon lowlands. Distinct ecological tiers supported early farming, craft production, and regional chiefdoms connected by trade and pilgrimage routes. Exchange between Andean and lowland societies moved crops, textiles, and ritual goods across steep altitudes. Terracing, irrigation, and engineered roads show long adaptation to unstable terrain. The region’s history reflects continual interaction between highland and tropical worlds.",
     "key": "regionType:northAndes",
     "name": "North Andes",
+    "cities": [
+      "Bogotá",
+      "San Agustín",
+      "La Tolita",
+      "Medellín",
+      "Cali",
+      "Guayaquil",
+      "Cuenca",
+      "Tunja",
+      "Popayán",
+      "Real Alto",
+      "Pasto",
+      "Manizales",
+      "Riobamba",
+      "Ibarra",
+      "Loja"
+    ],
     "requires": [
       "continentType:andea"
     ]
@@ -115,6 +300,23 @@
     "description": "The Central Andes combine high plateaus, snow-fed valleys, and desert coasts connected through intensive agriculture and road networks. Communities practiced vertical farming, camelid herding, and mining within sharply varied environments. Over millennia, they built monumental centers, irrigation systems, and states that coordinated labor across wide territories. Architecture, textile arts, and metallurgy reached exceptional refinement. Long continuity of settlement and innovation made the Central Andes one of the world’s most complex mountain civilizations.",
     "key": "regionType:centralAndes",
     "name": "Central Andes",
+    "cities": [
+      "Cusco",
+      "Lima",
+      "Machu Picchu",
+      "Caral",
+      "Tiwanaku",
+      "Nazca",
+      "Arequipa",
+      "Ollantaytambo",
+      "Puno",
+      "Ayacucho",
+      "Supe",
+      "Huaraz",
+      "Huancayo",
+      "Juliaca",
+      "Abancay"
+    ],
     "requires": [
       "continentType:andea"
     ]
@@ -125,6 +327,22 @@
     "description": "Zhonghua encompasses the river basins, plains, and uplands of northern and central East Asia. Early millet and rice cultivation along the Yellow and Yangtze Rivers supported towns, bronze production, and early dynastic states. Successive empires unified these core regions through bureaucracy, philosophy, and large-scale irrigation. Trade routes linked inland steppes to maritime zones, spreading technologies and ideas across Asia. The region’s long development rests on fertile riverlands, organized governance, and enduring literary and scientific traditions.",
     "key": "regionType:zhonghua",
     "name": "Zhonghua",
+    "cities": [
+      "Beijing",
+      "Xi’an",
+      "Luoyang",
+      "Kaifeng",
+      "Erlitou",
+      "Anyang",
+      "Linzi",
+      "Zhengzhou",
+      "Jinan",
+      "Taiyuan",
+      "Datong",
+      "Handan",
+      "Yinchuan",
+      "Baoding"
+    ],
     "requires": [
       "continentType:asia"
     ]
@@ -135,6 +353,23 @@
     "description": "Bharat covers the Indian subcontinent’s plains, coasts, and uplands shaped by monsoon cycles. Early farming along the Indus and Ganges fostered cities, craft industries, and regional kingdoms. Trade by land and sea connected South Asia with Central Asia, Arabia, and Southeast Asia. Philosophical and artistic traditions diversified through centuries of cultural synthesis and migration. From metallurgy and mathematics to architecture and devotion, the region has sustained deep continuity of innovation and expression.",
     "key": "regionType:bharat",
     "name": "Bharat",
+    "cities": [
+      "Delhi",
+      "Agra",
+      "Lahore",
+      "Varanasi",
+      "Amritsar",
+      "Harappa",
+      "Mohenjo-daro",
+      "Mathura",
+      "Peshawar",
+      "Jaipur",
+      "Prayagraj",
+      "Kanauj",
+      "Patna",
+      "Ujjain",
+      "Multan"
+    ],
     "requires": [
       "continentType:asia"
     ]
@@ -145,6 +380,23 @@
     "description": "Nippon consists of volcanic islands along the northwest Pacific rim, marked by forests, fertile plains, and active tectonics. Foragers and rice cultivators established long-settled villages, maritime routes, and ritual landscapes linked to mountains and sea. Cycles of centralization and regional autonomy shaped written culture, art, and technology. The islands’ position encouraged selective exchange with continental Asia while preserving distinctive institutions and aesthetics. Nippon’s history shows enduring adaptation to dynamic natural and social environments.",
     "key": "regionType:nippon",
     "name": "Nippon",
+    "cities": [
+      "Tokyo",
+      "Kyoto",
+      "Osaka",
+      "Hiroshima",
+      "Nagasaki",
+      "Kamakura",
+      "Nara",
+      "Kagoshima",
+      "Kanazawa",
+      "Sapporo",
+      "Sendai",
+      "Sannai-Maruyama",
+      "Yoshinogari",
+      "Hakone",
+      "Matsuyama"
+    ],
     "requires": [
       "continentType:asia"
     ]
@@ -155,6 +407,23 @@
     "description": "The Chao Phraya Basin lies in the fertile lowlands of mainland Southeast Asia, sustained by monsoon rivers and seasonal flooding. Wet-rice agriculture supported early city-states that traded across India, China, and the maritime world. Metalworking, irrigation, and religious exchange produced a blend of Indic, local, and Chinese influences. Urban and temple centers managed labor and water systems through complex hierarchies. The region’s long stability reflects control of river hydrology and access to regional trade.",
     "key": "regionType:chaoPhraya",
     "name": "Chao Phraya",
+    "cities": [
+      "Bangkok",
+      "Ayutthaya",
+      "Chiang Mai",
+      "Sukhothai",
+      "Chiang Rai",
+      "Lampang",
+      "Mae Sot",
+      "Mandalay",
+      "Bagan",
+      "Moulmein",
+      "Tavoy",
+      "Malacca",
+      "Phuket",
+      "Hat Yai",
+      "Songkhla"
+    ],
     "requires": [
       "continentType:asia"
     ]
@@ -165,6 +434,21 @@
     "description": "Britannia includes the islands of the eastern North Atlantic, defined by rolling highlands, river valleys, and maritime climates. Forested and fertile after glacial retreat, it supported early farming, monument building, and seaborne trade. Successive migrations and cultural contacts connected the isles with continental Europe while sustaining local identities. Over millennia, Celtic, Roman, Norse, and later medieval influences layered languages, crafts, and settlement patterns. Britannia’s history reflects a balance between insularity and constant exchange across surrounding seas.",
     "key": "regionType:britannia",
     "name": "Britannia",
+    "cities": [
+      "London",
+      "York",
+      "Winchester",
+      "Canterbury",
+      "Colchester",
+      "Manchester",
+      "Bristol",
+      "Oxford",
+      "Cambridge",
+      "Bath",
+      "Liverpool",
+      "Birmingham",
+      "Norwich"
+    ],
     "requires": [
       "continentType:europe"
     ]
@@ -175,6 +459,23 @@
     "description": "Gallia covers the temperate plains and river valleys between the Atlantic and the Alps. Fertile land and accessible routes supported early agriculture, metalwork, and trade with neighboring regions. Settlements developed into fortified centers that coordinated craft production and exchange. The area’s position between Mediterranean and northern Europe encouraged continual adaptation and synthesis of cultural forms. Across millennia, Gallia remained a crossroads of technology, language, and regional identity.",
     "key": "regionType:gallia",
     "name": "Gallia",
+    "cities": [
+      "Paris",
+      "Marseille",
+      "Lyon",
+      "Reims",
+      "Alesia",
+      "Tours",
+      "Orléans",
+      "Bordeaux",
+      "Toulouse",
+      "Poitiers",
+      "Nîmes",
+      "Arles",
+      "Bibracte",
+      "Rouen",
+      "Vienne"
+    ],
     "requires": [
       "continentType:europe"
     ]
@@ -185,6 +486,23 @@
     "description": "Germania extends across central European plains, forests, and river basins shaped by glacial soils and navigable waterways. Varied environments supported farming, metallurgy, and long-distance exchange in amber, salt, and metal goods. Distinctive regional traditions coexisted with links to steppe and Mediterranean worlds. Geography favored both confederation and diversity, producing societies that influenced European cultural and political patterns for thousands of years.",
     "key": "regionType:germania",
     "name": "Germania",
+    "cities": [
+      "Berlin",
+      "Hamburg",
+      "Cologne",
+      "Frankfurt",
+      "Nuremberg",
+      "Stuttgart",
+      "Leipzig",
+      "Dresden",
+      "Mainz",
+      "Aachen",
+      "Trier",
+      "Regensburg",
+      "Heidelberg",
+      "Magdeburg",
+      "Königsberg"
+    ],
     "requires": [
       "continentType:europe"
     ]
@@ -195,6 +513,23 @@
     "description": "The Balkans comprise mountains, river valleys, and coastal plains joining Europe and Anatolia. Rich ecological zones supported early agriculture, metallurgy, and enduring cultural interaction. The region’s location at the meeting point of empires and trade routes created deep linguistic and artistic diversity. Over millennia, mountain corridors and inland seas shaped movement, settlement, and exchange, producing one of Europe’s most historically layered regions.",
     "key": "regionType:balkans",
     "name": "Balkans",
+    "cities": [
+      "Belgrade",
+      "Niš",
+      "Plovdiv",
+      "Sarajevo",
+      "Sofia",
+      "Dubrovnik",
+      "Ohrid",
+      "Split",
+      "Vinča",
+      "Lepenski Vir",
+      "Skopje",
+      "Novi Sad",
+      "Sirmium",
+      "Tirana",
+      "Pristina"
+    ],
     "requires": [
       "continentType:europe"
     ]
@@ -205,6 +540,23 @@
     "description": "The Nile Valley forms a fertile corridor through desert surroundings, renewed by predictable floods. Agriculture and settlement flourished early along its banks, giving rise to complex administration, monumental architecture, and scholarship. Irrigation and trade connected the river to Nubia, the Levant, and the Red Sea. For thousands of years, the valley’s prosperity and continuity depended on managing water, labor, and ritual in one of the world’s most enduring cultural landscapes.",
     "key": "regionType:nileValley",
     "name": "Nile Valley",
+    "cities": [
+      "Cairo",
+      "Alexandria",
+      "Luxor",
+      "Memphis",
+      "Giza",
+      "Aswan",
+      "Abydos",
+      "Karnak",
+      "Philae",
+      "Saqqara",
+      "Damietta",
+      "Edfu",
+      "Elephantine",
+      "Rosetta",
+      "Tanis"
+    ],
     "requires": [
       "continentType:levantica"
     ]
@@ -215,6 +567,23 @@
     "description": "Persia encompasses high plateaus, mountain chains, and desert basins linking Mesopotamia, Central Asia, and South Asia. Early herding and irrigation supported the rise of cities and long-distance trade. Successive empires developed systems of governance, infrastructure, and art that shaped much of Eurasia. The region’s cultural strength drew on diverse environments and enduring traditions in science, literature, and architecture. Persia’s geography fostered both resilience and influence across continents.",
     "key": "regionType:persia",
     "name": "Persia",
+    "cities": [
+      "Isfahan",
+      "Persepolis",
+      "Tehran",
+      "Susa",
+      "Pasargadae",
+      "Ctesiphon",
+      "Hamadan",
+      "Anshan",
+      "Shiraz",
+      "Mashhad",
+      "Tabriz",
+      "Yazd",
+      "Bishapur",
+      "Istakhr",
+      "Kerman"
+    ],
     "requires": [
       "continentType:levantica"
     ]
@@ -225,6 +594,23 @@
     "description": "Mesopotamia occupies the fertile alluvial plains between the Tigris and Euphrates. Early communities built irrigation canals, cultivated cereals, and founded the first urban centers. Over thousands of years, they developed writing, law, and astronomy while maintaining trade networks with Anatolia, Persia, and the Levant. Despite shifting climates and political cycles, Mesopotamia remained a continuous center of innovation grounded in its river landscapes.",
     "key": "regionType:mesopotamia",
     "name": "Mesopotamia",
+    "cities": [
+      "Baghdad",
+      "Babylon",
+      "Nineveh",
+      "Uruk",
+      "Ur",
+      "Assur",
+      "Samarra",
+      "Mosul",
+      "Erbil",
+      "Hatra",
+      "Nimrud",
+      "Lagash",
+      "Nippur",
+      "Borsippa",
+      "Kirkuk"
+    ],
     "requires": [
       "continentType:levantica"
     ]
@@ -235,6 +621,23 @@
     "description": "The Levant lies along the eastern Mediterranean coast, connecting Africa, Anatolia, and Mesopotamia. Its narrow corridor of plains and mountains supported farming, trade, and seafaring communities from early prehistory onward. Cities and ports facilitated cultural exchange across continents, producing layered traditions in language, religion, and art. The region’s long continuity reflects both geographic vulnerability and exceptional openness to movement and innovation.",
     "key": "regionType:levant",
     "name": "Levant",
+    "cities": [
+      "Damascus",
+      "Aleppo",
+      "Antioch",
+      "Palmyra",
+      "Sidon",
+      "Byblos",
+      "Nazareth",
+      "Jericho",
+      "Acre",
+      "Bosra",
+      "Ugarit",
+      "Homs",
+      "Ebla",
+      "Mari",
+      "Hama"
+    ],
     "requires": [
       "continentType:levantica"
     ]
@@ -245,6 +648,23 @@
     "description": "The Aegean includes islands, peninsulas, and coastal plains shaped by tectonic activity and maritime access. Communities engaged in farming, craft production, and seafaring trade in metals, ceramics, and crops. Rugged terrain favored independent settlements connected through shared artistic and ritual practices. Long-standing exchange between islands and mainland facilitated innovation in navigation, architecture, and storytelling. The region’s geography fostered sustained interaction between sea, mountain, and human settlement.",
     "key": "regionType:aegean",
     "name": "Aegean",
+    "cities": [
+      "Athens",
+      "Knossos",
+      "Mycenae",
+      "Rhodes",
+      "Sparta",
+      "Corinth",
+      "Delphi",
+      "Olympia",
+      "Ephesus",
+      "Smyrna",
+      "Pergamon",
+      "Miletus",
+      "Phaistos",
+      "Tiryns",
+      "Chalcis"
+    ],
     "requires": [
       "continentType:mediterra"
     ]
@@ -255,6 +675,23 @@
     "description": "The Apennine region extends along central Italy, featuring mountains, fertile valleys, and volcanic soils. Early farmers established river-valley settlements and maintained trade across Adriatic and Tyrrhenian coasts. Hilltop towns, terraced fields, and road networks supported dense, interconnected communities. Its central location linked Mediterranean, Alpine, and Balkan spheres. Urban centers produced architecture, engineering, and legal systems reflecting long-term adaptation to diverse ecological conditions.",
     "key": "regionType:apennine",
     "name": "Apennine",
+    "cities": [
+      "Rome",
+      "Venice",
+      "Florence",
+      "Naples",
+      "Milan",
+      "Pompeii",
+      "Ravenna",
+      "Bologna",
+      "Genoa",
+      "Turin",
+      "Verona",
+      "Pisa",
+      "Ostia",
+      "Tarquinia",
+      "Siena"
+    ],
     "requires": [
       "continentType:mediterra"
     ]
@@ -265,6 +702,23 @@
     "description": "Iberia encompasses the Iberian Peninsula’s mountains, plateaus, and coasts shaped by Atlantic and Mediterranean climates. Agriculture, metallurgy, and seafaring supported early regional networks. Trade routes carried tin, gold, and agricultural products across Europe and North Africa. Over millennia, successive migrations and cultural contacts layered languages, beliefs, and artistic traditions. Mountainous interiors offered local autonomy, while coastal zones facilitated maritime exchange, producing a historically diverse and interconnected landscape.",
     "key": "regionType:iberia",
     "name": "Iberia",
+    "cities": [
+      "Madrid",
+      "Barcelona",
+      "Seville",
+      "Córdoba",
+      "Valencia",
+      "Toledo",
+      "Tartessos",
+      "Santiago de Compostela",
+      "Mérida",
+      "Granada",
+      "Zaragoza",
+      "Salamanca",
+      "Itálica",
+      "Numantia",
+      "Coimbra"
+    ],
     "requires": [
       "continentType:mediterra"
     ]
@@ -275,6 +729,23 @@
     "description": "The Maghreb spans the western Mediterranean coast and northern Sahara margins, including mountains, steppe, and oases. Berber-speaking communities practiced pastoralism, agriculture, and long-distance trade connecting the Sahel with Mediterranean ports. Exchanges with Europe and the Near East circulated goods, ideas, and technologies. Inland caravan networks maintained communication across deserts. The region’s history reflects adaptation to fertile coastal plains and harsh desert environments, producing resilient, interconnected societies over millennia.",
     "key": "regionType:maghreb",
     "name": "Maghreb",
+    "cities": [
+      "Tunis",
+      "Carthage",
+      "Kairouan",
+      "Constantine",
+      "Oran",
+      "Leptis Magna",
+      "Sousse",
+      "Hippo Regius",
+      "Dougga",
+      "Bulla Regia",
+      "Thysdrus",
+      "Sabratha",
+      "Sfax",
+      "Annaba",
+      "Utica"
+    ],
     "requires": [
       "continentType:mediterra"
     ]
@@ -285,6 +756,23 @@
     "description": "The Malay region includes tropical islands and peninsulas linking mainland Southeast Asia with the Indian Ocean. Communities practiced rice cultivation, forest agriculture, and maritime trade. Monsoon winds facilitated seaborne exchange of ceramics, spices, metals, and cultural practices. Port settlements and inland villages supported interconnected economies and social systems. Over millennia, Austronesian foundations combined with Indic and later Islamic influences, creating a culturally diverse and maritime-focused region.",
     "key": "regionType:malay",
     "name": "Malay",
+    "cities": [
+      "Jakarta",
+      "Makassar",
+      "Malacca",
+      "Surabaya",
+      "Majapahit",
+      "Ternate",
+      "Denpasar",
+      "Bandung",
+      "Batujaya",
+      "Medan",
+      "Banjarmasin",
+      "Pontianak",
+      "Balikpapan",
+      "Manado",
+      "Samarinda"
+    ],
     "requires": [
       "continentType:oceania"
     ]
@@ -295,6 +783,23 @@
     "description": "Polynesia comprises remote islands and atolls across the central and eastern Pacific. Settlers navigated vast ocean distances using stars, winds, and currents, establishing networks of kinship, ritual, and trade. Agriculture adapted to limited soils, and monumental architecture reflected social and religious organization. Communities maintained cultural continuity through oral traditions and voyaging. The region demonstrates sustained ecological adaptation and seafaring innovation across millennia.",
     "key": "regionType:polynesia",
     "name": "Polynesia",
+    "cities": [
+      "Auckland",
+      "Apia",
+      "Sydney",
+      "Melbourne",
+      "Papeete",
+      "Lapita",
+      "Nukuʻalofa",
+      "Brisbane",
+      "Suva",
+      "Nouméa",
+      "Rarotonga",
+      "Talepakemalai",
+      "Mulifanua",
+      "Port Vila",
+      "Honiara"
+    ],
     "requires": [
       "continentType:oceania"
     ]
@@ -305,6 +810,23 @@
     "description": "Lanka is a tropical island with central highlands, river plains, and monsoon-fed coasts. Agriculture, including rice and cinnamon cultivation, supported early urban centers and extensive irrigation systems. Maritime routes connected the island to South Asia, Arabia, and Southeast Asia, facilitating trade and cultural exchange. Successive kingdoms developed monumental architecture and hydraulic engineering. Lanka’s history reflects integration of insular continuity with broader maritime networks.",
     "key": "regionType:lanka",
     "name": "Lanka",
+    "cities": [
+      "Colombo",
+      "Kandy",
+      "Anuradhapura",
+      "Polonnaruwa",
+      "Sigiriya",
+      "Madurai",
+      "Thanjavur",
+      "Jaffna",
+      "Galle",
+      "Kochi",
+      "Calicut",
+      "Mihintale",
+      "Malé",
+      "Trincomalee",
+      "Trichy"
+    ],
     "requires": [
       "continentType:oceania"
     ]
@@ -315,6 +837,23 @@
     "description": "Indochina spans river deltas, monsoon forests, and coastal plains in Southeast Asia. Fertile lowlands supported rice cultivation, early urban centers, and bronze and iron technologies. Rivers enabled transport and irrigation, linking inland and coastal communities. Trade and cultural exchange connected China, India, and the Malay world, shaping governance, craft, and religious traditions. The region’s history demonstrates continuous integration of local innovation with transregional influences.",
     "key": "regionType:indochina",
     "name": "Indochina",
+    "cities": [
+      "Hanoi",
+      "Saigon",
+      "Hue",
+      "Da Nang",
+      "Haiphong",
+      "Ha Long",
+      "Dien Bien Phu",
+      "Ninh Binh",
+      "Thanh Hoa",
+      "Vinh",
+      "Can Tho",
+      "Da Lat",
+      "Quy Nhon",
+      "Luang Prabang",
+      "Battambang"
+    ],
     "requires": [
       "continentType:oceania"
     ]
@@ -325,6 +864,23 @@
     "description": "The Central Steppe stretches across grasslands, plateaus, and cold deserts from Mongolia toward Eurasia’s interior. Nomadic communities practiced herding, seasonal migration, and horse-based economies. The region formed a corridor linking China, Siberia, Persia, and Europe, enabling movement of people, goods, and technologies. Pastoral societies developed political alliances, metalworking, and spiritual traditions attuned to mobile life. Over millennia, the steppe shaped Eurasian trade, warfare, and cultural exchange.",
     "key": "regionType:centralSteppe",
     "name": "Central Steppe",
+    "cities": [
+      "Karakorum",
+      "Ulaanbaatar",
+      "Otrar",
+      "Taraz",
+      "Tobolsk",
+      "Turpan",
+      "Erdene Zuu",
+      "Atyrau",
+      "Semey",
+      "Kyzylorda",
+      "Ust-Kamenogorsk",
+      "Kokshetau",
+      "Khorgos",
+      "Hovd",
+      "Bayan-Ölgii"
+    ],
     "requires": [
       "continentType:siberia"
     ]
@@ -335,6 +891,23 @@
     "description": "The Himalaya comprise the world’s highest mountain ranges, with glacial valleys and high-altitude plateaus. Communities adapted to limited arable land, terraced farming, and pastoralism, while maintaining trade routes connecting South, Central, and East Asia. Monastic and ritual traditions coexisted with ecological knowledge of alpine environments. Geographic isolation did not prevent exchange; religious, artistic, and technological ideas circulated across passes. The region reflects resilience and sustained adaptation to extreme terrain.",
     "key": "regionType:himalaya",
     "name": "Himalaya",
+    "cities": [
+      "Lhasa",
+      "Shigatse",
+      "Leh",
+      "Srinagar",
+      "Dharamshala",
+      "Samye",
+      "Gyantse",
+      "Kyunglung Ngulkhar",
+      "Bhaktapur",
+      "Patan",
+      "Paro",
+      "Lo Manthang",
+      "Namche Bazaar",
+      "Tsetang",
+      "Kalimpong"
+    ],
     "requires": [
       "continentType:siberia"
     ]
@@ -345,6 +918,23 @@
     "description": "Anatolia occupies a plateau framed by mountains and seas, linking the Mediterranean and Near East. Fertile basins and strategic passes supported early farming and urban cultures. The region became a meeting point for Indo-European, Semitic, and Caucasian peoples, fostering metallurgy, trade, and statecraft. Routes connected Aegean coasts to Mesopotamia, facilitating long-term exchange. Monumental architecture, writing systems, and complex polities reflect Anatolia’s role as a continental crossroads over millennia.",
     "key": "regionType:anatolia",
     "name": "Anatolia",
+    "cities": [
+      "Istanbul",
+      "Ankara",
+      "Izmir",
+      "Konya",
+      "Bursa",
+      "Gaziantep",
+      "Diyarbakir",
+      "Trabzon",
+      "Kayseri",
+      "Erzurum",
+      "Van",
+      "Sivas",
+      "Troy",
+      "Hattusa",
+      "Sardis"
+    ],
     "requires": [
       "continentType:siberia"
     ]
@@ -355,6 +945,23 @@
     "description": "Central Asia spans steppes, deserts, and river oases between Iran, Siberia, and China. Communities practiced horse pastoralism and oasis agriculture, supporting cities along Silk Road corridors. Nomadic groups influenced military and political developments across Eurasia. Contrasts between arid basins, mountains, and fertile valleys shaped interdependence between mobile and settled populations. The region’s history demonstrates movement, diversity, and strategic significance over millennia.",
     "key": "regionType:centralAsia",
     "name": "Central Asia",
+    "cities": [
+      "Samarkand",
+      "Bukhara",
+      "Tashkent",
+      "Herat",
+      "Merv",
+      "Khiva",
+      "Balkh",
+      "Urgench",
+      "Kokand",
+      "Termez",
+      "Andijan",
+      "Panjakent",
+      "Nisa",
+      "Kesh",
+      "Ai Khanoum"
+    ],
     "requires": [
       "continentType:siberia"
     ]
@@ -365,6 +972,23 @@
     "description": "Central Europe encompasses plains, river corridors, and forested highlands shaped by glacial soils and shifting climates. Early farmers and metallurgists established long-distance exchange networks connecting the Danube basin with Baltic and Alpine regions. Settlements grew into dense communities with layered craft, political, and linguistic traditions. Rivers and fertile soils supported trade, diplomacy, and agriculture. The region’s position between Mediterranean, steppe, and northern zones encouraged continual interaction, shaping European history over millennia.",
     "key": "regionType:centralEurope",
     "name": "Central Europe",
+    "cities": [
+      "Warsaw",
+      "Kraków",
+      "Gdańsk",
+      "Poznań",
+      "Lublin",
+      "Lwów",
+      "Grodno",
+      "Brest",
+      "Toruń",
+      "Gniezno",
+      "Płock",
+      "Sandomierz",
+      "Kalisz",
+      "Łódź",
+      "Białystok"
+    ],
     "requires": [
       "continentType:taiga"
     ]
@@ -375,6 +999,23 @@
     "description": "Eastern Europe stretches from forest-steppe zones to broad plains with extensive river systems flowing toward the Baltic, Black Sea, and Arctic. Agriculture, pastoralism, and foraging supported diverse communities. The region’s open terrain facilitated migrations, trade, and the rise of expansive polities. Long-distance routes connected it to steppe, Baltic, and Byzantine worlds. Over millennia, these ecological and cultural interactions produced a mosaic of societies and enduring patterns of settlement and exchange.",
     "key": "regionType:easternEurope",
     "name": "Eastern Europe",
+    "cities": [
+      "Moscow",
+      "Saint Petersburg",
+      "Novgorod",
+      "Smolensk",
+      "Vladimir",
+      "Yaroslavl",
+      "Tver",
+      "Pskov",
+      "Minsk",
+      "Polotsk",
+      "Ryazan",
+      "Kursk",
+      "Bryansk",
+      "Vitebsk",
+      "Arkhangelsk"
+    ],
     "requires": [
       "continentType:taiga"
     ]
@@ -385,6 +1026,23 @@
     "description": "The Highlands include rugged mountains, moorlands, and coastal islands influenced by Atlantic winds and ancient geology. Communities adapted to thin soils, cool climates, and maritime resources through pastoralism and small-scale agriculture. Clan-based social systems and oral traditions shaped local identity. Maritime routes linked settlements to northern Europe while upland isolation encouraged distinctive cultural expression. Over millennia, the Highlands balanced connectivity with insularity, producing persistent social and ecological traditions.",
     "key": "regionType:highlands",
     "name": "Highlands",
+    "cities": [
+      "Edinburgh",
+      "Glasgow",
+      "Inverness",
+      "Aberdeen",
+      "Stirling",
+      "Dundee",
+      "Perth",
+      "Fort William",
+      "Oban",
+      "Kirkwall",
+      "Lerwick",
+      "Stornoway",
+      "Wick",
+      "Thurso",
+      "Elgin"
+    ],
     "requires": [
       "continentType:taiga"
     ]
@@ -395,6 +1053,23 @@
     "description": "Scandinavia covers peninsulas, fjords, and boreal forests sculpted by Ice Age glaciers. Hunter-fisher and reindeer-herding communities were later joined by farming settlements adapted to long winters and coastal resources. Seafaring and inland trade fostered regional connectivity across the North Atlantic and Baltic. Woodcraft, metallurgy, and maritime technologies coexisted with pastoral and agricultural practices. Over millennia, the region maintained cultural continuity while integrating environmental adaptation and northern trade networks.",
     "key": "regionType:scandinavia",
     "name": "Scandinavia",
+    "cities": [
+      "Stockholm",
+      "Oslo",
+      "Gothenburg",
+      "Bergen",
+      "Malmö",
+      "Trondheim",
+      "Uppsala",
+      "Aarhus",
+      "Odense",
+      "Visby",
+      "Lund",
+      "Tromsø",
+      "Aalborg",
+      "Umeå",
+      "Luleå"
+    ],
     "requires": [
       "continentType:taiga"
     ]
