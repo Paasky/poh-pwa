@@ -1,7 +1,5 @@
 import { DataBucket } from "@/Data/DataBucket";
 import type { GameKey, GameObject, IRawGameObject } from "@/Common/Models/_GameModel";
-import type { IEvent } from "@/Common/IEvent";
-import { publishEvents } from "@/Common/Buses/EventBus";
 import type { Agenda } from "@/Common/Models/Agenda";
 import type { Citizen } from "@/Common/Models/Citizen";
 import type { City } from "@/Common/Models/City";
@@ -15,7 +13,9 @@ import type { TradeRoute } from "@/Common/Models/TradeRoute";
 import type { Unit } from "@/Common/Models/Unit";
 import type { UnitDesign } from "@/Common/Models/UnitDesign";
 import { useDataBucket } from "@/Data/useDataBucket";
-import { PohMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
+import { diff } from "@/Common/Helpers/collectionTools";
+import { TypeStorage } from "@/Common/Objects/TypeStorage";
 
 export class DataStore {
   readonly dataBucket: DataBucket;
@@ -27,17 +27,61 @@ export class DataStore {
   set(mutations: PohMutation<GameObject>[]): void {
     const set = [] as IRawGameObject[];
     const remove = [] as GameKey[];
-    const events = [] as IEvent[];
 
     mutations.forEach((mutation) => {
+      // Verify obj exists (+ needed for adv types)
+      const obj = this.dataBucket.getObject(mutation.payload.key);
+
       switch (mutation.type) {
+        // Simple types
         case "create":
         case "update":
           set.push(mutation.payload);
           break;
+
+        // Types that modify a property of an existing object
+        case "append":
+        case "filter":
+        case "setKeys":
+          {
+            // Build payload as combo of object value + payload; IDE complains without any
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const payload = {} as any;
+
+            for (const [key, value] of Object.entries(mutation.payload)) {
+              if (key === "key") continue;
+
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              const objValue = obj[key as keyof typeof obj] as any;
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              const payloadValue = value as any;
+
+              if (mutation.type === "append") {
+                payload[key] = [...(objValue ?? []), ...(payloadValue ?? [])];
+              }
+
+              if (mutation.type === "filter") {
+                payload[key] = diff(objValue ?? [], payloadValue ?? []);
+              }
+
+              if (mutation.type === "setKeys") {
+                if (objValue instanceof TypeStorage) {
+                  payload[key] = { ...objValue.toJson(), ...(payloadValue ?? {}) };
+                } else {
+                  payload[key] = { ...(objValue ?? {}), ...(payloadValue ?? {}) };
+                }
+              }
+            }
+            set.push(payload);
+          }
+          break;
+
+        // Types that remove an object from the bucket
         case "remove":
           remove.push(mutation.payload.key);
           break;
+        default:
+          throw new Error(`Unknown mutation.type '${mutation.type}' in DataStore.set()`);
       }
     });
 
@@ -46,24 +90,6 @@ export class DataStore {
     try {
       remove.forEach(this.dataBucket.removeObject);
       this.dataBucket.setRawObjects(set);
-    } catch (error) {
-      this.dataBucket.restore(backup);
-      throw error;
-    }
-
-    try {
-      const players = this.dataBucket.getClassObjects<Player>("player");
-      mutations.forEach((mutation) => {
-        events.push(
-          this.eventFromMutation(
-            mutation,
-            this.dataBucket.getObject(mutation.payload.key),
-            players,
-          ),
-        );
-      });
-
-      publishEvents(events);
     } catch (error) {
       this.dataBucket.restore(backup);
       throw error;

@@ -2,7 +2,7 @@ import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
 import { Player } from "@/Common/Models/Player";
 import { Tile } from "@/Common/Models/Tile";
 import { Unit } from "@/Common/Models/Unit";
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 import { Pathfinder } from "@/Simulation/Movement/Pathfinder";
 import { UnitMovement } from "@/Simulation/Movement/UnitMovement";
 import { belongsToPlayer } from "@/Simulation/Validator";
@@ -26,7 +26,7 @@ export class UnitMove implements ISimAction {
     return this;
   }
 
-  handleAction(): IMutation[] {
+  handleAction(): PohMutation[] {
     this.unit.movement.move();
 
     return [

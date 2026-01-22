@@ -1,7 +1,7 @@
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
 import { Player } from "@/Common/Models/Player";
 import { City } from "@/Common/Models/City";
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 import { belongsToCity, belongsToPlayer } from "@/Simulation/Validator";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { Construction } from "@/Common/Models/Construction";
@@ -74,7 +74,7 @@ export class CityStartConstruction implements ISimAction {
     return this;
   }
 
-  handleAction(): IMutation[] {
+  handleAction(): PohMutation[] {
     return [
       {
         type: "update",

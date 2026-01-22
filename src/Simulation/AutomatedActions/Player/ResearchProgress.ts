@@ -1,6 +1,6 @@
 import { Research } from "@/Common/Models/Research";
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { roundToTenth } from "@/Common/Objects/World";
 import { Player } from "@/Common/Models/Player";
@@ -19,7 +19,7 @@ export class ResearchProgress implements ISimAction {
     return this;
   }
 
-  handleAction(): IMutation<Research | Player>[] {
+  handleAction(): PohMutation<Research | Player>[] {
     const progress = roundToTenth(this.research.getProgress(this.tech) + this.amount);
 
     // Did it complete?
@@ -27,7 +27,7 @@ export class ResearchProgress implements ISimAction {
       const mutations = new ResearchComplete(this.research, this.tech).handleAction();
 
       const overflow = roundToTenth(progress - this.tech.scienceCost!);
-      const playerMutation: IMutation<Player> = {
+      const playerMutation: PohMutation<Player> = {
         type: "setKeys",
         payload: {
           key: this.research.playerKey,

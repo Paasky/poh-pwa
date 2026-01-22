@@ -3,7 +3,7 @@ import { Difficulty, Note, Priority, Region } from "@/Actor/Ai/AiTypes";
 import { StrategyCommand } from "@/Actor/Ai/Commands/StrategyCommand";
 import { Memory } from "@/Actor/Ai/Memory";
 import { subscribeToEvents } from "@/Common/Buses/EventBus";
-import { IEvent } from "@/Common/IEvent";
+import { IEvent } from "@/Common/PohEvent";
 import { pushActions } from "@/Common/Buses/ActionBus";
 import { IMindset } from "@/Actor/Ai/Mindsets/_IMindset";
 import { PreSettled } from "@/Actor/Ai/Mindsets/PreSettled";

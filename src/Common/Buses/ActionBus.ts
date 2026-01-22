@@ -1,12 +1,12 @@
-import { IAction } from "@/Common/IAction";
+import { PohAction } from "@/Common/PohAction";
 import { GameKey } from "@/Common/Models/_GameModel";
 
-const listeners = [] as ((playerKey: GameKey, actions: IAction[]) => void)[];
+const listeners = [] as ((playerKey: GameKey, actions: PohAction[]) => void)[];
 
-export function subscribeToActions(callback: (playerKey: GameKey, actions: IAction[]) => void) {
+export function subscribeToActions(callback: (playerKey: GameKey, actions: PohAction[]) => void) {
   listeners.push(callback);
 }
 
-export function pushActions(playerKey: GameKey, actions: IAction[]) {
+export function pushActions(playerKey: GameKey, actions: PohAction[]) {
   listeners.forEach((listener) => listener(playerKey, actions));
 }

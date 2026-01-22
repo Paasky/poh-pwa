@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useDataBucket } from "../../Data/useDataBucket";
+import { useDataBucket } from "@/Data/useDataBucket";
 import { TypeObject } from "../Static/Objects/TypeObject";
-
-export { GameClass, GameKey, parseKey } from "./_GameTypes";
+import { GameClass, GameKey, parseKey } from "@/Common/Models/_GameTypes";
 
 export * from "./_GameTypes";
 

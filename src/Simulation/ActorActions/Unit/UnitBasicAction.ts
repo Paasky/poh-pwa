@@ -1,9 +1,9 @@
 import { Player } from "@/Common/Models/Player";
 import { Unit } from "@/Common/Models/Unit";
-import { ActionType } from "@/Common/IAction";
+import { ActionType } from "@/Common/PohAction";
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
 import { belongsToPlayer } from "@/Simulation/Validator";
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 
 export class UnitBasicAction implements ISimAction {
   constructor(
@@ -18,7 +18,7 @@ export class UnitBasicAction implements ISimAction {
     return this;
   }
 
-  handleAction(): IMutation[] {
+  handleAction(): PohMutation[] {
     return [
       {
         type: "update",

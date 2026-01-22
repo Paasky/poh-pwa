@@ -1,7 +1,7 @@
 import { Player } from "@/Common/Models/Player";
 import { Citizen } from "@/Common/Models/Citizen";
 import { Tile } from "@/Common/Models/Tile";
-import { createMutation, IMutation } from "@/Common/IMutation";
+import { createMutation, PohMutation } from "@/Common/PohMutation";
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
 import { belongsToCity, belongsToPlayer } from "@/Simulation/Validator";
 import { City } from "@/Common/Models/City";
@@ -24,7 +24,7 @@ export class CitizenPickTile implements ISimAction {
     return this;
   }
 
-  handleAction(): IMutation[] {
+  handleAction(): PohMutation[] {
     this.citizen.tileKey = this.tile.key;
     const mutation = createMutation("update", this.citizen.key);
     mutation.payload.tileKey = this.citizen.tileKey;

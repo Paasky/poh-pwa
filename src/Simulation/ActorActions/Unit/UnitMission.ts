@@ -2,7 +2,7 @@ import { Player } from "@/Common/Models/Player";
 import { Unit } from "@/Common/Models/Unit";
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
 import { belongsToPlayer, hasMoves, isAlive } from "@/Simulation/Validator";
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { GameObject } from "@/Common/Models/_GameModel";
 
@@ -22,7 +22,7 @@ export class UnitMission implements ISimAction {
     return this;
   }
 
-  handleAction(): IMutation[] {
+  handleAction(): PohMutation[] {
     this.unit.action = {
       type: "mission",
       target: this.target?.key ?? null,

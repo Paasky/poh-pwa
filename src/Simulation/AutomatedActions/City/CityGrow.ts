@@ -1,7 +1,7 @@
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
 import { City } from "@/Common/Models/City";
 import { Tile } from "@/Common/Models/Tile";
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 import { getRandom } from "@/Common/Helpers/arrayTools";
 import { belongsToCity } from "@/Simulation/Validator";
 import { generateKey } from "@/Common/Models/_GameTypes";
@@ -26,14 +26,14 @@ export class CityGrow implements ISimAction {
     return this;
   }
 
-  handleAction(): IMutation[] {
+  handleAction(): PohMutation[] {
     const policyKeys = this.city.player.research.knownTypeKeys.filter((key) =>
       key.startsWith("policyType:"),
     );
     const religions = Array.from(this.city.religions.values()).map((r) => r.religion);
 
-    const mutations: IMutation[] = [];
-    const newCitizenMutation: IMutation = {
+    const mutations: PohMutation[] = [];
+    const newCitizenMutation: PohMutation = {
       type: "create",
       payload: {
         key: generateKey("citizen"),

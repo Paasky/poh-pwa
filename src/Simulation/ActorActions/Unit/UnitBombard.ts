@@ -9,7 +9,7 @@ import {
   isInRange,
   isValidCombatTarget,
 } from "@/Simulation/Validator";
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 import { City } from "@/Common/Models/City";
 import { Construction } from "@/Common/Models/Construction";
 import { Combat } from "@/Simulation/Combat/Combat";
@@ -34,7 +34,7 @@ export class UnitBombard implements ISimAction {
     return this;
   }
 
-  handleAction(): IMutation[] {
+  handleAction(): PohMutation[] {
     return new Combat(this.unit, this.target).bombard();
   }
 

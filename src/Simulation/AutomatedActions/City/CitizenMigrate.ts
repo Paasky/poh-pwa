@@ -1,6 +1,6 @@
 import { Citizen } from "@/Common/Models/Citizen";
 import { City } from "@/Common/Models/City";
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
 import { CitizenPickTile } from "@/Simulation/ActorActions/City/CitizenPickTile";
 import { getRandom } from "@/Common/Helpers/arrayTools";
@@ -25,7 +25,7 @@ export class CitizenMigrate implements ISimAction {
     return this;
   }
 
-  handleAction(): IMutation[] {
+  handleAction(): PohMutation[] {
     if (this.toCity) {
       this.citizen.playerKey = this.toCity.playerKey;
       this.citizen.cityKey = this.toCity.key;

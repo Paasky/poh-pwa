@@ -1,9 +1,9 @@
 import { Player } from "@/Common/Models/Player";
 import { Unit } from "@/Common/Models/Unit";
-import { ActionType } from "@/Common/IAction";
+import { ActionType } from "@/Common/PohAction";
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
 import { belongsToPlayer, isInRange } from "@/Simulation/Validator";
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 import { Tile } from "@/Common/Models/Tile";
 
 export class UnitTileAction implements ISimAction {
@@ -21,7 +21,7 @@ export class UnitTileAction implements ISimAction {
     return this;
   }
 
-  handleAction(): IMutation[] {
+  handleAction(): PohMutation[] {
     return [
       {
         type: "update",

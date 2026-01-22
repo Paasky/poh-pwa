@@ -1,6 +1,6 @@
 import { Player } from "@/Common/Models/Player";
 import { ActionReport, Difficulty, Locality, MapAction, Note, Priority } from "@/Actor/Ai/AiTypes";
-import { Attack, IAction } from "@/Common/IAction";
+import { Attack, PohAction } from "@/Common/PohAction";
 import { Unit } from "@/Common/Models/Unit";
 import { City } from "@/Common/Models/City";
 import { useDataBucket } from "@/Data/useDataBucket";
@@ -18,7 +18,7 @@ export class LocalCommand {
   private turn = useDataBucket().world.turn;
   private now = Date.now();
 
-  private actions = [] as IAction[];
+  private actions = [] as PohAction[];
   private notes = [] as Note[];
 
   constructor(
@@ -255,7 +255,7 @@ export class LocalCommand {
     } as Attack;
   }
 
-  private bombardAction(object: City | Unit, target: City | Construction | Tile | Unit): IAction {
+  private bombardAction(object: City | Unit, target: City | Construction | Tile | Unit): PohAction {
     return {
       type: "actionType:bombard",
       [object instanceof City ? "cityKey" : "unitKey"]: object.key,
@@ -265,7 +265,7 @@ export class LocalCommand {
     };
   }
 
-  private moveAction(object: City | Unit, tile: Tile): IAction {
+  private moveAction(object: City | Unit, tile: Tile): PohAction {
     return {
       type: "actionType:move",
       unitKey: object.key,
@@ -275,7 +275,7 @@ export class LocalCommand {
     };
   }
 
-  private skipAction(object: City | Unit): IAction {
+  private skipAction(object: City | Unit): PohAction {
     return {
       type: "actionType:skipTurn",
       unitKey: object.key,

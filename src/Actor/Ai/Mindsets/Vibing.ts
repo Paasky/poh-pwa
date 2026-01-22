@@ -2,7 +2,7 @@ import { Difficulty, Priority, Region } from "@/Actor/Ai/AiTypes";
 import { Player } from "@/Common/Models/Player";
 import { IMindset } from "@/Actor/Ai/Mindsets/_IMindset";
 import { Memory } from "@/Actor/Ai/Memory";
-import { IEvent } from "@/Common/IEvent";
+import { IEvent } from "@/Common/PohEvent";
 
 // No specific plans or threats, just vibing!
 export class Vibing implements IMindset {

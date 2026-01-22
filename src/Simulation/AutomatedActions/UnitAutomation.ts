@@ -1,7 +1,7 @@
 import { Unit } from "@/Common/Models/Unit";
 import { Construction } from "@/Common/Models/Construction";
 import { DataStore } from "@/Data/DataStore";
-import { IMutation, mergeMutations } from "@/Common/IMutation";
+import { PohMutation, mergeMutations } from "@/Common/PohMutation";
 import { Health } from "@/Simulation/Common/Health";
 import { Construct } from "@/Simulation/Common/Construct";
 
@@ -20,7 +20,7 @@ export class UnitAutomation {
       payload: {
         key: this.unit.tile.key,
       },
-    } as IMutation;
+    } as PohMutation;
 
     switch (this.unit.action?.type) {
       case "actionType:clear":
@@ -37,7 +37,7 @@ export class UnitAutomation {
   }
 
   startTurn(): UnitCompleted {
-    const mutations: IMutation[] = [];
+    const mutations: PohMutation[] = [];
 
     // 1. Reset movement and attack status
     mutations.push({

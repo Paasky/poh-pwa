@@ -2,7 +2,7 @@ import { Player } from "@/Common/Models/Player";
 import { Unit } from "@/Common/Models/Unit";
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
 import { belongsToPlayer, hasMoves, isAlive } from "@/Simulation/Validator";
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 
 export class UnitClear implements ISimAction {
   constructor(
@@ -18,7 +18,7 @@ export class UnitClear implements ISimAction {
     return this;
   }
 
-  handleAction(): IMutation[] {
+  handleAction(): PohMutation[] {
     return [
       {
         type: "update",

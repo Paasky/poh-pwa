@@ -3,7 +3,7 @@ import { Unit } from "@/Common/Models/Unit";
 import { Tile } from "@/Common/Models/Tile";
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
 import { belongsToPlayer, hasMoves, isAlive } from "@/Simulation/Validator";
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 
 export class UnitRebase implements ISimAction {
   constructor(
@@ -20,7 +20,7 @@ export class UnitRebase implements ISimAction {
     return this;
   }
 
-  handleAction(): IMutation[] {
+  handleAction(): PohMutation[] {
     this.unit.action = { type: "rebase", target: this.tile.key };
     return [
       {

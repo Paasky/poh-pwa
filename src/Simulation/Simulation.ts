@@ -1,5 +1,5 @@
 import { subscribeToActions } from "@/Common/Buses/ActionBus";
-import { IAction } from "@/Common/IAction";
+import { PohAction } from "@/Common/PohAction";
 import { GameKey } from "@/Common/Models/_GameModel";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { DataStore } from "@/Data/DataStore";
@@ -26,7 +26,7 @@ export class Simulation {
   /**
    * Main entry point for performing player actions.
    */
-  onAction(playerKey: GameKey, action: IAction) {
+  onAction(playerKey: GameKey, action: PohAction) {
     const bucket = useDataBucket();
 
     // 1. Conflict Resolution (Optimistic Locking)

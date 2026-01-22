@@ -1,7 +1,7 @@
 import { Player } from "@/Common/Models/Player";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 
 export class PlayerUnselectType implements ISimAction {
   constructor(
@@ -22,7 +22,7 @@ export class PlayerUnselectType implements ISimAction {
     return this;
   }
 
-  handleAction(): IMutation[] {
+  handleAction(): PohMutation[] {
     return [
       {
         type: "action",

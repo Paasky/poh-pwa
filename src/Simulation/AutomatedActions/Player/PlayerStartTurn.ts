@@ -4,7 +4,7 @@ import { Construction } from "@/Common/Models/Construction";
 import { ResearchStartTurn } from "@/Simulation/AutomatedActions/Player/ResearchStartTurn";
 import { GovernmentStartTurn } from "@/Simulation/AutomatedActions/Player/GovernmentStartTurn";
 import { DiplomacyStartTurn } from "@/Simulation/AutomatedActions/Player/DiplomacyStartTurn";
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 import { Diplomacy } from "@/Common/Objects/Diplomacy";
 import { Government } from "@/Common/Models/Government";
 import { Research } from "@/Common/Models/Research";
@@ -78,6 +78,6 @@ export class PlayerStartTurn {
 }
 
 export type PlayerCompleted = {
-  mutations: IMutation<Diplomacy | Government | Player | Research>[];
+  mutations: PohMutation<Diplomacy | Government | Player | Research>[];
   worldWonders?: Construction[];
 };

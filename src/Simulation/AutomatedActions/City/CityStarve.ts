@@ -1,6 +1,6 @@
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
 import { City } from "@/Common/Models/City";
-import { createMutation, IMutation } from "@/Common/IMutation";
+import { createMutation, PohMutation } from "@/Common/PohMutation";
 import { getRandom } from "@/Common/Helpers/arrayTools";
 
 // Note: a Actor cannot decide to starve a City,
@@ -15,7 +15,7 @@ export class CityStarve implements ISimAction {
     return this;
   }
 
-  handleAction(): IMutation[] {
+  handleAction(): PohMutation[] {
     return [createMutation("remove", getRandom(Array.from(this.city.citizenKeys)))];
   }
 }

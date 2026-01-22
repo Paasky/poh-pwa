@@ -1,7 +1,7 @@
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
 import { Player } from "@/Common/Models/Player";
 import { City } from "@/Common/Models/City";
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 import { Citizen } from "@/Common/Models/Citizen";
 import { belongsToCity, belongsToPlayer } from "@/Simulation/Validator";
 import { getRandom } from "@/Common/Helpers/arrayTools";
@@ -28,7 +28,7 @@ export class CityLevy implements ISimAction {
     return this;
   }
 
-  handleAction(): IMutation[] {
+  handleAction(): PohMutation[] {
     const design = this.player.activeDesigns
       .filter((design) => design.equipment.specials.includes("specialType:canLevy"))
       .sort(

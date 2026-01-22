@@ -1,15 +1,15 @@
 import { Diplomacy } from "@/Common/Objects/Diplomacy";
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 
 export class DiplomacyStartTurn implements ISimAction {
-  constructor (private diplomacy: Diplomacy) {}
+  constructor(private diplomacy: Diplomacy) {}
 
-  validateAction (): this {
+  validateAction(): this {
     return this;
   }
 
-  handleAction (): IMutation<Diplomacy>[] {
+  handleAction(): PohMutation<Diplomacy>[] {
     return [];
   }
 }

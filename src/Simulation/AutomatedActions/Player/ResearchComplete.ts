@@ -1,18 +1,22 @@
 import { Research } from "@/Common/Models/Research";
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 
 export class ResearchComplete implements ISimAction {
-  constructor(private readonly research: Research, private readonly tech:TypeObject) {}
+  constructor(
+    private readonly research: Research,
+    private readonly tech: TypeObject,
+  ) {}
 
   validateAction(): this {
-    if (this.research.researched.has(this.tech)) throw new Error(`${this.tech.name} is already researched`);
+    if (this.research.researched.has(this.tech))
+      throw new Error(`${this.tech.name} is already researched`);
     return this;
   }
 
-  handleAction(): IMutation<Research>[] {
-    const mutations: IMutation<Research>[] = [
+  handleAction(): PohMutation<Research>[] {
+    const mutations: PohMutation<Research>[] = [
       {
         type: "append",
         payload: {
@@ -34,17 +38,17 @@ export class ResearchComplete implements ISimAction {
     }
 
     if (this.research.current === this.tech) {
-     mutations.push({
-       // Update current to be the next in queue (that is not the completed tech)
-       type: "update",
-       payload: {
-         key: this.research.key,
-         current:
-           this.research.queue[0]?.key === this.tech.key
-             ? this.research.queue[1]
-             : this.research.queue[0],
-       },
-     });
+      mutations.push({
+        // Update current to be the next in queue (that is not the completed tech)
+        type: "update",
+        payload: {
+          key: this.research.key,
+          current:
+            this.research.queue[0]?.key === this.tech.key
+              ? this.research.queue[1]
+              : this.research.queue[0],
+        },
+      });
     }
 
     return mutations;

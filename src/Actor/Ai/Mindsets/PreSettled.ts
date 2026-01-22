@@ -8,7 +8,7 @@ import {
 import { Player } from "@/Common/Models/Player";
 import { IMindset } from "@/Actor/Ai/Mindsets/_IMindset";
 import { Memory } from "@/Actor/Ai/Memory";
-import { IEvent } from "@/Common/IEvent";
+import { IEvent } from "@/Common/PohEvent";
 import { regionEmphasis } from "@/Actor/Ai/Emphasis/RegionEmphasis";
 
 // Player doesn't have any cities yet, just Exploring

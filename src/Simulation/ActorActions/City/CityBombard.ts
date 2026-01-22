@@ -1,7 +1,7 @@
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
 import { Player } from "@/Common/Models/Player";
 import { City } from "@/Common/Models/City";
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 import {
   belongsToPlayer,
   canAttack,
@@ -31,7 +31,7 @@ export class CityBombard implements ISimAction {
     return this;
   }
 
-  handleAction(): IMutation[] {
+  handleAction(): PohMutation[] {
     return new Combat(this.city, this.target).bombard();
   }
 

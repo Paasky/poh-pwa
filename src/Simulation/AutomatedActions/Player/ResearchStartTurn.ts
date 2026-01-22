@@ -1,6 +1,6 @@
 import { Research } from "@/Common/Models/Research";
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 import { ResearchProgress } from "@/Simulation/AutomatedActions/Player/ResearchProgress";
 import { Player } from "@/Common/Models/Player";
 
@@ -11,7 +11,7 @@ export class ResearchStartTurn implements ISimAction {
     return this;
   }
 
-  handleAction(): IMutation<Research|Player>[] {
+  handleAction(): PohMutation<Research | Player>[] {
     if (!this.research.current) return [];
 
     // Use all science the player has
@@ -23,13 +23,15 @@ export class ResearchStartTurn implements ISimAction {
       progress.validateAction();
     } catch {
       // Remove the invalid current tech
-      return [{
+      return [
+        {
           type: "update",
           payload: { key: this.research.key, current: null },
-      }];
+        },
+      ];
     }
 
-    const playerMutation: IMutation<Player> = {
+    const playerMutation: PohMutation<Player> = {
       type: "setKeys",
       payload: {
         key: this.research.playerKey,

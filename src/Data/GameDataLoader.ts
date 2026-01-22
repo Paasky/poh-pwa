@@ -1,11 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
-import {
-  type GameClass,
-  type GameKey,
-  type IRawGameObject,
-  parseKey,
-} from "@/Common/Models/_GameTypes";
+import { type GameClass, type GameKey, type IRawGameObject, parseKey, } from "@/Common/Models/_GameTypes";
 import { Agenda } from "@/Common/Models/Agenda";
 import { Citizen } from "@/Common/Models/Citizen";
 import { City } from "@/Common/Models/City";
@@ -19,7 +14,6 @@ import { Tile } from "@/Common/Models/Tile";
 import { TradeRoute } from "@/Common/Models/TradeRoute";
 import { Unit } from "@/Common/Models/Unit";
 import { UnitDesign } from "@/Common/Models/UnitDesign";
-import type { TypeKey } from "@/Common/Objects/World";
 import type { DataBucket } from "@/Data/DataBucket"; // Constructor type that also exposes the static attrsConf declared on each GameObject subclass
 
 // Constructor type that also exposes the static attrsConf declared on each GameObject subclass

@@ -1,7 +1,7 @@
 import { ActionReport, Difficulty, Note, Priority, Region } from "@/Actor/Ai/AiTypes";
 import { Player } from "@/Common/Models/Player";
 import { LocalCommand } from "@/Actor/Ai/Commands/LocalCommand";
-import { Action } from "@/Common/IAction";
+import { Action } from "@/Common/PohAction";
 import { prioritiesById } from "@/Actor/Ai/Helpers/prioritiesById";
 
 export class RegionCommand {

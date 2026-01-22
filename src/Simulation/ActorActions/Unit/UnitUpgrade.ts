@@ -3,7 +3,7 @@ import { Unit } from "@/Common/Models/Unit";
 import { UnitDesign } from "@/Common/Models/UnitDesign";
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
 import { belongsToPlayer, hasMoves, hasUnitDesign, isAlive } from "@/Simulation/Validator";
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 
 export class UnitUpgrade implements ISimAction {
   constructor(
@@ -21,7 +21,7 @@ export class UnitUpgrade implements ISimAction {
     return this;
   }
 
-  handleAction(): IMutation[] {
+  handleAction(): PohMutation[] {
     this.unit.action = { type: "upgrade", target: this.design.key };
     return [
       {

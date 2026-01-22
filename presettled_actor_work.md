@@ -30,9 +30,9 @@
 
 ## Relations
 
-- **Simulation**: Actors push `IAction` (Intents) to the `ActionBus`. They must generate a unique `transactionId` for
+- **Simulation**: Actors push `PohAction` (Intents) to the `ActionBus`. They must generate a unique `transactionId` for
   each action.
-- **Common**: Depends on `IAction` and `Player` models.
+- **Common**: Depends on `PohAction` and `Player` models.
 - **Data**: AI `Brain` subscribes to the `EventBus` to update its internal `Memory`. It must handle events that may have
   attributes masked based on visibility.
 

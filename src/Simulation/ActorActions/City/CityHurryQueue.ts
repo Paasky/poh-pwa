@@ -1,7 +1,7 @@
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
 import { Player } from "@/Common/Models/Player";
 import { City } from "@/Common/Models/City";
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 import { Queue } from "@/Common/Objects/Queues";
 
 export class CityHurryQueue implements ISimAction {
@@ -15,7 +15,7 @@ export class CityHurryQueue implements ISimAction {
     return this;
   }
 
-  handleAction(): IMutation[] {
+  handleAction(): PohMutation[] {
     return [];
   }
 }

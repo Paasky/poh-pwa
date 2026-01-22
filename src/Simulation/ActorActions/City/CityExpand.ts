@@ -1,6 +1,6 @@
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
 import { City } from "@/Common/Models/City";
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 import { Tile } from "@/Common/Models/Tile";
 import { Player } from "@/Common/Models/Player";
 
@@ -16,7 +16,7 @@ export class CityExpand implements ISimAction {
     return this;
   }
 
-  handleAction(): IMutation[] {
+  handleAction(): PohMutation[] {
     return [];
   }
 }

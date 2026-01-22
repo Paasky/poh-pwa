@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 import { City } from "@/Common/Models/City";
 import { Unit } from "@/Common/Models/Unit";
 import { Citizen } from "@/Common/Models/Citizen";
@@ -13,35 +13,35 @@ import { GameClass, generateKey } from "@/Common/Models/_GameTypes";
 import { GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 
-export function createAgenda(props: Partial<Agenda>): IMutation {
+export function createAgenda(props: Partial<Agenda>): PohMutation {
   return create(props, "agenda", Agenda.attrsConf);
 }
-export function createCitizen(props: Partial<Citizen>): IMutation {
+export function createCitizen(props: Partial<Citizen>): PohMutation {
   return create(props, "citizen", Citizen.attrsConf);
 }
-export function createCity(props: Partial<City>): IMutation {
+export function createCity(props: Partial<City>): PohMutation {
   return create(props, "city", City.attrsConf);
 }
-export function createConstruction(props: Partial<Construction>): IMutation {
+export function createConstruction(props: Partial<Construction>): PohMutation {
   return create(props, "construction", Construction.attrsConf);
 }
-export function createDeal(props: Partial<Deal>): IMutation {
+export function createDeal(props: Partial<Deal>): PohMutation {
   return create(props, "deal", Deal.attrsConf);
 }
-export function createDesign(props: Partial<UnitDesign>): IMutation {
+export function createDesign(props: Partial<UnitDesign>): PohMutation {
   return create(props, "unitDesign", UnitDesign.attrsConf);
 }
-export function createIncident(props: Partial<Incident>): IMutation {
+export function createIncident(props: Partial<Incident>): PohMutation {
   return create(props, "incident", Incident.attrsConf);
 }
-export function createUnit(props: Partial<Unit>): IMutation {
+export function createUnit(props: Partial<Unit>): PohMutation {
   return create(props, "unit", Unit.attrsConf);
 }
-export function createTradeRoute(props: Partial<TradeRoute>): IMutation {
+export function createTradeRoute(props: Partial<TradeRoute>): PohMutation {
   return create(props, "tradeRoute", TradeRoute.attrsConf);
 }
 
-function create(props: Partial<GameObject>, cls: GameClass, attrsConf: GameObjAttr[]): IMutation {
+function create(props: Partial<GameObject>, cls: GameClass, attrsConf: GameObjAttr[]): PohMutation {
   attrsConf.forEach((config) => {
     const attrValue = (props as any)[config.attrName];
     const hasAttr = attrValue !== undefined && attrValue !== null;

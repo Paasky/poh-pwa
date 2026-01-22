@@ -20,7 +20,7 @@ import { UnitTrade } from "@/Simulation/ActorActions/Unit/UnitTrade";
 import { UnitUpgrade } from "@/Simulation/ActorActions/Unit/UnitUpgrade";
 import { UnitDesign } from "@/Common/Models/UnitDesign";
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
-import { ActionType } from "@/Common/IAction";
+import { ActionType } from "@/Common/PohAction";
 import { Player } from "@/Common/Models/Player";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { Construction } from "@/Common/Models/Construction";

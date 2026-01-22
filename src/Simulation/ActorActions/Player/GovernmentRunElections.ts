@@ -1,5 +1,5 @@
 import { Government, GovernmentConfig } from "@/Common/Models/Government";
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
 import { CatKey, roundToTenth, TypeKey } from "@/Common/Objects/World";
 import { TypeObject } from "@/Common/Objects/TypeObject";
@@ -18,8 +18,8 @@ export class GovernmentRunElections implements ISimAction {
     return this;
   }
 
-  handleAction(): IMutation<Government>[] {
-    const mutation: IMutation<Government> = {
+  handleAction(): PohMutation<Government>[] {
+    const mutation: PohMutation<Government> = {
       type: "update",
       payload: { key: this.government.key },
     };

@@ -8,7 +8,7 @@ import {
   isAlive,
   isValidCombatTarget,
 } from "@/Simulation/Validator";
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 import { City } from "@/Common/Models/City";
 import { Combat } from "@/Simulation/Combat/Combat";
 import { Construction } from "@/Common/Models/Construction";
@@ -30,7 +30,7 @@ export class UnitAttack implements ISimAction {
     return this;
   }
 
-  handleAction(): IMutation[] {
+  handleAction(): PohMutation[] {
     return new Combat(this.unit, this.target).melee();
   }
 

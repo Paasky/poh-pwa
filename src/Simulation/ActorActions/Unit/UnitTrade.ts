@@ -3,7 +3,7 @@ import { Unit } from "@/Common/Models/Unit";
 import { GameKey } from "@/Common/Models/_GameTypes";
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
 import { belongsToPlayer, hasMoves, isAlive } from "@/Simulation/Validator";
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 
 export class UnitTrade implements ISimAction {
   constructor(
@@ -20,7 +20,7 @@ export class UnitTrade implements ISimAction {
     return this;
   }
 
-  handleAction(): IMutation[] {
+  handleAction(): PohMutation[] {
     this.unit.action = { type: "trade", target: this.target.key };
     return [
       {

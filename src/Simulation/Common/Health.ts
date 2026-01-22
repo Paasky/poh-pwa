@@ -1,5 +1,5 @@
 import { Unit } from "@/Common/Models/Unit";
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 import { roundToTenth } from "@/Common/Objects/World";
 import { clamp } from "@/Common/Helpers/basicMath";
 import { City } from "@/Common/Models/City";
@@ -33,7 +33,7 @@ export class Health {
     );
   }
 
-  modify(amount: number): IMutation | null {
+  modify(amount: number): PohMutation | null {
     const newHealth = roundToTenth(clamp(this.object.health + amount, 0, 100));
     if (newHealth === this.object.health) {
       return null;

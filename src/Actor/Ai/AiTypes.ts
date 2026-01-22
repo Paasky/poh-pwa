@@ -1,6 +1,6 @@
 import { Tile } from "@/Common/Models/Tile";
 import { Memory } from "@/Actor/Ai/Memory";
-import { IAction } from "@/Common/IAction";
+import { PohAction } from "@/Common/PohAction";
 import { GameKey } from "@/Common/Models/_GameTypes";
 import { Requires } from "@/Common/Static/Objects/Requires";
 
@@ -80,7 +80,7 @@ export type Priority = {
 };
 
 export type ActionReport = {
-  actions: IAction[];
+  actions: PohAction[];
   notes: Note[];
 };
 

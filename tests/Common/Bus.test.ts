@@ -2,13 +2,13 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { initTestDataBucket } from "../_setup/dataHelpers";
 import { destroyDataBucket, useDataBucket } from "@/Data/useDataBucket";
 import { subscribeToEvents } from "@/Common/Buses/EventBus";
-import { IEvent } from "@/Common/IEvent";
+import { IEvent } from "@/Common/PohEvent";
 import { GameKey } from "@/Common/Models/_GameTypes";
 import { pushActions, subscribeToActions } from "@/Common/Buses/ActionBus";
-import { IAction } from "@/Common/IAction";
+import { PohAction } from "@/Common/PohAction";
 import { tileKey } from "@/Common/Helpers/mapTools";
 import { DataStore } from "@/Data/DataStore";
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 import { Player } from "@/Common/Models/Player";
 import { Unit } from "@/Common/Models/Unit";
 
@@ -22,7 +22,7 @@ describe("Buses Test", () => {
   });
 
   it("Event -> Mutation -> Action", () => {
-    const actionLog = new Map<GameKey, IAction[]>();
+    const actionLog = new Map<GameKey, PohAction[]>();
     const eventLog: IEvent[] = [];
     const store = new DataStore();
 
@@ -39,7 +39,7 @@ describe("Buses Test", () => {
     useDataBucket().setObject(unit);
 
     // Player pushes an action -> picked up -> converted to mutation -> set to store -> pushed as event
-    const actions: IAction[] = [
+    const actions: PohAction[] = [
       {
         type: "actionType:move",
         turn: 1,
@@ -48,7 +48,7 @@ describe("Buses Test", () => {
         unitKey: unit.key,
       },
     ];
-    const mutations: IMutation<Player | Unit>[] = [
+    const mutations: PohMutation<Player | Unit>[] = [
       {
         type: "update",
         payload: {

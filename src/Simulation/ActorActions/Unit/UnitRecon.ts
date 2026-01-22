@@ -3,7 +3,7 @@ import { Unit } from "@/Common/Models/Unit";
 import { Tile } from "@/Common/Models/Tile";
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
 import { belongsToPlayer, hasMoves, isAlive } from "@/Simulation/Validator";
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 
 export class UnitRecon implements ISimAction {
   constructor(
@@ -20,7 +20,7 @@ export class UnitRecon implements ISimAction {
     return this;
   }
 
-  handleAction(): IMutation[] {
+  handleAction(): PohMutation[] {
     this.unit.action = { type: "recon", target: this.tile.key };
     return [
       {

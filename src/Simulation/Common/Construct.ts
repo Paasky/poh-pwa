@@ -3,7 +3,7 @@ import { Construction } from "@/Common/Models/Construction";
 import { Unit } from "@/Common/Models/Unit";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { Tile } from "@/Common/Models/Tile";
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 import { createConstruction } from "@/Simulation/MutationFactory";
 import { clamp } from "@/Common/Helpers/basicMath";
 import { useDataBucket } from "@/Data/useDataBucket";
@@ -11,7 +11,7 @@ import { useDataBucket } from "@/Data/useDataBucket";
 export class Construct {
   constructor(public readonly object: City | Unit) {}
 
-  complete(construction: Construction): IMutation {
+  complete(construction: Construction): PohMutation {
     return {
       type: "update",
       payload: {
@@ -22,7 +22,7 @@ export class Construct {
     };
   }
 
-  progress(construction: Construction, amount: number): IMutation {
+  progress(construction: Construction, amount: number): PohMutation {
     const progress = clamp(
       construction.progress + amount,
       0,
@@ -38,7 +38,7 @@ export class Construct {
     };
   }
 
-  start(type: TypeObject, tile: Tile): IMutation {
+  start(type: TypeObject, tile: Tile): PohMutation {
     const props = {
       type,
       tileKey: tile.key,

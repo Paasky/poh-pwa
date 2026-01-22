@@ -13,7 +13,7 @@ import { useEventStore } from "../../App/stores/eventStore";
 import { UnitCreated, UnitHealed, UnitLost } from "../events/Unit";
 import { getCoordsFromTileKey, getHexNeighborCoords, tileKey } from "../Helpers/mapTools";
 import { UnitMovement } from "../../Simulation/Movement/UnitMovement";
-import { ActionType } from "../IAction";
+import { ActionType } from "../PohAction";
 
 // mercenary: +10% strength, +50% upkeep, 1/city/t;
 // regular: no effects

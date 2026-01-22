@@ -2,7 +2,7 @@ import { City } from "@/Common/Models/City";
 import { Unit } from "@/Common/Models/Unit";
 import { Construction } from "@/Common/Models/Construction";
 import { attackStrength, calcDamage, defenseStrength } from "@/Simulation/Combat/Strength";
-import { createMutation, IMutation, mergeMutations } from "@/Common/IMutation";
+import { createMutation, PohMutation, mergeMutations } from "@/Common/PohMutation";
 import { MovementManager } from "@/Simulation/Movement/MovementManager";
 import { Health } from "@/Simulation/Common/Health";
 
@@ -19,8 +19,8 @@ export class Combat {
     );
   }
 
-  melee(): IMutation[] {
-    const mutations = [] as IMutation[];
+  melee(): PohMutation[] {
+    const mutations = [] as PohMutation[];
 
     const damage = this.getDamage();
 
@@ -60,8 +60,8 @@ export class Combat {
     return mergeMutations(mutations);
   }
 
-  bombard(): IMutation[] {
-    const mutations = [] as IMutation[];
+  bombard(): PohMutation[] {
+    const mutations = [] as PohMutation[];
 
     const damage = this.getDamage();
 

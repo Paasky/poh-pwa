@@ -1,6 +1,6 @@
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 
 export interface ISimAction {
   validateAction(): this;
-  handleAction(): IMutation[];
+  handleAction(): PohMutation[];
 }

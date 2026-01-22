@@ -9,7 +9,7 @@ import {
   OrderTraining,
   StartConstruction,
   StartTraining,
-} from "@/Common/IAction";
+} from "@/Common/PohAction";
 
 export function setToConstruct(
   city: City,

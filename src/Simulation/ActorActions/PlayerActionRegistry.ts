@@ -1,5 +1,5 @@
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
-import { ActionType } from "@/Common/IAction";
+import { ActionType } from "@/Common/PohAction";
 import { Player } from "@/Common/Models/Player";
 import { TypeObject } from "@/Common/Objects/TypeObject";
 import { PlayerSelectType } from "@/Simulation/ActorActions/Player/PlayerSelectType";

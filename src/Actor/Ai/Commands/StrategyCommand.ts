@@ -2,7 +2,7 @@ import { Player } from "@/Common/Models/Player";
 import { ActionReport, Difficulty, Note, Priority, Region } from "@/Actor/Ai/AiTypes";
 import { Memory } from "@/Actor/Ai/Memory";
 import { RegionCommand } from "@/Actor/Ai/Commands/RegionCommand";
-import { Action } from "@/Common/IAction";
+import { Action } from "@/Common/PohAction";
 import { prioritiesById } from "@/Actor/Ai/Helpers/prioritiesById";
 
 export class StrategyCommand {

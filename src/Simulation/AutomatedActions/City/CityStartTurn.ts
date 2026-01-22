@@ -4,7 +4,7 @@ import { UnitDesign } from "@/Common/Models/UnitDesign";
 import { DataStore } from "@/Data/DataStore";
 import { createUnit } from "@/Simulation/MutationFactory";
 import { ISimAction } from "@/Simulation/ActorActions/ISimAction";
-import { IMutation } from "@/Common/IMutation";
+import { PohMutation } from "@/Common/PohMutation";
 
 export class CityStartTurn implements ISimAction {
   private readonly dataStore: DataStore;
@@ -38,7 +38,7 @@ export class CityStartTurn implements ISimAction {
 }
 
 export type CityCompleted = {
-  mutations: IMutation<City>[];
+  mutations: PohMutation<City>[];
   citizen?: true;
   construction?: Construction;
   training?: UnitDesign;

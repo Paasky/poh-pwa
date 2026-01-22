@@ -155,6 +155,21 @@ export class PohAction {
       },
     );
   }
+
+  toData(): PohActionData {
+    return {
+      actionType: this.actionType,
+      playerKey: this.player.key,
+      subjectKey: this.subject.key,
+      timestamp: this.timestamp,
+      turn: this.turn,
+      index: this.index,
+      name: this.name,
+      targetKey: this.target?.key,
+      toIndex: this.toIndex,
+      typeKey: this.type?.key,
+    };
+  }
 }
 
 export const PohActionSchema = z.object({
@@ -172,72 +187,44 @@ export const PohActionSchema = z.object({
 
 export type PohActionData = z.infer<typeof PohActionSchema>;
 
-export interface IAction {
-  type: ActionType;
-
-  /**
-   * The world tick/version this action was based on.
-   * Used for optimistic locking/conflict resolution in multiplayer.
-   */
-  turn: number;
-
-  /**
-   * Client-side timestamp when the action was created.
-   */
-  timestamp: number;
-
-  citizenKey?: GameKey;
-  cityKey?: GameKey;
-  designKey?: GameKey;
-  equipmentKey?: TypeKey;
-  index?: number;
-  toIndex?: number;
-  name?: string;
-  platformKey?: TypeKey;
-  targetKey?: GameKey;
-  tileKey?: GameKey;
-  typeKey?: TypeKey;
-  unitKey?: GameKey;
-}
-
 // Units
-export type Alert = IAction & { type: "alert"; unitKey: GameKey };
-export type Attack = IAction & { type: "attack"; unitKey: GameKey; targetKey: GameKey };
-export type Bombard = IAction & { type: "bombard"; unitKey: GameKey; targetKey: GameKey };
-export type Build = IAction & { type: "build"; unitKey: GameKey; typeKey: TypeKey };
-export type Demobilize = IAction & { type: "demobilize"; unitKey: GameKey };
-export type Disband = IAction & { type: "disband"; unitKey: GameKey };
-export type EndTurn = IAction & { type: "endTurn" };
-export type Explore = IAction & { type: "explore"; unitKey: GameKey };
-export type Fortify = IAction & { type: "fortify"; unitKey: GameKey };
-export type Heal = IAction & { type: "heal"; unitKey: GameKey };
-export type Mission = IAction & {
+export type Alert = PohAction & { type: "alert"; unitKey: GameKey };
+export type Attack = PohAction & { type: "attack"; unitKey: GameKey; targetKey: GameKey };
+export type Bombard = PohAction & { type: "bombard"; unitKey: GameKey; targetKey: GameKey };
+export type Build = PohAction & { type: "build"; unitKey: GameKey; typeKey: TypeKey };
+export type Demobilize = PohAction & { type: "demobilize"; unitKey: GameKey };
+export type Disband = PohAction & { type: "disband"; unitKey: GameKey };
+export type EndTurn = PohAction & { type: "endTurn" };
+export type Explore = PohAction & { type: "explore"; unitKey: GameKey };
+export type Fortify = PohAction & { type: "fortify"; unitKey: GameKey };
+export type Heal = PohAction & { type: "heal"; unitKey: GameKey };
+export type Mission = PohAction & {
   type: "mission";
   unitKey: GameKey;
   typeKey: TypeKey;
   targetKey: GameKey;
 };
-export type Mobilize = IAction & { type: "mobilize"; unitKey: GameKey };
-export type Move = IAction & { type: "move"; unitKey: GameKey; targetKey: GameKey };
-export type Pillage = IAction & { type: "pillage"; unitKey: GameKey };
-export type Rebase = IAction & { type: "rebase"; unitKey: GameKey; targetKey: GameKey };
-export type Recon = IAction & { type: "recon"; unitKey: GameKey; targetKey: GameKey };
-export type Rename = IAction & { type: "rename"; unitKey: GameKey; name: string };
-export type Skip = IAction & { type: "skip"; unitKey: GameKey };
-export type Settle = IAction & { type: "settle"; unitKey: GameKey; tileKey?: GameKey };
-export type Stop = IAction & { type: "stop"; unitKey: GameKey };
-export type Trade = IAction & { type: "trade"; unitKey: GameKey; targetKey: GameKey };
-export type Upgrade = IAction & { type: "upgrade"; unitKey: GameKey; designKey: GameKey };
+export type Mobilize = PohAction & { type: "mobilize"; unitKey: GameKey };
+export type Move = PohAction & { type: "move"; unitKey: GameKey; targetKey: GameKey };
+export type Pillage = PohAction & { type: "pillage"; unitKey: GameKey };
+export type Rebase = PohAction & { type: "rebase"; unitKey: GameKey; targetKey: GameKey };
+export type Recon = PohAction & { type: "recon"; unitKey: GameKey; targetKey: GameKey };
+export type Rename = PohAction & { type: "rename"; unitKey: GameKey; name: string };
+export type Skip = PohAction & { type: "skip"; unitKey: GameKey };
+export type Settle = PohAction & { type: "settle"; unitKey: GameKey; tileKey?: GameKey };
+export type Stop = PohAction & { type: "stop"; unitKey: GameKey };
+export type Trade = PohAction & { type: "trade"; unitKey: GameKey; targetKey: GameKey };
+export type Upgrade = PohAction & { type: "upgrade"; unitKey: GameKey; designKey: GameKey };
 
 // Unit Design
-export type CreateDesign = IAction & {
+export type CreateDesign = PohAction & {
   type: "createDesign";
   name: string;
   platformKey: TypeKey;
   equipmentKey: TypeKey;
 };
-export type DeactivateDesign = IAction & { type: "deactivateDesign"; designKey: GameKey };
-export type UpgradeDesign = IAction & {
+export type DeactivateDesign = PohAction & { type: "deactivateDesign"; designKey: GameKey };
+export type UpgradeDesign = PohAction & {
   type: "upgradeDesign";
   designKey: GameKey;
   name: string;
@@ -246,71 +233,75 @@ export type UpgradeDesign = IAction & {
 };
 
 // City
-export type StartConstruction = IAction & {
+export type StartConstruction = PohAction & {
   type: "startConstruction";
   cityKey: GameKey;
   tileKey: GameKey;
   typeKey: TypeKey;
   index: number;
 };
-export type OrderConstruction = IAction & {
+export type OrderConstruction = PohAction & {
   type: "orderConstruction";
   cityKey: GameKey;
   index: number;
   toIndex: number;
 };
-export type HurryConstruction = IAction & { type: "hurryConstruction"; cityKey: GameKey };
-export type CancelConstruction = IAction & {
+export type HurryConstruction = PohAction & { type: "hurryConstruction"; cityKey: GameKey };
+export type CancelConstruction = PohAction & {
   type: "cancelConstruction";
   cityKey: GameKey;
   typeKey: TypeKey;
 };
-export type StartTraining = IAction & {
+export type StartTraining = PohAction & {
   type: "startTraining";
   cityKey: GameKey;
   designKey: GameKey;
   index: number;
 };
-export type OrderTraining = IAction & {
+export type OrderTraining = PohAction & {
   type: "orderTraining";
   cityKey: GameKey;
   index: number;
   toIndex: number;
 };
-export type HurryTraining = IAction & { type: "hurryTraining"; cityKey: GameKey };
-export type CancelTraining = IAction & {
+export type HurryTraining = PohAction & { type: "hurryTraining"; cityKey: GameKey };
+export type CancelTraining = PohAction & {
   type: "cancelTraining";
   cityKey: GameKey;
   designKey: GameKey;
 };
-export type MoveCitizen = IAction & { type: "moveCitizen"; citizenKey: GameKey; tileKey: GameKey };
-export type PurchaseTile = IAction & { type: "purchaseTile"; cityKey: GameKey; tileKey: GameKey };
-export type RenameCity = IAction & { type: "renameCity"; cityKey: GameKey; name: string };
+export type MoveCitizen = PohAction & {
+  type: "moveCitizen";
+  citizenKey: GameKey;
+  tileKey: GameKey;
+};
+export type PurchaseTile = PohAction & { type: "purchaseTile"; cityKey: GameKey; tileKey: GameKey };
+export type RenameCity = PohAction & { type: "renameCity"; cityKey: GameKey; name: string };
 
 // Diplomacy
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type StartAgenda = IAction & { type: "startAgenda"; payload: any }; // payload structure TBD
-export type OpposeAgenda = IAction & { type: "opposeAgenda"; agendaKey: GameKey };
-export type SupportAgenda = IAction & { type: "supportAgenda"; agendaKey: GameKey };
-export type CancelAgenda = IAction & { type: "cancelAgenda"; agendaKey: GameKey };
+export type StartAgenda = PohAction & { type: "startAgenda"; payload: any }; // payload structure TBD
+export type OpposeAgenda = PohAction & { type: "opposeAgenda"; agendaKey: GameKey };
+export type SupportAgenda = PohAction & { type: "supportAgenda"; agendaKey: GameKey };
+export type CancelAgenda = PohAction & { type: "cancelAgenda"; agendaKey: GameKey };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type ProposeDeal = IAction & { type: "proposeDeal"; toPlayerKey: GameKey; payload: any }; // payload structure TBD
-export type ApproveDeal = IAction & { type: "approveDeal"; dealKey: GameKey };
+export type ProposeDeal = PohAction & { type: "proposeDeal"; toPlayerKey: GameKey; payload: any }; // payload structure TBD
+export type ApproveDeal = PohAction & { type: "approveDeal"; dealKey: GameKey };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type NegotiateDeal = IAction & { type: "negotiateDeal"; dealKey: GameKey; payload: any }; // payload structure TBD
-export type RejectDeal = IAction & { type: "rejectDeal"; dealKey: GameKey };
+export type NegotiateDeal = PohAction & { type: "negotiateDeal"; dealKey: GameKey; payload: any }; // payload structure TBD
+export type RejectDeal = PohAction & { type: "rejectDeal"; dealKey: GameKey };
 
 // Actor
-export type SelectHeritage = IAction & { type: "selectHeritage"; typeKey: TypeKey };
-export type SelectTrait = IAction & { type: "selectTrait"; typeKey: TypeKey };
-export type SelectMyth = IAction & { type: "selectMyth"; typeKey: TypeKey };
-export type SelectGod = IAction & { type: "selectGod"; typeKey: TypeKey };
-export type SelectDogma = IAction & { type: "selectDogma"; typeKey: TypeKey };
-export type SelectPolicy = IAction & { type: "selectPolicy"; typeKey: TypeKey };
-export type SelectTechnology = IAction & { type: "selectTechnology"; typeKey: TypeKey };
-export type KeepStatusQuo = IAction & { type: "keepStatusQuo" };
-export type EnactReforms = IAction & { type: "enactReforms" };
-export type JoinRevolution = IAction & { type: "joinRevolution" };
+export type SelectHeritage = PohAction & { type: "selectHeritage"; typeKey: TypeKey };
+export type SelectTrait = PohAction & { type: "selectTrait"; typeKey: TypeKey };
+export type SelectMyth = PohAction & { type: "selectMyth"; typeKey: TypeKey };
+export type SelectGod = PohAction & { type: "selectGod"; typeKey: TypeKey };
+export type SelectDogma = PohAction & { type: "selectDogma"; typeKey: TypeKey };
+export type SelectPolicy = PohAction & { type: "selectPolicy"; typeKey: TypeKey };
+export type SelectTechnology = PohAction & { type: "selectTechnology"; typeKey: TypeKey };
+export type KeepStatusQuo = PohAction & { type: "keepStatusQuo" };
+export type EnactReforms = PohAction & { type: "enactReforms" };
+export type JoinRevolution = PohAction & { type: "joinRevolution" };
 
 export type Action =
   | Alert
