@@ -5,13 +5,14 @@ import {
   StaticKey,
   TypeKey,
 } from "@/Common/Static/StaticEnums";
-import { getClass, IStaticObject } from "@/Common/Static/Objects/_StaticObject";
+import { getClassAndId, IStaticObject } from "@/Common/Static/Objects/_StaticObject";
 import { CompiledCategoryData } from "@/Data/StaticDataCompiler";
 import { getObjectIcon, ObjectIcon } from "@/Common/Static/Icon";
 
 export type CategoryObject = IStaticObject & {
   // Duplicate IStaticObject attributes for clarity
   class: CategoryClass;
+  id: string;
   key: CatKey;
   concept: ConceptTypeKey;
   name: string;
@@ -27,7 +28,7 @@ export function initCategoryObject(data: CompiledCategoryData): CategoryObject {
     ...data,
 
     // Add/init extra data
-    class: getClass<CategoryClass>(data.key),
+    ...getClassAndId<CategoryClass>(data.key),
     icon: getObjectIcon(data.key, data.concept),
     allows: data.allows ?? [],
     relatesTo: data.relatesTo ?? [],

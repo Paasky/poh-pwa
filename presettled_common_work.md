@@ -3,7 +3,7 @@
 ## Current Findings
 
 - **Models**: The core models (`Player`, `Unit`, `City`, `Tile`) are well-defined in `src/Common/Models/`.
-- **Interfaces**: `PohAction`, `IEvent`, and `PohMutation` provide the contracts between domains.
+- **Interfaces**: `PohAction`, `PohEvent`, and `PohMutation` provide the contracts between domains.
 - **Action/Event Bus**: Singleton buses facilitate communication. `ActionBus` for intents (Actor -> Simulation) and
   `EventBus` for results (Data -> Actor).
 - **Data Types**: `actionType:explore`, `actionType:settle`, and `yieldType:heritagePoint` are already defined in the
@@ -13,7 +13,7 @@
 
 1. **Actor** (UI/AI): Analyzes state -> Produces `PohAction` (with `transactionId`).
 2. **Simulation**: Functional logic `(State, Action) => PohMutation[]`. Validates actions and calculates consequences.
-3. **Data**: `DataStore` applies `PohMutation[]` -> Scans for sensitive data -> Publishes filtered `IEvent[]`.
+3. **Data**: `DataStore` applies `PohMutation[]` -> Scans for sensitive data -> Publishes filtered `PohEvent[]`.
 4. **Actor**: Subscribes to `EventBus` -> Updates memory/UI.
 
 ## Common Glue Tasks
@@ -45,5 +45,5 @@
 ## Relations
 
 - **Data**: Uses Common models for storage and serialization; respects visibility flags for event filtering.
-- **Actor**: Produces Common `PohAction` and consumes Common `IEvent`.
+- **Actor**: Produces Common `PohAction` and consumes Common `PohEvent`.
 - **Simulation**: Functional processor of Common interfaces.

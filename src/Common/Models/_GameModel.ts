@@ -76,7 +76,7 @@ export class GameObject {
   protected computed<ValueT, ThisT extends this>(
     cachePropName: string,
     getter: () => ValueT,
-    watchers: {
+    watchers?: {
       props?: (keyof ThisT)[];
       relations?: { relName: keyof ThisT; relProps: string[] }[]; // relProps is (keyof RelatedClass)[]
     },
@@ -90,12 +90,8 @@ export class GameObject {
 
     // If the cache prop doesn't exist -> this is the first call so start watching for changes
     if (!hasCache) {
-      if (!watchers.props && !watchers.relations) {
-        throw new Error(`computed(${cachePropName}) has no invalidation watchers`);
-      }
-
       // Initialize watchers (if given)
-      if (watchers.props?.length) {
+      if (watchers?.props?.length) {
         // "When you update, let me know what changed"
 
         const propsSet = new Set(watchers.props);
@@ -109,7 +105,7 @@ export class GameObject {
         });
       }
 
-      if (watchers.relations?.length) {
+      if (watchers?.relations?.length) {
         // "When this relation updates, let me know what changed"
 
         watchers.relations.forEach(({ relName, relProps }) => {

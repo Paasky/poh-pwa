@@ -8,8 +8,8 @@ import {
 import { Player } from "@/Common/Models/Player";
 import { IMindset } from "@/Actor/Ai/Mindsets/_IMindset";
 import { Memory } from "@/Actor/Ai/Memory";
-import { IEvent } from "@/Common/PohEvent";
 import { regionEmphasis } from "@/Actor/Ai/Emphasis/RegionEmphasis";
+import { PohEvent } from "@/Common/PohEvent";
 
 // Player doesn't have any cities yet, just Exploring
 export class PreSettled implements IMindset {
@@ -20,7 +20,7 @@ export class PreSettled implements IMindset {
     public readonly regions: Set<Region>,
   ) {}
 
-  analyzeStrategy(events: IEvent[]): Priority[] {
+  analyzeStrategy(events: PohEvent[]): Priority[] {
     let bestRegion: Region | undefined;
     let bestEmphasis: Map<EmphasisCategory, CategoryEmphasis> | undefined;
     let bestScore = -Infinity;

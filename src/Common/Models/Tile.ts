@@ -1,8 +1,7 @@
-import { canHaveOne, hasMany } from "./_Relations";
 import { TypeObject } from "../Static/Objects/TypeObject";
 import { tileYieldTypeKeys, Yield, Yields } from "../Static/Objects/Yields";
 import { GameKey, GameObjAttr, GameObject } from "./_GameModel";
-import { useDataBucket } from "../../Data/useDataBucket";
+import { useDataBucket } from "@/Data/useDataBucket";
 import type { River } from "./River";
 import type { Construction } from "./Construction";
 import type { Citizen } from "./Citizen";
@@ -33,14 +32,6 @@ export class Tile extends GameObject {
     public playerKey: GameKey | null = null,
   ) {
     super(key);
-
-    canHaveOne<Player>(this, "playerKey");
-    hasMany<Citizen>(this, "citizenKeys");
-    canHaveOne<City>(this, "cityKey");
-    canHaveOne<Construction>(this, "constructionKey");
-    canHaveOne<River>(this, "riverKey");
-    hasMany<TradeRoute>(this, "tradeRouteKeys");
-    hasMany<Unit>(this, "unitKeys");
   }
 
   static attrsConf: GameObjAttr[] = [
@@ -78,52 +69,58 @@ export class Tile extends GameObject {
    * Relations
    */
   citizenKeys = new Set<GameKey>();
-  declare citizens: Citizen[];
-
-  cityKey: GameKey | null = null;
-  declare city: City | null;
-
-  constructionKey: GameKey | null = null;
-  declare construction: Construction | null;
-
-  declare player: Player | null;
-
-  riverKey: GameKey | null = null;
-  declare river: River | null;
-
-  tradeRouteKeys = new Set<GameKey>();
-  declare tradeRoutes: TradeRoute[];
-
-  unitKeys = new Set<GameKey>();
-  declare units: Unit[];
-
-  // Use direct array vs computed for peak-performance during Tile calc (especially A*)
-  private _neighborTiles: Tile[] = [];
-  get neighborTiles(): Tile[] {
-    if (this._neighborTiles.length === 0) {
-      this._neighborTiles = getNeighbors(
-        useDataBucket().world.size,
-        this,
-        useDataBucket().getTiles(),
-        "hex",
-      );
-    }
-    return this._neighborTiles;
+  get citizens(): Map<GameKey, Citizen> {
+    return this.hasMany<Citizen>("citizenKeys");
   }
 
-  private _worldPosition: Vector3 | null = null;
-  get worldPosition(): Vector3 {
-    if (!this._worldPosition) {
-      const center = tileCenter(useDataBucket().world.size, this);
-      const height = tileHeight(this, true); // Logic height
-      this._worldPosition = new Vector3(center.x, height, center.z);
-    }
-    return this._worldPosition;
+  cityKey: GameKey | null = null;
+  get city(): City | null {
+    return this.canHaveOne<City>("cityKey");
+  }
+
+  constructionKey: GameKey | null = null;
+  get construction(): Construction | null {
+    return this.canHaveOne<Construction>("constructionKey");
+  }
+
+  get player(): Player {
+    return this.hasOne<Player>("playerKey");
+  }
+
+  riverKey: GameKey | null = null;
+  get river(): River | null {
+    return this.canHaveOne<River>("riverKey");
+  }
+
+  tradeRouteKeys = new Set<GameKey>();
+  get tradeRoutes(): Map<GameKey, TradeRoute> {
+    return this.hasMany<TradeRoute>("tradeRouteKeys");
+  }
+
+  unitKeys = new Set<GameKey>();
+  get units(): Map<GameKey, Unit> {
+    return this.hasMany<Unit>("unitKeys");
   }
 
   /*
    * Computed
    */
+
+  get freeCitizenSlotCount(): number {
+    return this.computed(
+      "freeCitizenSlotCount",
+      () => Math.max(0, this.yields.getLumpAmount("yieldType:citizenSlot") - this.citizenKeys.size),
+      {
+        props: ["citizenKeys"],
+        relations: [
+          {
+            relName: "construction",
+            relProps: ["health", "progress", "type"],
+          },
+        ],
+      },
+    );
+  }
 
   // My Types (not inherited)
   get myTypes(): Set<TypeObject> {
@@ -163,6 +160,12 @@ export class Tile extends GameObject {
         props: ["feature", "resource", "pollution", "constructionKey"],
         relations: [{ relName: "construction", relProps: ["types"] }],
       },
+    );
+  }
+
+  get neighborTiles(): Tile[] {
+    return this.computed("neighborTiles", () =>
+      getNeighbors(useDataBucket().world.size, this, useDataBucket().getTiles(), "hex"),
     );
   }
 
@@ -209,6 +212,13 @@ export class Tile extends GameObject {
         ],
       },
     );
+  }
+
+  get worldPosition(): Vector3 {
+    return this.computed("worldPosition", () => {
+      const center = tileCenter(useDataBucket().world.size, this);
+      return new Vector3(center.x, tileHeight(this, true), center.z);
+    });
   }
 
   warmUp(): void {}

@@ -4,8 +4,8 @@ import { GameKey, GameObjAttr, GameObject } from "./_GameModel";
 import type { Citizen } from "./Citizen";
 import type { Tile } from "./Tile";
 import { City } from "./City";
-import { useDataBucket } from "../../Data/useDataBucket";
-import { useEventStore } from "../../App/stores/eventStore";
+import { useDataBucket } from "@/Data/useDataBucket";
+import { useEventStore } from "@/App/stores/eventStore";
 import {
   ConstructionAbandoned,
   ConstructionCancelled,

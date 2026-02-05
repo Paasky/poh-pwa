@@ -1,6 +1,6 @@
 import z from "zod";
 import { GameKey, GameObject } from "@/Common/Models/_GameModel";
-import { TypeKey } from "@/Common/Static/StaticEnums";
+import { ActionTypeKey, TypeKey } from "@/Common/Static/StaticEnums";
 import { Player } from "@/Common/Models/Player";
 import { TypeObject } from "@/Common/Static/Objects/TypeObject";
 import { useDataBucket } from "@/Data/useDataBucket";
@@ -173,7 +173,7 @@ export class PohAction {
 }
 
 export const PohActionSchema = z.object({
-  actionType: typeKeySchema(["actionType"]),
+  actionType: typeKeySchema<ActionTypeKey>(["actionType"]),
   playerKey: gameKeySchema(["player"]),
   turn: z.number().int(),
   timestamp: z.number(),

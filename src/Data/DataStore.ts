@@ -100,7 +100,7 @@ export class DataStore {
     mutation: PohMutation<GameObject>,
     object: GameObject,
     players: Set<Player>,
-  ): IEvent {
+  ): PohEvent {
     const eventPlayerKeys = new Set<GameKey>();
 
     switch (object.class) {
@@ -200,7 +200,7 @@ export class DataStore {
     const event = {
       playerKeys: eventPlayerKeys,
       mutation,
-    } as IEvent;
+    } as PohEvent;
 
     if (mutation.type === "create") {
       event.object = object;

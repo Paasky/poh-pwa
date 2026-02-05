@@ -6,16 +6,16 @@ import type { Religion } from "./Religion";
 import type { Tile } from "./Tile";
 import type { TradeRoute } from "./TradeRoute";
 import { Unit } from "./Unit";
-import { useDataBucket } from "../../Data/useDataBucket";
+import { useDataBucket } from "@/Data/useDataBucket";
 import { Construction } from "./Construction";
-import { useEventStore } from "../../App/stores/eventStore";
-import { getRandom } from "../Helpers/arrayTools";
+import { useEventStore } from "@/App/stores/eventStore";
 import { TypeObject } from "../Static/Objects/TypeObject";
 import { UnitDesign } from "./UnitDesign";
 import { getNeighbors } from "../Helpers/mapTools";
 import { ConstructionQueue, TrainingQueue } from "../Objects/Queues";
 import { TypeStorage } from "../Objects/TypeStorage";
 import { cityYieldTypeKeys, Yield, Yields } from "../Static/Objects/Yields";
+import { getRandomItem } from "@/Common/Helpers/collectionTools";
 
 export class City extends GameObject {
   constructor(
@@ -187,7 +187,7 @@ export class City extends GameObject {
           this.playerKey,
           this.tileKey,
           this.player.religionKey,
-          getRandom(policies.size ? policies : [null]),
+          getRandomItem(policies.size ? policies : [null]),
         ),
       );
       this.storage.take("yieldType:food", this.foodToGrow);

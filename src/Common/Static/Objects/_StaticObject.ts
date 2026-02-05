@@ -10,6 +10,7 @@ import { ObjectIcon } from "@/Common/Static/Icon";
 export interface IStaticObject {
   class: CategoryClass | TypeClass;
   key: StaticKey;
+  id: string;
   concept: ConceptTypeKey;
   name: string;
   description: string;
@@ -19,6 +20,12 @@ export interface IStaticObject {
   relatesTo: StaticKey[];
 }
 
-export function getClass<ClassT extends CategoryClass | TypeClass>(concept: StaticKey): ClassT {
-  return concept.split(":")[0] as ClassT;
+export function getClassAndId<ClassT extends CategoryClass | TypeClass>(
+  concept: StaticKey,
+): { class: ClassT; id: string } {
+  const [cls, id] = concept.split(":");
+  return {
+    class: cls as ClassT,
+    id,
+  };
 }

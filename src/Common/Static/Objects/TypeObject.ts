@@ -10,12 +10,13 @@ import {
 } from "@/Common/Static/StaticEnums";
 import { getObjectIcon, ObjectIcon } from "@/Common/Static/Icon";
 import { CompiledTypeData } from "@/Data/StaticDataCompiler";
-import { getClass, IStaticObject } from "@/Common/Static/Objects/_StaticObject";
+import { getClassAndId, IStaticObject } from "@/Common/Static/Objects/_StaticObject";
 
 export type TypeObject = IStaticObject & {
   // Duplicate IStaticObject attributes for clarity
   class: TypeClass;
   key: TypeKey;
+  id: string;
   concept: ConceptTypeKey;
   name: string;
   description: string;
@@ -71,7 +72,7 @@ export function initTypeObject(data: CompiledTypeData): TypeObject {
     ...data,
 
     // Add/init extra data
-    class: getClass<TypeClass>(data.key),
+    ...getClassAndId<TypeClass>(data.key),
     icon: getObjectIcon(data.key, data.concept, data.category),
     requires: new Requires(data.requires),
     yields,

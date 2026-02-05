@@ -1,6 +1,16 @@
 import z from "zod";
-import { CategoryClass, CatKey, StaticKey, TypeClass, TypeKey } from "./Static/StaticEnums";
+import {
+  ActionTypeKey,
+  CategoryClass,
+  CatKey,
+  ConceptTypeKey,
+  SpecialTypeKey,
+  StaticKey,
+  TypeClass,
+  TypeKey,
+} from "./Static/StaticEnums";
 import { GameClass, GameKey } from "@/Common/Models/_GameTypes";
+import { YieldTypeKey } from "@/Common/Static/Objects/Yields";
 
 function baseKeySchema<T extends string>(options?: { classes?: string[]; suffix?: string }) {
   return z
@@ -26,8 +36,8 @@ export function staticKeySchema() {
   return baseKeySchema<StaticKey>();
 }
 
-export function typeKeySchema(classes?: TypeClass[]) {
-  return baseKeySchema<TypeKey>({ classes, suffix: "Type" });
+export function typeKeySchema<KeyT extends TypeKey>(classes?: TypeClass[]) {
+  return baseKeySchema<KeyT>({ classes, suffix: "Type" });
 }
 
 export const RequiresSchema = z
@@ -36,7 +46,7 @@ export const RequiresSchema = z
   .default([]);
 
 export const YieldSchema = z.object({
-  type: typeKeySchema(["yieldType"]),
+  type: typeKeySchema<YieldTypeKey>(["yieldType"]),
   method: z.enum(["lump", "percent", "set"]).optional().default("lump"),
   amount: z.number().optional().default(0),
   for: z.array(staticKeySchema()).optional().default([]),
@@ -46,14 +56,14 @@ export const YieldSchema = z.object({
 export const CategoryObjectSchema = z.object({
   key: catKeySchema(),
   name: z.string(),
-  concept: typeKeySchema(["conceptType"]),
+  concept: typeKeySchema<ConceptTypeKey>(["conceptType"]),
   description: z.string().default(""),
 });
 
 export const TypeObjectSchema = z.object({
   key: typeKeySchema(),
   name: z.string(),
-  concept: typeKeySchema(["conceptType"]),
+  concept: typeKeySchema<ConceptTypeKey>(["conceptType"]),
   category: catKeySchema().optional(),
   description: z.string().default(""),
   audio: z.array(z.string()).optional(),
@@ -86,11 +96,11 @@ export const TypeObjectSchema = z.object({
   gains: z.array(typeKeySchema()).optional().default([]),
   upgradesFrom: z.array(typeKeySchema()).optional().default([]),
   specials: z
-    .array(typeKeySchema(["specialType"]))
+    .array(typeKeySchema<SpecialTypeKey>(["specialType"]))
     .optional()
     .default([]),
   actions: z
-    .array(typeKeySchema(["actionType"]))
+    .array(typeKeySchema<ActionTypeKey>(["actionType"]))
     .optional()
     .default([]),
 });
@@ -100,5 +110,5 @@ export type RawCategoryData = z.infer<typeof CategoryObjectSchema>;
 
 export const GameObjectSchema = z.object({
   key: gameKeySchema(),
-  concept: typeKeySchema(["conceptType"]),
+  concept: typeKeySchema<ConceptTypeKey>(["conceptType"]),
 });
