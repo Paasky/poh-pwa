@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { initTestDataBucket } from "../_setup/dataHelpers";
 import { destroyDataBucket, useDataBucket } from "@/Data/useDataBucket";
 import { subscribeToEvents } from "@/Common/Buses/EventBus";
-import { IEvent } from "@/Common/PohEvent";
+import { PohEvent } from "@/Common/PohEvent";
 import { GameKey } from "@/Common/Models/_GameTypes";
 import { pushActions, subscribeToActions } from "@/Common/Buses/ActionBus";
 import { PohAction } from "@/Common/PohAction";
@@ -23,7 +23,7 @@ describe("Buses Test", () => {
 
   it("Event -> Mutation -> Action", () => {
     const actionLog = new Map<GameKey, PohAction[]>();
-    const eventLog: IEvent[] = [];
+    const eventLog: PohEvent[] = [];
     const store = new DataStore();
 
     // Simple test data: Player moves Unit
@@ -57,7 +57,7 @@ describe("Buses Test", () => {
         },
       },
     ];
-    const events: IEvent[] = [
+    const events: PohEvent[] = [
       {
         playerKeys: new Set([player.key]),
         mutations,

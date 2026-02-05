@@ -3,14 +3,14 @@ import { Difficulty, Note, Priority, Region } from "@/Actor/Ai/AiTypes";
 import { StrategyCommand } from "@/Actor/Ai/Commands/StrategyCommand";
 import { Memory } from "@/Actor/Ai/Memory";
 import { subscribeToEvents } from "@/Common/Buses/EventBus";
-import { IEvent } from "@/Common/PohEvent";
 import { pushActions } from "@/Common/Buses/ActionBus";
 import { IMindset } from "@/Actor/Ai/Mindsets/_IMindset";
 import { PreSettled } from "@/Actor/Ai/Mindsets/PreSettled";
 import { Vibing } from "@/Actor/Ai/Mindsets/Vibing";
+import { PohEvent } from "@/Common/PohEvent";
 
 export class Brain {
-  public readonly eventInbox: IEvent[] = [];
+  public readonly eventInbox: PohEvent[] = [];
   public mindset?: IMindset;
   public readonly strategyCommand: StrategyCommand;
 
@@ -67,7 +67,7 @@ export class Brain {
     // todo save to memory what went well/what went badly/what big mindset-altering events happened
   }
 
-  private onEvents(events: IEvent[]): void {
+  private onEvents(events: PohEvent[]): void {
     this.eventInbox.push(...events);
   }
 }

@@ -1,6 +1,6 @@
 import { Priority } from "@/Actor/Ai/AiTypes";
-import { IEvent } from "@/Common/PohEvent";
+import { PohEvent } from "@/Common/PohEvent";
 
 export interface IMindset {
-  analyzeStrategy(events: IEvent[]): Priority[];
+  analyzeStrategy(events: PohEvent[]): Priority[];
 }

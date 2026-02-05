@@ -1,6 +1,5 @@
 import { GameKey, GameObjAttr, GameObject } from "./_GameModel";
 import type { Player } from "./Player";
-import { hasOne } from "./_Relations";
 import { playerYieldTypeKeys, Yield, Yields } from "../Static/Objects/Yields";
 import { TypeObject } from "../Static/Objects/TypeObject";
 import { clamp, roundToTenth } from "../Helpers/basicMath";
@@ -12,8 +11,6 @@ export class Agenda extends GameObject {
     public playerKey: GameKey,
   ) {
     super(key);
-
-    hasOne<Player>(this, "playerKey");
   }
 
   static attrsConf: GameObjAttr[] = [
