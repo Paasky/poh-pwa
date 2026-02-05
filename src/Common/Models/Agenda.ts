@@ -29,7 +29,7 @@ export class Agenda extends GameObject {
    * Relations
    */
   get player(): Player {
-    return this.hasOne<Player>("playerKey");
+    return this.hasOne<Player>("player", "playerKey");
   }
 
   /*

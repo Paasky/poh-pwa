@@ -87,6 +87,21 @@ export class Religion extends GameObject {
   }
 
   get canSelect(): boolean {
+    return this.computed(
+      "canSelect",
+      () => {
+        const holyCityOwner = this.city.player;
+        // If the holy city owner doesn't follow the religion: can never select
+        if (holyCityOwner.religionKey !== this.key) {
+          return false;
+        }
+
+        return holyCityOwner.storage.amount("yieldType:faith") >= this.faithToGrow;
+      },
+      {
+        relations: [{relName: "city", relProps:["playerKey"]}]
+      }
+    )
     const holyCityOwner = this.city.player;
     // If the holy city owner doesn't follow the religion: can never select
     if (holyCityOwner.religionKey !== this.key) {
@@ -101,57 +116,75 @@ export class Religion extends GameObject {
   }
 
   get selectableDogmas(): Set<TypeObject> {
-    if (this.status !== "dogmas") return new Set();
+    return this.computed(
+      "selectableDogmas",
+      () => {
+        if (this.status !== "dogmas") return new Set;
 
-    const selectable: Set<TypeObject> = new Set();
-    for (const dogma of useDataBucket().getClassTypes("dogmaType")) {
-      // Category already chosen
-      if (has(this.dogmas, (dogma) => dogma.category === dogma.category)) {
-        continue;
-      }
+        const selectable: Set<TypeObject> = new Set();
+        for (const dogma of useDataBucket().getClassTypes("dogmaType")) {
+          // Category already chosen
+          if (has(this.dogmas, (dogma) => dogma.category === dogma.category)) {
+            continue;
+          }
 
-      if (dogma.requires.isEmpty || dogma.requires.isSatisfied(this.dogmas)) {
-        selectable.add(dogma);
-      }
-    }
+          if (dogma.requires.isEmpty || dogma.requires.isSatisfied(this.dogmas)) {
+            selectable.add(dogma);
+          }
+        }
 
-    return selectable;
+        return selectable;
+      },
+      { props: ["status", "dogmas"]}
+    )
   }
 
   get selectableGods(): Set<TypeObject> {
-    if (this.status !== "gods") return new Set();
+    return this.computed(
+      "selectableGods",
+      () => {
+        if (this.status !== "gods") return new Set();
 
-    const selectable: Set<TypeObject> = new Set();
-    for (const god of useDataBucket().getClassTypes("godType")) {
-      // Category already chosen
-      if (has(this.gods, (god) => god.category === god.category)) {
-        continue;
-      }
+        const selectable: Set<TypeObject> = new Set();
+        for (const god of useDataBucket().getClassTypes("godType")) {
+          // Category already chosen
+          if (has(this.gods, (god) => god.category === god.category)) {
+            continue;
+          }
 
-      if (god.requires.isEmpty || god.requires.isSatisfied(this.gods)) {
-        selectable.add(god);
-      }
-    }
+          if (god.requires.isEmpty || god.requires.isSatisfied(this.gods)) {
+            selectable.add(god);
+          }
+        }
 
-    return selectable;
+        return selectable;
+      },
+      { props: ["status", "gods"] },
+    );
   }
 
   get selectableMyths(): Set<TypeObject> {
-    if (this.status !== "myths") return new Set();
+    return this.computed(
+      "selectableMyths",
+      () => {
+        if (this.status !== "myths") return new Set();
 
-    const selectable: Set<TypeObject> = new Set();
-    for (const myth of useDataBucket().getClassTypes("mythType")) {
-      // Category already chosen
-      if (has(this.myths, (myth) => myth.category === myth.category)) {
-        continue;
-      }
+        const selectable: Set<TypeObject> = new Set();
+        for (const myth of useDataBucket().getClassTypes("mythType")) {
+          // Category already chosen
+          if (has(this.myths, (myth) => myth.category === myth.category)) {
+            continue;
+          }
 
-      if (myth.requires.isEmpty || myth.requires.isSatisfied(this.myths)) {
-        selectable.add(myth);
-      }
-    }
+          if (myth.requires.isEmpty || myth.requires.isSatisfied(this.myths)) {
+            selectable.add(myth);
+          }
+        }
 
-    return selectable;
+        return selectable;
+      },
+      { props: ["status", "myths"] },
+    );
   }
 
   /*

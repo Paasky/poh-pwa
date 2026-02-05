@@ -73,6 +73,7 @@ function getGetterName(relationKey: RelationKey): string {
   }
   return name;
 }
+
 function setPrivateProp(instance: any, relationKey: RelationKey) {
   const getterName = getGetterName(relationKey);
   const propName = `_${getterName}`;
@@ -88,37 +89,33 @@ function setPrivateProp(instance: any, relationKey: RelationKey) {
   return { getterName, propName };
 }
 
-// On first call: initializes private cache property & update watchers;
-// On all calls: calls getter if not cached; returns cached value
-export function computedProp<ObjectT extends ObjectWithProps, ValueT>(
-  object: ObjectT,
-  privatePropName: string,
-  getter: () => ValueT,
-  watchProps?: (keyof ObjectT)[],
-): ValueT {
-  // Not in instance yet -> this is the first call
-  if (!(privatePropName in object)) {
-    // Initialize the private cache property
-    Object.defineProperty(object, privatePropName, {
-      enumerable: false,
-      configurable: true,
-    });
+const relations = new Map<GameKey, Set<GameKey>>();
+const backRelations = new Map<GameKey, Set<GameKey>>();
 
-    // Initialize object property watchers (if given)
-    if (watchProps?.length) {
-      // Tell the object "when you update, let me know what changed"
-      object.updateWatchers.push((changes) => {
-        // If any of the props we are watching change, invalidate the cache
-        if (watchProps.some((prop) => prop in changes)) {
-          (object as any)[privatePropName] = undefined;
-        }
-      });
-    }
+function addRelation(fromKey: GameKey, toKey: GameKey) {
+  const existingFrom = relations.get(fromKey);
+  if (existingFrom) {
+    existingFrom.add(toKey);
+  } else  {
+    relations.set(fromKey, new Set([toKey]));
   }
 
-  // If the value is still undefined, we need to cache by running the getter function
-  if ((object as any)[privatePropName] === undefined) {
-    (object as any)[privatePropName] = getter();
+  const existingTo = backRelations.get(toKey);
+  if (existingTo) {
+    existingTo.add(fromKey);
+  } else {
+    backRelations.set(toKey, new Set([fromKey]));
   }
-  return (object as any)[privatePropName] as ValueT;
+}
+
+function removeRelation(fromKey: GameKey, toKey: GameKey) {
+  const existingFrom = relations.get(fromKey);
+  if (existingFrom) {
+    existingFrom.delete(toKey);
+  }
+
+  const existingTo = backRelations.get(toKey);
+  if (existingTo) {
+    backRelations.delete(fromKey);
+  }
 }
