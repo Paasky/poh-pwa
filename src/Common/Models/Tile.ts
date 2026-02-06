@@ -12,6 +12,7 @@ import type { Unit } from "./Unit";
 import { getNeighbors, tileHeight, tileKey } from "../Helpers/mapTools";
 import { Vector3 } from "@babylonjs/core";
 import { tileCenter } from "../Helpers/math";
+import { Agenda } from "@/Common/Models/Agenda";
 
 // TODO: Centralize tile mutations in a TileManager to trigger useMoveCostCache().resetCache([tile.key])
 export class Tile extends GameObject {
@@ -68,38 +69,44 @@ export class Tile extends GameObject {
   /*
    * Relations
    */
+
+  agendaKeys = new Set<GameKey>();
+  get agendas(): Map<GameKey, Agenda> {
+    return this.hasMany<Agenda>("agendas", "agendaKeys");
+  }
+
   citizenKeys = new Set<GameKey>();
   get citizens(): Map<GameKey, Citizen> {
-    return this.hasMany<Citizen>("citizenKeys");
+    return this.hasMany<Citizen>("citizens", "citizenKeys");
   }
 
   cityKey: GameKey | null = null;
   get city(): City | null {
-    return this.canHaveOne<City>("cityKey");
+    return this.canHaveOne<City>("city", "cityKey");
   }
 
   constructionKey: GameKey | null = null;
   get construction(): Construction | null {
-    return this.canHaveOne<Construction>("constructionKey");
+    return this.canHaveOne<Construction>("construction", "constructionKey");
   }
 
   get player(): Player {
-    return this.hasOne<Player>("playerKey");
+    return this.hasOne<Player>("player", "playerKey");
   }
 
   riverKey: GameKey | null = null;
   get river(): River | null {
-    return this.canHaveOne<River>("riverKey");
+    return this.canHaveOne<River>("river", "riverKey");
   }
 
   tradeRouteKeys = new Set<GameKey>();
   get tradeRoutes(): Map<GameKey, TradeRoute> {
-    return this.hasMany<TradeRoute>("tradeRouteKeys");
+    return this.hasMany<TradeRoute>("tradeRoutes", "tradeRouteKeys");
   }
 
   unitKeys = new Set<GameKey>();
   get units(): Map<GameKey, Unit> {
-    return this.hasMany<Unit>("unitKeys");
+    return this.hasMany<Unit>("units", "unitKeys");
   }
 
   /*
@@ -167,6 +174,21 @@ export class Tile extends GameObject {
     return this.computed("neighborTiles", () =>
       getNeighbors(useDataBucket().world.size, this, useDataBucket().getTiles(), "hex"),
     );
+  }
+
+  get chokepointValue(): number {
+    // todo calculate this
+    return 0;
+  }
+
+  get settleValue(): number {
+    // todo calculate this
+    return 0;
+  }
+
+  get strategicValue(): number {
+    // todo calculate this
+    return 0;
   }
 
   // Types a Citizen inherits from me

@@ -44,19 +44,19 @@ export class TradeRoute extends GameObject {
    * Relations
    */
   get city1(): City {
-    return this.hasOne<City>("city1Key");
+    return this.hasOne<City>("city1", "city1Key");
   }
 
   get city2(): City {
-    return this.hasOne<City>("city2Key");
+    return this.hasOne<City>("city2", "city2Key");
   }
 
   get tiles(): Map<GameKey, Tile> {
-    return this.hasMany<Tile>("tileKeys");
+    return this.hasMany<Tile>("tiles", "tileKeys");
   }
 
   get unit(): Unit {
-    return this.hasOne<Unit>("unitKey");
+    return this.hasOne<Unit>("unit", "unitKey");
   }
 
   /*
