@@ -41,19 +41,19 @@ export class Citizen extends GameObject {
    * Relations
    */
   get city(): City {
-    return this.hasOne<City>("cityKey");
+    return this.hasOne<City>("city", "cityKey");
   }
   get culture(): Culture {
-    return this.hasOne<Culture>("cultureKey");
+    return this.hasOne<Culture>("culture", "cultureKey");
   }
   get player(): Player {
-    return this.hasOne<Player>("playerKey");
+    return this.hasOne<Player>("player", "playerKey");
   }
   get religion(): Religion | null {
-    return this.canHaveOne<Religion>("religionKey");
+    return this.canHaveOne<Religion>("religion", "religionKey");
   }
   get tile(): Tile {
-    return this.hasOne<Tile>("tileKey");
+    return this.hasOne<Tile>("tile", "tileKey");
   }
 
   /*

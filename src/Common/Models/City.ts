@@ -53,39 +53,39 @@ export class City extends GameObject {
    */
   citizenKeys = new Set<GameKey>();
   get citizens(): Map<GameKey, Citizen> {
-    return this.hasMany<Citizen>("citizenKeys");
+    return this.hasMany<Citizen>("citizens", "citizenKeys");
   }
 
   constructionKeys = new Set<GameKey>();
   get constructions(): Map<GameKey, Construction> {
-    return this.hasMany<Construction>("constructionKeys");
+    return this.hasMany<Construction>("constructions", "constructionKeys");
   }
 
   holyCityForKeys = new Set<GameKey>();
   get holyCityFors(): Map<GameKey, Religion> {
-    return this.hasMany<Religion>("holyCityForKeys");
+    return this.hasMany<Religion>("holyCityFors", "holyCityForKeys");
   }
 
   get origPlayer(): Player {
-    return this.hasOne<Player>("origPlayerKey");
+    return this.hasOne<Player>("origPlayer", "origPlayerKey");
   }
 
   get player(): Player {
-    return this.hasOne<Player>("playerKey");
+    return this.hasOne<Player>("player", "playerKey");
   }
 
   get tile(): Tile {
-    return this.hasOne<Tile>("tileKey");
+    return this.hasOne<Tile>("tile", "tileKey");
   }
 
   tradeRouteKeys = new Set<GameKey>();
   get tradeRoutes(): Map<GameKey, TradeRoute> {
-    return this.hasMany<TradeRoute>("tradeRouteKeys");
+    return this.hasMany<TradeRoute>("tradeRoutes", "tradeRouteKeys");
   }
 
   unitKeys = new Set<GameKey>();
   get units(): Map<GameKey, Unit> {
-    return this.hasMany<Unit>("unitKeys");
+    return this.hasMany<Unit>("units", "unitKeys");
   }
 
   /*

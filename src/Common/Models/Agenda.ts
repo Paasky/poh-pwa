@@ -4,17 +4,23 @@ import { playerYieldTypeKeys, Yield, Yields } from "../Static/Objects/Yields";
 import { TypeObject } from "../Static/Objects/TypeObject";
 import { clamp, roundToTenth } from "../Helpers/basicMath";
 import { reduce } from "../Helpers/collectionTools";
+import type { Tile } from "@/Common/Models/Tile";
 
 export class Agenda extends GameObject {
   constructor(
     key: GameKey,
     public playerKey: GameKey,
+    public tileKeys: Set<GameKey>,
   ) {
     super(key);
   }
 
   static attrsConf: GameObjAttr[] = [
     { attrName: "playerKey", related: { theirKeyAttr: "agendaKeys" } },
+    {
+      attrName: "tileKeys",
+      related: { theirKeyAttr: "agendaKeys", isManyToMany: true },
+    },
   ];
 
   /*
@@ -26,7 +32,11 @@ export class Agenda extends GameObject {
    * Relations
    */
   get player(): Player {
-    return this.hasOne<Player>("playerKey");
+    return this.hasOne<Player>("player", "playerKey");
+  }
+
+  get tiles(): Map<GameKey, Tile> {
+    return this.hasMany<Tile>("tiles", "tileKeys");
   }
 
   /*

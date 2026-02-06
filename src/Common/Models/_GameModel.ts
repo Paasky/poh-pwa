@@ -2,6 +2,7 @@
 import { useDataBucket } from "@/Data/useDataBucket";
 import { TypeObject } from "../Static/Objects/TypeObject";
 import { GameClass, GameKey, parseKey } from "@/Common/Models/_GameTypes";
+import { th } from "vuetify/locale";
 
 export * from "./_GameTypes";
 
@@ -28,7 +29,11 @@ export class GameObject {
   id: string;
   static attrsConf: GameObjAttr[] = [];
 
+  // This Model's cache of computed values, { key: value }
   protected readonly computedCache: Map<string, any> = new Map();
+
+  // The Relations registered by this Model, { relatedKey: relationName }
+  protected readonly relations: Map<keyof this & RelationKey, keyof this> = new Map();
 
   // Register relation-change-post-processors here
   protected readonly relationWatchers = new Map<
@@ -50,13 +55,24 @@ export class GameObject {
   // Triggered after this object is created and cached in the DataBucket
   onCreate(): void {}
 
-  // Triggered after this object is updated & cached in the DataBucket
+  // Triggered after this object is updated
   onUpdate(changes: Partial<this>): void {
+    // 1) Tell all the watchers we've been updated
     this.updateWatchers.forEach((watcher) => watcher(changes));
+
+    // 2) For each change, check if it's a relation
+    for (const key of Object.keys(changes)) {
+      const relationName = this.relations.get(key as any);
+      if (relationName) {
+        // It's a relation (and was updated -> Trigger a full relation update
+        this.onRelationUpdate(relationName, this[relationName] as GameObject);
+      }
+    }
   }
 
-  // Triggered after this object's relation is updated & cached in the DataBucket
-  onRelationUpdate(relName: keyof this, changes: Partial<this>): void {
+  // Triggered after this object's relation is updated
+  onRelationUpdate(relName: keyof this, changes: Partial<GameObject>): void {
+    // Tell all he watchers the relation has been updated
     this.relationWatchers.get(relName)?.forEach((fn) => fn(changes));
   }
 
@@ -131,28 +147,43 @@ export class GameObject {
     return val;
   }
 
-  protected relation<OutT>(keyPropName: keyof this & RelationKey, getter: () => OutT): OutT {
+  protected relation<OutT>(
+    relationName: keyof this,
+    keyPropName: keyof this & RelationKey,
+    getter: () => OutT,
+  ): OutT {
+    // Register key to relation name (relation name is used by computed relation watchers)
+    if (this.relations.has(keyPropName)) {
+      throw new Error(`Relation ${relationName as string} already exists`);
+    }
+    this.relations.set(keyPropName, relationName);
+
     return this.computed(keyPropName, getter, { props: [keyPropName] });
   }
 
-  protected hasOne<ObjT extends GameObject>(keyPropName: keyof this & RelationKey): ObjT {
-    return this.relation(keyPropName, () =>
+  protected hasOne<ObjT extends GameObject>(
+    relationName: keyof this,
+    keyPropName: keyof this & RelationKey,
+  ): ObjT {
+    return this.relation(relationName, keyPropName, () =>
       useDataBucket().getObject<ObjT>(this[keyPropName] as GameKey),
     );
   }
 
   protected canHaveOne<ObjT extends GameObject>(
+    relationName: keyof this,
     keyPropName: keyof this & RelationKey,
   ): ObjT | null {
-    return this.relation(keyPropName, () =>
+    return this.relation(relationName, keyPropName, () =>
       this[keyPropName] ? useDataBucket().getObject<ObjT>(this[keyPropName] as GameKey) : null,
     );
   }
 
   protected hasMany<ObjT extends GameObject>(
+    relationName: keyof this,
     keyPropName: keyof this & RelationKey,
   ): Map<GameKey, ObjT> {
-    return this.relation(keyPropName, () => {
+    return this.relation(relationName, keyPropName, () => {
       const objects = new Map<GameKey, ObjT>();
       (this[keyPropName] as Set<GameKey>).forEach((key) => {
         objects.set(key, useDataBucket().getObject<ObjT>(key));
