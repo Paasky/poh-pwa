@@ -56,6 +56,11 @@
   },
   {
     "concept": "conceptType:concept",
+    "key": "conceptType:diplomacy",
+    "name": "Diplomacy"
+  },
+  {
+    "concept": "conceptType:concept",
     "key": "conceptType:dogma",
     "name": "Dogma"
   },
@@ -109,6 +114,11 @@
     "concept": "conceptType:concept",
     "key": "conceptType:god",
     "name": "God"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:government",
+    "name": "Government"
   },
   {
     "concept": "conceptType:concept",
@@ -205,6 +215,11 @@
     "concept": "conceptType:concept",
     "key": "conceptType:religion",
     "name": "Religion"
+  },
+  {
+    "concept": "conceptType:concept",
+    "key": "conceptType:research",
+    "name": "Research"
   },
   {
     "concept": "conceptType:concept",

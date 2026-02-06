@@ -14,7 +14,11 @@ import { Tile } from "@/Common/Models/Tile";
 import { TradeRoute } from "@/Common/Models/TradeRoute";
 import { Unit } from "@/Common/Models/Unit";
 import { UnitDesign } from "@/Common/Models/UnitDesign";
-import type { DataBucket } from "@/Data/DataBucket"; // Constructor type that also exposes the static attrsConf declared on each GameObject subclass
+import type { DataBucket } from "@/Data/DataBucket";
+import { Diplomacy } from "@/Common/Objects/Diplomacy";
+import { Government } from "@/Common/Models/Government";
+import { Incident } from "@/Common/Models/Incident";
+import { Research } from "@/Common/Models/Research"; // Constructor type that also exposes the static attrsConf declared on each GameObject subclass
 
 // Constructor type that also exposes the static attrsConf declared on each GameObject subclass
 type Ctor<T = GameObject> = {
@@ -29,9 +33,13 @@ const classConf = {
   construction: Construction,
   culture: Culture,
   deal: Deal,
+  diplomacy: Diplomacy,
+  government: Government,
+  incident: Incident,
   player: Player,
   river: River,
   religion: Religion,
+  research: Research,
   tile: Tile,
   tradeRoute: TradeRoute,
   unit: Unit,

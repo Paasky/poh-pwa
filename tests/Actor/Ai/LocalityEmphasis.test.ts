@@ -1,6 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { CapabilityEmphasis } from "@/Actor/Ai/Emphasis/Calculators/CapabilityEmphasis";
-import { cityRawData, initTestDataBucket, playerRawData, tileRawData, } from "../../_setup/dataHelpers";
+import {
+  cityRawData,
+  initTestDataBucket,
+  playerRawData,
+  tileRawData,
+} from "../../_setup/dataHelpers";
 import { destroyDataBucket, useDataBucket } from "@/Data/useDataBucket";
 import { generateKey } from "@/Common/Models/_GameTypes";
 import { tileKey } from "@/Common/Helpers/mapTools";

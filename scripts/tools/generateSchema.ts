@@ -1,9 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { toJSONSchema, z } from "zod";
-
-// We need to import the schemas.
-import { CategoryObjectSchema, TypeObjectSchema } from "../../src/Data/StaticDataLoader.ts";
+import { CategoryObjectSchema, TypeObjectSchema } from "../../src/Common/Validation";
 
 const schema = z.object({
   types: z.array(TypeObjectSchema),
