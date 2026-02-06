@@ -1,11 +1,10 @@
 import { TypeObject } from "../Static/Objects/TypeObject";
 import { GameKey, GameObjAttr, GameObject } from "./_GameModel";
-import { useDataBucket } from "../../Data/useDataBucket";
+import { useDataBucket } from "@/Data/useDataBucket";
 import type { Citizen } from "./Citizen";
 import type { Player } from "./Player";
 import type { City } from "./City";
-import { useEventStore } from "../../App/stores/eventStore";
-import { ReligionHasEvolved, ReligionHasNewType } from "../events/Religion";
+import { useEventStore } from "@/App/stores/eventStore";
 import { Yields } from "../Static/Objects/Yields";
 import { has } from "../Helpers/collectionTools";
 
@@ -53,20 +52,20 @@ export class Religion extends GameObject {
    */
   citizenKeys = new Set<GameKey>();
   get citizens(): Map<GameKey, Citizen> {
-    return this.hasMany<Citizen>("citizenKeys");
+    return this.hasMany<Citizen>("citizens", "citizenKeys");
   }
 
   get city(): City {
-    return this.hasOne<City>("cityKey");
+    return this.hasOne<City>("city", "cityKey");
   }
 
   playerKeys = new Set<GameKey>();
   get players(): Map<GameKey, Player> {
-    return this.hasMany<Player>("playerKeys");
+    return this.hasMany<Player>("players", "playerKeys");
   }
 
   get knownByPlayers(): Map<GameKey, Player> {
-    return this.hasMany<Player>("knownByPlayerKeys");
+    return this.hasMany<Player>("knownByPlayers", "knownByPlayerKeys");
   }
 
   /*
@@ -99,9 +98,9 @@ export class Religion extends GameObject {
         return holyCityOwner.storage.amount("yieldType:faith") >= this.faithToGrow;
       },
       {
-        relations: [{relName: "city", relProps:["playerKey"]}]
-      }
-    )
+        relations: [{ relName: "city", relProps: ["playerKey"] }],
+      },
+    );
     const holyCityOwner = this.city.player;
     // If the holy city owner doesn't follow the religion: can never select
     if (holyCityOwner.religionKey !== this.key) {
@@ -119,7 +118,7 @@ export class Religion extends GameObject {
     return this.computed(
       "selectableDogmas",
       () => {
-        if (this.status !== "dogmas") return new Set;
+        if (this.status !== "dogmas") return new Set();
 
         const selectable: Set<TypeObject> = new Set();
         for (const dogma of useDataBucket().getClassTypes("dogmaType")) {
@@ -135,8 +134,8 @@ export class Religion extends GameObject {
 
         return selectable;
       },
-      { props: ["status", "dogmas"]}
-    )
+      { props: ["status", "dogmas"] },
+    );
   }
 
   get selectableGods(): Set<TypeObject> {

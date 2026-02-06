@@ -1,17 +1,12 @@
-import { CategoryEmphasis, EmphasisReason, Locality } from "@/Actor/Ai/AiTypes";
-import { Player } from "@/Common/Models/Player";
+import { CategoryEmphasis, EmphasisReason } from "@/Actor/Ai/AiTypes";
+import { CommonEmphasis } from "@/Actor/Ai/Emphasis/Calculators/_CommonEmphasis";
 
-export class UrgencyEmphasis {
-  constructor(
-    private readonly player: Player,
-    private readonly locality: Locality,
-  ) {}
-
+export class UrgencyEmphasis extends CommonEmphasis {
   calculate(): CategoryEmphasis {
     const reasons: EmphasisReason[] = [];
 
     // Tension
-    const tensionValue = this.getTensionValue();
+    const tensionValue = this.getTensionValue(this.locality.tension);
     if (tensionValue > 0) {
       reasons.push({
         type: "tension",
@@ -20,36 +15,18 @@ export class UrgencyEmphasis {
     }
 
     // Siege
-    // TODO: Not implemented yet
+    // <=50 tile.city?.health: 100, 100 health: 0
+    const siegeValue = this.getSiegeValue();
+    if (siegeValue > 0) {
+      reasons.push({
+        type: "siege",
+        value: siegeValue,
+      });
+    }
 
     // Diplomacy Timers
     // TODO: Not implemented yet
 
-    const value =
-      reasons.length > 0 ? reasons.reduce((sum, r) => sum + r.value, 0) / reasons.length : 0;
-
-    return {
-      category: "urgency",
-      value: Math.round(value),
-      reasons,
-    };
-  }
-
-  private getTensionValue(): number {
-    const tension = this.locality.tension;
-    if (!tension) return 0;
-
-    switch (tension) {
-      case "safe":
-        return 0;
-      case "calm":
-        return 25;
-      case "suspicious":
-        return 50;
-      case "violence":
-        return 100;
-      default:
-        throw new Error(`Unknown tension type: ${tension}`);
-    }
+    return this.buildResult("urgency", reasons);
   }
 }

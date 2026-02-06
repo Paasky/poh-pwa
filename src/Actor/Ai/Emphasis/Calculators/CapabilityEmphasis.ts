@@ -1,12 +1,7 @@
-import { CategoryEmphasis, EmphasisReason, Locality } from "@/Actor/Ai/AiTypes";
-import { Player } from "@/Common/Models/Player";
+import { CategoryEmphasis, EmphasisReason } from "@/Actor/Ai/AiTypes";
+import { CommonEmphasis } from "@/Actor/Ai/Emphasis/Calculators/_CommonEmphasis";
 
-export class CapabilityEmphasis {
-  constructor(
-    private readonly player: Player,
-    private readonly locality: Locality,
-  ) {}
-
+export class CapabilityEmphasis extends CommonEmphasis {
   calculate(): CategoryEmphasis {
     const reasons: EmphasisReason[] = [];
 
@@ -95,14 +90,7 @@ export class CapabilityEmphasis {
       }
     }
 
-    const value =
-      reasons.length > 0 ? reasons.reduce((sum, r) => sum + r.value, 0) / reasons.length : 0;
-
-    return {
-      category: "capability",
-      value: Math.round(value),
-      reasons,
-    };
+    return this.buildResult("capability", reasons);
   }
 
   private getMilitaryStats() {
@@ -179,28 +167,5 @@ export class CapabilityEmphasis {
     }
 
     return { ourFaithCount, otherFaithCount };
-  }
-
-  // Convert ratio to value: 0: <= 1:2, 50: 1:1, 100: >= 2:1
-  private ratioToValue(ours: number, theirs: number): number {
-    if (ours === 0) return 0;
-    if (theirs === 0) return 100;
-
-    const ratio = ours / theirs;
-
-    // ratio <= 0.5 -> 0
-    // ratio = 1.0 -> 50
-    // ratio >= 2.0 -> 100
-    if (ratio <= 0.5) return 0;
-    if (ratio >= 2.0) return 100;
-
-    // Linear interpolation between 0.5 and 2.0
-    if (ratio <= 1.0) {
-      // 0.5 to 1.0 maps to 0 to 50
-      return ((ratio - 0.5) / 0.5) * 50;
-    } else {
-      // 1.0 to 2.0 maps to 50 to 100
-      return 50 + ((ratio - 1.0) / 1.0) * 50;
-    }
   }
 }

@@ -2,12 +2,11 @@ import { TypeObject } from "../Static/Objects/TypeObject";
 import { CatKey, TypeKey } from "../Static/StaticEnums";
 import { Yields } from "../Static/Objects/Yields";
 import { GameKey, GameObjAttr, GameObject } from "./_GameModel";
-import { useDataBucket } from "../../Data/useDataBucket";
+import { useDataBucket } from "@/Data/useDataBucket";
 import type { Citizen } from "./Citizen";
 import type { Player } from "./Player";
 import type { Tile } from "./Tile";
-import { useEventStore } from "../../App/stores/eventStore";
-import { CultureHasNewType, CultureHasSettled } from "../events/Culture";
+import { useEventStore } from "@/App/stores/eventStore";
 import { has } from "../Helpers/collectionTools";
 
 export type CultureStatus = "notSettled" | "canSettle" | "mustSettle" | "settled";
@@ -48,11 +47,11 @@ export class Culture extends GameObject {
    */
   citizenKeys = new Set<GameKey>();
   get citizens(): Map<GameKey, Citizen> {
-    return this.hasMany<Citizen>("citizenKeys");
+    return this.hasMany<Citizen>("citizens", "citizenKeys");
   }
 
   get player(): Player {
-    return this.hasOne<Player>("playerKey");
+    return this.hasOne<Player>("player", "playerKey");
   }
 
   /*

@@ -1,12 +1,7 @@
-import { CategoryEmphasis, EmphasisReason, Locality } from "@/Actor/Ai/AiTypes";
-import { Player } from "@/Common/Models/Player";
+import { CategoryEmphasis, EmphasisReason } from "@/Actor/Ai/AiTypes";
+import { CommonEmphasis } from "@/Actor/Ai/Emphasis/Calculators/_CommonEmphasis";
 
-export class GainEmphasis {
-  constructor(
-    private readonly player: Player,
-    private readonly locality: Locality,
-  ) {}
-
+export class GainEmphasis extends CommonEmphasis {
   calculate(): CategoryEmphasis {
     const reasons: EmphasisReason[] = [];
 
@@ -29,16 +24,32 @@ export class GainEmphasis {
     }
 
     // Good Settlement Tiles
-    // TODO: Not implemented yet
+    const goodSettleValue = this.getGoodSettleTilesValue();
+    if (goodSettleValue > 0) {
+      reasons.push({
+        type: "goodSettleTile",
+        value: goodSettleValue,
+      });
+    }
 
-    const value =
-      reasons.length > 0 ? reasons.reduce((sum, r) => sum + r.value, 0) / reasons.length : 0;
+    return this.buildResult("gain", reasons);
+  }
 
-    return {
-      category: "gain",
-      value: Math.round(value),
-      reasons,
-    };
+  private getGoodSettleTilesValue(): number {
+    let totalSettleValue = 0;
+    let tileCount = 0;
+
+    for (const tile of this.locality.tiles) {
+      if (!tile.playerKey && tile.settleValue > 0) {
+        totalSettleValue += tile.settleValue;
+        tileCount++;
+      }
+    }
+
+    if (tileCount === 0) return 0;
+
+    const avgSettleValue = totalSettleValue / tileCount;
+    return Math.min(100, Math.round(avgSettleValue));
   }
 
   private getUnusedResourceValue(): number {

@@ -90,82 +90,82 @@ export class Player extends GameObject {
 
   agendaKeys = new Set<GameKey>();
   get agendas(): Map<GameKey, Agenda> {
-    return this.hasMany<Agenda>("agendaKeys");
+    return this.hasMany<Agenda>("agendas", "agendaKeys");
   }
 
   citizenKeys = new Set<GameKey>();
   get citizens(): Map<GameKey, Citizen> {
-    return this.hasMany<Citizen>("citizenKeys");
+    return this.hasMany<Citizen>("citizens", "citizenKeys");
   }
 
   cityKeys = new Set<GameKey>();
   get cities(): Map<GameKey, City> {
-    return this.hasMany<City>("cityKeys");
+    return this.hasMany<City>("cities", "cityKeys");
   }
 
   constructionKeys = new Set<GameKey>();
   get constructions(): Map<GameKey, Construction> {
-    return this.hasMany<Construction>("constructionKeys");
+    return this.hasMany<Construction>("constructions", "constructionKeys");
   }
 
   get culture(): Culture {
-    return this.hasOne<Culture>("cultureKey");
+    return this.hasOne<Culture>("culture", "cultureKey");
   }
 
   dealKeys = new Set<GameKey>();
   get deals(): Map<GameKey, Deal> {
-    return this.hasMany<Deal>("dealKeys");
+    return this.hasMany<Deal>("deals", "dealKeys");
   }
 
   designKeys = new Set<GameKey>();
   get designs(): Map<GameKey, UnitDesign> {
-    return this.hasMany<UnitDesign>("designKeys");
+    return this.hasMany<UnitDesign>("designs", "designKeys");
   }
 
   get diplomacy(): Diplomacy {
-    return this.hasOne<Diplomacy>("diplomacyKey");
+    return this.hasOne<Diplomacy>("diplomacy", "diplomacyKey");
   }
 
   get government(): Government {
-    return this.hasOne<Government>("governmentKey");
+    return this.hasOne<Government>("government", "governmentKey");
   }
 
   incidentKeys = new Set<GameKey>();
   get incidents(): Map<GameKey, Incident> {
-    return this.hasMany<Incident>("incidentKeys");
+    return this.hasMany<Incident>("incidents", "incidentKeys");
   }
 
   get religion(): Religion | null {
-    return this.canHaveOne<Religion>("religionKey");
+    return this.canHaveOne<Religion>("religion", "religionKey");
   }
 
   get research(): Research {
-    return this.hasOne<Research>("researchKey");
+    return this.hasOne<Research>("research", "researchKey");
   }
 
   tileKeys = new Set<GameKey>();
   get tiles(): Map<GameKey, Tile> {
-    return this.hasMany<Tile>("tileKeys");
+    return this.hasMany<Tile>("tiles", "tileKeys");
   }
 
   tradeRouteKeys = new Set<GameKey>();
   get tradeRoutes(): Map<GameKey, TradeRoute> {
-    return this.hasMany<TradeRoute>("tradeRouteKeys");
+    return this.hasMany<TradeRoute>("tradeRoutes", "tradeRouteKeys");
   }
 
   unitKeys = new Set<GameKey>();
   get units(): Map<GameKey, Unit> {
-    return this.hasMany<Unit>("unitKeys");
+    return this.hasMany<Unit>("units", "unitKeys");
   }
 
   get knownPlayers(): Map<GameKey, Player> {
-    return this.hasMany<Player>("knownPlayerKeys");
+    return this.hasMany<Player>("knownPlayers", "knownPlayerKeys");
   }
   get knownReligions(): Map<GameKey, Religion> {
-    return this.hasMany<Religion>("knownReligionKeys");
+    return this.hasMany<Religion>("knownReligions", "knownReligionKeys");
   }
   get knownTiles(): Map<GameKey, Tile> {
-    return this.hasMany<Tile>("knownTileKeys");
+    return this.hasMany<Tile>("knownTiles", "knownTileKeys");
   }
 
   /*

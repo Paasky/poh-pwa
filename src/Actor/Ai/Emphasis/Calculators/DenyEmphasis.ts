@@ -1,17 +1,18 @@
-import { CategoryEmphasis, EmphasisReason, Locality } from "@/Actor/Ai/AiTypes";
-import { Player } from "@/Common/Models/Player";
+import { CategoryEmphasis, EmphasisReason } from "@/Actor/Ai/AiTypes";
+import { CommonEmphasis } from "@/Actor/Ai/Emphasis/Calculators/_CommonEmphasis";
 
-export class DenyEmphasis {
-  constructor(
-    private readonly player: Player,
-    private readonly locality: Locality,
-  ) {}
-
+export class DenyEmphasis extends CommonEmphasis {
   calculate(): CategoryEmphasis {
     const reasons: EmphasisReason[] = [];
 
     // Enemy Agenda
-    // TODO: Not implemented yet
+    const enemyAgendaValue = this.getEnemyAgendaValue();
+    if (enemyAgendaValue > 0) {
+      reasons.push({
+        type: "enemyAgenda",
+        value: enemyAgendaValue,
+      });
+    }
 
     // Enemy Value Tiles
     const enemyValueTilesValue = this.getEnemyValueTilesValue();
@@ -23,16 +24,29 @@ export class DenyEmphasis {
     }
 
     // Chokepoints
-    // TODO: Not implemented yet
+    const chokepointValue = this.getChokepointValue();
+    if (chokepointValue > 0) {
+      reasons.push({
+        type: "chokepoint",
+        value: chokepointValue,
+      });
+    }
 
-    const value =
-      reasons.length > 0 ? reasons.reduce((sum, r) => sum + r.value, 0) / reasons.length : 0;
+    return this.buildResult("deny", reasons);
+  }
 
-    return {
-      category: "deny",
-      value: Math.round(value),
-      reasons,
-    };
+  private getEnemyAgendaValue(): number {
+    let enemyAgendaCount = 0;
+
+    for (const tile of this.locality.tiles) {
+      for (const agenda of tile.agendas.values()) {
+        if (agenda.playerKey !== this.player.key) {
+          enemyAgendaCount++;
+        }
+      }
+    }
+
+    return Math.min(100, enemyAgendaCount * 25);
   }
 
   private getEnemyValueTilesValue(): number {
@@ -47,5 +61,22 @@ export class DenyEmphasis {
     }
 
     return Math.min(100, enemyValueTiles * 20);
+  }
+
+  private getChokepointValue(): number {
+    let totalChokepointValue = 0;
+    let tileCount = 0;
+
+    for (const tile of this.locality.tiles) {
+      if (tile.chokepointValue > 0) {
+        totalChokepointValue += tile.chokepointValue;
+        tileCount++;
+      }
+    }
+
+    if (tileCount === 0) return 0;
+
+    const avgChokepointValue = totalChokepointValue / tileCount;
+    return Math.min(100, Math.round(avgChokepointValue));
   }
 }

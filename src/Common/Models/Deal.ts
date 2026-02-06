@@ -32,10 +32,10 @@ export class Deal extends GameObject {
    * Relations
    */
   get fromPlayer(): Player {
-    return this.hasOne<Player>("fromPlayerKey");
+    return this.hasOne<Player>("fromPlayer", "fromPlayerKey");
   }
   get toPlayer(): Player {
-    return this.hasOne<Player>("toPlayerKey");
+    return this.hasOne<Player>("toPlayer", "toPlayerKey");
   }
 
   /*

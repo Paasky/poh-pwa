@@ -1,12 +1,7 @@
-import { CategoryEmphasis, EmphasisReason, Locality } from "@/Actor/Ai/AiTypes";
-import { Player } from "@/Common/Models/Player";
+import { CategoryEmphasis, EmphasisReason } from "@/Actor/Ai/AiTypes";
+import { CommonEmphasis } from "@/Actor/Ai/Emphasis/Calculators/_CommonEmphasis";
 
-export class RiskEmphasis {
-  constructor(
-    private readonly player: Player,
-    private readonly locality: Locality,
-  ) {}
-
+export class RiskEmphasis extends CommonEmphasis {
   calculate(): CategoryEmphasis {
     const reasons: EmphasisReason[] = [];
 
@@ -29,7 +24,7 @@ export class RiskEmphasis {
     }
 
     // Tension
-    const tensionValue = this.getTensionValue();
+    const tensionValue = this.getTensionValue(this.locality.tension);
     if (tensionValue > 0) {
       reasons.push({
         type: "tension",
@@ -37,14 +32,7 @@ export class RiskEmphasis {
       });
     }
 
-    const value =
-      reasons.length > 0 ? reasons.reduce((sum, r) => sum + r.value, 0) / reasons.length : 0;
-
-    return {
-      category: "risk",
-      value: Math.round(value),
-      reasons,
-    };
+    return this.buildResult("risk", reasons);
   }
 
   private getEnemyMilitaryValue(): number {
@@ -73,23 +61,5 @@ export class RiskEmphasis {
     }
 
     return Math.min(100, ourValueTiles * 15);
-  }
-
-  private getTensionValue(): number {
-    const tension = this.locality.tension;
-    if (!tension) return 0;
-
-    switch (tension) {
-      case "safe":
-        return 0;
-      case "calm":
-        return 25;
-      case "suspicious":
-        return 50;
-      case "violence":
-        return 100;
-      default:
-        throw new Error(`Unknown tension type: ${tension}`);
-    }
   }
 }

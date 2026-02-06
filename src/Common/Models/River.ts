@@ -26,7 +26,7 @@ export class River extends GameObject {
    * Relations
    */
   get tiles(): Map<GameKey, Tile> {
-    return this.hasMany<Tile>("tileKeys");
+    return this.hasMany<Tile>("tiles", "tileKeys");
   }
 
   /*

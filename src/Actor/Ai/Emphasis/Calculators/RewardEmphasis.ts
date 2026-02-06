@@ -1,12 +1,7 @@
-import { CategoryEmphasis, EmphasisReason, Locality } from "@/Actor/Ai/AiTypes";
-import { Player } from "@/Common/Models/Player";
+import { CategoryEmphasis, EmphasisReason } from "@/Actor/Ai/AiTypes";
+import { CommonEmphasis } from "@/Actor/Ai/Emphasis/Calculators/_CommonEmphasis";
 
-export class RewardEmphasis {
-  constructor(
-    private readonly player: Player,
-    private readonly locality: Locality,
-  ) {}
-
+export class RewardEmphasis extends CommonEmphasis {
   calculate(): CategoryEmphasis {
     const reasons: EmphasisReason[] = [];
 
@@ -20,19 +15,32 @@ export class RewardEmphasis {
     }
 
     // Our Agenda
-    // TODO: Not implemented yet
+    const ourAgendaValue = this.getOurAgendaValue();
+    if (ourAgendaValue > 0) {
+      reasons.push({
+        type: "agendaTarget",
+        value: ourAgendaValue,
+      });
+    }
 
     // Wonders Available
     // TODO: Not implemented yet
 
-    const value =
-      reasons.length > 0 ? reasons.reduce((sum, r) => sum + r.value, 0) / reasons.length : 0;
+    return this.buildResult("reward", reasons);
+  }
 
-    return {
-      category: "reward",
-      value: Math.round(value),
-      reasons,
-    };
+  private getOurAgendaValue(): number {
+    let ourAgendaCount = 0;
+
+    for (const tile of this.locality.tiles) {
+      for (const agenda of tile.agendas.values()) {
+        if (agenda.playerKey === this.player.key) {
+          ourAgendaCount++;
+        }
+      }
+    }
+
+    return Math.min(100, ourAgendaCount * 25);
   }
 
   private getUnknownTilesValue(): number {

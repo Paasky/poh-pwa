@@ -42,12 +42,12 @@ export class UnitDesign extends GameObject {
    * Relations
    */
   get player(): Player | null {
-    return this.canHaveOne<Player>("playerKey");
+    return this.canHaveOne<Player>("player", "playerKey");
   }
 
   unitKeys = new Set<GameKey>();
   get units(): Map<GameKey, Unit> {
-    return this.hasMany<Unit>("unitKeys");
+    return this.hasMany<Unit>("units", "unitKeys");
   }
 
   /*
@@ -61,6 +61,7 @@ export class UnitDesign extends GameObject {
       { props: ["yields"] },
     );
   }
+
   get types(): Set<TypeObject> {
     return new Set([this.concept, this.domain, this.platform, this.equipment]);
   }

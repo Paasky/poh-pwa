@@ -6,12 +6,6 @@ import type { Tile } from "./Tile";
 import { City } from "./City";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { useEventStore } from "@/App/stores/eventStore";
-import {
-  ConstructionAbandoned,
-  ConstructionCancelled,
-  ConstructionCompleted,
-  ConstructionLost,
-} from "../events/Construction";
 import { Player } from "./Player";
 
 export class Construction extends GameObject {
@@ -53,15 +47,15 @@ export class Construction extends GameObject {
    */
   citizenKeys = new Set<GameKey>();
   get citizens(): Map<GameKey, Citizen> {
-    return this.hasMany<Citizen>("citizenKeys");
+    return this.hasMany<Citizen>("citizens", "citizenKeys");
   }
 
   get city(): City | null {
-    return this.canHaveOne<City>("cityKey");
+    return this.canHaveOne<City>("city", "cityKey");
   }
 
   get tile(): Tile {
-    return this.hasOne<Tile>("tileKey");
+    return this.hasOne<Tile>("tile", "tileKey");
   }
 
   /*

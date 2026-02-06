@@ -83,28 +83,28 @@ export class Unit extends GameObject {
    * Relations
    */
   get city(): City | null {
-    return this.canHaveOne<City>("cityKey");
+    return this.canHaveOne<City>("city", "cityKey");
   }
 
   get design(): UnitDesign {
-    return this.hasOne<UnitDesign>("designKey");
+    return this.hasOne<UnitDesign>("design", "designKey");
   }
 
   get player(): Player {
-    return this.hasOne<Player>("playerKey");
+    return this.hasOne<Player>("player", "playerKey");
   }
 
   get origPlayer(): Player {
-    return this.hasOne<Player>("origPlayerKey");
+    return this.hasOne<Player>("origPlayer", "origPlayerKey");
   }
 
   get tile(): Tile {
-    return this.hasOne<Tile>("tileKey");
+    return this.hasOne<Tile>("tile", "tileKey");
   }
 
   tradeRouteKey: GameKey | null;
   get tradeRoute(): TradeRoute | null {
-    return this.canHaveOne<TradeRoute>("tradeRouteKey");
+    return this.canHaveOne<TradeRoute>("tradeRoute", "tradeRouteKey");
   }
 
   /*
