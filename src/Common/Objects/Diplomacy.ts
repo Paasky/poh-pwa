@@ -7,8 +7,9 @@ export class Diplomacy extends GameObject {
     public playerKey: GameKey,
   ) {
     super(id);
-    hasOne<Player>(this, "playerKey");
   }
 
-  declare player: Player;
+  get player(): Player {
+    return this.hasOne<Player>("player", "playerKey");
+  }
 }

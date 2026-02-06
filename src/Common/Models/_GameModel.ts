@@ -2,7 +2,6 @@
 import { useDataBucket } from "@/Data/useDataBucket";
 import { TypeObject } from "../Static/Objects/TypeObject";
 import { GameClass, GameKey, parseKey } from "@/Common/Models/_GameTypes";
-import { th } from "vuetify/locale";
 
 export * from "./_GameTypes";
 
@@ -153,10 +152,9 @@ export class GameObject {
     getter: () => OutT,
   ): OutT {
     // Register key to relation name (relation name is used by computed relation watchers)
-    if (this.relations.has(keyPropName)) {
-      throw new Error(`Relation ${relationName as string} already exists`);
+    if (!this.relations.has(keyPropName)) {
+      this.relations.set(keyPropName, relationName);
     }
-    this.relations.set(keyPropName, relationName);
 
     return this.computed(keyPropName, getter, { props: [keyPropName] });
   }

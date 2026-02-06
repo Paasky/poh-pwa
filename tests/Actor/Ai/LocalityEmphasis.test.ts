@@ -1,11 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { CapabilityEmphasis } from "@/Actor/Ai/Emphasis/Calculators/CapabilityEmphasis";
-import {
-  cityRawData,
-  initTestDataBucket,
-  playerRawData,
-  tileRawData,
-} from "../../_setup/dataHelpers";
+import { cityRawData, initTestDataBucket, playerRawData, tileRawData, } from "../../_setup/dataHelpers";
 import { destroyDataBucket, useDataBucket } from "@/Data/useDataBucket";
 import { generateKey } from "@/Common/Models/_GameTypes";
 import { tileKey } from "@/Common/Helpers/mapTools";
@@ -39,6 +34,8 @@ describe("LocalityEmphasis Calculators", () => {
       ...playerRawData(playerKey2),
       ...tileRawData(tileKey1),
       ...tileRawData(tileKey2),
+      ...tileRawData(tileKey3),
+      ...tileRawData(tileKey4),
       ...cityRawData(cityKey1, {
         playerKey: playerKey1,
         tileKey: tileKey1,

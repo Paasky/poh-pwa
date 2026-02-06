@@ -5012,6 +5012,18 @@
       "actions": []
     },
     {
+      "key": "conceptType:diplomacy",
+      "name": "Diplomacy",
+      "concept": "conceptType:concept",
+      "description": "",
+      "requires": [],
+      "yields": [],
+      "gains": [],
+      "upgradesFrom": [],
+      "specials": [],
+      "actions": []
+    },
+    {
       "key": "conceptType:dogma",
       "name": "Dogma",
       "concept": "conceptType:concept",
@@ -5236,6 +5248,18 @@
     {
       "key": "conceptType:god",
       "name": "God",
+      "concept": "conceptType:concept",
+      "description": "",
+      "requires": [],
+      "yields": [],
+      "gains": [],
+      "upgradesFrom": [],
+      "specials": [],
+      "actions": []
+    },
+    {
+      "key": "conceptType:government",
+      "name": "Government",
       "concept": "conceptType:concept",
       "description": "",
       "requires": [],
@@ -5497,6 +5521,18 @@
     {
       "key": "conceptType:religion",
       "name": "Religion",
+      "concept": "conceptType:concept",
+      "description": "",
+      "requires": [],
+      "yields": [],
+      "gains": [],
+      "upgradesFrom": [],
+      "specials": [],
+      "actions": []
+    },
+    {
+      "key": "conceptType:research",
+      "name": "Research",
       "concept": "conceptType:concept",
       "description": "",
       "requires": [],

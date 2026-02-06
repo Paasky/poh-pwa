@@ -13,16 +13,13 @@ import { GameClass, GameKey } from "@/Common/Models/_GameTypes";
 import { YieldTypeKey } from "@/Common/Static/Objects/Yields";
 
 function baseKeySchema<T extends string>(options?: { classes?: string[]; suffix?: string }) {
-  return z
-    .string()
-    .refine((value) => {
-      const classAndId = value.split(":");
-      if (classAndId.length !== 2 || !classAndId[0] || !classAndId[1]) return false;
-      if (options?.classes) return options.classes.includes(classAndId[0]);
-      if (options?.suffix) return classAndId[0].endsWith(options.suffix);
-      return true;
-    })
-    .transform((v) => v as T);
+  return z.string().refine((value) => {
+    const classAndId = value.split(":");
+    if (classAndId.length !== 2 || !classAndId[0] || !classAndId[1]) return false;
+    if (options?.classes) return options.classes.includes(classAndId[0]);
+    if (options?.suffix) return classAndId[0].endsWith(options.suffix);
+    return true;
+  }) as unknown as z.ZodType<T>;
 }
 
 export function catKeySchema(classes?: CategoryClass[]) {
@@ -64,7 +61,9 @@ export const TypeObjectSchema = z.object({
   key: typeKeySchema(),
   name: z.string(),
   concept: typeKeySchema<ConceptTypeKey>(["conceptType"]),
-  category: catKeySchema().optional(),
+  category: z
+    .union([catKeySchema(), z.string().regex(/^eraType:[^:]+$/, 'Expected "eraType:<id>"')])
+    .optional(),
   description: z.string().default(""),
   audio: z.array(z.string()).optional(),
   image: z.string().optional(),
