@@ -1,18 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import { TypeObject } from "../Static/Objects/TypeObject";
 import { unitYieldTypeKeys, Yield, Yields } from "../Static/Objects/Yields";
-import { roundToTenth } from "../Helpers/basicMath";
 import { GameKey, GameObjAttr, GameObject } from "./_GameModel";
-import { useDataBucket } from "../../Data/useDataBucket";
+import { useDataBucket } from "@/Data/useDataBucket";
 import type { UnitDesign } from "./UnitDesign";
 import type { City } from "./City";
 import type { Player } from "./Player";
 import type { TradeRoute } from "./TradeRoute";
 import { type Tile } from "./Tile";
-import { useEventStore } from "../../App/stores/eventStore";
-import { UnitCreated, UnitHealed, UnitLost } from "../events/Unit";
 import { getCoordsFromTileKey, getHexNeighborCoords, tileKey } from "../Helpers/mapTools";
-import { UnitMovement } from "../../Simulation/Movement/UnitMovement";
+import { UnitMovement } from "@/Simulation/Movement/UnitMovement";
 import { ActionType } from "../PohAction";
 
 // mercenary: +10% strength, +50% upkeep, 1/city/t;
@@ -113,6 +110,40 @@ export class Unit extends GameObject {
   /*
    * Computed
    */
+  get isAgent(): boolean {
+    return this.computed(
+      "isAgent",
+      () =>
+        [
+          "equipmentCategory:diplomat",
+          "equipmentCategory:missionary",
+          "equipmentCategory:spy",
+        ].includes(this.design.equipment.category!),
+      { relations: [{ relName: "design", relProps: ["equipment"] }] },
+    );
+  }
+
+  get isCivilian(): boolean {
+    return this.computed(
+      "isCivilian",
+      () =>
+        [
+          "equipmentCategory:settler",
+          "equipmentCategory:trader",
+          "equipmentCategory:worker",
+        ].includes(this.design.equipment.category!),
+      {
+        relations: [{ relName: "design", relProps: ["equipment"] }],
+      },
+    );
+  }
+
+  get isMilitary(): boolean {
+    return this.computed("isMilitary", () => !this.isAgent && !this.isCivilian, {
+      relations: [{ relName: "design", relProps: ["equipment"] }],
+    });
+  }
+
   get myTypes(): Set<TypeObject> {
     return this.computed(
       "myTypes",
@@ -212,68 +243,6 @@ export class Unit extends GameObject {
     );
   }
 
-  modifyHealth(amount: number, reason: string) {
-    this.health = Math.max(0, Math.min(100, roundToTenth(this.health + amount)));
-
-    const city = this.tile.city ?? [...this.tile.neighborTiles.values()].find((t) => t.city)?.city;
-
-    if (this.health <= 0) {
-      this.delete(reason, city);
-      return;
-    }
-
-    if (this.health >= 100 && this.action?.type === "heal") {
-      useEventStore().turnEvents.push(new UnitHealed(this));
-      this.action = null;
-    }
-  }
-
-  complete() {
-    if (this.city) {
-      this.city.unitKeys.add(this.key);
-    }
-
-    this.design.unitKeys.add(this.key);
-
-    this.player.unitKeys.add(this.key);
-
-    this.tile.unitKeys.add(this.key);
-
-    useEventStore().turnEvents.push(new UnitCreated(this));
-  }
-
-  delete(reason: string, city?: City | null) {
-    this.unwatchers.forEach((u) => u());
-
-    if (this.city) {
-      this.city.unitKeys.delete(this.key);
-    }
-
-    this.design.unitKeys.delete(this.key);
-
-    this.player.unitKeys.delete(this.key);
-
-    this.tile.unitKeys.delete(this.key);
-
-    if (this.tradeRoute) {
-      this.tradeRoute.delete(true);
-    }
-
-    delete useDataBucket()._gameObjects[this.key];
-
-    useEventStore().turnEvents.push(new UnitLost(this.name, this.player, this.tile, reason, city));
-  }
-
-  startTurn(): void {
-    // Reset moves
-    this.movement.moves = this.design.yields.getLumpAmount("yieldType:moves");
-
-    // Heal
-    if (this.health < 100 && this.action?.type === "heal") {
-      this.modifyHealth(10, "healing");
-    }
-  }
-
   warmUp(): void {
     this.city;
     this.design;
@@ -286,8 +255,6 @@ export class Unit extends GameObject {
     this.movement.specialTypeKeys;
     this.myTypes;
     this.name;
-    this.playerYields;
-    this.tileYields;
     this.types;
     this.visibleTileKeys;
     this.yields;

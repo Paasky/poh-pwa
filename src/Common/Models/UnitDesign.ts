@@ -18,7 +18,6 @@ export class UnitDesign extends GameObject {
     super(key);
 
     this.domain = this.getDomain();
-    this.types = new Set([this.concept, this.domain, this.platform, this.equipment]);
   }
 
   static attrsConf: GameObjAttr[] = [
@@ -38,7 +37,6 @@ export class UnitDesign extends GameObject {
    * Attributes
    */
   domain: TypeObject;
-  types: Set<TypeObject>;
 
   /*
    * Relations
@@ -56,6 +54,17 @@ export class UnitDesign extends GameObject {
    * Computed
    */
 
+  get productionCost(): number {
+    return this.computed(
+      "productionCost",
+      () => this.yields.getLumpAmount("yieldType:productionCost"),
+      { props: ["yields"] },
+    );
+  }
+  get types(): Set<TypeObject> {
+    return new Set([this.concept, this.domain, this.platform, this.equipment]);
+  }
+
   // My Yield output
   get yields(): Yields {
     return this.computed(
@@ -65,7 +74,7 @@ export class UnitDesign extends GameObject {
           return yields.only(unitYieldTypeKeys, new Set<TypeObject>([this.concept])).all();
         };
 
-        // Design Yields are Platform + Equipment + Actor Mods
+        // Design Yields are Platform + Equipment + Player Mods
         const yields = new Yields([...this.platform.yields.all(), ...this.equipment.yields.all()]);
         if (this.player) yields.add(...yieldsForMe(this.player.yieldMods));
 
