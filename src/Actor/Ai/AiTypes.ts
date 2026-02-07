@@ -85,6 +85,23 @@ export type ActionReport = {
   notes: Note[];
 };
 
+export type CanActStatus = "ready" | "limited" | "unable";
+
+export type CanActResponse = {
+  areaId: string;
+  areaName: string;
+  status: CanActStatus;
+  canActPriorities: Priority[];
+  limitedPriorities: Priority[];
+  cannotActPriorities: Priority[];
+  availableUnits: number;
+  availableCities: number;
+  idleUnits: number;
+  idleCities: number;
+  idleUnitTiles: Set<Tile>;
+  reasoning?: string;
+};
+
 export type Locality = {
   id: string;
   name: string;

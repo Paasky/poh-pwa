@@ -1,5 +1,13 @@
 import { Player } from "@/Common/Models/Player";
-import { ActionReport, Difficulty, Locality, MapAction, Note, Priority } from "@/Actor/Ai/AiTypes";
+import {
+  ActionReport,
+  CanActResponse,
+  Difficulty,
+  Locality,
+  MapAction,
+  Note,
+  Priority,
+} from "@/Actor/Ai/AiTypes";
 import { Attack, PohAction } from "@/Common/PohAction";
 import { Unit } from "@/Common/Models/Unit";
 import { City } from "@/Common/Models/City";
@@ -26,6 +34,123 @@ export class LocalCommand {
     public readonly difficulty: Difficulty,
     public readonly locality: Locality,
   ) {}
+
+  canAct(localPriorities: Priority[]): CanActResponse {
+    const cities: City[] = [];
+    const units: Unit[] = [];
+    const idleUnits: Unit[] = [];
+    const idleCities: City[] = [];
+    const idleUnitTiles = new Set<Tile>();
+
+    for (const tile of this.locality.tiles) {
+      if (tile.city?.playerKey === this.player.key) {
+        cities.push(tile.city);
+        if (!tile.city.constructionQueue.items[0] && !tile.city.trainingQueue.items[0]) {
+          idleCities.push(tile.city);
+        }
+      }
+      for (const unit of tile.units) {
+        if (unit.playerKey === this.player.key) {
+          units.push(unit);
+          if (!this.canAttack(unit) && !this.canBombard(unit) && !this.canMove(unit)) {
+            idleUnits.push(unit);
+            idleUnitTiles.add(tile);
+          }
+        }
+      }
+    }
+
+    const canActPriorities: Priority[] = [];
+    const limitedPriorities: Priority[] = [];
+    const cannotActPriorities: Priority[] = [];
+
+    if (cities.length === 0 && units.length === 0) {
+      return {
+        areaId: this.locality.id,
+        areaName: this.locality.name,
+        status: "unable",
+        canActPriorities: [],
+        limitedPriorities: [],
+        cannotActPriorities: localPriorities,
+        availableUnits: 0,
+        availableCities: 0,
+        idleUnits: 0,
+        idleCities: 0,
+        idleUnitTiles: new Set(),
+        reasoning: "No units or cities in locality",
+      };
+    }
+
+    for (const priority of localPriorities) {
+      const evaluation = this.evaluatePriority(priority, cities, units);
+
+      if (evaluation.canAct) {
+        canActPriorities.push(priority);
+      } else if (evaluation.partial) {
+        limitedPriorities.push(priority);
+      } else {
+        cannotActPriorities.push(priority);
+      }
+    }
+
+    let status: "ready" | "limited" | "unable";
+    if (canActPriorities.length > 0) {
+      status = "ready";
+    } else if (limitedPriorities.length > 0) {
+      status = "limited";
+    } else {
+      status = "unable";
+    }
+
+    return {
+      areaId: this.locality.id,
+      areaName: this.locality.name,
+      status,
+      canActPriorities,
+      limitedPriorities,
+      cannotActPriorities,
+      availableUnits: units.length,
+      availableCities: cities.length,
+      idleUnits: idleUnits.length,
+      idleCities: idleCities.length,
+      idleUnitTiles,
+    };
+  }
+
+  private evaluatePriority(
+    priority: Priority,
+    cities: City[],
+    units: Unit[],
+  ): { canAct: boolean; partial: boolean } {
+    const capableCities = cities.filter((c) => this.isPriorityFor(priority, c));
+    const capableUnits = units.filter((u) => this.isPriorityFor(priority, u));
+
+    if (priority.cityAction && capableCities.length === 0) {
+      return { canAct: false, partial: false };
+    }
+
+    if (priority.mapAction) {
+      const actionableUnits = capableUnits.filter((u) => {
+        if (priority.mapAction === "explore" || priority.mapAction === "settle") {
+          return this.canMove(u);
+        }
+        if (priority.mapAction === "attack" || priority.mapAction === "posture") {
+          return this.canAttack(u) || this.canBombard(u);
+        }
+        return true;
+      });
+
+      if (actionableUnits.length === 0 && capableCities.length === 0) {
+        return { canAct: false, partial: false };
+      }
+
+      if (actionableUnits.length < capableUnits.length) {
+        return { canAct: true, partial: true };
+      }
+    }
+
+    return { canAct: true, partial: false };
+  }
 
   act(localPriorities: Priority[]): ActionReport {
     this.turn = useDataBucket().world.turn;
