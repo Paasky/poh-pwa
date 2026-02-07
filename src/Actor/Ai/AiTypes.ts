@@ -77,6 +77,7 @@ export type Priority = {
   mapAction?: MapAction;
   requires?: Requires;
   targetRequires?: Requires;
+  areaId?: string;
 };
 
 export type ActionReport = {

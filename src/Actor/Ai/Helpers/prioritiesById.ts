@@ -8,7 +8,7 @@ export function prioritiesById(
 
   areas.forEach((area) =>
     priorities.forEach((priority) => {
-      if (priority.targetId && priority.targetId !== area.id) return;
+      if (priority.areaId && priority.areaId !== area.id) return;
       const areaPriorities = prioritiesByLocality.get(area.id);
       if (areaPriorities) {
         areaPriorities.push(priority);
