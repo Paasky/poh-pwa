@@ -67,13 +67,13 @@ export class StrategyCommand {
 
     for (const priority of originalPriorities) {
       const regionsCanAct = regionResponses.filter((r) =>
-        r.canActPriorities.some((p) => p.name === priority.name),
+        r.canActPriorities.some((p: Priority) => p.name === priority.name),
       );
       const regionsLimited = regionResponses.filter((r) =>
-        r.limitedPriorities.some((p) => p.name === priority.name),
+        r.limitedPriorities.some((p: Priority) => p.name === priority.name),
       );
       const regionsCannotAct = regionResponses.filter((r) =>
-        r.cannotActPriorities.some((p) => p.name === priority.name),
+        r.cannotActPriorities.some((p: Priority) => p.name === priority.name),
       );
 
       if (regionsCanAct.length === 0 && regionsLimited.length === 0) {

@@ -1,5 +1,4 @@
 import { GameKey, GameObjAttr, GameObject } from "./_GameModel";
-import { generateKey } from "./_GameTypes";
 import { Citizen } from "./Citizen";
 import type { Player } from "./Player";
 import type { Religion } from "./Religion";
@@ -8,14 +7,12 @@ import type { TradeRoute } from "./TradeRoute";
 import { Unit } from "./Unit";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { Construction } from "./Construction";
-import { useEventStore } from "@/App/stores/eventStore";
 import { TypeObject } from "../Static/Objects/TypeObject";
 import { UnitDesign } from "./UnitDesign";
 import { getNeighbors } from "../Helpers/mapTools";
 import { ConstructionQueue, TrainingQueue } from "../Objects/Queues";
 import { TypeStorage } from "../Objects/TypeStorage";
 import { cityYieldTypeKeys, Yield, Yields } from "../Static/Objects/Yields";
-import { getRandomItem } from "@/Common/Helpers/collectionTools";
 
 export class City extends GameObject {
   constructor(
@@ -172,47 +169,6 @@ export class City extends GameObject {
   /*
    * Actions
    */
-  startTurn(): void {
-    // Load the yields from the end of the prev turn into storage
-    this.storage.load(this.yields.toStorage().all());
-
-    // If the city has enough food to grow, add a new Citizen
-    if (this.storage.amount("yieldType:food") >= this.foodToGrow) {
-      const policies = this.player.government.policies;
-      useEventStore().readyCitizens.push(
-        new Citizen(
-          generateKey("citizen"),
-          this.key,
-          this.player.cultureKey,
-          this.playerKey,
-          this.tileKey,
-          this.player.religionKey,
-          getRandomItem(policies.size ? policies : [null]),
-        ),
-      );
-      this.storage.take("yieldType:food", this.foodToGrow);
-    }
-
-    const halfProd = {
-      type: "yieldType:production",
-      amount: this.storage.takeAll("yieldType:production") / 2,
-      method: "lump",
-      for: new Set(),
-      vs: new Set(),
-    } as Yield;
-
-    const constructed = this.constructionQueue.startTurn(halfProd, this.storage, this.yields);
-    const trained = this.trainingQueue.startTurn(halfProd, this.storage, this.yields);
-
-    if (constructed) {
-      useEventStore().readyConstructions.push(constructed as Construction);
-    }
-    if (trained) {
-      useEventStore().readyUnits.push(
-        new Unit(generateKey("unit"), trained.key, this.playerKey, this.tileKey, this.key),
-      );
-    }
-  }
 
   warmUp(): void {
     // todo
