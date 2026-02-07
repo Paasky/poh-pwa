@@ -20,6 +20,7 @@ import { CategoryObject } from "@/Common/Static/Objects/CategoryObject";
 import { CompiledStaticData } from "@/Data/StaticDataCompiler";
 import { formatYear } from "@/Common/Helpers/time";
 import { WorldLinks } from "@/Data/WorldLinks";
+import { WonderRegistry } from "@/Common/Objects/WonderRegistry";
 
 export type RawSaveData = {
   name: string; // "Leader Name - Culture Name" (user editable)
@@ -32,6 +33,7 @@ export type RawSaveData = {
 
 export class DataBucket {
   public readonly links: WorldLinks;
+  public readonly wonders: WonderRegistry;
 
   // Static Types and Categories
   private readonly categoryTypesIndex = new Map<StaticKey, Set<TypeKey>>();
@@ -51,6 +53,7 @@ export class DataBucket {
     dataLoader?: GameDataLoader,
   ) {
     this.links = new WorldLinks(this);
+    this.wonders = new WonderRegistry();
     this.dataLoader = dataLoader ?? new GameDataLoader(this);
 
     // Build indexes

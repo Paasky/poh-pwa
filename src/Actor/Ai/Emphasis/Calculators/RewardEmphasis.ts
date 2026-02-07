@@ -24,7 +24,13 @@ export class RewardEmphasis extends CommonEmphasis {
     }
 
     // Wonders Available
-    // TODO: Not implemented yet
+    const wondersValue = this.getWondersAvailableValue();
+    if (wondersValue > 0) {
+      reasons.push({
+        type: "wonderAvailable",
+        value: wondersValue,
+      });
+    }
 
     return this.buildResult("reward", reasons);
   }
@@ -58,5 +64,28 @@ export class RewardEmphasis extends CommonEmphasis {
 
     const ratio = unknownTiles / totalTiles;
     return Math.round(ratio * 100);
+  }
+
+  private getWondersAvailableValue(): number {
+    const totalAvailable =
+      this.player.availableWorldWonders.size + this.player.availableNationalWonders.size;
+
+    if (totalAvailable === 0) return 0;
+
+    let buildableTileCount = 0;
+    for (const tile of this.locality.tiles) {
+      if (!tile.city || tile.city.playerKey !== this.player.key) continue;
+
+      const availableHere = tile.city.getAvailableWondersForTile(tile.key);
+      if (availableHere.size > 0) {
+        buildableTileCount++;
+      }
+    }
+
+    if (buildableTileCount === 0) return 0;
+
+    const tileRatio = buildableTileCount / this.locality.tiles.size;
+    const wonderBonus = Math.min(totalAvailable, 5);
+    return Math.min(100, Math.round(tileRatio * wonderBonus * 20));
   }
 }

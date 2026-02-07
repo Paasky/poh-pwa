@@ -174,6 +174,29 @@ export class City extends GameObject {
     // todo
   }
 
+  getAvailableWondersForTile(tileKey: GameKey): Set<TypeObject> {
+    const tile = this.player.tiles.get(tileKey);
+    if (!tile) return new Set();
+
+    if (tile.construction !== null) return new Set();
+
+    const result = new Set<TypeObject>();
+    const playerAvailable = [
+      ...this.player.availableWorldWonders,
+      ...this.player.availableNationalWonders,
+    ];
+
+    const combinedTypes = new Set<TypeObject>([...this.player.types, ...tile.types]);
+    for (const type of playerAvailable) {
+      if (!type.requires.isEmpty && !type.requires.isSatisfied(combinedTypes)) {
+        continue;
+      }
+      result.add(type);
+    }
+
+    return result;
+  }
+
   // Types I give to the Actor
   get typesForPlayer(): Set<TypeObject> {
     return this.computed(

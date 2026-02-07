@@ -17,6 +17,13 @@ import type { Unit } from "./Unit";
 import { Diplomacy } from "../Objects/Diplomacy";
 import { Construction } from "./Construction";
 import { Incident } from "./Incident";
+import { useDataBucket } from "@/Data/useDataBucket";
+
+export interface WonderState {
+  completed: Set<TypeObject>;
+  underConstruction: Set<TypeObject>;
+  available: Set<TypeObject>;
+}
 
 export class Player extends GameObject {
   constructor(
@@ -212,6 +219,105 @@ export class Player extends GameObject {
 
   warmUp(): void {
     // todo warm up computed fields by calling them
+  }
+
+  /*
+   * Wonder Tracking
+   */
+
+  get nationalWonderState(): WonderState {
+    return this.computed(
+      "nationalWonderState",
+      () => {
+        const completed = new Set<TypeObject>();
+        const underConstruction = new Set<TypeObject>();
+
+        for (const construction of this.constructions.values()) {
+          if (construction.type.class !== "nationalWonderType") continue;
+          if (construction.completedAtTurn !== null) {
+            completed.add(construction.type);
+          } else {
+            underConstruction.add(construction.type);
+          }
+        }
+
+        const available = new Set<TypeObject>();
+        for (const type of useDataBucket().getClassTypes("nationalWonderType")) {
+          if (completed.has(type) || underConstruction.has(type)) continue;
+          if (!this.research.researched.has(type)) continue;
+          if (!type.requires.isEmpty && !type.requires.isSatisfied(this.types)) continue;
+          available.add(type);
+        }
+
+        return { completed, underConstruction, available };
+      },
+      {
+        relations: [
+          { relName: "constructions", relProps: ["type", "completedAtTurn"] },
+          { relName: "research", relProps: ["researched"] },
+        ],
+      },
+    );
+  }
+
+  get worldWonderState(): WonderState {
+    return this.computed(
+      "worldWonderState",
+      () => {
+        const completed = new Set<TypeObject>();
+        const underConstruction = new Set<TypeObject>();
+
+        for (const construction of this.constructions.values()) {
+          if (construction.type.class !== "worldWonderType") continue;
+          if (construction.completedAtTurn !== null) {
+            completed.add(construction.type);
+          } else {
+            underConstruction.add(construction.type);
+          }
+        }
+
+        const available = new Set<TypeObject>();
+        const wonders = useDataBucket().wonders;
+        for (const type of useDataBucket().getClassTypes("worldWonderType")) {
+          if (wonders.isClaimed(type.key)) continue;
+          if (!this.research.researched.has(type)) continue;
+          if (!type.requires.isEmpty && !type.requires.isSatisfied(this.types)) continue;
+          available.add(type);
+        }
+
+        return { completed, underConstruction, available };
+      },
+      {
+        relations: [
+          { relName: "constructions", relProps: ["type", "completedAtTurn"] },
+          { relName: "research", relProps: ["researched"] },
+        ],
+      },
+    );
+  }
+
+  get completedNationalWonders(): Set<TypeObject> {
+    return this.nationalWonderState.completed;
+  }
+
+  get underConstructionNationalWonders(): Set<TypeObject> {
+    return this.nationalWonderState.underConstruction;
+  }
+
+  get availableNationalWonders(): Set<TypeObject> {
+    return this.nationalWonderState.available;
+  }
+
+  get completedWorldWonders(): Set<TypeObject> {
+    return this.worldWonderState.completed;
+  }
+
+  get underConstructionWorldWonders(): Set<TypeObject> {
+    return this.worldWonderState.underConstruction;
+  }
+
+  get availableWorldWonders(): Set<TypeObject> {
+    return this.worldWonderState.available;
   }
 
   ////// v0.1

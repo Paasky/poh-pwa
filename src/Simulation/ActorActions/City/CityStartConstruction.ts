@@ -3,10 +3,10 @@ import { Player } from "@/Common/Models/Player";
 import { City } from "@/Common/Models/City";
 import { PohMutation } from "@/Common/PohMutation";
 import { belongsToCity, belongsToPlayer } from "@/Simulation/Validator";
-import { TypeObject } from "@/Common/Objects/TypeObject";
 import { Construction } from "@/Common/Models/Construction";
 import { Tile } from "@/Common/Models/Tile";
 import { useDataBucket } from "@/Data/useDataBucket";
+import { TypeObject } from "@/Common/Static/Objects/TypeObject";
 
 export class CityStartConstruction implements ISimAction {
   constructor(
@@ -35,7 +35,7 @@ export class CityStartConstruction implements ISimAction {
         ) {
           throw new Error(`${this.type.key} is already in queue`);
         }
-        if (!this.type.requires.isSatisfied([...this.player.types, ...this.tile.types])) {
+        if (!this.type.requires.isSatisfied(new Set([...this.player.types, ...this.tile.types]))) {
           throw new Error(`${this.type.key} cannot be built on this tile`);
         }
         break;
@@ -74,15 +74,23 @@ export class CityStartConstruction implements ISimAction {
     return this;
   }
 
-  handleAction(): PohMutation[] {
+  handleAction(): PohMutation<City>[] {
+    this.trackWorldWonderClaim();
+
     return [
       {
-        type: "update",
+        type: "append",
         payload: {
           key: this.city.key,
           constructionQueue: { tile: this.tile, type: this.type, index: this.index },
         },
       },
     ];
+  }
+
+  private trackWorldWonderClaim(): void {
+    if (this.type.class === "worldWonderType") {
+      useDataBucket().wonders.claim(this.type.key);
+    }
   }
 }

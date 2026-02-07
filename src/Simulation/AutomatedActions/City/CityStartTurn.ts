@@ -19,7 +19,9 @@ export class CityStartTurn implements ISimAction {
     // todo
   }
   loseWorldWonder(construction: Construction): void {
-    // todo
+    if (construction.key !== construction.city?.constructions.values().next().value?.key) {
+      construction.cancel(this.city.player, true);
+    }
   }
   createUnit(unitDesign: UnitDesign): void {
     this.dataStore.set([

@@ -5,7 +5,6 @@ import type { Citizen } from "./Citizen";
 import type { Tile } from "./Tile";
 import { City } from "./City";
 import { useDataBucket } from "@/Data/useDataBucket";
-import { useEventStore } from "@/App/stores/eventStore";
 import { Player } from "./Player";
 
 export class Construction extends GameObject {
@@ -137,21 +136,9 @@ export class Construction extends GameObject {
   /*
    * Actions
    */
-  abandon(reason: string): void {
-    this.health = 0;
-    this.tile.citizens.forEach((c) => c.pickTile());
-
-    useEventStore().turnEvents.push(new ConstructionAbandoned(this, reason));
-  }
-
-  complete(player: Player): void {
-    this.completedAtTurn = useDataBucket().world.turn;
-    this.progress = 100;
-
-    useEventStore().turnEvents.push(new ConstructionCompleted(this, player));
-  }
-
   cancel(player: Player, wasLost: boolean): void {
+    this.removeWorldWonderClaim();
+
     if (this.city) {
       this.city.constructionKeys.delete(this.key);
     }
@@ -167,6 +154,19 @@ export class Construction extends GameObject {
       useEventStore().turnEvents.push(
         new ConstructionCancelled(this.type, player, this.tile, this.city),
       );
+    }
+  }
+
+  private removeWorldWonderClaim(): void {
+    if (this.type.class === "worldWonderType") {
+      const bucket = useDataBucket();
+      const stillExists = Array.from(bucket.getClassObjects<Construction>("construction")).some(
+        (c) => c.key !== this.key && c.type.key === this.type.key,
+      );
+
+      if (!stillExists) {
+        bucket.wonders.release(this.type.key);
+      }
     }
   }
 }

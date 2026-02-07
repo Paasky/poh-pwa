@@ -8,6 +8,7 @@ import { Player } from "@/Common/Models/Player";
 import { gameKeySchema, typeKeySchema } from "@/Common/Validation";
 
 export class PohEvent {
+  readonly key: string;
   readonly turn: number;
   readonly title: string;
   readonly subject: GameObject;
@@ -30,6 +31,7 @@ export class PohEvent {
     turn: number,
 
     opts: {
+      key?: string;
       action?: PohAction; // What Action caused the event?
       description?: string;
       isLocal?: boolean; // Event came from local or from a host (host event mutations must be applied to local store)
@@ -39,6 +41,7 @@ export class PohEvent {
       type?: TypeObject;
     },
   ) {
+    this.key = opts.key ?? crypto.randomUUID();
     this.subject = subject;
     this.title = title;
     this.turn = turn;

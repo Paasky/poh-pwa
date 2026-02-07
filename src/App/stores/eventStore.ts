@@ -1,10 +1,9 @@
 import { defineStore } from "pinia";
-import { type EventSetting, type EventType } from "@/Common/types/events";
 import { type Construction } from "@/Common/Models/Construction";
 import { type Citizen } from "@/Common/Models/Citizen";
 import { type Unit } from "@/Common/Models/Unit";
-import { type PohEvent } from "@/Common/events/_Event";
-import { type TypeKey } from "@/Common/Objects/World";
+import { TypeKey } from "@/Common/Static/StaticEnums";
+import { PohEvent } from "@/Common/PohEvent";
 
 export const useEventStore = defineStore("events", {
   state: () => ({
@@ -15,8 +14,6 @@ export const useEventStore = defineStore("events", {
 
     turnEvents: [] as PohEvent[],
     current: null as PohEvent | null,
-
-    eventSettings: {} as Record<EventType, EventSetting>,
   }),
   getters: {
     unreadEvents: (state): PohEvent[] => (state.turnEvents as PohEvent[]).filter((e) => !e.isRead),
