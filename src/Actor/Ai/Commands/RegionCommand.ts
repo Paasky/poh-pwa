@@ -1,7 +1,7 @@
 import { ActionReport, Difficulty, Note, Priority, Region } from "@/Actor/Ai/AiTypes";
 import { Player } from "@/Common/Models/Player";
 import { LocalCommand } from "@/Actor/Ai/Commands/LocalCommand";
-import { Action } from "@/Common/PohAction";
+import { PohAction } from "@/Common/PohAction";
 import { prioritiesById } from "@/Actor/Ai/Helpers/prioritiesById";
 
 export class RegionCommand {
@@ -19,7 +19,7 @@ export class RegionCommand {
   }
 
   act(regionPriorities: Priority[]): ActionReport {
-    const actions = [] as Action[];
+    const actions = [] as PohAction[];
     const notes = [] as Note[];
 
     // Act at the Region Level first

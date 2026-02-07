@@ -2,7 +2,7 @@ import { Player } from "@/Common/Models/Player";
 import { ActionReport, Difficulty, Note, Priority, Region } from "@/Actor/Ai/AiTypes";
 import { Memory } from "@/Actor/Ai/Memory";
 import { RegionCommand } from "@/Actor/Ai/Commands/RegionCommand";
-import { Action } from "@/Common/PohAction";
+import { PohAction } from "@/Common/PohAction";
 import { prioritiesById } from "@/Actor/Ai/Helpers/prioritiesById";
 
 export class StrategyCommand {
@@ -19,14 +19,16 @@ export class StrategyCommand {
     });
   }
 
-  act(strategicPriorities: Priority[]): ActionReport {
-    const actions = [] as Action[];
+  act(priorities: Priority[]): ActionReport {
+    const actions = [] as PohAction[];
     const notes = [] as Note[];
 
-    // Act at the Strategy Level first
-
     // Group priorities by region
-    const prioritiesByRegion = prioritiesById(this.regions, strategicPriorities);
+    const prioritiesByRegion = prioritiesById(this.regions, priorities);
+
+    // todo: ask each region if they can act according to their priorities
+    // regionCommand.canAct(priorities)
+    // response can have 1-n of: ok / need orders (no prios given/can't comply) / need help (with map actions) / free units (units are idle, with units)
 
     // Make each region act
     this.regionCommands.forEach((regionCommand) => {
