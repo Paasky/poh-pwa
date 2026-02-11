@@ -19,8 +19,11 @@ import {
 } from "@babylonjs/core";
 import { useSettingsStore } from "@/App/stores/settingsStore";
 import { watch } from "vue";
-import { useCurrentContext } from "@/Common/composables/useCurrentContext";
+import { useEngineContext } from "@/Common/composables/useCurrentContext";
 import type { Unit } from "@/Common/Models/Unit";
+import type { City } from "@/Common/Models/City";
+import type { Construction } from "@/Common/Models/Construction";
+import type { GameObject } from "@/Common/Models/_GameModel";
 import { MovementManager } from "@/Simulation/Movement/MovementManager";
 import type { PohEngine } from "@/Actor/Human/PohEngine";
 
@@ -171,42 +174,49 @@ export class LogicMesh {
   }
 
   private onTileSelect(tile: Tile): void {
-    const current = useCurrentContext();
+    const ctx = useEngineContext();
+    const selectables = LogicMesh.getSelectables(tile);
+
     // Tile has nothing to select -> clear selection
-    if (!tile.selectable.size) {
-      current.actionMode.value = undefined;
-      current.tile.value = undefined;
-      current.object.value = undefined;
+    if (selectables.length === 0) {
+      ctx.actionMode = undefined;
+      ctx.tile = undefined;
+      ctx.object = undefined;
       return;
     }
 
     // Tile is already selected
-    if (current.tile.value?.key === tile.key) {
-      // If something is selected -> select the next item
-      if (current.object.value) {
-        // Don't trust indexOf as it does an exact obj check
-        for (const [i, item] of tile.selectable.entries()) {
-          if (item.key === current.object.value!.key) {
-            current.object.value = tile.selectable[wrapExclusive(i + 1, 0, tile.selectable.size)];
+    if (ctx.tile?.key === tile.key) {
+      if (ctx.object) {
+        for (const [i, item] of selectables.entries()) {
+          if (item.key === ctx.object!.key) {
+            ctx.object = selectables[wrapExclusive(i + 1, 0, selectables.length)];
             return;
           }
         }
       }
 
-      // Nothing is selected/selected item is not selectable anymore -> select the first item
-      current.object.value = tile.selectable[0];
+      ctx.object = selectables[0];
       return;
     }
 
     // Tile is not selected -> select the first item
-    current.tile.value = tile;
-    current.object.value = tile.selectable[0];
+    ctx.tile = tile;
+    ctx.object = selectables[0];
+  }
+
+  private static getSelectables(tile: Tile): GameObject[] {
+    const items: GameObject[] = [];
+    tile.units.forEach((u) => items.push(u as unknown as GameObject));
+    if (tile.city) items.push(tile.city as unknown as GameObject);
+    if (tile.construction) items.push(tile.construction as unknown as GameObject);
+    return items;
   }
 
   private onTileAction(tile: Tile): void {
-    const current = useCurrentContext();
+    const ctx = useEngineContext();
     // Check it's a unit
-    const object = current.object.value;
+    const object = ctx.object;
     if (object?.class !== "unit") return;
     const unit = object as Unit;
 
@@ -215,12 +225,12 @@ export class LogicMesh {
 
   // Fired on mouse moving on top
   private onTileHover(tile: Tile): void {
-    useCurrentContext().hover.value = tile;
+    useEngineContext().hover = tile;
   }
 
   // Fired on mouse leaving (left canvas/left map tiles)
   private onTileExit(): void {
-    useCurrentContext().hover.value = undefined;
+    useEngineContext().hover = undefined;
   }
 
   ////////////////////////

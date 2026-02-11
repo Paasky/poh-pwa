@@ -39,7 +39,7 @@ export abstract class BaseOverlay<T> implements IOverlay<T> {
   }
 
   /** Batch refresh to the next microtask to prevent redundant updates */
-  protected triggerRefresh(): void {
+  public triggerRefresh(): void {
     if (this._refreshPending) return;
     this._refreshPending = true;
     Promise.resolve().then(() => {

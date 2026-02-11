@@ -1,5 +1,5 @@
 import { useDataBucket } from "@/Data/useDataBucket";
-import { useCurrentContext } from "@/Common/composables/useCurrentContext";
+import { useEngineContext } from "@/Common/composables/useCurrentContext";
 import { saveManager } from "@/Common/utils/saveManager";
 import { useSettingsStore } from "@/App/stores/settingsStore";
 import pkg from "../../../../package.json";
@@ -14,7 +14,7 @@ export class SaveAction {
    */
   static save(name?: string, isAutosave = false) {
     const bucket = useDataBucket();
-    const { currentPlayer } = useCurrentContext();
+    const { currentPlayer } = useEngineContext();
 
     const saveName = name ?? `${currentPlayer.name} ${bucket.year}`;
 

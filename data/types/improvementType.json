@@ -31,14 +31,9 @@
     "requires": [
       "technologyType:irrigation",
       "domainType:land",
-      [
-        "elevationType:flat",
-        "elevationType:hill"
-      ]
+      ["elevationType:flat", "elevationType:hill"]
     ],
-    "upgradesFrom": [
-      "improvementType:farm"
-    ],
+    "upgradesFrom": ["improvementType:farm"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -59,14 +54,9 @@
     "requires": [
       "technologyType:cropRotation",
       "domainType:land",
-      [
-        "elevationType:flat",
-        "elevationType:hill"
-      ]
+      ["elevationType:flat", "elevationType:hill"]
     ],
-    "upgradesFrom": [
-      "improvementType:irrigatedFarm"
-    ],
+    "upgradesFrom": ["improvementType:irrigatedFarm"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -87,14 +77,9 @@
     "requires": [
       "technologyType:scientificMethod",
       "domainType:land",
-      [
-        "elevationType:flat",
-        "elevationType:hill"
-      ]
+      ["elevationType:flat", "elevationType:hill"]
     ],
-    "upgradesFrom": [
-      "improvementType:feudalFarm"
-    ],
+    "upgradesFrom": ["improvementType:feudalFarm"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -115,14 +100,9 @@
     "requires": [
       "technologyType:trackedTreads",
       "domainType:land",
-      [
-        "elevationType:flat",
-        "elevationType:hill"
-      ]
+      ["elevationType:flat", "elevationType:hill"]
     ],
-    "upgradesFrom": [
-      "improvementType:fertilizedFarm"
-    ],
+    "upgradesFrom": ["improvementType:fertilizedFarm"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -143,14 +123,9 @@
     "requires": [
       "technologyType:robotics",
       "domainType:land",
-      [
-        "elevationType:flat",
-        "elevationType:hill"
-      ]
+      ["elevationType:flat", "elevationType:hill"]
     ],
-    "upgradesFrom": [
-      "improvementType:mechanizedFarm"
-    ],
+    "upgradesFrom": ["improvementType:mechanizedFarm"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -168,12 +143,8 @@
     "description": "Ancient plantations were organized cash-crop plots managed by estates, temples, or royal administrations. Schedules coordinated pruning, irrigation, harvest, and processing with seasonal labor. In Babylonia, date palm groves produced fruit, syrup, and fiber documented in cuneiform accounts. Along the Nile, vineyard estates supplied wine for elite households and cult offerings. In early China, mulberry groves supported sericulture through regulated leaf gathering and silkworm feeding. Overseers tracked yields and issued rations to workers. Storage jars, presses, and drying yards formed the processing core. Long-lived trees and vines required investment and protection, anchoring revenue for palaces and city institutions. Record systems monitored tenancy, rents, and transport to markets along river routes.",
     "key": "improvementType:plantation",
     "name": "Plantation",
-    "requires": [
-      "technologyType:calendar"
-    ],
-    "specials": [
-      "specialType:onlyOnResource"
-    ],
+    "requires": ["technologyType:calendar"],
+    "specials": ["specialType:onlyOnResource"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -195,15 +166,9 @@
     "description": "Bronze Age irrigated plantations combined perennial crops with engineered water supply. Canals, embankments, and basin regulators stabilized moisture and extended cultivation into arid margins. Mesopotamian date groves drew controlled flow from distributary channels that also flushed salts. In the Indus region, wells and small channels watered cotton plots for spinning and weaving. Oasis orchards on Arabian caravan routes used cisterns and seasonal flood capture to sustain palms and fruit trees. Estate managers organized maintenance crews for dredging, bank repair, and gate operation. Clay tablets and sealings recorded water shares and deliveries. The system linked plantation output to long-distance trade in textiles, dried fruit, and oils, while constraining sites to dependable water sources.",
     "key": "improvementType:irrigatedPlantation",
     "name": "Irrigated Plantation",
-    "requires": [
-      "technologyType:irrigation"
-    ],
-    "specials": [
-      "specialType:onlyOnResource"
-    ],
-    "upgradesFrom": [
-      "improvementType:plantation"
-    ],
+    "requires": ["technologyType:irrigation"],
+    "specials": ["specialType:onlyOnResource"],
+    "upgradesFrom": ["improvementType:plantation"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -225,15 +190,9 @@
     "description": "Medieval plantations were lordly estates focused on cash crops under feudal or seigneurial jurisdiction. Ownership concentrated mills, presses, and storage, while peasant or dependent labor met service obligations. In Crusader Cyprus and the Levant, sugar estates combined cane fields with crushing mills powered by animals or water. Andalusian olive properties produced oil for trade across Iberian and Mediterranean ports. Venetian holdings on Crete cultivated cane and vines with tight fiscal oversight. Contracts specified rents, corvée, and protective duties. Fortified sites guarded equipment and harvests in contested zones. Output moved through urban merchant networks to monasteries, garrisons, and export markets, tying estates to regional politics and warfare.",
     "key": "improvementType:feudalPlantation",
     "name": "Feudal Plantation",
-    "requires": [
-      "technologyType:feudalism"
-    ],
-    "specials": [
-      "specialType:onlyOnResource"
-    ],
-    "upgradesFrom": [
-      "improvementType:irrigatedPlantation"
-    ],
+    "requires": ["technologyType:feudalism"],
+    "specials": ["specialType:onlyOnResource"],
+    "upgradesFrom": ["improvementType:irrigatedPlantation"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -255,15 +214,9 @@
     "description": "Enlightenment plantations incorporated scientific agronomy, new inputs, and botanical transfer. Estate managers applied lime, dung, and imported guano to maintain soils under continuous monoculture. Field layouts rationalized drainage, paths, and mill access to cut losses. Caribbean sugar estates adopted experimental varietal trials and controlled fallowing. Dutch East Indies plantations drew on botanical gardens and experts to expand spice cultivation beyond native ranges. In Saint-Domingue, French planters developed high-yield coffee with careful pruning and shade management. Ledgers tracked inputs, labor days, and mill efficiency for tighter cost control. Imperial networks moved seeds, manuals, and instruments, embedding plantations in global commodity flows and colonial administration.",
     "key": "improvementType:fertilizedPlantation",
     "name": "Fertilized Plantation",
-    "requires": [
-      "technologyType:scientificMethod"
-    ],
-    "specials": [
-      "specialType:onlyOnResource"
-    ],
-    "upgradesFrom": [
-      "improvementType:feudalPlantation"
-    ],
+    "requires": ["technologyType:scientificMethod"],
+    "specials": ["specialType:onlyOnResource"],
+    "upgradesFrom": ["improvementType:feudalPlantation"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -285,15 +238,9 @@
     "description": "Mechanized plantations emerged in the 1900s as large estates adopted tractors, motorized harvesters, and powered mills. Engine traction, internal combustion engines, and conveyor-driven processing shortened harvest windows and reduced spoilage. Field operations moved from animal teams to steel plows, disk harrows, and planters towed by tractors. Mechanical cotton pickers in the U.S. South transformed labor demand after the 1940s. Sugarcane cutting in Brazil shifted to combines and billet handling systems. Malaysian palm oil estates built centralized mills linked by roads and light rail. Mechanization supported larger field blocks, systematic drainage, and chemical weed control. It also pushed standardization of varieties and planting geometry for machine access. The system increased output per worker while concentrating capital and management at estate scale.",
     "key": "improvementType:mechanizedPlantation",
     "name": "Mechanized Plantation",
-    "requires": [
-      "technologyType:trackedTreads"
-    ],
-    "specials": [
-      "specialType:onlyOnResource"
-    ],
-    "upgradesFrom": [
-      "improvementType:fertilizedPlantation"
-    ],
+    "requires": ["technologyType:trackedTreads"],
+    "specials": ["specialType:onlyOnResource"],
+    "upgradesFrom": ["improvementType:fertilizedPlantation"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -315,15 +262,9 @@
     "description": "Automated plantations developed in the 2000s through digital sensing, robotics, and data-driven control. Drones map canopy vigor and apply targeted sprays. IoT networks stream soil moisture, microclimate, and nutrient data to cloud dashboards. Autonomous weeders and harvest aids navigate by GPS and machine vision. Californian almond orchards use sensor-controlled irrigation and variable-rate fertigation. Southeast Asian oil palm estates deploy fleets of drones for scouting and spraying. Australian cotton fields trial autonomous weeders to cut herbicide use. Analytics forecast yields and schedule labor and transport. Edge devices integrate with packing plants and traceability systems. The approach raises input efficiency, supports compliance reporting, and buffers climate variability. Capital costs and connectivity needs remain constraints, but adoption continues across high-value plantations.",
     "key": "improvementType:automatedPlantation",
     "name": "Automated Plantation",
-    "requires": [
-      "technologyType:robotics"
-    ],
-    "specials": [
-      "specialType:onlyOnResource"
-    ],
-    "upgradesFrom": [
-      "improvementType:mechanizedPlantation"
-    ],
+    "requires": ["technologyType:robotics"],
+    "specials": ["specialType:onlyOnResource"],
+    "upgradesFrom": ["improvementType:mechanizedPlantation"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -345,12 +286,8 @@
     "description": "Ancient hunting camps were temporary field sites used for trapping, butchery, drying, and tool maintenance. Groups selected locations near water, game trails, and raw material sources. Archaeological signatures include hearths, lithic scatters, bone piles with cut marks, and simple shelters. Processing equipment such as scrapers, hammerstones, and boiling pits is common. Natufian hunters in the Levant used seasonal camps tied to gazelle and ibex movements. Clovis bison kill sites in North America combined mass procurement with onsite rendering. Magdalenian groups in Europe established reindeer hunting stations during cold-season migrations. Preservation relied on smoking racks, drying frames, and storage pits. Camps were reoccupied across years, forming patterned landscapes of resource use.",
     "key": "improvementType:huntingCamp",
     "name": "Hunting Camp",
-    "requires": [
-      "technologyType:trapping"
-    ],
-    "specials": [
-      "specialType:onlyOnResource"
-    ],
+    "requires": ["technologyType:trapping"],
+    "specials": ["specialType:onlyOnResource"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -372,15 +309,9 @@
     "description": "Bronze Age hunting lodges were permanent or semi-permanent structures that supported organized elite hunts. Facilities provided shelter, stores, water, and equipment for archers, drivers, and beaters. Reliefs and inscriptions from New Kingdom Egypt depict desert lodges linked to chariot hunts and animal processing. The Shang dynasty maintained royal hunting grounds near Anyang with associated buildings and granaries. Hittite rulers in Anatolia staged ceremonial hunts from fortified compounds on the steppe. Lodges coordinated logistics, meat preservation, and distribution to courts and temples. They also functioned as outposts for surveillance and boundary control. Archaeology records foundation walls, storage jars, kennels, and refuse dumps with faunal remains.",
     "key": "improvementType:huntingLodge",
     "name": "Hunting Lodge",
-    "requires": [
-      "technologyType:archery"
-    ],
-    "specials": [
-      "specialType:onlyOnResource"
-    ],
-    "upgradesFrom": [
-      "improvementType:huntingCamp"
-    ],
+    "requires": ["technologyType:archery"],
+    "specials": ["specialType:onlyOnResource"],
+    "upgradesFrom": ["improvementType:huntingCamp"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -402,15 +333,9 @@
     "description": "Medieval hunting grounds were reserved landscapes managed for the game needs of kings and nobles. Law restricted access, regulated weapons, and set penalties for poaching. Management practices included coppicing, deer parks with palisades, meadows for fodder, and rabbit warrens. The royal forests of Norman England formalized forest law over mixed land uses. In Poland, royal reserves in Białowieża preserved bison and red deer under court supervision. Bohemian rulers created walled game parks during the reign of Charles IV. Hunts supplied venison, pelts, and political ceremony. Restrictions often conflicted with peasant grazing and wood gathering, prompting charters and periodic reforms. Long-term protection shaped woodland structure and species composition.",
     "key": "improvementType:huntingGround",
     "name": "Hunting Ground",
-    "requires": [
-      "technologyType:castles"
-    ],
-    "specials": [
-      "specialType:onlyOnResource"
-    ],
-    "upgradesFrom": [
-      "improvementType:huntingLodge"
-    ],
+    "requires": ["technologyType:chivalry"],
+    "specials": ["specialType:onlyOnResource"],
+    "upgradesFrom": ["improvementType:huntingLodge"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -432,15 +357,9 @@
     "description": "Enlightenment estates integrated hunting, forestry, and agricultural rents under centralized administration. Landowners adopted surveying, cadastral mapping, and bookkeeping to manage revenues and improvements. Sustained-yield forestry developed on Prussian estates, with compartment systems and rotation planning. Scottish sporting estates managed grouse moors, deer forests, and tenant farms to balance field sports with income. In France, royal domaines underwent reorganization before the Revolution, rationalizing leases and timber harvests. Estates invested in drainage, enclosures, and model farms while retaining gamekeepers and foresters. New legal instruments, such as long leases and entail reforms, encouraged capital investment. The estate became a laboratory for applied agronomy, silviculture, and rural administration.",
     "key": "improvementType:estate",
     "name": "Estate",
-    "requires": [
-      "technologyType:bureaucracy"
-    ],
-    "specials": [
-      "specialType:onlyOnResource"
-    ],
-    "upgradesFrom": [
-      "improvementType:huntingGround"
-    ],
+    "requires": ["technologyType:bureaucracy"],
+    "specials": ["specialType:onlyOnResource"],
+    "upgradesFrom": ["improvementType:huntingGround"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -462,15 +381,9 @@
     "description": "National parks in the 1900s placed large landscapes under state protection for conservation and public recreation. The United States created the National Park Service in 1916 to standardize management, ranger services, and visitor facilities. Yellowstone pioneered wildlife management debates, from predator control to fire policy, in the early twentieth century. South Africa expanded and formalized Kruger National Park, building roads, rest camps, and research programs. Park systems used scientific surveys, zoning, and permits to limit extraction and guide tourism. They promoted education, scenic drives, and trail networks. Conflicts over resident communities, grazing, and hunting shaped later policies, including buffer zones and transfrontier linkages.",
     "key": "improvementType:nationalPark",
     "name": "National Park",
-    "requires": [
-      "technologyType:artDeco"
-    ],
-    "specials": [
-      "specialType:onlyOnResource"
-    ],
-    "upgradesFrom": [
-      "improvementType:estate"
-    ],
+    "requires": ["technologyType:artDeco"],
+    "specials": ["specialType:onlyOnResource"],
+    "upgradesFrom": ["improvementType:estate"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -492,15 +405,9 @@
     "description": "Twenty-first-century nature reserves emphasize biodiversity outcomes, renewable infrastructure, and community stewardship. The EU’s Natura 2000 network coordinates habitat protection across member states with standardized monitoring. Kenyan community conservancies integrate tourism revenues, grazing plans, and solar-powered water points. Marine protected areas adopt satellite and drone surveillance to deter illegal fishing and track vessel activity. Reserves use adaptive management with biodiversity baselines, indicator species, and periodic audits. Co-management agreements align local livelihoods with conservation targets. Sensor networks and open data portals support transparency and rapid response. The model extends protection beyond core zones through corridors and seascapes.",
     "key": "improvementType:natureReserve",
     "name": "Nature Reserve",
-    "requires": [
-      "technologyType:renewableEnergy"
-    ],
-    "specials": [
-      "specialType:onlyOnResource"
-    ],
-    "upgradesFrom": [
-      "improvementType:nationalPark"
-    ],
+    "requires": ["technologyType:renewableEnergy"],
+    "specials": ["specialType:onlyOnResource"],
+    "upgradesFrom": ["improvementType:nationalPark"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -522,12 +429,8 @@
     "description": "Shepherds managed small livestock in ancient pastoral economies using mobile pastures and seasonal transhumance. Duties included breeding, lambing, guarding with dogs, and selecting grazing to avoid overuse. Biblical narratives record Levantine herders moving between valleys and uplands. Neolithic communities in Anatolia developed sheep-goat herding alongside early farming. In the Andes, pastoralists tended llama and alpaca for fiber, transport, and meat. Equipment was simple: crook, sling, and woven bags. Knowledge of weather, forage, and water sources governed routes and timing.",
     "key": "improvementType:shepherd",
     "name": "Shepherd",
-    "requires": [
-      "technologyType:animalHusbandry"
-    ],
-    "specials": [
-      "specialType:onlyOnResource"
-    ],
+    "requires": ["technologyType:animalHusbandry"],
+    "specials": ["specialType:onlyOnResource"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -549,15 +452,9 @@
     "description": "Bronze Age pastures were deliberately managed grazing fields near water sources, corrals, and settlements. Communities improved forage through clearing, controlled burning, and seasonal rest. Enclosures of stone, timber, or thorn hedges defined boundaries and protected night pens. Minoan goat pastures on Crete supported dairy processing and textile production. Anatolian cattle grounds linked upland summer grazing to lowland winter quarters. In the Indus Valley, herders used wells and channels to water stock near Harappan towns. Zooarchaeology shows culling profiles and pathologies tied to intensive herding. Managed pastures stabilized manure supplies, supported traction animals, and integrated with early trade networks.",
     "key": "improvementType:pasture",
     "name": "Pasture",
-    "requires": [
-      "technologyType:pottery"
-    ],
-    "specials": [
-      "specialType:onlyOnResource"
-    ],
-    "upgradesFrom": [
-      "improvementType:shepherd"
-    ],
+    "requires": ["technologyType:pottery"],
+    "specials": ["specialType:onlyOnResource"],
+    "upgradesFrom": ["improvementType:shepherd"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -579,15 +476,9 @@
     "description": "Feudal pastures formed part of the manorial economy in medieval Europe. Lords held demesne meadows for their own herds while tenants enjoyed rights of pasture on commons, heaths, and wood pastures. Access was governed by season, stocking limits, and customary dues enforced by manorial courts. Grazing schedules matched arable rotations and haymaking to protect winter fodder. Transhumance moved flocks between lowlands and upland or alpine summer pastures under seigneurial or communal charters. By-laws regulated fencing, pannage, and stubble grazing to prevent overuse. Noted cases include demesne grazing on English and French manors and regulated transhumance in the Alps. The system supplied dairy, wool, traction, and manure, integrating pastoral output into rents, labor services, and tithe obligations.",
     "key": "improvementType:feudalPasture",
     "name": "Feudal Pasture",
-    "requires": [
-      "technologyType:feudalism"
-    ],
-    "specials": [
-      "specialType:onlyOnResource"
-    ],
-    "upgradesFrom": [
-      "improvementType:pasture"
-    ],
+    "requires": ["technologyType:feudalism"],
+    "specials": ["specialType:onlyOnResource"],
+    "upgradesFrom": ["improvementType:pasture"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -609,15 +500,9 @@
     "description": "Renaissance towns established centralized slaughterhouses to regulate hygiene, taxation, and animal handling. Municipal statutes required approved facilities with paved floors, drainage, and water supply. Guilds supervised workmanship, tool condition, and bleeding practices within period standards for humane killing. Authorities enforced rules for offal disposal and restricted slaughter hours to reduce nuisance and disease risk. Street butchery districts, such as York’s Shambles, gradually ceded activity to more centralized and cleaner sites. Italian city-states, including Florence and Venice, set inspection protocols and controlled stall placement, with provisions for diverse ritual practices where applicable. Centralization supported growing urban markets through consistent oversight and quality checks. These institutions laid foundations for later public abattoirs and nineteenth-century sanitary reforms.",
     "key": "improvementType:slaughterhouse",
     "name": "Slaughterhouse",
-    "requires": [
-      "technologyType:sanitation"
-    ],
-    "specials": [
-      "specialType:onlyOnResource"
-    ],
-    "upgradesFrom": [
-      "improvementType:feudalPasture"
-    ],
+    "requires": ["technologyType:sanitation"],
+    "specials": ["specialType:onlyOnResource"],
+    "upgradesFrom": ["improvementType:feudalPasture"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -639,15 +524,9 @@
     "description": "Factory farming expanded in the mid-twentieth century with confinement housing, formulated feeds, and widespread antibiotic use as growth promoters and disease control. Concentrated Animal Feeding Operations (CAFOs) placed large numbers of hogs, cattle, or poultry under controlled ventilation, temperature, and lighting. Integrated feed mills, waste lagoons, and biosecurity protocols standardized production flows. Vertical integration linked breeding, grow-out, slaughter, and distribution, notably in the U.S. broiler industry. After 1950, American hog and cattle CAFOs spread near grain belts and export nodes. Broiler integrators optimized genetics, feed conversion ratios, and processing lines. The model reduced labor per animal and stabilized high-volume output. It also prompted new regulations for manure management, antimicrobial stewardship, and worker safety across late twentieth-century agriculture.",
     "key": "improvementType:factoryFarm",
     "name": "Factory Farm",
-    "requires": [
-      "technologyType:antibiotics"
-    ],
-    "specials": [
-      "specialType:onlyOnResource"
-    ],
-    "upgradesFrom": [
-      "improvementType:slaughterhouse"
-    ],
+    "requires": ["technologyType:antibiotics"],
+    "specials": ["specialType:onlyOnResource"],
+    "upgradesFrom": ["improvementType:slaughterhouse"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -669,15 +548,9 @@
     "description": "Automated pasture systems combine grazing with digital control and robotics. Robotic milking parlors enable voluntary cow traffic and precise yield and health recording. Sensor collars track activity, rumination, and location. GPS virtual fencing guides herd movement and protects sensitive areas without physical fences. Automated feeders deliver supplements by animal ID. Data platforms optimize rotation intervals, sward recovery, and nutrient placement. European dairy farms, especially in the Netherlands and Scandinavia, adopted robotic milking widely in the 2000s. Trials in Australia and New Zealand applied virtual fencing to extensive cattle enterprises. The approach reduces routine labor, improves heat and illness detection, and tightens pasture utilization. It links animal welfare monitoring with environmental metrics such as soil moisture and nutrient loss alerts.",
     "key": "improvementType:automatedPasture",
     "name": "Automated Pasture",
-    "requires": [
-      "technologyType:robotics"
-    ],
-    "specials": [
-      "specialType:onlyOnResource"
-    ],
-    "upgradesFrom": [
-      "improvementType:factoryFarm"
-    ],
+    "requires": ["technologyType:robotics"],
+    "specials": ["specialType:onlyOnResource"],
+    "upgradesFrom": ["improvementType:factoryFarm"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -702,10 +575,7 @@
     "requires": [
       "technologyType:pitMining",
       "domainType:land",
-      [
-        "elevationType:hill",
-        "conceptType:mountains"
-      ]
+      ["elevationType:hill", "conceptType:mountains"]
     ],
     "yields": [
       {
@@ -727,14 +597,9 @@
     "requires": [
       "technologyType:mining",
       "domainType:land",
-      [
-        "elevationType:hill",
-        "conceptType:mountains"
-      ]
+      ["elevationType:hill", "conceptType:mountains"]
     ],
-    "upgradesFrom": [
-      "improvementType:rockPit"
-    ],
+    "upgradesFrom": ["improvementType:rockPit"],
     "yields": [
       {
         "type": "yieldType:production",
@@ -755,14 +620,9 @@
     "requires": [
       "technologyType:feudalism",
       "domainType:land",
-      [
-        "elevationType:hill",
-        "conceptType:mountains"
-      ]
+      ["elevationType:hill", "conceptType:mountains"]
     ],
-    "upgradesFrom": [
-      "improvementType:quarry"
-    ],
+    "upgradesFrom": ["improvementType:quarry"],
     "yields": [
       {
         "type": "yieldType:production",
@@ -783,14 +643,9 @@
     "requires": [
       "technologyType:steamEngine",
       "domainType:land",
-      [
-        "elevationType:hill",
-        "conceptType:mountains"
-      ]
+      ["elevationType:hill", "conceptType:mountains"]
     ],
-    "upgradesFrom": [
-      "improvementType:feudalQuarry"
-    ],
+    "upgradesFrom": ["improvementType:feudalQuarry"],
     "yields": [
       {
         "type": "yieldType:production",
@@ -811,14 +666,9 @@
     "requires": [
       "technologyType:trackedTreads",
       "domainType:land",
-      [
-        "elevationType:hill",
-        "conceptType:mountains"
-      ]
+      ["elevationType:hill", "conceptType:mountains"]
     ],
-    "upgradesFrom": [
-      "improvementType:steamQuarry"
-    ],
+    "upgradesFrom": ["improvementType:steamQuarry"],
     "yields": [
       {
         "type": "yieldType:production",
@@ -839,14 +689,9 @@
     "requires": [
       "technologyType:robotics",
       "domainType:land",
-      [
-        "elevationType:hill",
-        "conceptType:mountains"
-      ]
+      ["elevationType:hill", "conceptType:mountains"]
     ],
-    "upgradesFrom": [
-      "improvementType:mechanizedQuarry"
-    ],
+    "upgradesFrom": ["improvementType:mechanizedQuarry"],
     "yields": [
       {
         "type": "yieldType:production",
@@ -864,11 +709,7 @@
     "description": "Saw camps were temporary timber felling and rough-shaping sites established within forests. Crews used stone or early copper axes, adzes, wedges, and coarse saws. Trees were felled, bucked, and split near the stump to ease transport. Planks and beams were hewn with broad axes and finished with scraping tools. Camps followed seasonal labor patterns and river levels. Transport relied on sledges, rollers, and rafts to downstream workshops. Such camps supplied timbers for early shipbuilding on the Nile, where planks and masts moved by canal. They also fed Neolithic construction, providing long timbers for longhouses in northern Europe. Tool marks and charcoal scatters at woodland sites attest to on-site reduction of logs and organized provisioning of construction projects.",
     "key": "improvementType:sawCamp",
     "name": "Saw Camp",
-    "requires": [
-      "technologyType:woodWorking",
-      "domainType:land",
-      "featureCategory:forest"
-    ],
+    "requires": ["technologyType:woodWorking", "domainType:land", "featureCategory:forest"],
     "yields": [
       {
         "type": "yieldType:production",
@@ -886,14 +727,8 @@
     "description": "In the Bronze Age, sawmills were organized workshops where logs were processed into lumber with simple mechanical assistance. Workers raised logs over saw-pits and used long two-man saws to rip boards. Bronze saws, chisels, and adzes improved accuracy and finish. Rollers, ramps, and block-and-tackle eased handling within the yard. Standard sizes were produced for palatial and temple building programs. Waste was converted to fuel for nearby kilns and furnaces. In Anatolia, organized log-sawing workshops supported urban expansion and metalworking. In the Aegean, timber processing under the Mycenaean palatial economy supplied beams, planking, and ship timbers. The workshop setting concentrated skilled labor, regularized outputs, and linked forest procurement with construction logistics.",
     "key": "improvementType:sawmill",
     "name": "Sawmill",
-    "requires": [
-      "technologyType:bronzeWorking",
-      "domainType:land",
-      "featureCategory:forest"
-    ],
-    "upgradesFrom": [
-      "improvementType:sawCamp"
-    ],
+    "requires": ["technologyType:shipBuilding", "domainType:land", "featureCategory:forest"],
+    "upgradesFrom": ["improvementType:sawCamp"],
     "yields": [
       {
         "type": "yieldType:production",
@@ -911,14 +746,8 @@
     "description": "Medieval water-powered sawmills converted river flow into reciprocating motion for vertical frame saws. A waterwheel, crank, and connecting rod drove the blade through logs on a simple carriage. Timbering yards integrated sorting ponds, log booms, and storage sheds. Output increased compared with pit-sawing, enabling larger building projects. Monastic estates introduced mills to supply cloisters, barns, and bridges, and to sell surplus lumber. In Germany and Scandinavia, water-driven sawmills served town builders and shipwrights. Standard beams, planks, and shingles became common in castle and cathedral construction. Sawmill rights and tolls formed part of seigneurial incomes. Seasonal flooding, ice, and log supply governed operating schedules and maintenance.",
     "key": "improvementType:feudalSawmill",
     "name": "Feudal Sawmill",
-    "requires": [
-      "technologyType:feudalism",
-      "domainType:land",
-      "featureCategory:forest"
-    ],
-    "upgradesFrom": [
-      "improvementType:sawmill"
-    ],
+    "requires": ["technologyType:machinery", "domainType:land", "featureCategory:forest"],
+    "upgradesFrom": ["improvementType:sawmill"],
     "yields": [
       {
         "type": "yieldType:production",
@@ -936,14 +765,8 @@
     "description": "Steam sawmills replaced water dependence with stationary engines driving saws, carriages, and handling gear. Circular and gang saws cut rapidly while powered log carriages fed precise passes. Steam winches and tramways moved logs from ponds to headrigs. Boilers also supplied heat for dry kilns and worker facilities. Year-round operation near rail or port became possible, enabling large-scale export. In the nineteenth-century Pacific Northwest, steam mills processed Douglas-fir and cedar for California and Pacific trade. Along Russia's taiga railways, steam-powered lumber mills followed new lines into virgin stands. Accident risks and fuel consumption were high, but productivity transformed regional timber economies and standardized dimensional lumber.",
     "key": "improvementType:steamSawmill",
     "name": "Steam Sawmill",
-    "requires": [
-      "technologyType:steamEngine",
-      "domainType:land",
-      "featureCategory:forest"
-    ],
-    "upgradesFrom": [
-      "improvementType:feudalSawmill"
-    ],
+    "requires": ["technologyType:steamEngine", "domainType:land", "featureCategory:forest"],
+    "upgradesFrom": ["improvementType:feudalSawmill"],
     "yields": [
       {
         "type": "yieldType:production",
@@ -961,14 +784,8 @@
     "description": "Twentieth-century mechanized sawmills adopted electric motors, band saws, and conveyor systems. Line shafts gave way to distributed three-phase drives with safer guards and controls. Thin-kerf bands improved lumber recovery from large and small logs. Mechanical debarkers, edgers, trimmers, and chippers integrated waste into pulp or fuel. Forklifts, bridge cranes, and automated stackers accelerated yard flow. Grading rules and kiln schedules standardized outputs for national markets. After 1945, conveyorized mills linked bucking lines, primary breakdown, and finishing with minimal manual handling. Plants such as Weyerhaeuser's band sawmills exemplified high throughput and consistent quality. Diesel loaders and trucks extended log supply zones and reduced dependence on rail spurs.",
     "key": "improvementType:mechanizedSawmill",
     "name": "Mechanized Sawmill",
-    "requires": [
-      "technologyType:trackedTreads",
-      "domainType:land",
-      "featureCategory:forest"
-    ],
-    "upgradesFrom": [
-      "improvementType:steamSawmill"
-    ],
+    "requires": ["technologyType:trackedTreads", "domainType:land", "featureCategory:forest"],
+    "upgradesFrom": ["improvementType:steamSawmill"],
     "yields": [
       {
         "type": "yieldType:production",
@@ -986,14 +803,8 @@
     "description": "Automated sawmills use computer optimization, scanners, and robotics to manage timber processing. 3D laser and X-ray scanners model each log to maximize recovery and value. PLC-controlled edgers, curve-sawing gangs, and thin-kerf bands execute optimized cuts. Vision systems grade boards in real time and route pieces to automated sorters and stackers. Robotic handling reduces injuries and labor variation. Data systems track batches from intake to shipping and feed planning models. Scandinavian mills pioneered integrated 3D scanning with robotic handling. Canadian operations deployed automated grading and sorting at scale for commodity and specialty markets. Energy monitoring, dust control, and enclosed lines improve safety and environmental performance while sustaining high uptime.",
     "key": "improvementType:automatedSawmill",
     "name": "Automated Sawmill",
-    "requires": [
-      "technologyType:robotics",
-      "domainType:land",
-      "featureCategory:forest"
-    ],
-    "upgradesFrom": [
-      "improvementType:mechanizedSawmill"
-    ],
+    "requires": ["technologyType:robotics", "domainType:land", "featureCategory:forest"],
+    "upgradesFrom": ["improvementType:mechanizedSawmill"],
     "yields": [
       {
         "type": "yieldType:production",
@@ -1011,12 +822,8 @@
     "description": "Ancient mine pits were shallow surface excavations targeting exposed ore bodies. Workers used hammerstones, antler picks, bone tools, and early metal chisels. Fire-setting fractured rock, which was then pried and crushed. Ore was hand-sorted and washed in nearby basins. Waste rock formed distinctive spoil rings around pits. Seasonal crews camped at sites and transported concentrates to smelting areas. At Timna in the southern Levant, open-pit copper extraction fed early metallurgical complexes. Prehistoric workings at Rio Tinto in Iberia left terraces and slag mounds from repeated campaigns. The method required minimal infrastructure but depended on visible mineralization and access to fuel, water, and labor.",
     "key": "improvementType:minePit",
     "name": "Mine Pit",
-    "requires": [
-      "technologyType:pitMining"
-    ],
-    "specials": [
-      "specialType:onlyOnResource"
-    ],
+    "requires": ["technologyType:pitMining"],
+    "specials": ["specialType:onlyOnResource"],
     "yields": [
       {
         "type": "yieldType:gold",
@@ -1034,15 +841,9 @@
     "description": "Bronze Age mines expanded beyond surface pits into shafts and galleries following rich veins. Fire-setting and stone or bronze picks broke ore in constrained headings. Timber sets stabilized roofs and controlled collapses. Simple windshafts and bellows improved ventilation at depth. Buckets and ladders handled hoisting before mechanical gins. Ore was crushed with mortars and pestles and smelted nearby using charcoal. The Great Orme mines in Wales show extensive underground copper extraction with organized labor. In Anatolia, Kestel and Göltepe supplied tin for alloying and long-distance trade. These mines linked geology, metallurgy, and early administrative systems that coordinated provisioning and output.",
     "key": "improvementType:mine",
     "name": "Mine",
-    "requires": [
-      "technologyType:mining"
-    ],
-    "specials": [
-      "specialType:onlyOnResource"
-    ],
-    "upgradesFrom": [
-      "improvementType:minePit"
-    ],
+    "requires": ["technologyType:mining"],
+    "specials": ["specialType:onlyOnResource"],
+    "upgradesFrom": ["improvementType:minePit"],
     "yields": [
       {
         "type": "yieldType:gold",
@@ -1060,15 +861,9 @@
     "description": "Medieval mining developed timbered stopes, drainage adits, and water-powered machinery. Waterwheels drove bellows, rag-and-chain pumps, and stamping mills for ore preparation. Ventilation relied on shafts, doors, and regulated airflow. Mining law (Bergrecht) defined claims, royalties, and technical oversight. Settlements formed around booms in silver and base metals. Freiberg in Saxony pioneered organized silver extraction with sophisticated drainage and smelting. Kutná Hora in Bohemia sustained large outputs that financed mints and rulers. Specialized guilds trained hewers, carpenters, and smelters. Despite limited depth compared with later eras, these systems intensified production and stabilized supply for coinage and urban growth.",
     "key": "improvementType:feudalMine",
     "name": "Feudal Mine",
-    "requires": [
-      "technologyType:feudalism"
-    ],
-    "specials": [
-      "specialType:onlyOnResource"
-    ],
-    "upgradesFrom": [
-      "improvementType:mine"
-    ],
+    "requires": ["technologyType:engineering"],
+    "specials": ["specialType:onlyOnResource"],
+    "upgradesFrom": ["improvementType:mine"],
     "yields": [
       {
         "type": "yieldType:gold",
@@ -1086,15 +881,9 @@
     "description": "Industrial mining harnessed steam power to dewater, hoist, and ventilate deep workings. Newcomen atmospheric engines pumped English coal pits and enabled expansion below water tables. Watt's separate condenser improved efficiency and supported larger installations. Cornish pumping engines raised water from deep copper and tin mines through cast-iron rising mains. Steam winders hoisted cages on wire ropes guided by rigid conductors. Rail tracks and locomotives moved ore underground and to shafts. Deeper mines adopted furnace and mechanical ventilation and introduced safety protocols. These systems transformed productivity and reliability across the coal and metal sectors. Examples include dewatering in English coalfields and deep operations in Cornwall.",
     "key": "improvementType:steamMine",
     "name": "Steam Mine",
-    "requires": [
-      "technologyType:steamEngine"
-    ],
-    "specials": [
-      "specialType:onlyOnResource"
-    ],
-    "upgradesFrom": [
-      "improvementType:feudalMine"
-    ],
+    "requires": ["technologyType:steamEngine"],
+    "specials": ["specialType:onlyOnResource"],
+    "upgradesFrom": ["improvementType:feudalMine"],
     "yields": [
       {
         "type": "yieldType:gold",
@@ -1112,15 +901,9 @@
     "description": "Mechanized mining emerged in the early 20th century as tracked vehicles, cable shovels, and draglines replaced hand labor. Open‑pit operations expanded through high‑capacity shovels from firms such as P&H and diesel dozers from Caterpillar. Continuous drilling, blasting, and loading cycles increased stripping ratios and cut unit costs. Electrification supported hoists and conveyors. Bingham Canyon’s copper pit adopted large mechanical excavators in the 1920s–1930s, setting benchmarks for scale. In the Ruhr, postwar strip mines deployed bucket‑wheel excavators for brown coal. Standardized trucks, maintenance depots, and survey control improved availability and safety. Mechanized support systems, including workshops and rail spurs, tied mines to smelters and ports. Environmental disturbance rose with overburden removal, prompting early reclamation practices. The mechanized mine defined 20th‑century bulk extraction.",
     "key": "improvementType:mechanizedMine",
     "name": "Mechanized Mine",
-    "requires": [
-      "technologyType:trackedTreads"
-    ],
-    "specials": [
-      "specialType:onlyOnResource"
-    ],
-    "upgradesFrom": [
-      "improvementType:steamMine"
-    ],
+    "requires": ["technologyType:trackedTreads"],
+    "specials": ["specialType:onlyOnResource"],
+    "upgradesFrom": ["improvementType:steamMine"],
     "yields": [
       {
         "type": "yieldType:gold",
@@ -1138,15 +921,9 @@
     "description": "Automation matured in the 2000s with digital control, sensors, and robotics across surface and underground fleets. Autonomous haul trucks, machine‑guided drills, and tele‑operated loaders worked on scheduled cycles. Private LTE/5G networks, high‑precision GPS, and lidar enabled collision avoidance and dispatch optimization. Rio Tinto’s Pilbara mines fielded large driverless truck fleets in the 2010s. Boliden’s Aitik and Garpenberg integrated automated drilling, loading, and shaft hoisting with centralized control rooms. The Syama underground mine advanced tele‑operation and autonomous tramming in constrained headings. Benefits included higher equipment utilization, lower exposure to hazards, and continuous night shifts. New roles focused on maintenance, software, and data analytics. Challenges involved interoperability, cybersecurity, and regulatory frameworks. Automated mining marked a shift toward lights‑out production in selective zones.",
     "key": "improvementType:automatedMine",
     "name": "Automated Mine",
-    "requires": [
-      "technologyType:robotics"
-    ],
-    "specials": [
-      "specialType:onlyOnResource"
-    ],
-    "upgradesFrom": [
-      "improvementType:mechanizedMine"
-    ],
+    "requires": ["technologyType:robotics"],
+    "specials": ["specialType:onlyOnResource"],
+    "upgradesFrom": ["improvementType:mechanizedMine"],
     "yields": [
       {
         "type": "yieldType:gold",
@@ -1164,10 +941,7 @@
     "description": "The Fisher is a small coastal boat used since antiquity for subsistence fishing and short‑haul transport. Construction varied by region and materials. Ancient Egyptians built reed and papyrus craft for the Nile’s placid waters. Mediterranean communities used light skiffs for shore fishing and ferrying goods between coves. In prehistoric Japan, Jōmon peoples carved dugout canoes from single logs. Propulsion relied on paddles and small sails. Fishing gear included nets, lines, and basket traps. Low freeboard and shallow draft suited estuaries, lagoons, and rivers. These boats provisioned early settlements with fish, shellfish, and salt goods. They also supported pilotage, net tending, and harbor tasks. Archaeological impressions and iconography show their pervasive role in early maritime economies.",
     "key": "improvementType:fisher",
     "name": "Fisher",
-    "requires": [
-      "technologyType:sailing",
-      "terrainType:coast"
-    ],
+    "requires": ["technologyType:sailing", "terrainType:coast"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -1189,13 +963,8 @@
     "description": "Classical‑period boats grew in size and specialization for trade, fishing, and coastal warfare. Mediterranean shipwrights refined mortise‑and‑tenon joinery and shell‑first construction, later blending frame‑first methods. Merchant vessels (navis oneraria) carried amphorae, grain, and timber along established cabotage routes. Mixed sail‑and‑oar craft serviced islands and river mouths. Greek and Roman fleets used support boats for triremes and harbor logistics. Hellenistic and Roman networks linked Egypt, the Aegean, Italy, and the Levant. Standardized gear, anchors, and rigging improved reliability and turnaround in port. Wrecks and inscriptions document dense traffic and seasonal schedules. These boats formed the workaday backbone behind state navies and long‑distance convoys.",
     "key": "improvementType:boats",
     "name": "Boats",
-    "requires": [
-      "technologyType:shipBuilding",
-      "terrainType:coast"
-    ],
-    "upgradesFrom": [
-      "improvementType:fisher"
-    ],
+    "requires": ["technologyType:shipBuilding", "terrainType:coast"],
+    "upgradesFrom": ["improvementType:fisher"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -1217,13 +986,8 @@
     "description": "Medieval boatbuilding adapted to colder seas and feudal trade systems. Northern Europe favored clinker‑built hulls that flexed in heavy swell. The cog, introduced to the North and Baltic Seas, combined broad beams with a stern rudder and single square sail. It served Hanseatic merchants moving grain, timber, and salt. Norse knarrs handled Atlantic crossings for trade and provisioning. In the south, Arabian dhows with lateen rigs sustained monsoon routes across the Indian Ocean. Fishing fleets expanded around herring and cod grounds, feeding urban growth. Port towns organized guilds, tolls, and convoy practices. Incremental advances in rigging, caulking, and iron fastenings improved seaworthiness and payloads. These boats underpinned regional markets and castle supply lines.",
     "key": "improvementType:feudalBoats",
     "name": "Feudal Boats",
-    "requires": [
-      "technologyType:feudalism",
-      "terrainType:coast"
-    ],
-    "upgradesFrom": [
-      "improvementType:boats"
-    ],
+    "requires": ["technologyType:feudalism", "terrainType:coast"],
+    "upgradesFrom": ["improvementType:boats"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -1245,13 +1009,8 @@
     "description": "Steam boats transformed inland and coastal transport in the 19th century. Compact engines and paddlewheels or screws allowed scheduled service against current and wind. Robert Fulton’s Clermont on the Hudson in 1807 demonstrated commercial viability. The PS Comet introduced regular passenger service in Britain in 1812. On the Mississippi system, sidewheelers linked plantations, towns, and frontier settlements, moving cotton, lumber, and passengers. Hull forms optimized shallow draft and wide decks. Boiler explosions prompted inspection regimes and safety laws, including the U.S. Steamboat Act of 1852. Steam boats supported mail routes, troop movements, and surveying. Their networks reshaped trade geography until railways and efficient propeller craft reduced their dominance.",
     "key": "improvementType:steamBoats",
     "name": "Steam Boats",
-    "requires": [
-      "technologyType:steamEngine",
-      "terrainType:coast"
-    ],
-    "upgradesFrom": [
-      "improvementType:feudalBoats"
-    ],
+    "requires": ["technologyType:steamEngine", "terrainType:coast"],
+    "upgradesFrom": ["improvementType:feudalBoats"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -1273,13 +1032,8 @@
     "description": "Diesel propulsion spread in the 20th century, replacing steam on many small and medium boats. Compression‑ignition engines offered higher fuel efficiency, quicker starts, and reduced crew requirements. Interwar North Sea trawlers adopted compact diesels for extended fishing trips. During World War II, diesel patrol and utility craft provided coastal escort, rescue, and logistics. Postwar purse seiners and longliners integrated hydraulic gear and refrigeration with reliable engines, opening distant grounds. Diesel boats expanded service to remote islands and minor ports with limited coal infrastructure. Maintenance shifted to fuel injection systems and gearbox service. Safety improved through lower fire risk and better control at low speeds. Dieselization defined workboat fleets through the late 20th century.",
     "key": "improvementType:dieselBoats",
     "name": "Diesel Boats",
-    "requires": [
-      "technologyType:hydrodynamics",
-      "terrainType:coast"
-    ],
-    "upgradesFrom": [
-      "improvementType:steamBoats"
-    ],
+    "requires": ["technologyType:hydrodynamics", "terrainType:coast"],
+    "upgradesFrom": ["improvementType:steamBoats"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -1301,13 +1055,8 @@
     "description": "Automated boats emerged in the 21st century as unmanned surface vehicles and highly instrumented crewed craft. Navigation uses GNSS, inertial sensors, radar, and computer vision with collision‑avoidance algorithms. Mission profiles include hydrographic survey, environmental monitoring, logistics, and long‑endurance patrols. Sea Hunter demonstrated autonomous anti‑submarine scouting over oceanic ranges. Port authorities adopted robotic survey boats to map channels and inspect infrastructure. In fisheries, autopilot trawlers combined net haulers, sonar, and catch sensors to reduce crew workload. Communications rely on satellite links, AIS, and encrypted control channels. Regulatory frameworks address watchkeeping, traffic separation, and fail‑safes. Automated boats extend operational windows while lowering risk in hazardous waters.",
     "key": "improvementType:automatedBoats",
     "name": "Automated Boats",
-    "requires": [
-      "technologyType:robotics",
-      "terrainType:coast"
-    ],
-    "upgradesFrom": [
-      "improvementType:dieselBoats"
-    ],
+    "requires": ["technologyType:robotics", "terrainType:coast"],
+    "upgradesFrom": ["improvementType:dieselBoats"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -1329,10 +1078,7 @@
     "description": "The medieval fort combined earthworks, timber, and stone to secure territory against raids and sieges. Early motte‑and‑bailey designs raised a timber keep on an artificial mound with a palisaded courtyard. Stone castles evolved with curtain walls, gatehouses, and towers. Defensive features included arrow slits, hoardings, and later machicolations. Water management created moats and protected wells. Garrisons controlled roads, bridges, and markets, enforcing feudal authority and hosting courts. Crusader strongholds such as Krak des Chevaliers projected power along supply lines. Urban complexes like Carcassonne integrated walls with civic spaces. Siege engines, mining, and fire shaped an arms race in wall thickness and layout. The fort anchored administrative and military networks across medieval polities.",
     "key": "improvementType:fort",
     "name": "Fort",
-    "requires": [
-      "technologyType:sieging",
-      "domainType:land"
-    ],
+    "requires": ["technologyType:sieging", "domainType:land"],
     "yields": [
       {
         "type": "yieldType:defense",
@@ -1346,13 +1092,8 @@
     "description": "The bastion fort of the Renaissance responded to gunpowder artillery with low, thick walls and angular plans. The trace italienne arranged projecting bastions to deliver interlocking flanking fire along curtains. Ditches, glacis, ravelins, and covered ways absorbed bombardment and slowed assaults. Engineers calculated lines of fire, traverse heights, and powder storage safety. Palmanova in Italy exemplified geometric planning. Vauban’s works at places like Neuf‑Brisach refined standardized profiles and siege protocols. Antwerp’s bastioned citadel guarded river access and urban approaches. Construction employed brick, rubble, and compacted earth for resilience. The system dominated European siege warfare until rifled artillery and explosive shells eroded its advantages in the 19th century.",
     "key": "improvementType:bastion",
     "name": "Bastion",
-    "requires": [
-      "technologyType:engineering",
-      "domainType:land"
-    ],
-    "upgradesFrom": [
-      "improvementType:fort"
-    ],
+    "requires": ["technologyType:engineering", "domainType:land"],
+    "upgradesFrom": ["improvementType:fort"],
     "yields": [
       {
         "type": "yieldType:defense",
@@ -1366,13 +1107,8 @@
     "description": "A redoubt is a detached fieldwork that extends a defensive line with a self‑contained strongpoint. Most were earthen or timber‑revetted works with a ditch, parapet, firing steps, and limited internal space for guns and infantry. Commanders sited them to control approaches, anchor flanks, or cover gaps between larger forts. From the seventeenth century to the nineteenth, they adapted quickly to terrain and could be built in days. Polygonal layouts reduced dead ground and improved all‑round fire. At Borodino in 1812, a chain of redoubts shaped the battlefield. The Malakoff redoubt became decisive at Sevastopol. American Civil War armies raised countless redoubts, including those at Fort Wagner, integrating them with trenches and artillery to create layered, resilient defenses during sieges and field campaigns.",
     "key": "improvementType:redoubt",
     "name": "Redoubt",
-    "requires": [
-      "technologyType:steelCasting",
-      "domainType:land"
-    ],
-    "upgradesFrom": [
-      "improvementType:bastion"
-    ],
+    "requires": ["technologyType:steelCasting", "domainType:land"],
+    "upgradesFrom": ["improvementType:bastion"],
     "yields": [
       {
         "type": "yieldType:defense",
@@ -1386,13 +1122,8 @@
     "description": "Trenches are linear earthworks designed to protect soldiers from fire and observation while enabling sustained combat. Standard systems combined front‑line firing trenches with traverses, dugouts, and communication trenches to the rear. Features included parapets, parados, fire steps, saps, and wire entanglements. Drainage, duckboards, and revetments reduced collapse and disease. Artillery observation posts and telephone lines integrated trenches with indirect fire. The Western Front in World War I refined these into multi‑belt systems with strongpoints and counter‑attack reserves. Gallipoli saw rapid adaptation to steep, stony ground. Positional warfare on the Eastern Front produced long sectors broken by marshes and forests. Mining, mortars, gas, and machine guns made depth and dispersion essential. The form persisted in later conflicts as a local, expedient defense.",
     "key": "improvementType:trenches",
     "name": "Trenches",
-    "requires": [
-      "technologyType:trenchWarfare",
-      "domainType:land"
-    ],
-    "upgradesFrom": [
-      "improvementType:redoubt"
-    ],
+    "requires": ["technologyType:trenchWarfare", "domainType:land"],
+    "upgradesFrom": ["improvementType:redoubt"],
     "yields": [
       {
         "type": "yieldType:defense",
@@ -1406,13 +1137,8 @@
     "description": "A defense zone is a layered network that fuses sensors, command systems, and shooters to control a contested perimeter. Radars, electro‑optical posts, drones, and electronic intelligence feed command nodes that allocate fires from missiles, artillery, and aircraft. Fixed and mobile assets create overlapping engagement envelopes against air, surface, and ground threats. Hardened nodes, decoys, and redundancy preserve function under attack. Israel’s border defenses link surveillance with Iron Dome and other interceptors to counter rockets and incursions. Anti‑access areas in the South China Sea integrate maritime patrols, coastal missiles, and island‑based radars. In the Russia‑Ukraine war, drone reconnaissance, counter‑battery radars, and layered short‑ to medium‑range air defenses define dynamic zones that shift with operations and logistics.",
     "key": "improvementType:defenseZone",
     "name": "Defense Zone",
-    "requires": [
-      "technologyType:militaryDrones",
-      "domainType:land"
-    ],
-    "upgradesFrom": [
-      "improvementType:trenches"
-    ],
+    "requires": ["technologyType:militaryDrones", "domainType:land"],
+    "upgradesFrom": ["improvementType:trenches"],
     "yields": [
       {
         "type": "yieldType:defense",
@@ -1426,10 +1152,7 @@
     "description": "An outpost is a small forward station that extends reach for trade, security, and exploration. In the classical world, such sites guarded routes, gathered intelligence, and provisioned travelers. Roman authorities maintained trading outposts along the limes to monitor frontier movement and channel commerce. Greek emporia served as coastal marketplaces that connected city‑states to regional networks. Nabataean caravanserai in desert corridors provided water, shelter, and stabling, enabling long‑distance trade. Typical features included a modest garrison, storehouses, a well, and basic fortification by palisade or stone. Placement favored river crossings, passes, and oases. Outposts relayed signals, enforced tolls, and stabilized contact zones. Over time they could expand into fortified settlements or decline as routes shifted.",
     "key": "improvementType:outpost",
     "name": "Outpost",
-    "requires": [
-      "technologyType:commerce",
-      "domainType:land"
-    ],
+    "requires": ["technologyType:commerce", "domainType:land"],
     "yields": [
       {
         "type": "yieldType:range",
@@ -1443,13 +1166,8 @@
     "description": "A stronghold is a fortified outpost that secures borders, passes, and administrative zones. Medieval examples combined masonry walls, towers, and a keep with a garrison, stores, and water supply. They controlled roads and river crossings, enforced lordship, and served as courts and tax points. Construction emphasized defensible terrain, interlocking fields of fire, and layered barriers such as ditches and gates. The Teutonic Order raised castle chains across the Baltic frontier to project authority and stage campaigns. In the Welsh Marches, marcher lords built dense networks of strongpoints to manage contested lands. Fortlets in the Alps and Pyrenees guarded strategic passes and relays. Siegecraft with trebuchets and later bombards drove thicker walls and improved plans, foreshadowing trace italienne forms.",
     "key": "improvementType:stronghold",
     "name": "Stronghold",
-    "requires": [
-      "technologyType:engineering",
-      "domainType:land"
-    ],
-    "upgradesFrom": [
-      "improvementType:outpost"
-    ],
+    "requires": ["technologyType:engineering", "domainType:land"],
+    "upgradesFrom": ["improvementType:outpost"],
     "yields": [
       {
         "type": "yieldType:range",
@@ -1463,13 +1181,8 @@
     "description": "A colony is a permanent settlement established abroad to secure resources, trade routes, and strategic position under a metropole’s authority. Renaissance and early modern powers used charters, garrisons, and church missions to implant rule. Spanish colonies in the Americas imposed municipal institutions and encomienda labor systems while exploiting silver and agricultural estates. The Portuguese Estado da Índia, including Goa, linked fortified ports across the Indian Ocean to regulate spice and textile flows. Jamestown (1607) began England’s durable plantation footprint in North America. Colonies reshaped demography through migration and coercion, exported legal and linguistic norms, and reoriented regional economies. Their legacies include hybrid cultures, new trade patterns, and enduring political disputes.",
     "key": "improvementType:colony",
     "name": "Colony",
-    "requires": [
-      "technologyType:colonialism",
-      "domainType:land"
-    ],
-    "upgradesFrom": [
-      "improvementType:stronghold"
-    ],
+    "requires": ["technologyType:colonialism", "domainType:land"],
+    "upgradesFrom": ["improvementType:stronghold"],
     "yields": [
       {
         "type": "yieldType:range",
@@ -1483,13 +1196,8 @@
     "description": "A base is a modern military or logistical installation built to project force, sustain operations, and coordinate communications. Facilities include depots, workshops, fuel farms, hospitals, barracks, and command posts linked by radio and later digital networks. Coastal or air access enables rapid throughput of materiel and personnel. During World War II, U.S. Pacific island bases supported amphibious advances with runways, docks, and repair yards. RAF desert bases sustained air superiority and supply in North Africa. The Soviet Union developed Arctic bases for polar navigation, radar coverage, and strategic aviation. Postwar, bases anchored alliance commitments, prepositioned stocks, and hosted training and joint commands. Defensive perimeters, hardened storage, and layered air defense protect critical functions.",
     "key": "improvementType:base",
     "name": "Base",
-    "requires": [
-      "technologyType:radio",
-      "domainType:land"
-    ],
-    "upgradesFrom": [
-      "improvementType:colony"
-    ],
+    "requires": ["technologyType:radio", "domainType:land"],
+    "upgradesFrom": ["improvementType:colony"],
     "yields": [
       {
         "type": "yieldType:range",
@@ -1503,11 +1211,7 @@
     "description": "An airfield is a prepared site for aircraft operations. Core elements are runways, taxiways, aprons, hangars, fuel storage, and a control point for traffic management. Early airfields were grass strips near fronts or cities, with windsocks and simple sheds. World War I Western Front fields supported reconnaissance and fighter patrols. Interwar improvements brought paved runways and better maintenance shops. RAF Biggin Hill operated as a key fighter station during the Battle of Britain with sector control and dispersal bays. Midway Atoll’s airfield served as a forward base that enabled long‑range scouting and strike operations in 1942. Camouflage, revetments, and perimeter defenses evolved alongside navigation aids, lighting, and meteorological services to ensure continuous sorties.",
     "key": "improvementType:airfield",
     "name": "Airfield",
-    "requires": [
-      "technologyType:flight",
-      "domainType:land",
-      "elevationType:flat"
-    ],
+    "requires": ["technologyType:flight", "domainType:land", "elevationType:flat"],
     "yields": [
       {
         "type": "yieldType:airSlot",
@@ -1521,14 +1225,8 @@
     "description": "An air base is a large, hardened aviation complex designed for sustained, global operations. It integrates long runways, hardened shelters, extensive fuel and munitions storage, maintenance depots, and medical and housing areas. Command centers fuse radar, satellite links, and battle management systems. Layered defenses include patrols, sensors, and surface‑to‑air systems. Al Udeid Air Base in Qatar supports coalition airlift, refueling, and strike missions with regional command functions. Ramstein Air Base serves as a NATO hub for logistics and aeromedical evacuation. Andersen Air Force Base on Guam projects power across the Pacific with bomber and tanker rotations. Dispersal pads, redundancy in utilities, and rapid repair capabilities preserve sortie generation under attack.",
     "key": "improvementType:airBase",
     "name": "Air Base",
-    "requires": [
-      "technologyType:globalArmy",
-      "domainType:land",
-      "elevationType:flat"
-    ],
-    "upgradesFrom": [
-      "improvementType:airfield"
-    ],
+    "requires": ["technologyType:globalArmy", "domainType:land", "elevationType:flat"],
+    "upgradesFrom": ["improvementType:airfield"],
     "yields": [
       {
         "type": "yieldType:airSlot",
@@ -1542,12 +1240,8 @@
     "description": "A well is a drilled or dug shaft that accesses subsurface fluids such as water, oil, or gas. Construction uses casing, screens, and seals to stabilize the bore and protect aquifers. Cable‑tool and later rotary drilling expanded depth and speed. The Drake Well of 1859 demonstrated commercial oil production and spurred petroleum exploration. Spindletop in 1901 delivered a massive gusher, launching the Texas oil industry and advancing blowout control techniques. Municipal artesian wells supplied pressurized groundwater to growing nineteenth‑century cities. Pumps, sucker rods, and derricks mechanized lifting. Modern wells integrate logging, cementing, and pressure control, with pipelines and storage linking output to markets. Decommissioning requires plugging and site remediation to prevent contamination.",
     "key": "improvementType:well",
     "name": "Well",
-    "requires": [
-      "technologyType:drilling"
-    ],
-    "specials": [
-      "specialType:onlyOnResource"
-    ],
+    "requires": ["technologyType:drilling"],
+    "specials": ["specialType:onlyOnResource"],
     "yields": [
       {
         "type": "yieldType:production",
@@ -1569,15 +1263,9 @@
     "description": "Mechanized wells introduced powered artificial lift to extract fluids from drilled holes. Early units used gas and steam engines; later internal combustion engines and electric motors dominated. The beam pump, with its surface pumpjack and subsurface plunger on a sucker-rod string, became the standard for oil fields in the twentieth century. Mechanization enabled continuous production, higher lifting rates, and deeper wells than manual or animal systems. It standardized field layouts with surface power clusters, gearboxes, and walking beams. The approach spread rapidly after the Texas and Oklahoma booms and matured in global basins. Exemplary deployments include pumpjack networks in the Permian Basin, mechanized lifting across the East Texas Oil Field, and widespread beam-pump installations in Saudi Arabia's Ghawar Field.",
     "key": "improvementType:mechanizedWell",
     "name": "Mechanized Well",
-    "requires": [
-      "technologyType:oilRefining"
-    ],
-    "specials": [
-      "specialType:onlyOnResource"
-    ],
-    "upgradesFrom": [
-      "improvementType:well"
-    ],
+    "requires": ["technologyType:oilRefining"],
+    "specials": ["specialType:onlyOnResource"],
+    "upgradesFrom": ["improvementType:well"],
     "yields": [
       {
         "type": "yieldType:production",
@@ -1599,15 +1287,9 @@
     "description": "Automated wells integrate sensors, remote control, and robotics to manage flow and equipment in real time. Downhole gauges, fiber-optic lines, and intelligent completions feed data to SCADA systems and digital twins. Algorithms adjust choke settings, artificial lift, and chemical injection to stabilize production and reduce interventions. Offshore platforms deploy robotic inspection and automated valves to limit human exposure. Land pads use centralized control rooms and predictive maintenance to cut downtime. The approach reduces emissions by optimizing energy use and limiting flaring and leaks. Notable implementations include robotic systems on North Sea platforms, SCADA-controlled pad wells throughout the Permian Basin, and Saudi Aramco fields equipped with intelligent well completions.",
     "key": "improvementType:automatedWell",
     "name": "Automated Well",
-    "requires": [
-      "technologyType:robotics"
-    ],
-    "specials": [
-      "specialType:onlyOnResource"
-    ],
-    "upgradesFrom": [
-      "improvementType:mechanizedWell"
-    ],
+    "requires": ["technologyType:robotics"],
+    "specials": ["specialType:onlyOnResource"],
+    "upgradesFrom": ["improvementType:mechanizedWell"],
     "yields": [
       {
         "type": "yieldType:production",
@@ -1629,13 +1311,8 @@
     "description": "Masonry stone bridges of the classical world used the true arch with cut voussoirs and a central keystone. Builders erected timber centering, laid dressed blocks with lime mortar, and thickened piers to resist scour. The form carried heavy loads, shed water efficiently, and lasted for centuries with limited maintenance. Roman survey practice enabled precise gradients and alignment for roads and aqueducts. Surviving works show the durability of this approach. The Pons Fabricius (62 BCE) still carries traffic in Rome. The Alcantara Bridge in Lusitania (c. 106 CE) spans the Tagus with monumental inscriptions. The Pont du Gard (1st century CE) combines aqueduct and bridge functions with stacked arches.",
     "key": "improvementType:stoneBridge",
     "name": "Stone Bridge",
-    "requires": [
-      "technologyType:mathematics",
-      "domainType:water"
-    ],
-    "specials": [
-      "specialType:landUnitsCanEnter"
-    ],
+    "requires": ["technologyType:arches", "domainType:water"],
+    "specials": ["specialType:landUnitsCanEnter"],
     "yields": [
       {
         "type": "yieldType:span",
@@ -1649,16 +1326,9 @@
     "description": "Cantilever bridges of the industrial era used large steel trusses that project from piers and balance a central suspended span. The method avoided extensive falsework in deep or swift channels and allowed rapid erection by incremental launching. Precision riveted or bolted connections distributed compression in top chords and tension in bottom chords. Redundancy and stiffness improved after early failures led to stricter analysis and inspection. The Forth Bridge (1890) set a long-span benchmark and proved the viability of steel cantilevers in harsh marine climates. The Quebec Bridge, completed in 1917 after catastrophic collapses, reshaped design practice worldwide. The Howrah Bridge (1943) in India showed large urban throughput with a riveted, braced cantilever system.",
     "key": "improvementType:cantileverBridge",
     "name": "Cantilever Bridge",
-    "requires": [
-      "technologyType:steelMilling",
-      "domainType:water"
-    ],
-    "specials": [
-      "specialType:landUnitsCanEnter"
-    ],
-    "upgradesFrom": [
-      "improvementType:stoneBridge"
-    ],
+    "requires": ["technologyType:steelMilling", "domainType:water"],
+    "specials": ["specialType:landUnitsCanEnter"],
+    "upgradesFrom": ["improvementType:stoneBridge"],
     "yields": [
       {
         "type": "yieldType:span",
@@ -1672,16 +1342,9 @@
     "description": "Modern suspension bridges suspend the deck from main cables draped over towers and anchored in massive foundations. High-strength steel wire enabled long main spans during the twentieth century. Aerodynamic lessons from the Tacoma Narrows failure drove the adoption of stiffening trusses, box girders, and tuned damping. Cable spinning, cable clamps, and orthotropic decks increased efficiency and eased maintenance. The Golden Gate Bridge (1937) demonstrated large-span construction in foggy, tidal conditions. The Verrazzano-Narrows Bridge (1964) advanced two-deck urban capacity and wind design. The Akashi Kaikyo Bridge (1998) extended the record span with precision seismic engineering and cable technology.",
     "key": "improvementType:suspensionBridge",
     "name": "Suspension Bridge",
-    "requires": [
-      "technologyType:stainlessSteel",
-      "domainType:water"
-    ],
-    "specials": [
-      "specialType:landUnitsCanEnter"
-    ],
-    "upgradesFrom": [
-      "improvementType:cantileverBridge"
-    ],
+    "requires": ["technologyType:stainlessSteel", "domainType:water"],
+    "specials": ["specialType:landUnitsCanEnter"],
+    "upgradesFrom": ["improvementType:cantileverBridge"],
     "yields": [
       {
         "type": "yieldType:span",
@@ -1695,16 +1358,9 @@
     "description": "Super-span bridges are proposed ultra-long crossings that extend suspension or hybrid systems beyond contemporary limits. Designers study carbon-fiber or corrosion-free composite cables, ultra-high-performance concrete, and aerodynamic box decks with active control. Wind, seismic risk, and maintenance drive new tower forms, optimized anchorages, and real-time structural health monitoring. Construction concepts include modular deck fabrication, robotic cable handling, and floating or deepwater foundations. Economic and environmental assessments shape corridor selection and lifecycle planning. Feasibility studies for the Strait of Messina and the Qiongzhou Strait explore spans at the edge of current practice. Research into next-generation composite mega-suspension systems sets performance targets for future projects.",
     "key": "improvementType:superSpanBridge",
     "name": "Super-Span Bridge",
-    "requires": [
-      "technologyType:composites",
-      "domainType:water"
-    ],
-    "specials": [
-      "specialType:landUnitsCanEnter"
-    ],
-    "upgradesFrom": [
-      "improvementType:suspensionBridge"
-    ],
+    "requires": ["technologyType:composites", "domainType:water"],
+    "specials": ["specialType:landUnitsCanEnter"],
+    "upgradesFrom": ["improvementType:suspensionBridge"],
     "yields": [
       {
         "type": "yieldType:span",

@@ -685,7 +685,7 @@
       "description": "An apothecary was both shop and practitioner specializing in the preparation and sale of medicinals. Stock included dried herbs, gums, resins, minerals, and distillates stored in labeled jars. Compounding used balances, mortars, percolators, and stills, guided by local pharmacopeias. In the Islamic world, pharmacies in Baghdad and Cairo operated under market inspection and produced syrups and electuaries. Song and Ming China sustained apothecary guilds tied to materia medica texts and pulse traditions. Medieval and Renaissance Europe regulated apothecaries alongside physicians and surgeons, later evolving into chemists and pharmacists. Colonial boticas in New Spain and the Philippines connected imperial trade to local remedies. By the nineteenth century formal training, standardized dosing, and prescription practices reshaped the apothecary into modern pharmacy.",
       "image": "/media/images/buildingType/apothecary.jpg",
       "requires": [
-        "technologyType:clinkerHulls",
+        "technologyType:optics",
         [
           "conceptType:flatLand",
           "elevationType:hill"
@@ -2080,7 +2080,7 @@
       "description": "A granary is a purpose-built structure for storing harvested grain to stabilize food supplies. Designs used raised floors, ventilated bins, sealed silos, and thick walls to deter pests and moisture. State systems in ancient Egypt collected and redistributed grain through temple and palace granaries. Roman horrea supported urban provisioning and military logistics. In South Asia, large brick granaries at Harappa and Mohenjo‑daro indicate planned storage in the Indus cities. In the ancient Near East, storage complexes managed tax in kind and emergency reserves. Administrative records tracked inflows, rations, and loans. Granaries buffered seasonal cycles, underpinned taxation, and enabled urban growth by separating production from consumption in space and time.",
       "image": "/media/images/buildingType/granary.jpg",
       "requires": [
-        "technologyType:construction",
+        "technologyType:publicWorks",
         [
           "conceptType:flatLand",
           "elevationType:hill"
@@ -2122,7 +2122,7 @@
       "description": "A guild hall housed the governing body of a craft or merchant association and served as its legal address. In medieval Europe, halls hosted assemblies, set apprenticeship rules, inspected wares, and stored records, banners, and chests. Examples include London’s livery company halls, the Cloth Hall of Ypres, and Lübeck’s merchant buildings tied to Hanseatic trade. Such halls arbitrated disputes and coordinated charity and funerary funds. Beyond Europe, urban guilds met in comparable venues, such as huiguan halls in Qing China that supported regional merchants. Architecture ranged from timber complexes to brick civic monuments on market squares, and ceremonies reinforced corporate standing within urban government.",
       "image": "/media/images/buildingType/guildHall.jpg",
       "requires": [
-        "technologyType:feudalism",
+        "technologyType:guilds",
         [
           "conceptType:flatLand",
           "elevationType:hill"
@@ -2677,7 +2677,7 @@
       "description": "A mint is a state or city facility that fabricates standardized coins. Coinage began in Lydia in the seventh to sixth centuries BCE with electrum staters. Greek poleis and the Achaemenid Empire adopted struck coinage using engraved dies and hammers. Roman mints produced vast issues of silver denarii and later base‑metal coins, marked by officina and mint signatures. In China, imperial mints cast round cash with square holes in bronze molds, maintaining weight standards across regions. Techniques included alloy control, die engraving, and edge treatments to deter clipping. Mints acted as fiscal tools, channeling bullion into a uniform medium for pay, taxation, and trade. Suspensions, reforms, and debasements tracked changing state finances.",
       "image": "/media/images/buildingType/mint.jpg",
       "requires": [
-        "technologyType:currency",
+        "technologyType:minting",
         [
           "conceptType:flatLand",
           "elevationType:hill"
@@ -4381,7 +4381,7 @@
       "description": "A trader’s guild is a corporate association of merchants that maintains a hall, archives, and meeting rooms for regulation, credit, and dispute resolution. The building stores ledgers, seals, and scales; it hosts audits, oath taking, and price setting. Hanseatic kontors at Bergen and Bruges coordinated privileges and convoy dues. The Artus Court in Gdańsk and the livery halls of London show ceremonial and administrative rooms beside countinghouses. In China, huiguan (native-place guild halls) in Guangzhou and Shanghai pooled capital and mediated with officials. Facilities often include chapels or shrines, kitchens, and bonded rooms. Guild officers manage apprenticeships, entry fees, and collective insurance against shipwreck, theft, and fire.",
       "image": "/media/images/buildingType/tradersGuild.jpg",
       "requires": [
-        "technologyType:feudalism",
+        "technologyType:guilds",
         "domainType:land",
         "elevationType:flat"
       ],
@@ -10688,7 +10688,7 @@
         "platformType:elephant": "Elephant Longbowman"
       },
       "requires": [
-        "technologyType:buttress"
+        "technologyType:optics"
       ],
       "yields": [
         {
@@ -12754,6 +12754,10 @@
       "upgradesFrom": [],
       "specials": [],
       "actions": [],
+      "allows": [
+        "goalType:nuclearDeterrence",
+        "goalType:securityCouncil"
+      ],
       "relatesTo": [
         "technologyType:aluminumMilling",
         "technologyType:fission",
@@ -12786,6 +12790,9 @@
       "upgradesFrom": [],
       "specials": [],
       "actions": [],
+      "allows": [
+        "goalType:pantheonOfGods"
+      ],
       "relatesTo": [
         "technologyType:bronzeWorking",
         "technologyType:pottery",
@@ -12813,13 +12820,18 @@
       "upgradesFrom": [],
       "specials": [],
       "actions": [],
+      "allows": [
+        "goalType:veniVidiVici"
+      ],
       "relatesTo": [
         "technologyType:ironSmithing",
         "technologyType:construction",
         "technologyType:democracy",
         "technologyType:minting",
-        "technologyType:woodComposites",
-        "technologyType:ironCasting"
+        "technologyType:publicWorks",
+        "technologyType:standingArmy",
+        "technologyType:ironCasting",
+        "technologyType:woodComposites"
       ]
     },
     {
@@ -12840,6 +12852,9 @@
       "upgradesFrom": [],
       "specials": [],
       "actions": [],
+      "allows": [
+        "goalType:colonialEmpire"
+      ],
       "relatesTo": [
         "technologyType:coldSteel",
         "technologyType:colonialism",
@@ -12869,6 +12884,9 @@
       "upgradesFrom": [],
       "specials": [],
       "actions": [],
+      "allows": [
+        "goalType:tradeNetwork"
+      ],
       "relatesTo": [
         "technologyType:trade",
         "technologyType:copperWorking",
@@ -12897,6 +12915,9 @@
       "upgradesFrom": [],
       "specials": [],
       "actions": [],
+      "allows": [
+        "goalType:spaceRace"
+      ],
       "relatesTo": [
         "technologyType:transistors",
         "technologyType:verticalFlight",
@@ -12927,6 +12948,9 @@
       "upgradesFrom": [],
       "specials": [],
       "actions": [],
+      "allows": [
+        "goalType:theEnlightenment"
+      ],
       "relatesTo": [
         "technologyType:mercantilism",
         "technologyType:flintlock",
@@ -12957,6 +12981,9 @@
       "upgradesFrom": [],
       "specials": [],
       "actions": [],
+      "allows": [
+        "goalType:oceanVoyages"
+      ],
       "relatesTo": [
         "technologyType:carvelHulls",
         "technologyType:gunpowder",
@@ -12985,6 +13012,9 @@
       "upgradesFrom": [],
       "specials": [],
       "actions": [],
+      "allows": [
+        "goalType:industrialMight"
+      ],
       "relatesTo": [
         "technologyType:railroad",
         "technologyType:replaceableParts",
@@ -13017,6 +13047,10 @@
       "upgradesFrom": [],
       "specials": [],
       "actions": [],
+      "allows": [
+        "goalType:worldsFair",
+        "goalType:urbanSociety"
+      ],
       "relatesTo": [
         "technologyType:industrialization",
         "technologyType:militaryTradition",
@@ -13047,6 +13081,9 @@
       "upgradesFrom": [],
       "specials": [],
       "actions": [],
+      "allows": [
+        "goalType:worldWideWeb"
+      ],
       "relatesTo": [
         "technologyType:internet",
         "technologyType:globalArmy",
@@ -13076,14 +13113,19 @@
       "upgradesFrom": [],
       "specials": [],
       "actions": [],
+      "allows": [
+        "goalType:greatPhilosophers",
+        "goalType:olympics"
+      ],
       "relatesTo": [
         "technologyType:riding",
         "technologyType:ironWorking",
         "technologyType:shipEngineering",
         "technologyType:sports",
-        "technologyType:philosophy",
         "technologyType:alphabet",
+        "technologyType:philosophy",
         "technologyType:drama",
+        "technologyType:arches",
         "technologyType:mathematics"
       ]
     },
@@ -13105,6 +13147,9 @@
       "upgradesFrom": [],
       "specials": [],
       "actions": [],
+      "allows": [
+        "goalType:wondersOfTheWorld"
+      ],
       "relatesTo": [
         "technologyType:celestialNavigation",
         "technologyType:bronzeSmithing",
@@ -13135,10 +13180,14 @@
       "upgradesFrom": [],
       "specials": [],
       "actions": [],
+      "allows": [
+        "goalType:feudalLords",
+        "goalType:tournaments"
+      ],
       "relatesTo": [
         "technologyType:steel",
         "technologyType:feudalism",
-        "technologyType:stateReligion",
+        "technologyType:guilds",
         "technologyType:engineering",
         "technologyType:cropRotation",
         "technologyType:machinery",
@@ -13164,6 +13213,9 @@
       "upgradesFrom": [],
       "specials": [],
       "actions": [],
+      "allows": [
+        "goalType:worldWar"
+      ],
       "relatesTo": [
         "technologyType:trenchWarfare",
         "technologyType:stainlessSteel",
@@ -13229,6 +13281,9 @@
       "upgradesFrom": [],
       "specials": [],
       "actions": [],
+      "allows": [
+        "goalType:firstCities"
+      ],
       "relatesTo": [
         "technologyType:sailing",
         "technologyType:agriculture",
@@ -13261,6 +13316,14 @@
       "upgradesFrom": [],
       "specials": [],
       "actions": [],
+      "allows": [
+        "goalType:interplanetarySpecies",
+        "goalType:oneTrueFaith",
+        "goalType:worldPolice",
+        "goalType:globalMonopoly",
+        "goalType:worldDomination",
+        "goalType:culturalSingularity"
+      ],
       "relatesTo": [
         "technologyType:onlineEconomy",
         "technologyType:semiconductors",
@@ -13290,6 +13353,9 @@
       "upgradesFrom": [],
       "specials": [],
       "actions": [],
+      "allows": [
+        "goalType:mandateOfHeaven"
+      ],
       "relatesTo": [
         "technologyType:steelSmithing",
         "technologyType:clinkerHulls",
@@ -14117,8 +14183,7 @@
         "url": "/media/quotes/goalType/colonialEmpire.mp3"
       },
       "requires": [
-        "technologyType:colonialism",
-        "yieldType:goalPoints"
+        "eraType:colonial"
       ],
       "yields": [],
       "gains": [],
@@ -14139,7 +14204,9 @@
         "url": "/media/quotes/goalType/culturalSingularity.mp3"
       },
       "p1": "The stories of the world no longer compete — they echo one another. Music, art, and meaning revolve around a single star of inspiration. The age of imitation has become the age of unity",
-      "requires": [],
+      "requires": [
+        "eraType:postIndustrial"
+      ],
       "yields": [],
       "gains": [],
       "upgradesFrom": [],
@@ -14159,8 +14226,7 @@
         "url": "/media/quotes/goalType/feudalLords.mp3"
       },
       "requires": [
-        "technologyType:feudalism",
-        "yieldType:goalPoints"
+        "eraType:medieval"
       ],
       "yields": [],
       "gains": [],
@@ -14184,8 +14250,7 @@
         "url": "/media/quotes/goalType/firstCities.mp3"
       },
       "requires": [
-        "technologyType:settlements",
-        "yieldType:goalPoints"
+        "eraType:neolithic"
       ],
       "yields": [],
       "gains": [],
@@ -14209,7 +14274,9 @@
         "url": "/media/quotes/goalType/globalMonopoly.mp3"
       },
       "p1": "The merchants of the past dreamed of gold; now value itself obeys design. Every exchange, every thought, every breath of commerce flows through an unseen hand. The market has become the world — and the world, its dominion.",
-      "requires": [],
+      "requires": [
+        "eraType:postIndustrial"
+      ],
       "yields": [],
       "gains": [],
       "upgradesFrom": [],
@@ -14229,8 +14296,7 @@
         "url": "/media/quotes/goalType/greatPhilosophers.mp3"
       },
       "requires": [
-        "technologyType:philosophy",
-        "yieldType:goalPoints"
+        "eraType:iron"
       ],
       "yields": [],
       "gains": [],
@@ -14254,8 +14320,7 @@
         "url": "/media/quotes/goalType/industrialMight.mp3"
       },
       "requires": [
-        "technologyType:steelMilling",
-        "yieldType:goalPoints"
+        "eraType:imperial"
       ],
       "yields": [],
       "gains": [],
@@ -14279,7 +14344,9 @@
         "url": "/media/quotes/goalType/interplanetarySpecies.mp3"
       },
       "p1": "From the dust of one world, we rose to claim the stars. The gravity that bound us became the forge of our resolve. Now the void itself carries our breath, our memory, our will — and the endless frontier knows the name of humankind.",
-      "requires": [],
+      "requires": [
+        "eraType:postIndustrial"
+      ],
       "yields": [],
       "gains": [],
       "upgradesFrom": [],
@@ -14299,8 +14366,7 @@
         "url": "/media/quotes/goalType/mandateOfHeaven.mp3"
       },
       "requires": [
-        "technologyType:divineRight",
-        "yieldType:goalPoints"
+        "eraType:renaissance"
       ],
       "yields": [],
       "gains": [],
@@ -14324,8 +14390,7 @@
         "url": "/media/quotes/goalType/nuclearDeterrence.mp3"
       },
       "requires": [
-        "technologyType:fission",
-        "yieldType:goalPoints"
+        "eraType:atomic"
       ],
       "yields": [],
       "gains": [],
@@ -14346,8 +14411,7 @@
         "url": "/media/quotes/goalType/oceanVoyages.mp3"
       },
       "requires": [
-        "technologyType:carvelHulls",
-        "yieldType:goalPoints"
+        "eraType:exploration"
       ],
       "yields": [],
       "gains": [],
@@ -14371,8 +14435,7 @@
         "url": "/media/quotes/goalType/olympics.mp3"
       },
       "requires": [
-        "technologyType:sports",
-        "yieldType:goalPoints"
+        "eraType:iron"
       ],
       "yields": [],
       "gains": [],
@@ -14393,7 +14456,9 @@
         "url": "/media/quotes/goalType/oneTrueFaith.mp3"
       },
       "p1": "Empires crumbled, tongues divided, prophets fell silent — yet belief endured. Across fire and doubt, one creed gathered the hearts of nations. Now, the spirit of humanity stands united in purpose, bound not by fear, but by faith everlasting.",
-      "requires": [],
+      "requires": [
+        "eraType:postIndustrial"
+      ],
       "yields": [],
       "gains": [],
       "upgradesFrom": [],
@@ -14413,8 +14478,7 @@
         "url": "/media/quotes/goalType/pantheonOfGods.mp3"
       },
       "requires": [
-        "technologyType:pottery",
-        "yieldType:goalPoints"
+        "eraType:bronze"
       ],
       "yields": [],
       "gains": [],
@@ -14438,8 +14502,7 @@
         "url": "/media/quotes/goalType/securityCouncil.mp3"
       },
       "requires": [
-        "technologyType:plastics",
-        "yieldType:goalPoints"
+        "eraType:atomic"
       ],
       "yields": [],
       "gains": [],
@@ -14459,7 +14522,9 @@
         "source": "Yuri Gagarin, 1961",
         "url": "/media/quotes/goalType/spaceRace.mp3"
       },
-      "requires": [],
+      "requires": [
+        "eraType:digital"
+      ],
       "yields": [],
       "gains": [],
       "upgradesFrom": [],
@@ -14479,8 +14544,7 @@
         "url": "/media/quotes/goalType/theEnlightenment.mp3"
       },
       "requires": [
-        "technologyType:education",
-        "yieldType:goalPoints"
+        "eraType:enlightenment"
       ],
       "yields": [],
       "gains": [],
@@ -14504,8 +14568,7 @@
         "url": "/media/quotes/goalType/tournaments.mp3"
       },
       "requires": [
-        "technologyType:chivalry",
-        "yieldType:goalPoints"
+        "eraType:medieval"
       ],
       "yields": [],
       "gains": [],
@@ -14529,8 +14592,7 @@
         "url": "/media/quotes/goalType/tradeNetwork.mp3"
       },
       "requires": [
-        "technologyType:trade",
-        "yieldType:goalPoints"
+        "eraType:copper"
       ],
       "yields": [],
       "gains": [],
@@ -14554,8 +14616,7 @@
         "url": "/media/quotes/goalType/urbanSociety.mp3"
       },
       "requires": [
-        "technologyType:bureaucracy",
-        "yieldType:goalPoints"
+        "eraType:industrial"
       ],
       "yields": [],
       "gains": [],
@@ -14579,8 +14640,7 @@
         "url": "/media/quotes/goalType/veniVidiVici.mp3"
       },
       "requires": [
-        "technologyType:ironSmithing",
-        "yieldType:goalPoints"
+        "eraType:classical"
       ],
       "yields": [],
       "gains": [],
@@ -14604,8 +14664,7 @@
         "url": "/media/quotes/goalType/wondersOfTheWorld.mp3"
       },
       "requires": [
-        "technologyType:government",
-        "yieldType:goalPoints"
+        "eraType:lateBronze"
       ],
       "yields": [],
       "gains": [],
@@ -14629,7 +14688,9 @@
         "url": "/media/quotes/goalType/worldDomination.mp3"
       },
       "p1": "The banners of countless nations fell before ambition’s march. Where others faltered, power endured, until all borders dissolved beneath its shadow. The world kneels, not from fear alone, but from awe at the will that conquered it.",
-      "requires": [],
+      "requires": [
+        "eraType:postIndustrial"
+      ],
       "yields": [],
       "gains": [],
       "upgradesFrom": [],
@@ -14649,7 +14710,9 @@
         "url": "/media/quotes/goalType/worldPolice.mp3"
       },
       "p1": "When war had no victors and chaos knew no borders, governance itself became the final weapon. Through treaty, tribunal, and tireless negotiation, the nations bent toward a single will. The world is unified not by conquest, but by the quiet supremacy of order.",
-      "requires": [],
+      "requires": [
+        "eraType:postIndustrial"
+      ],
       "yields": [],
       "gains": [],
       "upgradesFrom": [],
@@ -14669,8 +14732,7 @@
         "url": "/media/quotes/goalType/worldsFair.mp3"
       },
       "requires": [
-        "technologyType:industrialization",
-        "yieldType:goalPoints"
+        "eraType:industrial"
       ],
       "yields": [],
       "gains": [],
@@ -14691,8 +14753,7 @@
         "url": "/media/quotes/goalType/worldWar.mp3"
       },
       "requires": [
-        "technologyType:repeatingRifles",
-        "yieldType:goalPoints"
+        "eraType:modern"
       ],
       "yields": [],
       "gains": [],
@@ -14715,7 +14776,9 @@
         "source": "Tim Berners-Lee, 2012",
         "url": "/media/quotes/goalType/worldWideWeb.mp3"
       },
-      "requires": [],
+      "requires": [
+        "eraType:information"
+      ],
       "yields": [],
       "gains": [],
       "upgradesFrom": [],
@@ -17003,7 +17066,7 @@
       "category": "improvementCategory:mine",
       "description": "Medieval mining developed timbered stopes, drainage adits, and water-powered machinery. Waterwheels drove bellows, rag-and-chain pumps, and stamping mills for ore preparation. Ventilation relied on shafts, doors, and regulated airflow. Mining law (Bergrecht) defined claims, royalties, and technical oversight. Settlements formed around booms in silver and base metals. Freiberg in Saxony pioneered organized silver extraction with sophisticated drainage and smelting. Kutná Hora in Bohemia sustained large outputs that financed mints and rulers. Specialized guilds trained hewers, carpenters, and smelters. Despite limited depth compared with later eras, these systems intensified production and stabilized supply for coinage and urban growth.",
       "requires": [
-        "technologyType:feudalism"
+        "technologyType:engineering"
       ],
       "yields": [
         {
@@ -17168,7 +17231,7 @@
       "category": "improvementCategory:sawmill",
       "description": "Medieval water-powered sawmills converted river flow into reciprocating motion for vertical frame saws. A waterwheel, crank, and connecting rod drove the blade through logs on a simple carriage. Timbering yards integrated sorting ponds, log booms, and storage sheds. Output increased compared with pit-sawing, enabling larger building projects. Monastic estates introduced mills to supply cloisters, barns, and bridges, and to sell surplus lumber. In Germany and Scandinavia, water-driven sawmills served town builders and shipwrights. Standard beams, planks, and shingles became common in castle and cathedral construction. Sawmill rights and tolls formed part of seigneurial incomes. Seasonal flooding, ice, and log supply governed operating schedules and maintenance.",
       "requires": [
-        "technologyType:feudalism",
+        "technologyType:machinery",
         "domainType:land",
         "featureCategory:forest"
       ],
@@ -17315,7 +17378,7 @@
       "category": "improvementCategory:camp",
       "description": "Medieval hunting grounds were reserved landscapes managed for the game needs of kings and nobles. Law restricted access, regulated weapons, and set penalties for poaching. Management practices included coppicing, deer parks with palisades, meadows for fodder, and rabbit warrens. The royal forests of Norman England formalized forest law over mixed land uses. In Poland, royal reserves in Białowieża preserved bison and red deer under court supervision. Bohemian rulers created walled game parks during the reign of Charles IV. Hunts supplied venison, pelts, and political ceremony. Restrictions often conflicted with peasant grazing and wood gathering, prompting charters and periodic reforms. Long-term protection shaped woodland structure and species composition.",
       "requires": [
-        "technologyType:castles"
+        "technologyType:chivalry"
       ],
       "yields": [
         {
@@ -18141,7 +18204,7 @@
       "category": "improvementCategory:sawmill",
       "description": "In the Bronze Age, sawmills were organized workshops where logs were processed into lumber with simple mechanical assistance. Workers raised logs over saw-pits and used long two-man saws to rip boards. Bronze saws, chisels, and adzes improved accuracy and finish. Rollers, ramps, and block-and-tackle eased handling within the yard. Standard sizes were produced for palatial and temple building programs. Waste was converted to fuel for nearby kilns and furnaces. In Anatolia, organized log-sawing workshops supported urban expansion and metalworking. In the Aegean, timber processing under the Mycenaean palatial economy supplied beams, planking, and ship timbers. The workshop setting concentrated skilled labor, regularized outputs, and linked forest procurement with construction logistics.",
       "requires": [
-        "technologyType:bronzeWorking",
+        "technologyType:shipBuilding",
         "domainType:land",
         "featureCategory:forest"
       ],
@@ -18421,7 +18484,7 @@
       "category": "improvementCategory:bridge",
       "description": "Masonry stone bridges of the classical world used the true arch with cut voussoirs and a central keystone. Builders erected timber centering, laid dressed blocks with lime mortar, and thickened piers to resist scour. The form carried heavy loads, shed water efficiently, and lasted for centuries with limited maintenance. Roman survey practice enabled precise gradients and alignment for roads and aqueducts. Surviving works show the durability of this approach. The Pons Fabricius (62 BCE) still carries traffic in Rome. The Alcantara Bridge in Lusitania (c. 106 CE) spans the Tagus with monumental inscriptions. The Pont du Gard (1st century CE) combines aqueduct and bridge functions with stacked arches.",
       "requires": [
-        "technologyType:mathematics",
+        "technologyType:arches",
         "domainType:water"
       ],
       "yields": [
@@ -34572,7 +34635,7 @@
         "url": "/media/quotes/nationalWonderType/campusMartius.mp3"
       },
       "requires": [
-        "technologyType:militaryTraining",
+        "technologyType:standingArmy",
         "goalType:veniVidiVici"
       ],
       "yields": [
@@ -40893,7 +40956,9 @@
       "concept": "conceptType:policy",
       "category": "policyCategory:faith",
       "description": "Atheist policy seeks to exclude religious authority from the state and promote secular, often scientific, worldviews. The Soviet Union pursued state atheism, closed or repurposed houses of worship, and subordinated permitted activity to party oversight. Albania under Enver Hoxha declared itself an atheist state and banned public religious practice. During the French Revolution, dechristianization and civic cults challenged clerical power before later settlements. The People’s Republic of China encourages secular public life while licensing and supervising religious bodies. Measures range from education campaigns to legal restrictions on clergy and property. Outcomes include rapid secularization, diasporic religious resilience, and periodic accommodation.",
-      "requires": [],
+      "requires": [
+        "technologyType:liberalism"
+      ],
       "yields": [
         {
           "type": "yieldType:faith",
@@ -40936,7 +41001,9 @@
       "concept": "conceptType:policy",
       "category": "policyCategory:military",
       "description": "Conscription is compulsory military service imposed by law to expand forces quickly. It links citizenship to defense obligations and enables mass armies. Revolutionary France pioneered the levée en masse in 1793, feeding Napoleonic campaigns. Most belligerents relied on conscription in World War I and World War II to sustain industrial warfare. The United States used drafts during the Civil War and both world wars. Post‑1945, many states retained universal or selective service, including Israel and South Korea. Conscription remains politically contested. Supporters stress readiness and social cohesion. Critics cite inequities, economic disruption, and civil‑military friction.",
-      "requires": [],
+      "requires": [
+        "technologyType:nationalism"
+      ],
       "yields": [
         {
           "type": "yieldType:strength",
@@ -40970,7 +41037,9 @@
       "concept": "conceptType:policy",
       "category": "policyCategory:leadership",
       "description": "Dictatorship consolidates authority in a single ruler or junta, using coercion, censorship, and control of institutions. Nazi Germany fused party and state, pursued total war, and committed genocidal crimes. Stalin’s Soviet Union enforced rapid industrialization and collectivization through terror and planned targets. North Korea entrenched dynastic rule, a command economy, and pervasive surveillance. Pinochet’s Chile installed military rule after a coup, repressing opposition while adopting neoliberal reforms. Dictatorships arise through coups, revolutions, or wartime states of emergency. They often claim order and modernization while curtailing rights. Endings include defeat in war, elite splits, popular uprisings, or negotiated transitions.",
-      "requires": [],
+      "requires": [
+        "technologyType:settlements"
+      ],
       "yields": [
         {
           "type": "yieldType:happiness",
@@ -41011,7 +41080,9 @@
       "concept": "conceptType:policy",
       "category": "policyCategory:faith",
       "description": "Dogmatic governance enforces a single orthodoxy and penalizes deviation. Institutions police doctrine through courts, censorship, and surveillance. The Spanish Inquisition pursued heresy cases and regulated printed matter. Confessional states in early modern Europe mandated uniform worship and punished dissenters. Stalinist purges fused ideology with security services, producing show trials, expulsions, and forced conformity in science and culture. Authoritarian religious councils have issued binding interpretations and sanctioned rivals. Dogmatism narrows debate, reduces experimental policy, and entrenches patronage networks. Stability can increase in the short term. Long-term effects often include intellectual stagnation, underground opposition, and brittle legitimacy when crises expose contradictions.",
-      "requires": [],
+      "requires": [
+        "technologyType:organizedReligion"
+      ],
       "yields": [
         {
           "type": "yieldType:faith",
@@ -41045,7 +41116,9 @@
       "concept": "conceptType:policy",
       "category": "policyCategory:military",
       "description": "The draft is an emergency call‑up of civilians for short‑term service, often via registries and lotteries. It is used when volunteer numbers are insufficient during crises. The United States instituted federal drafts in the Civil War, prompting the 1863 New York Draft Riots. Selective Service operated in World War II and during the Vietnam era with varying deferments. Many belligerents issued wartime drafts in World Wars I and II to meet casualty replacement needs. The Soviet Union mobilized vast numbers during the Great Patriotic War. Draft systems invite legal exemptions, public protest, and administrative challenges in fast‑moving conflicts.",
-      "requires": [],
+      "requires": [
+        "technologyType:rifling"
+      ],
       "yields": [
         {
           "type": "yieldType:strength",
@@ -41088,7 +41161,9 @@
       "concept": "conceptType:policy",
       "category": "policyCategory:trade",
       "description": "Duties are tariffs and excise taxes levied on imports and specific goods to protect producers and fund the state. They shaped industrial policy in many countries. The United States used high protective tariffs in the nineteenth century during rapid industrialization. The Smoot‑Hawley Tariff Act of 1930 raised rates sharply and met foreign retaliation. In the late twentieth century, some developing states applied moderate tariffs to shelter infant industries. Duties can guide revenue and bargaining power. They can also raise prices, reduce trade volumes, and trigger disputes under international agreements.",
-      "requires": [],
+      "requires": [
+        "technologyType:trade"
+      ],
       "yields": [
         {
           "type": "yieldType:tradeYield",
@@ -41120,7 +41195,9 @@
       "concept": "conceptType:policy",
       "category": "policyCategory:leadership",
       "description": "A federation joins semi-autonomous states under a common constitution and federal institutions. Authority is divided between central and regional governments, often protected by judicial review. The United States defined this model in 1789, balancing national powers with state sovereignty and testing the settlement in the Civil War. Switzerland consolidated its cantons under a federal constitution in 1848 and refined it by referendum and consensus practice. The Federal Republic of Germany rebuilt federalism after 1949 through the Basic Law and cooperative institutions. India formed a union of states after 1947, reorganizing linguistic boundaries and developing strong emergency provisions to manage diversity and crisis.",
-      "requires": [],
+      "requires": [
+        "technologyType:democracy"
+      ],
       "yields": [
         {
           "type": "yieldType:tradeYield",
@@ -41163,7 +41240,9 @@
       "concept": "conceptType:policy",
       "category": "policyCategory:economy",
       "description": "Feudalism organized medieval power through personal bonds and land tenure. Lords granted fiefs to vassals in exchange for military and court service. Peasants on manors owed rents and labor, often under serfdom. Authority was fragmented, with castle-based defense, private justice, and overlapping jurisdictions. Norman England documented holdings in the Domesday Book and bound nobles through fealty. In Japan, the shogunate structured the bakuhan system, with daimyo domains and samurai service under Tokugawa hegemony. Feudal relations declined with stronger monarchies, money rents replacing labor dues, urban growth, and military changes. The Black Death accelerated commutation and peasant bargaining power.",
-      "requires": [],
+      "requires": [
+        "technologyType:feudalism"
+      ],
       "yields": [
         {
           "type": "yieldType:production",
@@ -41204,7 +41283,9 @@
       "concept": "conceptType:policy",
       "category": "policyCategory:faith",
       "description": "Freedom of religion denotes legal protection for belief, worship, and nonbelief. The policy limits government establishment and bans coercion in matters of conscience. Early precedents include the Edict of Nantes, which granted restricted toleration to French Protestants, and the pluralist Dutch Republic after the Reformation. The U.S. First Amendment created a durable model combining nonestablishment with free exercise. Contemporary secular constitutions protect minority communities and enable voluntary institutions. Implementation varies. Some states retain blasphemy laws or registration regimes that burden small groups. Durable pluralism tends to correlate with commercial openness, urbanization, and independent courts that enforce neutral rules.",
-      "requires": [],
+      "requires": [
+        "technologyType:liberalism"
+      ],
       "yields": [
         {
           "type": "yieldType:faith",
@@ -41238,7 +41319,9 @@
       "concept": "conceptType:policy",
       "category": "policyCategory:faith",
       "description": "Fundamentalist policy fuses religious doctrine with governance and daily life. Authorities claim scriptural mandates for law, education, and social conduct. Enforcement targets blasphemy, moral offenses, and heterodox practice. Puritan New England legislated Sabbath keeping and communal discipline. Wahhabi movements in the Arabian Peninsula sought to purify worship and reorganize tribal politics under strict monotheism. After 1979, Iran institutionalized clerical oversight, Islamic courts, and religious vetting of officials. Taliban administrations enforced conservative dress codes, gender segregation, and religious schooling. Supporters frame the order as faithful restoration. Critics record curtailed civil liberties and suppression of minority sects. Outcomes depend on local institutions, clerical authority, and external pressure.",
-      "requires": [],
+      "requires": [
+        "technologyType:fundamentalism"
+      ],
       "yields": [
         {
           "type": "yieldType:faith",
@@ -41281,7 +41364,9 @@
       "concept": "conceptType:policy",
       "category": "policyCategory:trade",
       "description": "Isolationism restricts foreign trade, alliances, and travel to preserve sovereignty and internal order. It shapes diplomacy through neutrality and limited ports of entry. Tokugawa Japan enforced sakoku from the seventeenth to nineteenth centuries with tightly controlled contacts at Nagasaki. The Qing dynasty’s Canton System confined European commerce to a single port with licensed intermediaries. The United States adopted neutrality laws and avoided entangling alliances in the interwar years. Isolation can stabilize regimes and reduce external entanglements. It can also slow innovation and leave states unprepared for systemic shocks.",
-      "requires": [],
+      "requires": [
+        "technologyType:civilService"
+      ],
       "yields": [
         {
           "type": "yieldType:tradeYield",
@@ -41324,7 +41409,9 @@
       "concept": "conceptType:policy",
       "category": "policyCategory:leadership",
       "description": "A kingdom centers authority in a monarch, usually through hereditary succession, supported by aristocratic and court institutions. Medieval and early modern kingdoms built legitimacy through dynastic law, religion, and control of land and offices. The Kingdom of France under the Ancien Régime developed royal centralization and fiscal absolutism before 1789. The United Kingdom evolved from monarchical prerogative to parliamentary sovereignty after 1688 and through later reforms. Sweden shifted from estates politics to constitutional monarchy, culminating in the 1974 Instrument of Government. Saudi Arabia unified disparate regions in 1932 under an absolute monarchy linked to tribal alliances and religious authority.",
-      "requires": [],
+      "requires": [
+        "technologyType:government"
+      ],
       "yields": [
         {
           "type": "yieldType:happiness",
@@ -41356,7 +41443,9 @@
       "concept": "conceptType:policy",
       "category": "policyCategory:economy",
       "description": "Laissez-faire prescribes minimal state intervention in markets, limited taxation, and secure property rights. Rooted in classical political economy, it gained strength in nineteenth-century Britain with free trade, the gold standard, and light regulation during industrialization. The United States in the Gilded Age reduced barriers to enterprise, tolerated trusts until antitrust action, and relied on courts to settle labor and corporate conflicts. Pre-1997 Hong Kong maintained low taxes and few industrial policies while serving as a regional entrepôt. Laissez-faire often delivered rapid growth and capital accumulation but also sharp inequality and instability, prompting later regulatory and social policy responses.",
-      "requires": [],
+      "requires": [
+        "technologyType:liberalism"
+      ],
       "yields": [
         {
           "type": "yieldType:gold",
@@ -41399,7 +41488,9 @@
       "concept": "conceptType:policy",
       "category": "policyCategory:military",
       "description": "Levied troops are locally raised forces mustered for a campaign and then disbanded. Authority flowed through lords, towns, or provinces rather than a central army. Medieval Europe relied on feudal levies of knights and peasant contingents bound by service days. The Anglo‑Saxon fyrd mobilized regional militia for defense. Early modern states still called county and provincial levies when emergencies arose. In Japan, ashigaru foot soldiers began as levied retainers before professionalization. Levies provided quick manpower but uneven training, limited endurance, and variable loyalty. As states centralized, levies yielded to standing troops and conscription systems.",
-      "requires": [],
+      "requires": [
+        "technologyType:warfare"
+      ],
       "yields": [
         {
           "type": "yieldType:strength",
@@ -41433,7 +41524,9 @@
       "concept": "conceptType:policy",
       "category": "policyCategory:trade",
       "description": "Mercantilism was an early modern doctrine that sought national power through controlled commerce and bullion accumulation. States granted monopolies to chartered companies, enforced navigation laws, and exploited colonies for raw materials. Spain drew silver and gold from the Americas to fund imperial commitments. England used the Navigation Acts and the East India Company to channel trade through English ships and ports. The Dutch VOC secured Asian spices under state-backed privileges. Mercantilism financed fleets and wars and aided state formation. Classical economists later criticized it for restraining competition and misallocating resources.",
-      "requires": [],
+      "requires": [
+        "technologyType:mercantilism"
+      ],
       "yields": [
         {
           "type": "yieldType:tradeYield",
@@ -41465,7 +41558,9 @@
       "concept": "conceptType:policy",
       "category": "policyCategory:military",
       "description": "Mercenaries are soldiers who contract for pay rather than allegiance to a polity. States and princes have hired them since antiquity to fill manpower gaps or gain specialist skills. Swiss pikemen and German Landsknechts dominated European battlefields in the fifteenth and sixteenth centuries. Italian city-states employed condottieri who negotiated detailed service contracts. During the Hundred Years’ War, Free Companies fought and pillaged between truces. The practice continued into the modern era with German auxiliaries in foreign service and colonial campaigns. In the late twentieth and early twenty-first centuries, private military companies revived the model, notably Executive Outcomes and the Wagner Group, raising accountability and sovereignty debates.",
-      "requires": [],
+      "requires": [
+        "technologyType:minting"
+      ],
       "yields": [
         {
           "type": "yieldType:strength",
@@ -41499,7 +41594,9 @@
       "concept": "conceptType:policy",
       "category": "policyCategory:leadership",
       "description": "Oligarchy concentrates power in a small elite, often based on wealth, birth, or military control. Spartan governance combined dual kingship with the Gerousia and ephors, restricting citizenship and disciplining society. Venice institutionalized a mercantile oligarchy through the Great Council, Senate, and a constrained Doge, sustaining stability and maritime trade for centuries. The Late Roman Republic saw senatorial elites dominate policy through patronage and control of magistracies. Modern states sometimes exhibit oligarchic influence when concentrated economic power shapes policy outside broad democratic accountability. Mechanisms include restricted franchises, closed councils, party cartels, and financial capture of regulatory and media systems.",
-      "requires": [],
+      "requires": [
+        "technologyType:settlements"
+      ],
       "yields": [
         {
           "type": "yieldType:gold",
@@ -41531,7 +41628,9 @@
       "concept": "conceptType:policy",
       "category": "policyCategory:trade",
       "description": "Open trade policy lowers tariffs, quotas, and capital barriers to integrate with external markets. Advocates seek specialization, productivity gains, and consumer choice. Nineteenth‑century Britain moved toward free trade after the Corn Laws repeal and through the Cobden‑Chevalier Treaty network. After 1945, GATT and later the WTO reduced barriers worldwide. Regional projects such as the European Single Market removed internal customs checks and harmonized standards. Openness can accelerate growth and diffusion of ideas. It can also expose domestic sectors to shocks and dependence on foreign supply chains, spurring periodic protectionist backlashes.",
-      "requires": [],
+      "requires": [
+        "technologyType:liberalism"
+      ],
       "yields": [
         {
           "type": "yieldType:tradeYield",
@@ -41565,7 +41664,9 @@
       "concept": "conceptType:policy",
       "category": "policyCategory:economy",
       "description": "Planned economies allocate resources through state targets and administrative orders rather than market prices. The Soviet Union’s Five-Year Plans directed heavy industry, electrification, and defense, coordinated by Gosplan and sector ministries. Eastern Bloc states adopted similar material-balance planning after 1945. The People’s Republic of China used comprehensive plans before 1978, later shifting to market reforms while retaining industrial policy tools. Planning achieved rapid industrial buildup and literacy gains but produced chronic shortages, soft budget constraints, and suppressed consumer welfare. Reform efforts introduced enterprise autonomy and indicative methods. Systemic limits persisted where prices and profit signals remained politically fixed.",
-      "requires": [],
+      "requires": [
+        "technologyType:replaceableParts"
+      ],
       "yields": [
         {
           "type": "yieldType:gold",
@@ -41608,7 +41709,9 @@
       "concept": "conceptType:policy",
       "category": "policyCategory:military",
       "description": "Professional soldiers form standing forces maintained by the state as a career. They receive regular pay, standardized training, and a clear hierarchy. The Roman Imperial legions set an early model with long terms, pensions, and permanent camps. Early modern reforms built on this base. The New Model Army and later Prussian drill systems improved discipline and logistics. By the nineteenth century many European powers kept standing armies in peace and war. The British Army evolved into a permanent force after the eighteenth century. In the twentieth century, professionalization spread across industrial states and NATO members, supported by staff colleges, doctrine, and specialized branches.",
-      "requires": [],
+      "requires": [
+        "technologyType:standingArmy"
+      ],
       "yields": [
         {
           "type": "yieldType:strength",
@@ -41640,7 +41743,9 @@
       "concept": "conceptType:policy",
       "category": "policyCategory:economy",
       "description": "Rationing allocates scarce goods through state quotas, coupons, and priority categories. It aims to sustain military supply, stabilize prices, and share shortages. Britain and the United States rationed food, fuel, and consumer goods during the Second World War, combining coupons with propaganda and price controls. The Soviet Union used card systems in 1941–1947 to manage wartime scarcity. Cuba introduced the libreta in the 1960s to guarantee basic staples amid trade and production shocks. Rationing often kept nutrition above crisis levels but encouraged black markets and substitution. Removal typically followed recovery, though some systems persisted during chronic shortages.",
-      "requires": [],
+      "requires": [
+        "technologyType:nationalism"
+      ],
       "yields": [
         {
           "type": "yieldType:happiness",
@@ -41681,7 +41786,9 @@
       "concept": "conceptType:policy",
       "category": "policyCategory:economy",
       "description": "A regulated market economy retains private enterprise while subjecting it to public rules on finance, competition, labor, and safety. The United States expanded oversight in the 1930s with New Deal agencies such as the SEC and NLRB. After 2008, Dodd–Frank introduced capital and derivatives rules and systemic risk supervision. The European Union develops competition law, consumer protection, and data and environmental standards across member states. Regulatory regimes shift with political coalitions and crises, alternating between liberalization and tighter controls. The long-term pattern is a mixed economy that seeks to curb monopoly, financial excess, and hazardous practices without abolishing markets.",
-      "requires": [],
+      "requires": [
+        "technologyType:banking"
+      ],
       "yields": [
         {
           "type": "yieldType:gold",
@@ -41713,7 +41820,9 @@
       "concept": "conceptType:policy",
       "category": "policyCategory:leadership",
       "description": "A republic is government by elected or appointed officials who rule under law for the public interest. The Roman Republic created a mixed constitution with magistrates, Senate, and popular assemblies, shaping later ideas on civic virtue and checks on power. Modern republics adopted representative institutions and written constitutions. The United States combined separation of powers with federalism. Revolutionary France moved through successive republican constitutions and expanded civic participation. The Weimar Republic attempted liberal democracy under proportional representation but faced polarization and crisis. Republicanism spread in the nineteenth and twentieth centuries as monarchies receded or adapted to constitutional limits.",
-      "requires": [],
+      "requires": [
+        "technologyType:democracy"
+      ],
       "yields": [
         {
           "type": "yieldType:happiness",
@@ -41747,7 +41856,9 @@
       "concept": "conceptType:policy",
       "category": "policyCategory:trade",
       "description": "Self‑reliant policy, or autarky, aims for strategic independence by substituting imports with domestic production and controlling key inputs. It spreads risk and reduces exposure to embargoes. The Soviet Union pursued planning and import substitution across heavy industry. Post‑independence India favored protected markets and licensing during the 1950s–1970s. North Korea’s Juche doctrine pushed extreme self‑reliance, with chronic shortages. Autarky can build capacities in defense and essentials. It often imposes high costs through inefficiency, limited technology transfer, and constrained consumer choice.",
-      "requires": [],
+      "requires": [
+        "technologyType:civilService"
+      ],
       "yields": [
         {
           "type": "yieldType:tradeYield",
@@ -41788,7 +41899,9 @@
       "concept": "conceptType:policy",
       "category": "policyCategory:faith",
       "description": "A state religion is an officially endorsed faith integrated into law, education, and ceremony. The state funds clergy, regulates doctrine, and often links officeholding to religious conformity. In Britain, the monarch is Supreme Governor of the Church of England, and ecclesiastical appointments historically intersected with politics. Lutheran state churches in Scandinavia shaped schooling, parish records, and welfare provision. The Ottoman Empire structured administration through Islamic law and a millet system for recognized minorities. Modern constitutions may retain establishment while expanding civil rights. Reforms commonly separate fiscal support from doctrine and remove legal disabilities for dissenters, yet ceremonial roles and concordats can persist.",
-      "requires": [],
+      "requires": [
+        "technologyType:organizedReligion"
+      ],
       "yields": [
         {
           "type": "yieldType:faith",
@@ -48908,11 +49021,11 @@
         "source": "Herodotus, Histories, ca. 440 BCE",
         "url": "/media/quotes/technologyType/alphabet.mp3"
       },
-      "x": 6,
+      "x": 2,
       "y": 30,
       "requires": [
-        "technologyType:ironWorking",
-        "technologyType:shipEngineering"
+        "technologyType:riding",
+        "technologyType:ironWorking"
       ],
       "yields": [
         {
@@ -48929,7 +49042,7 @@
       "actions": [],
       "allows": [
         "buildingType:library",
-        "technologyType:mathematics",
+        "technologyType:arches",
         "worldWonderType:libraryOfAlexandria"
       ]
     },
@@ -49087,6 +49200,44 @@
         "technologyType:militaryTraining",
         "technologyType:bronzeCasting",
         "worldWonderType:templeOfArtemis"
+      ]
+    },
+    {
+      "key": "technologyType:arches",
+      "name": "Arches",
+      "concept": "conceptType:technology",
+      "category": "eraType:iron",
+      "description": "",
+      "image": "/media/images/technologyType/arches.jpg",
+      "quote": {
+        "text": "",
+        "source": "",
+        "url": "/media/quotes/technologyType/arches.mp3"
+      },
+      "x": 4,
+      "y": 32,
+      "requires": [
+        "technologyType:philosophy",
+        "technologyType:alphabet"
+      ],
+      "yields": [
+        {
+          "type": "yieldType:scienceCost",
+          "method": "lump",
+          "amount": 124,
+          "for": [],
+          "vs": []
+        }
+      ],
+      "gains": [],
+      "upgradesFrom": [],
+      "specials": [],
+      "actions": [],
+      "allows": [
+        "improvementType:stoneBridge",
+        "technologyType:ironSmithing",
+        "technologyType:construction",
+        "worldWonderType:hangingGardens"
       ]
     },
     {
@@ -49420,6 +49571,7 @@
       "actions": [],
       "allows": [
         "buildingType:bank",
+        "policyType:regulated",
         "technologyType:mercantilism",
         "technologyType:flintlock",
         "worldWonderType:uffizi"
@@ -49535,7 +49687,6 @@
         "buildingType:bronzeSmith",
         "equipmentType:bronzeSpear",
         "equipmentType:bronzeJavelin",
-        "improvementType:sawmill",
         "technologyType:mining",
         "technologyType:irrigation"
       ]
@@ -49574,7 +49725,6 @@
       "allows": [
         "buildingType:magistrate",
         "improvementType:estate",
-        "goalType:urbanSociety",
         "nationalWonderType:parliament",
         "nationalWonderType:highCourt",
         "technologyType:steelMilling",
@@ -49614,7 +49764,6 @@
       "actions": [],
       "allows": [
         "buildingType:cathedral",
-        "equipmentType:longbow",
         "nationalWonderType:royalPalace",
         "technologyType:gunpowder",
         "technologyType:fundamentalism",
@@ -49726,7 +49875,6 @@
       "specials": [],
       "actions": [],
       "allows": [
-        "goalType:oceanVoyages",
         "nationalWonderType:voyageOfMagellan",
         "platformType:carvel",
         "technologyType:militaryDiscipline"
@@ -49766,7 +49914,6 @@
       "allows": [
         "buildingType:castle",
         "equipmentType:trebuchet",
-        "improvementType:huntingGround",
         "nationalWonderType:carcassonne",
         "stockpileType:diseaseProjectile",
         "technologyType:clinkerHulls",
@@ -49879,7 +50026,7 @@
       "specials": [],
       "actions": [],
       "allows": [
-        "goalType:tournaments",
+        "improvementType:huntingGround",
         "nationalWonderType:codexManesse",
         "nationalWonderType:tournamentGrounds",
         "technologyType:divineRight",
@@ -49956,6 +50103,8 @@
       "specials": [],
       "actions": [],
       "allows": [
+        "policyType:selfReliant",
+        "policyType:isolationist",
         "technologyType:township",
         "technologyType:theater",
         "worldWonderType:bazaarOfIstanbul"
@@ -49993,7 +50142,6 @@
       "specials": [],
       "actions": [],
       "allows": [
-        "buildingType:apothecary",
         "platformType:clinker",
         "technologyType:tradeCaravans",
         "technologyType:optics",
@@ -50032,7 +50180,8 @@
       "actions": [],
       "allows": [
         "buildingType:courthouse",
-        "technologyType:currency"
+        "technologyType:currency",
+        "worldWonderType:pyramidsOfGiza"
       ]
     },
     {
@@ -50105,7 +50254,6 @@
         "buildingType:port",
         "equipmentType:colonist",
         "improvementType:colony",
-        "goalType:colonialEmpire",
         "nationalWonderType:eastIndiaCompany",
         "technologyType:cartography",
         "technologyType:pistols"
@@ -50283,6 +50431,7 @@
       "x": 6,
       "y": 35,
       "requires": [
+        "technologyType:arches",
         "technologyType:mathematics"
       ],
       "yields": [
@@ -50299,11 +50448,10 @@
       "specials": [],
       "actions": [],
       "allows": [
-        "buildingType:granary",
         "buildingType:aqueduct",
         "routeType:cobbledRoad",
         "technologyType:minting",
-        "technologyType:woodComposites",
+        "technologyType:publicWorks",
         "worldWonderType:pantheon"
       ]
     },
@@ -50360,7 +50508,7 @@
       "y": 44,
       "requires": [
         "technologyType:feudalism",
-        "technologyType:stateReligion"
+        "technologyType:guilds"
       ],
       "yields": [
         {
@@ -50414,7 +50562,6 @@
       "specials": [],
       "actions": [],
       "allows": [
-        "buildingType:mint",
         "buildingType:market",
         "nationalWonderType:greatMarket",
         "technologyType:shipEngineering",
@@ -50489,7 +50636,9 @@
       "actions": [],
       "allows": [
         "equipmentType:envoy",
-        "technologyType:woodComposites",
+        "policyType:federation",
+        "policyType:republic",
+        "technologyType:publicWorks",
         "worldWonderType:parthenon"
       ]
     },
@@ -50566,7 +50715,6 @@
       "allows": [
         "buildingType:royalCourt",
         "equipmentType:courtier",
-        "goalType:mandateOfHeaven",
         "technologyType:optics",
         "worldWonderType:angkorWat"
       ]
@@ -50757,7 +50905,6 @@
       "actions": [],
       "allows": [
         "buildingType:university",
-        "goalType:theEnlightenment",
         "technologyType:mercantilism",
         "worldWonderType:oxfordUniversity"
       ]
@@ -50830,11 +50977,12 @@
       "specials": [],
       "actions": [],
       "allows": [
+        "improvementType:feudalMine",
         "improvementType:bastion",
         "improvementType:stronghold",
         "technologyType:machinery",
         "technologyType:castles",
-        "worldWonderType:chichenItza"
+        "worldWonderType:greatWall"
       ]
     },
     {
@@ -50852,7 +51000,8 @@
       "x": 6,
       "y": 42,
       "requires": [
-        "technologyType:ironCasting"
+        "technologyType:ironCasting",
+        "technologyType:woodComposites"
       ],
       "yields": [
         {
@@ -50868,19 +51017,14 @@
       "specials": [],
       "actions": [],
       "allows": [
-        "buildingType:guildHall",
-        "buildingType:tradersGuild",
         "equipmentType:peasant",
         "improvementType:feudalPlantation",
         "improvementType:feudalPasture",
         "improvementType:feudalQuarry",
-        "improvementType:feudalSawmill",
-        "improvementType:feudalMine",
         "improvementType:feudalBoats",
-        "goalType:feudalLords",
+        "policyType:feudal",
         "technologyType:engineering",
-        "technologyType:cropRotation",
-        "worldWonderType:greatWall"
+        "technologyType:cropRotation"
       ]
     },
     {
@@ -50956,7 +51100,6 @@
       "actions": [],
       "allows": [
         "buildingType:nuclearPowerPlant",
-        "goalType:nuclearDeterrence",
         "nationalWonderType:manhattanProject",
         "stockpileType:atomBomb",
         "technologyType:thermonuclearDevice"
@@ -51108,6 +51251,7 @@
       "actions": [],
       "allows": [
         "equipmentType:monk",
+        "policyType:fundamentalist",
         "technologyType:civilService"
       ]
     },
@@ -51290,10 +51434,9 @@
       "allows": [
         "buildingType:mansion",
         "equipmentType:builder",
-        "goalType:wondersOfTheWorld",
+        "policyType:kingdom",
         "technologyType:organizedReligion",
-        "technologyType:codeOfLaw",
-        "worldWonderType:pyramidsOfGiza"
+        "technologyType:codeOfLaw"
       ]
     },
     {
@@ -51406,6 +51549,43 @@
         "technologyType:internet",
         "technologyType:globalArmy",
         "technologyType:rifleScopes"
+      ]
+    },
+    {
+      "key": "technologyType:guilds",
+      "name": "Guilds",
+      "concept": "conceptType:technology",
+      "category": "eraType:medieval",
+      "description": "",
+      "image": "/media/images/technologyType/guilds.jpg",
+      "quote": {
+        "text": "",
+        "source": "",
+        "url": "/media/quotes/technologyType/guilds.mp3"
+      },
+      "x": 10,
+      "y": 42,
+      "requires": [
+        "technologyType:woodComposites"
+      ],
+      "yields": [
+        {
+          "type": "yieldType:scienceCost",
+          "method": "lump",
+          "amount": 160,
+          "for": [],
+          "vs": []
+        }
+      ],
+      "gains": [],
+      "upgradesFrom": [],
+      "specials": [],
+      "actions": [],
+      "allows": [
+        "buildingType:guildHall",
+        "buildingType:tradersGuild",
+        "technologyType:cropRotation",
+        "worldWonderType:chichenItza"
       ]
     },
     {
@@ -51671,7 +51851,6 @@
       "actions": [],
       "allows": [
         "buildingType:factory",
-        "goalType:worldsFair",
         "routeType:canal",
         "technologyType:steamEngine",
         "technologyType:bureaucracy",
@@ -51731,7 +51910,7 @@
       "y": 39,
       "requires": [
         "technologyType:minting",
-        "technologyType:woodComposites"
+        "technologyType:publicWorks"
       ],
       "yields": [
         {
@@ -51749,7 +51928,6 @@
       "allows": [
         "technologyType:steel",
         "technologyType:feudalism",
-        "technologyType:stateReligion",
         "worldWonderType:wallsOfConstantinople"
       ]
     },
@@ -51768,7 +51946,7 @@
       "x": 2,
       "y": 35,
       "requires": [
-        "technologyType:mathematics"
+        "technologyType:arches"
       ],
       "yields": [
         {
@@ -51786,7 +51964,6 @@
       "allows": [
         "equipmentType:ironSword",
         "equipmentType:ironRam",
-        "goalType:veniVidiVici",
         "technologyType:minting"
       ]
     },
@@ -51825,9 +52002,8 @@
         "buildingType:smith",
         "equipmentType:ironSpear",
         "equipmentType:ironJavelin",
-        "technologyType:philosophy",
         "technologyType:alphabet",
-        "worldWonderType:petra"
+        "technologyType:philosophy"
       ]
     },
     {
@@ -51899,6 +52075,10 @@
       "specials": [],
       "actions": [],
       "allows": [
+        "policyType:laissezFaire",
+        "policyType:open",
+        "policyType:freedomOfReligion",
+        "policyType:atheist",
         "technologyType:combustion",
         "technologyType:universalSuffrage"
       ]
@@ -51937,6 +52117,7 @@
         "buildingType:printingPress",
         "buildingType:windmill",
         "equipmentType:crossbow",
+        "improvementType:feudalSawmill",
         "technologyType:steelSmithing",
         "technologyType:clinkerHulls"
       ]
@@ -51991,11 +52172,10 @@
         "source": "Indian mathematical treatise, ca. 300 BCE",
         "url": "/media/quotes/technologyType/mathematics.mp3"
       },
-      "x": 6,
+      "x": 8,
       "y": 32,
       "requires": [
         "technologyType:philosophy",
-        "technologyType:alphabet",
         "technologyType:drama"
       ],
       "yields": [
@@ -52014,11 +52194,8 @@
       "allows": [
         "buildingType:siegeWorkshop",
         "equipmentType:catapult",
-        "improvementType:stoneBridge",
-        "technologyType:ironSmithing",
         "technologyType:construction",
-        "technologyType:democracy",
-        "worldWonderType:hangingGardens"
+        "technologyType:democracy"
       ]
     },
     {
@@ -52057,7 +52234,7 @@
         "buildingType:hospital",
         "technologyType:replaceableParts",
         "technologyType:economics",
-        "worldWonderType:embankment"
+        "worldWonderType:statueOfLiberty"
       ]
     },
     {
@@ -52093,6 +52270,7 @@
       "actions": [],
       "allows": [
         "buildingType:coffeeHouse",
+        "policyType:mercantilism",
         "technologyType:diplomacy",
         "technologyType:opera"
       ]
@@ -52282,7 +52460,6 @@
       "actions": [],
       "allows": [
         "buildingType:trainingGround",
-        "nationalWonderType:campusMartius",
         "technologyType:riding",
         "technologyType:ironWorking",
         "worldWonderType:terracottaArmy"
@@ -52356,6 +52533,9 @@
       "specials": [],
       "actions": [],
       "allows": [
+        "buildingType:mint",
+        "policyType:mercenary",
+        "technologyType:standingArmy",
         "technologyType:ironCasting"
       ]
     },
@@ -52465,6 +52645,8 @@
       "specials": [],
       "actions": [],
       "allows": [
+        "policyType:rationed",
+        "policyType:conscription",
         "technologyType:industrialization",
         "technologyType:militaryTradition"
       ]
@@ -52727,6 +52909,8 @@
       "specials": [],
       "actions": [],
       "allows": [
+        "buildingType:apothecary",
+        "equipmentType:longbow",
         "technologyType:compass",
         "technologyType:buttress",
         "worldWonderType:houseOfWisdom"
@@ -52767,6 +52951,8 @@
         "buildingType:temple",
         "equipmentType:priest",
         "nationalWonderType:templeMount",
+        "policyType:dogmatic",
+        "policyType:stateReligion",
         "technologyType:bronzeCasting",
         "technologyType:currency",
         "worldWonderType:oracle"
@@ -52784,11 +52970,11 @@
         "source": "Zhuangzi, ca. 300 BCE",
         "url": "/media/quotes/technologyType/philosophy.mp3"
       },
-      "x": 2,
+      "x": 6,
       "y": 30,
       "requires": [
-        "technologyType:riding",
-        "technologyType:ironWorking"
+        "technologyType:ironWorking",
+        "technologyType:shipEngineering"
       ],
       "yields": [
         {
@@ -52804,9 +52990,10 @@
       "specials": [],
       "actions": [],
       "allows": [
-        "goalType:greatPhilosophers",
         "nationalWonderType:schoolOfSocrates",
-        "technologyType:mathematics"
+        "technologyType:arches",
+        "technologyType:mathematics",
+        "worldWonderType:petra"
       ]
     },
     {
@@ -52917,7 +53104,6 @@
       "actions": [],
       "allows": [
         "buildingType:supermarket",
-        "goalType:securityCouncil",
         "technologyType:transistors",
         "technologyType:verticalFlight",
         "worldWonderType:unitedNations"
@@ -52958,7 +53144,6 @@
         "buildingType:potter",
         "equipmentType:settler",
         "improvementType:pasture",
-        "goalType:pantheonOfGods",
         "technologyType:irrigation"
       ]
     },
@@ -52997,6 +53182,44 @@
         "nationalWonderType:spaceport",
         "technologyType:aIAnalysis",
         "technologyType:weaponizedLasers"
+      ]
+    },
+    {
+      "key": "technologyType:publicWorks",
+      "name": "Public Works",
+      "concept": "conceptType:technology",
+      "category": "eraType:classical",
+      "description": "",
+      "image": "/media/images/technologyType/publicWorks.jpg",
+      "quote": {
+        "text": "",
+        "source": "",
+        "url": "/media/quotes/technologyType/publicWorks.mp3"
+      },
+      "x": 8,
+      "y": 37,
+      "requires": [
+        "technologyType:construction",
+        "technologyType:democracy"
+      ],
+      "yields": [
+        {
+          "type": "yieldType:scienceCost",
+          "method": "lump",
+          "amount": 144,
+          "for": [],
+          "vs": []
+        }
+      ],
+      "gains": [],
+      "upgradesFrom": [],
+      "specials": [],
+      "actions": [],
+      "allows": [
+        "buildingType:granary",
+        "technologyType:ironCasting",
+        "technologyType:woodComposites",
+        "worldWonderType:colosseum"
       ]
     },
     {
@@ -53147,7 +53370,6 @@
       "allows": [
         "equipmentType:rifle",
         "equipmentType:aAGun",
-        "goalType:worldWar",
         "nationalWonderType:generalStaff",
         "technologyType:chemistry"
       ]
@@ -53185,6 +53407,7 @@
       "actions": [],
       "allows": [
         "buildingType:assemblyLine",
+        "policyType:planned",
         "technologyType:repeatingRifles"
       ]
     },
@@ -53223,7 +53446,7 @@
         "platformType:horse",
         "platformType:camel",
         "platformType:elephant",
-        "technologyType:philosophy",
+        "technologyType:alphabet",
         "worldWonderType:circusMaximus"
       ]
     },
@@ -53299,6 +53522,7 @@
       "allows": [
         "equipmentType:rifledMusket",
         "equipmentType:lightCannon",
+        "policyType:draft",
         "technologyType:medicine",
         "technologyType:sanitation"
       ]
@@ -53499,7 +53723,7 @@
         "improvementType:slaughterhouse",
         "technologyType:economics",
         "technologyType:electricity",
-        "worldWonderType:statueOfLiberty"
+        "worldWonderType:embankment"
       ]
     },
     {
@@ -53608,7 +53832,8 @@
       "allows": [
         "buildingType:governor",
         "equipmentType:tribe",
-        "goalType:firstCities",
+        "policyType:oligarchy",
+        "policyType:dictatorship",
         "technologyType:tradition",
         "technologyType:pitMining"
       ]
@@ -53644,6 +53869,7 @@
       "specials": [],
       "actions": [],
       "allows": [
+        "improvementType:sawmill",
         "improvementType:boats",
         "platformType:galley",
         "technologyType:celestialNavigation",
@@ -53684,7 +53910,7 @@
       "allows": [
         "buildingType:boatyard",
         "platformType:heavyGalley",
-        "technologyType:alphabet",
+        "technologyType:philosophy",
         "technologyType:drama",
         "worldWonderType:portOfCarthage"
       ]
@@ -53837,9 +54063,7 @@
       "actions": [],
       "allows": [
         "buildingType:arena",
-        "goalType:olympics",
-        "technologyType:drama",
-        "worldWonderType:colosseum"
+        "technologyType:drama"
       ]
     },
     {
@@ -53880,27 +54104,27 @@
       ]
     },
     {
-      "key": "technologyType:stateReligion",
-      "name": "State Religion",
+      "key": "technologyType:standingArmy",
+      "name": "Standing Army",
       "concept": "conceptType:technology",
-      "category": "eraType:medieval",
-      "description": "State religion in the medieval world joined doctrine with governance, law, and public ritual. The Byzantine Empire coordinated imperial authority with Orthodox hierarchy, councils, and monastic patronage. The Abbasid Caliphate embedded Islamic jurisprudence, taxation norms, and educational endowments in state structures. In the Holy Roman Empire, Catholic institutions legitimated rulers through coronation, investiture, and ecclesiastical courts. Rulers funded clergy, built churches and mosques, and regulated heresy. Integration furnished legitimacy, literacy, and diplomatic channels, but also provoked conflicts over jurisdiction and reform. Conversion campaigns and missions extended power to frontier societies.",
-      "image": "/media/images/technologyType/stateReligion.jpg",
+      "category": "eraType:classical",
+      "description": "",
+      "image": "/media/images/technologyType/standingArmy.jpg",
       "quote": {
-        "text": "A throne must be backed by faith to rule the hearts.",
-        "source": "Al-Mawardi, ca. 1050",
-        "url": "/media/quotes/technologyType/stateReligion.mp3"
+        "text": "",
+        "source": "",
+        "url": "/media/quotes/technologyType/standingArmy.mp3"
       },
-      "x": 10,
-      "y": 42,
+      "x": 2,
+      "y": 39,
       "requires": [
-        "technologyType:ironCasting"
+        "technologyType:minting"
       ],
       "yields": [
         {
           "type": "yieldType:scienceCost",
           "method": "lump",
-          "amount": 160,
+          "amount": 158,
           "for": [],
           "vs": []
         }
@@ -53910,7 +54134,9 @@
       "specials": [],
       "actions": [],
       "allows": [
-        "technologyType:cropRotation"
+        "nationalWonderType:campusMartius",
+        "policyType:professional",
+        "technologyType:steel"
       ]
     },
     {
@@ -54041,6 +54267,7 @@
       "x": 2,
       "y": 42,
       "requires": [
+        "technologyType:standingArmy",
         "technologyType:ironCasting"
       ],
       "yields": [
@@ -54134,7 +54361,6 @@
       "allows": [
         "buildingType:steelMill",
         "improvementType:cantileverBridge",
-        "goalType:industrialMight",
         "nationalWonderType:carnegieSteel",
         "platformType:heavySteamer",
         "technologyType:railroad",
@@ -54445,7 +54671,7 @@
       "allows": [
         "buildingType:townSquare",
         "equipmentType:trader",
-        "goalType:tradeNetwork",
+        "policyType:duties",
         "technologyType:commerce"
       ]
     },
@@ -54788,6 +55014,7 @@
         "buildingType:townWatch",
         "equipmentType:axe",
         "equipmentType:emissary",
+        "policyType:levied",
         "technologyType:slings"
       ]
     },
@@ -54879,17 +55106,16 @@
         "source": "Chinese proverb",
         "url": "/media/quotes/technologyType/woodComposites.mp3"
       },
-      "x": 8,
-      "y": 37,
+      "x": 10,
+      "y": 39,
       "requires": [
-        "technologyType:construction",
-        "technologyType:democracy"
+        "technologyType:publicWorks"
       ],
       "yields": [
         {
           "type": "yieldType:scienceCost",
           "method": "lump",
-          "amount": 144,
+          "amount": 158,
           "for": [],
           "vs": []
         }
@@ -54900,7 +55126,8 @@
       "actions": [],
       "allows": [
         "equipmentType:compositeBow",
-        "technologyType:ironCasting"
+        "technologyType:feudalism",
+        "technologyType:guilds"
       ]
     },
     {
@@ -56273,7 +56500,7 @@
         "url": "/media/quotes/worldWonderType/chichenItza.mp3"
       },
       "requires": [
-        "technologyType:engineering",
+        "technologyType:guilds",
         "featureType:jungle"
       ],
       "yields": [
@@ -56336,7 +56563,7 @@
         "url": "/media/quotes/worldWonderType/colosseum.mp3"
       },
       "requires": [
-        "technologyType:sports"
+        "technologyType:publicWorks"
       ],
       "yields": [
         {
@@ -56456,7 +56683,7 @@
         "url": "/media/quotes/worldWonderType/embankment.mp3"
       },
       "requires": [
-        "technologyType:medicine",
+        "technologyType:sanitation",
         "conceptType:navigableRiver"
       ],
       "yields": [
@@ -56768,7 +56995,7 @@
         "url": "/media/quotes/worldWonderType/greatWall.mp3"
       },
       "requires": [
-        "technologyType:feudalism"
+        "technologyType:engineering"
       ],
       "yields": [],
       "gains": [
@@ -56824,7 +57051,7 @@
         "url": "/media/quotes/worldWonderType/hangingGardens.mp3"
       },
       "requires": [
-        "technologyType:mathematics",
+        "technologyType:arches",
         "conceptType:freshWater"
       ],
       "yields": [
@@ -57699,7 +57926,7 @@
         "url": "/media/quotes/worldWonderType/petra.mp3"
       },
       "requires": [
-        "technologyType:ironWorking",
+        "technologyType:philosophy",
         "terrainType:desert"
       ],
       "yields": [
@@ -57938,7 +58165,7 @@
         "url": "/media/quotes/worldWonderType/pyramidsOfGiza.mp3"
       },
       "requires": [
-        "technologyType:government",
+        "technologyType:codeOfLaw",
         "featureType:floodPlain"
       ],
       "yields": [
@@ -58094,7 +58321,7 @@
         "url": "/media/quotes/worldWonderType/statueOfLiberty.mp3"
       },
       "requires": [
-        "technologyType:sanitation",
+        "technologyType:medicine",
         "terrainType:coast"
       ],
       "yields": [
@@ -58805,28 +59032,7 @@
       "gains": [],
       "upgradesFrom": [],
       "specials": [],
-      "actions": [],
-      "allows": [
-        "goalType:firstCities",
-        "goalType:tradeNetwork",
-        "goalType:pantheonOfGods",
-        "goalType:wondersOfTheWorld",
-        "goalType:greatPhilosophers",
-        "goalType:olympics",
-        "goalType:veniVidiVici",
-        "goalType:feudalLords",
-        "goalType:tournaments",
-        "goalType:mandateOfHeaven",
-        "goalType:oceanVoyages",
-        "goalType:colonialEmpire",
-        "goalType:theEnlightenment",
-        "goalType:worldsFair",
-        "goalType:urbanSociety",
-        "goalType:industrialMight",
-        "goalType:worldWar",
-        "goalType:nuclearDeterrence",
-        "goalType:securityCouncil"
-      ]
+      "actions": []
     },
     {
       "key": "yieldType:gold",

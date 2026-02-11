@@ -21,6 +21,7 @@ import { Tile } from "@/Common/Models/Tile";
 import { createTestWorld } from "../../_setup/testWorld";
 import { destroyDataBucket, useDataBucket } from "@/Data/useDataBucket";
 import { initTestDataBucket } from "../../_setup/dataHelpers";
+import { GameKey } from "@/Common/Models/_GameTypes";
 
 describe("mapTools", () => {
   beforeEach(async () => {
@@ -302,8 +303,8 @@ describe("mapTools", () => {
       const tiles = store.getTiles();
       const startTile = tiles[Tile.getKey(1, 1)];
 
-      const seen = new Set<string>([Tile.getKey(1, 1)]);
-      const valid = new Set<string>();
+      const seen = new Set<GameKey>([Tile.getKey(1, 1)]);
+      const valid = new Set<GameKey>();
 
       crawlTiles(startTile, () => true, undefined, undefined, seen, valid);
 

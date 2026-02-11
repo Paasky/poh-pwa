@@ -19,10 +19,10 @@ import { ObjectInstancer } from "@/Actor/Human/Instancers/ObjectInstancer";
 import type { Tile } from "@/Common/Models/Tile";
 import type { Unit } from "@/Common/Models/Unit";
 import type { Construction } from "@/Common/Models/Construction";
-import type { GameKey } from "@/Common/Models/_GameModel";
+import type { GameKey, ObjectWithProps } from "@/Common/Models/_GameModel";
 import { Coords, getCoordsFromTileKey } from "@/Common/Helpers/mapTools";
 import { EngineCoords } from "@/Actor/Human/Terrain/_terrainMeshTypes";
-import { useCurrentContext } from "@/Common/composables/useCurrentContext";
+import { useEngineContext } from "@/Common/composables/useCurrentContext";
 import { Pathfinder } from "@/Simulation/Movement/Pathfinder";
 import { useSettingsStore } from "@/App/stores/settingsStore";
 import { watch } from "vue";
@@ -73,7 +73,7 @@ export class PohEngine {
   }
 
   private onCanvasLeave = (): void => {
-    useCurrentContext().hover.value = undefined;
+    useEngineContext().hover = undefined;
   };
 
   initEngineAndScene(customEngine?: BabylonEngine): this {
@@ -205,17 +205,19 @@ export class PohEngine {
   initContextOverlay(): this {
     this.contextOverlay = new ContextOverlay(this.scene, this.size);
 
-    // Watch for known/visible area changes to update minimap and clamping bounds
-    const player = useCurrentContext().currentPlayer;
-    this._stopHandles.push(
-      watch(
-        () => [player.knownTileKeys, player.visibleTileKeys],
-        ([known]) => {
-          this._knownBounds = calculateKnownBounds(this.size, known);
-          // Trigger minimap update if it exists
-          if (this.minimap) this.minimap.triggerCapture();
-        },
-        { immediate: true },
+    const player = useEngineContext().currentPlayer;
+    const playerObservable = player as unknown as ObjectWithProps;
+    const onPlayerUpdate = (): void => {
+      this._knownBounds = calculateKnownBounds(this.size, player.knownTileKeys);
+      this.contextOverlay.triggerRefresh();
+      if (this.minimap) this.minimap.triggerCapture();
+    };
+    this._knownBounds = calculateKnownBounds(this.size, player.knownTileKeys);
+    playerObservable.updateWatchers.push(onPlayerUpdate);
+    this._stopHandles.push(() =>
+      playerObservable.updateWatchers.splice(
+        playerObservable.updateWatchers.indexOf(onPlayerUpdate),
+        1,
       ),
     );
 
@@ -368,17 +370,15 @@ export class PohEngine {
   }
 
   flyToCurrentPlayer(teleport = false): void {
-    const currentPlayer = useCurrentContext().currentPlayer;
+    const currentPlayer = useEngineContext().currentPlayer;
 
-    // Unit has priority
-    const unit = currentPlayer.units[0];
+    const unit = currentPlayer.units.values().next().value;
     if (unit) {
       this.flyToTile(unit.tileKey, teleport);
       return;
     }
 
-    // Then capital
-    const capital = currentPlayer.cities.find((city) => city.isCapital);
+    const capital = Array.from(currentPlayer.cities.values()).find((city) => city.isCapital);
     if (capital) {
       this.flyToTile(capital.tileKey, teleport);
       return;

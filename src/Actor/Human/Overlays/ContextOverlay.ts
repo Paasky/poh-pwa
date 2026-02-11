@@ -11,7 +11,7 @@ import {
   Vector2,
   Vector4,
 } from "@babylonjs/core";
-import { watchEffect } from "vue";
+import { watch } from "vue";
 import { getMapBounds } from "@/Common/Helpers/math";
 import type { Coords } from "@/Common/Helpers/mapTools";
 import { Tile } from "@/Common/Models/Tile";
@@ -19,7 +19,7 @@ import type { GameKey } from "@/Common/Models/_GameModel";
 import { useSettingsStore } from "@/App/stores/settingsStore";
 import { BaseOverlay } from "./BaseOverlay";
 import { EngineGroups, EngineOverlayColors } from "@/Actor/Human/EngineStyles";
-import { useCurrentContext } from "@/Common/composables/useCurrentContext";
+import { useEngineContext } from "@/Common/composables/useCurrentContext";
 
 export type ContextHighlight = { tile: Tile; colorId: string; alpha: number };
 export type ContextPayload = { items: ContextHighlight[] };
@@ -93,25 +93,10 @@ export class ContextOverlay extends BaseOverlay<ContextPayload> {
 
     // Default Palette
     this.setPalette(EngineOverlayColors);
-
-    // Sync FoW state from DataBucket
-    this.cleanupStopHandles.push(
-      watchEffect(() => {
-        const player = useCurrentContext().currentPlayer;
-        // Explicitly access values synchronously to register Vue dependencies
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        player.knownTileKeys;
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        player.visibleTileKeys;
-
-        // Direct trigger of refresh when visibility state changes
-        this.triggerRefresh();
-      }),
-    );
   }
 
   protected onRefresh(): void {
-    const player = useCurrentContext().currentPlayer;
+    const player = useEngineContext().currentPlayer;
     this.maskBuffer.fill(0);
 
     // 1. Fill FoW (R: Known, G: Visible)
@@ -204,13 +189,15 @@ export class ContextOverlay extends BaseOverlay<ContextPayload> {
     }
 
     const settings = useSettingsStore();
-    const stopHandle = watchEffect(() => {
-      if (options?.alwaysEnable || settings.engineSettings.enableFogOfWar) {
+    const applyFow = (enabled: boolean): void => {
+      if (options?.alwaysEnable || enabled) {
         camera.attachPostProcess(postProcess);
       } else {
         camera.detachPostProcess(postProcess);
       }
-    });
+    };
+    applyFow(settings.engineSettings.enableFogOfWar);
+    const stopHandle = watch(() => settings.engineSettings.enableFogOfWar, applyFow);
 
     this.postProcessStopHandles.set(camera, stopHandle);
   }

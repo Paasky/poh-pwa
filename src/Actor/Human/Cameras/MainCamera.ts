@@ -33,6 +33,7 @@ export class MainCamera {
 
   private readonly _rotationInput = new ArcRotateCameraPointersInput();
   private _manualTiltEnabled = false;
+  private _stopHandles: (() => void)[] = [];
 
   panSpeed: number = 5;
   maxRotation: number = rot30;
@@ -99,10 +100,17 @@ export class MainCamera {
 
     const settings = useSettingsStore();
     this.setManualTilt(settings.engineSettings.manualTilt);
-    watch(
-      () => settings.engineSettings.manualTilt,
-      (enabled) => this.setManualTilt(enabled),
+    this._stopHandles.push(
+      watch(
+        () => settings.engineSettings.manualTilt,
+        (enabled) => this.setManualTilt(enabled),
+      ),
     );
+  }
+
+  dispose(): void {
+    this._stopHandles.forEach((stop) => stop());
+    this._stopHandles = [];
   }
 
   setManualTilt(enabled: boolean): void {

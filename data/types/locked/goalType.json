@@ -11,10 +11,7 @@
       "source": "Aristotle, ca. 400 BCE",
       "url": "/media/quotes/goalType/firstCities.mp3"
     },
-    "requires": [
-      "technologyType:settlements",
-      "yieldType:goalPoints"
-    ]
+    "requires": ["eraType:neolithic"]
   },
   {
     "category": "goalCategory:trade",
@@ -28,10 +25,7 @@
       "source": "Ibn Khaldun, 1377",
       "url": "/media/quotes/goalType/tradeNetwork.mp3"
     },
-    "requires": [
-      "technologyType:trade",
-      "yieldType:goalPoints"
-    ]
+    "requires": ["eraType:copper"]
   },
   {
     "category": "goalCategory:faith",
@@ -45,10 +39,7 @@
       "source": "Rig Veda, ca. 1300 BCE",
       "url": "/media/quotes/goalType/pantheonOfGods.mp3"
     },
-    "requires": [
-      "technologyType:pottery",
-      "yieldType:goalPoints"
-    ]
+    "requires": ["eraType:bronze"]
   },
   {
     "category": "goalCategory:culture",
@@ -62,10 +53,7 @@
       "source": "Philo of Byzantium, ca. 300 BCE",
       "url": "/media/quotes/goalType/wondersOfTheWorld.mp3"
     },
-    "requires": [
-      "technologyType:government",
-      "yieldType:goalPoints"
-    ]
+    "requires": ["eraType:lateBronze"]
   },
   {
     "category": "goalCategory:science",
@@ -79,10 +67,7 @@
       "source": "Socrates, 399 BCE",
       "url": "/media/quotes/goalType/greatPhilosophers.mp3"
     },
-    "requires": [
-      "technologyType:philosophy",
-      "yieldType:goalPoints"
-    ]
+    "requires": ["eraType:iron"]
   },
   {
     "category": "goalCategory:influence",
@@ -96,10 +81,7 @@
       "source": "Pindar, 476 BCE",
       "url": "/media/quotes/goalType/olympics.mp3"
     },
-    "requires": [
-      "technologyType:sports",
-      "yieldType:goalPoints"
-    ]
+    "requires": ["eraType:iron"]
   },
   {
     "category": "goalCategory:military",
@@ -113,10 +95,7 @@
       "source": "Julius Caesar, 47 BCE",
       "url": "/media/quotes/goalType/veniVidiVici.mp3"
     },
-    "requires": [
-      "technologyType:ironSmithing",
-      "yieldType:goalPoints"
-    ]
+    "requires": ["eraType:classical"]
   },
   {
     "category": "goalCategory:culture",
@@ -130,10 +109,7 @@
       "source": "John of Salisbury, 1159",
       "url": "/media/quotes/goalType/feudalLords.mp3"
     },
-    "requires": [
-      "technologyType:feudalism",
-      "yieldType:goalPoints"
-    ]
+    "requires": ["eraType:medieval"]
   },
   {
     "category": "goalCategory:influence",
@@ -147,10 +123,7 @@
       "source": "Geoffroi de Charny, ca. 1350",
       "url": "/media/quotes/goalType/tournaments.mp3"
     },
-    "requires": [
-      "technologyType:chivalry",
-      "yieldType:goalPoints"
-    ]
+    "requires": ["eraType:medieval"]
   },
   {
     "category": "goalCategory:faith",
@@ -164,10 +137,7 @@
       "source": "Book of Documents, ca. 1000 CE",
       "url": "/media/quotes/goalType/mandateOfHeaven.mp3"
     },
-    "requires": [
-      "technologyType:divineRight",
-      "yieldType:goalPoints"
-    ]
+    "requires": ["eraType:renaissance"]
   },
   {
     "category": "goalCategory:military",
@@ -181,10 +151,7 @@
       "source": "Herman Melville, 1851",
       "url": "/media/quotes/goalType/oceanVoyages.mp3"
     },
-    "requires": [
-      "technologyType:carvelHulls",
-      "yieldType:goalPoints"
-    ]
+    "requires": ["eraType:exploration"]
   },
   {
     "category": "goalCategory:trade",
@@ -198,10 +165,7 @@
       "source": "Bernal Díaz del Castillo, 1568",
       "url": "/media/quotes/goalType/colonialEmpire.mp3"
     },
-    "requires": [
-      "technologyType:colonialism",
-      "yieldType:goalPoints"
-    ]
+    "requires": ["eraType:colonial"]
   },
   {
     "category": "goalCategory:science",
@@ -215,10 +179,7 @@
       "source": "Francis Bacon, 1597",
       "url": "/media/quotes/goalType/theEnlightenment.mp3"
     },
-    "requires": [
-      "technologyType:education",
-      "yieldType:goalPoints"
-    ]
+    "requires": ["eraType:enlightenment"]
   },
   {
     "category": "goalCategory:influence",
@@ -232,10 +193,7 @@
       "source": "Victor Hugo, 1867",
       "url": "/media/quotes/goalType/worldsFair.mp3"
     },
-    "requires": [
-      "technologyType:industrialization",
-      "yieldType:goalPoints"
-    ]
+    "requires": ["eraType:industrial"]
   },
   {
     "category": "goalCategory:growth",
@@ -249,10 +207,7 @@
       "source": "Friedrich Engels, 1845",
       "url": "/media/quotes/goalType/urbanSociety.mp3"
     },
-    "requires": [
-      "technologyType:bureaucracy",
-      "yieldType:goalPoints"
-    ]
+    "requires": ["eraType:industrial"]
   },
   {
     "category": "goalCategory:growth",
@@ -266,10 +221,7 @@
       "source": "Friedrich List, 1841",
       "url": "/media/quotes/goalType/industrialMight.mp3"
     },
-    "requires": [
-      "technologyType:steelMilling",
-      "yieldType:goalPoints"
-    ]
+    "requires": ["eraType:imperial"]
   },
   {
     "category": "goalCategory:military",
@@ -283,10 +235,7 @@
       "source": "Edward Grey, 1914",
       "url": "/media/quotes/goalType/worldWar.mp3"
     },
-    "requires": [
-      "technologyType:repeatingRifles",
-      "yieldType:goalPoints"
-    ]
+    "requires": ["eraType:modern"]
   },
   {
     "category": "goalCategory:military",
@@ -300,10 +249,7 @@
       "source": "Albert Einstein, 1946",
       "url": "/media/quotes/goalType/nuclearDeterrence.mp3"
     },
-    "requires": [
-      "technologyType:fission",
-      "yieldType:goalPoints"
-    ]
+    "requires": ["eraType:atomic"]
   },
   {
     "category": "goalCategory:influence",
@@ -317,10 +263,7 @@
       "source": "Dag Hammarskjöld, 1954",
       "url": "/media/quotes/goalType/securityCouncil.mp3"
     },
-    "requires": [
-      "technologyType:plastics",
-      "yieldType:goalPoints"
-    ]
+    "requires": ["eraType:atomic"]
   },
   {
     "category": "goalCategory:science",
@@ -333,7 +276,8 @@
       "text": "Payekhali, Let's go!",
       "source": "Yuri Gagarin, 1961",
       "url": "/media/quotes/goalType/spaceRace.mp3"
-    }
+    },
+    "requires": ["eraType:digital"]
   },
   {
     "category": "goalCategory:influence",
@@ -346,7 +290,8 @@
       "text": "The Web is for everyone.",
       "source": "Tim Berners-Lee, 2012",
       "url": "/media/quotes/goalType/worldWideWeb.mp3"
-    }
+    },
+    "requires": ["eraType:information"]
   },
   {
     "category": "goalCategory:victory",
@@ -359,7 +304,8 @@
       "text": "The Earth is the cradle of humanity, but one cannot live in the cradle forever.",
       "source": "Konstantin Tsiolkovsky, 1911",
       "url": "/media/quotes/goalType/interplanetarySpecies.mp3"
-    }
+    },
+    "requires": ["eraType:postIndustrial"]
   },
   {
     "category": "goalCategory:victory",
@@ -373,7 +319,8 @@
       "text": "If God is with us, who can be against us?",
       "source": "Romans 8:31, ca. 0 CE",
       "url": "/media/quotes/goalType/oneTrueFaith.mp3"
-    }
+    },
+    "requires": ["eraType:postIndustrial"]
   },
   {
     "category": "goalCategory:victory",
@@ -387,7 +334,8 @@
       "text": "Speak softly and carry a big stick; you will go far.",
       "source": "Theodore Roosevelt, 1901",
       "url": "/media/quotes/goalType/worldPolice.mp3"
-    }
+    },
+    "requires": ["eraType:postIndustrial"]
   },
   {
     "category": "goalCategory:victory",
@@ -400,7 +348,8 @@
       "text": "The world has become one vast market; humanity itself, the commodity.",
       "source": "Karl Marx, 1848",
       "url": "/media/quotes/goalType/globalMonopoly.mp3"
-    }
+    },
+    "requires": ["eraType:postIndustrial"]
   },
   {
     "category": "goalCategory:victory",
@@ -414,7 +363,8 @@
       "text": "Power tends to corrupt, and absolute power corrupts absolutely.",
       "source": "Lord Acton, 1887",
       "url": "/media/quotes/goalType/worldDomination.mp3"
-    }
+    },
+    "requires": ["eraType:postIndustrial"]
   },
   {
     "category": "goalCategory:victory",
@@ -427,6 +377,7 @@
       "text": "The supreme art of war is to subdue the enemy without fighting",
       "source": "Sun Tzu, ca. 500 BC",
       "url": "/media/quotes/goalType/culturalSingularity.mp3"
-    }
+    },
+    "requires": ["eraType:postIndustrial"]
   }
 ]

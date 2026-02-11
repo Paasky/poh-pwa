@@ -210,6 +210,7 @@
       "upgradesFrom": 19,
       "specials": 19,
       "actions": 19,
+      "allows": 18,
       "relatesTo": 19
     },
     "eventType": {
@@ -345,8 +346,7 @@
       "gains": 40,
       "upgradesFrom": 40,
       "specials": 40,
-      "actions": 40,
-      "allows": 1
+      "actions": 40
     },
     "majorCultureType": {
       "key": 200,
@@ -520,22 +520,22 @@
       "actions": 6
     },
     "technologyType": {
-      "key": 165,
-      "name": 165,
-      "concept": 165,
-      "category": 165,
-      "description": 165,
-      "image": 165,
-      "quote": 165,
-      "x": 165,
-      "y": 165,
-      "requires": 165,
-      "yields": 165,
-      "gains": 165,
-      "upgradesFrom": 165,
-      "specials": 165,
-      "actions": 165,
-      "allows": 164,
+      "key": 168,
+      "name": 168,
+      "concept": 168,
+      "category": 168,
+      "description": 168,
+      "image": 168,
+      "quote": 168,
+      "x": 168,
+      "y": 168,
+      "requires": 168,
+      "yields": 168,
+      "gains": 168,
+      "upgradesFrom": 168,
+      "specials": 168,
+      "actions": 168,
+      "allows": 167,
       "relatesTo": 4
     },
     "traitType": {

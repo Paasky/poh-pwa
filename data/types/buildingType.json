@@ -6,13 +6,7 @@
     "image": "/media/images/buildingType/stoneWorks.jpg",
     "key": "buildingType:stoneWorks",
     "name": "Stone Works",
-    "requires": [
-      "technologyType:pitMining",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
+    "requires": ["technologyType:pitMining", ["conceptType:flatLand", "elevationType:hill"]],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -31,16 +25,8 @@
     "image": "/media/images/buildingType/smith.jpg",
     "key": "buildingType:smith",
     "name": "Smith",
-    "requires": [
-      "technologyType:ironWorking",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:stoneWorks"
-    ],
+    "requires": ["technologyType:ironWorking", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:stoneWorks"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -59,16 +45,8 @@
     "image": "/media/images/buildingType/forge.jpg",
     "key": "buildingType:forge",
     "name": "Forge",
-    "requires": [
-      "technologyType:steelSmithing",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:smith"
-    ],
+    "requires": ["technologyType:steelSmithing", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:smith"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -89,14 +67,9 @@
     "name": "Factory",
     "requires": [
       "technologyType:industrialization",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
+      ["conceptType:flatLand", "elevationType:hill"]
     ],
-    "upgradesFrom": [
-      "buildingType:forge"
-    ],
+    "upgradesFrom": ["buildingType:forge"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -115,16 +88,8 @@
     "image": "/media/images/buildingType/assemblyLine.jpg",
     "key": "buildingType:assemblyLine",
     "name": "Assembly Line",
-    "requires": [
-      "technologyType:replaceableParts",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:factory"
-    ],
+    "requires": ["technologyType:replaceableParts", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:factory"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -143,16 +108,8 @@
     "image": "/media/images/buildingType/automatedFactory.jpg",
     "key": "buildingType:automatedFactory",
     "name": "Automated Factory",
-    "requires": [
-      "technologyType:robotics",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:assemblyLine"
-    ],
+    "requires": ["technologyType:robotics", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:assemblyLine"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -171,13 +128,7 @@
     "image": "/media/images/buildingType/taxCollector.jpg",
     "key": "buildingType:taxCollector",
     "name": "Tax Collector",
-    "requires": [
-      "technologyType:commerce",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
+    "requires": ["technologyType:commerce", ["conceptType:flatLand", "elevationType:hill"]],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -196,16 +147,8 @@
     "image": "/media/images/buildingType/mint.jpg",
     "key": "buildingType:mint",
     "name": "Mint",
-    "requires": [
-      "technologyType:currency",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:taxCollector"
-    ],
+    "requires": ["technologyType:minting", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:taxCollector"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -224,16 +167,8 @@
     "image": "/media/images/buildingType/guildHall.jpg",
     "key": "buildingType:guildHall",
     "name": "Guild Hall",
-    "requires": [
-      "technologyType:feudalism",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:mint"
-    ],
+    "requires": ["technologyType:guilds", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:mint"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -252,16 +187,8 @@
     "image": "/media/images/buildingType/bank.jpg",
     "key": "buildingType:bank",
     "name": "Bank",
-    "requires": [
-      "technologyType:banking",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:guildHall"
-    ],
+    "requires": ["technologyType:banking", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:guildHall"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -280,16 +207,8 @@
     "image": "/media/images/buildingType/stockExchange.jpg",
     "key": "buildingType:stockExchange",
     "name": "Stock Exchange",
-    "requires": [
-      "technologyType:economics",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:bank"
-    ],
+    "requires": ["technologyType:economics", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:bank"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -308,16 +227,8 @@
     "image": "/media/images/buildingType/startupHub.jpg",
     "key": "buildingType:startupHub",
     "name": "Startup Hub",
-    "requires": [
-      "technologyType:onlineEconomy",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:stockExchange"
-    ],
+    "requires": ["technologyType:onlineEconomy", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:stockExchange"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -336,13 +247,7 @@
     "image": "/media/images/buildingType/scribery.jpg",
     "key": "buildingType:scribery",
     "name": "Scribery",
-    "requires": [
-      "technologyType:writing",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
+    "requires": ["technologyType:writing", ["conceptType:flatLand", "elevationType:hill"]],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -361,16 +266,8 @@
     "image": "/media/images/buildingType/library.jpg",
     "key": "buildingType:library",
     "name": "Library",
-    "requires": [
-      "technologyType:alphabet",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:scribery"
-    ],
+    "requires": ["technologyType:alphabet", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:scribery"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -389,16 +286,8 @@
     "image": "/media/images/buildingType/printingPress.jpg",
     "key": "buildingType:printingPress",
     "name": "Printing Press",
-    "requires": [
-      "technologyType:machinery",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:library"
-    ],
+    "requires": ["technologyType:machinery", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:library"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -417,16 +306,8 @@
     "image": "/media/images/buildingType/university.jpg",
     "key": "buildingType:university",
     "name": "University",
-    "requires": [
-      "technologyType:education",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:printingPress"
-    ],
+    "requires": ["technologyType:education", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:printingPress"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -445,16 +326,8 @@
     "image": "/media/images/buildingType/researchLab.jpg",
     "key": "buildingType:researchLab",
     "name": "Research Lab",
-    "requires": [
-      "technologyType:atomicTheory",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:university"
-    ],
+    "requires": ["technologyType:atomicTheory", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:university"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -473,16 +346,8 @@
     "image": "/media/images/buildingType/nanotechLab.jpg",
     "key": "buildingType:nanotechLab",
     "name": "Nanotech Lab",
-    "requires": [
-      "technologyType:composites",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:researchLab"
-    ],
+    "requires": ["technologyType:composites", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:researchLab"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -501,13 +366,7 @@
     "image": "/media/images/buildingType/potter.jpg",
     "key": "buildingType:potter",
     "name": "Potter",
-    "requires": [
-      "technologyType:pottery",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
+    "requires": ["technologyType:pottery", ["conceptType:flatLand", "elevationType:hill"]],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -516,9 +375,7 @@
       {
         "type": "yieldType:citizenSlot",
         "amount": 1,
-        "for": [
-          "conceptType:building"
-        ]
+        "for": ["conceptType:building"]
       }
     ]
   },
@@ -529,16 +386,8 @@
     "image": "/media/images/buildingType/granary.jpg",
     "key": "buildingType:granary",
     "name": "Granary",
-    "requires": [
-      "technologyType:construction",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:potter"
-    ],
+    "requires": ["technologyType:publicWorks", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:potter"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -547,9 +396,7 @@
       {
         "type": "yieldType:citizenSlot",
         "amount": 2,
-        "for": [
-          "conceptType:building"
-        ]
+        "for": ["conceptType:building"]
       }
     ]
   },
@@ -560,16 +407,8 @@
     "image": "/media/images/buildingType/windmill.jpg",
     "key": "buildingType:windmill",
     "name": "Windmill",
-    "requires": [
-      "technologyType:machinery",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:granary"
-    ],
+    "requires": ["technologyType:machinery", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:granary"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -578,9 +417,7 @@
       {
         "type": "yieldType:citizenSlot",
         "amount": 3,
-        "for": [
-          "conceptType:building"
-        ]
+        "for": ["conceptType:building"]
       }
     ]
   },
@@ -591,16 +428,8 @@
     "image": "/media/images/buildingType/dispensary.jpg",
     "key": "buildingType:dispensary",
     "name": "Dispensary",
-    "requires": [
-      "technologyType:medicine",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:windmill"
-    ],
+    "requires": ["technologyType:medicine", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:windmill"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -609,9 +438,7 @@
       {
         "type": "yieldType:citizenSlot",
         "amount": 5,
-        "for": [
-          "conceptType:building"
-        ]
+        "for": ["conceptType:building"]
       }
     ]
   },
@@ -622,16 +449,8 @@
     "image": "/media/images/buildingType/metroSystem.jpg",
     "key": "buildingType:metroSystem",
     "name": "Metro System",
-    "requires": [
-      "technologyType:combustion",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:dispensary"
-    ],
+    "requires": ["technologyType:combustion", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:dispensary"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -640,9 +459,7 @@
       {
         "type": "yieldType:citizenSlot",
         "amount": 7,
-        "for": [
-          "conceptType:building"
-        ]
+        "for": ["conceptType:building"]
       }
     ]
   },
@@ -653,16 +470,8 @@
     "image": "/media/images/buildingType/fulfillmentCenter.jpg",
     "key": "buildingType:fulfillmentCenter",
     "name": "fulfillment Center",
-    "requires": [
-      "technologyType:deliveryServices",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:metroSystem"
-    ],
+    "requires": ["technologyType:deliveryServices", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:metroSystem"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -671,9 +480,7 @@
       {
         "type": "yieldType:citizenSlot",
         "amount": 9,
-        "for": [
-          "conceptType:building"
-        ]
+        "for": ["conceptType:building"]
       }
     ]
   },
@@ -684,13 +491,7 @@
     "image": "/media/images/buildingType/obelisk.jpg",
     "key": "buildingType:obelisk",
     "name": "Obelisk",
-    "requires": [
-      "technologyType:tradition",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
+    "requires": ["technologyType:tradition", ["conceptType:flatLand", "elevationType:hill"]],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -709,16 +510,8 @@
     "image": "/media/images/buildingType/amphitheater.jpg",
     "key": "buildingType:amphitheater",
     "name": "Amphitheater",
-    "requires": [
-      "technologyType:drama",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:obelisk"
-    ],
+    "requires": ["technologyType:drama", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:obelisk"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -737,16 +530,8 @@
     "image": "/media/images/buildingType/theater.jpg",
     "key": "buildingType:theater",
     "name": "Theater",
-    "requires": [
-      "technologyType:theater",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:amphitheater"
-    ],
+    "requires": ["technologyType:theater", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:amphitheater"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -765,16 +550,8 @@
     "image": "/media/images/buildingType/opera.jpg",
     "key": "buildingType:opera",
     "name": "Opera",
-    "requires": [
-      "technologyType:opera",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:theater"
-    ],
+    "requires": ["technologyType:opera", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:theater"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -793,16 +570,8 @@
     "image": "/media/images/buildingType/cinema.jpg",
     "key": "buildingType:cinema",
     "name": "Cinema",
-    "requires": [
-      "technologyType:radio",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:opera"
-    ],
+    "requires": ["technologyType:radio", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:opera"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -821,16 +590,8 @@
     "image": "/media/images/buildingType/internetProvider.jpg",
     "key": "buildingType:internetProvider",
     "name": "Internet Provider",
-    "requires": [
-      "technologyType:internet",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:cinema"
-    ],
+    "requires": ["technologyType:internet", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:cinema"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -849,13 +610,7 @@
     "image": "/media/images/buildingType/shrine.jpg",
     "key": "buildingType:shrine",
     "name": "Shrine",
-    "requires": [
-      "technologyType:mysticism",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
+    "requires": ["technologyType:mysticism", ["conceptType:flatLand", "elevationType:hill"]],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -876,14 +631,9 @@
     "name": "Temple",
     "requires": [
       "technologyType:organizedReligion",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
+      ["conceptType:flatLand", "elevationType:hill"]
     ],
-    "upgradesFrom": [
-      "buildingType:shrine"
-    ],
+    "upgradesFrom": ["buildingType:shrine"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -902,16 +652,8 @@
     "image": "/media/images/buildingType/cathedral.jpg",
     "key": "buildingType:cathedral",
     "name": "Cathedral",
-    "requires": [
-      "technologyType:buttress",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:temple"
-    ],
+    "requires": ["technologyType:buttress", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:temple"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -930,16 +672,8 @@
     "image": "/media/images/buildingType/congregation.jpg",
     "key": "buildingType:congregation",
     "name": "Congregation",
-    "requires": [
-      "technologyType:royalCharter",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:cathedral"
-    ],
+    "requires": ["technologyType:royalCharter", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:cathedral"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -958,16 +692,8 @@
     "image": "/media/images/buildingType/televangelist.jpg",
     "key": "buildingType:televangelist",
     "name": "Televangelist",
-    "requires": [
-      "technologyType:massMedia",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:congregation"
-    ],
+    "requires": ["technologyType:massMedia", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:congregation"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -986,16 +712,8 @@
     "image": "/media/images/buildingType/megachurch.jpg",
     "key": "buildingType:megachurch",
     "name": "Megachurch",
-    "requires": [
-      "technologyType:verticalFlight",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:televangelist"
-    ],
+    "requires": ["technologyType:verticalFlight", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:televangelist"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1014,13 +732,7 @@
     "image": "/media/images/buildingType/townHealer.jpg",
     "key": "buildingType:townHealer",
     "name": "Town Healer",
-    "requires": [
-      "technologyType:herbalRemedies",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
+    "requires": ["technologyType:herbalRemedies", ["conceptType:flatLand", "elevationType:hill"]],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1039,16 +751,8 @@
     "image": "/media/images/buildingType/aqueduct.jpg",
     "key": "buildingType:aqueduct",
     "name": "Aqueduct",
-    "requires": [
-      "technologyType:construction",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:townHealer"
-    ],
+    "requires": ["technologyType:construction", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:townHealer"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1067,16 +771,8 @@
     "image": "/media/images/buildingType/apothecary.jpg",
     "key": "buildingType:apothecary",
     "name": "Apothecary",
-    "requires": [
-      "technologyType:clinkerHulls",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:aqueduct"
-    ],
+    "requires": ["technologyType:optics", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:aqueduct"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1095,16 +791,8 @@
     "image": "/media/images/buildingType/hospital.jpg",
     "key": "buildingType:hospital",
     "name": "Hospital",
-    "requires": [
-      "technologyType:medicine",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:apothecary"
-    ],
+    "requires": ["technologyType:medicine", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:apothecary"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1123,16 +811,8 @@
     "image": "/media/images/buildingType/supermarket.jpg",
     "key": "buildingType:supermarket",
     "name": "Supermarket",
-    "requires": [
-      "technologyType:plastics",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:hospital"
-    ],
+    "requires": ["technologyType:plastics", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:hospital"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1151,16 +831,8 @@
     "image": "/media/images/buildingType/medicalClinic.jpg",
     "key": "buildingType:medicalClinic",
     "name": "Medical Clinic",
-    "requires": [
-      "technologyType:genetics",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:supermarket"
-    ],
+    "requires": ["technologyType:genetics", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:supermarket"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1179,13 +851,7 @@
     "image": "/media/images/buildingType/garden.jpg",
     "key": "buildingType:garden",
     "name": "Garden",
-    "requires": [
-      "technologyType:irrigation",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
+    "requires": ["technologyType:irrigation", ["conceptType:flatLand", "elevationType:hill"]],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1204,16 +870,8 @@
     "image": "/media/images/buildingType/arena.jpg",
     "key": "buildingType:arena",
     "name": "Arena",
-    "requires": [
-      "technologyType:sports",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:garden"
-    ],
+    "requires": ["technologyType:sports", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:garden"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1232,16 +890,8 @@
     "image": "/media/images/buildingType/tavern.jpg",
     "key": "buildingType:tavern",
     "name": "Tavern",
-    "requires": [
-      "technologyType:tradeCaravans",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:arena"
-    ],
+    "requires": ["technologyType:tradeCaravans", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:arena"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1260,16 +910,8 @@
     "image": "/media/images/buildingType/coffeeHouse.jpg",
     "key": "buildingType:coffeeHouse",
     "name": "Coffee House",
-    "requires": [
-      "technologyType:mercantilism",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:tavern"
-    ],
+    "requires": ["technologyType:mercantilism", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:tavern"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1288,16 +930,8 @@
     "image": "/media/images/buildingType/departmentStore.jpg",
     "key": "buildingType:departmentStore",
     "name": "Department Store",
-    "requires": [
-      "technologyType:economics",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:coffeeHouse"
-    ],
+    "requires": ["technologyType:economics", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:coffeeHouse"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1316,16 +950,8 @@
     "image": "/media/images/buildingType/amusementPark.jpg",
     "key": "buildingType:amusementPark",
     "name": "Amusement Park",
-    "requires": [
-      "technologyType:microchips",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:departmentStore"
-    ],
+    "requires": ["technologyType:microchips", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:departmentStore"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1344,13 +970,7 @@
     "image": "/media/images/buildingType/townWatch.jpg",
     "key": "buildingType:townWatch",
     "name": "Town Watch",
-    "requires": [
-      "technologyType:warfare",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
+    "requires": ["technologyType:warfare", ["conceptType:flatLand", "elevationType:hill"]],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1369,16 +989,8 @@
     "image": "/media/images/buildingType/courthouse.jpg",
     "key": "buildingType:courthouse",
     "name": "Courthouse",
-    "requires": [
-      "technologyType:codeOfLaw",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:townWatch"
-    ],
+    "requires": ["technologyType:codeOfLaw", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:townWatch"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1397,16 +1009,8 @@
     "image": "/media/images/buildingType/townHall.jpg",
     "key": "buildingType:townHall",
     "name": "Town Hall",
-    "requires": [
-      "technologyType:township",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:courthouse"
-    ],
+    "requires": ["technologyType:township", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:courthouse"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1425,16 +1029,8 @@
     "image": "/media/images/buildingType/magistrate.jpg",
     "key": "buildingType:magistrate",
     "name": "Magistrate",
-    "requires": [
-      "technologyType:bureaucracy",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:townHall"
-    ],
+    "requires": ["technologyType:bureaucracy", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:townHall"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1455,14 +1051,9 @@
     "name": "Police Station",
     "requires": [
       "technologyType:universalSuffrage",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
+      ["conceptType:flatLand", "elevationType:hill"]
     ],
-    "upgradesFrom": [
-      "buildingType:magistrate"
-    ],
+    "upgradesFrom": ["buildingType:magistrate"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1483,14 +1074,9 @@
     "name": "Riot Police",
     "requires": [
       "technologyType:stateSurveillance",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
+      ["conceptType:flatLand", "elevationType:hill"]
     ],
-    "upgradesFrom": [
-      "buildingType:policeStation"
-    ],
+    "upgradesFrom": ["buildingType:policeStation"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1509,13 +1095,7 @@
     "image": "/media/images/buildingType/governor.jpg",
     "key": "buildingType:governor",
     "name": "Governor",
-    "requires": [
-      "technologyType:settlements",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
+    "requires": ["technologyType:settlements", ["conceptType:flatLand", "elevationType:hill"]],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1534,16 +1114,8 @@
     "image": "/media/images/buildingType/mansion.jpg",
     "key": "buildingType:mansion",
     "name": "Mansion",
-    "requires": [
-      "technologyType:government",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:governor"
-    ],
+    "requires": ["technologyType:government", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:governor"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1562,16 +1134,8 @@
     "image": "/media/images/buildingType/royalCourt.jpg",
     "key": "buildingType:royalCourt",
     "name": "Royal Court",
-    "requires": [
-      "technologyType:divineRight",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:mansion"
-    ],
+    "requires": ["technologyType:divineRight", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:mansion"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1590,16 +1154,8 @@
     "image": "/media/images/buildingType/gentlemensClub.jpg",
     "key": "buildingType:gentlemensClub",
     "name": "Gentlemen's Club",
-    "requires": [
-      "technologyType:diplomacy",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:royalCourt"
-    ],
+    "requires": ["technologyType:diplomacy", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:royalCourt"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1620,14 +1176,9 @@
     "name": "Embassy Quarter",
     "requires": [
       "technologyType:universalSuffrage",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
+      ["conceptType:flatLand", "elevationType:hill"]
     ],
-    "upgradesFrom": [
-      "buildingType:gentlemensClub"
-    ],
+    "upgradesFrom": ["buildingType:gentlemensClub"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1646,16 +1197,8 @@
     "image": "/media/images/buildingType/networkMonitoring.jpg",
     "key": "buildingType:networkMonitoring",
     "name": "Network Monitoring",
-    "requires": [
-      "technologyType:virtualReality",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:embassyQuarter"
-    ],
+    "requires": ["technologyType:virtualReality", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:embassyQuarter"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1674,11 +1217,7 @@
     "image": "/media/images/buildingType/trainingGround.jpg",
     "key": "buildingType:trainingGround",
     "name": "Training Ground",
-    "requires": [
-      "technologyType:militaryTraining",
-      "domainType:land",
-      "elevationType:flat"
-    ],
+    "requires": ["technologyType:militaryTraining", "domainType:land", "elevationType:flat"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1687,9 +1226,7 @@
       {
         "type": "yieldType:production",
         "amount": 6,
-        "for": [
-          "platformType:human"
-        ]
+        "for": ["platformType:human"]
       }
     ]
   },
@@ -1700,14 +1237,8 @@
     "image": "/media/images/buildingType/garrison.jpg",
     "key": "buildingType:garrison",
     "name": "Garrison",
-    "requires": [
-      "technologyType:steel",
-      "domainType:land",
-      "elevationType:flat"
-    ],
-    "upgradesFrom": [
-      "buildingType:trainingGround"
-    ],
+    "requires": ["technologyType:steel", "domainType:land", "elevationType:flat"],
+    "upgradesFrom": ["buildingType:trainingGround"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1716,9 +1247,7 @@
       {
         "type": "yieldType:production",
         "amount": 8,
-        "for": [
-          "platformType:human"
-        ]
+        "for": ["platformType:human"]
       }
     ]
   },
@@ -1729,14 +1258,8 @@
     "image": "/media/images/buildingType/barracks.jpg",
     "key": "buildingType:barracks",
     "name": "Barracks",
-    "requires": [
-      "technologyType:firearms",
-      "domainType:land",
-      "elevationType:flat"
-    ],
-    "upgradesFrom": [
-      "buildingType:garrison"
-    ],
+    "requires": ["technologyType:firearms", "domainType:land", "elevationType:flat"],
+    "upgradesFrom": ["buildingType:garrison"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1745,9 +1268,7 @@
       {
         "type": "yieldType:production",
         "amount": 12,
-        "for": [
-          "platformType:human"
-        ]
+        "for": ["platformType:human"]
       }
     ]
   },
@@ -1758,14 +1279,8 @@
     "image": "/media/images/buildingType/recruitmentOffice.jpg",
     "key": "buildingType:recruitmentOffice",
     "name": "Recruitment Office",
-    "requires": [
-      "technologyType:antibiotics",
-      "domainType:land",
-      "elevationType:flat"
-    ],
-    "upgradesFrom": [
-      "buildingType:barracks"
-    ],
+    "requires": ["technologyType:antibiotics", "domainType:land", "elevationType:flat"],
+    "upgradesFrom": ["buildingType:barracks"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1774,9 +1289,7 @@
       {
         "type": "yieldType:production",
         "amount": 16,
-        "for": [
-          "platformType:human"
-        ]
+        "for": ["platformType:human"]
       }
     ]
   },
@@ -1787,14 +1300,8 @@
     "image": "/media/images/buildingType/militaryBase.jpg",
     "key": "buildingType:militaryBase",
     "name": "Military Base",
-    "requires": [
-      "technologyType:rifleScopes",
-      "domainType:land",
-      "elevationType:flat"
-    ],
-    "upgradesFrom": [
-      "buildingType:recruitmentOffice"
-    ],
+    "requires": ["technologyType:rifleScopes", "domainType:land", "elevationType:flat"],
+    "upgradesFrom": ["buildingType:recruitmentOffice"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1803,9 +1310,7 @@
       {
         "type": "yieldType:production",
         "amount": 20,
-        "for": [
-          "platformType:human"
-        ]
+        "for": ["platformType:human"]
       }
     ]
   },
@@ -1816,10 +1321,7 @@
     "image": "/media/images/buildingType/boatyard.jpg",
     "key": "buildingType:boatyard",
     "name": "Boatyard",
-    "requires": [
-      "technologyType:shipEngineering",
-      "terrainType:coast"
-    ],
+    "requires": ["technologyType:shipEngineering", "terrainType:coast"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1828,9 +1330,7 @@
       {
         "type": "yieldType:production",
         "amount": 6,
-        "for": [
-          "domainType:water"
-        ]
+        "for": ["domainType:water"]
       }
     ]
   },
@@ -1841,13 +1341,8 @@
     "image": "/media/images/buildingType/shipwright.jpg",
     "key": "buildingType:shipwright",
     "name": "Shipwright",
-    "requires": [
-      "technologyType:compass",
-      "terrainType:coast"
-    ],
-    "upgradesFrom": [
-      "buildingType:boatyard"
-    ],
+    "requires": ["technologyType:compass", "terrainType:coast"],
+    "upgradesFrom": ["buildingType:boatyard"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1856,9 +1351,7 @@
       {
         "type": "yieldType:production",
         "amount": 8,
-        "for": [
-          "domainType:water"
-        ]
+        "for": ["domainType:water"]
       }
     ]
   },
@@ -1869,13 +1362,8 @@
     "image": "/media/images/buildingType/shipyard.jpg",
     "key": "buildingType:shipyard",
     "name": "Shipyard",
-    "requires": [
-      "technologyType:cartography",
-      "terrainType:coast"
-    ],
-    "upgradesFrom": [
-      "buildingType:shipwright"
-    ],
+    "requires": ["technologyType:cartography", "terrainType:coast"],
+    "upgradesFrom": ["buildingType:shipwright"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1884,9 +1372,7 @@
       {
         "type": "yieldType:production",
         "amount": 12,
-        "for": [
-          "domainType:water"
-        ]
+        "for": ["domainType:water"]
       }
     ]
   },
@@ -1897,13 +1383,8 @@
     "image": "/media/images/buildingType/drydock.jpg",
     "key": "buildingType:drydock",
     "name": "Drydock",
-    "requires": [
-      "technologyType:hydrodynamics",
-      "terrainType:coast"
-    ],
-    "upgradesFrom": [
-      "buildingType:shipyard"
-    ],
+    "requires": ["technologyType:hydrodynamics", "terrainType:coast"],
+    "upgradesFrom": ["buildingType:shipyard"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1912,9 +1393,7 @@
       {
         "type": "yieldType:production",
         "amount": 16,
-        "for": [
-          "domainType:water"
-        ]
+        "for": ["domainType:water"]
       }
     ]
   },
@@ -1925,13 +1404,8 @@
     "image": "/media/images/buildingType/navalStation.jpg",
     "key": "buildingType:navalStation",
     "name": "Naval Station",
-    "requires": [
-      "technologyType:globalArmy",
-      "terrainType:coast"
-    ],
-    "upgradesFrom": [
-      "buildingType:drydock"
-    ],
+    "requires": ["technologyType:globalArmy", "terrainType:coast"],
+    "upgradesFrom": ["buildingType:drydock"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1940,9 +1414,7 @@
       {
         "type": "yieldType:production",
         "amount": 20,
-        "for": [
-          "domainType:water"
-        ]
+        "for": ["domainType:water"]
       }
     ]
   },
@@ -1953,11 +1425,7 @@
     "image": "/media/images/buildingType/townSquare.jpg",
     "key": "buildingType:townSquare",
     "name": "Town Square",
-    "requires": [
-      "technologyType:trade",
-      "domainType:land",
-      "elevationType:flat"
-    ],
+    "requires": ["technologyType:trade", "domainType:land", "elevationType:flat"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1976,14 +1444,8 @@
     "image": "/media/images/buildingType/market.jpg",
     "key": "buildingType:market",
     "name": "Market",
-    "requires": [
-      "technologyType:currency",
-      "domainType:land",
-      "elevationType:flat"
-    ],
-    "upgradesFrom": [
-      "buildingType:townSquare"
-    ],
+    "requires": ["technologyType:currency", "domainType:land", "elevationType:flat"],
+    "upgradesFrom": ["buildingType:townSquare"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2002,14 +1464,8 @@
     "image": "/media/images/buildingType/tradersGuild.jpg",
     "key": "buildingType:tradersGuild",
     "name": "Trader's Guild",
-    "requires": [
-      "technologyType:feudalism",
-      "domainType:land",
-      "elevationType:flat"
-    ],
-    "upgradesFrom": [
-      "buildingType:market"
-    ],
+    "requires": ["technologyType:guilds", "domainType:land", "elevationType:flat"],
+    "upgradesFrom": ["buildingType:market"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2028,14 +1484,8 @@
     "image": "/media/images/buildingType/warehouse.jpg",
     "key": "buildingType:warehouse",
     "name": "Warehouse",
-    "requires": [
-      "technologyType:royalCharter",
-      "domainType:land",
-      "elevationType:flat"
-    ],
-    "upgradesFrom": [
-      "buildingType:tradersGuild"
-    ],
+    "requires": ["technologyType:royalCharter", "domainType:land", "elevationType:flat"],
+    "upgradesFrom": ["buildingType:tradersGuild"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2054,14 +1504,8 @@
     "image": "/media/images/buildingType/railwayStation.jpg",
     "key": "buildingType:railwayStation",
     "name": "Railway Station",
-    "requires": [
-      "technologyType:railroad",
-      "domainType:land",
-      "elevationType:flat"
-    ],
-    "upgradesFrom": [
-      "buildingType:warehouse"
-    ],
+    "requires": ["technologyType:railroad", "domainType:land", "elevationType:flat"],
+    "upgradesFrom": ["buildingType:warehouse"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2080,14 +1524,8 @@
     "image": "/media/images/buildingType/multimodalTerminal.jpg",
     "key": "buildingType:multimodalTerminal",
     "name": "Multimodal Terminal",
-    "requires": [
-      "technologyType:globalization",
-      "domainType:land",
-      "elevationType:flat"
-    ],
-    "upgradesFrom": [
-      "buildingType:railwayStation"
-    ],
+    "requires": ["technologyType:globalization", "domainType:land", "elevationType:flat"],
+    "upgradesFrom": ["buildingType:railwayStation"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2106,10 +1544,7 @@
     "image": "/media/images/buildingType/wharf.jpg",
     "key": "buildingType:wharf",
     "name": "Wharf",
-    "requires": [
-      "technologyType:sailing",
-      "terrainType:coast"
-    ],
+    "requires": ["technologyType:sailing", "terrainType:coast"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2118,9 +1553,7 @@
       {
         "type": "yieldType:food",
         "amount": 1,
-        "for": [
-          "improvementCategory:boats"
-        ]
+        "for": ["improvementCategory:boats"]
       }
     ]
   },
@@ -2131,13 +1564,8 @@
     "image": "/media/images/buildingType/lighthouse.jpg",
     "key": "buildingType:lighthouse",
     "name": "Lighthouse",
-    "requires": [
-      "technologyType:celestialNavigation",
-      "terrainType:coast"
-    ],
-    "upgradesFrom": [
-      "buildingType:wharf"
-    ],
+    "requires": ["technologyType:celestialNavigation", "terrainType:coast"],
+    "upgradesFrom": ["buildingType:wharf"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2146,16 +1574,12 @@
       {
         "type": "yieldType:food",
         "amount": 2,
-        "for": [
-          "improvementCategory:boats"
-        ]
+        "for": ["improvementCategory:boats"]
       },
       {
         "type": "yieldType:production",
         "amount": 1,
-        "for": [
-          "improvementCategory:boats"
-        ]
+        "for": ["improvementCategory:boats"]
       }
     ]
   },
@@ -2166,13 +1590,8 @@
     "image": "/media/images/buildingType/harbor.jpg",
     "key": "buildingType:harbor",
     "name": "Harbor",
-    "requires": [
-      "technologyType:compass",
-      "terrainType:coast"
-    ],
-    "upgradesFrom": [
-      "buildingType:lighthouse"
-    ],
+    "requires": ["technologyType:compass", "terrainType:coast"],
+    "upgradesFrom": ["buildingType:lighthouse"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2181,16 +1600,12 @@
       {
         "type": "yieldType:food",
         "amount": 2,
-        "for": [
-          "improvementCategory:boats"
-        ]
+        "for": ["improvementCategory:boats"]
       },
       {
         "type": "yieldType:production",
         "amount": 2,
-        "for": [
-          "improvementCategory:boats"
-        ]
+        "for": ["improvementCategory:boats"]
       }
     ]
   },
@@ -2201,13 +1616,8 @@
     "image": "/media/images/buildingType/port.jpg",
     "key": "buildingType:port",
     "name": "Port",
-    "requires": [
-      "technologyType:colonialism",
-      "terrainType:coast"
-    ],
-    "upgradesFrom": [
-      "buildingType:harbor"
-    ],
+    "requires": ["technologyType:colonialism", "terrainType:coast"],
+    "upgradesFrom": ["buildingType:harbor"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2220,16 +1630,12 @@
       {
         "type": "yieldType:food",
         "amount": 3,
-        "for": [
-          "improvementCategory:boats"
-        ]
+        "for": ["improvementCategory:boats"]
       },
       {
         "type": "yieldType:production",
         "amount": 3,
-        "for": [
-          "improvementCategory:boats"
-        ]
+        "for": ["improvementCategory:boats"]
       }
     ]
   },
@@ -2240,13 +1646,8 @@
     "image": "/media/images/buildingType/containerPort.jpg",
     "key": "buildingType:containerPort",
     "name": "Container Port",
-    "requires": [
-      "technologyType:aluminumMilling",
-      "terrainType:coast"
-    ],
-    "upgradesFrom": [
-      "buildingType:port"
-    ],
+    "requires": ["technologyType:aluminumMilling", "terrainType:coast"],
+    "upgradesFrom": ["buildingType:port"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2259,16 +1660,12 @@
       {
         "type": "yieldType:food",
         "amount": 4,
-        "for": [
-          "improvementCategory:boats"
-        ]
+        "for": ["improvementCategory:boats"]
       },
       {
         "type": "yieldType:production",
         "amount": 4,
-        "for": [
-          "improvementCategory:boats"
-        ]
+        "for": ["improvementCategory:boats"]
       }
     ]
   },
@@ -2279,13 +1676,8 @@
     "image": "/media/images/buildingType/automatedPort.jpg",
     "key": "buildingType:automatedPort",
     "name": "Automated Port",
-    "requires": [
-      "technologyType:robotics",
-      "terrainType:coast"
-    ],
-    "upgradesFrom": [
-      "buildingType:containerPort"
-    ],
+    "requires": ["technologyType:robotics", "terrainType:coast"],
+    "upgradesFrom": ["buildingType:containerPort"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2294,16 +1686,12 @@
       {
         "type": "yieldType:food",
         "amount": 5,
-        "for": [
-          "improvementCategory:boats"
-        ]
+        "for": ["improvementCategory:boats"]
       },
       {
         "type": "yieldType:production",
         "amount": 5,
-        "for": [
-          "improvementCategory:boats"
-        ]
+        "for": ["improvementCategory:boats"]
       }
     ]
   },
@@ -2314,13 +1702,7 @@
     "image": "/media/images/buildingType/palisades.jpg",
     "key": "buildingType:palisades",
     "name": "Palisades",
-    "requires": [
-      "technologyType:woodWorking",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
+    "requires": ["technologyType:woodWorking", ["conceptType:flatLand", "elevationType:hill"]],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2339,16 +1721,8 @@
     "image": "/media/images/buildingType/stoneWalls.jpg",
     "key": "buildingType:stoneWalls",
     "name": "Stone Walls",
-    "requires": [
-      "technologyType:bronzeCasting",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:palisades"
-    ],
+    "requires": ["technologyType:bronzeCasting", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:palisades"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2367,16 +1741,8 @@
     "image": "/media/images/buildingType/castle.jpg",
     "key": "buildingType:castle",
     "name": "Castle",
-    "requires": [
-      "technologyType:castles",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:stoneWalls"
-    ],
+    "requires": ["technologyType:castles", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:stoneWalls"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2395,16 +1761,8 @@
     "image": "/media/images/buildingType/starFort.jpg",
     "key": "buildingType:starFort",
     "name": "Star Fort",
-    "requires": [
-      "technologyType:steelCasting",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:castle"
-    ],
+    "requires": ["technologyType:steelCasting", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:castle"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2423,16 +1781,8 @@
     "image": "/media/images/buildingType/civilDefense.jpg",
     "key": "buildingType:civilDefense",
     "name": "Civil Defense",
-    "requires": [
-      "technologyType:civilDefense",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:starFort"
-    ],
+    "requires": ["technologyType:civilDefense", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:starFort"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2451,13 +1801,7 @@
     "image": "/media/images/buildingType/siegeWorkshop.jpg",
     "key": "buildingType:siegeWorkshop",
     "name": "Siege Workshop",
-    "requires": [
-      "technologyType:mathematics",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
+    "requires": ["technologyType:mathematics", ["conceptType:flatLand", "elevationType:hill"]],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2467,9 +1811,7 @@
         "type": "yieldType:production",
         "amount": 25,
         "method": "percent",
-        "for": [
-          "equipmentCategory:siege"
-        ]
+        "for": ["equipmentCategory:siege"]
       }
     ]
   },
@@ -2480,16 +1822,8 @@
     "image": "/media/images/buildingType/artilleryFactory.jpg",
     "key": "buildingType:artilleryFactory",
     "name": "Artillery Factory",
-    "requires": [
-      "technologyType:artillery",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:siegeWorkshop"
-    ],
+    "requires": ["technologyType:artillery", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:siegeWorkshop"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2499,9 +1833,7 @@
         "type": "yieldType:production",
         "amount": 25,
         "method": "percent",
-        "for": [
-          "equipmentCategory:artillery"
-        ]
+        "for": ["equipmentCategory:artillery"]
       }
     ]
   },
@@ -2512,13 +1844,7 @@
     "image": "/media/images/buildingType/archeryRange.jpg",
     "key": "buildingType:archeryRange",
     "name": "Archery Range",
-    "requires": [
-      "technologyType:archery",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
+    "requires": ["technologyType:archery", ["conceptType:flatLand", "elevationType:hill"]],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2528,9 +1854,7 @@
         "type": "yieldType:production",
         "amount": 25,
         "method": "percent",
-        "for": [
-          "equipmentCategory:ranged"
-        ]
+        "for": ["equipmentCategory:ranged"]
       }
     ]
   },
@@ -2541,16 +1865,8 @@
     "image": "/media/images/buildingType/firingRange.jpg",
     "key": "buildingType:firingRange",
     "name": "Firing Range",
-    "requires": [
-      "technologyType:firearms",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:archeryRange"
-    ],
+    "requires": ["technologyType:firearms", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:archeryRange"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2560,10 +1876,7 @@
         "type": "yieldType:production",
         "amount": 25,
         "method": "percent",
-        "for": [
-          "equipmentCategory:mortar",
-          "equipmentCategory:specOps"
-        ]
+        "for": ["equipmentCategory:mortar", "equipmentCategory:specOps"]
       }
     ]
   },
@@ -2574,13 +1887,7 @@
     "image": "/media/images/buildingType/stables.jpg",
     "key": "buildingType:stables",
     "name": "Stables",
-    "requires": [
-      "technologyType:riding",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
+    "requires": ["technologyType:riding", ["conceptType:flatLand", "elevationType:hill"]],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2590,9 +1897,7 @@
         "type": "yieldType:production",
         "amount": 25,
         "method": "percent",
-        "for": [
-          "platformCategory:mounted"
-        ]
+        "for": ["platformCategory:mounted"]
       }
     ]
   },
@@ -2603,16 +1908,8 @@
     "image": "/media/images/buildingType/carFactory.jpg",
     "key": "buildingType:carFactory",
     "name": "Car Factory",
-    "requires": [
-      "technologyType:combustion",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:stables"
-    ],
+    "requires": ["technologyType:combustion", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:stables"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2622,10 +1919,7 @@
         "type": "yieldType:production",
         "amount": 25,
         "method": "percent",
-        "for": [
-          "platformType:truck",
-          "platformType:tracked"
-        ]
+        "for": ["platformType:truck", "platformType:tracked"]
       }
     ]
   },
@@ -2633,9 +1927,7 @@
     "category": "buildingCategory:resourceProduction",
     "concept": "conceptType:building",
     "description": "A bronze smithy is a workshop where copper and tin are alloyed and cast into tools, weapons, and ornaments. Furnaces, crucibles, stone or clay molds, and anvils equip the shop. Craftspeople smelted ore, mixed alloy in controlled ratios, cast by two-part molds or lost-wax, then finished by grinding, cold hammering, and annealing. Bronze’s hardness and corrosion resistance supported axes, chisels, spearheads, mirrors, and ritual vessels. Early centers included Mesopotamian and Egyptian workshops, Minoan and Mycenaean Aegean sites, and Indus settlements. In China, Shang and Zhou foundries at Anyang produced complex ritual bronzes with sectional molds. Southeast Asia’s Dong Son culture cast large drums. Bronze smiths formed core urban crafts, supplying households, temples, and armies until ironworking spread.",
-    "gains": [
-      "resourceType:bronze"
-    ],
+    "gains": ["resourceType:bronze"],
     "image": "/media/images/buildingType/bronzeSmith.jpg",
     "key": "buildingType:bronzeSmith",
     "name": "Bronze Smith",
@@ -2643,10 +1935,7 @@
       "technologyType:bronzeWorking",
       "resourceType:copper",
       "resourceType:tin",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
+      ["conceptType:flatLand", "elevationType:hill"]
     ],
     "yields": [
       {
@@ -2659,9 +1948,7 @@
     "category": "buildingCategory:resourceProduction",
     "concept": "conceptType:building",
     "description": "A steel mill produces steel from pig iron or scrap using converters and furnaces, then rolls it into finished shapes. From the 1870s, Bessemer converters and open-hearth furnaces enabled cheap mass steel, displacing wrought iron. Plants integrated coke ovens, blast furnaces, and rolling mills. Notable complexes included Pittsburgh and Chicago works in the United States, the Ruhr in Germany, and Middlesbrough in Britain. Russia built Magnitogorsk; India developed Jamshedpur under Tata; Japan’s Yawata and later integrated works modernized rapidly. After 1950, basic oxygen furnaces and continuous casting raised output and quality. Steel mills supplied rails, ship plate, beams, wire, and machinery steel, underpinning railways, bridges, skyscrapers, and armaments through the mid-20th century.",
-    "gains": [
-      "resourceType:steel"
-    ],
+    "gains": ["resourceType:steel"],
     "image": "/media/images/buildingType/steelMill.jpg",
     "key": "buildingType:steelMill",
     "name": "Steel Mill",
@@ -2669,14 +1956,9 @@
       "technologyType:steelMilling",
       "resourceType:coal",
       "resourceType:iron",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
+      ["conceptType:flatLand", "elevationType:hill"]
     ],
-    "upgradesFrom": [
-      "buildingType:bronzeSmith"
-    ],
+    "upgradesFrom": ["buildingType:bronzeSmith"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2688,9 +1970,7 @@
     "category": "buildingCategory:resourceProduction",
     "concept": "conceptType:building",
     "description": "A synthetic oil plant converts coal, natural gas, or oil shale into liquid fuels. Two main routes dominated: coal hydrogenation (Bergius) and Fischer–Tropsch synthesis, along with shale oil retorting. Germany built large complexes at Leuna, Pölitz, and the Ruhr in the 1930s–1940s to reduce dependence on crude imports; these targets drew heavy Allied bombing. Japan processed shale and coal in Manchuria and at Fushun. Postwar, South Africa’s Sasol expanded coal-to-liquids to address embargoes and supply security. Plants integrate gasification, synthesis reactors, hydrocracking, and refining units to produce gasoline, diesel, and lubricants. Programs advanced catalysts and high-pressure engineering, trading higher capital and energy costs for assured fuel supply during wartime and embargo periods.",
-    "gains": [
-      "resourceType:oil"
-    ],
+    "gains": ["resourceType:oil"],
     "image": "/media/images/buildingType/syntheticOilPlant.jpg",
     "key": "buildingType:syntheticOilPlant",
     "name": "Synthetic Oil Plant",
@@ -2698,10 +1978,7 @@
       "technologyType:oilRefining",
       "resourceType:coal",
       "resourceType:electricity",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
+      ["conceptType:flatLand", "elevationType:hill"]
     ],
     "yields": [
       {
@@ -2714,9 +1991,7 @@
     "category": "buildingCategory:resourceProduction",
     "concept": "conceptType:building",
     "description": "An electronics factory is an industrial facility dedicated to producing electronic components and finished devices for civilian, scientific, and military markets. Early plants made vacuum tubes, radios, and telegraph equipment in the late nineteenth and early twentieth centuries. After 1945, mass production of televisions and transistor radios scaled the sector. Cleanrooms and photolithography entered in the 1960s for integrated circuits, followed by surface-mount assembly and automated test in the 1980s. Regional clusters grew around research hubs and export zones: RCA tube works in Camden, New Jersey; Philips in Eindhoven; Zelenograd microelectronics plants in the USSR; Sony and Toshiba lines in Japan; Texas Instruments and Intel fabs in the United States. By the late twentieth century, Penang’s Free Industrial Zone, Hsinchu Science Park, and Shenzhen’s manufacturing belt anchored global supply chains.",
-    "gains": [
-      "resourceType:electronics"
-    ],
+    "gains": ["resourceType:electronics"],
     "image": "/media/images/buildingType/electronicsFactory.jpg",
     "key": "buildingType:electronicsFactory",
     "name": "Electronics Factory",
@@ -2724,10 +1999,7 @@
       "technologyType:transistors",
       "resourceType:copper",
       "resourceType:rareEarthMetals",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
+      ["conceptType:flatLand", "elevationType:hill"]
     ],
     "yields": [
       {
@@ -2740,19 +2012,14 @@
     "category": "buildingCategory:powerPlant",
     "concept": "conceptType:building",
     "description": "Coal-fired power plants convert the chemical energy of coal into electricity through boilers, steam turbines, and generators coupled to grid substations. The Pearl Street Station in New York (1882) initiated commercial coal generation, and large steam turbines made central stations dominant by the early twentieth century. Pulverized-coal firing and high-pressure boilers improved efficiency in the 1920s–1950s; supercritical units followed. From the 1930s to the 1970s, coal stations became the baseload backbone of many national grids. Emission controls such as electrostatic precipitators and flue-gas desulfurization spread after the 1970s. Notable plants include Battersea Power Station in London, Drax in Yorkshire, Reftinskaya GRES in Russia, the Navajo Generating Station in Arizona, NTPC’s Singrauli Super Thermal Power Station in India, and Liddell Power Station in New South Wales.",
-    "gains": [
-      "resourceType:electricity"
-    ],
+    "gains": ["resourceType:electricity"],
     "image": "/media/images/buildingType/coalPowerPlant.jpg",
     "key": "buildingType:coalPowerPlant",
     "name": "Coal Power Plant",
     "requires": [
       "technologyType:electricity",
       "resourceType:coal",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
+      ["conceptType:flatLand", "elevationType:hill"]
     ],
     "yields": [
       {
@@ -2769,19 +2036,14 @@
     "category": "buildingCategory:powerPlant",
     "concept": "conceptType:building",
     "description": "Oil-fired power plants burn petroleum fuels in boilers, gas turbines, or large diesel engines to drive generators. They expanded rapidly from the 1940s to the 1970s where oil supply was secure or coal was scarce, and they often served urban peaking demand or island baseload. The 1973–1979 oil shocks led many stations to convert fuels or operate less frequently, but oil units remained important for fast-start capacity. Notable examples include Yokosuka Thermal Power Station in Japan, Kahe Power Plant on Oahu, Poolbeg Generating Station in Dublin, and the San Juan power complex in Puerto Rico. Many African and Caribbean grids relied on heavy-fuel-oil plants built with development finance during the late twentieth century, providing essential electrification despite high operating costs.",
-    "gains": [
-      "resourceType:electricity"
-    ],
+    "gains": ["resourceType:electricity"],
     "image": "/media/images/buildingType/oilPowerPlant.jpg",
     "key": "buildingType:oilPowerPlant",
     "name": "Oil Power Plant",
     "requires": [
       "technologyType:oilRefining",
       "resourceType:oil",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
+      ["conceptType:flatLand", "elevationType:hill"]
     ],
     "yields": [
       {
@@ -2798,19 +2060,14 @@
     "category": "buildingCategory:powerPlant",
     "concept": "conceptType:building",
     "description": "Hydroelectric power plants convert the potential energy of stored or flowing water into electricity using turbines and generators. Alternating-current transmission made remote hydropower practical in the 1890s, culminating in the Niagara Falls project (1895). Reservoir dams integrated flood control, irrigation, and navigation with generation. Francis, Kaplan, and Pelton turbines enabled deployment across varied heads and flows. Large schemes shaped national grids and regional economies: Hoover Dam and Grand Coulee in the United States, Aswan High Dam in Egypt, Churchill Falls in Canada, Itaipu on the Brazil–Paraguay border, and Norway’s cascaded stations. Construction often involved major resettlement and environmental changes. By the late twentieth century, pumped-storage hydropower also stabilized systems with variable thermal and renewable generation.",
-    "gains": [
-      "resourceType:electricity"
-    ],
+    "gains": ["resourceType:electricity"],
     "image": "/media/images/buildingType/hydroPowerPlant.jpg",
     "key": "buildingType:hydroPowerPlant",
     "name": "Hydro Power Plant",
     "requires": [
       "technologyType:hydrodynamics",
       "conceptType:river",
-      [
-        "elevationType:hill",
-        "elevationType:mountain"
-      ]
+      ["elevationType:hill", "elevationType:mountain"]
     ],
     "yields": [
       {
@@ -2823,9 +2080,7 @@
     "category": "buildingCategory:powerPlant",
     "concept": "conceptType:building",
     "description": "Nuclear power plants generate electricity from controlled fission in reactor cores, producing heat to drive steam turbines. Early grid-connected stations included Obninsk in the USSR (1954), Calder Hall in the United Kingdom (1956), and Shippingport in the United States (1957). Commercial designs standardized around pressurized and boiling water reactors, while Canada developed the heavy-water CANDU, the UK operated gas-cooled AGRs, and the USSR built graphite-moderated RBMKs. National programs scaled rapidly in the 1970s–1980s, notably France’s fleet buildout, Japan’s coastal stations, and units in South Korea and India. Safety regimes and containment systems evolved after incidents at Three Mile Island (1979) and Chernobyl (1986). Examples include Tarapur Atomic Power Station in India, Koeberg in South Africa, and Gravelines in France.",
-    "gains": [
-      "resourceType:electricity"
-    ],
+    "gains": ["resourceType:electricity"],
     "image": "/media/images/buildingType/nuclearPowerPlant.jpg",
     "key": "buildingType:nuclearPowerPlant",
     "name": "Nuclear Power Plant",
@@ -2834,10 +2089,7 @@
       "resourceType:uranium",
       "domainType:land",
       "elevationType:flat",
-      [
-        "conceptType:freshWater",
-        "specialType:nextToCoast"
-      ]
+      ["conceptType:freshWater", "specialType:nextToCoast"]
     ],
     "yields": [
       {
@@ -2850,23 +2102,12 @@
     "category": "buildingCategory:powerPlant",
     "concept": "conceptType:building",
     "description": "Solar power plants capture sunlight to produce electricity through photovoltaic (PV) modules or concentrating solar power (CSP) systems. Laboratory PV cells emerged in the 1950s and served satellites in the 1960s. Oil-price shocks drove terrestrial demonstrations in the 1970s and 1980s, including the Solar One CSP project at Daggett, California, and early PV arrays on the Carrizo Plain. Utility-scale growth accelerated in the 1990s–2000s with policy support and cheaper modules, notable in Germany and Spain. Spain’s PS10 tower near Seville and California’s SEGS parabolic-trough plants showed grid-scale potential. Remote telecom sites, lighthouses, and rural clinics adopted PV widely in developing regions. By the turn of the century, solar plants complemented conventional generation with modular, low-operating-cost capacity.",
-    "gains": [
-      "resourceType:electricity"
-    ],
+    "gains": ["resourceType:electricity"],
     "image": "/media/images/buildingType/solarPowerPlant.jpg",
     "key": "buildingType:solarPowerPlant",
     "name": "Solar Power Plant",
-    "requires": [
-      "technologyType:renewableEnergy",
-      [
-        "conceptType:flatLand",
-        "elevationType:hill"
-      ]
-    ],
-    "upgradesFrom": [
-      "buildingType:coalPowerPlant",
-      "buildingType:oilPowerPlant"
-    ],
+    "requires": ["technologyType:renewableEnergy", ["conceptType:flatLand", "elevationType:hill"]],
+    "upgradesFrom": ["buildingType:coalPowerPlant", "buildingType:oilPowerPlant"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2878,27 +2119,16 @@
     "category": "buildingCategory:powerPlant",
     "concept": "conceptType:building",
     "description": "Wind power plants, or wind farms, deploy multiple turbines to convert wind kinetic energy into grid electricity. Modern three-bladed horizontal-axis turbines matured in Denmark in the 1970s, leading to community-owned arrays in the 1980s. Large installations followed at Altamont Pass, Tehachapi, and Palm Springs in California. Spain, India, and Germany expanded substantially in the 1990s. Offshore wind began with Vindeby in Denmark (1991) and progressed to larger arrays such as Horns Rev in the North Sea. Grid integration, improved aerodynamics, and taller towers increased capacity factors and reduced costs. Notable sites include Muppandal in Tamil Nadu, the Tarifa region in Spain, and Danish coastal clusters. By the early twenty-first century, wind farms formed major shares of generation in several countries.",
-    "gains": [
-      "resourceType:electricity"
-    ],
+    "gains": ["resourceType:electricity"],
     "image": "/media/images/buildingType/windPowerPlant.jpg",
     "key": "buildingType:windPowerPlant",
     "name": "Wind Power Plant",
     "requires": [
       "technologyType:renewableEnergy",
-      [
-        "domainType:land",
-        "terrainType:coast"
-      ],
-      [
-        "elevationType:flat",
-        "elevationType:hill"
-      ]
+      ["domainType:land", "terrainType:coast"],
+      ["elevationType:flat", "elevationType:hill"]
     ],
-    "upgradesFrom": [
-      "buildingType:coalPowerPlant",
-      "buildingType:oilPowerPlant"
-    ],
+    "upgradesFrom": ["buildingType:coalPowerPlant", "buildingType:oilPowerPlant"],
     "yields": [
       {
         "type": "yieldType:productionCost",

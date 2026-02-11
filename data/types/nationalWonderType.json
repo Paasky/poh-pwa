@@ -11,10 +11,7 @@
       "source": "Mother Jones, ca. 1890",
       "url": "/media/quotes/nationalWonderType/carnegieSteel.mp3"
     },
-    "requires": [
-      "technologyType:steelMilling",
-      "goalType:industrialMight"
-    ],
+    "requires": ["technologyType:steelMilling", "goalType:industrialMight"],
     "yields": [
       {
         "type": "yieldType:production",
@@ -34,17 +31,13 @@
       "source": "Friedrich List, 1841",
       "url": "/media/quotes/nationalWonderType/industrialFund.mp3"
     },
-    "requires": [
-      "technologyType:stainlessSteel"
-    ],
+    "requires": ["technologyType:stainlessSteel"],
     "yields": [
       {
         "type": "yieldType:production",
         "amount": 10,
         "method": "percent",
-        "for": [
-          "specialType:allCities"
-        ]
+        "for": ["specialType:allCities"]
       }
     ]
   },
@@ -60,17 +53,13 @@
       "source": "William Shatner, 1966",
       "url": "/media/quotes/nationalWonderType/spaceport.mp3"
     },
-    "requires": [
-      "technologyType:privateSpaceFlight"
-    ],
+    "requires": ["technologyType:privateSpaceFlight"],
     "yields": [
       {
         "type": "yieldType:production",
         "amount": 50,
         "method": "percent",
-        "for": [
-          "domainType:space"
-        ]
+        "for": ["domainType:space"]
       }
     ]
   },
@@ -86,17 +75,13 @@
       "source": "Alexander Hamilton, 1791",
       "url": "/media/quotes/nationalWonderType/nationalBank.mp3"
     },
-    "requires": [
-      "technologyType:economics"
-    ],
+    "requires": ["technologyType:economics"],
     "yields": [
       {
         "type": "yieldType:gold",
         "amount": 10,
         "method": "percent",
-        "for": [
-          "specialType:allCities"
-        ]
+        "for": ["specialType:allCities"]
       }
     ]
   },
@@ -112,16 +97,12 @@
       "source": "Singaporean minister, ca. 1975",
       "url": "/media/quotes/nationalWonderType/freeTradeZone.mp3"
     },
-    "requires": [
-      "technologyType:globalization"
-    ],
+    "requires": ["technologyType:globalization"],
     "yields": [
       {
         "type": "yieldType:gold",
         "amount": 3,
-        "for": [
-          "conceptType:tradeRoute"
-        ]
+        "for": ["conceptType:tradeRoute"]
       }
     ]
   },
@@ -137,10 +118,7 @@
       "source": "Socrates, 399 BCE",
       "url": "/media/quotes/nationalWonderType/schoolOfSocrates.mp3"
     },
-    "requires": [
-      "technologyType:philosophy",
-      "goalType:greatPhilosophers"
-    ],
+    "requires": ["technologyType:philosophy", "goalType:greatPhilosophers"],
     "yields": [
       {
         "type": "yieldType:science",
@@ -160,10 +138,7 @@
       "source": "Royal Society motto, 1663",
       "url": "/media/quotes/nationalWonderType/royalSociety.mp3"
     },
-    "requires": [
-      "technologyType:scientificMethod",
-      "goalType:theEnlightenment"
-    ],
+    "requires": ["technologyType:scientificMethod", "goalType:theEnlightenment"],
     "yields": [
       {
         "type": "yieldType:science",
@@ -183,17 +158,13 @@
       "source": "Victor Hugo, 1860",
       "url": "/media/quotes/nationalWonderType/nationalLibrary.mp3"
     },
-    "requires": [
-      "technologyType:universalSuffrage"
-    ],
+    "requires": ["technologyType:universalSuffrage"],
     "yields": [
       {
         "type": "yieldType:science",
         "amount": 10,
         "method": "percent",
-        "for": [
-          "specialType:allCities"
-        ]
+        "for": ["specialType:allCities"]
       }
     ]
   },
@@ -209,12 +180,8 @@
       "source": "John F. Kennedy, 1962",
       "url": "/media/quotes/nationalWonderType/spaceProgram.mp3"
     },
-    "requires": [
-      "technologyType:spaceFlight"
-    ],
-    "specials": [
-      "specialType:canBuildSatellites"
-    ]
+    "requires": ["technologyType:spaceFlight"],
+    "specials": ["specialType:canBuildSatellites"]
   },
   {
     "category": "nationalWonderCategory:science",
@@ -228,17 +195,13 @@
       "source": "AI researcher, ca. 2023",
       "url": "/media/quotes/nationalWonderType/largeLanguageModel.mp3"
     },
-    "requires": [
-      "technologyType:artificialIntelligence"
-    ],
+    "requires": ["technologyType:artificialIntelligence"],
     "yields": [
       {
         "type": "yieldType:science",
         "amount": 50,
         "method": "percent",
-        "for": [
-          "specialType:allCities"
-        ]
+        "for": ["specialType:allCities"]
       }
     ]
   },
@@ -254,16 +217,12 @@
       "source": "Franklin D. Roosevelt, 1933",
       "url": "/media/quotes/nationalWonderType/foodProgram.mp3"
     },
-    "requires": [
-      "technologyType:antibiotics"
-    ],
+    "requires": ["technologyType:antibiotics"],
     "yields": [
       {
         "type": "yieldType:food",
         "amount": 2,
-        "for": [
-          "conceptType:building"
-        ]
+        "for": ["conceptType:building"]
       }
     ]
   },
@@ -279,10 +238,7 @@
       "source": "Nazca elder, ca. 500 CE",
       "url": "/media/quotes/nationalWonderType/geoglyph.mp3"
     },
-    "requires": [
-      "technologyType:tradition",
-      "goalType:firstCities"
-    ],
+    "requires": ["technologyType:tradition", "goalType:firstCities"],
     "yields": [
       {
         "type": "yieldType:culture",
@@ -302,10 +258,7 @@
       "source": "Tablet I, ca. 2100 BCE",
       "url": "/media/quotes/nationalWonderType/greatEpic.mp3"
     },
-    "requires": [
-      "technologyType:drama",
-      "goalType:wondersOfTheWorld"
-    ],
+    "requires": ["technologyType:drama", "goalType:wondersOfTheWorld"],
     "yields": [
       {
         "type": "yieldType:culture",
@@ -325,10 +278,7 @@
       "source": "Manesse family motto, ca. 1300",
       "url": "/media/quotes/nationalWonderType/codexManesse.mp3"
     },
-    "requires": [
-      "technologyType:chivalry",
-      "goalType:tournaments"
-    ],
+    "requires": ["technologyType:chivalry", "goalType:tournaments"],
     "yields": [
       {
         "type": "yieldType:culture",
@@ -348,9 +298,7 @@
       "source": "John Ruskin, 1851",
       "url": "/media/quotes/nationalWonderType/nationalArtMuseum.mp3"
     },
-    "requires": [
-      "technologyType:artHistory"
-    ],
+    "requires": ["technologyType:artHistory"],
     "yields": [
       {
         "type": "yieldType:culture",
@@ -370,17 +318,13 @@
       "source": "O. C. Marsh, 1870",
       "url": "/media/quotes/nationalWonderType/naturalHistoryMuseum.mp3"
     },
-    "requires": [
-      "technologyType:drilling"
-    ],
+    "requires": ["technologyType:drilling"],
     "yields": [
       {
         "type": "yieldType:culture",
         "amount": 15,
         "method": "percent",
-        "for": [
-          "specialType:allCities"
-        ]
+        "for": ["specialType:allCities"]
       }
     ]
   },
@@ -396,10 +340,7 @@
       "source": "Genesis 28:17",
       "url": "/media/quotes/nationalWonderType/templeMount.mp3"
     },
-    "requires": [
-      "technologyType:organizedReligion",
-      "goalType:pantheonOfGods"
-    ],
+    "requires": ["technologyType:organizedReligion", "goalType:pantheonOfGods"],
     "yields": [
       {
         "type": "yieldType:faith",
@@ -419,10 +360,7 @@
       "source": "Court scribe, ca. 1400 BCE",
       "url": "/media/quotes/nationalWonderType/royalPalace.mp3"
     },
-    "requires": [
-      "technologyType:buttress",
-      "goalType:mandateOfHeaven"
-    ],
+    "requires": ["technologyType:buttress", "goalType:mandateOfHeaven"],
     "yields": [
       {
         "type": "yieldType:faith",
@@ -442,17 +380,13 @@
       "source": "Louis XIV, 1685",
       "url": "/media/quotes/nationalWonderType/nationalChurch.mp3"
     },
-    "requires": [
-      "technologyType:radio"
-    ],
+    "requires": ["technologyType:radio"],
     "yields": [
       {
         "type": "yieldType:faith",
         "amount": 15,
         "method": "percent",
-        "for": [
-          "specialType:allCities"
-        ]
+        "for": ["specialType:allCities"]
       }
     ]
   },
@@ -468,17 +402,13 @@
       "source": "Aneurin Bevan, 1948",
       "url": "/media/quotes/nationalWonderType/nationalHealthService.mp3"
     },
-    "requires": [
-      "technologyType:antibiotics"
-    ],
+    "requires": ["technologyType:antibiotics"],
     "yields": [
       {
         "type": "yieldType:health",
         "amount": 20,
         "method": "percent",
-        "for": [
-          "specialType:allCities"
-        ]
+        "for": ["specialType:allCities"]
       }
     ]
   },
@@ -494,16 +424,12 @@
       "source": "William Pitt the Younger, ca. 1790",
       "url": "/media/quotes/nationalWonderType/parliament.mp3"
     },
-    "requires": [
-      "technologyType:bureaucracy"
-    ],
+    "requires": ["technologyType:bureaucracy"],
     "yields": [
       {
         "type": "yieldType:happiness",
         "amount": 6,
-        "for": [
-          "specialType:allCities"
-        ]
+        "for": ["specialType:allCities"]
       }
     ]
   },
@@ -519,16 +445,12 @@
       "source": "John Muir, 1901",
       "url": "/media/quotes/nationalWonderType/yellowstone.mp3"
     },
-    "requires": [
-      "technologyType:drilling"
-    ],
+    "requires": ["technologyType:drilling"],
     "yields": [
       {
         "type": "yieldType:happiness",
         "amount": 2,
-        "for": [
-          "conceptType:building"
-        ]
+        "for": ["conceptType:building"]
       }
     ]
   },
@@ -544,17 +466,12 @@
       "source": "Lord Hewart, 1924",
       "url": "/media/quotes/nationalWonderType/highCourt.mp3"
     },
-    "requires": [
-      "technologyType:bureaucracy",
-      "goalType:urbanSociety"
-    ],
+    "requires": ["technologyType:bureaucracy", "goalType:urbanSociety"],
     "yields": [
       {
         "type": "yieldType:order",
         "amount": 6,
-        "for": [
-          "specialType:allCities"
-        ]
+        "for": ["specialType:allCities"]
       }
     ]
   },
@@ -570,16 +487,12 @@
       "source": "German official, ca. 1700",
       "url": "/media/quotes/nationalWonderType/statePolice.mp3"
     },
-    "requires": [
-      "technologyType:civilDefense"
-    ],
+    "requires": ["technologyType:civilDefense"],
     "yields": [
       {
         "type": "yieldType:order",
         "amount": 2,
-        "for": [
-          "specialType:allCities"
-        ]
+        "for": ["specialType:allCities"]
       }
     ]
   },
@@ -595,12 +508,8 @@
       "source": "French herald, ca. 1300",
       "url": "/media/quotes/nationalWonderType/tournamentGrounds.mp3"
     },
-    "requires": [
-      "technologyType:chivalry"
-    ],
-    "specials": [
-      "specialType:canHoldTournaments"
-    ]
+    "requires": ["technologyType:chivalry"],
+    "specials": ["specialType:canHoldTournaments"]
   },
   {
     "category": "nationalWonderCategory:influence",
@@ -614,17 +523,13 @@
       "source": "Sir Henry Wotton, 1604",
       "url": "/media/quotes/nationalWonderType/diplomacyInstitute.mp3"
     },
-    "requires": [
-      "technologyType:diplomacy"
-    ],
+    "requires": ["technologyType:diplomacy"],
     "yields": [
       {
         "type": "yieldType:influence",
         "amount": 10,
         "method": "percent",
-        "for": [
-          "conceptType:city"
-        ]
+        "for": ["conceptType:city"]
       }
     ]
   },
@@ -640,9 +545,7 @@
       "source": "Ian Fleming, 1953",
       "url": "/media/quotes/nationalWonderType/intelligenceAgency.mp3"
     },
-    "requires": [
-      "technologyType:civilDefense"
-    ],
+    "requires": ["technologyType:civilDefense"],
     "yields": [
       {
         "type": "yieldType:influenceCost",
@@ -663,17 +566,13 @@
       "source": "Ukrainian analyst, ca. 2022",
       "url": "/media/quotes/nationalWonderType/hybridWarfareCenter.mp3"
     },
-    "requires": [
-      "technologyType:virtualReality"
-    ],
+    "requires": ["technologyType:virtualReality"],
     "yields": [
       {
         "type": "yieldType:influenceCost",
         "amount": 25,
         "method": "percent",
-        "for": [
-          "specialType:againstYourIncident"
-        ]
+        "for": ["specialType:againstYourIncident"]
       }
     ]
   },
@@ -689,17 +588,12 @@
       "source": "Livy, 25 BCE",
       "url": "/media/quotes/nationalWonderType/campusMartius.mp3"
     },
-    "requires": [
-      "technologyType:militaryTraining",
-      "goalType:veniVidiVici"
-    ],
+    "requires": ["technologyType:standingArmy", "goalType:veniVidiVici"],
     "yields": [
       {
         "type": "yieldType:production",
         "amount": 6,
-        "for": [
-          "domainType:land"
-        ]
+        "for": ["domainType:land"]
       }
     ]
   },
@@ -715,16 +609,12 @@
       "source": "Carl von Clausewitz, 1812",
       "url": "/media/quotes/nationalWonderType/militaryAcademy.mp3"
     },
-    "requires": [
-      "technologyType:militaryTradition"
-    ],
+    "requires": ["technologyType:militaryTradition"],
     "yields": [
       {
         "type": "yieldType:strength",
         "amount": 1,
-        "for": [
-          "domainType:land"
-        ]
+        "for": ["domainType:land"]
       }
     ]
   },
@@ -740,17 +630,12 @@
       "source": "Dwight D. Eisenhower, 1957",
       "url": "/media/quotes/nationalWonderType/generalStaff.mp3"
     },
-    "requires": [
-      "technologyType:repeatingRifles",
-      "goalType:worldWar"
-    ],
+    "requires": ["technologyType:repeatingRifles", "goalType:worldWar"],
     "yields": [
       {
         "type": "yieldType:strength",
         "amount": 1,
-        "for": [
-          "domainType:land"
-        ]
+        "for": ["domainType:land"]
       }
     ]
   },
@@ -766,16 +651,12 @@
       "source": "U.S. Army Field Manual 25-100, 1988",
       "url": "/media/quotes/nationalWonderType/militaryPracticeRange.mp3"
     },
-    "requires": [
-      "technologyType:rifleScopes"
-    ],
+    "requires": ["technologyType:rifleScopes"],
     "yields": [
       {
         "type": "yieldType:strength",
         "amount": 1,
-        "for": [
-          "domainType:land"
-        ]
+        "for": ["domainType:land"]
       }
     ]
   },
@@ -791,17 +672,12 @@
       "source": "Captain Thomas Hurd, 1810",
       "url": "/media/quotes/nationalWonderType/navalAcademy.mp3"
     },
-    "requires": [
-      "technologyType:militaryTradition",
-      "terrainType:coast"
-    ],
+    "requires": ["technologyType:militaryTradition", "terrainType:coast"],
     "yields": [
       {
         "type": "yieldType:strength",
         "amount": 1,
-        "for": [
-          "domainType:water"
-        ]
+        "for": ["domainType:water"]
       }
     ]
   },
@@ -817,17 +693,12 @@
       "source": "Ibn Battuta, 1355",
       "url": "/media/quotes/nationalWonderType/greatMarket.mp3"
     },
-    "requires": [
-      "technologyType:currency",
-      "goalType:tradeNetwork"
-    ],
+    "requires": ["technologyType:currency", "goalType:tradeNetwork"],
     "yields": [
       {
         "type": "yieldType:gold",
         "amount": 2,
-        "for": [
-          "conceptType:tradeRoute"
-        ]
+        "for": ["conceptType:tradeRoute"]
       }
     ]
   },
@@ -843,10 +714,7 @@
       "source": "Edmund Burke, 1773",
       "url": "/media/quotes/nationalWonderType/eastIndiaCompany.mp3"
     },
-    "requires": [
-      "technologyType:colonialism",
-      "terrainType:coast"
-    ],
+    "requires": ["technologyType:colonialism", "terrainType:coast"],
     "yields": [
       {
         "type": "yieldType:tradeSlot",
@@ -866,17 +734,13 @@
       "source": "British envoy, ca. 1870",
       "url": "/media/quotes/nationalWonderType/tradeDelegation.mp3"
     },
-    "requires": [
-      "technologyType:economics"
-    ],
+    "requires": ["technologyType:economics"],
     "yields": [
       {
         "type": "yieldType:tradeRange",
         "amount": 25,
         "method": "percent",
-        "for": [
-          "specialType:allCities"
-        ]
+        "for": ["specialType:allCities"]
       }
     ]
   },
@@ -892,18 +756,13 @@
       "source": "Jacques Cousteau, ca. 1950",
       "url": "/media/quotes/nationalWonderType/marineInstitute.mp3"
     },
-    "requires": [
-      "technologyType:hydrodynamics",
-      "terrainType:coast"
-    ],
+    "requires": ["technologyType:hydrodynamics", "terrainType:coast"],
     "yields": [
       {
         "type": "yieldType:food",
         "amount": 20,
         "method": "percent",
-        "for": [
-          "domainType:water"
-        ]
+        "for": ["domainType:water"]
       }
     ]
   },
@@ -919,17 +778,12 @@
       "source": "Occitan saying",
       "url": "/media/quotes/nationalWonderType/carcassonne.mp3"
     },
-    "requires": [
-      "technologyType:castles",
-      "goalType:feudalLords"
-    ],
+    "requires": ["technologyType:castles", "goalType:feudalLords"],
     "yields": [
       {
         "type": "yieldType:defense",
         "amount": 12,
-        "for": [
-          "buildingCategory:defense"
-        ]
+        "for": ["buildingCategory:defense"]
       }
     ]
   },
@@ -945,18 +799,12 @@
       "source": "Ferdinand Magellan, 1519",
       "url": "/media/quotes/nationalWonderType/voyageOfMagellan.mp3"
     },
-    "requires": [
-      "technologyType:carvelHulls",
-      "terrainType:coast",
-      "goalType:oceanVoyages"
-    ],
+    "requires": ["technologyType:carvelHulls", "terrainType:coast", "goalType:oceanVoyages"],
     "yields": [
       {
         "type": "yieldType:moves",
         "amount": 1,
-        "for": [
-          "domainType:water"
-        ]
+        "for": ["domainType:water"]
       }
     ]
   },
@@ -972,9 +820,7 @@
       "source": "J. Robert Oppenheimer, 1945",
       "url": "/media/quotes/nationalWonderType/manhattanProject.mp3"
     },
-    "requires": [
-      "technologyType:fission"
-    ]
+    "requires": ["technologyType:fission"]
   },
   {
     "category": "nationalWonderCategory:wMD",
@@ -988,9 +834,7 @@
       "source": "Eyewitness, 1952",
       "url": "/media/quotes/nationalWonderType/operationIvy.mp3"
     },
-    "requires": [
-      "technologyType:thermonuclearDevice"
-    ]
+    "requires": ["technologyType:thermonuclearDevice"]
   },
   {
     "category": "nationalWonderCategory:wMD",
@@ -1004,17 +848,13 @@
       "source": "Nikita Khrushchev, 1961",
       "url": "/media/quotes/nationalWonderType/tsarBomba.mp3"
     },
-    "requires": [
-      "technologyType:thermonuclearDevice"
-    ]
+    "requires": ["technologyType:thermonuclearDevice"]
   },
   {
     "category": "nationalWonderCategory:production",
     "concept": "conceptType:nationalWonder",
     "description": "A fusion plant is a power station designed to produce electricity from controlled nuclear fusion. Most designs use deuterium–tritium fuel heated to plasma conditions and confined in magnetic devices such as tokamaks or stellarators. High fields and advanced materials manage extreme heat loads and neutron flux. Key challenges include sustained net energy gain, tritium breeding, and component durability. Experimental programs like JET demonstrated significant fusion yields, while ITER aims to reach long-pulse power amplification. DEMO concepts and national pilot plants plan grid delivery once materials and breeding blankets mature. Private ventures pursue compact approaches with high-temperature superconductors and novel magnets. If realized, fusion would provide large-scale, low-carbon baseload power with minimal long-lived waste.",
-    "gains": [
-      "resourceType:electricity"
-    ],
+    "gains": ["resourceType:electricity"],
     "image": "/media/images/nationalWonderType/fusionPowerPlant.jpg",
     "key": "nationalWonderType:fusionPowerPlant",
     "name": "Fusion Power Plant",
@@ -1023,8 +863,6 @@
       "source": "Stephen Hawking, 2010",
       "url": "/media/quotes/nationalWonderType/fusionPowerPlant.mp3"
     },
-    "requires": [
-      "technologyType:nuclearFusion"
-    ]
+    "requires": ["technologyType:nuclearFusion"]
   }
 ]

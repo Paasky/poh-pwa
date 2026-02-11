@@ -24,12 +24,7 @@ import { DefaultRenderingPipeline } from "@babylonjs/core/PostProcesses/RenderPi
 import { defaultTimeOfDay2400, getLightingForTimeOfDay } from "@/Actor/Human/Environment/timeOfDay";
 import { defaultMonth, getBlendedSeasonPalette } from "@/Actor/Human/Environment/season";
 import { defaultWeatherType, weatherPresets, WeatherType } from "@/Actor/Human/Environment/weather";
-import {
-  clockHoursPerRealMinute,
-  isClockRunning,
-  timeOfDay2400,
-  wrapTime2400,
-} from "@/Actor/Human/Environment/clock";
+import { clock, wrapTime2400 } from "@/Actor/Human/Environment/clock";
 import { EngineSettings } from "@/Actor/Human/EngineSettings";
 import { clamp, wrapInclusive } from "@/Common/Helpers/math";
 
@@ -112,10 +107,10 @@ export class Environment {
       ...configuration,
     } as EnvironmentServiceConfig;
 
-    // Initialize shared clock refs from defaults (only once at service creation)
-    timeOfDay2400.value = this.targetTimeOfDay2400;
-    isClockRunning.value = this.configuration.startWithClockRunning;
-    clockHoursPerRealMinute.value = this.configuration.clockHoursPerRealMinute;
+    // Initialize shared clock state from defaults (only once at service creation)
+    clock.timeOfDay2400 = this.targetTimeOfDay2400;
+    clock.isClockRunning = this.configuration.startWithClockRunning;
+    clock.clockHoursPerRealMinute = this.configuration.clockHoursPerRealMinute;
 
     // Set up the environment and core lights with safe defaults.
     this.setupEnvironmentSkyboxAndTexture();
@@ -191,8 +186,8 @@ export class Environment {
    */
   public setTimeOfDay(timeOfDayValue2400: number): void {
     this.targetTimeOfDay2400 = Environment.clampTime2400(timeOfDayValue2400);
-    timeOfDay2400.value = this.targetTimeOfDay2400;
-    this.updateSunFromTimeOfDay(timeOfDay2400.value);
+    clock.timeOfDay2400 = this.targetTimeOfDay2400;
+    this.updateSunFromTimeOfDay(clock.timeOfDay2400);
   }
 
   /** Update the current season using a 1..12 month index. */
@@ -210,7 +205,7 @@ export class Environment {
 
   /** Start or stop the internal clock. */
   public setIsClockRunning(isRunning: boolean): void {
-    isClockRunning.value = isRunning;
+    clock.isClockRunning = isRunning;
     if (isRunning) this.startClockInterval();
     else this.stopClockInterval();
   }
@@ -256,13 +251,13 @@ export class Environment {
   private startClockInterval(): void {
     if (this._clockIntervalId === undefined) {
       this._clockIntervalId = window.setInterval(() => {
-        if (!isClockRunning.value) return;
+        if (!clock.isClockRunning) return;
 
-        timeOfDay2400.value = wrapTime2400(
-          timeOfDay2400.value + this.configuration.clockHoursPerRealMinute / 600,
+        clock.timeOfDay2400 = wrapTime2400(
+          clock.timeOfDay2400 + this.configuration.clockHoursPerRealMinute / 600,
         );
 
-        this.updateSunFromTimeOfDay(timeOfDay2400.value);
+        this.updateSunFromTimeOfDay(clock.timeOfDay2400);
         this.applySeasonPalette(this.month);
       }, 100);
     }
@@ -361,8 +356,8 @@ export class Environment {
     // Data the weather multiplier and re-apply sun intensity using current time-of-day
     this.weatherSunIntensityScale = preset.sunIntensityScale;
 
-    // Use the reactive clock refs for the effective time when running; otherwise use target
-    const effectiveTime = isClockRunning.value ? timeOfDay2400.value : this.targetTimeOfDay2400;
+    // Use the clock state for the effective time when running; otherwise use target
+    const effectiveTime = clock.isClockRunning ? clock.timeOfDay2400 : this.targetTimeOfDay2400;
     this.updateSunFromTimeOfDay(effectiveTime);
   }
 

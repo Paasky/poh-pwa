@@ -186,6 +186,20 @@
       const PAD_X = 30; // canvas padding
       const PAD_Y = 30;
 
+      const STORAGE_KEY = "tech-tree-view";
+
+      function saveView() {
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ scale, tx, ty }));
+      }
+
+      function loadView() {
+        try {
+          return JSON.parse(sessionStorage.getItem(STORAGE_KEY));
+        } catch {
+          return null;
+        }
+      }
+
       fetch("/data/staticData.json")
         .then((r) => r.json())
         .then(build);
@@ -275,14 +289,16 @@
                 .trim()
             : "";
 
+          const THRESHOLD = 5;
           const SHOW = 3;
-          const extraCount = Math.max(0, allowedItems.length - SHOW);
+          const truncate = allowedItems.length > THRESHOLD;
+          const extraCount = truncate ? allowedItems.length - SHOW : 0;
 
           const itemsHtml = allowedItems.length
             ? `<ul class="items">${allowedItems
                 .map(
                   (item, idx) =>
-                    `<li title="${item}"${idx >= SHOW ? ' class="hidden"' : ""}>${item}</li>`,
+                    `<li title="${item}"${truncate && idx >= SHOW ? ' class="hidden"' : ""}>${item}</li>`,
                 )
                 .join(
                   "",
@@ -377,6 +393,7 @@
 
       function applyTransform() {
         wrap.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+        saveView();
       }
 
       function zoom(factor, cx, cy) {
@@ -464,7 +481,15 @@
       );
 
       function initPanZoom(W, H) {
-        setTimeout(fitToScreen, 50);
+        const saved = loadView();
+        if (saved) {
+          scale = saved.scale;
+          tx = saved.tx;
+          ty = saved.ty;
+          applyTransform();
+        } else {
+          setTimeout(fitToScreen, 50);
+        }
       }
     </script>
   </body>

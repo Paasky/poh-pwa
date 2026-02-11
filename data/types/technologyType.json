@@ -790,14 +790,14 @@
   {
     "category": "eraType:iron",
     "concept": "conceptType:technology",
-    "description": "Classical philosophy pursued systematic inquiry into knowledge, nature, and ethics. Socrates advanced dialectical questioning to examine virtue and civic duty. Plato founded the Academy, treating metaphysics, mathematics, and political order. Aristotle’s Lyceum developed logic, natural philosophy, and empirical method, compiling research across biology, rhetoric, and ethics. Hellenistic schools extended these projects: Stoics framed ethics through reason and fate; Epicureans sought tranquility through measured desire; Skeptics scrutinized claims to certainty. Philosophical curricula shaped education, law, and science in later eras, transmitting argumentative techniques and classifications essential to scholarly practice.",
-    "image": "/media/images/technologyType/philosophy.jpg",
-    "key": "technologyType:philosophy",
-    "name": "Philosophy",
+    "description": "Classical alphabets encoded speech through a fixed set of letters, enabling flexible writing and rapid learning. Greeks adapted the Phoenician script and introduced vowel letters, improving phonetic accuracy across dialects. Early inscriptions, such as the Duenos inscription in Latin, display local variants that later converged. The Greek and Latin alphabets spread with colonization, trade, and administration, appearing on stone, pottery, papyrus, and metal. Alphabetic writing supported law codes, drama, philosophy, and commerce by reducing copying costs and aiding record‑keeping. Its modular design encouraged literacy across diverse communities and domains.",
+    "image": "/media/images/technologyType/alphabet.jpg",
+    "key": "technologyType:alphabet",
+    "name": "Alphabet",
     "quote": {
-      "text": "He who conquers himself is mightier than he who conquers a city.",
-      "source": "Zhuangzi, ca. 300 BCE",
-      "url": "/media/quotes/technologyType/philosophy.mp3"
+      "text": "The Phoenicians taught us letters.",
+      "source": "Herodotus, Histories, ca. 440 BCE",
+      "url": "/media/quotes/technologyType/alphabet.mp3"
     },
     "requires": ["technologyType:riding", "technologyType:ironWorking"],
     "x": 2,
@@ -812,14 +812,14 @@
   {
     "category": "eraType:iron",
     "concept": "conceptType:technology",
-    "description": "Classical alphabets encoded speech through a fixed set of letters, enabling flexible writing and rapid learning. Greeks adapted the Phoenician script and introduced vowel letters, improving phonetic accuracy across dialects. Early inscriptions, such as the Duenos inscription in Latin, display local variants that later converged. The Greek and Latin alphabets spread with colonization, trade, and administration, appearing on stone, pottery, papyrus, and metal. Alphabetic writing supported law codes, drama, philosophy, and commerce by reducing copying costs and aiding record‑keeping. Its modular design encouraged literacy across diverse communities and domains.",
-    "image": "/media/images/technologyType/alphabet.jpg",
-    "key": "technologyType:alphabet",
-    "name": "Alphabet",
+    "description": "Classical philosophy pursued systematic inquiry into knowledge, nature, and ethics. Socrates advanced dialectical questioning to examine virtue and civic duty. Plato founded the Academy, treating metaphysics, mathematics, and political order. Aristotle’s Lyceum developed logic, natural philosophy, and empirical method, compiling research across biology, rhetoric, and ethics. Hellenistic schools extended these projects: Stoics framed ethics through reason and fate; Epicureans sought tranquility through measured desire; Skeptics scrutinized claims to certainty. Philosophical curricula shaped education, law, and science in later eras, transmitting argumentative techniques and classifications essential to scholarly practice.",
+    "image": "/media/images/technologyType/philosophy.jpg",
+    "key": "technologyType:philosophy",
+    "name": "Philosophy",
     "quote": {
-      "text": "The Phoenicians taught us letters.",
-      "source": "Herodotus, Histories, ca. 440 BCE",
-      "url": "/media/quotes/technologyType/alphabet.mp3"
+      "text": "He who conquers himself is mightier than he who conquers a city.",
+      "source": "Zhuangzi, ca. 300 BCE",
+      "url": "/media/quotes/technologyType/philosophy.mp3"
     },
     "requires": ["technologyType:ironWorking", "technologyType:shipEngineering"],
     "x": 6,
@@ -856,6 +856,28 @@
   {
     "category": "eraType:iron",
     "concept": "conceptType:technology",
+    "description": "",
+    "image": "/media/images/technologyType/arches.jpg",
+    "key": "technologyType:arches",
+    "name": "Arches",
+    "quote": {
+      "text": "",
+      "source": "",
+      "url": "/media/quotes/technologyType/arches.mp3"
+    },
+    "requires": ["technologyType:philosophy", "technologyType:alphabet"],
+    "x": 4,
+    "y": 32,
+    "yields": [
+      {
+        "type": "yieldType:scienceCost",
+        "amount": 124
+      }
+    ]
+  },
+  {
+    "category": "eraType:iron",
+    "concept": "conceptType:technology",
     "description": "Classical mathematics organized proof‑based knowledge across geometry, arithmetic, and mechanics. Euclid’s Elements codified axioms, propositions, and rigorous demonstrations that structured later study. Eudoxus developed proportion theory, enabling work with magnitudes and incommensurables. Archimedes advanced methods for calculating areas, volumes, and centers of gravity, linking geometry to hydrostatics and simple machines. Astronomers applied geometry to planetary models and calendrics. Surveyors and engineers used practical algorithms for land division, construction, and siegecraft. Manuscript transmission in Alexandria and beyond preserved texts that framed mathematical reasoning for subsequent traditions.",
     "image": "/media/images/technologyType/mathematics.jpg",
     "key": "technologyType:mathematics",
@@ -865,8 +887,8 @@
       "source": "Indian mathematical treatise, ca. 300 BCE",
       "url": "/media/quotes/technologyType/mathematics.mp3"
     },
-    "requires": ["technologyType:philosophy", "technologyType:alphabet", "technologyType:drama"],
-    "x": 6,
+    "requires": ["technologyType:philosophy", "technologyType:drama"],
+    "x": 8,
     "y": 32,
     "yields": [
       {
@@ -887,7 +909,7 @@
       "source": "Geoffrey Chaucer, 1386",
       "url": "/media/quotes/technologyType/ironSmithing.mp3"
     },
-    "requires": ["technologyType:mathematics"],
+    "requires": ["technologyType:arches"],
     "x": 2,
     "y": 35,
     "yields": [
@@ -909,7 +931,7 @@
       "source": "Egyptian foundation ritual, ca. 1200 BCE",
       "url": "/media/quotes/technologyType/construction.mp3"
     },
-    "requires": ["technologyType:mathematics"],
+    "requires": ["technologyType:arches", "technologyType:mathematics"],
     "x": 6,
     "y": 35,
     "yields": [
@@ -966,14 +988,14 @@
   {
     "category": "eraType:classical",
     "concept": "conceptType:technology",
-    "description": "Classical wood composites combined layers, fibers, and adhesives to improve strength-to-weight and resilience. Shield makers laminated thin planks with animal glue, oriented grains crosswise, and faced surfaces with leather or canvas. Roman scuta used curved, multi-ply cores that resisted impact and flexed without breaking. Shipwrights applied layered planking and internal reinforcements to hulls and rams, enhancing stiffness under oar and sail loads. Composite oars balanced elasticity and durability for sustained rowing. Adhesives included hide glue, fish glue, and resinous pitches; bindings with linen or sinew added tensile strength. The approach economized scarce large timbers and allowed complex shapes. Maintenance involved drying, re-gluing, and clamping to prevent delamination in damp service.",
-    "image": "/media/images/technologyType/woodComposites.jpg",
-    "key": "technologyType:woodComposites",
-    "name": "Wood Composites",
+    "description": "",
+    "image": "/media/images/technologyType/publicWorks.jpg",
+    "key": "technologyType:publicWorks",
+    "name": "Public Works",
     "quote": {
-      "text": "One beam cannot hold up a house.",
-      "source": "Chinese proverb",
-      "url": "/media/quotes/technologyType/woodComposites.mp3"
+      "text": "",
+      "source": "",
+      "url": "/media/quotes/technologyType/publicWorks.mp3"
     },
     "requires": ["technologyType:construction", "technologyType:democracy"],
     "x": 8,
@@ -982,6 +1004,28 @@
       {
         "type": "yieldType:scienceCost",
         "amount": 144
+      }
+    ]
+  },
+  {
+    "category": "eraType:classical",
+    "concept": "conceptType:technology",
+    "description": "",
+    "image": "/media/images/technologyType/standingArmy.jpg",
+    "key": "technologyType:standingArmy",
+    "name": "Standing Army",
+    "quote": {
+      "text": "",
+      "source": "",
+      "url": "/media/quotes/technologyType/standingArmy.mp3"
+    },
+    "requires": ["technologyType:minting"],
+    "x": 2,
+    "y": 39,
+    "yields": [
+      {
+        "type": "yieldType:scienceCost",
+        "amount": 158
       }
     ]
   },
@@ -997,8 +1041,30 @@
       "source": "Huainanzi, 139 BCE",
       "url": "/media/quotes/technologyType/ironCasting.mp3"
     },
-    "requires": ["technologyType:minting", "technologyType:woodComposites"],
+    "requires": ["technologyType:minting", "technologyType:publicWorks"],
     "x": 6,
+    "y": 39,
+    "yields": [
+      {
+        "type": "yieldType:scienceCost",
+        "amount": 158
+      }
+    ]
+  },
+  {
+    "category": "eraType:classical",
+    "concept": "conceptType:technology",
+    "description": "Classical wood composites combined layers, fibers, and adhesives to improve strength-to-weight and resilience. Shield makers laminated thin planks with animal glue, oriented grains crosswise, and faced surfaces with leather or canvas. Roman scuta used curved, multi-ply cores that resisted impact and flexed without breaking. Shipwrights applied layered planking and internal reinforcements to hulls and rams, enhancing stiffness under oar and sail loads. Composite oars balanced elasticity and durability for sustained rowing. Adhesives included hide glue, fish glue, and resinous pitches; bindings with linen or sinew added tensile strength. The approach economized scarce large timbers and allowed complex shapes. Maintenance involved drying, re-gluing, and clamping to prevent delamination in damp service.",
+    "image": "/media/images/technologyType/woodComposites.jpg",
+    "key": "technologyType:woodComposites",
+    "name": "Wood Composites",
+    "quote": {
+      "text": "One beam cannot hold up a house.",
+      "source": "Chinese proverb",
+      "url": "/media/quotes/technologyType/woodComposites.mp3"
+    },
+    "requires": ["technologyType:publicWorks"],
+    "x": 10,
     "y": 39,
     "yields": [
       {
@@ -1019,7 +1085,7 @@
       "source": "Norse warrior proverb, ca. 1000",
       "url": "/media/quotes/technologyType/steel.mp3"
     },
-    "requires": ["technologyType:ironCasting"],
+    "requires": ["technologyType:standingArmy", "technologyType:ironCasting"],
     "x": 2,
     "y": 42,
     "yields": [
@@ -1041,7 +1107,7 @@
       "source": "Samurai oath, Kamakura period, ca. 1200",
       "url": "/media/quotes/technologyType/feudalism.mp3"
     },
-    "requires": ["technologyType:ironCasting"],
+    "requires": ["technologyType:ironCasting", "technologyType:woodComposites"],
     "x": 6,
     "y": 42,
     "yields": [
@@ -1054,16 +1120,16 @@
   {
     "category": "eraType:medieval",
     "concept": "conceptType:technology",
-    "description": "State religion in the medieval world joined doctrine with governance, law, and public ritual. The Byzantine Empire coordinated imperial authority with Orthodox hierarchy, councils, and monastic patronage. The Abbasid Caliphate embedded Islamic jurisprudence, taxation norms, and educational endowments in state structures. In the Holy Roman Empire, Catholic institutions legitimated rulers through coronation, investiture, and ecclesiastical courts. Rulers funded clergy, built churches and mosques, and regulated heresy. Integration furnished legitimacy, literacy, and diplomatic channels, but also provoked conflicts over jurisdiction and reform. Conversion campaigns and missions extended power to frontier societies.",
-    "image": "/media/images/technologyType/stateReligion.jpg",
-    "key": "technologyType:stateReligion",
-    "name": "State Religion",
+    "description": "",
+    "image": "/media/images/technologyType/guilds.jpg",
+    "key": "technologyType:guilds",
+    "name": "Guilds",
     "quote": {
-      "text": "A throne must be backed by faith to rule the hearts.",
-      "source": "Al-Mawardi, ca. 1050",
-      "url": "/media/quotes/technologyType/stateReligion.mp3"
+      "text": "",
+      "source": "",
+      "url": "/media/quotes/technologyType/guilds.mp3"
     },
-    "requires": ["technologyType:ironCasting"],
+    "requires": ["technologyType:woodComposites"],
     "x": 10,
     "y": 42,
     "yields": [
@@ -1107,7 +1173,7 @@
       "source": "Leviticus 25:4, ca. 700 BCE",
       "url": "/media/quotes/technologyType/cropRotation.mp3"
     },
-    "requires": ["technologyType:feudalism", "technologyType:stateReligion"],
+    "requires": ["technologyType:feudalism", "technologyType:guilds"],
     "x": 8,
     "y": 44,
     "yields": [

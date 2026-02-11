@@ -11,18 +11,12 @@
       "source": "Hallstatt chieftain, ca. 800 BCE",
       "url": "/media/quotes/worldWonderType/hallstattSaltMines.mp3"
     },
-    "requires": [
-      "technologyType:pitMining",
-      "elevationType:hill"
-    ],
+    "requires": ["technologyType:pitMining", "elevationType:hill"],
     "yields": [
       {
         "type": "yieldType:production",
         "amount": 1,
-        "for": [
-          "improvementCategory:mine",
-          "improvementCategory:quarry"
-        ]
+        "for": ["improvementCategory:mine", "improvementCategory:quarry"]
       }
     ]
   },
@@ -38,24 +32,17 @@
       "source": "Nabataean inscription, 1st century CE",
       "url": "/media/quotes/worldWonderType/petra.mp3"
     },
-    "requires": [
-      "technologyType:ironWorking",
-      "terrainType:desert"
-    ],
+    "requires": ["technologyType:philosophy", "terrainType:desert"],
     "yields": [
       {
         "type": "yieldType:food",
         "amount": 1,
-        "for": [
-          "terrainType:desert"
-        ]
+        "for": ["terrainType:desert"]
       },
       {
         "type": "yieldType:production",
         "amount": 1,
-        "for": [
-          "terrainType:desert"
-        ]
+        "for": ["terrainType:desert"]
       }
     ]
   },
@@ -71,17 +58,12 @@
       "source": "Fray Diego de Landa, 1566",
       "url": "/media/quotes/worldWonderType/chichenItza.mp3"
     },
-    "requires": [
-      "technologyType:engineering",
-      "featureType:jungle"
-    ],
+    "requires": ["technologyType:guilds", "featureType:jungle"],
     "yields": [
       {
         "type": "yieldType:production",
         "amount": 4,
-        "for": [
-          "featureType:jungle"
-        ]
+        "for": ["featureType:jungle"]
       }
     ]
   },
@@ -97,18 +79,12 @@
       "source": "German worker’s saying, 19th century",
       "url": "/media/quotes/worldWonderType/ruhrValley.mp3"
     },
-    "requires": [
-      "technologyType:steelMilling",
-      "conceptType:flatLand"
-    ],
+    "requires": ["technologyType:steelMilling", "conceptType:flatLand"],
     "yields": [
       {
         "type": "yieldType:production",
         "amount": 5,
-        "for": [
-          "improvementCategory:mine",
-          "improvementCategory:quarry"
-        ]
+        "for": ["improvementCategory:mine", "improvementCategory:quarry"]
       }
     ]
   },
@@ -124,17 +100,12 @@
       "source": "Joe Sutter, 1970",
       "url": "/media/quotes/worldWonderType/everettFactory.mp3"
     },
-    "requires": [
-      "technologyType:aerodynamics",
-      "conceptType:flatLand"
-    ],
+    "requires": ["technologyType:aerodynamics", "conceptType:flatLand"],
     "yields": [
       {
         "type": "yieldType:production",
         "amount": 2,
-        "for": [
-          "conceptType:building"
-        ]
+        "for": ["conceptType:building"]
       }
     ]
   },
@@ -150,10 +121,7 @@
       "source": "Elon Musk, 2016",
       "url": "/media/quotes/worldWonderType/gigafactory.mp3"
     },
-    "requires": [
-      "technologyType:robotics",
-      "conceptType:flatLand"
-    ],
+    "requires": ["technologyType:robotics", "conceptType:flatLand"],
     "yields": [
       {
         "type": "yieldType:production",
@@ -173,9 +141,7 @@
       "source": "Nabatean proverb, ca. 300 BCE",
       "url": "/media/quotes/worldWonderType/oldCityOfDamascus.mp3"
     },
-    "requires": [
-      "technologyType:commerce"
-    ],
+    "requires": ["technologyType:commerce"],
     "yields": [
       {
         "type": "yieldType:gold",
@@ -195,16 +161,12 @@
       "source": "Vitruvius, 15 BCE",
       "url": "/media/quotes/worldWonderType/tombOfMausolus.mp3"
     },
-    "requires": [
-      "technologyType:drama"
-    ],
+    "requires": ["technologyType:drama"],
     "yields": [
       {
         "type": "yieldType:gold",
         "amount": 250,
-        "for": [
-          "conceptType:era"
-        ]
+        "for": ["conceptType:era"]
       }
     ]
   },
@@ -220,16 +182,12 @@
       "source": "Evliya Çelebi, ca. 1650",
       "url": "/media/quotes/worldWonderType/bazaarOfIstanbul.mp3"
     },
-    "requires": [
-      "technologyType:civilService"
-    ],
+    "requires": ["technologyType:civilService"],
     "yields": [
       {
         "type": "yieldType:gold",
         "amount": 3,
-        "for": [
-          "conceptType:tradeRoute"
-        ]
+        "for": ["conceptType:tradeRoute"]
       }
     ]
   },
@@ -245,16 +203,12 @@
       "source": "Giorgio Vasari, 1560",
       "url": "/media/quotes/worldWonderType/uffizi.mp3"
     },
-    "requires": [
-      "technologyType:banking"
-    ],
+    "requires": ["technologyType:banking"],
     "yields": [
       {
         "type": "yieldType:gold",
         "amount": 5,
-        "for": [
-          "buildingCategory:culture"
-        ]
+        "for": ["buildingCategory:culture"]
       }
     ]
   },
@@ -270,16 +224,12 @@
       "source": "New York Times, 1931",
       "url": "/media/quotes/worldWonderType/empireStateBuilding.mp3"
     },
-    "requires": [
-      "technologyType:artDeco"
-    ],
+    "requires": ["technologyType:artDeco"],
     "yields": [
       {
         "type": "yieldType:gold",
         "amount": 6,
-        "for": [
-          "buildingCategory:production"
-        ]
+        "for": ["buildingCategory:production"]
       }
     ]
   },
@@ -295,17 +245,12 @@
       "source": "TSMC marketing, 2022",
       "url": "/media/quotes/worldWonderType/tSMC.mp3"
     },
-    "requires": [
-      "technologyType:semiconductors",
-      "conceptType:flatLand"
-    ],
+    "requires": ["technologyType:semiconductors", "conceptType:flatLand"],
     "yields": [
       {
         "type": "yieldType:gold",
         "amount": 3,
-        "for": [
-          "buildingCategory:science"
-        ]
+        "for": ["buildingCategory:science"]
       }
     ]
   },
@@ -321,10 +266,7 @@
       "source": "Welsh oral tradition, 12th century",
       "url": "/media/quotes/worldWonderType/stonehenge.mp3"
     },
-    "requires": [
-      "technologyType:calendar",
-      "conceptType:flatLand"
-    ],
+    "requires": ["technologyType:calendar", "conceptType:flatLand"],
     "yields": [
       {
         "type": "yieldType:science",
@@ -344,16 +286,12 @@
       "source": "Ptolemy I, ca. 290 BCE",
       "url": "/media/quotes/worldWonderType/libraryOfAlexandria.mp3"
     },
-    "requires": [
-      "technologyType:alphabet"
-    ],
+    "requires": ["technologyType:alphabet"],
     "yields": [
       {
         "type": "yieldType:science",
         "amount": 2,
-        "for": [
-          "conceptType:tradeRoute"
-        ]
+        "for": ["conceptType:tradeRoute"]
       }
     ]
   },
@@ -369,16 +307,12 @@
       "source": "Al-Ma’mun, ca. 830 CE",
       "url": "/media/quotes/worldWonderType/houseOfWisdom.mp3"
     },
-    "requires": [
-      "technologyType:optics"
-    ],
+    "requires": ["technologyType:optics"],
     "yields": [
       {
         "type": "yieldType:science",
         "amount": 4,
-        "for": [
-          "conceptType:tradeRoute"
-        ]
+        "for": ["conceptType:tradeRoute"]
       }
     ]
   },
@@ -394,12 +328,8 @@
       "source": "Oxford motto, 16th century",
       "url": "/media/quotes/worldWonderType/oxfordUniversity.mp3"
     },
-    "requires": [
-      "technologyType:education"
-    ],
-    "specials": [
-      "specialType:chooseFreeTechnology"
-    ]
+    "requires": ["technologyType:education"],
+    "specials": ["specialType:chooseFreeTechnology"]
   },
   {
     "category": "worldWonderCategory:science",
@@ -413,12 +343,8 @@
       "source": "Claude Shannon, ca. 1950",
       "url": "/media/quotes/worldWonderType/bellLabs.mp3"
     },
-    "requires": [
-      "technologyType:atomicTheory"
-    ],
-    "specials": [
-      "specialType:chooseFreeTechnology"
-    ]
+    "requires": ["technologyType:atomicTheory"],
+    "specials": ["specialType:chooseFreeTechnology"]
   },
   {
     "category": "worldWonderCategory:science",
@@ -432,12 +358,8 @@
       "source": "Nature, 2009",
       "url": "/media/quotes/worldWonderType/cERN.mp3"
     },
-    "requires": [
-      "technologyType:microchips"
-    ],
-    "specials": [
-      "specialType:chooseFreeTechnology"
-    ]
+    "requires": ["technologyType:microchips"],
+    "specials": ["specialType:chooseFreeTechnology"]
   },
   {
     "category": "worldWonderCategory:growth",
@@ -451,17 +373,12 @@
       "source": "Ian Hodder, 2007",
       "url": "/media/quotes/worldWonderType/gobekliTepe.mp3"
     },
-    "requires": [
-      "technologyType:tradition",
-      "elevationType:hill"
-    ],
+    "requires": ["technologyType:tradition", "elevationType:hill"],
     "yields": [
       {
         "type": "yieldType:citizenSlot",
         "amount": 2,
-        "for": [
-          "conceptType:building"
-        ]
+        "for": ["conceptType:building"]
       }
     ]
   },
@@ -477,16 +394,12 @@
       "source": "Mortimer Wheeler, 1947",
       "url": "/media/quotes/worldWonderType/granaryOfHarappa.mp3"
     },
-    "requires": [
-      "technologyType:currency"
-    ],
+    "requires": ["technologyType:currency"],
     "yields": [
       {
         "type": "yieldType:food",
         "amount": 2,
-        "for": [
-          "improvementCategory:farm"
-        ]
+        "for": ["improvementCategory:farm"]
       }
     ]
   },
@@ -502,18 +415,12 @@
       "source": "Norse proverb",
       "url": "/media/quotes/worldWonderType/lofotrLonghouse.mp3"
     },
-    "requires": [
-      "technologyType:cropRotation",
-      "terrainType:tundra"
-    ],
+    "requires": ["technologyType:cropRotation", "terrainType:tundra"],
     "yields": [
       {
         "type": "yieldType:food",
         "amount": 4,
-        "for": [
-          "improvementCategory:camp",
-          "improvementCategory:pasture"
-        ]
+        "for": ["improvementCategory:camp", "improvementCategory:pasture"]
       }
     ]
   },
@@ -529,17 +436,12 @@
       "source": "Quechua oral tradition",
       "url": "/media/quotes/worldWonderType/machuPicchu.mp3"
     },
-    "requires": [
-      "technologyType:coldSteel",
-      "conceptType:mountains"
-    ],
+    "requires": ["technologyType:coldSteel", "conceptType:mountains"],
     "yields": [
       {
         "type": "yieldType:food",
         "amount": 5,
-        "for": [
-          "conceptType:mountains"
-        ]
+        "for": ["conceptType:mountains"]
       }
     ]
   },
@@ -555,18 +457,12 @@
       "source": "Upton Sinclair, 1906",
       "url": "/media/quotes/worldWonderType/unionStockyards.mp3"
     },
-    "requires": [
-      "technologyType:railroad",
-      "terrainType:plains"
-    ],
+    "requires": ["technologyType:railroad", "terrainType:plains"],
     "yields": [
       {
         "type": "yieldType:food",
         "amount": 6,
-        "for": [
-          "improvementCategory:camp",
-          "improvementCategory:pasture"
-        ]
+        "for": ["improvementCategory:camp", "improvementCategory:pasture"]
       }
     ]
   },
@@ -582,9 +478,7 @@
       "source": "Vendor at La Merced, ca. 2000",
       "url": "/media/quotes/worldWonderType/centralDeAbastos.mp3"
     },
-    "requires": [
-      "technologyType:onlineEconomy"
-    ],
+    "requires": ["technologyType:onlineEconomy"],
     "yields": [
       {
         "type": "yieldType:food",
@@ -604,10 +498,7 @@
       "source": "Plutarch, ca. 220 CE",
       "url": "/media/quotes/worldWonderType/parthenon.mp3"
     },
-    "requires": [
-      "technologyType:democracy",
-      "elevationType:hill"
-    ],
+    "requires": ["technologyType:democracy", "elevationType:hill"],
     "yields": [
       {
         "type": "yieldType:culture",
@@ -627,17 +518,13 @@
       "source": "William Shakespeare, 1623",
       "url": "/media/quotes/worldWonderType/shakespearesTheater.mp3"
     },
-    "requires": [
-      "technologyType:theater"
-    ],
+    "requires": ["technologyType:theater"],
     "yields": [
       {
         "type": "yieldType:culture",
         "amount": 25,
         "method": "percent",
-        "for": [
-          "specialType:allCities"
-        ]
+        "for": ["specialType:allCities"]
       }
     ]
   },
@@ -653,9 +540,7 @@
       "source": "Napoleon Bonaparte, 1804",
       "url": "/media/quotes/worldWonderType/louvre.mp3"
     },
-    "requires": [
-      "technologyType:artHistory"
-    ],
+    "requires": ["technologyType:artHistory"],
     "yields": [
       {
         "type": "yieldType:culture",
@@ -676,16 +561,12 @@
       "source": "Will Rogers, ca. 1925",
       "url": "/media/quotes/worldWonderType/hollywood.mp3"
     },
-    "requires": [
-      "technologyType:radio"
-    ],
+    "requires": ["technologyType:radio"],
     "yields": [
       {
         "type": "yieldType:culture",
         "amount": 5,
-        "for": [
-          "specialType:allCities"
-        ]
+        "for": ["specialType:allCities"]
       }
     ]
   },
@@ -701,9 +582,7 @@
       "source": "Queen Elizabeth II, 1973",
       "url": "/media/quotes/worldWonderType/sydneyOperaHouse.mp3"
     },
-    "requires": [
-      "technologyType:transistors"
-    ],
+    "requires": ["technologyType:transistors"],
     "yields": [
       {
         "type": "yieldType:culture",
@@ -723,9 +602,7 @@
       "source": "Giovanni Francesco Abela, 1647",
       "url": "/media/quotes/worldWonderType/ggantija.mp3"
     },
-    "requires": [
-      "technologyType:mysticism"
-    ],
+    "requires": ["technologyType:mysticism"],
     "yields": [
       {
         "type": "yieldType:faith",
@@ -745,9 +622,7 @@
       "source": "Cassius Dio, ca. 200 CE",
       "url": "/media/quotes/worldWonderType/pantheon.mp3"
     },
-    "requires": [
-      "technologyType:construction"
-    ],
+    "requires": ["technologyType:construction"],
     "yields": [
       {
         "type": "yieldType:faith",
@@ -759,9 +634,7 @@
     "category": "worldWonderCategory:faith",
     "concept": "conceptType:worldWonder",
     "description": "Notre-Dame de Paris, begun in 1163 and largely completed by the mid-14th century, anchors the Île de la Cité. It advanced Gothic engineering through rib vaults, flying buttresses, and large rose windows, allowing soaring naves and extensive glazing. The cathedral served medieval liturgy, royal ceremonies, and civic gatherings. It hosted the coronation of Napoleon in 1804 and state Te Deums. Revolutionary desecration in the 1790s led to loss of statuary and treasure. Eugène Viollet-le-Duc directed a major restoration in the 19th century, refining the spire and sculpture program. A 2019 fire damaged the roof and spire; stabilization and reconstruction followed. Notre-Dame remains a central monument of Gothic architecture and urban identity, binding sacred function to national history.",
-    "gains": [
-      "conceptType:dogma"
-    ],
+    "gains": ["conceptType:dogma"],
     "image": "/media/images/worldWonderType/notreDame.jpg",
     "key": "worldWonderType:notreDame",
     "name": "Notre Dame",
@@ -770,9 +643,7 @@
       "source": "Victor Hugo, 1831",
       "url": "/media/quotes/worldWonderType/notreDame.mp3"
     },
-    "requires": [
-      "technologyType:buttress"
-    ]
+    "requires": ["technologyType:buttress"]
   },
   {
     "category": "worldWonderCategory:faith",
@@ -786,16 +657,12 @@
       "source": "Reginald Heber, 1824",
       "url": "/media/quotes/worldWonderType/tajMahal.mp3"
     },
-    "requires": [
-      "technologyType:architecture"
-    ],
+    "requires": ["technologyType:architecture"],
     "yields": [
       {
         "type": "yieldType:faith",
         "amount": 2,
-        "for": [
-          "conceptType:building"
-        ]
+        "for": ["conceptType:building"]
       }
     ]
   },
@@ -811,10 +678,7 @@
       "source": "Cardinal Leme, 1931",
       "url": "/media/quotes/worldWonderType/cristoRedentor.mp3"
     },
-    "requires": [
-      "technologyType:massMedia",
-      "terrainType:coast"
-    ],
+    "requires": ["technologyType:massMedia", "terrainType:coast"],
     "yields": [
       {
         "type": "yieldType:faith",
@@ -834,9 +698,7 @@
       "source": "Josep Puig i Cadafalch, ca. 1930",
       "url": "/media/quotes/worldWonderType/sagradaFamilia.mp3"
     },
-    "requires": [
-      "technologyType:verticalFlight"
-    ],
+    "requires": ["technologyType:verticalFlight"],
     "yields": [
       {
         "type": "yieldType:faith",
@@ -856,10 +718,7 @@
       "source": "Berossus, ca. 290 BCE",
       "url": "/media/quotes/worldWonderType/hangingGardens.mp3"
     },
-    "requires": [
-      "technologyType:mathematics",
-      "conceptType:freshWater"
-    ],
+    "requires": ["technologyType:arches", "conceptType:freshWater"],
     "yields": [
       {
         "type": "yieldType:health",
@@ -879,17 +738,12 @@
       "source": "Khmer proverb",
       "url": "/media/quotes/worldWonderType/angkorWat.mp3"
     },
-    "requires": [
-      "technologyType:divineRight",
-      "featureType:jungle"
-    ],
+    "requires": ["technologyType:divineRight", "featureType:jungle"],
     "yields": [
       {
         "type": "yieldType:health",
         "amount": 4,
-        "for": [
-          "specialType:allCities"
-        ]
+        "for": ["specialType:allCities"]
       }
     ]
   },
@@ -905,17 +759,12 @@
       "source": "Joseph Bazalgette, 1870",
       "url": "/media/quotes/worldWonderType/embankment.mp3"
     },
-    "requires": [
-      "technologyType:medicine",
-      "conceptType:navigableRiver"
-    ],
+    "requires": ["technologyType:sanitation", "conceptType:navigableRiver"],
     "yields": [
       {
         "type": "yieldType:health",
         "amount": 3,
-        "for": [
-          "conceptType:building"
-        ]
+        "for": ["conceptType:building"]
       }
     ]
   },
@@ -931,17 +780,12 @@
       "source": "Robert Ley, 1936",
       "url": "/media/quotes/worldWonderType/prora.mp3"
     },
-    "requires": [
-      "technologyType:antibiotics",
-      "terrainType:coast"
-    ],
+    "requires": ["technologyType:antibiotics", "terrainType:coast"],
     "yields": [
       {
         "type": "yieldType:health",
         "amount": 2,
-        "for": [
-          "specialType:allCities"
-        ]
+        "for": ["specialType:allCities"]
       }
     ]
   },
@@ -957,16 +801,12 @@
       "source": "Bill Clinton, 2000",
       "url": "/media/quotes/worldWonderType/humanGenomeProject.mp3"
     },
-    "requires": [
-      "technologyType:genetics"
-    ],
+    "requires": ["technologyType:genetics"],
     "yields": [
       {
         "type": "yieldType:health",
         "amount": 4,
-        "for": [
-          "buildingCategory:health"
-        ]
+        "for": ["buildingCategory:health"]
       }
     ]
   },
@@ -982,17 +822,12 @@
       "source": "Irish folklore",
       "url": "/media/quotes/worldWonderType/newgrange.mp3"
     },
-    "requires": [
-      "technologyType:wheel",
-      "conceptType:flatLand"
-    ],
+    "requires": ["technologyType:wheel", "conceptType:flatLand"],
     "yields": [
       {
         "type": "yieldType:happiness",
         "amount": 2,
-        "for": [
-          "specialType:allCities"
-        ]
+        "for": ["specialType:allCities"]
       }
     ]
   },
@@ -1008,9 +843,7 @@
       "source": "Martial, ca. 80 CE",
       "url": "/media/quotes/worldWonderType/colosseum.mp3"
     },
-    "requires": [
-      "technologyType:sports"
-    ],
+    "requires": ["technologyType:publicWorks"],
     "yields": [
       {
         "type": "yieldType:happiness",
@@ -1030,16 +863,12 @@
       "source": "Johan Nieuhof, 1656",
       "url": "/media/quotes/worldWonderType/porcelainTower.mp3"
     },
-    "requires": [
-      "technologyType:chivalry"
-    ],
+    "requires": ["technologyType:chivalry"],
     "yields": [
       {
         "type": "yieldType:happiness",
         "amount": 4,
-        "for": [
-          "specialType:allCities"
-        ]
+        "for": ["specialType:allCities"]
       }
     ]
   },
@@ -1055,17 +884,12 @@
       "source": "Marie de’ Medici, 1612",
       "url": "/media/quotes/worldWonderType/luxembourgGarden.mp3"
     },
-    "requires": [
-      "technologyType:opera",
-      "conceptType:freshWater"
-    ],
+    "requires": ["technologyType:opera", "conceptType:freshWater"],
     "yields": [
       {
         "type": "yieldType:happiness",
         "amount": 2,
-        "for": [
-          "conceptType:building"
-        ]
+        "for": ["conceptType:building"]
       }
     ]
   },
@@ -1081,18 +905,12 @@
       "source": "Bavarian folk saying, 19th century",
       "url": "/media/quotes/worldWonderType/neuschwanstein.mp3"
     },
-    "requires": [
-      "technologyType:chemistry",
-      "elevationType:hill"
-    ],
+    "requires": ["technologyType:chemistry", "elevationType:hill"],
     "yields": [
       {
         "type": "yieldType:happiness",
         "amount": 4,
-        "for": [
-          "elevationType:hill",
-          "conceptType:mountains"
-        ]
+        "for": ["elevationType:hill", "conceptType:mountains"]
       }
     ]
   },
@@ -1108,16 +926,12 @@
       "source": "CNN, 2010",
       "url": "/media/quotes/worldWonderType/burjKhalifa.mp3"
     },
-    "requires": [
-      "technologyType:composites"
-    ],
+    "requires": ["technologyType:composites"],
     "yields": [
       {
         "type": "yieldType:happiness",
         "amount": 4,
-        "for": [
-          "conceptType:tradeRoute"
-        ]
+        "for": ["conceptType:tradeRoute"]
       }
     ]
   },
@@ -1133,17 +947,12 @@
       "source": "Priestly text, ca. 2700 BCE",
       "url": "/media/quotes/worldWonderType/pyramidOfDjoser.mp3"
     },
-    "requires": [
-      "technologyType:copperWorking",
-      "featureType:floodPlain"
-    ],
+    "requires": ["technologyType:copperWorking", "featureType:floodPlain"],
     "yields": [
       {
         "type": "yieldType:order",
         "amount": 2,
-        "for": [
-          "specialType:allCities"
-        ]
+        "for": ["specialType:allCities"]
       }
     ]
   },
@@ -1159,17 +968,12 @@
       "source": "Pyramid complex inscription, ca. 2400 BCE",
       "url": "/media/quotes/worldWonderType/pyramidsOfGiza.mp3"
     },
-    "requires": [
-      "technologyType:government",
-      "featureType:floodPlain"
-    ],
+    "requires": ["technologyType:codeOfLaw", "featureType:floodPlain"],
     "yields": [
       {
         "type": "yieldType:order",
         "amount": 3,
-        "for": [
-          "specialType:allCities"
-        ]
+        "for": ["specialType:allCities"]
       }
     ]
   },
@@ -1185,17 +989,12 @@
       "source": "Emperor Yongle, 1420",
       "url": "/media/quotes/worldWonderType/forbiddenPalace.mp3"
     },
-    "requires": [
-      "technologyType:township",
-      "conceptType:flatLand"
-    ],
+    "requires": ["technologyType:township", "conceptType:flatLand"],
     "yields": [
       {
         "type": "yieldType:order",
         "amount": 4,
-        "for": [
-          "specialType:allCities"
-        ]
+        "for": ["specialType:allCities"]
       }
     ]
   },
@@ -1211,16 +1010,12 @@
       "source": "London pamphlet, 18th century",
       "url": "/media/quotes/worldWonderType/oldBailey.mp3"
     },
-    "requires": [
-      "technologyType:bureaucracy"
-    ],
+    "requires": ["technologyType:bureaucracy"],
     "yields": [
       {
         "type": "yieldType:order",
         "amount": 2,
-        "for": [
-          "conceptType:building"
-        ]
+        "for": ["conceptType:building"]
       }
     ]
   },
@@ -1236,16 +1031,12 @@
       "source": "Le Figaro editorial, 1889",
       "url": "/media/quotes/worldWonderType/eiffelTower.mp3"
     },
-    "requires": [
-      "technologyType:electricity"
-    ],
+    "requires": ["technologyType:electricity"],
     "yields": [
       {
         "type": "yieldType:order",
         "amount": 3,
-        "for": [
-          "conceptType:building"
-        ]
+        "for": ["conceptType:building"]
       }
     ]
   },
@@ -1261,16 +1052,12 @@
       "source": "Fang Binxing, 2000",
       "url": "/media/quotes/worldWonderType/greatFirewall.mp3"
     },
-    "requires": [
-      "technologyType:internet"
-    ],
+    "requires": ["technologyType:internet"],
     "yields": [
       {
         "type": "yieldType:order",
         "amount": 4,
-        "for": [
-          "buildingCategory:culture"
-        ]
+        "for": ["buildingCategory:culture"]
       }
     ]
   },
@@ -1286,10 +1073,7 @@
       "source": "Herodotus, ca. 440 BCE",
       "url": "/media/quotes/worldWonderType/oracle.mp3"
     },
-    "requires": [
-      "technologyType:organizedReligion",
-      "elevationType:hill"
-    ],
+    "requires": ["technologyType:organizedReligion", "elevationType:hill"],
     "yields": [
       {
         "type": "yieldType:influence",
@@ -1309,10 +1093,7 @@
       "source": "Ibn Zamrak, 1370",
       "url": "/media/quotes/worldWonderType/alhambra.mp3"
     },
-    "requires": [
-      "technologyType:steelSmithing",
-      "elevationType:hill"
-    ],
+    "requires": ["technologyType:steelSmithing", "elevationType:hill"],
     "yields": [
       {
         "type": "yieldType:influence",
@@ -1332,17 +1113,12 @@
       "source": "Emma Lazarus, 1883",
       "url": "/media/quotes/worldWonderType/statueOfLiberty.mp3"
     },
-    "requires": [
-      "technologyType:sanitation",
-      "terrainType:coast"
-    ],
+    "requires": ["technologyType:medicine", "terrainType:coast"],
     "yields": [
       {
         "type": "yieldType:influence",
         "amount": 4,
-        "for": [
-          "conceptType:tradeRoute"
-        ]
+        "for": ["conceptType:tradeRoute"]
       }
     ]
   },
@@ -1358,17 +1134,13 @@
       "source": "Trygve Lie, 1947",
       "url": "/media/quotes/worldWonderType/unitedNations.mp3"
     },
-    "requires": [
-      "technologyType:plastics"
-    ],
+    "requires": ["technologyType:plastics"],
     "yields": [
       {
         "type": "yieldType:influence",
         "amount": 25,
         "method": "percent",
-        "for": [
-          "specialType:allCities"
-        ]
+        "for": ["specialType:allCities"]
       }
     ]
   },
@@ -1384,16 +1156,12 @@
       "source": "NASA, 2000",
       "url": "/media/quotes/worldWonderType/internationalSpaceStation.mp3"
     },
-    "requires": [
-      "technologyType:spaceFlight"
-    ],
+    "requires": ["technologyType:spaceFlight"],
     "yields": [
       {
         "type": "yieldType:influence",
         "amount": 4,
-        "for": [
-          "buildingCategory:production"
-        ]
+        "for": ["buildingCategory:production"]
       }
     ]
   },
@@ -1409,16 +1177,12 @@
       "source": "Warrior figurine base, 210 BCE",
       "url": "/media/quotes/worldWonderType/terracottaArmy.mp3"
     },
-    "requires": [
-      "technologyType:militaryTraining"
-    ],
+    "requires": ["technologyType:militaryTraining"],
     "yields": [
       {
         "type": "yieldType:strength",
         "amount": 1,
-        "for": [
-          "domainType:land"
-        ]
+        "for": ["domainType:land"]
       }
     ]
   },
@@ -1434,16 +1198,12 @@
       "source": "Russian proverb, 16th century",
       "url": "/media/quotes/worldWonderType/kremlin.mp3"
     },
-    "requires": [
-      "technologyType:militaryDiscipline"
-    ],
+    "requires": ["technologyType:militaryDiscipline"],
     "yields": [
       {
         "type": "yieldType:strength",
         "amount": 1,
-        "for": [
-          "equipmentCategory:firearm"
-        ]
+        "for": ["equipmentCategory:firearm"]
       }
     ]
   },
@@ -1459,16 +1219,12 @@
       "source": "Modern historian, 20th century",
       "url": "/media/quotes/worldWonderType/brandenburgGate.mp3"
     },
-    "requires": [
-      "technologyType:militaryTradition"
-    ],
+    "requires": ["technologyType:militaryTradition"],
     "yields": [
       {
         "type": "yieldType:attack",
         "amount": 1,
-        "for": [
-          "conceptType:unit"
-        ]
+        "for": ["conceptType:unit"]
       }
     ]
   },
@@ -1484,18 +1240,13 @@
       "source": "Soviet slogan, ca. 1935",
       "url": "/media/quotes/worldWonderType/tankograd.mp3"
     },
-    "requires": [
-      "technologyType:trackedTreads"
-    ],
+    "requires": ["technologyType:trackedTreads"],
     "yields": [
       {
         "type": "yieldType:production",
         "amount": 50,
         "method": "percent",
-        "for": [
-          "platformType:tracked",
-          "platformType:truck"
-        ]
+        "for": ["platformType:tracked", "platformType:truck"]
       }
     ]
   },
@@ -1511,16 +1262,12 @@
       "source": "Eisenhower aide, ca. 1950",
       "url": "/media/quotes/worldWonderType/pentagon.mp3"
     },
-    "requires": [
-      "technologyType:hollowCharge"
-    ],
+    "requires": ["technologyType:hollowCharge"],
     "yields": [
       {
         "type": "yieldType:strength",
         "amount": 1,
-        "for": [
-          "conceptType:unit"
-        ]
+        "for": ["conceptType:unit"]
       }
     ]
   },
@@ -1536,10 +1283,7 @@
       "source": "Polybius, 146 BCE",
       "url": "/media/quotes/worldWonderType/portOfCarthage.mp3"
     },
-    "requires": [
-      "technologyType:shipEngineering",
-      "terrainType:coast"
-    ],
+    "requires": ["technologyType:shipEngineering", "terrainType:coast"],
     "yields": [
       {
         "type": "yieldType:tradeSlot",
@@ -1548,9 +1292,7 @@
       {
         "type": "yieldType:production",
         "amount": 2,
-        "for": [
-          "domainType:water"
-        ]
+        "for": ["domainType:water"]
       }
     ]
   },
@@ -1566,17 +1308,12 @@
       "source": "Marin Sanudo, 1530",
       "url": "/media/quotes/worldWonderType/venetianArsenal.mp3"
     },
-    "requires": [
-      "technologyType:clinkerHulls",
-      "terrainType:coast"
-    ],
+    "requires": ["technologyType:clinkerHulls", "terrainType:coast"],
     "yields": [
       {
         "type": "yieldType:production",
         "amount": 4,
-        "for": [
-          "domainType:water"
-        ]
+        "for": ["domainType:water"]
       }
     ]
   },
@@ -1592,17 +1329,12 @@
       "source": "Dockworker recollection, ca. 1900",
       "url": "/media/quotes/worldWonderType/tynesideShipyards.mp3"
     },
-    "requires": [
-      "technologyType:steamEngine",
-      "terrainType:coast"
-    ],
+    "requires": ["technologyType:steamEngine", "terrainType:coast"],
     "yields": [
       {
         "type": "yieldType:production",
         "amount": 6,
-        "for": [
-          "domainType:water"
-        ]
+        "for": ["domainType:water"]
       }
     ]
   },
@@ -1618,17 +1350,12 @@
       "source": "Postwar analyst, 1945",
       "url": "/media/quotes/worldWonderType/blohmVoss.mp3"
     },
-    "requires": [
-      "technologyType:artillery",
-      "terrainType:coast"
-    ],
+    "requires": ["technologyType:artillery", "terrainType:coast"],
     "yields": [
       {
         "type": "yieldType:production",
         "amount": 8,
-        "for": [
-          "domainType:water"
-        ]
+        "for": ["domainType:water"]
       }
     ]
   },
@@ -1644,17 +1371,12 @@
       "source": "HHI worker, ca. 1990",
       "url": "/media/quotes/worldWonderType/hyundaiHeavyIndustries.mp3"
     },
-    "requires": [
-      "technologyType:globalArmy",
-      "terrainType:coast"
-    ],
+    "requires": ["technologyType:globalArmy", "terrainType:coast"],
     "yields": [
       {
         "type": "yieldType:production",
         "amount": 10,
-        "for": [
-          "domainType:water"
-        ]
+        "for": ["domainType:water"]
       }
     ]
   },
@@ -1670,10 +1392,7 @@
       "source": "Philo of Byzantium, ca. 225 BCE",
       "url": "/media/quotes/worldWonderType/colossus.mp3"
     },
-    "requires": [
-      "technologyType:bronzeCasting",
-      "terrainType:coast"
-    ],
+    "requires": ["technologyType:bronzeCasting", "terrainType:coast"],
     "yields": [
       {
         "type": "yieldType:tradeRange",
@@ -1694,10 +1413,7 @@
       "source": "Amadou Hampâté Bâ, 20th century",
       "url": "/media/quotes/worldWonderType/mosqueOfDjenne.mp3"
     },
-    "requires": [
-      "technologyType:tradeCaravans",
-      "terrainType:desert"
-    ],
+    "requires": ["technologyType:tradeCaravans", "terrainType:desert"],
     "yields": [
       {
         "type": "yieldType:tradeRange",
@@ -1718,17 +1434,12 @@
       "source": "Tang dynasty edict, 8th century",
       "url": "/media/quotes/worldWonderType/grandCanal.mp3"
     },
-    "requires": [
-      "technologyType:industrialization",
-      "conceptType:navigableRiver"
-    ],
+    "requires": ["technologyType:industrialization", "conceptType:navigableRiver"],
     "yields": [
       {
         "type": "yieldType:tradeSlot",
         "amount": 3,
-        "for": [
-          "specialType:allCitiesWithRiver"
-        ]
+        "for": ["specialType:allCitiesWithRiver"]
       }
     ]
   },
@@ -1744,9 +1455,7 @@
       "source": "Mayor Ernst Reuter, 1949",
       "url": "/media/quotes/worldWonderType/tempelhofAirport.mp3"
     },
-    "requires": [
-      "technologyType:flight"
-    ],
+    "requires": ["technologyType:flight"],
     "yields": [
       {
         "type": "yieldType:tradeRange",
@@ -1767,16 +1476,12 @@
       "source": "Union Pacific, ca. 1970",
       "url": "/media/quotes/worldWonderType/baileyYard.mp3"
     },
-    "requires": [
-      "technologyType:globalization"
-    ],
+    "requires": ["technologyType:globalization"],
     "yields": [
       {
         "type": "yieldType:gold",
         "amount": 2,
-        "for": [
-          "specialType:allCitiesWithRailroad"
-        ]
+        "for": ["specialType:allCitiesWithRailroad"]
       }
     ]
   },
@@ -1792,17 +1497,12 @@
       "source": "Lucian of Samosata, 2nd century CE",
       "url": "/media/quotes/worldWonderType/pharosOfAlexandria.mp3"
     },
-    "requires": [
-      "technologyType:celestialNavigation",
-      "terrainType:coast"
-    ],
+    "requires": ["technologyType:celestialNavigation", "terrainType:coast"],
     "yields": [
       {
         "type": "yieldType:moves",
         "amount": 1,
-        "for": [
-          "domainType:water"
-        ]
+        "for": ["domainType:water"]
       }
     ]
   },
@@ -1818,24 +1518,17 @@
       "source": "Rapa Nui legend",
       "url": "/media/quotes/worldWonderType/moaiStatues.mp3"
     },
-    "requires": [
-      "technologyType:compass",
-      "terrainType:coast"
-    ],
+    "requires": ["technologyType:compass", "terrainType:coast"],
     "yields": [
       {
         "type": "yieldType:food",
         "amount": 1,
-        "for": [
-          "terrainType:sea"
-        ]
+        "for": ["terrainType:sea"]
       },
       {
         "type": "yieldType:gold",
         "amount": 1,
-        "for": [
-          "terrainType:sea"
-        ]
+        "for": ["terrainType:sea"]
       }
     ]
   },
@@ -1851,17 +1544,12 @@
       "source": "Merchant's toast, ca. 1800",
       "url": "/media/quotes/worldWonderType/westIndiaDocks.mp3"
     },
-    "requires": [
-      "technologyType:royalCharter",
-      "terrainType:coast"
-    ],
+    "requires": ["technologyType:royalCharter", "terrainType:coast"],
     "yields": [
       {
         "type": "yieldType:gold",
         "amount": 3,
-        "for": [
-          "improvementCategory:boats"
-        ]
+        "for": ["improvementCategory:boats"]
       }
     ]
   },
@@ -1877,16 +1565,12 @@
       "source": "John F. Stevens, 1906",
       "url": "/media/quotes/worldWonderType/panamaCanal.mp3"
     },
-    "requires": [
-      "technologyType:hydrodynamics"
-    ],
+    "requires": ["technologyType:hydrodynamics"],
     "yields": [
       {
         "type": "yieldType:gold",
         "amount": 2,
-        "for": [
-          "conceptType:tradeRoute"
-        ]
+        "for": ["conceptType:tradeRoute"]
       }
     ]
   },
@@ -1902,17 +1586,12 @@
       "source": "Maritime Journal, 2015",
       "url": "/media/quotes/worldWonderType/portOfShanghai.mp3"
     },
-    "requires": [
-      "technologyType:globalization",
-      "terrainType:coast"
-    ],
+    "requires": ["technologyType:globalization", "terrainType:coast"],
     "yields": [
       {
         "type": "yieldType:gold",
         "amount": 5,
-        "for": [
-          "improvementCategory:boats"
-        ]
+        "for": ["improvementCategory:boats"]
       }
     ]
   },
@@ -1928,16 +1607,12 @@
       "source": "Emperor Theodosius II, 413 CE",
       "url": "/media/quotes/worldWonderType/wallsOfConstantinople.mp3"
     },
-    "requires": [
-      "technologyType:ironCasting"
-    ],
+    "requires": ["technologyType:ironCasting"],
     "yields": [
       {
         "type": "yieldType:defense",
         "amount": 7,
-        "for": [
-          "buildingCategory:defense"
-        ]
+        "for": ["buildingCategory:defense"]
       }
     ]
   },
@@ -1945,9 +1620,7 @@
     "category": "worldWonderCategory:defense",
     "concept": "conceptType:worldWonder",
     "description": "The Great Wall comprises networks of ramparts, beacon towers, and garrisons along northern China’s frontier. While earlier walls existed, the most substantial works date to the Ming dynasty, from the 14th to 16th centuries. Brick-faced walls, crenellations, and signal stations improved endurance and communication. The system aimed to control crossings, deter Mongol and Jurchen raids, and regulate trade and smuggling. Garrisons and supply depots supported patrols across rugged terrain. Strategic passes, such as Shanhai Pass and Juyong Pass, became fortified choke points. Maintenance and military relevance fluctuated with court priorities and frontier dynamics. Later centuries saw neglect and reuse of materials. Today, restored segments and ruins demonstrate layered construction methods and the logistical demands of long-distance border defense.",
-    "gains": [
-      "improvementType:bastion"
-    ],
+    "gains": ["improvementType:bastion"],
     "image": "/media/images/worldWonderType/greatWall.jpg",
     "key": "worldWonderType:greatWall",
     "name": "Great Wall",
@@ -1956,9 +1629,7 @@
       "source": "Ming dynasty poem, 15th century",
       "url": "/media/quotes/worldWonderType/greatWall.mp3"
     },
-    "requires": [
-      "technologyType:feudalism"
-    ]
+    "requires": ["technologyType:engineering"]
   },
   {
     "category": "worldWonderCategory:defense",
@@ -1972,24 +1643,17 @@
       "source": "King's Gate inscription, 1754",
       "url": "/media/quotes/worldWonderType/suomenlinna.mp3"
     },
-    "requires": [
-      "technologyType:dynamite",
-      "terrainType:coast"
-    ],
+    "requires": ["technologyType:dynamite", "terrainType:coast"],
     "yields": [
       {
         "type": "yieldType:range",
         "amount": 1,
-        "for": [
-          "conceptType:city"
-        ]
+        "for": ["conceptType:city"]
       },
       {
         "type": "yieldType:attack",
         "amount": 2,
-        "for": [
-          "conceptType:city"
-        ]
+        "for": ["conceptType:city"]
       }
     ]
   },
@@ -1997,9 +1661,7 @@
     "category": "worldWonderCategory:defense",
     "concept": "conceptType:worldWonder",
     "description": "The Maginot Line was an interwar French fortification system guarding the German border from Luxembourg to Switzerland. Built from 1929 to 1938 under André Maginot’s program, it combined deep underground ouvrages, armored turrets, anti-tank obstacles, and integrated communications. Major complexes such as Ouvrage Hackenberg and Ouvrage Schoenenbourg housed artillery, power plants, and garrisons linked by rail tunnels. The network aimed to deter invasion and channel attacks into Belgium while economizing manpower. In 1940 the German army bypassed the heaviest sectors via the Ardennes and the Low Countries, exploiting gaps in mobile defense and doctrine rather than the forts themselves. Many ouvrages resisted localized assaults but were isolated after breakthroughs. The system influenced later Cold War fortifications and remains a case study in fixed defense versus maneuver warfare.",
-    "gains": [
-      "improvementType:trenches"
-    ],
+    "gains": ["improvementType:trenches"],
     "image": "/media/images/worldWonderType/maginotLine.jpg",
     "key": "worldWonderType:maginotLine",
     "name": "Maginot Line",
@@ -2008,9 +1670,7 @@
       "source": "French military press, 1935",
       "url": "/media/quotes/worldWonderType/maginotLine.mp3"
     },
-    "requires": [
-      "technologyType:civilDefense"
-    ]
+    "requires": ["technologyType:civilDefense"]
   },
   {
     "category": "worldWonderCategory:milLand",
@@ -2024,16 +1684,12 @@
       "source": "Juvenal, 110 CE",
       "url": "/media/quotes/worldWonderType/circusMaximus.mp3"
     },
-    "requires": [
-      "technologyType:riding"
-    ],
+    "requires": ["technologyType:riding"],
     "yields": [
       {
         "type": "yieldType:strength",
         "amount": 1,
-        "for": [
-          "platformCategory:mounted"
-        ]
+        "for": ["platformCategory:mounted"]
       }
     ]
   },
@@ -2041,9 +1697,7 @@
     "category": "worldWonderCategory:production",
     "concept": "conceptType:worldWonder",
     "description": "Hoover Dam is a concrete arch-gravity dam on the Colorado River at Black Canyon, completed in 1936 by the U.S. Bureau of Reclamation. Built during the New Deal, it provided large-scale hydroelectricity, water storage, and flood control for the American Southwest. The impounded Lake Mead became a key reservoir supporting irrigation and urban growth in Nevada, Arizona, and California. Construction required diversion tunnels, highline cableways, and interlocking concrete blocks cooled by embedded pipe. The powerhouse delivered power to regional grids, underwriting industrial development in Los Angeles and beyond. The project formalized river compacts and set precedents in federal water management. Hoover Dam remains an engineering landmark and a central node in the Lower Colorado system.",
-    "gains": [
-      "resourceType:electricity"
-    ],
+    "gains": ["resourceType:electricity"],
     "image": "/media/images/worldWonderType/hooverDam.jpg",
     "key": "worldWonderType:hooverDam",
     "name": "Hoover Dam",
@@ -2052,16 +1706,12 @@
       "source": "Harold L. Ickes, 1935",
       "url": "/media/quotes/worldWonderType/hooverDam.mp3"
     },
-    "requires": [
-      "technologyType:hydrodynamics"
-    ],
+    "requires": ["technologyType:hydrodynamics"],
     "yields": [
       {
         "type": "yieldType:food",
         "amount": 3,
-        "for": [
-          "terrainType:desert"
-        ]
+        "for": ["terrainType:desert"]
       }
     ]
   },
@@ -2069,9 +1719,7 @@
     "category": "worldWonderCategory:production",
     "concept": "conceptType:worldWonder",
     "description": "The Three Gorges Dam spans the Yangtze River at Sandouping in Hubei, completed in stages from 2003 to 2012. It is the world’s largest hydroelectric installation by installed capacity, integrating a gravity dam, spillways, and dual navigation systems. Its generators supply gigawatt-scale power to central and eastern China, stabilizing regional grids and supporting industrial demand. The reservoir enhances flood control for the middle and lower Yangtze and improves navigation through ship locks and a ship lift that moves vessels past the dam. Construction involved massive resettlement and sediment management programs, with continuing debates over ecology and heritage loss. The project follows earlier Republican-era proposals and marks the culmination of long-term planning in Chinese water engineering.",
-    "gains": [
-      "resourceType:electricity"
-    ],
+    "gains": ["resourceType:electricity"],
     "image": "/media/images/worldWonderType/threeGorgesDam.jpg",
     "key": "worldWonderType:threeGorgesDam",
     "name": "Three Gorges Dam",
@@ -2080,9 +1728,7 @@
       "source": "Pan Jiazheng, 2003",
       "url": "/media/quotes/worldWonderType/threeGorgesDam.mp3"
     },
-    "requires": [
-      "technologyType:renewableEnergy"
-    ]
+    "requires": ["technologyType:renewableEnergy"]
   },
   {
     "category": "worldWonderCategory:air",
@@ -2096,9 +1742,7 @@
       "source": "Kelly Johnson, 1957",
       "url": "/media/quotes/worldWonderType/lockheedSkunkWorks.mp3"
     },
-    "requires": [
-      "technologyType:flyByWire"
-    ]
+    "requires": ["technologyType:flyByWire"]
   },
   {
     "category": "worldWonderCategory:milLand",
@@ -2112,16 +1756,12 @@
       "source": "Pausanias, ca. 160 CE",
       "url": "/media/quotes/worldWonderType/templeOfArtemis.mp3"
     },
-    "requires": [
-      "technologyType:archery"
-    ],
+    "requires": ["technologyType:archery"],
     "yields": [
       {
         "type": "yieldType:strength",
         "amount": 1,
-        "for": [
-          "equipmentCategory:ranged"
-        ]
+        "for": ["equipmentCategory:ranged"]
       }
     ]
   },
@@ -2137,16 +1777,12 @@
       "source": "Orban, 1452",
       "url": "/media/quotes/worldWonderType/orbansFoundry.mp3"
     },
-    "requires": [
-      "technologyType:gunpowder"
-    ],
+    "requires": ["technologyType:gunpowder"],
     "yields": [
       {
         "type": "yieldType:strength",
         "amount": 1,
-        "for": [
-          "equipmentCategory:siege"
-        ]
+        "for": ["equipmentCategory:siege"]
       }
     ]
   },
@@ -2162,16 +1798,12 @@
       "source": "Lord Thomson of Cardington, 1929",
       "url": "/media/quotes/worldWonderType/schneiderCup.mp3"
     },
-    "requires": [
-      "technologyType:rocketry"
-    ],
+    "requires": ["technologyType:rocketry"],
     "yields": [
       {
         "type": "yieldType:strength",
         "amount": 2,
-        "for": [
-          "domainType:air"
-        ]
+        "for": ["domainType:air"]
       }
     ]
   }

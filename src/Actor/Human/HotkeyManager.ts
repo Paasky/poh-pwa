@@ -1,40 +1,38 @@
-import { onKeyStroke, useUserAgent } from "@vueuse/core";
 import { SaveAction } from "@/Actor/Human/Actions/SaveAction";
 
 export type Modifier = "ctrl" | "shift" | "alt" | "meta";
 
-/**
- * Returns an OS-aware hotkey label (e.g., ⌘S on Mac, Ctrl+S on others).
- */
-export const getHotkeyLabel = (key: string, modifiers: Modifier[] = ["ctrl"]) => {
-  const { isMac } = useUserAgent();
+const isMac = (): boolean => /Mac|iPhone|iPad|iPod/.test(navigator.platform);
 
+export const getHotkeyLabel = (key: string, modifiers: Modifier[] = ["ctrl"]): string => {
+  const mac = isMac();
   const labelMap: Record<Modifier, string> = {
-    ctrl: isMac.value ? "⌘" : "Ctrl",
-    meta: isMac.value ? "⌘" : "Win",
-    alt: isMac.value ? "⌥" : "Alt",
+    ctrl: mac ? "⌘" : "Ctrl",
+    meta: mac ? "⌘" : "Win",
+    alt: mac ? "⌥" : "Alt",
     shift: "⇧",
   };
-
   const parts = modifiers.map((m) => labelMap[m]);
   parts.push(key.toUpperCase());
-
-  return parts.join(isMac.value ? "" : "+");
+  return parts.join(mac ? "" : "+");
 };
 
-/**
- * Global hotkey orchestrator for the Human Actor.
- */
+const _listeners: Array<(e: KeyboardEvent) => void> = [];
+
 export const HotkeyManager = {
   init() {
-    // Quick Save: Ctrl+S or Cmd+S
-    onKeyStroke(["s", "S"], (e) => {
-      if (e.ctrlKey || e.metaKey) {
+    const onKeyDown = (e: KeyboardEvent): void => {
+      if ((e.ctrlKey || e.metaKey) && (e.key === "s" || e.key === "S")) {
         e.preventDefault();
         SaveAction.quickSave();
       }
-    });
+    };
+    _listeners.push(onKeyDown);
+    document.addEventListener("keydown", onKeyDown);
+  },
 
-    // Add more global hotkeys here as needed
+  dispose() {
+    _listeners.forEach((fn) => document.removeEventListener("keydown", fn));
+    _listeners.length = 0;
   },
 };

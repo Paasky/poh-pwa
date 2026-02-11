@@ -9,9 +9,7 @@
       "platformType:human": "Warrior",
       "platformType:chariot": "Chariot"
     },
-    "requires": [
-      "technologyType:warfare"
-    ],
+    "requires": ["technologyType:warfare"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -30,9 +28,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "platformType:human"
-        ]
+        "vs": ["platformType:human"]
       }
     ]
   },
@@ -47,13 +43,8 @@
       "platformType:chariot": "War Chariot",
       "platformType:horse": "Rider"
     },
-    "requires": [
-      "technologyType:bronzeSmithing",
-      "resourceType:bronze"
-    ],
-    "upgradesFrom": [
-      "equipmentType:axe"
-    ],
+    "requires": ["technologyType:bronzeSmithing", "resourceType:bronze"],
+    "upgradesFrom": ["equipmentType:axe"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -72,9 +63,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "platformType:human"
-        ]
+        "vs": ["platformType:human"]
       }
     ]
   },
@@ -88,13 +77,8 @@
       "platformType:human": "Swordsman",
       "platformType:horse": "Horseman"
     },
-    "requires": [
-      "technologyType:ironSmithing",
-      "resourceType:iron"
-    ],
-    "upgradesFrom": [
-      "equipmentType:bronzeAxe"
-    ],
+    "requires": ["technologyType:ironSmithing", "resourceType:iron"],
+    "upgradesFrom": ["equipmentType:bronzeAxe"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -113,9 +97,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "platformType:human"
-        ]
+        "vs": ["platformType:human"]
       }
     ]
   },
@@ -129,13 +111,8 @@
       "platformType:human": "Longswordsman",
       "platformType:horse": "Knight"
     },
-    "requires": [
-      "technologyType:steelSmithing",
-      "resourceType:iron"
-    ],
-    "upgradesFrom": [
-      "equipmentType:ironSword"
-    ],
+    "requires": ["technologyType:steelSmithing", "resourceType:iron"],
+    "upgradesFrom": ["equipmentType:ironSword"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -154,9 +131,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "platformType:human"
-        ]
+        "vs": ["platformType:human"]
       }
     ]
   },
@@ -170,13 +145,8 @@
       "platformType:human": "Man-at-Arms",
       "platformType:horse": "Cuirassier"
     },
-    "requires": [
-      "technologyType:coldSteel",
-      "resourceType:iron"
-    ],
-    "upgradesFrom": [
-      "equipmentType:longsword"
-    ],
+    "requires": ["technologyType:coldSteel", "resourceType:iron"],
+    "upgradesFrom": ["equipmentType:longsword"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -195,9 +165,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "platformType:human"
-        ]
+        "vs": ["platformType:human"]
       }
     ]
   },
@@ -211,15 +179,9 @@
       "platformType:human": "Musketman",
       "platformType:horse": "Cavalry"
     },
-    "requires": [
-      "technologyType:flintlock"
-    ],
-    "specials": [
-      "specialType:canLevy"
-    ],
-    "upgradesFrom": [
-      "equipmentType:saber"
-    ],
+    "requires": ["technologyType:flintlock"],
+    "specials": ["specialType:canLevy"],
+    "upgradesFrom": ["equipmentType:saber"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -233,9 +195,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "platformType:human"
-        ]
+        "vs": ["platformType:human"]
       }
     ]
   },
@@ -249,15 +209,9 @@
       "platformType:human": "Infantry",
       "platformType:truck": "Mot. Infantry"
     },
-    "requires": [
-      "technologyType:repeatingRifles"
-    ],
-    "specials": [
-      "specialType:canLevy"
-    ],
-    "upgradesFrom": [
-      "equipmentType:musket"
-    ],
+    "requires": ["technologyType:repeatingRifles"],
+    "specials": ["specialType:canLevy"],
+    "upgradesFrom": ["equipmentType:musket"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -271,9 +225,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "platformType:human"
-        ]
+        "vs": ["platformType:human"]
       }
     ]
   },
@@ -287,15 +239,9 @@
       "platformType:human": "Assault Infantry",
       "platformType:truck": "Mech. Infantry"
     },
-    "requires": [
-      "technologyType:automaticCarbines"
-    ],
-    "specials": [
-      "specialType:canLevy"
-    ],
-    "upgradesFrom": [
-      "equipmentType:rifle"
-    ],
+    "requires": ["technologyType:automaticCarbines"],
+    "specials": ["specialType:canLevy"],
+    "upgradesFrom": ["equipmentType:rifle"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -309,9 +255,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "platformType:human"
-        ]
+        "vs": ["platformType:human"]
       }
     ]
   },
@@ -325,15 +269,9 @@
       "platformType:human": "Modern Infantry",
       "platformType:truck": "IFV"
     },
-    "requires": [
-      "technologyType:rifleScopes"
-    ],
-    "specials": [
-      "specialType:canLevy"
-    ],
-    "upgradesFrom": [
-      "equipmentType:assaultRifle"
-    ],
+    "requires": ["technologyType:rifleScopes"],
+    "specials": ["specialType:canLevy"],
+    "upgradesFrom": ["equipmentType:assaultRifle"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -347,9 +285,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "platformType:human"
-        ]
+        "vs": ["platformType:human"]
       }
     ]
   },
@@ -363,16 +299,9 @@
       "platformType:human": "Laser Infantry",
       "platformType:truck": "Laser IFV"
     },
-    "requires": [
-      "technologyType:weaponizedLasers",
-      "resourceType:electronics"
-    ],
-    "specials": [
-      "specialType:canLevy"
-    ],
-    "upgradesFrom": [
-      "equipmentType:scopedRifle"
-    ],
+    "requires": ["technologyType:weaponizedLasers", "resourceType:electronics"],
+    "specials": ["specialType:canLevy"],
+    "upgradesFrom": ["equipmentType:scopedRifle"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -386,9 +315,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "platformType:human"
-        ]
+        "vs": ["platformType:human"]
       }
     ]
   },
@@ -401,9 +328,7 @@
     "names": {
       "platformType:human": "Warband"
     },
-    "specials": [
-      "specialType:canLevy"
-    ],
+    "specials": ["specialType:canLevy"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -417,9 +342,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "platformCategory:mounted"
-        ]
+        "vs": ["platformCategory:mounted"]
       }
     ]
   },
@@ -432,15 +355,9 @@
     "names": {
       "platformType:human": "Spearman"
     },
-    "requires": [
-      "technologyType:bronzeWorking"
-    ],
-    "specials": [
-      "specialType:canLevy"
-    ],
-    "upgradesFrom": [
-      "equipmentType:spear"
-    ],
+    "requires": ["technologyType:bronzeWorking"],
+    "specials": ["specialType:canLevy"],
+    "upgradesFrom": ["equipmentType:spear"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -454,9 +371,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "platformCategory:mounted"
-        ]
+        "vs": ["platformCategory:mounted"]
       }
     ]
   },
@@ -469,15 +384,9 @@
     "names": {
       "platformType:human": "Phalanx"
     },
-    "requires": [
-      "technologyType:ironWorking"
-    ],
-    "specials": [
-      "specialType:canLevy"
-    ],
-    "upgradesFrom": [
-      "equipmentType:bronzeSpear"
-    ],
+    "requires": ["technologyType:ironWorking"],
+    "specials": ["specialType:canLevy"],
+    "upgradesFrom": ["equipmentType:bronzeSpear"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -491,9 +400,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "platformCategory:mounted"
-        ]
+        "vs": ["platformCategory:mounted"]
       }
     ]
   },
@@ -506,15 +413,9 @@
     "names": {
       "platformType:human": "Pikeman"
     },
-    "requires": [
-      "technologyType:steel"
-    ],
-    "specials": [
-      "specialType:canLevy"
-    ],
-    "upgradesFrom": [
-      "equipmentType:ironSpear"
-    ],
+    "requires": ["technologyType:steel"],
+    "specials": ["specialType:canLevy"],
+    "upgradesFrom": ["equipmentType:ironSpear"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -528,9 +429,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "platformCategory:mounted"
-        ]
+        "vs": ["platformCategory:mounted"]
       }
     ]
   },
@@ -543,15 +442,9 @@
     "names": {
       "platformType:human": "Halberdier"
     },
-    "requires": [
-      "technologyType:militaryDiscipline"
-    ],
-    "specials": [
-      "specialType:canLevy"
-    ],
-    "upgradesFrom": [
-      "equipmentType:pike"
-    ],
+    "requires": ["technologyType:militaryDiscipline"],
+    "specials": ["specialType:canLevy"],
+    "upgradesFrom": ["equipmentType:pike"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -565,9 +458,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "platformCategory:mounted"
-        ]
+        "vs": ["platformCategory:mounted"]
       }
     ]
   },
@@ -580,12 +471,8 @@
     "names": {
       "platformType:human": "Grenadier"
     },
-    "requires": [
-      "technologyType:militaryTradition"
-    ],
-    "upgradesFrom": [
-      "equipmentType:halberd"
-    ],
+    "requires": ["technologyType:militaryTradition"],
+    "upgradesFrom": ["equipmentType:halberd"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -604,9 +491,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "platformCategory:mounted"
-        ]
+        "vs": ["platformCategory:mounted"]
       }
     ]
   },
@@ -619,12 +504,8 @@
     "names": {
       "platformType:human": "AT-Rifle"
     },
-    "requires": [
-      "technologyType:trenchWarfare"
-    ],
-    "upgradesFrom": [
-      "equipmentType:grenadier"
-    ],
+    "requires": ["technologyType:trenchWarfare"],
+    "upgradesFrom": ["equipmentType:grenadier"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -638,9 +519,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "platformCategory:vehicle"
-        ]
+        "vs": ["platformCategory:vehicle"]
       }
     ]
   },
@@ -653,12 +532,8 @@
     "names": {
       "platformType:human": "RPG"
     },
-    "requires": [
-      "technologyType:hollowCharge"
-    ],
-    "upgradesFrom": [
-      "equipmentType:aTRifle"
-    ],
+    "requires": ["technologyType:hollowCharge"],
+    "upgradesFrom": ["equipmentType:aTRifle"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -672,9 +547,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "platformCategory:vehicle"
-        ]
+        "vs": ["platformCategory:vehicle"]
       }
     ]
   },
@@ -687,13 +560,8 @@
     "names": {
       "platformType:human": "AT-Drone"
     },
-    "requires": [
-      "technologyType:militaryDrones",
-      "resourceType:electronics"
-    ],
-    "upgradesFrom": [
-      "equipmentType:rPG"
-    ],
+    "requires": ["technologyType:militaryDrones", "resourceType:electronics"],
+    "upgradesFrom": ["equipmentType:rPG"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -707,9 +575,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "platformCategory:vehicle"
-        ]
+        "vs": ["platformCategory:vehicle"]
       }
     ]
   },
@@ -722,13 +588,8 @@
     "names": {
       "platformType:human": "AI-Drone"
     },
-    "requires": [
-      "technologyType:artificialIntelligence",
-      "resourceType:electronics"
-    ],
-    "upgradesFrom": [
-      "equipmentType:aTDrone"
-    ],
+    "requires": ["technologyType:artificialIntelligence", "resourceType:electronics"],
+    "upgradesFrom": ["equipmentType:aTDrone"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -742,9 +603,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "platformCategory:vehicle"
-        ]
+        "vs": ["platformCategory:vehicle"]
       }
     ]
   },
@@ -757,9 +616,7 @@
     "names": {
       "platformType:tracked": "Tank"
     },
-    "requires": [
-      "technologyType:trackedTreads"
-    ],
+    "requires": ["technologyType:trackedTreads"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -773,9 +630,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "platformCategory:vehicle"
-        ]
+        "vs": ["platformCategory:vehicle"]
       }
     ]
   },
@@ -788,12 +643,8 @@
     "names": {
       "platformType:tracked": "Main Battle Tank"
     },
-    "requires": [
-      "technologyType:hollowCharge"
-    ],
-    "upgradesFrom": [
-      "equipmentType:aTGun"
-    ],
+    "requires": ["technologyType:hollowCharge"],
+    "upgradesFrom": ["equipmentType:aTGun"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -807,9 +658,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "platformCategory:vehicle"
-        ]
+        "vs": ["platformCategory:vehicle"]
       }
     ]
   },
@@ -822,12 +671,8 @@
     "names": {
       "platformType:tracked": "Modern Tank"
     },
-    "requires": [
-      "technologyType:composites"
-    ],
-    "upgradesFrom": [
-      "equipmentType:highVelocityGun"
-    ],
+    "requires": ["technologyType:composites"],
+    "upgradesFrom": ["equipmentType:highVelocityGun"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -841,9 +686,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "platformCategory:vehicle"
-        ]
+        "vs": ["platformCategory:vehicle"]
       }
     ]
   },
@@ -856,13 +699,8 @@
     "names": {
       "platformType:tracked": "Laser Tank"
     },
-    "requires": [
-      "technologyType:weaponizedLasers",
-      "resourceType:electronics"
-    ],
-    "upgradesFrom": [
-      "equipmentType:smoothboreGun"
-    ],
+    "requires": ["technologyType:weaponizedLasers", "resourceType:electronics"],
+    "upgradesFrom": ["equipmentType:smoothboreGun"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -876,9 +714,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "platformCategory:vehicle"
-        ]
+        "vs": ["platformCategory:vehicle"]
       }
     ]
   },
@@ -892,12 +728,8 @@
       "platformType:raft": "Raft",
       "platformType:galley": "Galley"
     },
-    "requires": [
-      "technologyType:sailing"
-    ],
-    "specials": [
-      "specialType:pillageRange"
-    ],
+    "requires": ["technologyType:sailing"],
+    "specials": ["specialType:pillageRange"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -911,9 +743,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "domainType:water"
-        ]
+        "vs": ["domainType:water"]
       }
     ]
   },
@@ -926,15 +756,9 @@
     "names": {
       "platformType:galley": "Bireme"
     },
-    "requires": [
-      "technologyType:bronzeSmithing"
-    ],
-    "specials": [
-      "specialType:pillageRange"
-    ],
-    "upgradesFrom": [
-      "equipmentType:woodRam"
-    ],
+    "requires": ["technologyType:bronzeSmithing"],
+    "specials": ["specialType:pillageRange"],
+    "upgradesFrom": ["equipmentType:woodRam"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -948,9 +772,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "domainType:water"
-        ]
+        "vs": ["domainType:water"]
       }
     ]
   },
@@ -964,15 +786,9 @@
       "platformType:galley": "Trireme",
       "platformType:clinker": "Galleass"
     },
-    "requires": [
-      "technologyType:ironSmithing"
-    ],
-    "specials": [
-      "specialType:pillageRange"
-    ],
-    "upgradesFrom": [
-      "equipmentType:bronzeRam"
-    ],
+    "requires": ["technologyType:ironSmithing"],
+    "specials": ["specialType:pillageRange"],
+    "upgradesFrom": ["equipmentType:bronzeRam"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -986,9 +802,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "domainType:water"
-        ]
+        "vs": ["domainType:water"]
       }
     ]
   },
@@ -1002,15 +816,9 @@
       "platformType:clinker": "Longship",
       "platformType:carvel": "Xebec"
     },
-    "requires": [
-      "technologyType:steelSmithing"
-    ],
-    "specials": [
-      "specialType:pillageRange"
-    ],
-    "upgradesFrom": [
-      "equipmentType:ironRam"
-    ],
+    "requires": ["technologyType:steelSmithing"],
+    "specials": ["specialType:pillageRange"],
+    "upgradesFrom": ["equipmentType:ironRam"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1024,9 +832,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "domainType:water"
-        ]
+        "vs": ["domainType:water"]
       }
     ]
   },
@@ -1039,15 +845,9 @@
     "names": {
       "platformType:carvel": "Brigantine"
     },
-    "requires": [
-      "technologyType:pistols"
-    ],
-    "specials": [
-      "specialType:pillageRange"
-    ],
-    "upgradesFrom": [
-      "equipmentType:raiders"
-    ],
+    "requires": ["technologyType:pistols"],
+    "specials": ["specialType:pillageRange"],
+    "upgradesFrom": ["equipmentType:raiders"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1061,9 +861,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "domainType:water"
-        ]
+        "vs": ["domainType:water"]
       }
     ]
   },
@@ -1077,15 +875,9 @@
       "platformType:carvel": "Brig",
       "platformType:steamer": "Gunboat"
     },
-    "requires": [
-      "technologyType:dynamite"
-    ],
-    "specials": [
-      "specialType:pillageRange"
-    ],
-    "upgradesFrom": [
-      "equipmentType:buccaneers"
-    ],
+    "requires": ["technologyType:dynamite"],
+    "specials": ["specialType:pillageRange"],
+    "upgradesFrom": ["equipmentType:buccaneers"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1099,9 +891,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "domainType:water"
-        ]
+        "vs": ["domainType:water"]
       }
     ]
   },
@@ -1114,15 +904,9 @@
     "names": {
       "platformType:submersible": "Submarine"
     },
-    "requires": [
-      "technologyType:hydrodynamics"
-    ],
-    "specials": [
-      "specialType:canSelectTarget"
-    ],
-    "upgradesFrom": [
-      "equipmentType:musketMarines"
-    ],
+    "requires": ["technologyType:hydrodynamics"],
+    "specials": ["specialType:canSelectTarget"],
+    "upgradesFrom": ["equipmentType:musketMarines"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1140,9 +924,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "domainType:water"
-        ]
+        "vs": ["domainType:water"]
       }
     ]
   },
@@ -1155,15 +937,9 @@
     "names": {
       "platformType:submersible": "Adv. Submarine"
     },
-    "requires": [
-      "technologyType:guidedOrdnance"
-    ],
-    "specials": [
-      "specialType:canSelectTarget"
-    ],
-    "upgradesFrom": [
-      "equipmentType:torpedo"
-    ],
+    "requires": ["technologyType:guidedOrdnance"],
+    "specials": ["specialType:canSelectTarget"],
+    "upgradesFrom": ["equipmentType:torpedo"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1181,9 +957,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "domainType:water"
-        ]
+        "vs": ["domainType:water"]
       }
     ]
   },
@@ -1196,16 +970,9 @@
     "names": {
       "platformType:submersible": "Stealth Submarine"
     },
-    "requires": [
-      "technologyType:homingSystems",
-      "resourceType:electronics"
-    ],
-    "specials": [
-      "specialType:canSelectTarget"
-    ],
-    "upgradesFrom": [
-      "equipmentType:guidedTorpedo"
-    ],
+    "requires": ["technologyType:homingSystems", "resourceType:electronics"],
+    "specials": ["specialType:canSelectTarget"],
+    "upgradesFrom": ["equipmentType:guidedTorpedo"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1223,9 +990,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "domainType:water"
-        ]
+        "vs": ["domainType:water"]
       }
     ]
   },
@@ -1238,16 +1003,9 @@
     "names": {
       "platformType:submersible": "AI Submarine"
     },
-    "requires": [
-      "technologyType:artificialIntelligence",
-      "resourceType:electronics"
-    ],
-    "specials": [
-      "specialType:canSelectTarget"
-    ],
-    "upgradesFrom": [
-      "equipmentType:homingTorpedo"
-    ],
+    "requires": ["technologyType:artificialIntelligence", "resourceType:electronics"],
+    "specials": ["specialType:canSelectTarget"],
+    "upgradesFrom": ["equipmentType:homingTorpedo"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1265,9 +1023,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "domainType:water"
-        ]
+        "vs": ["domainType:water"]
       }
     ]
   },
@@ -1281,9 +1037,7 @@
       "platformType:biplane": "Biplane",
       "platformType:monocoque": "Fighter"
     },
-    "requires": [
-      "technologyType:flight"
-    ],
+    "requires": ["technologyType:flight"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1297,9 +1051,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "domainType:air"
-        ]
+        "vs": ["domainType:air"]
       }
     ]
   },
@@ -1313,12 +1065,8 @@
       "platformType:monocoque": "Jet Fighter (Gen I)",
       "platformType:supersonic": "Jet Fighter (Gen II)"
     },
-    "requires": [
-      "technologyType:guidanceSystems"
-    ],
-    "upgradesFrom": [
-      "equipmentType:airGun"
-    ],
+    "requires": ["technologyType:guidanceSystems"],
+    "upgradesFrom": ["equipmentType:airGun"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1332,9 +1080,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "domainType:air"
-        ]
+        "vs": ["domainType:air"]
       }
     ]
   },
@@ -1349,13 +1095,8 @@
       "platformType:superagile": "Jet Fighter (Gen IV)",
       "platformType:stealth": "Stealth Fighter"
     },
-    "requires": [
-      "technologyType:homingSystems",
-      "resourceType:electronics"
-    ],
-    "upgradesFrom": [
-      "equipmentType:airMissile"
-    ],
+    "requires": ["technologyType:homingSystems", "resourceType:electronics"],
+    "upgradesFrom": ["equipmentType:airMissile"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1369,9 +1110,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "domainType:air"
-        ]
+        "vs": ["domainType:air"]
       }
     ]
   },
@@ -1425,17 +1164,13 @@
       "platformType:horse": "Horse Scout",
       "platformType:elephant": "Elephant Scout"
     },
-    "requires": [
-      "technologyType:bronzeWorking"
-    ],
+    "requires": ["technologyType:bronzeWorking"],
     "specials": [
       "specialType:ignoreMoveCost",
       "specialType:cannotAttackWater",
       "specialType:canSelectTarget"
     ],
-    "upgradesFrom": [
-      "equipmentType:javelin"
-    ],
+    "upgradesFrom": ["equipmentType:javelin"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1471,17 +1206,13 @@
       "platformType:horse": "Horse Peltast",
       "platformType:elephant": "Elephant Peltast"
     },
-    "requires": [
-      "technologyType:ironWorking"
-    ],
+    "requires": ["technologyType:ironWorking"],
     "specials": [
       "specialType:ignoreMoveCost",
       "specialType:cannotAttackWater",
       "specialType:canSelectTarget"
     ],
-    "upgradesFrom": [
-      "equipmentType:bronzeJavelin"
-    ],
+    "upgradesFrom": ["equipmentType:bronzeJavelin"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1517,17 +1248,13 @@
       "platformType:horse": "Horse Crossbow",
       "platformType:elephant": "Elephant Crossbow"
     },
-    "requires": [
-      "technologyType:machinery"
-    ],
+    "requires": ["technologyType:machinery"],
     "specials": [
       "specialType:ignoreMoveCost",
       "specialType:cannotAttackWater",
       "specialType:canSelectTarget"
     ],
-    "upgradesFrom": [
-      "equipmentType:ironJavelin"
-    ],
+    "upgradesFrom": ["equipmentType:ironJavelin"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1563,17 +1290,13 @@
       "platformType:horse": "Harquebusier",
       "platformType:elephant": "Elephant Arquebus"
     },
-    "requires": [
-      "technologyType:firearms"
-    ],
+    "requires": ["technologyType:firearms"],
     "specials": [
       "specialType:ignoreMoveCost",
       "specialType:cannotAttackWater",
       "specialType:canSelectTarget"
     ],
-    "upgradesFrom": [
-      "equipmentType:crossbow"
-    ],
+    "upgradesFrom": ["equipmentType:crossbow"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1609,17 +1332,13 @@
       "platformType:horse": "Light Cavalry",
       "platformType:elephant": "Elephant Rifles"
     },
-    "requires": [
-      "technologyType:rifling"
-    ],
+    "requires": ["technologyType:rifling"],
     "specials": [
       "specialType:ignoreMoveCost",
       "specialType:cannotAttackWater",
       "specialType:canSelectTarget"
     ],
-    "upgradesFrom": [
-      "equipmentType:arquebus"
-    ],
+    "upgradesFrom": ["equipmentType:arquebus"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1654,17 +1373,13 @@
       "platformType:human": "Sniper",
       "platformType:truck": "Ranger"
     },
-    "requires": [
-      "technologyType:trenchWarfare"
-    ],
+    "requires": ["technologyType:trenchWarfare"],
     "specials": [
       "specialType:ignoreMoveCost",
       "specialType:cannotAttackWater",
       "specialType:canSelectTarget"
     ],
-    "upgradesFrom": [
-      "equipmentType:rifledMusket"
-    ],
+    "upgradesFrom": ["equipmentType:rifledMusket"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1699,17 +1414,13 @@
       "platformType:human": "Paratrooper",
       "platformType:truck": "Mot. Paratrooper"
     },
-    "requires": [
-      "technologyType:verticalFlight"
-    ],
+    "requires": ["technologyType:verticalFlight"],
     "specials": [
       "specialType:ignoreMoveCost",
       "specialType:canMoveAfterAttack",
       "specialType:canSelectTarget"
     ],
-    "upgradesFrom": [
-      "equipmentType:sniper"
-    ],
+    "upgradesFrom": ["equipmentType:sniper"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1753,18 +1464,13 @@
       "platformType:human": "Special Forces",
       "platformType:truck": "Mot. Special Forces"
     },
-    "requires": [
-      "technologyType:rifleScopes",
-      "resourceType:electronics"
-    ],
+    "requires": ["technologyType:rifleScopes", "resourceType:electronics"],
     "specials": [
       "specialType:ignoreMoveCost",
       "specialType:canMoveAfterAttack",
       "specialType:canSelectTarget"
     ],
-    "upgradesFrom": [
-      "equipmentType:sMG"
-    ],
+    "upgradesFrom": ["equipmentType:sMG"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1808,9 +1514,7 @@
       "platformType:human": "Slinger",
       "platformType:chariot": "Chariot Slinger"
     },
-    "requires": [
-      "technologyType:slings"
-    ],
+    "requires": ["technologyType:slings"],
     "specials": [
       "specialType:cannotAttackWater",
       "specialType:cannotKillLandUnits",
@@ -1853,17 +1557,13 @@
       "platformType:horse": "Horse Bowman",
       "platformType:elephant": "Elephant Bowman"
     },
-    "requires": [
-      "technologyType:archery"
-    ],
+    "requires": ["technologyType:archery"],
     "specials": [
       "specialType:cannotAttackWater",
       "specialType:cannotKillLandUnits",
       "specialType:damagesAllUnitsInTile"
     ],
-    "upgradesFrom": [
-      "equipmentType:sling"
-    ],
+    "upgradesFrom": ["equipmentType:sling"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1900,17 +1600,13 @@
       "platformType:horse": "Horse Archer",
       "platformType:elephant": "Elephant Archer"
     },
-    "requires": [
-      "technologyType:woodComposites"
-    ],
+    "requires": ["technologyType:woodComposites"],
     "specials": [
       "specialType:cannotAttackWater",
       "specialType:cannotKillLandUnits",
       "specialType:damagesAllUnitsInTile"
     ],
-    "upgradesFrom": [
-      "equipmentType:bow"
-    ],
+    "upgradesFrom": ["equipmentType:bow"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1947,17 +1643,13 @@
       "platformType:horse": "Horse Longbowman",
       "platformType:elephant": "Elephant Longbowman"
     },
-    "requires": [
-      "technologyType:buttress"
-    ],
+    "requires": ["technologyType:optics"],
     "specials": [
       "specialType:cannotAttackWater",
       "specialType:cannotKillLandUnits",
       "specialType:damagesAllUnitsInTile"
     ],
-    "upgradesFrom": [
-      "equipmentType:compositeBow"
-    ],
+    "upgradesFrom": ["equipmentType:compositeBow"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -1994,17 +1686,13 @@
       "platformType:horse": "Horse Cannoneer",
       "platformType:elephant": "Elephant Cannoneer"
     },
-    "requires": [
-      "technologyType:firearms"
-    ],
+    "requires": ["technologyType:firearms"],
     "specials": [
       "specialType:cannotAttackWater",
       "specialType:cannotKillLandUnits",
       "specialType:damagesAllUnitsInTile"
     ],
-    "upgradesFrom": [
-      "equipmentType:longbow"
-    ],
+    "upgradesFrom": ["equipmentType:longbow"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2041,17 +1729,13 @@
       "platformType:horse": "Horse Cannon",
       "platformType:elephant": "Elephant Cannon"
     },
-    "requires": [
-      "technologyType:rifling"
-    ],
+    "requires": ["technologyType:rifling"],
     "specials": [
       "specialType:cannotAttackWater",
       "specialType:cannotKillLandUnits",
       "specialType:damagesAllUnitsInTile"
     ],
-    "upgradesFrom": [
-      "equipmentType:handCannon"
-    ],
+    "upgradesFrom": ["equipmentType:handCannon"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2087,17 +1771,13 @@
       "platformType:human": "Mortar",
       "platformType:truck": "Mot. Mortar"
     },
-    "requires": [
-      "technologyType:trenchWarfare"
-    ],
+    "requires": ["technologyType:trenchWarfare"],
     "specials": [
       "specialType:cannotAttackWater",
       "specialType:cannotKillLandUnits",
       "specialType:damagesAllUnitsInTile"
     ],
-    "upgradesFrom": [
-      "equipmentType:lightCannon"
-    ],
+    "upgradesFrom": ["equipmentType:lightCannon"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2133,17 +1813,13 @@
       "platformType:human": "Guided Mortar",
       "platformType:truck": "Mot. Guided Mortar"
     },
-    "requires": [
-      "technologyType:guidedOrdnance"
-    ],
+    "requires": ["technologyType:guidedOrdnance"],
     "specials": [
       "specialType:cannotAttackWater",
       "specialType:cannotKillLandUnits",
       "specialType:damagesAllUnitsInTile"
     ],
-    "upgradesFrom": [
-      "equipmentType:mortar"
-    ],
+    "upgradesFrom": ["equipmentType:mortar"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2179,18 +1855,13 @@
       "platformType:human": "Attack Drone",
       "platformType:truck": "Mot. Attack Drone"
     },
-    "requires": [
-      "technologyType:militaryDrones",
-      "resourceType:electronics"
-    ],
+    "requires": ["technologyType:militaryDrones", "resourceType:electronics"],
     "specials": [
       "specialType:cannotAttackWater",
       "specialType:cannotKillLandUnits",
       "specialType:damagesAllUnitsInTile"
     ],
-    "upgradesFrom": [
-      "equipmentType:guidedMortar"
-    ],
+    "upgradesFrom": ["equipmentType:guidedMortar"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2225,9 +1896,7 @@
     "names": {
       "platformType:carriage": "Battering Ram"
     },
-    "requires": [
-      "technologyType:sieging"
-    ],
+    "requires": ["technologyType:sieging"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2241,9 +1910,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "conceptType:urban"
-        ]
+        "vs": ["conceptType:urban"]
       }
     ]
   },
@@ -2257,18 +1924,14 @@
       "platformType:carriage": "Catapult",
       "platformType:heavyGalley": "Quadreme"
     },
-    "requires": [
-      "technologyType:mathematics"
-    ],
+    "requires": ["technologyType:mathematics"],
     "specials": [
       "specialType:cannotKillLandUnits",
       "specialType:damagesBuildings",
       "specialType:damagesImprovements",
       "specialType:canCarryStockpile"
     ],
-    "upgradesFrom": [
-      "equipmentType:batteringRam"
-    ],
+    "upgradesFrom": ["equipmentType:batteringRam"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2291,9 +1954,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "conceptType:urban"
-        ]
+        "vs": ["conceptType:urban"]
       }
     ]
   },
@@ -2307,18 +1968,14 @@
       "platformType:carriage": "Trebuchet",
       "platformType:heavyClinker": "Heavy Galleass"
     },
-    "requires": [
-      "technologyType:castles"
-    ],
+    "requires": ["technologyType:castles"],
     "specials": [
       "specialType:cannotKillLandUnits",
       "specialType:damagesBuildings",
       "specialType:damagesImprovements",
       "specialType:canCarryStockpile"
     ],
-    "upgradesFrom": [
-      "equipmentType:catapult"
-    ],
+    "upgradesFrom": ["equipmentType:catapult"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2341,9 +1998,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "conceptType:urban"
-        ]
+        "vs": ["conceptType:urban"]
       }
     ]
   },
@@ -2358,18 +2013,14 @@
       "platformType:heavyClinker": "Carrack",
       "platformType:heavyCarvel": "Galleon"
     },
-    "requires": [
-      "technologyType:gunpowder"
-    ],
+    "requires": ["technologyType:gunpowder"],
     "specials": [
       "specialType:cannotKillLandUnits",
       "specialType:damagesBuildings",
       "specialType:damagesImprovements",
       "specialType:canCarryStockpile"
     ],
-    "upgradesFrom": [
-      "equipmentType:trebuchet"
-    ],
+    "upgradesFrom": ["equipmentType:trebuchet"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2392,9 +2043,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "conceptType:urban"
-        ]
+        "vs": ["conceptType:urban"]
       }
     ]
   },
@@ -2409,18 +2058,14 @@
       "platformType:heavyCarvel": "Ship-of-the-Line",
       "platformType:heavySteamer": "Ironclad"
     },
-    "requires": [
-      "technologyType:steelCasting"
-    ],
+    "requires": ["technologyType:steelCasting"],
     "specials": [
       "specialType:cannotKillLandUnits",
       "specialType:damagesBuildings",
       "specialType:damagesImprovements",
       "specialType:canCarryStockpile"
     ],
-    "upgradesFrom": [
-      "equipmentType:bombard"
-    ],
+    "upgradesFrom": ["equipmentType:bombard"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2443,9 +2088,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "conceptType:urban"
-        ]
+        "vs": ["conceptType:urban"]
       }
     ]
   },
@@ -2463,18 +2106,14 @@
       "platformType:heavySteamer": "Dreadnought",
       "platformType:heavyDiesel": "Battleship"
     },
-    "requires": [
-      "technologyType:artillery"
-    ],
+    "requires": ["technologyType:artillery"],
     "specials": [
       "specialType:cannotKillLandUnits",
       "specialType:damagesBuildings",
       "specialType:damagesImprovements",
       "specialType:canCarryStockpile"
     ],
-    "upgradesFrom": [
-      "equipmentType:cannon"
-    ],
+    "upgradesFrom": ["equipmentType:cannon"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2497,9 +2136,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "conceptType:urban"
-        ]
+        "vs": ["conceptType:urban"]
       }
     ]
   },
@@ -2515,18 +2152,14 @@
       "platformType:dieselHull": "Rocket Frigate",
       "platformType:heavyDiesel": "Rocket Cruiser"
     },
-    "requires": [
-      "technologyType:ballistics"
-    ],
+    "requires": ["technologyType:ballistics"],
     "specials": [
       "specialType:cannotKillLandUnits",
       "specialType:damagesBuildings",
       "specialType:damagesImprovements",
       "specialType:canCarryStockpile"
     ],
-    "upgradesFrom": [
-      "equipmentType:howitzer"
-    ],
+    "upgradesFrom": ["equipmentType:howitzer"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2549,9 +2182,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "conceptType:urban"
-        ]
+        "vs": ["conceptType:urban"]
       }
     ]
   },
@@ -2567,19 +2198,14 @@
       "platformType:dieselHull": "Missile Frigate",
       "platformType:heavyDiesel": "Missile Cruiser"
     },
-    "requires": [
-      "technologyType:homingSystems",
-      "resourceType:electronics"
-    ],
+    "requires": ["technologyType:homingSystems", "resourceType:electronics"],
     "specials": [
       "specialType:cannotKillLandUnits",
       "specialType:damagesBuildings",
       "specialType:damagesImprovements",
       "specialType:canCarryStockpile"
     ],
-    "upgradesFrom": [
-      "equipmentType:rocketArtillery"
-    ],
+    "upgradesFrom": ["equipmentType:rocketArtillery"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2602,9 +2228,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "conceptType:urban"
-        ]
+        "vs": ["conceptType:urban"]
       }
     ]
   },
@@ -2620,19 +2244,14 @@
       "platformType:dieselHull": "Drone Frigate",
       "platformType:heavyDiesel": "Drone Cruiser"
     },
-    "requires": [
-      "technologyType:artificialIntelligence",
-      "resourceType:electronics"
-    ],
+    "requires": ["technologyType:artificialIntelligence", "resourceType:electronics"],
     "specials": [
       "specialType:cannotKillLandUnits",
       "specialType:damagesBuildings",
       "specialType:damagesImprovements",
       "specialType:canCarryStockpile"
     ],
-    "upgradesFrom": [
-      "equipmentType:mLRS"
-    ],
+    "upgradesFrom": ["equipmentType:mLRS"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2655,9 +2274,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "conceptType:urban"
-        ]
+        "vs": ["conceptType:urban"]
       }
     ]
   },
@@ -2670,9 +2287,7 @@
     "names": {
       "platformType:dieselHull": "Carrier"
     },
-    "requires": [
-      "technologyType:aerodynamics"
-    ],
+    "requires": ["technologyType:aerodynamics"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2702,12 +2317,8 @@
     "names": {
       "platformType:dieselHull": "Heavy Carrier"
     },
-    "requires": [
-      "technologyType:navalCatapults"
-    ],
-    "upgradesFrom": [
-      "equipmentType:woodDeck"
-    ],
+    "requires": ["technologyType:navalCatapults"],
+    "upgradesFrom": ["equipmentType:woodDeck"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2738,12 +2349,8 @@
       "platformType:dieselHull": "Fleet Carrier",
       "platformType:nuclearHull": "Nuclear Carrier"
     },
-    "requires": [
-      "technologyType:stealth"
-    ],
-    "upgradesFrom": [
-      "equipmentType:catapultDeck"
-    ],
+    "requires": ["technologyType:stealth"],
+    "upgradesFrom": ["equipmentType:catapultDeck"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2774,9 +2381,7 @@
       "platformType:submersible": "Missile Submarine",
       "platformType:nuclearSub": "Nuclear Submarine"
     },
-    "requires": [
-      "technologyType:ballistics"
-    ],
+    "requires": ["technologyType:ballistics"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2809,9 +2414,7 @@
       "platformType:steamer": "AA-Steamer",
       "platformType:dieselHull": "AA-Destroyer"
     },
-    "requires": [
-      "technologyType:repeatingRifles"
-    ],
+    "requires": ["technologyType:repeatingRifles"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2834,9 +2437,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "domainType:air"
-        ]
+        "vs": ["domainType:air"]
       }
     ]
   },
@@ -2851,12 +2452,8 @@
       "platformType:truck": "Mobile SAM",
       "platformType:dieselHull": "SAM-Destroyer"
     },
-    "requires": [
-      "technologyType:guidanceSystems"
-    ],
-    "upgradesFrom": [
-      "equipmentType:aAGun"
-    ],
+    "requires": ["technologyType:guidanceSystems"],
+    "upgradesFrom": ["equipmentType:aAGun"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2879,9 +2476,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "domainType:air"
-        ]
+        "vs": ["domainType:air"]
       }
     ]
   },
@@ -2896,13 +2491,8 @@
       "platformType:truck": "Mot. Homing SAM",
       "platformType:dieselHull": "AEGIS Destroyer"
     },
-    "requires": [
-      "technologyType:homingSystems",
-      "resourceType:electronics"
-    ],
-    "upgradesFrom": [
-      "equipmentType:aAMissile"
-    ],
+    "requires": ["technologyType:homingSystems", "resourceType:electronics"],
+    "upgradesFrom": ["equipmentType:aAMissile"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2925,9 +2515,7 @@
         "type": "yieldType:strength",
         "amount": 30,
         "method": "percent",
-        "vs": [
-          "domainType:air"
-        ]
+        "vs": ["domainType:air"]
       }
     ]
   },
@@ -2941,12 +2529,8 @@
       "platformType:monocoque": "Dive Bomber",
       "platformType:supersonic": "Strike Fighter (Gen I)"
     },
-    "requires": [
-      "technologyType:rocketry"
-    ],
-    "specials": [
-      "specialType:canSelectTarget"
-    ],
+    "requires": ["technologyType:rocketry"],
+    "specials": ["specialType:canSelectTarget"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -2960,17 +2544,13 @@
         "type": "yieldType:strength",
         "amount": 15,
         "method": "percent",
-        "vs": [
-          "platformCategory:vehicle"
-        ]
+        "vs": ["platformCategory:vehicle"]
       },
       {
         "type": "yieldType:strength",
         "amount": 15,
         "method": "percent",
-        "vs": [
-          "domainType:water"
-        ]
+        "vs": ["domainType:water"]
       }
     ]
   },
@@ -2984,15 +2564,9 @@
       "platformType:supersonic": "Strike Fighter (Gen II)",
       "platformType:superagile": "Strike Fighter (Gen III)"
     },
-    "requires": [
-      "technologyType:hollowCharge"
-    ],
-    "specials": [
-      "specialType:canSelectTarget"
-    ],
-    "upgradesFrom": [
-      "equipmentType:rocketPod"
-    ],
+    "requires": ["technologyType:hollowCharge"],
+    "specials": ["specialType:canSelectTarget"],
+    "upgradesFrom": ["equipmentType:rocketPod"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3006,17 +2580,13 @@
         "type": "yieldType:strength",
         "amount": 15,
         "method": "percent",
-        "vs": [
-          "platformCategory:vehicle"
-        ]
+        "vs": ["platformCategory:vehicle"]
       },
       {
         "type": "yieldType:strength",
         "amount": 15,
         "method": "percent",
-        "vs": [
-          "domainType:water"
-        ]
+        "vs": ["domainType:water"]
       }
     ]
   },
@@ -3029,16 +2599,9 @@
     "names": {
       "platformType:superagile": "Strike Fighter (Gen IV)"
     },
-    "requires": [
-      "technologyType:militaryDrones",
-      "resourceType:electronics"
-    ],
-    "specials": [
-      "specialType:canSelectTarget"
-    ],
-    "upgradesFrom": [
-      "equipmentType:aTMissile"
-    ],
+    "requires": ["technologyType:militaryDrones", "resourceType:electronics"],
+    "specials": ["specialType:canSelectTarget"],
+    "upgradesFrom": ["equipmentType:aTMissile"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3052,17 +2615,13 @@
         "type": "yieldType:strength",
         "amount": 15,
         "method": "percent",
-        "vs": [
-          "platformCategory:vehicle"
-        ]
+        "vs": ["platformCategory:vehicle"]
       },
       {
         "type": "yieldType:strength",
         "amount": 15,
         "method": "percent",
-        "vs": [
-          "domainType:water"
-        ]
+        "vs": ["domainType:water"]
       }
     ]
   },
@@ -3076,9 +2635,7 @@
       "platformType:biplane": "Light Bomber",
       "platformType:monocoque": "Heavy Bomber"
     },
-    "requires": [
-      "technologyType:flight"
-    ],
+    "requires": ["technologyType:flight"],
     "specials": [
       "specialType:cannotKillLandUnits",
       "specialType:damagesBuildings",
@@ -3109,9 +2666,7 @@
         "type": "yieldType:strength",
         "amount": 15,
         "method": "percent",
-        "vs": [
-          "conceptType:urban"
-        ]
+        "vs": ["conceptType:urban"]
       }
     ]
   },
@@ -3125,9 +2680,7 @@
       "platformType:monocoque": "Jet Bomber (Gen I)",
       "platformType:supersonic": "Jet Bomber (Gen II)"
     },
-    "requires": [
-      "technologyType:guidedOrdnance"
-    ],
+    "requires": ["technologyType:guidedOrdnance"],
     "specials": [
       "specialType:cannotKillLandUnits",
       "specialType:damagesBuildings",
@@ -3135,9 +2688,7 @@
       "specialType:damagesAllUnitsInTile",
       "specialType:canCarryStockpile"
     ],
-    "upgradesFrom": [
-      "equipmentType:bomb"
-    ],
+    "upgradesFrom": ["equipmentType:bomb"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3161,9 +2712,7 @@
         "type": "yieldType:strength",
         "amount": 15,
         "method": "percent",
-        "vs": [
-          "conceptType:urban"
-        ]
+        "vs": ["conceptType:urban"]
       }
     ]
   },
@@ -3177,10 +2726,7 @@
       "platformType:supersonic": "Jet Bomber (Gen III)",
       "platformType:superagile": "Jet Bomber (Gen IV)"
     },
-    "requires": [
-      "technologyType:homingSystems",
-      "resourceType:electronics"
-    ],
+    "requires": ["technologyType:homingSystems", "resourceType:electronics"],
     "specials": [
       "specialType:cannotKillLandUnits",
       "specialType:damagesBuildings",
@@ -3188,9 +2734,7 @@
       "specialType:damagesAllUnitsInTile",
       "specialType:canCarryStockpile"
     ],
-    "upgradesFrom": [
-      "equipmentType:guidedBomb"
-    ],
+    "upgradesFrom": ["equipmentType:guidedBomb"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3214,9 +2758,7 @@
         "type": "yieldType:strength",
         "amount": 15,
         "method": "percent",
-        "vs": [
-          "conceptType:urban"
-        ]
+        "vs": ["conceptType:urban"]
       }
     ]
   },
@@ -3229,10 +2771,7 @@
     "names": {
       "platformType:satellite": "Comms Satellite"
     },
-    "requires": [
-      "technologyType:spaceFlight",
-      "resourceType:electronics"
-    ],
+    "requires": ["technologyType:spaceFlight", "resourceType:electronics"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3242,17 +2781,13 @@
         "type": "yieldType:culture",
         "amount": 15,
         "method": "percent",
-        "for": [
-          "conceptType:citizen"
-        ]
+        "for": ["conceptType:citizen"]
       },
       {
         "type": "yieldType:gold",
         "amount": 15,
         "method": "percent",
-        "for": [
-          "conceptType:citizen"
-        ]
+        "for": ["conceptType:citizen"]
       }
     ]
   },
@@ -3265,10 +2800,7 @@
     "names": {
       "platformType:satellite": "Spy Satellite"
     },
-    "requires": [
-      "technologyType:spaceFlight",
-      "resourceType:electronics"
-    ],
+    "requires": ["technologyType:spaceFlight", "resourceType:electronics"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3289,9 +2821,7 @@
     "names": {
       "platformType:human": "Worker"
     },
-    "specials": [
-      "specialType:maxPerCity"
-    ],
+    "specials": ["specialType:maxPerCity"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3308,15 +2838,9 @@
     "names": {
       "platformType:human": "Builder"
     },
-    "requires": [
-      "technologyType:government"
-    ],
-    "specials": [
-      "specialType:maxPerCity"
-    ],
-    "upgradesFrom": [
-      "equipmentType:worker"
-    ],
+    "requires": ["technologyType:government"],
+    "specials": ["specialType:maxPerCity"],
+    "upgradesFrom": ["equipmentType:worker"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3333,15 +2857,9 @@
     "names": {
       "platformType:human": "Peasant"
     },
-    "requires": [
-      "technologyType:feudalism"
-    ],
-    "specials": [
-      "specialType:maxPerCity"
-    ],
-    "upgradesFrom": [
-      "equipmentType:builder"
-    ],
+    "requires": ["technologyType:feudalism"],
+    "specials": ["specialType:maxPerCity"],
+    "upgradesFrom": ["equipmentType:builder"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3358,15 +2876,9 @@
     "names": {
       "platformType:human": "Engineer"
     },
-    "requires": [
-      "technologyType:dynamite"
-    ],
-    "specials": [
-      "specialType:maxPerCity"
-    ],
-    "upgradesFrom": [
-      "equipmentType:peasant"
-    ],
+    "requires": ["technologyType:dynamite"],
+    "specials": ["specialType:maxPerCity"],
+    "upgradesFrom": ["equipmentType:peasant"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3383,15 +2895,9 @@
     "names": {
       "platformType:human": "Tractor"
     },
-    "requires": [
-      "technologyType:trackedTreads"
-    ],
-    "specials": [
-      "specialType:maxPerCity"
-    ],
-    "upgradesFrom": [
-      "equipmentType:engineer"
-    ],
+    "requires": ["technologyType:trackedTreads"],
+    "specials": ["specialType:maxPerCity"],
+    "upgradesFrom": ["equipmentType:engineer"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3408,15 +2914,9 @@
     "names": {
       "platformType:human": "Contractor"
     },
-    "requires": [
-      "technologyType:robotics"
-    ],
-    "specials": [
-      "specialType:maxPerCity"
-    ],
-    "upgradesFrom": [
-      "equipmentType:tractor"
-    ],
+    "requires": ["technologyType:robotics"],
+    "specials": ["specialType:maxPerCity"],
+    "upgradesFrom": ["equipmentType:tractor"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3433,12 +2933,8 @@
     "names": {
       "platformType:human": "Tribe"
     },
-    "requires": [
-      "technologyType:settlements"
-    ],
-    "specials": [
-      "specialType:startSize"
-    ],
+    "requires": ["technologyType:settlements"],
+    "specials": ["specialType:startSize"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3464,15 +2960,9 @@
       "platformType:human": "Settler",
       "platformType:clinker": "Settler Cog"
     },
-    "requires": [
-      "technologyType:pottery"
-    ],
-    "specials": [
-      "specialType:startSize"
-    ],
-    "upgradesFrom": [
-      "equipmentType:tribe"
-    ],
+    "requires": ["technologyType:pottery"],
+    "specials": ["specialType:startSize"],
+    "upgradesFrom": ["equipmentType:tribe"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3499,15 +2989,9 @@
       "platformType:clinker": "Colonist Cog",
       "platformType:carvel": "Colonist Caravel"
     },
-    "requires": [
-      "technologyType:colonialism"
-    ],
-    "specials": [
-      "specialType:startSize"
-    ],
-    "upgradesFrom": [
-      "equipmentType:settler"
-    ],
+    "requires": ["technologyType:colonialism"],
+    "specials": ["specialType:startSize"],
+    "upgradesFrom": ["equipmentType:settler"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3532,15 +3016,9 @@
     "names": {
       "platformType:human": "Migrant"
     },
-    "requires": [
-      "technologyType:universalSuffrage"
-    ],
-    "specials": [
-      "specialType:startSize"
-    ],
-    "upgradesFrom": [
-      "equipmentType:colonist"
-    ],
+    "requires": ["technologyType:universalSuffrage"],
+    "specials": ["specialType:startSize"],
+    "upgradesFrom": ["equipmentType:colonist"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3568,9 +3046,7 @@
       "platformType:galley": "Trade Galley",
       "platformType:clinker": "Trade Cog"
     },
-    "requires": [
-      "technologyType:trade"
-    ],
+    "requires": ["technologyType:trade"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3593,12 +3069,8 @@
       "platformType:clinker": "Merchant Cog",
       "platformType:carvel": "Schooner"
     },
-    "requires": [
-      "technologyType:tradeCaravans"
-    ],
-    "upgradesFrom": [
-      "equipmentType:trader"
-    ],
+    "requires": ["technologyType:tradeCaravans"],
+    "upgradesFrom": ["equipmentType:trader"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3622,12 +3094,8 @@
       "platformType:steamer": "Paddle Steamer",
       "platformType:dieselHull": "Ocean Liner"
     },
-    "requires": [
-      "technologyType:economics"
-    ],
-    "upgradesFrom": [
-      "equipmentType:merchant"
-    ],
+    "requires": ["technologyType:economics"],
+    "upgradesFrom": ["equipmentType:merchant"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3649,12 +3117,8 @@
       "platformType:human": "Freighter",
       "platformType:dieselHull": "Container Ship"
     },
-    "requires": [
-      "technologyType:globalization"
-    ],
-    "upgradesFrom": [
-      "equipmentType:capitalist"
-    ],
+    "requires": ["technologyType:globalization"],
+    "upgradesFrom": ["equipmentType:capitalist"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3675,9 +3139,7 @@
     "names": {
       "platformType:human": "Shaman"
     },
-    "requires": [
-      "technologyType:mysticism"
-    ],
+    "requires": ["technologyType:mysticism"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3694,12 +3156,8 @@
     "names": {
       "platformType:human": "Priest"
     },
-    "requires": [
-      "technologyType:organizedReligion"
-    ],
-    "upgradesFrom": [
-      "equipmentType:shaman"
-    ],
+    "requires": ["technologyType:organizedReligion"],
+    "upgradesFrom": ["equipmentType:shaman"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3716,12 +3174,8 @@
     "names": {
       "platformType:human": "Missionary"
     },
-    "requires": [
-      "technologyType:fundamentalism"
-    ],
-    "upgradesFrom": [
-      "equipmentType:priest"
-    ],
+    "requires": ["technologyType:fundamentalism"],
+    "upgradesFrom": ["equipmentType:priest"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3738,12 +3192,8 @@
     "names": {
       "platformType:human": "Preacher"
     },
-    "requires": [
-      "technologyType:universalSuffrage"
-    ],
-    "upgradesFrom": [
-      "equipmentType:monk"
-    ],
+    "requires": ["technologyType:universalSuffrage"],
+    "upgradesFrom": ["equipmentType:monk"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3760,9 +3210,7 @@
     "names": {
       "platformType:human": "Emissary"
     },
-    "requires": [
-      "technologyType:warfare"
-    ],
+    "requires": ["technologyType:warfare"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3779,12 +3227,8 @@
     "names": {
       "platformType:human": "Envoy"
     },
-    "requires": [
-      "technologyType:democracy"
-    ],
-    "upgradesFrom": [
-      "equipmentType:emissary"
-    ],
+    "requires": ["technologyType:democracy"],
+    "upgradesFrom": ["equipmentType:emissary"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3801,12 +3245,8 @@
     "names": {
       "platformType:human": "Ambassador"
     },
-    "requires": [
-      "technologyType:tradeCaravans"
-    ],
-    "upgradesFrom": [
-      "equipmentType:envoy"
-    ],
+    "requires": ["technologyType:tradeCaravans"],
+    "upgradesFrom": ["equipmentType:envoy"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3823,12 +3263,8 @@
     "names": {
       "platformType:human": "Diplomat"
     },
-    "requires": [
-      "technologyType:diplomacy"
-    ],
-    "upgradesFrom": [
-      "equipmentType:ambassador"
-    ],
+    "requires": ["technologyType:diplomacy"],
+    "upgradesFrom": ["equipmentType:ambassador"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3845,9 +3281,7 @@
     "names": {
       "platformType:human": "Thief"
     },
-    "requires": [
-      "technologyType:copperWorking"
-    ],
+    "requires": ["technologyType:copperWorking"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3864,12 +3298,8 @@
     "names": {
       "platformType:human": "Courtier"
     },
-    "requires": [
-      "technologyType:divineRight"
-    ],
-    "upgradesFrom": [
-      "equipmentType:thief"
-    ],
+    "requires": ["technologyType:divineRight"],
+    "upgradesFrom": ["equipmentType:thief"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3886,12 +3316,8 @@
     "names": {
       "platformType:human": "Gentleman"
     },
-    "requires": [
-      "technologyType:diplomacy"
-    ],
-    "upgradesFrom": [
-      "equipmentType:courtier"
-    ],
+    "requires": ["technologyType:diplomacy"],
+    "upgradesFrom": ["equipmentType:courtier"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -3908,12 +3334,8 @@
     "names": {
       "platformType:human": "Spy"
     },
-    "requires": [
-      "technologyType:radio"
-    ],
-    "upgradesFrom": [
-      "equipmentType:gentleman"
-    ],
+    "requires": ["technologyType:radio"],
+    "upgradesFrom": ["equipmentType:gentleman"],
     "yields": [
       {
         "type": "yieldType:productionCost",

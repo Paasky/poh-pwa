@@ -24,6 +24,39 @@ export function useCurrentContext() {
   };
 }
 
+export function useEngineContext() {
+  return {
+    get hover() {
+      return hover.value;
+    },
+    set hover(t) {
+      hover.value = t;
+    },
+    get tile() {
+      return tile.value;
+    },
+    set tile(t) {
+      tile.value = t;
+    },
+    get object() {
+      return object.value;
+    },
+    set object(o) {
+      object.value = o;
+    },
+    get actionMode() {
+      return actionMode.value;
+    },
+    set actionMode(m) {
+      actionMode.value = m;
+    },
+    get currentPlayer() {
+      if (!currentPlayer.value) throw new Error("Current Actor is not set in currentContext");
+      return currentPlayer.value;
+    },
+  };
+}
+
 export function setCurrentPlayer(player: Player) {
   currentPlayer.value = player;
 }

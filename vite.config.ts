@@ -60,7 +60,7 @@ export default defineConfig(async ({ command }) => {
         server.watcher.add(path.resolve(process.cwd(), "data"));
       },
       async handleHotUpdate({ file, server }) {
-        if (file.includes("/data/") && file.endsWith(".json")) {
+        if (file.includes("/data/") && !file.includes("/public/") && file.endsWith(".json")) {
           console.log(`\n⚒ Data changed: ${path.relative(process.cwd(), file)}. Reforging...`);
           try {
             // We import child_process dynamically to keep it out of the global scope
