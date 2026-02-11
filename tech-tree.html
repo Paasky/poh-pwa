@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Tech Tree</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background: #0d1117;
+        font-family: "Segoe UI", system-ui, sans-serif;
+        overflow: hidden;
+      }
+
+      #viewport {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        cursor: grab;
+        position: relative;
+      }
+
+      #viewport.dragging {
+        cursor: grabbing;
+      }
+
+      #canvas-wrap {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform-origin: 0 0;
+      }
+
+      svg#lines {
+        position: absolute;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+      }
+
+      #nodes {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+      .tech-node {
+        position: absolute;
+        width: 160px;
+        background: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 6px;
+        padding: 8px 10px;
+        transition:
+          border-color 0.15s,
+          box-shadow 0.15s;
+        cursor: default;
+        user-select: none;
+      }
+
+      .tech-node:hover {
+        border-color: #58a6ff;
+        box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.2);
+        z-index: 10;
+      }
+
+      .tech-node .title {
+        font-size: 11px;
+        font-weight: 600;
+        color: #e6edf3;
+        margin-bottom: 5px;
+        line-height: 1.3;
+      }
+
+      .tech-node .era {
+        font-size: 9px;
+        color: #8b949e;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+      }
+
+      .tech-node .items {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .tech-node .items li {
+        font-size: 9.5px;
+        color: #7ee787;
+        line-height: 1.3;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .tech-node .items li::before {
+        content: "▸ ";
+        color: #3fb950;
+        font-size: 8px;
+      }
+
+      .tech-node .items li.hidden {
+        display: none;
+      }
+
+      .tech-node .toggle-more {
+        margin-top: 3px;
+        font-size: 9px;
+        color: #58a6ff;
+        cursor: pointer;
+        background: none;
+        border: none;
+        padding: 0;
+        text-align: left;
+        line-height: 1.4;
+      }
+      .tech-node .toggle-more:hover {
+        color: #79c0ff;
+        text-decoration: underline;
+      }
+
+      #hud {
+        position: fixed;
+        bottom: 16px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 8px;
+        z-index: 100;
+      }
+
+      #hud button {
+        background: #21262d;
+        border: 1px solid #30363d;
+        color: #c9d1d9;
+        padding: 6px 14px;
+        border-radius: 6px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: background 0.1s;
+      }
+
+      #hud button:hover {
+        background: #30363d;
+      }
+
+      #info {
+        position: fixed;
+        top: 16px;
+        left: 16px;
+        color: #8b949e;
+        font-size: 11px;
+        z-index: 100;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="viewport">
+      <div id="canvas-wrap">
+        <svg id="lines"></svg>
+        <div id="nodes"></div>
+      </div>
+    </div>
+
+    <div id="hud">
+      <button onclick="resetView()">Reset View</button>
+      <button onclick="zoom(1.2)">+</button>
+      <button onclick="zoom(0.8)">−</button>
+    </div>
+
+    <div id="info">Scroll to zoom · Drag to pan · 164 technologies</div>
+
+    <script>
+      const CELL_W = 50; // px per x grid unit
+      const CELL_H = 80; // px per y grid unit
+      const NODE_W = 160;
+      const NODE_H_MIN = 60;
+      const PAD_X = 30; // canvas padding
+      const PAD_Y = 30;
+
+      fetch("/data/staticData.json")
+        .then((r) => r.json())
+        .then(build);
+
+      function build(data) {
+        const techs = data.types.filter((t) => t.key && t.key.startsWith("technologyType:"));
+        const byKey = {};
+        techs.forEach((t) => (byKey[t.key] = t));
+
+        // ── era colour palette ──────────────────────────────────────────────────────
+        const eraColors = {
+          "eraType:neolithic": "#3fb950",
+          "eraType:ancient": "#d29922",
+          "eraType:classical": "#e3b341",
+          "eraType:medieval": "#a371f7",
+          "eraType:renaissance": "#f78166",
+          "eraType:industrial": "#79c0ff",
+          "eraType:modern": "#58a6ff",
+          "eraType:atomic": "#ffa657",
+          "eraType:digital": "#ff7b72",
+          "eraType:nano": "#d2a8ff",
+        };
+
+        function eraColor(cat) {
+          return eraColors[cat] || "#8b949e";
+        }
+
+        // ── canvas size ─────────────────────────────────────────────────────────────
+        const maxX = Math.max(...techs.map((t) => t.x || 0));
+        const maxY = Math.max(...techs.map((t) => t.y || 0));
+        const W = maxX * CELL_W + NODE_W + PAD_X * 2;
+        const H = maxY * CELL_H + NODE_H_MIN + PAD_Y * 2;
+
+        const svg = document.getElementById("lines");
+        svg.setAttribute("width", W);
+        svg.setAttribute("height", H);
+        svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+
+        // ── node positions (centre of each node) ────────────────────────────────────
+        function nodePos(tech) {
+          return {
+            x: PAD_X + (tech.x || 0) * CELL_W,
+            y: PAD_Y + (tech.y || 0) * CELL_H,
+          };
+        }
+
+        // ── draw nodes ──────────────────────────────────────────────────────────────
+        const container = document.getElementById("nodes");
+        const nodeEls = {};
+
+        techs.forEach((tech) => {
+          const pos = nodePos(tech);
+          const color = eraColor(tech.category);
+
+          // allowed items that are NOT technologyType
+          const allowedItems = (tech.allows || [])
+            .filter((a) => !a.startsWith("technologyType:"))
+            .map((a) => {
+              // pretty-print: "improvementType:farm" → "Farm (Improvement)"
+              const [typeRaw, nameRaw] = a.split(":");
+              const typePretty = typeRaw
+                .replace("Type", "")
+                .replace(/([A-Z])/g, " $1")
+                .trim()
+                .replace(/^./, (c) => c.toUpperCase());
+              const namePretty = nameRaw
+                ? nameRaw
+                    .replace(/([A-Z])/g, " $1")
+                    .replace(/^./, (c) => c.toUpperCase())
+                    .trim()
+                : a;
+              return `${namePretty} (${typePretty})`;
+            });
+
+          const div = document.createElement("div");
+          div.className = "tech-node";
+          div.dataset.key = tech.key;
+          div.style.left = pos.x + "px";
+          div.style.top = pos.y + "px";
+          div.style.borderTopColor = color;
+          div.style.borderTopWidth = "2px";
+
+          const eraLabel = tech.category
+            ? tech.category
+                .replace("eraType:", "")
+                .replace(/([A-Z])/g, " $1")
+                .trim()
+            : "";
+
+          const SHOW = 3;
+          const extraCount = Math.max(0, allowedItems.length - SHOW);
+
+          const itemsHtml = allowedItems.length
+            ? `<ul class="items">${allowedItems
+                .map(
+                  (item, idx) =>
+                    `<li title="${item}"${idx >= SHOW ? ' class="hidden"' : ""}>${item}</li>`,
+                )
+                .join(
+                  "",
+                )}</ul>${extraCount > 0 ? `<button class="toggle-more">+${extraCount} more</button>` : ""}`
+            : "";
+
+          div.innerHTML = `
+            <div class="title">${tech.name} <span style="color:#8b949e;font-weight:400;font-size:9px">(${tech.x ?? 0},${tech.y ?? 0})</span></div>
+            ${eraLabel ? `<div class="era" style="color:${color}">${eraLabel}</div>` : ""}
+            ${itemsHtml}
+          `;
+
+          if (extraCount > 0) {
+            const btn = div.querySelector(".toggle-more");
+            const hiddenItems = div.querySelectorAll(".items li.hidden");
+            btn.addEventListener("click", (e) => {
+              e.stopPropagation();
+              const expanded = btn.dataset.expanded === "1";
+              hiddenItems.forEach((li) => li.classList.toggle("hidden", expanded));
+              btn.dataset.expanded = expanded ? "0" : "1";
+              btn.textContent = expanded ? `+${extraCount} more` : "hide";
+            });
+          }
+
+          container.appendChild(div);
+          nodeEls[tech.key] = { el: div, tech, pos };
+        });
+
+        // ── draw lines ──────────────────────────────────────────────────────────────
+        // Build edges: for each tech, draw to each technologyType it `allows`
+        // Also honour `requires` (draw from required → this)
+        const edges = new Set();
+
+        techs.forEach((tech) => {
+          const src = nodePos(tech);
+
+          // allows → technologyType children
+          (tech.allows || []).forEach((targetKey) => {
+            if (!targetKey.startsWith("technologyType:")) return;
+            const target = byKey[targetKey];
+            if (!target) return;
+            const edgeId = [tech.key, targetKey].sort().join("|");
+            if (edges.has(edgeId)) return;
+            edges.add(edgeId);
+
+            const dst = nodePos(target);
+            drawEdge(svg, src, dst, eraColor(tech.category));
+          });
+
+          // requires → draw from requirement to this node
+          (tech.requires || []).forEach((reqKey) => {
+            if (!reqKey.startsWith("technologyType:")) return;
+            const req = byKey[reqKey];
+            if (!req) return;
+            const edgeId = [tech.key, reqKey].sort().join("|");
+            if (edges.has(edgeId)) return;
+            edges.add(edgeId);
+
+            const reqPos = nodePos(req);
+            drawEdge(svg, reqPos, src, eraColor(req.category));
+          });
+        });
+
+        // ── fit initial view ─────────────────────────────────────────────────────────
+        initPanZoom(W, H);
+      }
+
+      function drawEdge(svg, src, dst, color) {
+        // centres: x + half width, y + half of a nominal node height
+        const x1 = src.x + NODE_W / 2;
+        const y1 = src.y + NODE_H_MIN / 2;
+        const x2 = dst.x + NODE_W / 2;
+        const y2 = dst.y + NODE_H_MIN / 2;
+
+        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        line.setAttribute("x1", x1);
+        line.setAttribute("y1", y1);
+        line.setAttribute("x2", x2);
+        line.setAttribute("y2", y2);
+        line.setAttribute("stroke", color);
+        line.setAttribute("stroke-width", "3");
+        line.setAttribute("stroke-opacity", "0.55");
+        svg.appendChild(line);
+      }
+
+      // ── Pan & Zoom ────────────────────────────────────────────────────────────────
+      let scale = 1,
+        tx = 0,
+        ty = 0;
+      const viewport = document.getElementById("viewport");
+      const wrap = document.getElementById("canvas-wrap");
+
+      function applyTransform() {
+        wrap.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+      }
+
+      function zoom(factor, cx, cy) {
+        const vw = viewport.clientWidth;
+        const vh = viewport.clientHeight;
+        cx = cx ?? vw / 2;
+        cy = cy ?? vh / 2;
+        const newScale = Math.max(0.08, Math.min(3, scale * factor));
+        tx = cx - (cx - tx) * (newScale / scale);
+        ty = cy - (cy - ty) * (newScale / scale);
+        scale = newScale;
+        applyTransform();
+      }
+
+      function resetView() {
+        scale = 1;
+        tx = 0;
+        ty = 0;
+        applyTransform();
+        fitToScreen();
+      }
+
+      function fitToScreen() {
+        const vw = viewport.clientWidth;
+        const vh = viewport.clientHeight;
+        // read actual canvas size from svg
+        const svg = document.getElementById("lines");
+        const cw = parseFloat(svg.getAttribute("width") || 3000);
+        const ch = parseFloat(svg.getAttribute("height") || 1000);
+        const s = Math.min(vw / cw, vh / ch) * 0.95;
+        scale = s;
+        tx = (vw - cw * s) / 2;
+        ty = (vh - ch * s) / 2;
+        applyTransform();
+      }
+
+      // wheel zoom
+      viewport.addEventListener(
+        "wheel",
+        (e) => {
+          e.preventDefault();
+          const factor = e.deltaY < 0 ? 1.1 : 0.9;
+          zoom(factor, e.clientX, e.clientY);
+        },
+        { passive: false },
+      );
+
+      // drag pan
+      let dragging = false,
+        dragStart = { x: 0, y: 0 };
+      viewport.addEventListener("mousedown", (e) => {
+        dragging = true;
+        dragStart = { x: e.clientX - tx, y: e.clientY - ty };
+        viewport.classList.add("dragging");
+      });
+      window.addEventListener("mousemove", (e) => {
+        if (!dragging) return;
+        tx = e.clientX - dragStart.x;
+        ty = e.clientY - dragStart.y;
+        applyTransform();
+      });
+      window.addEventListener("mouseup", () => {
+        dragging = false;
+        viewport.classList.remove("dragging");
+      });
+
+      // touch pan
+      let lastTouch = null;
+      viewport.addEventListener("touchstart", (e) => {
+        if (e.touches.length === 1)
+          lastTouch = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      });
+      viewport.addEventListener(
+        "touchmove",
+        (e) => {
+          e.preventDefault();
+          if (e.touches.length === 1 && lastTouch) {
+            tx += e.touches[0].clientX - lastTouch.x;
+            ty += e.touches[0].clientY - lastTouch.y;
+            lastTouch = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+            applyTransform();
+          }
+        },
+        { passive: false },
+      );
+
+      function initPanZoom(W, H) {
+        setTimeout(fitToScreen, 50);
+      }
+    </script>
+  </body>
+</html>

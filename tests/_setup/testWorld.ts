@@ -1,237 +1,174 @@
-import { Tile } from "../../src/Common/Models/Tile";
-import { GameKey, GameObject } from "../../src/Common/Models/_GameModel";
-import { Player } from "../../src/Common/Models/Player";
-import { Unit } from "../../src/Common/Models/Unit";
-import { City } from "../../src/Common/Models/City";
-import { WorldState } from "@/Common/Objects/World";
-import { useDataBucket } from "../../src/Data/useDataBucket";
-
-export const TestWorldState = {
-  id: "test-world",
-  size: { x: 5, y: 5 },
-  turn: 0,
-  year: -10000,
-  currentPlayerKey: "player:1",
-} as WorldState;
+import { useDataBucket } from "@/Data/useDataBucket";
 
 export function createTestWorld() {
-  const playerKey = "player:1" as GameKey;
-  const cultureKey = "culture:1" as GameKey;
-  const unitDesignKey = "unitDesign:1" as GameKey;
-  const cityKey = "city:1" as GameKey;
-
-  const objects: any[] = [
-    // Actor & Culture
-    {
-      key: playerKey,
-      name: "Test Player",
-      cultureKey: cultureKey,
-      isCurrent: true,
-    },
-    {
-      key: cultureKey,
-      type: "majorCultureType:viking",
-      playerKey: playerKey,
-    },
-
-    // Unit Design
-    {
-      key: unitDesignKey,
-      platform: "platformType:human",
-      equipment: "equipmentType:axe",
-      name: "Axeman",
-      playerKey: playerKey,
-    },
-
-    // Special terrain/objects
-    // (1,1) Land with City & Unit
-    {
-      key: Tile.getKey(1, 1),
-      x: 1,
-      y: 1,
-      domain: "domainType:land",
-      area: "continentType:taiga",
-      climate: "climateType:temperate",
-      terrain: "terrainType:grass",
-      elevation: "elevationType:flat",
-    },
-    {
-      key: cityKey,
-      playerKey: playerKey,
-      tileKey: Tile.getKey(1, 1),
-      name: "Test City",
-    },
-    {
-      key: "unit:1",
-      playerKey: playerKey,
-      designKey: unitDesignKey,
-      tileKey: Tile.getKey(1, 1),
-      moves: 2,
-    },
-
-    // (1,0) Land with River A, (2,0) Land with River B (Crossing check)
-    {
-      key: Tile.getKey(1, 0),
-      x: 1,
-      y: 0,
-      domain: "domainType:land",
-      area: "continentType:taiga",
-      climate: "climateType:temperate",
-      terrain: "terrainType:grass",
-      elevation: "elevationType:flat",
-      riverKey: "river:1",
-    },
-    {
-      key: Tile.getKey(2, 0),
-      x: 2,
-      y: 0,
-      domain: "domainType:land",
-      area: "continentType:taiga",
-      climate: "climateType:temperate",
-      terrain: "terrainType:grass",
-      elevation: "elevationType:flat",
-      riverKey: "river:2",
-    },
-    { key: "river:1", name: "River A", tileKeys: [Tile.getKey(1, 0)] },
-    { key: "river:2", name: "River B", tileKeys: [Tile.getKey(2, 0)] },
-
-    // (2,1) Hill
-    {
-      key: Tile.getKey(2, 1),
-      x: 2,
-      y: 1,
-      domain: "domainType:land",
-      area: "continentType:taiga",
-      climate: "climateType:temperate",
-      terrain: "terrainType:grass",
-      elevation: "elevationType:hill",
-    },
-    // (3,1) Mountain
-    {
-      key: Tile.getKey(3, 1),
-      x: 3,
-      y: 1,
-      domain: "domainType:land",
-      area: "continentType:taiga",
-      climate: "climateType:temperate",
-      terrain: "terrainType:grass",
-      elevation: "elevationType:mountain",
-    },
-    // (4,1) Snow Mountain
-    {
-      key: Tile.getKey(4, 1),
-      x: 4,
-      y: 1,
-      domain: "domainType:land",
-      area: "continentType:taiga",
-      climate: "climateType:temperate",
-      terrain: "terrainType:grass",
-      elevation: "elevationType:snowMountain",
-    },
-
-    // Water types
-    // (1,2) Coast
-    {
-      key: Tile.getKey(1, 2),
-      x: 1,
-      y: 2,
-      domain: "domainType:water",
-      area: "continentType:taiga",
-      climate: "climateType:temperate",
-      terrain: "terrainType:coast",
-      elevation: "elevationType:flat",
-    },
-    // (2,2) Sea
-    {
-      key: Tile.getKey(2, 2),
-      x: 2,
-      y: 2,
-      domain: "domainType:water",
-      area: "continentType:taiga",
-      climate: "climateType:temperate",
-      terrain: "terrainType:sea",
-      elevation: "elevationType:flat",
-    },
-    // (3,2) Ocean
-    {
-      key: Tile.getKey(3, 2),
-      x: 3,
-      y: 2,
-      domain: "domainType:water",
-      area: "continentType:taiga",
-      climate: "climateType:temperate",
-      terrain: "terrainType:ocean",
-      elevation: "elevationType:flat",
-    },
-    // (4,2) Lake
-    {
-      key: Tile.getKey(4, 2),
-      x: 4,
-      y: 2,
-      domain: "domainType:water",
-      area: "continentType:taiga",
-      climate: "climateType:temperate",
-      terrain: "terrainType:lake",
-      elevation: "elevationType:flat",
-    },
-
-    // Features
-    // (0,1) Forest
-    {
-      key: Tile.getKey(0, 1),
-      x: 0,
-      y: 1,
-      domain: "domainType:land",
-      area: "continentType:taiga",
-      climate: "climateType:temperate",
-      terrain: "terrainType:grass",
-      elevation: "elevationType:flat",
-      feature: "featureType:forest",
-    },
-    // (1,3) Ice
-    {
-      key: Tile.getKey(1, 3),
-      x: 1,
-      y: 3,
-      domain: "domainType:water",
-      area: "continentType:taiga",
-      climate: "climateType:temperate",
-      terrain: "terrainType:coast",
-      elevation: "elevationType:flat",
-      feature: "featureType:ice",
-    },
-  ];
-
-  // Fill the rest of the 5x5 grid with flat grass
-  for (let x = 0; x < 5; x++) {
-    for (let y = 0; y < 5; y++) {
-      const key = Tile.getKey(x, y);
-      if (!objects.find((o: any) => o.key === key)) {
-        objects.push({
-          key,
-          x,
-          y,
-          domain: "domainType:land",
-          area: "continentType:taiga",
-          climate: "climateType:temperate",
-          terrain: "terrainType:grass",
-          elevation: "elevationType:flat",
-        });
-      }
-    }
-  }
-
-  const bucket = useDataBucket();
-  bucket.setRawObjects(objects);
-
-  return {
-    player: bucket.getObject<Player>(playerKey),
-    unit: bucket.getObject<Unit>("unit:1"),
-    city: bucket.getObject<City>(cityKey),
-    tiles: bucket.getTiles(),
-    gameObjects: Object.fromEntries(bucket.getObjects().map((o) => [o.key, o])) as Record<
-      GameKey,
-      GameObject
-    >,
-  };
+  // todo
+  useDataBucket().setRawObjects(tilesData.map((tile) => ({ key: `tile:${tile.x}:${tile.y}` })));
+  useDataBucket().setWorld({
+    id: "test-world",
+    size:,
+    turn:0,
+    year:-10000,
+  });
 }
+
+const tilesData = [
+  { x: 0, y: 0, terrain: "ocean", feature: "ice" },
+  { x: 1, y: 0, terrain: "sea", feature: "ice" },
+  { x: 2, y: 0, terrain: "coast" },
+  { x: 3, y: 0, terrain: "snow" },
+  { x: 4, y: 0, terrain: "snow" },
+  { x: 5, y: 0, terrain: "snow" },
+  { x: 6, y: 0, terrain: "snow", feature: "ice" },
+  { x: 7, y: 0, terrain: "snow", feature: "ice" },
+  { x: 8, y: 0, terrain: "snow" },
+  { x: 9, y: 0, terrain: "snow" },
+  { x: 10, y: 0, terrain: "snow" },
+  { x: 11, y: 0, terrain: "snow" },
+  { x: 12, y: 0, terrain: "coast" },
+  { x: 13, y: 0, terrain: "sea" },
+  { x: 14, y: 0, terrain: "ocean", feature: "ice" },
+
+  { x: 0, y: 1, terrain: "sea", feature: "ice" },
+  { x: 1, y: 1, terrain: "coast" },
+  { x: 2, y: 1, terrain: "tundra", feature: "swamp" },
+  { x: 3, y: 1, terrain: "tundra", feature: "swamp" },
+  { x: 4, y: 1, terrain: "tundra" },
+  { x: 5, y: 1, terrain: "tundra", feature: "pineForest" },
+  { x: 6, y: 1, terrain: "snow", feature: "ice" },
+  { x: 7, y: 1, terrain: "tundra" },
+  { x: 8, y: 1, terrain: "tundra", elevation: "hills" },
+  { x: 9, y: 1, terrain: "tundra", elevation: "hills" },
+  { x: 10, y: 1, terrain: "tundra", elevation: "mountain" },
+  { x: 11, y: 1, terrain: "tundra" },
+  { x: 12, y: 1, terrain: "coast" },
+  { x: 13, y: 1, terrain: "sea" },
+  { x: 14, y: 1, terrain: "sea" },
+
+  { x: 0, y: 2, terrain: "coast" },
+  { x: 1, y: 2, terrain: "coast" },
+  { x: 2, y: 2, terrain: "grass" },
+  { x: 3, y: 2, terrain: "grass", feature: "swamp" },
+  { x: 4, y: 2, terrain: "grass" },
+  { x: 5, y: 2, terrain: "tundra", feature: "pineForest", elevation: "hills" },
+  { x: 6, y: 2, terrain: "tundra", feature: "pineForest" },
+  { x: 7, y: 2, terrain: "tundra" },
+  { x: 8, y: 2, terrain: "lake", feature: "kelp" },
+  { x: 9, y: 2, terrain: "tundra", elevation: "hills" },
+  { x: 10, y: 2, terrain: "tundra", elevation: "mountain" },
+  { x: 11, y: 2, terrain: "tundra", elevation: "mountain" },
+  { x: 12, y: 2, terrain: "majorRiver" },
+  { x: 13, y: 2, terrain: "coast" },
+  { x: 14, y: 2, terrain: "coast" },
+
+  { x: 0, y: 3, terrain: "desert" },
+  { x: 1, y: 3, terrain: "plains" },
+  { x: 2, y: 3, terrain: "plains", feature: "shrubs", elevation: "hills" },
+  { x: 3, y: 3, terrain: "grass" },
+  { x: 4, y: 3, terrain: "grass", feature: "forest", elevation: "hills" },
+  { x: 5, y: 3, terrain: "grass", feature: "forest" },
+  { x: 6, y: 3, terrain: "grass" },
+  { x: 7, y: 3, terrain: "lake", feature: "kelp" },
+  { x: 8, y: 3, terrain: "lake", feature: "kelp" },
+  { x: 9, y: 3, terrain: "majorRiver" },
+  { x: 10, y: 3, terrain: "grass" },
+  { x: 11, y: 3, terrain: "majorRiver" },
+  { x: 12, y: 3, terrain: "desert", feature: "floodPlain" },
+  { x: 13, y: 3, terrain: "desert" },
+  { x: 14, y: 3, terrain: "desert" },
+
+  { x: 0, y: 4, terrain: "plains" },
+  { x: 1, y: 4, terrain: "plains" },
+  { x: 2, y: 4, terrain: "plains", feature: "shrubs" },
+  { x: 3, y: 4, terrain: "plains", feature: "shrubs" },
+  { x: 4, y: 4, terrain: "grass" },
+  { x: 5, y: 4, terrain: "grass", feature: "forest" },
+  { x: 6, y: 4, terrain: "grass" },
+  { x: 7, y: 4, terrain: "majorRiver", route: "stoneBridge" },
+  { x: 8, y: 4, terrain: "lake" },
+  { x: 9, y: 4, terrain: "plains", elevation: "snowMountain" },
+  { x: 10, y: 4, terrain: "majorRiver" },
+  { x: 11, y: 4, terrain: "majorRiver" },
+  { x: 12, y: 4, terrain: "desert", feature: "floodPlain" },
+  { x: 13, y: 4, terrain: "desert" },
+  { x: 14, y: 4, terrain: "coast" },
+
+  { x: 0, y: 5, terrain: "grass" },
+  { x: 1, y: 5, terrain: "grass" },
+  { x: 2, y: 5, terrain: "grass" },
+  { x: 3, y: 5, terrain: "grass" },
+  { x: 4, y: 5, terrain: "majorRiver" },
+  { x: 5, y: 5, terrain: "majorRiver" },
+  { x: 6, y: 5, terrain: "majorRiver" },
+  { x: 7, y: 5, terrain: "plains" },
+  { x: 8, y: 5, terrain: "plains", elevation: "snowMountain" },
+  { x: 9, y: 5, terrain: "plains", elevation: "snowMountain" },
+  { x: 10, y: 5, terrain: "grass", feature: "jungle", elevation: "hills" },
+  { x: 11, y: 5, terrain: "plains" },
+  { x: 12, y: 5, terrain: "grass" },
+  { x: 13, y: 5, terrain: "tundra" },
+  { x: 14, y: 5, terrain: "coast" },
+
+  { x: 0, y: 6, terrain: "tundra" },
+  { x: 1, y: 6, terrain: "coast" },
+  { x: 2, y: 6, terrain: "coast" },
+  { x: 3, y: 6, terrain: "coast" },
+  { x: 4, y: 6, terrain: "grass", route: "canal" },
+  { x: 5, y: 6, terrain: "grass" },
+  { x: 6, y: 6, terrain: "grass" },
+  { x: 7, y: 6, terrain: "grass" },
+  { x: 8, y: 6, terrain: "grass" },
+  { x: 9, y: 6, terrain: "grass" },
+  { x: 10, y: 6, terrain: "grass", feature: "jungle" },
+  { x: 11, y: 6, terrain: "grass", feature: "jungle" },
+  { x: 12, y: 6, terrain: "grass" },
+  { x: 13, y: 6, terrain: "tundra" },
+  { x: 14, y: 6, terrain: "coast" },
+
+  { x: 0, y: 7, terrain: "coast" },
+  { x: 1, y: 7, terrain: "sea" },
+  { x: 2, y: 7, terrain: "sea" },
+  { x: 3, y: 7, terrain: "coast" },
+  { x: 4, y: 7, terrain: "tundra" },
+  { x: 5, y: 7, terrain: "tundra" },
+  { x: 6, y: 7, terrain: "coast", feature: "atoll" },
+  { x: 7, y: 7, terrain: "coast" },
+  { x: 8, y: 7, terrain: "coast", feature: "lagoon" },
+  { x: 9, y: 7, terrain: "tundra" },
+  { x: 10, y: 7, terrain: "coast" },
+  { x: 11, y: 7, terrain: "coast" },
+  { x: 12, y: 7, terrain: "coast" },
+  { x: 13, y: 7, terrain: "coast" },
+  { x: 14, y: 7, terrain: "sea" },
+
+  { x: 0, y: 8, terrain: "sea" },
+  { x: 1, y: 8, terrain: "sea" },
+  { x: 2, y: 8, terrain: "ocean" },
+  { x: 3, y: 8, terrain: "sea" },
+  { x: 4, y: 8, terrain: "coast" },
+  { x: 5, y: 8, terrain: "coast" },
+  { x: 6, y: 8, terrain: "coast" },
+  { x: 7, y: 8, terrain: "sea" },
+  { x: 8, y: 8, terrain: "sea" },
+  { x: 9, y: 8, terrain: "coast" },
+  { x: 10, y: 8, terrain: "coast" },
+  { x: 11, y: 8, terrain: "sea" },
+  { x: 12, y: 8, terrain: "sea" },
+  { x: 13, y: 8, terrain: "sea" },
+  { x: 14, y: 8, terrain: "sea" },
+
+  { x: 0, y: 9, terrain: "ocean" },
+  { x: 1, y: 9, terrain: "ocean" },
+  { x: 2, y: 9, terrain: "ocean" },
+  { x: 3, y: 9, terrain: "sea" },
+  { x: 4, y: 9, terrain: "sea" },
+  { x: 5, y: 9, terrain: "sea" },
+  { x: 6, y: 9, terrain: "sea" },
+  { x: 7, y: 9, terrain: "ocean" },
+  { x: 8, y: 9, terrain: "sea" },
+  { x: 9, y: 9, terrain: "sea" },
+  { x: 10, y: 9, terrain: "sea" },
+  { x: 11, y: 9, terrain: "ocean", feature: "tradeWind" },
+  { x: 12, y: 9, terrain: "ocean", feature: "tradeWind" },
+  { x: 13, y: 9, terrain: "ocean", feature: "tradeWind" },
+  { x: 14, y: 9, terrain: "ocean" },
+];

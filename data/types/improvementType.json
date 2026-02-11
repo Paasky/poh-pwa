@@ -700,7 +700,7 @@
     "key": "improvementType:rockPit",
     "name": "Rock Pit",
     "requires": [
-      "technologyType:mining",
+      "technologyType:pitMining",
       "domainType:land",
       [
         "elevationType:hill",
@@ -725,7 +725,7 @@
     "key": "improvementType:quarry",
     "name": "Quarry",
     "requires": [
-      "technologyType:bronzeWorking",
+      "technologyType:mining",
       "domainType:land",
       [
         "elevationType:hill",
@@ -1012,7 +1012,7 @@
     "key": "improvementType:minePit",
     "name": "Mine Pit",
     "requires": [
-      "technologyType:mining"
+      "technologyType:pitMining"
     ],
     "specials": [
       "specialType:onlyOnResource"
@@ -1035,7 +1035,7 @@
     "key": "improvementType:mine",
     "name": "Mine",
     "requires": [
-      "technologyType:bronzeWorking"
+      "technologyType:mining"
     ],
     "specials": [
       "specialType:onlyOnResource"

@@ -26,22 +26,14 @@ describe("Buses Test", () => {
     const eventLog: PohEvent[] = [];
     const store = new DataStore();
 
-    // Simple test data: Player moves Unit
-    const player = {
-      key: "player:1" as GameKey,
-    } as Player;
-    const unit = {
-      key: "unit:1" as GameKey,
-      tileKey: tileKey(0, 0),
-    } as Unit;
-
     useDataBucket().setObject(player);
     useDataBucket().setObject(unit);
 
     // Player pushes an action -> picked up -> converted to mutation -> set to store -> pushed as event
     const actions: PohAction[] = [
-      {
-        type: "actionType:move",
+      new PohAction(
+        "actionType:move",
+        player,
         turn: 1,
         timestamp: 123456789,
         tileKey: tileKey(0, 1),
@@ -49,13 +41,10 @@ describe("Buses Test", () => {
       },
     ];
     const mutations: PohMutation<Player | Unit>[] = [
-      {
-        type: "update",
-        payload: {
-          key: actions[0].unitKey!,
-          tileKey: actions[0].tileKey!,
-        },
-      },
+      new PohMutation<Player | Unit>("update", {
+        key: actions[0].unitKey!,
+        tileKey: actions[0].tileKey!,
+      }),
     ];
     const events: PohEvent[] = [
       {

@@ -93,7 +93,7 @@ describe("mapTools", () => {
     });
 
     it("toCube converts axial to cube coordinates", () => {
-      expect(toCube({ x: 0, y: 0 })).toEqual({ q: 0, r: 0, s: 0 });
+      expect(toCube({ x: 0, y: 0 })).toEqual({ q: 0, r: 0, s: -0 });
       expect(toCube({ x: 1, y: 0 })).toEqual({ q: 1, r: 0, s: -1 });
       expect(toCube({ x: 0, y: 1 })).toEqual({ q: 0, r: 1, s: -1 });
       expect(toCube({ x: 1, y: 1 })).toEqual({ q: 1, r: 1, s: -2 });

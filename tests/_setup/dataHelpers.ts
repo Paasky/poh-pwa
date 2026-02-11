@@ -9,7 +9,18 @@ import path from "path";
 import { execSync } from "child_process";
 import { CompiledStaticData } from "@/Data/StaticDataCompiler";
 
+/**************************
+ * Test Data Bucket Setup *
+ **************************/
+
 let rawDataCache: CompiledStaticData | null = null;
+
+export async function initTestDataBucket(
+  gameData?: IRawGameObject[],
+  world?: WorldState,
+): Promise<DataBucket> {
+  return setDataBucket(DataBucket.fromRaw(getRawStaticData(), world ?? TestWorldState, gameData));
+}
 
 export function getRawStaticData(): CompiledStaticData {
   if (rawDataCache) return rawDataCache;
@@ -28,14 +39,61 @@ export function getRawStaticData(): CompiledStaticData {
   return rawDataCache!;
 }
 
-export async function initTestDataBucket(
-  gameData?: IRawGameObject[],
-  world?: WorldState,
-): Promise<DataBucket> {
-  return setDataBucket(DataBucket.fromRaw(getRawStaticData(), world ?? TestWorldState, gameData));
+/**************************
+ * Model Raw Data         *
+ **************************/
+
+export function citizenRawData(key: GameKey = "citizen:1", overrides: any = {}): IRawGameObject[] {
+  const data = {
+    key,
+    cityKey: "city:1",
+    cultureKey: "culture:1",
+    playerKey: "player:1",
+    tileKey: tileKey(0, 0),
+    ...overrides,
+  } as any;
+
+  // TypeObject fields must not be null if we don't want GameDataLoader to attempt resolution
+  if (data.policy === null || data.policy === undefined) delete data.policy;
+  if (data.religionKey === null || data.religionKey === undefined) delete data.religionKey;
+
+  return [data];
 }
 
-// NOTE: using any is allowed here as otherwise TS will complain about nonexistent properties
+export function cityRawData(key: GameKey = "city:1", overrides: any = {}): IRawGameObject[] {
+  return [
+    {
+      key,
+      playerKey: "player:1",
+      tileKey: tileKey(0, 0),
+      name: "Test City",
+      canAttack: false,
+      health: 100,
+      isCapital: false,
+      ...overrides,
+    } as any,
+  ];
+}
+
+export function constructionRawData(
+  key: GameKey = "construction:1",
+  overrides: any = {},
+): IRawGameObject[] {
+  const data = {
+    key,
+    type: "buildingType:granary",
+    tileKey: tileKey(0, 0),
+    cityKey: null,
+    health: 100,
+    progress: 0,
+    ...overrides,
+  } as any;
+
+  if (data.cityKey === null) delete data.cityKey;
+
+  return [data];
+}
+
 export function cultureRawData(key: GameKey = "culture:1", overrides: any = {}): IRawGameObject[] {
   return [
     {
@@ -82,6 +140,36 @@ export function playerRawData(key: GameKey = "player:1", overrides: any = {}): I
   ];
 }
 
+export function religionRawData(
+  key: GameKey = "religion:1",
+  overrides: any = {},
+): IRawGameObject[] {
+  return [
+    {
+      key,
+      cityKey: "city:1",
+      name: "Test Religion",
+      foundedTurn: 1,
+      status: "myths",
+      myths: [],
+      gods: [],
+      dogmas: [],
+      ...overrides,
+    } as any,
+  ];
+}
+
+export function riverRawData(key: GameKey = "river:1", overrides: any = {}): IRawGameObject[] {
+  return [
+    {
+      key,
+      name: "Test River",
+      tileKeys: [],
+      ...overrides,
+    } as any,
+  ];
+}
+
 export function tileRawData(key: GameKey = tileKey(0, 0), overrides: any = {}): IRawGameObject[] {
   return [
     {
@@ -98,36 +186,20 @@ export function tileRawData(key: GameKey = tileKey(0, 0), overrides: any = {}): 
   ];
 }
 
-export function cityRawData(key: GameKey = "city:1", overrides: any = {}): IRawGameObject[] {
+export function tradeRouteRawData(
+  key: GameKey = "tradeRoute:1",
+  overrides: any = {},
+): IRawGameObject[] {
   return [
     {
       key,
-      playerKey: "player:1",
-      tileKey: tileKey(0, 0),
-      name: "Test City",
-      canAttack: false,
-      health: 100,
-      isCapital: false,
+      city1Key: "city:1",
+      city2Key: "city:2",
+      tileKeys: [],
+      unitKey: "unit:1",
       ...overrides,
     } as any,
   ];
-}
-
-export function citizenRawData(key: GameKey = "citizen:1", overrides: any = {}): IRawGameObject[] {
-  const data = {
-    key,
-    cityKey: "city:1",
-    cultureKey: "culture:1",
-    playerKey: "player:1",
-    tileKey: tileKey(0, 0),
-    ...overrides,
-  } as any;
-
-  // TypeObject fields must not be null if we don't want GameDataLoader to attempt resolution
-  if (data.policy === null || data.policy === undefined) delete data.policy;
-  if (data.religionKey === null || data.religionKey === undefined) delete data.religionKey;
-
-  return [data];
 }
 
 export function unitDesignRawData(
@@ -167,69 +239,4 @@ export function unitRawData(key: GameKey = "unit:1", overrides: any = {}): IRawG
   if (data.action === null) delete data.action;
 
   return [data];
-}
-
-export function constructionRawData(
-  key: GameKey = "construction:1",
-  overrides: any = {},
-): IRawGameObject[] {
-  const data = {
-    key,
-    type: "buildingType:granary",
-    tileKey: tileKey(0, 0),
-    cityKey: null,
-    health: 100,
-    progress: 0,
-    ...overrides,
-  } as any;
-
-  if (data.cityKey === null) delete data.cityKey;
-
-  return [data];
-}
-
-export function religionRawData(
-  key: GameKey = "religion:1",
-  overrides: any = {},
-): IRawGameObject[] {
-  return [
-    {
-      key,
-      cityKey: "city:1",
-      name: "Test Religion",
-      foundedTurn: 1,
-      status: "myths",
-      myths: [],
-      gods: [],
-      dogmas: [],
-      ...overrides,
-    } as any,
-  ];
-}
-
-export function riverRawData(key: GameKey = "river:1", overrides: any = {}): IRawGameObject[] {
-  return [
-    {
-      key,
-      name: "Test River",
-      tileKeys: [],
-      ...overrides,
-    } as any,
-  ];
-}
-
-export function tradeRouteRawData(
-  key: GameKey = "tradeRoute:1",
-  overrides: any = {},
-): IRawGameObject[] {
-  return [
-    {
-      key,
-      city1Key: "city:1",
-      city2Key: "city:2",
-      tileKeys: [],
-      unitKey: "unit:1",
-      ...overrides,
-    } as any,
-  ];
 }

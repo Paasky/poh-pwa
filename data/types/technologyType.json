@@ -32,7 +32,7 @@
       "source": "Instruction of Amenemope, 1100 BCE",
       "url": "/media/quotes/technologyType/agriculture.mp3"
     },
-    "x": 4,
+    "x": 8,
     "y": 0,
     "yields": [
       {
@@ -53,7 +53,7 @@
       "source": "Proverbs, ca. 400 BCE",
       "url": "/media/quotes/technologyType/trapping.mp3"
     },
-    "x": 8,
+    "x": 4,
     "y": 0,
     "yields": [
       {
@@ -95,10 +95,7 @@
       "source": "Mesopotamian proverb",
       "url": "/media/quotes/technologyType/herbalRemedies.mp3"
     },
-    "requires": [
-      "technologyType:agriculture",
-      "technologyType:trapping"
-    ],
+    "requires": ["technologyType:trapping"],
     "x": 4,
     "y": 2,
     "yields": [
@@ -120,10 +117,7 @@
       "source": "Saʿdī, The Gulistān, 1258",
       "url": "/media/quotes/technologyType/woodWorking.mp3"
     },
-    "requires": [
-      "technologyType:trapping",
-      "technologyType:animalHusbandry"
-    ],
+    "requires": ["technologyType:animalHusbandry"],
     "x": 12,
     "y": 2,
     "yields": [
@@ -145,9 +139,7 @@
       "source": "Chinese proverb",
       "url": "/media/quotes/technologyType/mysticism.mp3"
     },
-    "requires": [
-      "technologyType:herbalRemedies"
-    ],
+    "requires": ["technologyType:herbalRemedies"],
     "x": 2,
     "y": 4,
     "yields": [
@@ -169,9 +161,7 @@
       "source": "Yoruba proverb",
       "url": "/media/quotes/technologyType/tradition.mp3"
     },
-    "requires": [
-      "technologyType:herbalRemedies"
-    ],
+    "requires": ["technologyType:herbalRemedies", "technologyType:settlements"],
     "x": 6,
     "y": 4,
     "yields": [
@@ -193,9 +183,7 @@
       "source": "Egyptian mining proverb, ca. 1000 BCE",
       "url": "/media/quotes/technologyType/pitMining.mp3"
     },
-    "requires": [
-      "technologyType:woodWorking"
-    ],
+    "requires": ["technologyType:woodWorking", "technologyType:settlements"],
     "x": 10,
     "y": 4,
     "yields": [
@@ -217,9 +205,7 @@
       "source": "Sun Tzu, ca. 500 BCE",
       "url": "/media/quotes/technologyType/warfare.mp3"
     },
-    "requires": [
-      "technologyType:woodWorking"
-    ],
+    "requires": ["technologyType:woodWorking"],
     "x": 14,
     "y": 4,
     "yields": [
@@ -241,10 +227,7 @@
       "source": "Sumerian proverb, ca. 1800 BCE",
       "url": "/media/quotes/technologyType/trade.mp3"
     },
-    "requires": [
-      "technologyType:sailing",
-      "technologyType:mysticism"
-    ],
+    "requires": ["technologyType:sailing", "technologyType:mysticism"],
     "x": 0,
     "y": 7,
     "yields": [
@@ -266,10 +249,7 @@
       "source": "Hittite proverb, ca. 1300 BCE",
       "url": "/media/quotes/technologyType/copperWorking.mp3"
     },
-    "requires": [
-      "technologyType:mysticism",
-      "technologyType:tradition"
-    ],
+    "requires": ["technologyType:mysticism", "technologyType:tradition"],
     "x": 4,
     "y": 7,
     "yields": [
@@ -291,10 +271,7 @@
       "source": "The Death of Ur-Namma, ca. 2000 BCE",
       "url": "/media/quotes/technologyType/wheel.mp3"
     },
-    "requires": [
-      "technologyType:tradition",
-      "technologyType:pitMining"
-    ],
+    "requires": ["technologyType:tradition", "technologyType:pitMining"],
     "x": 8,
     "y": 7,
     "yields": [
@@ -316,10 +293,7 @@
       "source": "Hebrew Bible, 1 Samuel 17, ca. 600 BCE",
       "url": "/media/quotes/technologyType/slings.mp3"
     },
-    "requires": [
-      "technologyType:pitMining",
-      "technologyType:warfare"
-    ],
+    "requires": ["technologyType:pitMining", "technologyType:warfare"],
     "x": 12,
     "y": 7,
     "yields": [
@@ -341,11 +315,7 @@
       "source": "Assyrian merchant letter, ca. 1900 BCE",
       "url": "/media/quotes/technologyType/commerce.mp3"
     },
-    "requires": [
-      "technologyType:trade",
-      "technologyType:copperWorking",
-      "technologyType:wheel"
-    ],
+    "requires": ["technologyType:trade", "technologyType:copperWorking", "technologyType:wheel"],
     "x": 4,
     "y": 9,
     "yields": [
@@ -367,10 +337,7 @@
       "source": "Lament for Sumer and Urim, ca. 2000 BCE",
       "url": "/media/quotes/technologyType/sieging.mp3"
     },
-    "requires": [
-      "technologyType:wheel",
-      "technologyType:slings"
-    ],
+    "requires": ["technologyType:wheel", "technologyType:slings"],
     "x": 10,
     "y": 9,
     "yields": [
@@ -392,9 +359,7 @@
       "source": "Babylonian astronomical text, ca. 1000 BCE",
       "url": "/media/quotes/technologyType/calendar.mp3"
     },
-    "requires": [
-      "technologyType:commerce"
-    ],
+    "requires": ["technologyType:commerce"],
     "x": 4,
     "y": 11,
     "yields": [
@@ -416,9 +381,7 @@
       "source": "Chinese proverb, ca. 300 BCE",
       "url": "/media/quotes/technologyType/bronzeWorking.mp3"
     },
-    "requires": [
-      "technologyType:calendar"
-    ],
+    "requires": ["technologyType:calendar"],
     "x": 4,
     "y": 14,
     "yields": [
@@ -440,10 +403,7 @@
       "source": "Isaiah 29, ca. 700 BCE",
       "url": "/media/quotes/technologyType/pottery.mp3"
     },
-    "requires": [
-      "technologyType:calendar",
-      "technologyType:sieging"
-    ],
+    "requires": ["technologyType:calendar", "technologyType:sieging"],
     "x": 8,
     "y": 14,
     "yields": [
@@ -465,9 +425,7 @@
       "source": "Job 28, ca. 600 BCE",
       "url": "/media/quotes/technologyType/mining.mp3"
     },
-    "requires": [
-      "technologyType:bronzeWorking"
-    ],
+    "requires": ["technologyType:bronzeWorking"],
     "x": 2,
     "y": 16,
     "yields": [
@@ -489,10 +447,7 @@
       "source": "Egyptian wisdom text, ca. 1500 BCE",
       "url": "/media/quotes/technologyType/irrigation.mp3"
     },
-    "requires": [
-      "technologyType:bronzeWorking",
-      "technologyType:pottery"
-    ],
+    "requires": ["technologyType:bronzeWorking", "technologyType:pottery"],
     "x": 8,
     "y": 16,
     "yields": [
@@ -514,9 +469,7 @@
       "source": "Greek proverb, ca. 400 BCE",
       "url": "/media/quotes/technologyType/shipBuilding.mp3"
     },
-    "requires": [
-      "technologyType:mining"
-    ],
+    "requires": ["technologyType:mining"],
     "x": 2,
     "y": 18,
     "yields": [
@@ -538,9 +491,7 @@
       "source": "Egyptian proverb, ca. 1250 BCE",
       "url": "/media/quotes/technologyType/writing.mp3"
     },
-    "requires": [
-      "technologyType:irrigation"
-    ],
+    "requires": ["technologyType:irrigation"],
     "x": 8,
     "y": 18,
     "yields": [
@@ -562,9 +513,7 @@
       "source": "Polynesian proverb, ca. 1800 CE",
       "url": "/media/quotes/technologyType/celestialNavigation.mp3"
     },
-    "requires": [
-      "technologyType:shipBuilding"
-    ],
+    "requires": ["technologyType:shipBuilding"],
     "x": 2,
     "y": 21,
     "yields": [
@@ -586,10 +535,7 @@
       "source": "African proverb, ca. 1900",
       "url": "/media/quotes/technologyType/bronzeSmithing.mp3"
     },
-    "requires": [
-      "technologyType:shipBuilding",
-      "technologyType:writing"
-    ],
+    "requires": ["technologyType:shipBuilding", "technologyType:writing"],
     "x": 6,
     "y": 21,
     "yields": [
@@ -611,9 +557,7 @@
       "source": "Babylonian proverb, ca. 1700 BCE",
       "url": "/media/quotes/technologyType/government.mp3"
     },
-    "requires": [
-      "technologyType:writing"
-    ],
+    "requires": ["technologyType:writing"],
     "x": 10,
     "y": 21,
     "yields": [
@@ -635,10 +579,7 @@
       "source": "Egyptian military text, ca. 1200 BCE",
       "url": "/media/quotes/technologyType/archery.mp3"
     },
-    "requires": [
-      "technologyType:celestialNavigation",
-      "technologyType:bronzeSmithing"
-    ],
+    "requires": ["technologyType:celestialNavigation", "technologyType:bronzeSmithing"],
     "x": 4,
     "y": 23,
     "yields": [
@@ -660,10 +601,7 @@
       "source": "Mesopotamian proverb, ca. 2000 BCE",
       "url": "/media/quotes/technologyType/organizedReligion.mp3"
     },
-    "requires": [
-      "technologyType:bronzeSmithing",
-      "technologyType:government"
-    ],
+    "requires": ["technologyType:bronzeSmithing", "technologyType:government"],
     "x": 8,
     "y": 23,
     "yields": [
@@ -685,9 +623,7 @@
       "source": "Code of Hammurabi, ca. 1750 BCE",
       "url": "/media/quotes/technologyType/codeOfLaw.mp3"
     },
-    "requires": [
-      "technologyType:government"
-    ],
+    "requires": ["technologyType:government"],
     "x": 12,
     "y": 23,
     "yields": [
@@ -709,9 +645,7 @@
       "source": "Greek proverb, ca. 400 BCE",
       "url": "/media/quotes/technologyType/militaryTraining.mp3"
     },
-    "requires": [
-      "technologyType:archery"
-    ],
+    "requires": ["technologyType:archery"],
     "x": 2,
     "y": 25,
     "yields": [
@@ -733,10 +667,7 @@
       "source": "Chinese proverb, ca. 300 BCE",
       "url": "/media/quotes/technologyType/bronzeCasting.mp3"
     },
-    "requires": [
-      "technologyType:archery",
-      "technologyType:organizedReligion"
-    ],
+    "requires": ["technologyType:archery", "technologyType:organizedReligion"],
     "x": 6,
     "y": 25,
     "yields": [
@@ -758,10 +689,7 @@
       "source": "Persian proverb, ca. 500 BCE",
       "url": "/media/quotes/technologyType/currency.mp3"
     },
-    "requires": [
-      "technologyType:organizedReligion",
-      "technologyType:codeOfLaw"
-    ],
+    "requires": ["technologyType:organizedReligion", "technologyType:codeOfLaw"],
     "x": 10,
     "y": 25,
     "yields": [
@@ -783,9 +711,7 @@
       "source": "William Shakespeare, Richard III, 1594",
       "url": "/media/quotes/technologyType/riding.mp3"
     },
-    "requires": [
-      "technologyType:militaryTraining"
-    ],
+    "requires": ["technologyType:militaryTraining"],
     "x": 0,
     "y": 28,
     "yields": [
@@ -807,10 +733,7 @@
       "source": "Assyrian inscription, ca. 800 BCE",
       "url": "/media/quotes/technologyType/ironWorking.mp3"
     },
-    "requires": [
-      "technologyType:militaryTraining",
-      "technologyType:bronzeCasting"
-    ],
+    "requires": ["technologyType:militaryTraining", "technologyType:bronzeCasting"],
     "x": 4,
     "y": 28,
     "yields": [
@@ -832,10 +755,7 @@
       "source": "Carthaginian proverb, ca. 500 BCE",
       "url": "/media/quotes/technologyType/shipEngineering.mp3"
     },
-    "requires": [
-      "technologyType:bronzeCasting",
-      "technologyType:currency"
-    ],
+    "requires": ["technologyType:bronzeCasting", "technologyType:currency"],
     "x": 8,
     "y": 28,
     "yields": [
@@ -857,9 +777,7 @@
       "source": "Olympic inscription, ca. 300 BCE",
       "url": "/media/quotes/technologyType/sports.mp3"
     },
-    "requires": [
-      "technologyType:currency"
-    ],
+    "requires": ["technologyType:currency"],
     "x": 12,
     "y": 28,
     "yields": [
@@ -881,10 +799,7 @@
       "source": "Zhuangzi, ca. 300 BCE",
       "url": "/media/quotes/technologyType/philosophy.mp3"
     },
-    "requires": [
-      "technologyType:riding",
-      "technologyType:ironWorking"
-    ],
+    "requires": ["technologyType:riding", "technologyType:ironWorking"],
     "x": 2,
     "y": 30,
     "yields": [
@@ -906,10 +821,7 @@
       "source": "Herodotus, Histories, ca. 440 BCE",
       "url": "/media/quotes/technologyType/alphabet.mp3"
     },
-    "requires": [
-      "technologyType:ironWorking",
-      "technologyType:shipEngineering"
-    ],
+    "requires": ["technologyType:ironWorking", "technologyType:shipEngineering"],
     "x": 6,
     "y": 30,
     "yields": [
@@ -931,10 +843,7 @@
       "source": "Greek proverb, ca. 400 BCE",
       "url": "/media/quotes/technologyType/drama.mp3"
     },
-    "requires": [
-      "technologyType:shipEngineering",
-      "technologyType:sports"
-    ],
+    "requires": ["technologyType:shipEngineering", "technologyType:sports"],
     "x": 10,
     "y": 30,
     "yields": [
@@ -956,11 +865,7 @@
       "source": "Indian mathematical treatise, ca. 300 BCE",
       "url": "/media/quotes/technologyType/mathematics.mp3"
     },
-    "requires": [
-      "technologyType:philosophy",
-      "technologyType:alphabet",
-      "technologyType:drama"
-    ],
+    "requires": ["technologyType:philosophy", "technologyType:alphabet", "technologyType:drama"],
     "x": 6,
     "y": 32,
     "yields": [
@@ -982,9 +887,7 @@
       "source": "Geoffrey Chaucer, 1386",
       "url": "/media/quotes/technologyType/ironSmithing.mp3"
     },
-    "requires": [
-      "technologyType:mathematics"
-    ],
+    "requires": ["technologyType:mathematics"],
     "x": 2,
     "y": 35,
     "yields": [
@@ -1006,9 +909,7 @@
       "source": "Egyptian foundation ritual, ca. 1200 BCE",
       "url": "/media/quotes/technologyType/construction.mp3"
     },
-    "requires": [
-      "technologyType:mathematics"
-    ],
+    "requires": ["technologyType:mathematics"],
     "x": 6,
     "y": 35,
     "yields": [
@@ -1030,9 +931,7 @@
       "source": "Athenian proverb, ca. 400 BCE",
       "url": "/media/quotes/technologyType/democracy.mp3"
     },
-    "requires": [
-      "technologyType:mathematics"
-    ],
+    "requires": ["technologyType:mathematics"],
     "x": 10,
     "y": 35,
     "yields": [
@@ -1054,10 +953,7 @@
       "source": "Greek proverb, ca. 300 BCE",
       "url": "/media/quotes/technologyType/minting.mp3"
     },
-    "requires": [
-      "technologyType:ironSmithing",
-      "technologyType:construction"
-    ],
+    "requires": ["technologyType:ironSmithing", "technologyType:construction"],
     "x": 4,
     "y": 37,
     "yields": [
@@ -1079,10 +975,7 @@
       "source": "Chinese proverb",
       "url": "/media/quotes/technologyType/woodComposites.mp3"
     },
-    "requires": [
-      "technologyType:construction",
-      "technologyType:democracy"
-    ],
+    "requires": ["technologyType:construction", "technologyType:democracy"],
     "x": 8,
     "y": 37,
     "yields": [
@@ -1104,10 +997,7 @@
       "source": "Huainanzi, 139 BCE",
       "url": "/media/quotes/technologyType/ironCasting.mp3"
     },
-    "requires": [
-      "technologyType:minting",
-      "technologyType:woodComposites"
-    ],
+    "requires": ["technologyType:minting", "technologyType:woodComposites"],
     "x": 6,
     "y": 39,
     "yields": [
@@ -1129,9 +1019,7 @@
       "source": "Norse warrior proverb, ca. 1000",
       "url": "/media/quotes/technologyType/steel.mp3"
     },
-    "requires": [
-      "technologyType:ironCasting"
-    ],
+    "requires": ["technologyType:ironCasting"],
     "x": 2,
     "y": 42,
     "yields": [
@@ -1153,9 +1041,7 @@
       "source": "Samurai oath, Kamakura period, ca. 1200",
       "url": "/media/quotes/technologyType/feudalism.mp3"
     },
-    "requires": [
-      "technologyType:ironCasting"
-    ],
+    "requires": ["technologyType:ironCasting"],
     "x": 6,
     "y": 42,
     "yields": [
@@ -1177,9 +1063,7 @@
       "source": "Al-Mawardi, ca. 1050",
       "url": "/media/quotes/technologyType/stateReligion.mp3"
     },
-    "requires": [
-      "technologyType:ironCasting"
-    ],
+    "requires": ["technologyType:ironCasting"],
     "x": 10,
     "y": 42,
     "yields": [
@@ -1201,10 +1085,7 @@
       "source": "Medieval Latin architectural saying, ca. 1300",
       "url": "/media/quotes/technologyType/engineering.mp3"
     },
-    "requires": [
-      "technologyType:steel",
-      "technologyType:feudalism"
-    ],
+    "requires": ["technologyType:steel", "technologyType:feudalism"],
     "x": 4,
     "y": 44,
     "yields": [
@@ -1226,10 +1107,7 @@
       "source": "Leviticus 25:4, ca. 700 BCE",
       "url": "/media/quotes/technologyType/cropRotation.mp3"
     },
-    "requires": [
-      "technologyType:feudalism",
-      "technologyType:stateReligion"
-    ],
+    "requires": ["technologyType:feudalism", "technologyType:stateReligion"],
     "x": 8,
     "y": 44,
     "yields": [
@@ -1251,9 +1129,7 @@
       "source": "Al-Jazari, 1206",
       "url": "/media/quotes/technologyType/machinery.mp3"
     },
-    "requires": [
-      "technologyType:engineering"
-    ],
+    "requires": ["technologyType:engineering"],
     "x": 2,
     "y": 46,
     "yields": [
@@ -1275,10 +1151,7 @@
       "source": "German medieval proverb, ca. 1300",
       "url": "/media/quotes/technologyType/castles.mp3"
     },
-    "requires": [
-      "technologyType:engineering",
-      "technologyType:cropRotation"
-    ],
+    "requires": ["technologyType:engineering", "technologyType:cropRotation"],
     "x": 6,
     "y": 46,
     "yields": [
@@ -1300,9 +1173,7 @@
       "source": "French chivalric motto, ca. 1400",
       "url": "/media/quotes/technologyType/chivalry.mp3"
     },
-    "requires": [
-      "technologyType:cropRotation"
-    ],
+    "requires": ["technologyType:cropRotation"],
     "x": 10,
     "y": 46,
     "yields": [
@@ -1324,9 +1195,7 @@
       "source": "Forging saying, ca. 1600",
       "url": "/media/quotes/technologyType/steelSmithing.mp3"
     },
-    "requires": [
-      "technologyType:machinery"
-    ],
+    "requires": ["technologyType:machinery"],
     "x": 0,
     "y": 49,
     "yields": [
@@ -1348,10 +1217,7 @@
       "source": "Old Norse proverb, ca. 1200",
       "url": "/media/quotes/technologyType/clinkerHulls.mp3"
     },
-    "requires": [
-      "technologyType:machinery",
-      "technologyType:castles"
-    ],
+    "requires": ["technologyType:machinery", "technologyType:castles"],
     "x": 4,
     "y": 49,
     "yields": [
@@ -1373,10 +1239,7 @@
       "source": "Louis XIV of France, 1655",
       "url": "/media/quotes/technologyType/divineRight.mp3"
     },
-    "requires": [
-      "technologyType:castles",
-      "technologyType:chivalry"
-    ],
+    "requires": ["technologyType:castles", "technologyType:chivalry"],
     "x": 8,
     "y": 49,
     "yields": [
@@ -1398,10 +1261,7 @@
       "source": "Arabic proverb, ca. 1200",
       "url": "/media/quotes/technologyType/tradeCaravans.mp3"
     },
-    "requires": [
-      "technologyType:steelSmithing",
-      "technologyType:clinkerHulls"
-    ],
+    "requires": ["technologyType:steelSmithing", "technologyType:clinkerHulls"],
     "x": 2,
     "y": 51,
     "yields": [
@@ -1423,10 +1283,7 @@
       "source": "Ibn al-Haytham, 1020",
       "url": "/media/quotes/technologyType/optics.mp3"
     },
-    "requires": [
-      "technologyType:clinkerHulls",
-      "technologyType:divineRight"
-    ],
+    "requires": ["technologyType:clinkerHulls", "technologyType:divineRight"],
     "x": 6,
     "y": 51,
     "yields": [
@@ -1448,10 +1305,7 @@
       "source": "Arab mariner proverb, ca. 1300",
       "url": "/media/quotes/technologyType/compass.mp3"
     },
-    "requires": [
-      "technologyType:tradeCaravans",
-      "technologyType:optics"
-    ],
+    "requires": ["technologyType:tradeCaravans", "technologyType:optics"],
     "x": 4,
     "y": 53,
     "yields": [
@@ -1473,9 +1327,7 @@
       "source": "Gothic architectural maxim, ca. 1250",
       "url": "/media/quotes/technologyType/buttress.mp3"
     },
-    "requires": [
-      "technologyType:optics"
-    ],
+    "requires": ["technologyType:optics"],
     "x": 8,
     "y": 53,
     "yields": [
@@ -1497,9 +1349,7 @@
       "source": "Portuguese proverb, ca. 1500",
       "url": "/media/quotes/technologyType/carvelHulls.mp3"
     },
-    "requires": [
-      "technologyType:compass"
-    ],
+    "requires": ["technologyType:compass"],
     "x": 2,
     "y": 56,
     "yields": [
@@ -1521,10 +1371,7 @@
       "source": "Ottoman proverb, ca. 1500",
       "url": "/media/quotes/technologyType/gunpowder.mp3"
     },
-    "requires": [
-      "technologyType:optics",
-      "technologyType:buttress"
-    ],
+    "requires": ["technologyType:compass", "technologyType:buttress"],
     "x": 6,
     "y": 56,
     "yields": [
@@ -1546,9 +1393,7 @@
       "source": "French religious motto, ca. 1550",
       "url": "/media/quotes/technologyType/fundamentalism.mp3"
     },
-    "requires": [
-      "technologyType:buttress"
-    ],
+    "requires": ["technologyType:buttress"],
     "x": 10,
     "y": 56,
     "yields": [
@@ -1570,10 +1415,7 @@
       "source": "Swedish army manual, ca. 1600",
       "url": "/media/quotes/technologyType/militaryDiscipline.mp3"
     },
-    "requires": [
-      "technologyType:carvelHulls",
-      "technologyType:gunpowder"
-    ],
+    "requires": ["technologyType:carvelHulls", "technologyType:gunpowder"],
     "x": 4,
     "y": 58,
     "yields": [
@@ -1595,10 +1437,7 @@
       "source": "Chinese proverb, ca. 1000",
       "url": "/media/quotes/technologyType/civilService.mp3"
     },
-    "requires": [
-      "technologyType:gunpowder",
-      "technologyType:fundamentalism"
-    ],
+    "requires": ["technologyType:gunpowder", "technologyType:fundamentalism"],
     "x": 8,
     "y": 58,
     "yields": [
@@ -1620,10 +1459,7 @@
       "source": "German proverb, ca. 1300",
       "url": "/media/quotes/technologyType/township.mp3"
     },
-    "requires": [
-      "technologyType:militaryDiscipline",
-      "technologyType:civilService"
-    ],
+    "requires": ["technologyType:militaryDiscipline", "technologyType:civilService"],
     "x": 6,
     "y": 60,
     "yields": [
@@ -1645,9 +1481,7 @@
       "source": "William Shakespeare, 1599",
       "url": "/media/quotes/technologyType/theater.mp3"
     },
-    "requires": [
-      "technologyType:civilService"
-    ],
+    "requires": ["technologyType:civilService"],
     "x": 10,
     "y": 60,
     "yields": [
@@ -1669,9 +1503,7 @@
       "source": "Spanish fencing manual, 1620",
       "url": "/media/quotes/technologyType/coldSteel.mp3"
     },
-    "requires": [
-      "technologyType:township"
-    ],
+    "requires": ["technologyType:township"],
     "x": 0,
     "y": 63,
     "yields": [
@@ -1693,9 +1525,7 @@
       "source": "Dutch proverb, ca. 1600",
       "url": "/media/quotes/technologyType/colonialism.mp3"
     },
-    "requires": [
-      "technologyType:township"
-    ],
+    "requires": ["technologyType:township"],
     "x": 4,
     "y": 63,
     "yields": [
@@ -1717,10 +1547,7 @@
       "source": "French military manual, 1703",
       "url": "/media/quotes/technologyType/firearms.mp3"
     },
-    "requires": [
-      "technologyType:township",
-      "technologyType:theater"
-    ],
+    "requires": ["technologyType:township", "technologyType:theater"],
     "x": 8,
     "y": 63,
     "yields": [
@@ -1742,10 +1569,7 @@
       "source": "Spanish exploration report, 1606",
       "url": "/media/quotes/technologyType/cartography.mp3"
     },
-    "requires": [
-      "technologyType:coldSteel",
-      "technologyType:colonialism"
-    ],
+    "requires": ["technologyType:coldSteel", "technologyType:colonialism"],
     "x": 2,
     "y": 65,
     "yields": [
@@ -1767,10 +1591,7 @@
       "source": "English officer’s manual, 1759",
       "url": "/media/quotes/technologyType/pistols.mp3"
     },
-    "requires": [
-      "technologyType:colonialism",
-      "technologyType:firearms"
-    ],
+    "requires": ["technologyType:colonialism", "technologyType:firearms"],
     "x": 6,
     "y": 65,
     "yields": [
@@ -1792,9 +1613,7 @@
       "source": "Italian Baroque builder’s maxim, ca. 1600",
       "url": "/media/quotes/technologyType/architecture.mp3"
     },
-    "requires": [
-      "technologyType:firearms"
-    ],
+    "requires": ["technologyType:firearms"],
     "x": 10,
     "y": 65,
     "yields": [
@@ -1816,9 +1635,7 @@
       "source": "Edward Bulwer-Lytton, 1839",
       "url": "/media/quotes/technologyType/education.mp3"
     },
-    "requires": [
-      "technologyType:cartography"
-    ],
+    "requires": ["technologyType:cartography"],
     "x": 2,
     "y": 67,
     "yields": [
@@ -1840,10 +1657,7 @@
       "source": "Dutch finance proverb, ca. 1600",
       "url": "/media/quotes/technologyType/banking.mp3"
     },
-    "requires": [
-      "technologyType:pistols",
-      "technologyType:architecture"
-    ],
+    "requires": ["technologyType:pistols", "technologyType:architecture"],
     "x": 8,
     "y": 67,
     "yields": [
@@ -1865,10 +1679,7 @@
       "source": "French mercantile policy, ca. 1650",
       "url": "/media/quotes/technologyType/mercantilism.mp3"
     },
-    "requires": [
-      "technologyType:education",
-      "technologyType:banking"
-    ],
+    "requires": ["technologyType:education", "technologyType:banking"],
     "x": 4,
     "y": 70,
     "yields": [
@@ -1890,9 +1701,7 @@
       "source": "British infantry proverb, ca. 1750",
       "url": "/media/quotes/technologyType/flintlock.mp3"
     },
-    "requires": [
-      "technologyType:banking"
-    ],
+    "requires": ["technologyType:banking"],
     "x": 10,
     "y": 70,
     "yields": [
@@ -1914,9 +1723,7 @@
       "source": "Sir Henry Wotton, 1604",
       "url": "/media/quotes/technologyType/diplomacy.mp3"
     },
-    "requires": [
-      "technologyType:mercantilism"
-    ],
+    "requires": ["technologyType:mercantilism"],
     "x": 2,
     "y": 72,
     "yields": [
@@ -1938,9 +1745,7 @@
       "source": "Molière, ca. 1670",
       "url": "/media/quotes/technologyType/opera.mp3"
     },
-    "requires": [
-      "technologyType:mercantilism"
-    ],
+    "requires": ["technologyType:mercantilism"],
     "x": 6,
     "y": 72,
     "yields": [
@@ -1962,9 +1767,7 @@
       "source": "Foundry motto, ca. 1850",
       "url": "/media/quotes/technologyType/steelCasting.mp3"
     },
-    "requires": [
-      "technologyType:flintlock"
-    ],
+    "requires": ["technologyType:flintlock"],
     "x": 10,
     "y": 72,
     "yields": [
@@ -1986,9 +1789,7 @@
       "source": "Royal Society motto, 1660",
       "url": "/media/quotes/technologyType/scientificMethod.mp3"
     },
-    "requires": [
-      "technologyType:diplomacy"
-    ],
+    "requires": ["technologyType:diplomacy"],
     "x": 0,
     "y": 74,
     "yields": [
@@ -2010,10 +1811,7 @@
       "source": "Francis Bellamy, 1892",
       "url": "/media/quotes/technologyType/nationalism.mp3"
     },
-    "requires": [
-      "technologyType:diplomacy",
-      "technologyType:opera"
-    ],
+    "requires": ["technologyType:diplomacy", "technologyType:opera"],
     "x": 4,
     "y": 74,
     "yields": [
@@ -2035,10 +1833,7 @@
       "source": "French salon critic, ca. 1750",
       "url": "/media/quotes/technologyType/artHistory.mp3"
     },
-    "requires": [
-      "technologyType:opera",
-      "technologyType:steelCasting"
-    ],
+    "requires": ["technologyType:opera", "technologyType:steelCasting"],
     "x": 8,
     "y": 74,
     "yields": [
@@ -2060,9 +1855,7 @@
       "source": "English royal maxim, ca. 1600",
       "url": "/media/quotes/technologyType/royalCharter.mp3"
     },
-    "requires": [
-      "technologyType:steelCasting"
-    ],
+    "requires": ["technologyType:steelCasting"],
     "x": 12,
     "y": 74,
     "yields": [
@@ -2084,10 +1877,7 @@
       "source": "American mill slogan, ca. 1880",
       "url": "/media/quotes/technologyType/industrialization.mp3"
     },
-    "requires": [
-      "technologyType:scientificMethod",
-      "technologyType:nationalism"
-    ],
+    "requires": ["technologyType:scientificMethod", "technologyType:nationalism"],
     "x": 2,
     "y": 77,
     "yields": [
@@ -2109,10 +1899,7 @@
       "source": "British army maxim, ca. 1800",
       "url": "/media/quotes/technologyType/militaryTradition.mp3"
     },
-    "requires": [
-      "technologyType:nationalism",
-      "technologyType:artHistory"
-    ],
+    "requires": ["technologyType:nationalism", "technologyType:artHistory"],
     "x": 6,
     "y": 77,
     "yields": [
@@ -2134,10 +1921,7 @@
       "source": "Alfred Nobel, 1891",
       "url": "/media/quotes/technologyType/dynamite.mp3"
     },
-    "requires": [
-      "technologyType:artHistory",
-      "technologyType:royalCharter"
-    ],
+    "requires": ["technologyType:artHistory", "technologyType:royalCharter"],
     "x": 10,
     "y": 77,
     "yields": [
@@ -2159,9 +1943,7 @@
       "source": "British railway slogan, ca. 1830",
       "url": "/media/quotes/technologyType/steamEngine.mp3"
     },
-    "requires": [
-      "technologyType:industrialization"
-    ],
+    "requires": ["technologyType:industrialization"],
     "x": 0,
     "y": 79,
     "yields": [
@@ -2183,10 +1965,7 @@
       "source": "Oscar Wilde, ca. 1890",
       "url": "/media/quotes/technologyType/bureaucracy.mp3"
     },
-    "requires": [
-      "technologyType:industrialization",
-      "technologyType:militaryTradition"
-    ],
+    "requires": ["technologyType:industrialization", "technologyType:militaryTradition"],
     "x": 4,
     "y": 79,
     "yields": [
@@ -2208,10 +1987,7 @@
       "source": "Union army manual, ca. 1860",
       "url": "/media/quotes/technologyType/rifling.mp3"
     },
-    "requires": [
-      "technologyType:militaryTradition",
-      "technologyType:dynamite"
-    ],
+    "requires": ["technologyType:militaryTradition", "technologyType:dynamite"],
     "x": 8,
     "y": 79,
     "yields": [
@@ -2233,10 +2009,7 @@
       "source": "Steel mill saying, ca. 1880",
       "url": "/media/quotes/technologyType/steelMilling.mp3"
     },
-    "requires": [
-      "technologyType:steamEngine",
-      "technologyType:bureaucracy"
-    ],
+    "requires": ["technologyType:steamEngine", "technologyType:bureaucracy"],
     "x": 2,
     "y": 81,
     "yields": [
@@ -2258,10 +2031,7 @@
       "source": "Joseph Lister, ca. 1870",
       "url": "/media/quotes/technologyType/medicine.mp3"
     },
-    "requires": [
-      "technologyType:bureaucracy",
-      "technologyType:rifling"
-    ],
+    "requires": ["technologyType:bureaucracy", "technologyType:rifling"],
     "x": 6,
     "y": 81,
     "yields": [
@@ -2283,9 +2053,7 @@
       "source": "Mahatma Gandhi, 1917",
       "url": "/media/quotes/technologyType/sanitation.mp3"
     },
-    "requires": [
-      "technologyType:rifling"
-    ],
+    "requires": ["technologyType:rifling"],
     "x": 10,
     "y": 81,
     "yields": [
@@ -2307,9 +2075,7 @@
       "source": "Eyewitness report, ca. 1840",
       "url": "/media/quotes/technologyType/railroad.mp3"
     },
-    "requires": [
-      "technologyType:steelMilling"
-    ],
+    "requires": ["technologyType:steelMilling"],
     "x": 0,
     "y": 84,
     "yields": [
@@ -2331,10 +2097,7 @@
       "source": "Machinist’s proverb, ca. 1850",
       "url": "/media/quotes/technologyType/replaceableParts.mp3"
     },
-    "requires": [
-      "technologyType:steelMilling",
-      "technologyType:medicine"
-    ],
+    "requires": ["technologyType:steelMilling", "technologyType:medicine"],
     "x": 4,
     "y": 84,
     "yields": [
@@ -2356,10 +2119,7 @@
       "source": "John Stuart Mill, 1848",
       "url": "/media/quotes/technologyType/economics.mp3"
     },
-    "requires": [
-      "technologyType:medicine",
-      "technologyType:sanitation"
-    ],
+    "requires": ["technologyType:medicine", "technologyType:sanitation"],
     "x": 8,
     "y": 84,
     "yields": [
@@ -2381,9 +2141,7 @@
       "source": "The Times, 1882",
       "url": "/media/quotes/technologyType/electricity.mp3"
     },
-    "requires": [
-      "technologyType:sanitation"
-    ],
+    "requires": ["technologyType:sanitation"],
     "x": 12,
     "y": 84,
     "yields": [
@@ -2405,9 +2163,7 @@
       "source": "German officer, ca. 1864",
       "url": "/media/quotes/technologyType/artillery.mp3"
     },
-    "requires": [
-      "technologyType:railroad"
-    ],
+    "requires": ["technologyType:railroad"],
     "x": 0,
     "y": 86,
     "yields": [
@@ -2429,9 +2185,7 @@
       "source": "U.S. Marine Rifleman’s Creed, 1942",
       "url": "/media/quotes/technologyType/repeatingRifles.mp3"
     },
-    "requires": [
-      "technologyType:replaceableParts"
-    ],
+    "requires": ["technologyType:replaceableParts"],
     "x": 4,
     "y": 86,
     "yields": [
@@ -2453,9 +2207,7 @@
       "source": "Oil drilling proverb, ca. 1870",
       "url": "/media/quotes/technologyType/drilling.mp3"
     },
-    "requires": [
-      "technologyType:economics"
-    ],
+    "requires": ["technologyType:economics"],
     "x": 8,
     "y": 86,
     "yields": [
@@ -2477,9 +2229,7 @@
       "source": "Grover Cleveland, 1887",
       "url": "/media/quotes/technologyType/liberalism.mp3"
     },
-    "requires": [
-      "technologyType:electricity"
-    ],
+    "requires": ["technologyType:electricity"],
     "x": 12,
     "y": 86,
     "yields": [
@@ -2501,10 +2251,7 @@
       "source": "German chemical society toast, 1889",
       "url": "/media/quotes/technologyType/chemistry.mp3"
     },
-    "requires": [
-      "technologyType:repeatingRifles",
-      "technologyType:drilling"
-    ],
+    "requires": ["technologyType:repeatingRifles", "technologyType:drilling"],
     "x": 6,
     "y": 88,
     "yields": [
@@ -2526,10 +2273,7 @@
       "source": "American automobile advertisement, 1906",
       "url": "/media/quotes/technologyType/combustion.mp3"
     },
-    "requires": [
-      "technologyType:drilling",
-      "technologyType:liberalism"
-    ],
+    "requires": ["technologyType:drilling", "technologyType:liberalism"],
     "x": 10,
     "y": 88,
     "yields": [
@@ -2551,9 +2295,7 @@
       "source": "New Zealand election poster, 1893",
       "url": "/media/quotes/technologyType/universalSuffrage.mp3"
     },
-    "requires": [
-      "technologyType:liberalism"
-    ],
+    "requires": ["technologyType:liberalism"],
     "x": 14,
     "y": 88,
     "yields": [
@@ -2575,10 +2317,7 @@
       "source": "John McCrae, In Flanders Fields, 1915",
       "url": "/media/quotes/technologyType/trenchWarfare.mp3"
     },
-    "requires": [
-      "technologyType:artillery",
-      "technologyType:chemistry"
-    ],
+    "requires": ["technologyType:artillery", "technologyType:chemistry"],
     "x": 0,
     "y": 91,
     "yields": [
@@ -2600,9 +2339,7 @@
       "source": "Sheffield steelworks slogan, ca. 1924",
       "url": "/media/quotes/technologyType/stainlessSteel.mp3"
     },
-    "requires": [
-      "technologyType:chemistry"
-    ],
+    "requires": ["technologyType:chemistry"],
     "x": 4,
     "y": 91,
     "yields": [
@@ -2624,10 +2361,7 @@
       "source": "John D. Rockefeller, ca. 1880",
       "url": "/media/quotes/technologyType/oilRefining.mp3"
     },
-    "requires": [
-      "technologyType:chemistry",
-      "technologyType:combustion"
-    ],
+    "requires": ["technologyType:chemistry", "technologyType:combustion"],
     "x": 8,
     "y": 91,
     "yields": [
@@ -2649,10 +2383,7 @@
       "source": "Wilbur Wright, 1901",
       "url": "/media/quotes/technologyType/flight.mp3"
     },
-    "requires": [
-      "technologyType:combustion",
-      "technologyType:universalSuffrage"
-    ],
+    "requires": ["technologyType:combustion", "technologyType:universalSuffrage"],
     "x": 12,
     "y": 91,
     "yields": [
@@ -2674,10 +2405,7 @@
       "source": "Physics lecture, University of Cambridge, ca. 1923",
       "url": "/media/quotes/technologyType/atomicTheory.mp3"
     },
-    "requires": [
-      "technologyType:trenchWarfare",
-      "technologyType:stainlessSteel"
-    ],
+    "requires": ["technologyType:trenchWarfare", "technologyType:stainlessSteel"],
     "x": 2,
     "y": 93,
     "yields": [
@@ -2699,10 +2427,7 @@
       "source": "March of the Tankmen, 1939",
       "url": "/media/quotes/technologyType/trackedTreads.mp3"
     },
-    "requires": [
-      "technologyType:stainlessSteel",
-      "technologyType:oilRefining"
-    ],
+    "requires": ["technologyType:stainlessSteel", "technologyType:oilRefining"],
     "x": 6,
     "y": 93,
     "yields": [
@@ -2724,10 +2449,7 @@
       "source": "Wernher von Braun, 1944",
       "url": "/media/quotes/technologyType/rocketry.mp3"
     },
-    "requires": [
-      "technologyType:oilRefining",
-      "technologyType:flight"
-    ],
+    "requires": ["technologyType:oilRefining", "technologyType:flight"],
     "x": 10,
     "y": 93,
     "yields": [
@@ -2749,9 +2471,7 @@
       "source": "American music magazine, ca. 1938",
       "url": "/media/quotes/technologyType/radio.mp3"
     },
-    "requires": [
-      "technologyType:flight"
-    ],
+    "requires": ["technologyType:flight"],
     "x": 14,
     "y": 93,
     "yields": [
@@ -2773,9 +2493,7 @@
       "source": "U.S. Bureau of Reclamation engineer, ca. 1935",
       "url": "/media/quotes/technologyType/hydrodynamics.mp3"
     },
-    "requires": [
-      "technologyType:atomicTheory"
-    ],
+    "requires": ["technologyType:atomicTheory"],
     "x": 0,
     "y": 95,
     "yields": [
@@ -2797,10 +2515,7 @@
       "source": "Alexander Fleming, 1945",
       "url": "/media/quotes/technologyType/antibiotics.mp3"
     },
-    "requires": [
-      "technologyType:atomicTheory",
-      "technologyType:trackedTreads"
-    ],
+    "requires": ["technologyType:atomicTheory", "technologyType:trackedTreads"],
     "x": 4,
     "y": 95,
     "yields": [
@@ -2822,10 +2537,7 @@
       "source": "New York architecture review, ca. 1931",
       "url": "/media/quotes/technologyType/artDeco.mp3"
     },
-    "requires": [
-      "technologyType:trackedTreads",
-      "technologyType:rocketry"
-    ],
+    "requires": ["technologyType:trackedTreads", "technologyType:rocketry"],
     "x": 8,
     "y": 95,
     "yields": [
@@ -2847,10 +2559,7 @@
       "source": "German automotive poster, ca. 1936",
       "url": "/media/quotes/technologyType/aerodynamics.mp3"
     },
-    "requires": [
-      "technologyType:rocketry",
-      "technologyType:radio"
-    ],
+    "requires": ["technologyType:rocketry", "technologyType:radio"],
     "x": 12,
     "y": 95,
     "yields": [
@@ -2872,10 +2581,7 @@
       "source": "Aluminum on the March, 1956",
       "url": "/media/quotes/technologyType/aluminumMilling.mp3"
     },
-    "requires": [
-      "technologyType:hydrodynamics",
-      "technologyType:antibiotics"
-    ],
+    "requires": ["technologyType:hydrodynamics", "technologyType:antibiotics"],
     "x": 2,
     "y": 98,
     "yields": [
@@ -2897,10 +2603,7 @@
       "source": "Albert Einstein, 1948",
       "url": "/media/quotes/technologyType/fission.mp3"
     },
-    "requires": [
-      "technologyType:antibiotics",
-      "technologyType:artDeco"
-    ],
+    "requires": ["technologyType:antibiotics", "technologyType:artDeco"],
     "x": 6,
     "y": 98,
     "yields": [
@@ -2922,10 +2625,7 @@
       "source": "Walter Cronkite, 1962",
       "url": "/media/quotes/technologyType/massMedia.mp3"
     },
-    "requires": [
-      "technologyType:artDeco",
-      "technologyType:aerodynamics"
-    ],
+    "requires": ["technologyType:artDeco", "technologyType:aerodynamics"],
     "x": 10,
     "y": 98,
     "yields": [
@@ -2947,9 +2647,7 @@
       "source": "U.S. Federal Civil Defense Administration film, 1951",
       "url": "/media/quotes/technologyType/civilDefense.mp3"
     },
-    "requires": [
-      "technologyType:aerodynamics"
-    ],
+    "requires": ["technologyType:aerodynamics"],
     "x": 14,
     "y": 98,
     "yields": [
@@ -2971,9 +2669,7 @@
       "source": "AKM Field Manual (USSR), 1970",
       "url": "/media/quotes/technologyType/automaticCarbines.mp3"
     },
-    "requires": [
-      "technologyType:aluminumMilling"
-    ],
+    "requires": ["technologyType:aluminumMilling"],
     "x": 2,
     "y": 100,
     "yields": [
@@ -3021,9 +2717,7 @@
       "source": "Jules Verne, 1865",
       "url": "/media/quotes/technologyType/ballistics.mp3"
     },
-    "requires": [
-      "technologyType:massMedia"
-    ],
+    "requires": ["technologyType:massMedia"],
     "x": 10,
     "y": 100,
     "yields": [
@@ -3045,9 +2739,7 @@
       "source": "Raytheon promotional film, 1968",
       "url": "/media/quotes/technologyType/guidanceSystems.mp3"
     },
-    "requires": [
-      "technologyType:civilDefense"
-    ],
+    "requires": ["technologyType:civilDefense"],
     "x": 14,
     "y": 100,
     "yields": [
@@ -3069,9 +2761,7 @@
       "source": "Dow advertisement, 1952",
       "url": "/media/quotes/technologyType/plastics.mp3"
     },
-    "requires": [
-      "technologyType:automaticCarbines"
-    ],
+    "requires": ["technologyType:automaticCarbines"],
     "x": 2,
     "y": 102,
     "yields": [
@@ -3093,9 +2783,7 @@
       "source": "William R. Anderson, 1958.",
       "url": "/media/quotes/technologyType/nuclearPropulsion.mp3"
     },
-    "requires": [
-      "technologyType:thermonuclearDevice"
-    ],
+    "requires": ["technologyType:thermonuclearDevice"],
     "x": 6,
     "y": 102,
     "yields": [
@@ -3117,10 +2805,7 @@
       "source": "Chuck Yeager, 1985",
       "url": "/media/quotes/technologyType/supersonicFlight.mp3"
     },
-    "requires": [
-      "technologyType:ballistics",
-      "technologyType:guidanceSystems"
-    ],
+    "requires": ["technologyType:ballistics", "technologyType:guidanceSystems"],
     "x": 10,
     "y": 102,
     "yields": [
@@ -3142,9 +2827,7 @@
       "source": "William Shockley, 1949",
       "url": "/media/quotes/technologyType/transistors.mp3"
     },
-    "requires": [
-      "technologyType:plastics"
-    ],
+    "requires": ["technologyType:plastics"],
     "x": 0,
     "y": 105,
     "yields": [
@@ -3166,10 +2849,7 @@
       "source": "Creedence Clearwater Revival, 1969",
       "url": "/media/quotes/technologyType/verticalFlight.mp3"
     },
-    "requires": [
-      "technologyType:plastics",
-      "technologyType:nuclearPropulsion"
-    ],
+    "requires": ["technologyType:plastics", "technologyType:nuclearPropulsion"],
     "x": 4,
     "y": 105,
     "yields": [
@@ -3191,10 +2871,7 @@
       "source": "Sputnik, 1957",
       "url": "/media/quotes/technologyType/spaceFlight.mp3"
     },
-    "requires": [
-      "technologyType:nuclearPropulsion",
-      "technologyType:supersonicFlight"
-    ],
+    "requires": ["technologyType:nuclearPropulsion", "technologyType:supersonicFlight"],
     "x": 8,
     "y": 105,
     "yields": [
@@ -3216,9 +2893,7 @@
       "source": "ARES conflict report, 2000",
       "url": "/media/quotes/technologyType/hollowCharge.mp3"
     },
-    "requires": [
-      "technologyType:supersonicFlight"
-    ],
+    "requires": ["technologyType:supersonicFlight"],
     "x": 12,
     "y": 105,
     "yields": [
@@ -3240,10 +2915,7 @@
       "source": "Gordon Moore, 1965",
       "url": "/media/quotes/technologyType/microchips.mp3"
     },
-    "requires": [
-      "technologyType:transistors",
-      "technologyType:verticalFlight"
-    ],
+    "requires": ["technologyType:transistors", "technologyType:verticalFlight"],
     "x": 2,
     "y": 107,
     "yields": [
@@ -3265,10 +2937,7 @@
       "source": "Top Gun, 1986",
       "url": "/media/quotes/technologyType/navalCatapults.mp3"
     },
-    "requires": [
-      "technologyType:verticalFlight",
-      "technologyType:spaceFlight"
-    ],
+    "requires": ["technologyType:verticalFlight", "technologyType:spaceFlight"],
     "x": 6,
     "y": 107,
     "yields": [
@@ -3290,10 +2959,7 @@
       "source": "George Orwell, Nineteen Eighty-Four, 1949",
       "url": "/media/quotes/technologyType/stateSurveillance.mp3"
     },
-    "requires": [
-      "technologyType:spaceFlight",
-      "technologyType:hollowCharge"
-    ],
+    "requires": ["technologyType:spaceFlight", "technologyType:hollowCharge"],
     "x": 10,
     "y": 107,
     "yields": [
@@ -3315,9 +2981,7 @@
       "source": "Kofi Annan, 1997",
       "url": "/media/quotes/technologyType/globalization.mp3"
     },
-    "requires": [
-      "technologyType:microchips"
-    ],
+    "requires": ["technologyType:microchips"],
     "x": 0,
     "y": 109,
     "yields": [
@@ -3365,10 +3029,7 @@
       "source": "Google corporate motto, 2000",
       "url": "/media/quotes/technologyType/internet.mp3"
     },
-    "requires": [
-      "technologyType:globalization",
-      "technologyType:guidedOrdnance"
-    ],
+    "requires": ["technologyType:globalization", "technologyType:guidedOrdnance"],
     "x": 2,
     "y": 112,
     "yields": [
@@ -3390,9 +3051,7 @@
       "source": "Jaap de Hoop Scheffer, 2008",
       "url": "/media/quotes/technologyType/globalArmy.mp3"
     },
-    "requires": [
-      "technologyType:guidedOrdnance"
-    ],
+    "requires": ["technologyType:guidedOrdnance"],
     "x": 6,
     "y": 112,
     "yields": [
@@ -3414,9 +3073,7 @@
       "source": "Nightforce Optics motto, ca. 2000",
       "url": "/media/quotes/technologyType/rifleScopes.mp3"
     },
-    "requires": [
-      "technologyType:guidedOrdnance"
-    ],
+    "requires": ["technologyType:guidedOrdnance"],
     "x": 10,
     "y": 112,
     "yields": [
@@ -3438,9 +3095,7 @@
       "source": "Human Genome Project announcement, 2003",
       "url": "/media/quotes/technologyType/genetics.mp3"
     },
-    "requires": [
-      "technologyType:internet"
-    ],
+    "requires": ["technologyType:internet"],
     "x": 2,
     "y": 114,
     "yields": [
@@ -3462,10 +3117,7 @@
       "source": "Fighter pilot’s remark, 2009",
       "url": "/media/quotes/technologyType/flyByWire.mp3"
     },
-    "requires": [
-      "technologyType:globalArmy",
-      "technologyType:rifleScopes"
-    ],
+    "requires": ["technologyType:globalArmy", "technologyType:rifleScopes"],
     "x": 8,
     "y": 114,
     "yields": [
@@ -3487,9 +3139,7 @@
       "source": "The Simpsons, 1994",
       "url": "/media/quotes/technologyType/robotics.mp3"
     },
-    "requires": [
-      "technologyType:genetics"
-    ],
+    "requires": ["technologyType:genetics"],
     "x": 0,
     "y": 116,
     "yields": [
@@ -3511,9 +3161,7 @@
       "source": "IRENA promotional material, 2012",
       "url": "/media/quotes/technologyType/renewableEnergy.mp3"
     },
-    "requires": [
-      "technologyType:genetics"
-    ],
+    "requires": ["technologyType:genetics"],
     "x": 4,
     "y": 116,
     "yields": [
@@ -3535,9 +3183,7 @@
       "source": "USAF Officer professional journal, 2005",
       "url": "/media/quotes/technologyType/homingSystems.mp3"
     },
-    "requires": [
-      "technologyType:flyByWire"
-    ],
+    "requires": ["technologyType:flyByWire"],
     "x": 8,
     "y": 116,
     "yields": [
@@ -3559,10 +3205,7 @@
       "source": "Amazon checkout button text, 1995",
       "url": "/media/quotes/technologyType/onlineEconomy.mp3"
     },
-    "requires": [
-      "technologyType:robotics",
-      "technologyType:renewableEnergy"
-    ],
+    "requires": ["technologyType:robotics", "technologyType:renewableEnergy"],
     "x": 2,
     "y": 119,
     "yields": [
@@ -3584,10 +3227,7 @@
       "source": "Gordon Moore, 1965",
       "url": "/media/quotes/technologyType/semiconductors.mp3"
     },
-    "requires": [
-      "technologyType:renewableEnergy",
-      "technologyType:homingSystems"
-    ],
+    "requires": ["technologyType:renewableEnergy", "technologyType:homingSystems"],
     "x": 6,
     "y": 119,
     "yields": [
@@ -3609,9 +3249,7 @@
       "source": "Inscription, New York City Post Office, 1914",
       "url": "/media/quotes/technologyType/deliveryServices.mp3"
     },
-    "requires": [
-      "technologyType:onlineEconomy"
-    ],
+    "requires": ["technologyType:onlineEconomy"],
     "x": 0,
     "y": 121,
     "yields": [
@@ -3633,10 +3271,7 @@
       "source": "Boeing 787 Dreamliner press release, 2007",
       "url": "/media/quotes/technologyType/composites.mp3"
     },
-    "requires": [
-      "technologyType:onlineEconomy",
-      "technologyType:semiconductors"
-    ],
+    "requires": ["technologyType:onlineEconomy", "technologyType:semiconductors"],
     "x": 4,
     "y": 121,
     "yields": [
@@ -3658,9 +3293,7 @@
       "source": "USAF fact sheet on MQ-1 Predator, 2005",
       "url": "/media/quotes/technologyType/militaryDrones.mp3"
     },
-    "requires": [
-      "technologyType:semiconductors"
-    ],
+    "requires": ["technologyType:semiconductors"],
     "x": 8,
     "y": 121,
     "yields": [
@@ -3682,9 +3315,7 @@
       "source": "The Matrix, 1999",
       "url": "/media/quotes/technologyType/virtualReality.mp3"
     },
-    "requires": [
-      "technologyType:deliveryServices"
-    ],
+    "requires": ["technologyType:deliveryServices"],
     "x": 0,
     "y": 123,
     "yields": [
@@ -3706,9 +3337,7 @@
       "source": "Media coverage of X-51A flight test, 2010",
       "url": "/media/quotes/technologyType/hypersonicFlight.mp3"
     },
-    "requires": [
-      "technologyType:composites"
-    ],
+    "requires": ["technologyType:composites"],
     "x": 4,
     "y": 123,
     "yields": [
@@ -3730,9 +3359,7 @@
       "source": "USAF F-22 promotional material, 2017",
       "url": "/media/quotes/technologyType/stealth.mp3"
     },
-    "requires": [
-      "technologyType:militaryDrones"
-    ],
+    "requires": ["technologyType:militaryDrones"],
     "x": 8,
     "y": 123,
     "yields": [
@@ -3754,10 +3381,7 @@
       "source": "Stephen Hawking, 2014",
       "url": "/media/quotes/technologyType/artificialIntelligence.mp3"
     },
-    "requires": [
-      "technologyType:virtualReality",
-      "technologyType:hypersonicFlight"
-    ],
+    "requires": ["technologyType:virtualReality", "technologyType:hypersonicFlight"],
     "x": 2,
     "y": 126,
     "yields": [
@@ -3779,10 +3403,7 @@
       "source": "Elon Musk, 2017",
       "url": "/media/quotes/technologyType/privateSpaceFlight.mp3"
     },
-    "requires": [
-      "technologyType:hypersonicFlight",
-      "technologyType:stealth"
-    ],
+    "requires": ["technologyType:hypersonicFlight", "technologyType:stealth"],
     "x": 6,
     "y": 126,
     "yields": [
@@ -3804,9 +3425,7 @@
       "source": "Chemistry textbook phrase",
       "url": "/media/quotes/technologyType/graphite.mp3"
     },
-    "requires": [
-      "technologyType:stealth"
-    ],
+    "requires": ["technologyType:stealth"],
     "x": 10,
     "y": 126,
     "yields": [
@@ -3828,9 +3447,7 @@
       "source": "Theophrastus, ca. 300 BCE",
       "url": "/media/quotes/technologyType/aIProcessing.mp3"
     },
-    "requires": [
-      "technologyType:artificialIntelligence"
-    ],
+    "requires": ["technologyType:artificialIntelligence"],
     "x": 0,
     "y": 128,
     "yields": [
@@ -3852,10 +3469,7 @@
       "source": "Albert Einstein, 1929",
       "url": "/media/quotes/technologyType/aIAnalysis.mp3"
     },
-    "requires": [
-      "technologyType:artificialIntelligence",
-      "technologyType:privateSpaceFlight"
-    ],
+    "requires": ["technologyType:artificialIntelligence", "technologyType:privateSpaceFlight"],
     "x": 4,
     "y": 128,
     "yields": [
@@ -3877,10 +3491,7 @@
       "source": "Dr. Evil, Austin Powers, 1997",
       "url": "/media/quotes/technologyType/weaponizedLasers.mp3"
     },
-    "requires": [
-      "technologyType:privateSpaceFlight",
-      "technologyType:graphite"
-    ],
+    "requires": ["technologyType:privateSpaceFlight", "technologyType:graphite"],
     "x": 8,
     "y": 128,
     "yields": [
@@ -3902,10 +3513,7 @@
       "source": "E.F. Schumacher, 1973",
       "url": "/media/quotes/technologyType/nanotechnology.mp3"
     },
-    "requires": [
-      "technologyType:aIProcessing",
-      "technologyType:aIAnalysis"
-    ],
+    "requires": ["technologyType:aIProcessing", "technologyType:aIAnalysis"],
     "x": 2,
     "y": 130,
     "yields": [
@@ -3927,10 +3535,7 @@
       "source": "Mining industry slogan",
       "url": "/media/quotes/technologyType/syntheticGraphite.mp3"
     },
-    "requires": [
-      "technologyType:aIAnalysis",
-      "technologyType:weaponizedLasers"
-    ],
+    "requires": ["technologyType:aIAnalysis", "technologyType:weaponizedLasers"],
     "x": 6,
     "y": 130,
     "yields": [
@@ -3952,9 +3557,7 @@
       "source": "The Terminator, 1984",
       "url": "/media/quotes/technologyType/aITargeting.mp3"
     },
-    "requires": [
-      "technologyType:nanotechnology"
-    ],
+    "requires": ["technologyType:nanotechnology"],
     "x": 0,
     "y": 133,
     "yields": [
@@ -3976,10 +3579,7 @@
       "source": "Physics community proverb",
       "url": "/media/quotes/technologyType/nuclearFusion.mp3"
     },
-    "requires": [
-      "technologyType:nanotechnology",
-      "technologyType:syntheticGraphite"
-    ],
+    "requires": ["technologyType:nanotechnology", "technologyType:syntheticGraphite"],
     "x": 4,
     "y": 133,
     "yields": [
@@ -4001,16 +3601,34 @@
       "source": "Niels Bohr, ca. 1940",
       "url": "/media/quotes/technologyType/futureTech.mp3"
     },
-    "requires": [
-      "technologyType:aITargeting",
-      "technologyType:nuclearFusion"
-    ],
+    "requires": ["technologyType:aITargeting", "technologyType:nuclearFusion"],
     "x": 2,
     "y": 135,
     "yields": [
       {
         "type": "yieldType:scienceCost",
         "amount": 1012
+      }
+    ]
+  },
+  {
+    "category": "eraType:neolithic",
+    "concept": "conceptType:technology",
+    "description": "Settlements arose as communities began occupying fixed locations for extended periods, building permanent structures and organizing space for storage, craft, and communal life. Early settled villages in the Fertile Crescent, Anatolia, and East Asia combined agricultural plots with defended storage facilities and ritual areas. Fixed residence allowed accumulation of tools, surplus grain, and social knowledge. Over time, settlements grew into larger nucleated communities with planned layouts, dedicated workshops, and communal infrastructure. The transition from mobile to settled life restructured kinship, labor, and exchange, creating conditions for later urban institutions.",
+    "image": "/media/images/technologyType/settlements.jpg",
+    "key": "technologyType:settlements",
+    "name": "Settlements",
+    "quote": {
+      "text": "A place worth settling is worth defending.",
+      "source": "Ancient proverb"
+    },
+    "requires": ["technologyType:agriculture"],
+    "x": 8,
+    "y": 2,
+    "yields": [
+      {
+        "type": "yieldType:scienceCost",
+        "amount": 19
       }
     ]
   }

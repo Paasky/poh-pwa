@@ -2042,7 +2042,7 @@
       "description": "A governor is a territorial ruler or official appointed or elected to exercise executive authority on behalf of a central power. Early precedents include Sumerian and Akkadian city officials under kings, Achaemenid satraps supervising provinces, and Han Chinese commandery governors overseeing taxation and justice. The Roman Empire relied on proconsuls and propraetors to govern provinces and command troops. In the early modern era, Spanish viceroys, Portuguese captains-general, and Ottoman beylerbeyi managed far-flung domains. Colonial governance in British India and Africa used governors to implement policy, collect revenue, and maintain order. In federal states such as the United States, India, Nigeria, and Brazil, elected governors coordinate state administration, disaster response, and legislation. Across periods, the office balanced local conditions, fiscal demands, and directives from the center.",
       "image": "/media/images/buildingType/governor.jpg",
       "requires": [
-        "technologyType:tradition",
+        "technologyType:settlements",
         [
           "conceptType:flatLand",
           "elevationType:hill"
@@ -12350,7 +12350,7 @@
         "platformType:human": "Thief"
       },
       "requires": [
-        "technologyType:trade"
+        "technologyType:copperWorking"
       ],
       "yields": [
         {
@@ -12574,7 +12574,7 @@
         "platformType:human": "Tribe"
       },
       "requires": [
-        "technologyType:tradition"
+        "technologyType:settlements"
       ],
       "yields": [
         {
@@ -13239,7 +13239,8 @@
         "technologyType:mysticism",
         "technologyType:tradition",
         "technologyType:pitMining",
-        "technologyType:warfare"
+        "technologyType:warfare",
+        "technologyType:settlements"
       ]
     },
     {
@@ -14183,7 +14184,7 @@
         "url": "/media/quotes/goalType/firstCities.mp3"
       },
       "requires": [
-        "technologyType:tradition",
+        "technologyType:settlements",
         "yieldType:goalPoints"
       ],
       "yields": [],
@@ -14528,7 +14529,7 @@
         "url": "/media/quotes/goalType/tradeNetwork.mp3"
       },
       "requires": [
-        "technologyType:commerce",
+        "technologyType:trade",
         "yieldType:goalPoints"
       ],
       "yields": [],
@@ -17728,7 +17729,7 @@
       "category": "improvementCategory:mine",
       "description": "Bronze Age mines expanded beyond surface pits into shafts and galleries following rich veins. Fire-setting and stone or bronze picks broke ore in constrained headings. Timber sets stabilized roofs and controlled collapses. Simple windshafts and bellows improved ventilation at depth. Buckets and ladders handled hoisting before mechanical gins. Ore was crushed with mortars and pestles and smelted nearby using charcoal. The Great Orme mines in Wales show extensive underground copper extraction with organized labor. In Anatolia, Kestel and Göltepe supplied tin for alloying and long-distance trade. These mines linked geology, metallurgy, and early administrative systems that coordinated provisioning and output.",
       "requires": [
-        "technologyType:bronzeWorking"
+        "technologyType:mining"
       ],
       "yields": [
         {
@@ -17765,7 +17766,7 @@
       "category": "improvementCategory:mine",
       "description": "Ancient mine pits were shallow surface excavations targeting exposed ore bodies. Workers used hammerstones, antler picks, bone tools, and early metal chisels. Fire-setting fractured rock, which was then pried and crushed. Ore was hand-sorted and washed in nearby basins. Waste rock formed distinctive spoil rings around pits. Seasonal crews camped at sites and transported concentrates to smelting areas. At Timna in the southern Levant, open-pit copper extraction fed early metallurgical complexes. Prehistoric workings at Rio Tinto in Iberia left terraces and slag mounds from repeated campaigns. The method required minimal infrastructure but depended on visible mineralization and access to fuel, water, and labor.",
       "requires": [
-        "technologyType:mining"
+        "technologyType:pitMining"
       ],
       "yields": [
         {
@@ -17998,7 +17999,7 @@
       "category": "improvementCategory:quarry",
       "description": "Bronze Age quarries demonstrate organized extraction using bronze chisels, picks, and adzes supported by sledges, cordage, and timber cribbing. Foremen directed crews to cut channels, exploit bedding, and square blocks for construction. Levering and systematic cribbing eased stones onto sleds for haulage to palaces, fortresses, and harbors. On-site water and timber management sustained continuous work. Minoan limestone quarries supplied monumental architecture on Crete, while Hittite centers in Anatolia opened quarries for fortifications and sculpted reliefs. Tool signatures include pecked and chisel-faced surfaces. Sites often lay near roads or landing places to reduce transport costs. The period marks a shift from opportunistic extraction to planned operations tied to palace economies with standardized block sizes and work sequences.",
       "requires": [
-        "technologyType:bronzeWorking",
+        "technologyType:mining",
         "domainType:land",
         [
           "elevationType:hill",
@@ -18067,7 +18068,7 @@
       "category": "improvementCategory:quarry",
       "description": "Ancient rock pits were early open quarries exploiting surface outcrops with simple tools. Workers detached blocks by pounding with hammerstones, levering along natural joints, and inserting wooden wedges swollen with water. Fire-setting softened rock in some contexts. Extraction followed accessible seams near construction sites or ritual centers, with sledges, rollers, and waterways used for transport. Notable examples include bluestone extraction pits in the Preseli Hills, associated with Stonehenge, and limestone workings near the Giza plateau for pyramid building. Labor organization ranged from communal seasonal efforts to royal crews. Debitage piles, tool marks, and haul roads document techniques. These sites established knowledge of bedding planes, fracture behavior, and logistics that later quarrying systems refined.",
       "requires": [
-        "technologyType:mining",
+        "technologyType:pitMining",
         "domainType:land",
         [
           "elevationType:hill",
@@ -48766,7 +48767,7 @@
         "source": "Instruction of Amenemope, 1100 BCE",
         "url": "/media/quotes/technologyType/agriculture.mp3"
       },
-      "x": 4,
+      "x": 8,
       "y": 0,
       "requires": [],
       "yields": [
@@ -48788,7 +48789,7 @@
       ],
       "allows": [
         "improvementType:farm",
-        "technologyType:herbalRemedies"
+        "technologyType:settlements"
       ]
     },
     {
@@ -49534,9 +49535,7 @@
         "buildingType:bronzeSmith",
         "equipmentType:bronzeSpear",
         "equipmentType:bronzeJavelin",
-        "improvementType:quarry",
         "improvementType:sawmill",
-        "improvementType:mine",
         "technologyType:mining",
         "technologyType:irrigation"
       ]
@@ -50186,7 +50185,6 @@
       "allows": [
         "buildingType:taxCollector",
         "improvementType:outpost",
-        "goalType:tradeNetwork",
         "technologyType:calendar",
         "worldWonderType:oldCityOfDamascus"
       ]
@@ -50227,6 +50225,7 @@
         "buildingType:harbor",
         "platformType:heavyClinker",
         "technologyType:carvelHulls",
+        "technologyType:gunpowder",
         "worldWonderType:moaiStatues"
       ]
     },
@@ -50340,8 +50339,9 @@
       "specials": [],
       "actions": [],
       "allows": [
+        "equipmentType:thief",
         "technologyType:commerce",
-        "worldWonderType:ggantija"
+        "worldWonderType:pyramidOfDjoser"
       ]
     },
     {
@@ -51423,7 +51423,7 @@
       "x": 6,
       "y": 56,
       "requires": [
-        "technologyType:optics",
+        "technologyType:compass",
         "technologyType:buttress"
       ],
       "yields": [
@@ -51461,7 +51461,6 @@
       "x": 4,
       "y": 2,
       "requires": [
-        "technologyType:agriculture",
         "technologyType:trapping"
       ],
       "yields": [
@@ -52320,8 +52319,8 @@
       "specials": [],
       "actions": [],
       "allows": [
-        "improvementType:rockPit",
-        "improvementType:minePit",
+        "improvementType:quarry",
+        "improvementType:mine",
         "technologyType:shipBuilding"
       ]
     },
@@ -52394,7 +52393,8 @@
         "buildingType:shrine",
         "equipmentType:shaman",
         "technologyType:trade",
-        "technologyType:copperWorking"
+        "technologyType:copperWorking",
+        "worldWonderType:ggantija"
       ]
     },
     {
@@ -52729,7 +52729,6 @@
       "allows": [
         "technologyType:compass",
         "technologyType:buttress",
-        "technologyType:gunpowder",
         "worldWonderType:houseOfWisdom"
       ]
     },
@@ -52861,7 +52860,8 @@
       "x": 10,
       "y": 4,
       "requires": [
-        "technologyType:woodWorking"
+        "technologyType:woodWorking",
+        "technologyType:settlements"
       ],
       "yields": [
         {
@@ -52878,6 +52878,8 @@
       "actions": [],
       "allows": [
         "buildingType:stoneWorks",
+        "improvementType:rockPit",
+        "improvementType:minePit",
         "technologyType:wheel",
         "technologyType:slings",
         "worldWonderType:hallstattSaltMines"
@@ -53572,6 +53574,43 @@
         "technologyType:composites",
         "technologyType:militaryDrones",
         "worldWonderType:tSMC"
+      ]
+    },
+    {
+      "key": "technologyType:settlements",
+      "name": "Settlements",
+      "concept": "conceptType:technology",
+      "category": "eraType:neolithic",
+      "description": "Settlements arose as communities began occupying fixed locations for extended periods, building permanent structures and organizing space for storage, craft, and communal life. Early settled villages in the Fertile Crescent, Anatolia, and East Asia combined agricultural plots with defended storage facilities and ritual areas. Fixed residence allowed accumulation of tools, surplus grain, and social knowledge. Over time, settlements grew into larger nucleated communities with planned layouts, dedicated workshops, and communal infrastructure. The transition from mobile to settled life restructured kinship, labor, and exchange, creating conditions for later urban institutions.",
+      "image": "/media/images/technologyType/settlements.jpg",
+      "quote": {
+        "text": "A place worth settling is worth defending.",
+        "source": "Ancient proverb"
+      },
+      "x": 8,
+      "y": 2,
+      "requires": [
+        "technologyType:agriculture"
+      ],
+      "yields": [
+        {
+          "type": "yieldType:scienceCost",
+          "method": "lump",
+          "amount": 19,
+          "for": [],
+          "vs": []
+        }
+      ],
+      "gains": [],
+      "upgradesFrom": [],
+      "specials": [],
+      "actions": [],
+      "allows": [
+        "buildingType:governor",
+        "equipmentType:tribe",
+        "goalType:firstCities",
+        "technologyType:tradition",
+        "technologyType:pitMining"
       ]
     },
     {
@@ -54406,9 +54445,8 @@
       "allows": [
         "buildingType:townSquare",
         "equipmentType:trader",
-        "equipmentType:thief",
-        "technologyType:commerce",
-        "worldWonderType:pyramidOfDjoser"
+        "goalType:tradeNetwork",
+        "technologyType:commerce"
       ]
     },
     {
@@ -54465,7 +54503,8 @@
       "x": 6,
       "y": 4,
       "requires": [
-        "technologyType:herbalRemedies"
+        "technologyType:herbalRemedies",
+        "technologyType:settlements"
       ],
       "yields": [
         {
@@ -54482,9 +54521,6 @@
       "actions": [],
       "allows": [
         "buildingType:obelisk",
-        "buildingType:governor",
-        "equipmentType:tribe",
-        "goalType:firstCities",
         "nationalWonderType:geoglyph",
         "technologyType:copperWorking",
         "technologyType:wheel",
@@ -54539,7 +54575,7 @@
         "source": "Proverbs, ca. 400 BCE",
         "url": "/media/quotes/technologyType/trapping.mp3"
       },
-      "x": 8,
+      "x": 4,
       "y": 0,
       "requires": [],
       "yields": [
@@ -54561,8 +54597,7 @@
       ],
       "allows": [
         "improvementType:huntingCamp",
-        "technologyType:herbalRemedies",
-        "technologyType:woodWorking"
+        "technologyType:herbalRemedies"
       ]
     },
     {
@@ -54883,7 +54918,6 @@
       "x": 12,
       "y": 2,
       "requires": [
-        "technologyType:trapping",
         "technologyType:animalHusbandry"
       ],
       "yields": [
@@ -56549,7 +56583,7 @@
         "url": "/media/quotes/worldWonderType/ggantija.mp3"
       },
       "requires": [
-        "technologyType:copperWorking"
+        "technologyType:mysticism"
       ],
       "yields": [
         {
@@ -57872,7 +57906,7 @@
         "url": "/media/quotes/worldWonderType/pyramidOfDjoser.mp3"
       },
       "requires": [
-        "technologyType:trade",
+        "technologyType:copperWorking",
         "featureType:floodPlain"
       ],
       "yields": [
