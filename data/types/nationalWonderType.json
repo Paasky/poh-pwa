@@ -11,7 +11,7 @@
       "source": "Mother Jones, ca. 1890",
       "url": "/media/quotes/nationalWonderType/carnegieSteel.mp3"
     },
-    "requires": ["technologyType:steelMilling", "goalType:industrialMight"],
+    "requires": ["goalType:industrialMight"],
     "yields": [
       {
         "type": "yieldType:production",
@@ -53,7 +53,7 @@
       "source": "William Shatner, 1966",
       "url": "/media/quotes/nationalWonderType/spaceport.mp3"
     },
-    "requires": ["technologyType:privateSpaceFlight"],
+    "requires": ["goalType:spaceRace"],
     "yields": [
       {
         "type": "yieldType:production",
@@ -118,7 +118,7 @@
       "source": "Socrates, 399 BCE",
       "url": "/media/quotes/nationalWonderType/schoolOfSocrates.mp3"
     },
-    "requires": ["technologyType:philosophy", "goalType:greatPhilosophers"],
+    "requires": ["goalType:greatPhilosophers"],
     "yields": [
       {
         "type": "yieldType:science",
@@ -138,7 +138,7 @@
       "source": "Royal Society motto, 1663",
       "url": "/media/quotes/nationalWonderType/royalSociety.mp3"
     },
-    "requires": ["technologyType:scientificMethod", "goalType:theEnlightenment"],
+    "requires": ["goalType:theEnlightenment"],
     "yields": [
       {
         "type": "yieldType:science",
@@ -195,7 +195,7 @@
       "source": "AI researcher, ca. 2023",
       "url": "/media/quotes/nationalWonderType/largeLanguageModel.mp3"
     },
-    "requires": ["technologyType:artificialIntelligence"],
+    "requires": ["goalType:worldWideWeb"],
     "yields": [
       {
         "type": "yieldType:science",
@@ -238,7 +238,7 @@
       "source": "Nazca elder, ca. 500 CE",
       "url": "/media/quotes/nationalWonderType/geoglyph.mp3"
     },
-    "requires": ["technologyType:tradition", "goalType:firstCities"],
+    "requires": ["goalType:firstCities"],
     "yields": [
       {
         "type": "yieldType:culture",
@@ -258,7 +258,7 @@
       "source": "Tablet I, ca. 2100 BCE",
       "url": "/media/quotes/nationalWonderType/greatEpic.mp3"
     },
-    "requires": ["technologyType:drama", "goalType:wondersOfTheWorld"],
+    "requires": ["goalType:wondersOfTheWorld"],
     "yields": [
       {
         "type": "yieldType:culture",
@@ -278,7 +278,7 @@
       "source": "Manesse family motto, ca. 1300",
       "url": "/media/quotes/nationalWonderType/codexManesse.mp3"
     },
-    "requires": ["technologyType:chivalry", "goalType:tournaments"],
+    "requires": ["goalType:tournaments"],
     "yields": [
       {
         "type": "yieldType:culture",
@@ -340,7 +340,7 @@
       "source": "Genesis 28:17",
       "url": "/media/quotes/nationalWonderType/templeMount.mp3"
     },
-    "requires": ["technologyType:organizedReligion", "goalType:pantheonOfGods"],
+    "requires": ["goalType:pantheonOfGods"],
     "yields": [
       {
         "type": "yieldType:faith",
@@ -360,7 +360,7 @@
       "source": "Court scribe, ca. 1400 BCE",
       "url": "/media/quotes/nationalWonderType/royalPalace.mp3"
     },
-    "requires": ["technologyType:buttress", "goalType:mandateOfHeaven"],
+    "requires": ["goalType:mandateOfHeaven"],
     "yields": [
       {
         "type": "yieldType:faith",
@@ -466,7 +466,7 @@
       "source": "Lord Hewart, 1924",
       "url": "/media/quotes/nationalWonderType/highCourt.mp3"
     },
-    "requires": ["technologyType:bureaucracy", "goalType:urbanSociety"],
+    "requires": ["goalType:urbanSociety"],
     "yields": [
       {
         "type": "yieldType:order",
@@ -588,7 +588,7 @@
       "source": "Livy, 25 BCE",
       "url": "/media/quotes/nationalWonderType/campusMartius.mp3"
     },
-    "requires": ["technologyType:standingArmy", "goalType:veniVidiVici"],
+    "requires": ["goalType:veniVidiVici"],
     "yields": [
       {
         "type": "yieldType:production",
@@ -630,7 +630,7 @@
       "source": "Dwight D. Eisenhower, 1957",
       "url": "/media/quotes/nationalWonderType/generalStaff.mp3"
     },
-    "requires": ["technologyType:repeatingRifles", "goalType:worldWar"],
+    "requires": ["goalType:worldWar"],
     "yields": [
       {
         "type": "yieldType:strength",
@@ -693,7 +693,7 @@
       "source": "Ibn Battuta, 1355",
       "url": "/media/quotes/nationalWonderType/greatMarket.mp3"
     },
-    "requires": ["technologyType:currency", "goalType:tradeNetwork"],
+    "requires": ["goalType:tradeNetwork"],
     "yields": [
       {
         "type": "yieldType:gold",
@@ -714,7 +714,7 @@
       "source": "Edmund Burke, 1773",
       "url": "/media/quotes/nationalWonderType/eastIndiaCompany.mp3"
     },
-    "requires": ["technologyType:colonialism", "terrainType:coast"],
+    "requires": ["goalType:colonialEmpire", "terrainType:coast"],
     "yields": [
       {
         "type": "yieldType:tradeSlot",
@@ -778,7 +778,7 @@
       "source": "Occitan saying",
       "url": "/media/quotes/nationalWonderType/carcassonne.mp3"
     },
-    "requires": ["technologyType:castles", "goalType:feudalLords"],
+    "requires": ["elevationType:hill", "goalType:feudalLords"],
     "yields": [
       {
         "type": "yieldType:defense",
@@ -799,7 +799,7 @@
       "source": "Ferdinand Magellan, 1519",
       "url": "/media/quotes/nationalWonderType/voyageOfMagellan.mp3"
     },
-    "requires": ["technologyType:carvelHulls", "terrainType:coast", "goalType:oceanVoyages"],
+    "requires": ["terrainType:coast", "goalType:oceanVoyages"],
     "yields": [
       {
         "type": "yieldType:moves",
@@ -848,7 +848,7 @@
       "source": "Nikita Khrushchev, 1961",
       "url": "/media/quotes/nationalWonderType/tsarBomba.mp3"
     },
-    "requires": ["technologyType:thermonuclearDevice"]
+    "requires": ["goalType:nuclearDeterrence"]
   },
   {
     "category": "nationalWonderCategory:production",

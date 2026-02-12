@@ -856,13 +856,13 @@
   {
     "category": "eraType:iron",
     "concept": "conceptType:technology",
-    "description": "",
+    "description": "Classical arches used wedge-shaped stone voussoirs set over wooden centering and locked by a keystone to redirect vertical loads into lateral thrust carried by piers or abutments. Builders employed stone, brick, and Roman concrete, enabling durable spans in bridges, aqueduct arcades, gates, drains, and vaulted substructures. Repeated arches formed arcades and supported barrel and groin vaults, extending the technique into large interior spaces. Construction required precise stone cutting, mortar bonding, and careful foundation work to resist spreading forces. Roman military engineers and state-sponsored projects standardized arch use across roads and water systems, allowing infrastructure to cross rivers, valleys, and uneven terrain while supporting urban expansion, logistics, and monumentality.",
     "image": "/media/images/technologyType/arches.jpg",
     "key": "technologyType:arches",
     "name": "Arches",
     "quote": {
-      "text": "",
-      "source": "",
+      "text": "Build so it endures.",
+      "source": "Vitruvius, 15 BCE",
       "url": "/media/quotes/technologyType/arches.mp3"
     },
     "requires": ["technologyType:philosophy", "technologyType:alphabet"],
@@ -988,13 +988,13 @@
   {
     "category": "eraType:classical",
     "concept": "conceptType:technology",
-    "description": "",
+    "description": "Classical public works organized state-directed construction of roads, aqueducts, sewers, harbors, walls, and civic buildings to support urban life, sanitation, defense, and administration. Magistrates such as Roman censors and aediles oversaw planning, contracting, and maintenance, while military engineers, skilled laborers, and conscripted or enslaved workers carried out construction using standardized methods in stone, brick, and concrete. Road networks employed graded surfaces, drainage, and milestones to regulate movement and communication, while aqueducts and sewers managed water supply and waste removal. These projects required taxation, legal authority, and logistical coordination across regions, allowing governments to sustain population density, facilitate trade and military deployment, and express civic order and state capacity through durable shared infrastructure.",
     "image": "/media/images/technologyType/publicWorks.jpg",
     "key": "technologyType:publicWorks",
     "name": "Public Works",
     "quote": {
-      "text": "",
-      "source": "",
+      "text": "The welfare of the people shall be the supreme law.",
+      "source": "Cicero, 52 BCE",
       "url": "/media/quotes/technologyType/publicWorks.mp3"
     },
     "requires": ["technologyType:construction", "technologyType:democracy"],
@@ -1010,13 +1010,13 @@
   {
     "category": "eraType:classical",
     "concept": "conceptType:technology",
-    "description": "",
+    "description": "Classical standing armies maintained permanent, state-supported forces of trained infantry, cavalry, and specialists under centralized command, replacing temporary levies with long-term service, standardized equipment, and regular discipline. States such as Achaemenid Persia, Hellenistic kingdoms, and later Rome organized units into fixed formations with defined ranks, pay, and supply systems sustained through taxation and administrative oversight. Soldiers trained in coordinated drill, formation maneuver, and siege operations, while officers enforced hierarchy, logistics, and battlefield control. Permanent garrisons secured frontiers, suppressed revolt, and protected infrastructure and rulers. This institutionalization of military service enabled sustained campaigns, territorial control, and projection of authority, tying military power directly to state organization and political stability.",
     "image": "/media/images/technologyType/standingArmy.jpg",
     "key": "technologyType:standingArmy",
     "name": "Standing Army",
     "quote": {
-      "text": "",
-      "source": "",
+      "text": "He who wishes for peace must prepare for war.",
+      "source": "Vegetius, ca. 400 CE",
       "url": "/media/quotes/technologyType/standingArmy.mp3"
     },
     "requires": ["technologyType:minting"],
@@ -1120,13 +1120,13 @@
   {
     "category": "eraType:medieval",
     "concept": "conceptType:technology",
-    "description": "",
+    "description": "Early medieval guilds organized artisans and merchants into recognized associations that regulated production, training, and trade within towns and emerging urban economies. Members shared standards for quality, tools, and methods, while masters supervised workshops employing apprentices and journeymen under customary rules governing advancement and conduct. Guild statutes controlled prices, weights, and access to markets, and authorities granted privileges such as monopolies over specific crafts in return for taxes, service, or civic obligations. Guilds also maintained mutual aid, religious observances, and collective representation before municipal or lordly officials. This structure stabilized skilled production, supported urban growth, and integrated economic activity with local governance and social order.",
     "image": "/media/images/technologyType/guilds.jpg",
     "key": "technologyType:guilds",
     "name": "Guilds",
     "quote": {
-      "text": "",
-      "source": "",
+      "text": "Each craft shall have its proper rules and masters.",
+      "source": "Étienne Boileau, 1268",
       "url": "/media/quotes/technologyType/guilds.mp3"
     },
     "requires": ["technologyType:woodComposites"],
