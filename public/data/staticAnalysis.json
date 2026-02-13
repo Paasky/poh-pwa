@@ -553,19 +553,19 @@
       "actions": 24
     },
     "worldWonderType": {
-      "key": 88,
-      "name": 88,
-      "concept": 88,
-      "category": 88,
-      "description": 88,
-      "image": 88,
-      "quote": 88,
-      "requires": 88,
-      "yields": 88,
-      "gains": 88,
-      "upgradesFrom": 88,
-      "specials": 88,
-      "actions": 88
+      "key": 87,
+      "name": 87,
+      "concept": 87,
+      "category": 87,
+      "description": 87,
+      "image": 87,
+      "quote": 87,
+      "requires": 87,
+      "yields": 87,
+      "gains": 87,
+      "upgradesFrom": 87,
+      "specials": 87,
+      "actions": 87
     }
   },
   "categories": {

@@ -11483,7 +11483,7 @@
         "platformType:carvel": "Xebec"
       },
       "requires": [
-        "technologyType:steelSmithing"
+        "technologyType:clinkerHulls"
       ],
       "yields": [
         {
@@ -13820,7 +13820,6 @@
       ],
       "actions": [],
       "allows": [
-        "worldWonderType:pyramidOfDjoser",
         "worldWonderType:pyramidsOfGiza"
       ]
     },
@@ -47374,7 +47373,6 @@
         "worldWonderType:prora",
         "worldWonderType:newgrange",
         "worldWonderType:porcelainTower",
-        "worldWonderType:pyramidOfDjoser",
         "worldWonderType:pyramidsOfGiza",
         "worldWonderType:forbiddenPalace",
         "worldWonderType:unitedNations"
@@ -50301,6 +50299,7 @@
       "specials": [],
       "actions": [],
       "allows": [
+        "equipmentType:raiders",
         "platformType:clinker",
         "technologyType:tradeCaravans",
         "technologyType:optics",
@@ -50339,8 +50338,7 @@
       "actions": [],
       "allows": [
         "buildingType:courthouse",
-        "technologyType:currency",
-        "worldWonderType:pyramidsOfGiza"
+        "technologyType:currency"
       ]
     },
     {
@@ -50685,8 +50683,7 @@
       "actions": [],
       "allows": [
         "equipmentType:thief",
-        "technologyType:commerce",
-        "worldWonderType:pyramidOfDjoser"
+        "technologyType:commerce"
       ]
     },
     {
@@ -52199,7 +52196,8 @@
         "buildingType:garden",
         "improvementType:irrigatedFarm",
         "improvementType:irrigatedPlantation",
-        "technologyType:writing"
+        "technologyType:writing",
+        "worldWonderType:pyramidsOfGiza"
       ]
     },
     {
@@ -54523,7 +54521,6 @@
       "allows": [
         "buildingType:forge",
         "equipmentType:longsword",
-        "equipmentType:raiders",
         "technologyType:tradeCaravans",
         "worldWonderType:alhambra"
       ]
@@ -58203,38 +58200,6 @@
       "actions": []
     },
     {
-      "key": "worldWonderType:pyramidOfDjoser",
-      "name": "Pyramid of Djoser",
-      "concept": "conceptType:worldWonder",
-      "category": "worldWonderCategory:order",
-      "description": "The Pyramid of Djoser at Saqqara, built c. 2667-2648 BCE for the Third Dynasty king, is the earliest large-scale stone pyramid in Egypt. Designed by the vizier Imhotep, it evolved from a mastaba into a six-step structure within a vast walled complex. Courts, dummy chapels, colonnaded corridors, and the Heb-Sed court structured royal ritual and posthumous cult. Fine limestone masonry and corbelled substructures protected the burial and storerooms. The complex centralized funerary administration under a specialized priesthood and signaled state capacity for organized labor, quarrying, and transport. Excavations and restorations since the 20th century have stabilized the collapse-prone burial chamber and clarified construction sequences. The monument set precedent for Old Kingdom pyramids at Meidum and Giza by establishing techniques of casing, orientation, and enclosure planning.",
-      "image": "/media/images/worldWonderType/pyramidOfDjoser.jpg",
-      "quote": {
-        "text": "Imhotep, sage of sages, built this for Djoser’s name to live forever.",
-        "source": "Priestly text, ca. 2700 BCE",
-        "url": "/media/quotes/worldWonderType/pyramidOfDjoser.mp3"
-      },
-      "requires": [
-        "technologyType:copperWorking",
-        "featureType:floodPlain"
-      ],
-      "yields": [
-        {
-          "type": "yieldType:order",
-          "method": "lump",
-          "amount": 2,
-          "for": [
-            "specialType:allCities"
-          ],
-          "vs": []
-        }
-      ],
-      "gains": [],
-      "upgradesFrom": [],
-      "specials": [],
-      "actions": []
-    },
-    {
       "key": "worldWonderType:pyramidsOfGiza",
       "name": "Pyramids of Giza",
       "concept": "conceptType:worldWonder",
@@ -58247,7 +58212,7 @@
         "url": "/media/quotes/worldWonderType/pyramidsOfGiza.mp3"
       },
       "requires": [
-        "technologyType:codeOfLaw",
+        "technologyType:irrigation",
         "featureType:floodPlain"
       ],
       "yields": [
@@ -63082,7 +63047,6 @@
       "concept": "conceptType:worldWonder",
       "description": "",
       "relatesTo": [
-        "worldWonderType:pyramidOfDjoser",
         "worldWonderType:pyramidsOfGiza",
         "worldWonderType:forbiddenPalace",
         "worldWonderType:oldBailey",

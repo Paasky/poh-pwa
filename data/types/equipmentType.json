@@ -816,7 +816,7 @@
       "platformType:clinker": "Longship",
       "platformType:carvel": "Xebec"
     },
-    "requires": ["technologyType:steelSmithing"],
+    "requires": ["technologyType:clinkerHulls"],
     "specials": ["specialType:pillageRange"],
     "upgradesFrom": ["equipmentType:ironRam"],
     "yields": [
