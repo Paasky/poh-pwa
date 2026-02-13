@@ -53,7 +53,7 @@
       "source": "William Shatner, 1966",
       "url": "/media/quotes/nationalWonderType/spaceport.mp3"
     },
-    "requires": ["goalType:spaceRace"],
+    "requires": ["technologyType:privateSpaceFlight"],
     "yields": [
       {
         "type": "yieldType:production",
@@ -171,17 +171,17 @@
   {
     "category": "nationalWonderCategory:science",
     "concept": "conceptType:nationalWonder",
-    "description": "A space program is a government-led effort to develop rockets, satellites, and crewed flight for science, security, and economic aims. The Soviet launch of Sputnik in 1957 initiated global competition and collaboration. The United States achieved the Apollo Moon landings in 1969–1972 after Mercury and Gemini. Early human missions such as Vostok and Mercury proved orbital flight and reentry. Programs also built weather, communications, and navigation satellites. Over time agencies added international partnerships, reusable systems, and commercial procurement.",
-    "image": "/media/images/nationalWonderType/spaceProgram.jpg",
-    "key": "nationalWonderType:spaceProgram",
-    "name": "Space Program",
+    "description": "The Hubble Space Telescope placed a large optical observatory in low Earth orbit above atmospheric distortion, enabling sustained high-resolution observation of distant celestial objects. Its reflecting telescope, stabilized by precision gyroscopes and guided by onboard computers, captured detailed images and spectra across visible and ultraviolet wavelengths. Orbiting above weather, light pollution, and atmospheric interference allowed consistent long-exposure measurements impossible from ground-based instruments. Servicing missions replaced instruments and extended operational lifespan, incorporating improved cameras and sensors. Hubble provided data on galaxy formation, stellar evolution, and cosmic expansion, refining measurement of the universe’s age and structure. Its observations expanded astronomical research, supported theoretical models, and made deep-space phenomena visible with unprecedented clarity.",
+    "image": "/media/images/nationalWonderType/hubbleTelescope.jpg",
+    "key": "nationalWonderType:hubbleTelescope",
+    "name": "Hubble Telescope",
     "quote": {
-      "text": "We choose to go to the moon—not because it is easy, but because it is hard.",
-      "source": "John F. Kennedy, 1962",
-      "url": "/media/quotes/nationalWonderType/spaceProgram.mp3"
+      "text": "Somewhere, something incredible is waiting to be known.",
+      "source": "Carl Sagan, 1980",
+      "url": "/media/quotes/nationalWonderType/hubbleTelescope.mp3"
     },
-    "requires": ["technologyType:spaceFlight"],
-    "specials": ["specialType:canBuildSatellites"]
+    "requires": ["goalType:spaceRace"],
+    "specials": []
   },
   {
     "category": "nationalWonderCategory:science",
@@ -849,6 +849,21 @@
       "url": "/media/quotes/nationalWonderType/tsarBomba.mp3"
     },
     "requires": ["goalType:nuclearDeterrence"]
+  },
+  {
+    "category": "nationalWonderCategory:production",
+    "concept": "conceptType:nationalWonder",
+    "description": "A space program is a government-led effort to develop rockets, satellites, and crewed flight for science, security, and economic aims. The Soviet launch of Sputnik in 1957 initiated global competition and collaboration. The United States achieved the Apollo Moon landings in 1969–1972 after Mercury and Gemini. Early human missions such as Vostok and Mercury proved orbital flight and reentry. Programs also built weather, communications, and navigation satellites. Over time agencies added international partnerships, reusable systems, and commercial procurement.",
+    "image": "/media/images/nationalWonderType/spaceProgram.jpg",
+    "key": "nationalWonderType:spaceProgram",
+    "name": "Space Program",
+    "quote": {
+      "text": "We choose to go to the moon—not because it is easy, but because it is hard.",
+      "source": "John F. Kennedy, 1962",
+      "url": "/media/quotes/nationalWonderType/spaceProgram.mp3"
+    },
+    "requires": ["technologyType:spaceFlight"],
+    "specials": ["specialType:canBuildSatellites"]
   },
   {
     "category": "nationalWonderCategory:production",

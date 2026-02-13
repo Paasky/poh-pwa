@@ -844,7 +844,7 @@
     "description": "Helicopters use powered rotors for vertical takeoff, hovering, and landing in confined areas. Igor Sikorsky’s R-4 (1942) proved practical single-rotor design with tail rotor anti-torque. Postwar models expanded roles in rescue, liaison, and anti-submarine warfare. The Bell UH-1 Huey (1959) defined air mobility in Vietnam, moving troops and evacuating casualties. The Mil Mi-8 (1967) served worldwide as a versatile transport. Turboshaft engines improved power-to-weight and reliability. Advances included composite rotor blades, vibration control, and automatic flight systems for low-level operations. Attack variants added armor, cannons, and anti-tank missiles. Limitations include speed, range, and vulnerability to weather and small-arms fire. Tiltrotors and compound helicopters seek higher cruise speeds while preserving vertical-lift capability for dispersed operations.",
     "key": "platformType:helicopter",
     "name": "Helicopter",
-    "requires": ["technologyType:verticalFlight", "resourceType:aluminium", "resourceType:oil"],
+    "requires": ["technologyType:combinedArms", "resourceType:aluminium", "resourceType:oil"],
     "specials": ["specialType:ignoreMoveCost", "specialType:canMoveAfterAttack"],
     "yields": [
       {

@@ -1414,7 +1414,7 @@
       "platformType:human": "Paratrooper",
       "platformType:truck": "Mot. Paratrooper"
     },
-    "requires": ["technologyType:verticalFlight"],
+    "requires": ["technologyType:combinedArms"],
     "specials": [
       "specialType:ignoreMoveCost",
       "specialType:canMoveAfterAttack",
@@ -2317,7 +2317,7 @@
     "names": {
       "platformType:dieselHull": "Heavy Carrier"
     },
-    "requires": ["technologyType:navalCatapults"],
+    "requires": ["technologyType:combinedArms"],
     "upgradesFrom": ["equipmentType:woodDeck"],
     "yields": [
       {

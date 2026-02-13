@@ -121,7 +121,7 @@
       "source": "Elon Musk, 2016",
       "url": "/media/quotes/worldWonderType/gigafactory.mp3"
     },
-    "requires": ["technologyType:robotics", "conceptType:flatLand"],
+    "requires": ["technologyType:semiconductors", "conceptType:flatLand"],
     "yields": [
       {
         "type": "yieldType:production",
@@ -698,7 +698,7 @@
       "source": "Josep Puig i Cadafalch, ca. 1930",
       "url": "/media/quotes/worldWonderType/sagradaFamilia.mp3"
     },
-    "requires": ["technologyType:verticalFlight"],
+    "requires": ["technologyType:religiousRevival"],
     "yields": [
       {
         "type": "yieldType:faith",
@@ -1156,7 +1156,7 @@
       "source": "NASA, 2000",
       "url": "/media/quotes/worldWonderType/internationalSpaceStation.mp3"
     },
-    "requires": ["technologyType:spaceFlight"],
+    "requires": ["technologyType:flyByWire"],
     "yields": [
       {
         "type": "yieldType:influence",
@@ -1476,7 +1476,7 @@
       "source": "Union Pacific, ca. 1970",
       "url": "/media/quotes/worldWonderType/baileyYard.mp3"
     },
-    "requires": ["technologyType:globalization"],
+    "requires": ["technologyType:aluminumMilling"],
     "yields": [
       {
         "type": "yieldType:gold",

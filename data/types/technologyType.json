@@ -108,6 +108,27 @@
   {
     "category": "eraType:neolithic",
     "concept": "conceptType:technology",
+    "description": "Settlements arose as communities began occupying fixed locations for extended periods, building permanent structures and organizing space for storage, craft, and communal life. Early settled villages in the Fertile Crescent, Anatolia, and East Asia combined agricultural plots with defended storage facilities and ritual areas. Fixed residence allowed accumulation of tools, surplus grain, and social knowledge. Over time, settlements grew into larger nucleated communities with planned layouts, dedicated workshops, and communal infrastructure. The transition from mobile to settled life restructured kinship, labor, and exchange, creating conditions for later urban institutions.",
+    "image": "/media/images/technologyType/settlements.jpg",
+    "key": "technologyType:settlements",
+    "name": "Settlements",
+    "quote": {
+      "text": "A place worth settling is worth defending.",
+      "source": "Ancient proverb"
+    },
+    "requires": ["technologyType:agriculture"],
+    "x": 8,
+    "y": 2,
+    "yields": [
+      {
+        "type": "yieldType:scienceCost",
+        "amount": 19
+      }
+    ]
+  },
+  {
+    "category": "eraType:neolithic",
+    "concept": "conceptType:technology",
     "description": "Wood working supplied tools, dwellings, vehicles, and boats from the Neolithic onward. Craftspeople used adzes, chisels, bow drills, and saws, first in stone and later in copper and bronze. Joinery methods such as mortise-and-tenon, dowels, and lashings produced durable frames and furniture. Large timber longhouses in Neolithic Europe required planned felling, seasoning, and fitted posts. Dugout canoes carved from single trunks enabled riverine transport and fishing. Shipwrights refined planking and edge-joining for lighter hulls. Wheelmaking and sledge construction expanded land transport. Surface finishes, resins, and pigments protected and decorated wooden surfaces. Workshops developed standardized parts and templates to speed production. Offcuts fueled hearths and kilns, integrating carpentry with broader settlement economies. Archaeological finds from waterlogged contexts preserve tool marks and assembly techniques, allowing reconstruction of craft sequences and regional styles across early Eurasia and the Nile Valley.",
     "image": "/media/images/technologyType/woodWorking.jpg",
     "key": "technologyType:woodWorking",
@@ -2484,7 +2505,7 @@
   {
     "category": "eraType:modern",
     "concept": "conceptType:technology",
-    "description": "Hydrodynamics studies fluid motion, forces, and energy exchange in liquids. Building on the Navier–Stokes framework and dimensional analysis, 20th-century research linked laboratory models to full-scale systems through similarity laws and Reynolds number scaling. Naval architects applied towing tanks and cavitation tunnels to refine hull forms, propellers, and rudders, reducing drag and avoiding destructive vapor bubble collapse. Engineers optimized pumps, valves, and hydraulic turbines for irrigation, power generation, and industry. Submarine design integrated boundary-layer control and fairing to manage flow separation and acoustic signatures. The field supported offshore platforms, river control, and flood forecasting by coupling theory with instrumented trials. Computational methods later extended analysis to transient flows, free-surface waves, and multiphase phenomena.",
+    "description": "Hydrodynamics applied the study of fluid motion to the design and operation of ships, turbines, and hydraulic structures supporting industrial economies and modern navies. Engineers analyzed resistance, buoyancy, and flow behavior to refine hull shapes, propellers, and rudders, improving speed, efficiency, and stability under varying conditions. Experimental towing tanks and mathematical models enabled systematic testing and optimization of vessel performance. Hydraulic principles governed the construction of dams, spillways, and turbines that converted moving water into mechanical and electrical power. Dry docks used controlled flooding and pumping systems to support ship construction and maintenance below the waterline. These applications allowed states and industries to expand maritime transport, naval capability, and large-scale energy production through controlled interaction with moving fluids.",
     "image": "/media/images/technologyType/hydrodynamics.jpg",
     "key": "technologyType:hydrodynamics",
     "name": "Hydrodynamics",
@@ -2572,13 +2593,13 @@
   {
     "category": "eraType:modern",
     "concept": "conceptType:technology",
-    "description": "",
+    "description": "Submarines employed submersible hulls, ballast systems, and propulsion machinery to operate beneath the water’s surface for extended periods, enabling covert movement, reconnaissance, and attack. Early designs used hand-powered or compressed-air propulsion, while later vessels adopted diesel-electric and electric battery systems to balance submerged endurance with surface range. Ballast tanks regulated buoyancy by admitting or expelling water, allowing controlled diving, surfacing, and depth stability. Pressure-resistant hulls and periscopes enabled navigation and observation while submerged, and torpedoes provided offensive capability against ships and infrastructure. Naval institutions developed specialized training, maintenance, and operational doctrine for underwater warfare. Submarines altered naval strategy by enabling concealed approach, disrupting supply lines, and extending military presence below the surface domain.",
     "image": "/media/images/technologyType/submarines.jpg",
     "key": "technologyType:submarines",
     "name": "Submarines",
     "quote": {
-      "text": "",
-      "source": "",
+      "text": "The sea is everything. It covers seven tenths of the terrestrial globe.",
+      "source": "Jules Verne, 1870",
       "url": "/media/quotes/technologyType/submarines.mp3"
     },
     "requires": ["technologyType:hydrodynamics"],
@@ -2928,14 +2949,14 @@
   {
     "category": "eraType:digital",
     "concept": "conceptType:technology",
-    "description": "Vertical flight covers aircraft that take off and land vertically, allowing operations from confined areas. Helicopters create lift with powered rotors and use collective and cyclic controls. The Sikorsky R‑4 established practical utility in the 1940s. Turboshaft engines expanded range and payload, producing utility and assault types such as the UH‑1 Huey. Fixed‑wing VTOL aircraft use vectoring nozzles or lift fans, as with the Harrier. Vertical flight supports rescue, medevac, logistics, and close air support in difficult terrain. Research seeks higher speed, lower vibration, and hybrid rotorcraft configurations.",
-    "image": "/media/images/technologyType/verticalFlight.jpg",
-    "key": "technologyType:verticalFlight",
-    "name": "Vertical Flight",
+    "description": "Combined arms integrated infantry, cavalry, artillery, and later mechanized and air units into coordinated formations that applied complementary strengths against enemy forces. Commanders organized units to support one another, with infantry holding ground, cavalry or mobile forces maneuvering, and artillery disrupting formations and defenses at range. Communication systems, standardized drill, and staff planning enabled synchronized movement and timing across diverse units. Logistics supplied ammunition, equipment, and transport to sustain operations over distance. This coordination reduced the vulnerabilities of individual unit types and increased battlefield effectiveness. Combined arms allowed militaries to conduct offensive and defensive operations with greater flexibility, concentration of force, and operational control across complex and changing combat conditions.",
+    "image": "/media/images/technologyType/combinedArms.jpg",
+    "key": "technologyType:combinedArms",
+    "name": "Combined Arms",
     "quote": {
       "text": "I ain't no fortunate son...",
       "source": "Creedence Clearwater Revival, 1969",
-      "url": "/media/quotes/technologyType/verticalFlight.mp3"
+      "url": "/media/quotes/technologyType/combinedArms.mp3"
     },
     "requires": ["technologyType:plastics", "technologyType:nuclearPropulsion"],
     "x": 4,
@@ -3003,7 +3024,7 @@
       "source": "Gordon Moore, 1965",
       "url": "/media/quotes/technologyType/microchips.mp3"
     },
-    "requires": ["technologyType:transistors", "technologyType:verticalFlight"],
+    "requires": ["technologyType:transistors", "technologyType:combinedArms"],
     "x": 2,
     "y": 107,
     "yields": [
@@ -3016,16 +3037,16 @@
   {
     "category": "eraType:digital",
     "concept": "conceptType:technology",
-    "description": "Naval catapults convert stored energy into the sudden acceleration required to launch aircraft from short carrier decks. Early systems employed gunpowder charges and flywheels before hydraulic and steam-driven catapults became standard during the mid-20th century. Steam catapults, pioneered by the British and perfected in U.S. carriers, used high-pressure steam to drive a shuttle along the deck track, enabling the launch of heavy jet aircraft in rapid sequence. Launch valves, bridle catchers, and precise steam control ensured consistent end speeds across varying aircraft weights. Modern developments introduced the Electromagnetic Aircraft Launch System (EMALS), replacing steam with linear induction motors that offer smoother acceleration, reduced maintenance, and digital control integration. EMALS supports a wider range of airframes, from unmanned drones to heavy strike aircraft, while cutting thermal and mechanical stress on both launcher and airframe. These catapults, whether steam or electromagnetic, remain vital to carrier operations, merging naval engineering, power generation, and flight dynamics into a single, synchronized act of sea-based aviation.\n",
-    "image": "/media/images/technologyType/navalCatapults.jpg",
-    "key": "technologyType:navalCatapults",
-    "name": "Naval Catapults",
+    "description": "",
+    "image": "/media/images/technologyType/religiousRevival.jpg",
+    "key": "technologyType:religiousRevival",
+    "name": "Religious Revival",
     "quote": {
-      "text": "I feel the need — the need for speed!",
-      "source": "Top Gun, 1986",
-      "url": "/media/quotes/technologyType/navalCatapults.mp3"
+      "text": "Faith begins where sight ends.",
+      "source": "Martin Luther King, ca. 1960",
+      "url": "/media/quotes/technologyType/religiousRevival.mp3"
     },
-    "requires": ["technologyType:verticalFlight", "technologyType:spaceFlight"],
+    "requires": ["technologyType:combinedArms", "technologyType:spaceFlight"],
     "x": 6,
     "y": 107,
     "yields": [
@@ -3093,7 +3114,7 @@
     },
     "requires": [
       "technologyType:microchips",
-      "technologyType:navalCatapults",
+      "technologyType:religiousRevival",
       "technologyType:stateSurveillance"
     ],
     "x": 6,
@@ -3504,72 +3525,6 @@
   {
     "category": "eraType:nano",
     "concept": "conceptType:technology",
-    "description": "Graphite is a layered crystalline allotrope of carbon with high electrical and thermal conductivity. It serves in electrodes, neutron moderators, lubricants, refractories, and lightweight composites. In the 2000s and 2010s, demand surged for lithium‑ion battery anodes used in electronics and electric vehicles. Advanced gas‑cooled reactors use graphite moderators, and conductive fillers appear in electromagnetic and low‑observable coatings. Both natural and synthetic graphite are employed; the latter offers purity and tailored particle size. China emerged as the dominant supplier and processor, prompting diversification and recycling efforts. Environmental and energy costs in purification influenced supply chains. Work continues on silicon‑graphite blends and end‑of‑life anode recovery to meet growing storage needs.",
-    "image": "/media/images/technologyType/graphite.jpg",
-    "key": "technologyType:graphite",
-    "name": "Graphite",
-    "quote": {
-      "text": "Carbon is the element of life.",
-      "source": "Chemistry textbook phrase",
-      "url": "/media/quotes/technologyType/graphite.mp3"
-    },
-    "requires": ["technologyType:stealth"],
-    "x": 10,
-    "y": 126,
-    "yields": [
-      {
-        "type": "yieldType:scienceCost",
-        "amount": 880
-      }
-    ]
-  },
-  {
-    "category": "eraType:nano",
-    "concept": "conceptType:technology",
-    "description": "AI processing hardware accelerates machine learning training and inference. General‑purpose GPUs gained software support with CUDA in 2006, enabling large‑scale parallelism for neural networks. Specialized units followed. Google’s Tensor Processing Units, introduced in 2016, added high‑throughput matrix engines for datacenters. Device‑level neural engines, such as Apple’s, brought on‑device inference with low latency and privacy benefits. Key features include tensor cores, mixed‑precision arithmetic, high‑bandwidth memory, and fast interconnects for multi‑accelerator scaling. Software stacks integrate compilers, kernels, and graph optimizers across TensorFlow and PyTorch. Inference accelerators target efficiency per watt at the edge, while training clusters emphasize throughput and reliability. Co‑design of models and hardware remains central to performance and energy gains.",
-    "image": "/media/images/technologyType/aIProcessing.jpg",
-    "key": "technologyType:aIProcessing",
-    "name": "AI Processing",
-    "quote": {
-      "text": "Time is the most valuable thing a man can spend.",
-      "source": "Theophrastus, ca. 300 BCE",
-      "url": "/media/quotes/technologyType/aIProcessing.mp3"
-    },
-    "requires": ["technologyType:artificialIntelligence"],
-    "x": 0,
-    "y": 128,
-    "yields": [
-      {
-        "type": "yieldType:scienceCost",
-        "amount": 920
-      }
-    ]
-  },
-  {
-    "category": "eraType:nano",
-    "concept": "conceptType:technology",
-    "description": "AI analysis applies machine learning to extract patterns, predictions, and decisions from data at speed. Natural language models such as BERT (2018) improved search and information retrieval. Financial systems use anomaly detection to curb fraud. Medical imaging platforms assist clinicians with triage and diagnosis. Pipelines combine data preparation, model selection, and evaluation with monitoring in production. Interpretability, bias assessment, and auditability are required for high‑stakes uses. Deployed systems often run in real time and integrate with human oversight.",
-    "image": "/media/images/technologyType/aIAnalysis.jpg",
-    "key": "technologyType:aIAnalysis",
-    "name": "AI Analysis",
-    "quote": {
-      "text": "Information is not knowledge.",
-      "source": "Albert Einstein, 1929",
-      "url": "/media/quotes/technologyType/aIAnalysis.mp3"
-    },
-    "requires": ["technologyType:artificialIntelligence", "technologyType:privateSpaceFlight"],
-    "x": 4,
-    "y": 128,
-    "yields": [
-      {
-        "type": "yieldType:scienceCost",
-        "amount": 920
-      }
-    ]
-  },
-  {
-    "category": "eraType:nano",
-    "concept": "conceptType:technology",
     "description": "Weaponized lasers are directed‑energy systems that deliver concentrated light to damage sensors, drones, small boats, or incoming munitions. Power‑scaling of solid‑state and fiber lasers in the 2000s and 2010s enabled field trials. The US Navy demonstrated LaWS in 2014 and tested HELIOS for ship defense. Israel’s Iron Beam advanced ground‑based interception trials. Advantages include speed‑of‑light engagement, deep magazines, and low cost per shot. Challenges involve atmospheric attenuation, beam control, power supply, and thermal management. Operational concepts pair lasers with conventional defenses and networked sensors for layered protection.",
     "image": "/media/images/technologyType/weaponizedLasers.jpg",
     "key": "technologyType:weaponizedLasers",
@@ -3579,79 +3534,13 @@
       "source": "Dr. Evil, Austin Powers, 1997",
       "url": "/media/quotes/technologyType/weaponizedLasers.mp3"
     },
-    "requires": ["technologyType:privateSpaceFlight", "technologyType:graphite"],
-    "x": 8,
-    "y": 128,
+    "requires": ["technologyType:stealth"],
+    "x": 10,
+    "y": 126,
     "yields": [
       {
         "type": "yieldType:scienceCost",
-        "amount": 920
-      }
-    ]
-  },
-  {
-    "category": "eraType:nano",
-    "concept": "conceptType:technology",
-    "description": "Nanotechnology concerns the design and control of materials and devices at the 1–100 nm scale. Foundations include Feynman’s 1959 vision, scanning probe tools in the 1980s, and the National Nanotechnology Initiative launched in 2000. The 2000s saw growth in practical nanomaterials. Carbon nanotubes and graphene offered high strength and conductivity, though manufacturing remained complex. Nanoparticle drug delivery improved targeting in oncology. Quantum dots entered commercial displays with vivid color performance. Semiconductor fabrication advanced with nanoscale lithography and materials engineering. Standards and risk frameworks addressed toxicity, environmental fate, and metrology. The field bridges physics, chemistry, biology, and engineering to deliver tunable properties unavailable at bulk scales.",
-    "image": "/media/images/technologyType/nanotechnology.jpg",
-    "key": "technologyType:nanotechnology",
-    "name": "Nanotechnology",
-    "quote": {
-      "text": "Small is beautiful..",
-      "source": "E.F. Schumacher, 1973",
-      "url": "/media/quotes/technologyType/nanotechnology.mp3"
-    },
-    "requires": ["technologyType:aIProcessing", "technologyType:aIAnalysis"],
-    "x": 2,
-    "y": 130,
-    "yields": [
-      {
-        "type": "yieldType:scienceCost",
-        "amount": 960
-      }
-    ]
-  },
-  {
-    "category": "eraType:nano",
-    "concept": "conceptType:technology",
-    "description": "Synthetic graphite is a high-purity carbon material produced by graphitizing petroleum coke or other precursors at extreme temperature. Industrial production began in the early twentieth century for electrodes, later expanding to nuclear, aerospace, and electronics. Engineered grades offer tailored grain, porosity, and thermal conductivity. They withstand high heat flux, conduct heat efficiently, and can be protected against oxidation with suitable coatings. In advanced energy systems, synthetic graphite appears in divertor and first-wall components of commercial fusion power plants, where thermal shock and erosion control are critical. Space programs employ graphite structures and heat spreaders for high-energy laser payloads, including optics benches with tight dimensional stability. Grid storage uses graphite in high-performance battery and ultracapacitor electrodes, leveraging fast ion transport and long cycle life. Aerothermodynamics benefits include ablative nosecones and heat shields for sustained hypersonic flight, where controlled recession and structural integrity under oxidizing flow are essential.",
-    "image": "/media/images/technologyType/syntheticGraphite.jpg",
-    "key": "technologyType:syntheticGraphite",
-    "name": "Synthetic Graphite",
-    "quote": {
-      "text": "Without minerals, there is no progress.",
-      "source": "Mining industry slogan",
-      "url": "/media/quotes/technologyType/syntheticGraphite.mp3"
-    },
-    "requires": ["technologyType:aIAnalysis", "technologyType:weaponizedLasers"],
-    "x": 6,
-    "y": 130,
-    "yields": [
-      {
-        "type": "yieldType:scienceCost",
-        "amount": 960
-      }
-    ]
-  },
-  {
-    "category": "eraType:nano",
-    "concept": "conceptType:technology",
-    "description": "AI targeting denotes autonomous or semi-autonomous systems that detect, classify, track, and select targets using machine learning. The field grew with deep neural networks, embedded accelerators, and robust sensor fusion. Onboard inference enables fully autonomous drone swarms to coordinate navigation and engagement while deconflicting fire. Point-defense laser turrets predict hypersonic trajectories and steer beams for intercept. Armored vehicle fire-control integrates real-time scene understanding to prioritize threats and automate lead and stabilization. Smart munitions exchange data over secure mesh networks to retask in midcourse. Engineering focuses include latency, adversarial robustness, electronic warfare resilience, and positive control. Many programs impose human authorization for lethal action and maintain audit trails for post-mission review. Testing regimes use high-fidelity simulators and range trials against decoys and clutter. The technology alters command tempo and logistics while raising verification and safety challenges that drive standards and policy.",
-    "image": "/media/images/technologyType/aITargeting.jpg",
-    "key": "technologyType:aITargeting",
-    "name": "AI Targeting",
-    "quote": {
-      "text": "I’ll be back.",
-      "source": "The Terminator, 1984",
-      "url": "/media/quotes/technologyType/aITargeting.mp3"
-    },
-    "requires": ["technologyType:nanotechnology"],
-    "x": 0,
-    "y": 133,
-    "yields": [
-      {
-        "type": "yieldType:scienceCost",
-        "amount": 970
+        "amount": 880
       }
     ]
   },
@@ -3667,13 +3556,17 @@
       "source": "Physics community proverb",
       "url": "/media/quotes/technologyType/nuclearFusion.mp3"
     },
-    "requires": ["technologyType:nanotechnology", "technologyType:syntheticGraphite"],
-    "x": 4,
-    "y": 133,
+    "requires": [
+      "technologyType:artificialIntelligence",
+      "technologyType:privateSpaceFlight",
+      "technologyType:weaponizedLasers"
+    ],
+    "x": 6,
+    "y": 128,
     "yields": [
       {
         "type": "yieldType:scienceCost",
-        "amount": 970
+        "amount": 920
       }
     ]
   },
@@ -3689,34 +3582,13 @@
       "source": "Niels Bohr, ca. 1940",
       "url": "/media/quotes/technologyType/futureTech.mp3"
     },
-    "requires": ["technologyType:aITargeting", "technologyType:nuclearFusion"],
-    "x": 2,
-    "y": 135,
+    "requires": ["technologyType:nuclearFusion"],
+    "x": 6,
+    "y": 130,
     "yields": [
       {
         "type": "yieldType:scienceCost",
-        "amount": 1012
-      }
-    ]
-  },
-  {
-    "category": "eraType:neolithic",
-    "concept": "conceptType:technology",
-    "description": "Settlements arose as communities began occupying fixed locations for extended periods, building permanent structures and organizing space for storage, craft, and communal life. Early settled villages in the Fertile Crescent, Anatolia, and East Asia combined agricultural plots with defended storage facilities and ritual areas. Fixed residence allowed accumulation of tools, surplus grain, and social knowledge. Over time, settlements grew into larger nucleated communities with planned layouts, dedicated workshops, and communal infrastructure. The transition from mobile to settled life restructured kinship, labor, and exchange, creating conditions for later urban institutions.",
-    "image": "/media/images/technologyType/settlements.jpg",
-    "key": "technologyType:settlements",
-    "name": "Settlements",
-    "quote": {
-      "text": "A place worth settling is worth defending.",
-      "source": "Ancient proverb"
-    },
-    "requires": ["technologyType:agriculture"],
-    "x": 8,
-    "y": 2,
-    "yields": [
-      {
-        "type": "yieldType:scienceCost",
-        "amount": 19
+        "amount": 1000
       }
     ]
   }

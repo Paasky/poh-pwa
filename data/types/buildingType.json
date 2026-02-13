@@ -712,7 +712,7 @@
     "image": "/media/images/buildingType/megachurch.jpg",
     "key": "buildingType:megachurch",
     "name": "Megachurch",
-    "requires": ["technologyType:verticalFlight", ["conceptType:flatLand", "elevationType:hill"]],
+    "requires": ["technologyType:religiousRevival", ["conceptType:flatLand", "elevationType:hill"]],
     "upgradesFrom": ["buildingType:televangelist"],
     "yields": [
       {

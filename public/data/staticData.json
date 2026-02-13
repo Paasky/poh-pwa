@@ -2561,7 +2561,7 @@
       "description": "A megachurch is a modern congregation with very large weekly attendance, often exceeding 2,000, meeting in purpose-built auditoriums. Campuses integrate worship halls, classrooms, cafés, bookstores, and children’s facilities. Many operate multi-service schedules, small-group networks, and extensive volunteer systems. Media production, live music, and digital streaming extend reach beyond the site. Notable examples include Lakewood Church in Houston, Saddleback Church in California, and Yoido Full Gospel Church in Seoul. In Africa, the Redeemed Christian Church of God developed vast worship grounds near Lagos. Singapore’s City Harvest and Australia’s Hillsong illustrate regional variants. Some Muslim contexts built large modern mosques with comparable programmatic scale. Megachurches influence urban planning, traffic, and local economies, while drawing debate over governance, transparency, and civic roles.",
       "image": "/media/images/buildingType/megachurch.jpg",
       "requires": [
-        "technologyType:verticalFlight",
+        "technologyType:religiousRevival",
         [
           "conceptType:flatLand",
           "elevationType:hill"
@@ -9015,7 +9015,7 @@
         "platformType:dieselHull": "Heavy Carrier"
       },
       "requires": [
-        "technologyType:navalCatapults"
+        "technologyType:combinedArms"
       ],
       "yields": [
         {
@@ -12066,7 +12066,7 @@
         "platformType:truck": "Mot. Paratrooper"
       },
       "requires": [
-        "technologyType:verticalFlight"
+        "technologyType:combinedArms"
       ],
       "yields": [
         {
@@ -12931,11 +12931,11 @@
       ],
       "relatesTo": [
         "technologyType:transistors",
-        "technologyType:verticalFlight",
+        "technologyType:combinedArms",
         "technologyType:spaceFlight",
         "technologyType:hollowCharge",
         "technologyType:microchips",
-        "technologyType:navalCatapults",
+        "technologyType:religiousRevival",
         "technologyType:stateSurveillance",
         "technologyType:globalization",
         "technologyType:guidedOrdnance"
@@ -13264,13 +13264,7 @@
       "relatesTo": [
         "technologyType:artificialIntelligence",
         "technologyType:privateSpaceFlight",
-        "technologyType:graphite",
-        "technologyType:aIProcessing",
-        "technologyType:aIAnalysis",
         "technologyType:weaponizedLasers",
-        "technologyType:nanotechnology",
-        "technologyType:syntheticGraphite",
-        "technologyType:aITargeting",
         "technologyType:nuclearFusion",
         "technologyType:futureTech"
       ]
@@ -13302,12 +13296,12 @@
         "technologyType:trapping",
         "technologyType:animalHusbandry",
         "technologyType:herbalRemedies",
+        "technologyType:settlements",
         "technologyType:woodWorking",
         "technologyType:mysticism",
         "technologyType:tradition",
         "technologyType:pitMining",
-        "technologyType:warfare",
-        "technologyType:settlements"
+        "technologyType:warfare"
       ]
     },
     {
@@ -14549,7 +14543,7 @@
       "specials": [],
       "actions": [],
       "allows": [
-        "nationalWonderType:spaceport"
+        "nationalWonderType:hubbleTelescope"
       ]
     },
     {
@@ -35065,6 +35059,27 @@
       "actions": []
     },
     {
+      "key": "nationalWonderType:hubbleTelescope",
+      "name": "Hubble Telescope",
+      "concept": "conceptType:nationalWonder",
+      "category": "nationalWonderCategory:science",
+      "description": "The Hubble Space Telescope placed a large optical observatory in low Earth orbit above atmospheric distortion, enabling sustained high-resolution observation of distant celestial objects. Its reflecting telescope, stabilized by precision gyroscopes and guided by onboard computers, captured detailed images and spectra across visible and ultraviolet wavelengths. Orbiting above weather, light pollution, and atmospheric interference allowed consistent long-exposure measurements impossible from ground-based instruments. Servicing missions replaced instruments and extended operational lifespan, incorporating improved cameras and sensors. Hubble provided data on galaxy formation, stellar evolution, and cosmic expansion, refining measurement of the universe’s age and structure. Its observations expanded astronomical research, supported theoretical models, and made deep-space phenomena visible with unprecedented clarity.",
+      "image": "/media/images/nationalWonderType/hubbleTelescope.jpg",
+      "quote": {
+        "text": "Somewhere, something incredible is waiting to be known.",
+        "source": "Carl Sagan, 1980",
+        "url": "/media/quotes/nationalWonderType/hubbleTelescope.mp3"
+      },
+      "requires": [
+        "goalType:spaceRace"
+      ],
+      "yields": [],
+      "gains": [],
+      "upgradesFrom": [],
+      "specials": [],
+      "actions": []
+    },
+    {
       "key": "nationalWonderType:hybridWarfareCenter",
       "name": "Hybrid Warfare Center",
       "concept": "conceptType:nationalWonder",
@@ -35669,7 +35684,7 @@
         "url": "/media/quotes/nationalWonderType/spaceport.mp3"
       },
       "requires": [
-        "goalType:spaceRace"
+        "technologyType:privateSpaceFlight"
       ],
       "yields": [
         {
@@ -35691,7 +35706,7 @@
       "key": "nationalWonderType:spaceProgram",
       "name": "Space Program",
       "concept": "conceptType:nationalWonder",
-      "category": "nationalWonderCategory:science",
+      "category": "nationalWonderCategory:production",
       "description": "A space program is a government-led effort to develop rockets, satellites, and crewed flight for science, security, and economic aims. The Soviet launch of Sputnik in 1957 initiated global competition and collaboration. The United States achieved the Apollo Moon landings in 1969–1972 after Mercury and Gemini. Early human missions such as Vostok and Mercury proved orbital flight and reentry. Programs also built weather, communications, and navigation satellites. Over time agencies added international partnerships, reusable systems, and commercial procurement.",
       "image": "/media/images/nationalWonderType/spaceProgram.jpg",
       "quote": {
@@ -40063,7 +40078,7 @@
       "category": "platformCategory:helicopter",
       "description": "Helicopters use powered rotors for vertical takeoff, hovering, and landing in confined areas. Igor Sikorsky’s R-4 (1942) proved practical single-rotor design with tail rotor anti-torque. Postwar models expanded roles in rescue, liaison, and anti-submarine warfare. The Bell UH-1 Huey (1959) defined air mobility in Vietnam, moving troops and evacuating casualties. The Mil Mi-8 (1967) served worldwide as a versatile transport. Turboshaft engines improved power-to-weight and reliability. Advances included composite rotor blades, vibration control, and automatic flight systems for low-level operations. Attack variants added armor, cannons, and anti-tank missiles. Limitations include speed, range, and vulnerability to weather and small-arms fire. Tiltrotors and compound helicopters seek higher cruise speeds while preserving vertical-lift capability for dispersed operations.",
       "requires": [
-        "technologyType:verticalFlight",
+        "technologyType:combinedArms",
         "resourceType:aluminium",
         "resourceType:oil"
       ],
@@ -49161,110 +49176,6 @@
       ]
     },
     {
-      "key": "technologyType:aIAnalysis",
-      "name": "AI Analysis",
-      "concept": "conceptType:technology",
-      "category": "eraType:nano",
-      "description": "AI analysis applies machine learning to extract patterns, predictions, and decisions from data at speed. Natural language models such as BERT (2018) improved search and information retrieval. Financial systems use anomaly detection to curb fraud. Medical imaging platforms assist clinicians with triage and diagnosis. Pipelines combine data preparation, model selection, and evaluation with monitoring in production. Interpretability, bias assessment, and auditability are required for high‑stakes uses. Deployed systems often run in real time and integrate with human oversight.",
-      "image": "/media/images/technologyType/aIAnalysis.jpg",
-      "quote": {
-        "text": "Information is not knowledge.",
-        "source": "Albert Einstein, 1929",
-        "url": "/media/quotes/technologyType/aIAnalysis.mp3"
-      },
-      "x": 4,
-      "y": 128,
-      "requires": [
-        "technologyType:artificialIntelligence",
-        "technologyType:privateSpaceFlight"
-      ],
-      "yields": [
-        {
-          "type": "yieldType:scienceCost",
-          "method": "lump",
-          "amount": 920,
-          "for": [],
-          "vs": []
-        }
-      ],
-      "gains": [],
-      "upgradesFrom": [],
-      "specials": [],
-      "actions": [],
-      "allows": [
-        "technologyType:nanotechnology",
-        "technologyType:syntheticGraphite"
-      ]
-    },
-    {
-      "key": "technologyType:aIProcessing",
-      "name": "AI Processing",
-      "concept": "conceptType:technology",
-      "category": "eraType:nano",
-      "description": "AI processing hardware accelerates machine learning training and inference. General‑purpose GPUs gained software support with CUDA in 2006, enabling large‑scale parallelism for neural networks. Specialized units followed. Google’s Tensor Processing Units, introduced in 2016, added high‑throughput matrix engines for datacenters. Device‑level neural engines, such as Apple’s, brought on‑device inference with low latency and privacy benefits. Key features include tensor cores, mixed‑precision arithmetic, high‑bandwidth memory, and fast interconnects for multi‑accelerator scaling. Software stacks integrate compilers, kernels, and graph optimizers across TensorFlow and PyTorch. Inference accelerators target efficiency per watt at the edge, while training clusters emphasize throughput and reliability. Co‑design of models and hardware remains central to performance and energy gains.",
-      "image": "/media/images/technologyType/aIProcessing.jpg",
-      "quote": {
-        "text": "Time is the most valuable thing a man can spend.",
-        "source": "Theophrastus, ca. 300 BCE",
-        "url": "/media/quotes/technologyType/aIProcessing.mp3"
-      },
-      "x": 0,
-      "y": 128,
-      "requires": [
-        "technologyType:artificialIntelligence"
-      ],
-      "yields": [
-        {
-          "type": "yieldType:scienceCost",
-          "method": "lump",
-          "amount": 920,
-          "for": [],
-          "vs": []
-        }
-      ],
-      "gains": [],
-      "upgradesFrom": [],
-      "specials": [],
-      "actions": [],
-      "allows": [
-        "technologyType:nanotechnology"
-      ]
-    },
-    {
-      "key": "technologyType:aITargeting",
-      "name": "AI Targeting",
-      "concept": "conceptType:technology",
-      "category": "eraType:nano",
-      "description": "AI targeting denotes autonomous or semi-autonomous systems that detect, classify, track, and select targets using machine learning. The field grew with deep neural networks, embedded accelerators, and robust sensor fusion. Onboard inference enables fully autonomous drone swarms to coordinate navigation and engagement while deconflicting fire. Point-defense laser turrets predict hypersonic trajectories and steer beams for intercept. Armored vehicle fire-control integrates real-time scene understanding to prioritize threats and automate lead and stabilization. Smart munitions exchange data over secure mesh networks to retask in midcourse. Engineering focuses include latency, adversarial robustness, electronic warfare resilience, and positive control. Many programs impose human authorization for lethal action and maintain audit trails for post-mission review. Testing regimes use high-fidelity simulators and range trials against decoys and clutter. The technology alters command tempo and logistics while raising verification and safety challenges that drive standards and policy.",
-      "image": "/media/images/technologyType/aITargeting.jpg",
-      "quote": {
-        "text": "I’ll be back.",
-        "source": "The Terminator, 1984",
-        "url": "/media/quotes/technologyType/aITargeting.mp3"
-      },
-      "x": 0,
-      "y": 133,
-      "requires": [
-        "technologyType:nanotechnology"
-      ],
-      "yields": [
-        {
-          "type": "yieldType:scienceCost",
-          "method": "lump",
-          "amount": 970,
-          "for": [],
-          "vs": []
-        }
-      ],
-      "gains": [],
-      "upgradesFrom": [],
-      "specials": [],
-      "actions": [],
-      "allows": [
-        "technologyType:futureTech"
-      ]
-    },
-    {
       "key": "technologyType:alphabet",
       "name": "Alphabet",
       "concept": "conceptType:technology",
@@ -49335,7 +49246,8 @@
       "allows": [
         "buildingType:containerPort",
         "technologyType:automaticCarbines",
-        "technologyType:thermonuclearDevice"
+        "technologyType:thermonuclearDevice",
+        "worldWonderType:baileyYard"
       ]
     },
     {
@@ -49642,8 +49554,7 @@
         "equipmentType:aIDrone",
         "equipmentType:aITorpedo",
         "equipmentType:droneSwarm",
-        "technologyType:aIProcessing",
-        "technologyType:aIAnalysis"
+        "technologyType:nuclearFusion"
       ]
     },
     {
@@ -50504,6 +50415,45 @@
         "improvementType:colony",
         "technologyType:cartography",
         "technologyType:pistols"
+      ]
+    },
+    {
+      "key": "technologyType:combinedArms",
+      "name": "Combined Arms",
+      "concept": "conceptType:technology",
+      "category": "eraType:digital",
+      "description": "Combined arms integrated infantry, cavalry, artillery, and later mechanized and air units into coordinated formations that applied complementary strengths against enemy forces. Commanders organized units to support one another, with infantry holding ground, cavalry or mobile forces maneuvering, and artillery disrupting formations and defenses at range. Communication systems, standardized drill, and staff planning enabled synchronized movement and timing across diverse units. Logistics supplied ammunition, equipment, and transport to sustain operations over distance. This coordination reduced the vulnerabilities of individual unit types and increased battlefield effectiveness. Combined arms allowed militaries to conduct offensive and defensive operations with greater flexibility, concentration of force, and operational control across complex and changing combat conditions.",
+      "image": "/media/images/technologyType/combinedArms.jpg",
+      "quote": {
+        "text": "I ain't no fortunate son...",
+        "source": "Creedence Clearwater Revival, 1969",
+        "url": "/media/quotes/technologyType/combinedArms.mp3"
+      },
+      "x": 4,
+      "y": 105,
+      "requires": [
+        "technologyType:plastics",
+        "technologyType:nuclearPropulsion"
+      ],
+      "yields": [
+        {
+          "type": "yieldType:scienceCost",
+          "method": "lump",
+          "amount": 650,
+          "for": [],
+          "vs": []
+        }
+      ],
+      "gains": [],
+      "upgradesFrom": [],
+      "specials": [],
+      "actions": [],
+      "allows": [
+        "equipmentType:sMG",
+        "equipmentType:catapultDeck",
+        "platformType:helicopter",
+        "technologyType:microchips",
+        "technologyType:religiousRevival"
       ]
     },
     {
@@ -51461,6 +51411,7 @@
       "allows": [
         "platformType:superagile",
         "technologyType:homingSystems",
+        "worldWonderType:internationalSpaceStation",
         "worldWonderType:lockheedSkunkWorks"
       ]
     },
@@ -51512,17 +51463,16 @@
         "source": "Niels Bohr, ca. 1940",
         "url": "/media/quotes/technologyType/futureTech.mp3"
       },
-      "x": 2,
-      "y": 135,
+      "x": 6,
+      "y": 130,
       "requires": [
-        "technologyType:aITargeting",
         "technologyType:nuclearFusion"
       ],
       "yields": [
         {
           "type": "yieldType:scienceCost",
           "method": "lump",
-          "amount": 1012,
+          "amount": 1000,
           "for": [],
           "vs": []
         }
@@ -51642,7 +51592,6 @@
         "equipmentType:freighter",
         "nationalWonderType:freeTradeZone",
         "technologyType:internet",
-        "worldWonderType:baileyYard",
         "worldWonderType:portOfShanghai"
       ]
     },
@@ -51682,40 +51631,6 @@
         "policyType:kingdom",
         "technologyType:organizedReligion",
         "technologyType:codeOfLaw"
-      ]
-    },
-    {
-      "key": "technologyType:graphite",
-      "name": "Graphite",
-      "concept": "conceptType:technology",
-      "category": "eraType:nano",
-      "description": "Graphite is a layered crystalline allotrope of carbon with high electrical and thermal conductivity. It serves in electrodes, neutron moderators, lubricants, refractories, and lightweight composites. In the 2000s and 2010s, demand surged for lithium‑ion battery anodes used in electronics and electric vehicles. Advanced gas‑cooled reactors use graphite moderators, and conductive fillers appear in electromagnetic and low‑observable coatings. Both natural and synthetic graphite are employed; the latter offers purity and tailored particle size. China emerged as the dominant supplier and processor, prompting diversification and recycling efforts. Environmental and energy costs in purification influenced supply chains. Work continues on silicon‑graphite blends and end‑of‑life anode recovery to meet growing storage needs.",
-      "image": "/media/images/technologyType/graphite.jpg",
-      "quote": {
-        "text": "Carbon is the element of life.",
-        "source": "Chemistry textbook phrase",
-        "url": "/media/quotes/technologyType/graphite.mp3"
-      },
-      "x": 10,
-      "y": 126,
-      "requires": [
-        "technologyType:stealth"
-      ],
-      "yields": [
-        {
-          "type": "yieldType:scienceCost",
-          "method": "lump",
-          "amount": 880,
-          "for": [],
-          "vs": []
-        }
-      ],
-      "gains": [],
-      "upgradesFrom": [],
-      "specials": [],
-      "actions": [],
-      "allows": [
-        "technologyType:weaponizedLasers"
       ]
     },
     {
@@ -51771,7 +51686,7 @@
       "y": 109,
       "requires": [
         "technologyType:microchips",
-        "technologyType:navalCatapults",
+        "technologyType:religiousRevival",
         "technologyType:stateSurveillance"
       ],
       "yields": [
@@ -51989,7 +51904,7 @@
       "name": "Hydrodynamics",
       "concept": "conceptType:technology",
       "category": "eraType:modern",
-      "description": "Hydrodynamics studies fluid motion, forces, and energy exchange in liquids. Building on the Navier–Stokes framework and dimensional analysis, 20th-century research linked laboratory models to full-scale systems through similarity laws and Reynolds number scaling. Naval architects applied towing tanks and cavitation tunnels to refine hull forms, propellers, and rudders, reducing drag and avoiding destructive vapor bubble collapse. Engineers optimized pumps, valves, and hydraulic turbines for irrigation, power generation, and industry. Submarine design integrated boundary-layer control and fairing to manage flow separation and acoustic signatures. The field supported offshore platforms, river control, and flood forecasting by coupling theory with instrumented trials. Computational methods later extended analysis to transient flows, free-surface waves, and multiphase phenomena.",
+      "description": "Hydrodynamics applied the study of fluid motion to the design and operation of ships, turbines, and hydraulic structures supporting industrial economies and modern navies. Engineers analyzed resistance, buoyancy, and flow behavior to refine hull shapes, propellers, and rudders, improving speed, efficiency, and stability under varying conditions. Experimental towing tanks and mathematical models enabled systematic testing and optimization of vessel performance. Hydraulic principles governed the construction of dams, spillways, and turbines that converted moving water into mechanical and electrical power. Dry docks used controlled flooding and pumping systems to support ship construction and maintenance below the waterline. These applications allowed states and industries to expand maritime transport, naval capability, and large-scale energy production through controlled interaction with moving fluids.",
       "image": "/media/images/technologyType/hydrodynamics.jpg",
       "quote": {
         "text": "A dam is a fortress against the river.",
@@ -52534,7 +52449,7 @@
       "y": 107,
       "requires": [
         "technologyType:transistors",
-        "technologyType:verticalFlight"
+        "technologyType:combinedArms"
       ],
       "yields": [
         {
@@ -52821,42 +52736,6 @@
       ]
     },
     {
-      "key": "technologyType:nanotechnology",
-      "name": "Nanotechnology",
-      "concept": "conceptType:technology",
-      "category": "eraType:nano",
-      "description": "Nanotechnology concerns the design and control of materials and devices at the 1–100 nm scale. Foundations include Feynman’s 1959 vision, scanning probe tools in the 1980s, and the National Nanotechnology Initiative launched in 2000. The 2000s saw growth in practical nanomaterials. Carbon nanotubes and graphene offered high strength and conductivity, though manufacturing remained complex. Nanoparticle drug delivery improved targeting in oncology. Quantum dots entered commercial displays with vivid color performance. Semiconductor fabrication advanced with nanoscale lithography and materials engineering. Standards and risk frameworks addressed toxicity, environmental fate, and metrology. The field bridges physics, chemistry, biology, and engineering to deliver tunable properties unavailable at bulk scales.",
-      "image": "/media/images/technologyType/nanotechnology.jpg",
-      "quote": {
-        "text": "Small is beautiful..",
-        "source": "E.F. Schumacher, 1973",
-        "url": "/media/quotes/technologyType/nanotechnology.mp3"
-      },
-      "x": 2,
-      "y": 130,
-      "requires": [
-        "technologyType:aIProcessing",
-        "technologyType:aIAnalysis"
-      ],
-      "yields": [
-        {
-          "type": "yieldType:scienceCost",
-          "method": "lump",
-          "amount": 960,
-          "for": [],
-          "vs": []
-        }
-      ],
-      "gains": [],
-      "upgradesFrom": [],
-      "specials": [],
-      "actions": [],
-      "allows": [
-        "technologyType:aITargeting",
-        "technologyType:nuclearFusion"
-      ]
-    },
-    {
       "key": "technologyType:nationalism",
       "name": "Nationalism",
       "concept": "conceptType:technology",
@@ -52895,42 +52774,6 @@
       ]
     },
     {
-      "key": "technologyType:navalCatapults",
-      "name": "Naval Catapults",
-      "concept": "conceptType:technology",
-      "category": "eraType:digital",
-      "description": "Naval catapults convert stored energy into the sudden acceleration required to launch aircraft from short carrier decks. Early systems employed gunpowder charges and flywheels before hydraulic and steam-driven catapults became standard during the mid-20th century. Steam catapults, pioneered by the British and perfected in U.S. carriers, used high-pressure steam to drive a shuttle along the deck track, enabling the launch of heavy jet aircraft in rapid sequence. Launch valves, bridle catchers, and precise steam control ensured consistent end speeds across varying aircraft weights. Modern developments introduced the Electromagnetic Aircraft Launch System (EMALS), replacing steam with linear induction motors that offer smoother acceleration, reduced maintenance, and digital control integration. EMALS supports a wider range of airframes, from unmanned drones to heavy strike aircraft, while cutting thermal and mechanical stress on both launcher and airframe. These catapults, whether steam or electromagnetic, remain vital to carrier operations, merging naval engineering, power generation, and flight dynamics into a single, synchronized act of sea-based aviation.\n",
-      "image": "/media/images/technologyType/navalCatapults.jpg",
-      "quote": {
-        "text": "I feel the need — the need for speed!",
-        "source": "Top Gun, 1986",
-        "url": "/media/quotes/technologyType/navalCatapults.mp3"
-      },
-      "x": 6,
-      "y": 107,
-      "requires": [
-        "technologyType:verticalFlight",
-        "technologyType:spaceFlight"
-      ],
-      "yields": [
-        {
-          "type": "yieldType:scienceCost",
-          "method": "lump",
-          "amount": 684,
-          "for": [],
-          "vs": []
-        }
-      ],
-      "gains": [],
-      "upgradesFrom": [],
-      "specials": [],
-      "actions": [],
-      "allows": [
-        "equipmentType:catapultDeck",
-        "technologyType:guidedOrdnance"
-      ]
-    },
-    {
       "key": "technologyType:nuclearFusion",
       "name": "Nuclear Fusion",
       "concept": "conceptType:technology",
@@ -52942,17 +52785,18 @@
         "source": "Physics community proverb",
         "url": "/media/quotes/technologyType/nuclearFusion.mp3"
       },
-      "x": 4,
-      "y": 133,
+      "x": 6,
+      "y": 128,
       "requires": [
-        "technologyType:nanotechnology",
-        "technologyType:syntheticGraphite"
+        "technologyType:artificialIntelligence",
+        "technologyType:privateSpaceFlight",
+        "technologyType:weaponizedLasers"
       ],
       "yields": [
         {
           "type": "yieldType:scienceCost",
           "method": "lump",
-          "amount": 970,
+          "amount": 920,
           "for": [],
           "vs": []
         }
@@ -53000,7 +52844,7 @@
       "allows": [
         "platformType:nuclearHull",
         "platformType:nuclearSub",
-        "technologyType:verticalFlight",
+        "technologyType:combinedArms",
         "technologyType:spaceFlight"
       ]
     },
@@ -53348,7 +53192,7 @@
       "allows": [
         "buildingType:supermarket",
         "technologyType:transistors",
-        "technologyType:verticalFlight",
+        "technologyType:combinedArms",
         "worldWonderType:unitedNations"
       ]
     },
@@ -53422,8 +53266,8 @@
       "specials": [],
       "actions": [],
       "allows": [
-        "technologyType:aIAnalysis",
-        "technologyType:weaponizedLasers"
+        "nationalWonderType:spaceport",
+        "technologyType:nuclearFusion"
       ]
     },
     {
@@ -53536,6 +53380,43 @@
         "routeType:railroad",
         "technologyType:artillery",
         "worldWonderType:unionStockyards"
+      ]
+    },
+    {
+      "key": "technologyType:religiousRevival",
+      "name": "Religious Revival",
+      "concept": "conceptType:technology",
+      "category": "eraType:digital",
+      "description": "",
+      "image": "/media/images/technologyType/religiousRevival.jpg",
+      "quote": {
+        "text": "Faith begins where sight ends.",
+        "source": "Martin Luther King, ca. 1960",
+        "url": "/media/quotes/technologyType/religiousRevival.mp3"
+      },
+      "x": 6,
+      "y": 107,
+      "requires": [
+        "technologyType:combinedArms",
+        "technologyType:spaceFlight"
+      ],
+      "yields": [
+        {
+          "type": "yieldType:scienceCost",
+          "method": "lump",
+          "amount": 684,
+          "for": [],
+          "vs": []
+        }
+      ],
+      "gains": [],
+      "upgradesFrom": [],
+      "specials": [],
+      "actions": [],
+      "allows": [
+        "buildingType:megachurch",
+        "technologyType:guidedOrdnance",
+        "worldWonderType:sagradaFamilia"
       ]
     },
     {
@@ -53811,8 +53692,7 @@
         "improvementType:automatedMine",
         "improvementType:automatedBoats",
         "improvementType:automatedWell",
-        "technologyType:onlineEconomy",
-        "worldWonderType:gigafactory"
+        "technologyType:onlineEconomy"
       ]
     },
     {
@@ -54038,6 +53918,7 @@
       "allows": [
         "technologyType:composites",
         "technologyType:militaryDrones",
+        "worldWonderType:gigafactory",
         "worldWonderType:tSMC"
       ]
     },
@@ -54267,9 +54148,8 @@
         "nationalWonderType:spaceProgram",
         "platformType:iCBM",
         "platformType:satellite",
-        "technologyType:navalCatapults",
-        "technologyType:stateSurveillance",
-        "worldWonderType:internationalSpaceStation"
+        "technologyType:religiousRevival",
+        "technologyType:stateSurveillance"
       ]
     },
     {
@@ -54452,7 +54332,7 @@
         "equipmentType:radarDeck",
         "platformType:sealth",
         "technologyType:privateSpaceFlight",
-        "technologyType:graphite"
+        "technologyType:weaponizedLasers"
       ]
     },
     {
@@ -54653,11 +54533,11 @@
       "name": "Submarines",
       "concept": "conceptType:technology",
       "category": "eraType:modern",
-      "description": "",
+      "description": "Submarines employed submersible hulls, ballast systems, and propulsion machinery to operate beneath the water’s surface for extended periods, enabling covert movement, reconnaissance, and attack. Early designs used hand-powered or compressed-air propulsion, while later vessels adopted diesel-electric and electric battery systems to balance submerged endurance with surface range. Ballast tanks regulated buoyancy by admitting or expelling water, allowing controlled diving, surfacing, and depth stability. Pressure-resistant hulls and periscopes enabled navigation and observation while submerged, and torpedoes provided offensive capability against ships and infrastructure. Naval institutions developed specialized training, maintenance, and operational doctrine for underwater warfare. Submarines altered naval strategy by enabling concealed approach, disrupting supply lines, and extending military presence below the surface domain.",
       "image": "/media/images/technologyType/submarines.jpg",
       "quote": {
-        "text": "",
-        "source": "",
+        "text": "The sea is everything. It covers seven tenths of the terrestrial globe.",
+        "source": "Jules Verne, 1870",
         "url": "/media/quotes/technologyType/submarines.mp3"
       },
       "x": 0,
@@ -54720,41 +54600,6 @@
         "platformType:supersonic",
         "technologyType:spaceFlight",
         "technologyType:hollowCharge"
-      ]
-    },
-    {
-      "key": "technologyType:syntheticGraphite",
-      "name": "Synthetic Graphite",
-      "concept": "conceptType:technology",
-      "category": "eraType:nano",
-      "description": "Synthetic graphite is a high-purity carbon material produced by graphitizing petroleum coke or other precursors at extreme temperature. Industrial production began in the early twentieth century for electrodes, later expanding to nuclear, aerospace, and electronics. Engineered grades offer tailored grain, porosity, and thermal conductivity. They withstand high heat flux, conduct heat efficiently, and can be protected against oxidation with suitable coatings. In advanced energy systems, synthetic graphite appears in divertor and first-wall components of commercial fusion power plants, where thermal shock and erosion control are critical. Space programs employ graphite structures and heat spreaders for high-energy laser payloads, including optics benches with tight dimensional stability. Grid storage uses graphite in high-performance battery and ultracapacitor electrodes, leveraging fast ion transport and long cycle life. Aerothermodynamics benefits include ablative nosecones and heat shields for sustained hypersonic flight, where controlled recession and structural integrity under oxidizing flow are essential.",
-      "image": "/media/images/technologyType/syntheticGraphite.jpg",
-      "quote": {
-        "text": "Without minerals, there is no progress.",
-        "source": "Mining industry slogan",
-        "url": "/media/quotes/technologyType/syntheticGraphite.mp3"
-      },
-      "x": 6,
-      "y": 130,
-      "requires": [
-        "technologyType:aIAnalysis",
-        "technologyType:weaponizedLasers"
-      ],
-      "yields": [
-        {
-          "type": "yieldType:scienceCost",
-          "method": "lump",
-          "amount": 960,
-          "for": [],
-          "vs": []
-        }
-      ],
-      "gains": [],
-      "upgradesFrom": [],
-      "specials": [],
-      "actions": [],
-      "allows": [
-        "technologyType:nuclearFusion"
       ]
     },
     {
@@ -55182,46 +55027,6 @@
       ]
     },
     {
-      "key": "technologyType:verticalFlight",
-      "name": "Vertical Flight",
-      "concept": "conceptType:technology",
-      "category": "eraType:digital",
-      "description": "Vertical flight covers aircraft that take off and land vertically, allowing operations from confined areas. Helicopters create lift with powered rotors and use collective and cyclic controls. The Sikorsky R‑4 established practical utility in the 1940s. Turboshaft engines expanded range and payload, producing utility and assault types such as the UH‑1 Huey. Fixed‑wing VTOL aircraft use vectoring nozzles or lift fans, as with the Harrier. Vertical flight supports rescue, medevac, logistics, and close air support in difficult terrain. Research seeks higher speed, lower vibration, and hybrid rotorcraft configurations.",
-      "image": "/media/images/technologyType/verticalFlight.jpg",
-      "quote": {
-        "text": "I ain't no fortunate son...",
-        "source": "Creedence Clearwater Revival, 1969",
-        "url": "/media/quotes/technologyType/verticalFlight.mp3"
-      },
-      "x": 4,
-      "y": 105,
-      "requires": [
-        "technologyType:plastics",
-        "technologyType:nuclearPropulsion"
-      ],
-      "yields": [
-        {
-          "type": "yieldType:scienceCost",
-          "method": "lump",
-          "amount": 650,
-          "for": [],
-          "vs": []
-        }
-      ],
-      "gains": [],
-      "upgradesFrom": [],
-      "specials": [],
-      "actions": [],
-      "allows": [
-        "buildingType:megachurch",
-        "equipmentType:sMG",
-        "platformType:helicopter",
-        "technologyType:microchips",
-        "technologyType:navalCatapults",
-        "worldWonderType:sagradaFamilia"
-      ]
-    },
-    {
       "key": "technologyType:virtualReality",
       "name": "Virtual Reality",
       "concept": "conceptType:technology",
@@ -55307,17 +55112,16 @@
         "source": "Dr. Evil, Austin Powers, 1997",
         "url": "/media/quotes/technologyType/weaponizedLasers.mp3"
       },
-      "x": 8,
-      "y": 128,
+      "x": 10,
+      "y": 126,
       "requires": [
-        "technologyType:privateSpaceFlight",
-        "technologyType:graphite"
+        "technologyType:stealth"
       ],
       "yields": [
         {
           "type": "yieldType:scienceCost",
           "method": "lump",
-          "amount": 920,
+          "amount": 880,
           "for": [],
           "vs": []
         }
@@ -55329,7 +55133,7 @@
       "allows": [
         "equipmentType:laserRifle",
         "equipmentType:laserGun",
-        "technologyType:syntheticGraphite"
+        "technologyType:nuclearFusion"
       ]
     },
     {
@@ -56547,7 +56351,7 @@
         "url": "/media/quotes/worldWonderType/baileyYard.mp3"
       },
       "requires": [
-        "technologyType:globalization"
+        "technologyType:aluminumMilling"
       ],
       "yields": [
         {
@@ -57117,7 +56921,7 @@
         "url": "/media/quotes/worldWonderType/gigafactory.mp3"
       },
       "requires": [
-        "technologyType:robotics",
+        "technologyType:semiconductors",
         "conceptType:flatLand"
       ],
       "yields": [
@@ -57517,7 +57321,7 @@
         "url": "/media/quotes/worldWonderType/internationalSpaceStation.mp3"
       },
       "requires": [
-        "technologyType:spaceFlight"
+        "technologyType:flyByWire"
       ],
       "yields": [
         {
@@ -58508,7 +58312,7 @@
         "url": "/media/quotes/worldWonderType/sagradaFamilia.mp3"
       },
       "requires": [
-        "technologyType:verticalFlight"
+        "technologyType:religiousRevival"
       ],
       "yields": [
         {
@@ -62153,6 +61957,7 @@
         "nationalWonderType:carnegieSteel",
         "nationalWonderType:industrialFund",
         "nationalWonderType:spaceport",
+        "nationalWonderType:spaceProgram",
         "nationalWonderType:fusionPowerPlant"
       ]
     },
@@ -62165,7 +61970,7 @@
         "nationalWonderType:schoolOfSocrates",
         "nationalWonderType:royalSociety",
         "nationalWonderType:nationalLibrary",
-        "nationalWonderType:spaceProgram",
+        "nationalWonderType:hubbleTelescope",
         "nationalWonderType:largeLanguageModel"
       ]
     },
