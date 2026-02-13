@@ -113,8 +113,9 @@
     "key": "technologyType:settlements",
     "name": "Settlements",
     "quote": {
-      "text": "A place worth settling is worth defending.",
-      "source": "Ancient proverb"
+      "text": "They shall sit every man under his vine and under his fig tree.",
+      "source": "Micah 4:4",
+      "url": "/media/quotes/technologyType/settlements.mp3"
     },
     "requires": ["technologyType:agriculture"],
     "x": 8,
@@ -3042,8 +3043,8 @@
     "key": "technologyType:religiousRevival",
     "name": "Religious Revival",
     "quote": {
-      "text": "Faith begins where sight ends.",
-      "source": "Martin Luther King, ca. 1960",
+      "text": "I have a dream!",
+      "source": "Martin Luther King, 1963",
       "url": "/media/quotes/technologyType/religiousRevival.mp3"
     },
     "requires": ["technologyType:combinedArms", "technologyType:spaceFlight"],

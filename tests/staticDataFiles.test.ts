@@ -72,4 +72,53 @@ describe("Static Data File Integrity", () => {
       `Found ${errors.length} static data file errors. See console for details.`,
     ).toHaveLength(0);
   });
+
+  it("should have no orphaned media files that are not referenced by any type", () => {
+    const bucket = useDataBucket();
+    const allTypes = bucket.getTypes();
+    const publicDir = path.resolve(process.cwd(), "public");
+    const mediaDir = path.join(publicDir, "media");
+
+    const referencedPaths = new Set<string>();
+
+    const addReference = (url: string) => {
+      if (!url || url === "undefined") return;
+      let relativePath = url.startsWith("/") ? url.slice(1) : url;
+      relativePath = relativePath.replace(/\/\//g, "/");
+      referencedPaths.add(path.join(publicDir, relativePath));
+    };
+
+    allTypes.forEach((typeObj) => {
+      if (typeObj.image) {
+        addReference(typeObj.image);
+      }
+      if (typeObj.audio && Array.isArray(typeObj.audio)) {
+        typeObj.audio.forEach(addReference);
+      }
+      if (typeObj.quote?.url) {
+        addReference(typeObj.quote.url);
+      }
+    });
+
+    const collectFiles = (dir: string): string[] => {
+      if (!fs.existsSync(dir)) return [];
+      return fs.readdirSync(dir).flatMap((entry) => {
+        const fullPath = path.join(dir, entry);
+        return fs.statSync(fullPath).isDirectory() ? collectFiles(fullPath) : [fullPath];
+      });
+    };
+
+    const allMediaFiles = collectFiles(mediaDir);
+    const orphans = allMediaFiles.filter((filePath) => !referencedPaths.has(filePath));
+
+    if (orphans.length > 0) {
+      const relativeOrphans = orphans.map((f) => f.replace(publicDir + path.sep, "")).sort();
+      console.error(`Found ${orphans.length} orphaned media files:\n${relativeOrphans.join("\n")}`);
+    }
+
+    expect(
+      orphans,
+      `Found ${orphans.length} orphaned media files not referenced by any type. See console for details.`,
+    ).toHaveLength(0);
+  });
 });
