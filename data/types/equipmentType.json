@@ -504,7 +504,7 @@
     "names": {
       "platformType:human": "AT-Rifle"
     },
-    "requires": ["technologyType:trenchWarfare"],
+    "requires": ["technologyType:repeatingRifles"],
     "upgradesFrom": ["equipmentType:grenadier"],
     "yields": [
       {
@@ -616,7 +616,7 @@
     "names": {
       "platformType:tracked": "Tank"
     },
-    "requires": ["technologyType:trackedTreads"],
+    "requires": ["technologyType:stainlessSteel"],
     "yields": [
       {
         "type": "yieldType:productionCost",
@@ -904,7 +904,7 @@
     "names": {
       "platformType:submersible": "Submarine"
     },
-    "requires": ["technologyType:hydrodynamics"],
+    "requires": ["technologyType:submarines"],
     "specials": ["specialType:canSelectTarget"],
     "upgradesFrom": ["equipmentType:musketMarines"],
     "yields": [

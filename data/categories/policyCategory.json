@@ -23,5 +23,10 @@
     "key": "policyCategory:faith",
     "name": "Faith",
     "concept": "conceptType:policy"
+  },
+  {
+    "key": "policyCategory:foreignAffairs",
+    "name": "Foreign Affairs",
+    "concept": "conceptType:policy"
   }
 ]

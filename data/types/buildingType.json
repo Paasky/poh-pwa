@@ -930,7 +930,7 @@
     "image": "/media/images/buildingType/departmentStore.jpg",
     "key": "buildingType:departmentStore",
     "name": "Department Store",
-    "requires": ["technologyType:economics", ["conceptType:flatLand", "elevationType:hill"]],
+    "requires": ["technologyType:electricity", ["conceptType:flatLand", "elevationType:hill"]],
     "upgradesFrom": ["buildingType:coffeeHouse"],
     "yields": [
       {
@@ -1049,10 +1049,7 @@
     "image": "/media/images/buildingType/policeStation.jpg",
     "key": "buildingType:policeStation",
     "name": "Police Station",
-    "requires": [
-      "technologyType:universalSuffrage",
-      ["conceptType:flatLand", "elevationType:hill"]
-    ],
+    "requires": ["technologyType:repeatingRifles", ["conceptType:flatLand", "elevationType:hill"]],
     "upgradesFrom": ["buildingType:magistrate"],
     "yields": [
       {
@@ -1174,10 +1171,7 @@
     "image": "/media/images/buildingType/embassyQuarter.jpg",
     "key": "buildingType:embassyQuarter",
     "name": "Embassy Quarter",
-    "requires": [
-      "technologyType:universalSuffrage",
-      ["conceptType:flatLand", "elevationType:hill"]
-    ],
+    "requires": ["technologyType:liberalism", ["conceptType:flatLand", "elevationType:hill"]],
     "upgradesFrom": ["buildingType:gentlemensClub"],
     "yields": [
       {

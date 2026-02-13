@@ -101,7 +101,7 @@
     "description": "Dictatorship consolidates authority in a single ruler or junta, using coercion, censorship, and control of institutions. Nazi Germany fused party and state, pursued total war, and committed genocidal crimes. Stalin’s Soviet Union enforced rapid industrialization and collectivization through terror and planned targets. North Korea entrenched dynastic rule, a command economy, and pervasive surveillance. Pinochet’s Chile installed military rule after a coup, repressing opposition while adopting neoliberal reforms. Dictatorships arise through coups, revolutions, or wartime states of emergency. They often claim order and modernization while curtailing rights. Endings include defeat in war, elite splits, popular uprisings, or negotiated transitions.",
     "key": "policyType:dictatorship",
     "name": "Dictatorship",
-    "requires": ["technologyType:settlements"],
+    "requires": ["technologyType:tradition"],
     "yields": [
       {
         "type": "yieldType:happiness",
@@ -584,7 +584,7 @@
     "description": "Freedom of religion denotes legal protection for belief, worship, and nonbelief. The policy limits government establishment and bans coercion in matters of conscience. Early precedents include the Edict of Nantes, which granted restricted toleration to French Protestants, and the pluralist Dutch Republic after the Reformation. The U.S. First Amendment created a durable model combining nonestablishment with free exercise. Contemporary secular constitutions protect minority communities and enable voluntary institutions. Implementation varies. Some states retain blasphemy laws or registration regimes that burden small groups. Durable pluralism tends to correlate with commercial openness, urbanization, and independent courts that enforce neutral rules.",
     "key": "policyType:freedomOfReligion",
     "name": "Freedom of Religion",
-    "requires": ["technologyType:liberalism"],
+    "requires": ["technologyType:universalSuffrage"],
     "specials": ["specialType:noStateReligion"],
     "yields": [
       {
@@ -607,7 +607,7 @@
     "description": "Atheist policy seeks to exclude religious authority from the state and promote secular, often scientific, worldviews. The Soviet Union pursued state atheism, closed or repurposed houses of worship, and subordinated permitted activity to party oversight. Albania under Enver Hoxha declared itself an atheist state and banned public religious practice. During the French Revolution, dechristianization and civic cults challenged clerical power before later settlements. The People’s Republic of China encourages secular public life while licensing and supervising religious bodies. Measures range from education campaigns to legal restrictions on clergy and property. Outcomes include rapid secularization, diasporic religious resilience, and periodic accommodation.",
     "key": "policyType:atheist",
     "name": "Atheist",
-    "requires": ["technologyType:liberalism"],
+    "requires": ["technologyType:universalSuffrage"],
     "specials": ["specialType:noStateReligion"],
     "yields": [
       {
@@ -627,6 +627,151 @@
         "amount": 20,
         "method": "percent",
         "for": ["conceptType:city"]
+      }
+    ]
+  },
+  {
+    "category": "policyCategory:foreignAffairs",
+    "concept": "conceptType:policy",
+    "description": "",
+    "key": "policyType:neutrality",
+    "name": "Neutrality",
+    "requires": ["technologyType:writing"],
+    "specials": ["specialType:cannotJoinIncidents"],
+    "yields": [
+      {
+        "type": "yieldType:influence",
+        "amount": 20,
+        "method": "percent",
+        "for": ["conceptType:city"]
+      },
+      {
+        "type": "yieldType:faith",
+        "amount": -10,
+        "method": "percent",
+        "for": ["conceptType:city"]
+      },
+      {
+        "type": "yieldType:strength",
+        "amount": -10,
+        "method": "percent",
+        "for": ["conceptType:unit"]
+      }
+    ]
+  },
+  {
+    "category": "policyCategory:foreignAffairs",
+    "concept": "conceptType:policy",
+    "description": "",
+    "key": "policyType:statusQuo",
+    "name": "Status Quo",
+    "requires": ["technologyType:tradition"],
+    "specials": ["specialType:cannotJoinIncidents"],
+    "yields": [
+      {
+        "type": "yieldType:influence",
+        "amount": 20,
+        "method": "percent",
+        "for": ["conceptType:city"]
+      },
+      {
+        "type": "yieldType:faith",
+        "amount": -10,
+        "method": "percent",
+        "for": ["conceptType:city"]
+      },
+      {
+        "type": "yieldType:strength",
+        "amount": -10,
+        "method": "percent",
+        "for": ["conceptType:unit"]
+      }
+    ]
+  },
+  {
+    "category": "policyCategory:foreignAffairs",
+    "concept": "conceptType:policy",
+    "description": "",
+    "key": "policyType:ideological",
+    "name": "Ideological",
+    "requires": ["technologyType:philosophy"],
+    "specials": ["specialType:cannotJoinIncidents"],
+    "yields": [
+      {
+        "type": "yieldType:influence",
+        "amount": 20,
+        "method": "percent",
+        "for": ["conceptType:city"]
+      },
+      {
+        "type": "yieldType:faith",
+        "amount": -10,
+        "method": "percent",
+        "for": ["conceptType:city"]
+      },
+      {
+        "type": "yieldType:strength",
+        "amount": -10,
+        "method": "percent",
+        "for": ["conceptType:unit"]
+      }
+    ]
+  },
+  {
+    "category": "policyCategory:foreignAffairs",
+    "concept": "conceptType:policy",
+    "description": "",
+    "key": "policyType:expansionist",
+    "name": "Expansionist",
+    "requires": ["technologyType:philosophy"],
+    "specials": ["specialType:cannotJoinIncidents"],
+    "yields": [
+      {
+        "type": "yieldType:influence",
+        "amount": 20,
+        "method": "percent",
+        "for": ["conceptType:city"]
+      },
+      {
+        "type": "yieldType:faith",
+        "amount": -10,
+        "method": "percent",
+        "for": ["conceptType:city"]
+      },
+      {
+        "type": "yieldType:strength",
+        "amount": -10,
+        "method": "percent",
+        "for": ["conceptType:unit"]
+      }
+    ]
+  },
+  {
+    "category": "policyCategory:foreignAffairs",
+    "concept": "conceptType:policy",
+    "description": "",
+    "key": "policyType:aggressive",
+    "name": "Aggressive",
+    "requires": ["technologyType:slings"],
+    "specials": ["specialType:cannotJoinIncidents"],
+    "yields": [
+      {
+        "type": "yieldType:influence",
+        "amount": 20,
+        "method": "percent",
+        "for": ["conceptType:city"]
+      },
+      {
+        "type": "yieldType:faith",
+        "amount": -10,
+        "method": "percent",
+        "for": ["conceptType:city"]
+      },
+      {
+        "type": "yieldType:strength",
+        "amount": -10,
+        "method": "percent",
+        "for": ["conceptType:unit"]
       }
     ]
   }

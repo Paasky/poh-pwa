@@ -597,7 +597,7 @@
     "description": "A submarine is an underwater naval vessel capable of submerged propulsion and extended operations. During the industrial era, inventors moved from hand-powered craft to practical machines. The French Plongeur (1863) introduced mechanical propulsion with compressed air. The Spanish Ictíneo II (1864) tested air regeneration and improved hull form. The Confederate CSS Hunley (1864) carried out the first combat sinking by a submersible. John Holland’s Holland VI (1897) set the diesel-electric pattern with internal combustion for surface running, batteries for submerged movement, and torpedoes as primary armament. By World War I, submarines served as commerce raiders and fleet scouts. Periscopes, hydrophones, and fire control advanced rapidly. Interwar designs improved endurance and hull strength. World War II mass production and snorkels extended submerged cruising and set the stage for postwar innovation.",
     "key": "platformType:submarine",
     "name": "Submarine",
-    "requires": ["technologyType:hydrodynamics", "resourceType:oil"],
+    "requires": ["technologyType:submarines", "resourceType:oil"],
     "specials": [
       "specialType:invisibleBeforeMove",
       "specialType:noDefenseBonuses",

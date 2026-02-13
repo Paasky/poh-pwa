@@ -1196,7 +1196,7 @@
     "description": "A base is a modern military or logistical installation built to project force, sustain operations, and coordinate communications. Facilities include depots, workshops, fuel farms, hospitals, barracks, and command posts linked by radio and later digital networks. Coastal or air access enables rapid throughput of materiel and personnel. During World War II, U.S. Pacific island bases supported amphibious advances with runways, docks, and repair yards. RAF desert bases sustained air superiority and supply in North Africa. The Soviet Union developed Arctic bases for polar navigation, radar coverage, and strategic aviation. Postwar, bases anchored alliance commitments, prepositioned stocks, and hosted training and joint commands. Defensive perimeters, hardened storage, and layered air defense protect critical functions.",
     "key": "improvementType:base",
     "name": "Base",
-    "requires": ["technologyType:radio", "domainType:land"],
+    "requires": ["technologyType:stainlessSteel", "domainType:land"],
     "upgradesFrom": ["improvementType:colony"],
     "yields": [
       {

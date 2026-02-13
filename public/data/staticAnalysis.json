@@ -253,7 +253,7 @@
       "upgradesFrom": 27,
       "specials": 27,
       "actions": 27,
-      "allows": 14,
+      "allows": 18,
       "p1": 6
     },
     "interactionType": {
@@ -297,17 +297,17 @@
       "allows": 40
     },
     "specialType": {
-      "key": 83,
-      "name": 83,
-      "concept": 83,
-      "description": 83,
-      "requires": 83,
-      "yields": 83,
-      "gains": 83,
-      "upgradesFrom": 83,
-      "specials": 83,
-      "actions": 83,
-      "relatesTo": 61,
+      "key": 84,
+      "name": 84,
+      "concept": 84,
+      "description": 84,
+      "requires": 84,
+      "yields": 84,
+      "gains": 84,
+      "upgradesFrom": 84,
+      "specials": 84,
+      "actions": 84,
+      "relatesTo": 62,
       "allows": 20
     },
     "tensionType": {
@@ -467,17 +467,17 @@
       "relatesTo": 3
     },
     "policyType": {
-      "key": 25,
-      "name": 25,
-      "concept": 25,
-      "category": 25,
-      "description": 25,
-      "requires": 25,
-      "yields": 25,
-      "gains": 25,
-      "upgradesFrom": 25,
-      "specials": 25,
-      "actions": 25
+      "key": 30,
+      "name": 30,
+      "concept": 30,
+      "category": 30,
+      "description": 30,
+      "requires": 30,
+      "yields": 30,
+      "gains": 30,
+      "upgradesFrom": 30,
+      "specials": 30,
+      "actions": 30
     },
     "resourceType": {
       "key": 133,
@@ -520,22 +520,22 @@
       "actions": 6
     },
     "technologyType": {
-      "key": 168,
-      "name": 168,
-      "concept": 168,
-      "category": 168,
-      "description": 168,
-      "image": 168,
-      "quote": 168,
-      "x": 168,
-      "y": 168,
-      "requires": 168,
-      "yields": 168,
-      "gains": 168,
-      "upgradesFrom": 168,
-      "specials": 168,
-      "actions": 168,
-      "allows": 167,
+      "key": 169,
+      "name": 169,
+      "concept": 169,
+      "category": 169,
+      "description": 169,
+      "image": 169,
+      "quote": 169,
+      "x": 169,
+      "y": 169,
+      "requires": 169,
+      "yields": 169,
+      "gains": 169,
+      "upgradesFrom": 169,
+      "specials": 169,
+      "actions": 169,
+      "allows": 168,
       "relatesTo": 4
     },
     "traitType": {
@@ -706,11 +706,11 @@
       "relatesTo": 10
     },
     "policyCategory": {
-      "key": 5,
-      "name": 5,
-      "concept": 5,
-      "description": 5,
-      "relatesTo": 5
+      "key": 6,
+      "name": 6,
+      "concept": 6,
+      "description": 6,
+      "relatesTo": 6
     },
     "resourceCategory": {
       "key": 13,

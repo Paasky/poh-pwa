@@ -143,6 +143,11 @@
   },
   {
     "concept": "conceptType:special",
+    "key": "specialType:cannotJoinIncidents",
+    "name": "Cannot join Incidents"
+  },
+  {
+    "concept": "conceptType:special",
     "key": "specialType:cannotTradeNonAllies",
     "name": "Cannot trade non-allies"
   },

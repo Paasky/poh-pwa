@@ -1572,7 +1572,7 @@
       "description": "The department store concentrates diverse goods in specialized sections, using fixed prices, display windows, and aggressive advertising. Pioneers included Le Bon Marché and Au Printemps in Paris, Harrods in London, and Macy’s in New York. Escalators, elevators, and iron-framed halls enabled multi-level retail and spectacle shopping. Stores cultivated female clientele with amenities, return policies, and seasonal fashion shows. Catalog sales linked city flagships to rural consumers. The format spread globally: Mitsukoshi and Takashimaya in Japan, GUM in Moscow, El Palacio de Hierro in Mexico City, and David Jones in Australia. These enterprises shaped modern merchandising, window dressing, and holiday campaigns. Late 20th-century competition from malls and e-commerce forced reinvention through branding, experiential floors, and integration with online platforms.",
       "image": "/media/images/buildingType/departmentStore.jpg",
       "requires": [
-        "technologyType:economics",
+        "technologyType:electricity",
         [
           "conceptType:flatLand",
           "elevationType:hill"
@@ -1725,7 +1725,7 @@
       "description": "An embassy quarter is an urban district concentrating foreign legations and embassies for security, protocol, and shared services. Nineteenth- and twentieth-century capitals planned such zones to manage extraterritorial rights and diplomatic movement. Washington’s Embassy Row along Massachusetts Avenue, Vienna’s districts near the Ringstraße, and Berlin’s Tiergarten cluster host national missions. Beijing’s historic Legation Quarter at Dongjiaominxiang became a focal point during the Boxer Uprising. Postcolonial planning in New Delhi created Chanakyapuri to house embassies with wide streets and plots. Tokyo’s Akasaka and Roppongi contain many missions in modern towers. Architecture often showcases national styles while meeting host-country codes. These quarters serve consular work, negotiations, cultural outreach, and crisis coordination.",
       "image": "/media/images/buildingType/embassyQuarter.jpg",
       "requires": [
-        "technologyType:universalSuffrage",
+        "technologyType:liberalism",
         [
           "conceptType:flatLand",
           "elevationType:hill"
@@ -3053,7 +3053,7 @@
       "description": "A police station is the local headquarters for patrol organization, investigations, detention, and public reporting. The modern form developed with nineteenth-century urban reforms such as London’s Metropolitan Police, Paris’s Prefecture de Police, and precinct houses in New York. Stations included parade rooms, charge desks, armories, cells, and later telegraph, telephone, and radio rooms. Architectural styles ranged from fortress-like Victorian blocks to standardized interwar and postwar facilities. In Japan, networks of kōban and chuzaisho supported larger stations through neighborhood presence. In Latin America and South Asia, municipal stations anchored beat patrols and investigative bureaus. Twentieth-century modernization added motor pools, forensic labs, and data units. Contemporary stations integrate community service counters, custody suites meeting legal standards, and digital dispatch linked to citywide command centers.",
       "image": "/media/images/buildingType/policeStation.jpg",
       "requires": [
-        "technologyType:universalSuffrage",
+        "technologyType:repeatingRifles",
         [
           "conceptType:flatLand",
           "elevationType:hill"
@@ -4934,6 +4934,11 @@
         "policyType:stateReligion",
         "policyType:freedomOfReligion",
         "policyType:atheist",
+        "policyType:neutrality",
+        "policyType:statusQuo",
+        "policyType:ideological",
+        "policyType:expansionist",
+        "policyType:aggressive",
         "traitType:trading",
         "traitType:sedentary",
         "worldWonderType:suomenlinna"
@@ -5748,6 +5753,11 @@
         "policyType:conscription",
         "policyType:draft",
         "policyType:levied",
+        "policyType:neutrality",
+        "policyType:statusQuo",
+        "policyType:ideological",
+        "policyType:expansionist",
+        "policyType:aggressive",
         "stockpileType:diseaseProjectile",
         "stockpileType:gasProjectile",
         "stockpileType:virusBomb",
@@ -7284,6 +7294,7 @@
         "featureType:pineForest",
         "featureType:forest",
         "featureType:shrubs",
+        "nationalWonderType:carcassonne",
         "resourceType:copper",
         "resourceType:tin",
         "resourceType:iron",
@@ -8014,7 +8025,7 @@
         "platformType:tracked": "Tank"
       },
       "requires": [
-        "technologyType:trackedTreads"
+        "technologyType:stainlessSteel"
       ],
       "yields": [
         {
@@ -8118,7 +8129,7 @@
         "platformType:human": "AT-Rifle"
       },
       "requires": [
-        "technologyType:trenchWarfare"
+        "technologyType:repeatingRifles"
       ],
       "yields": [
         {
@@ -12379,7 +12390,7 @@
         "platformType:submersible": "Submarine"
       },
       "requires": [
-        "technologyType:hydrodynamics"
+        "technologyType:submarines"
       ],
       "yields": [
         {
@@ -13024,6 +13035,7 @@
         "technologyType:repeatingRifles",
         "technologyType:drilling",
         "technologyType:liberalism",
+        "technologyType:trenchWarfare",
         "technologyType:chemistry",
         "technologyType:combustion",
         "technologyType:universalSuffrage"
@@ -13217,15 +13229,15 @@
         "goalType:worldWar"
       ],
       "relatesTo": [
-        "technologyType:trenchWarfare",
+        "technologyType:atomicTheory",
         "technologyType:stainlessSteel",
         "technologyType:oilRefining",
         "technologyType:flight",
-        "technologyType:atomicTheory",
+        "technologyType:hydrodynamics",
         "technologyType:trackedTreads",
         "technologyType:rocketry",
         "technologyType:radio",
-        "technologyType:hydrodynamics",
+        "technologyType:submarines",
         "technologyType:antibiotics",
         "technologyType:artDeco",
         "technologyType:aerodynamics"
@@ -14189,7 +14201,10 @@
       "gains": [],
       "upgradesFrom": [],
       "specials": [],
-      "actions": []
+      "actions": [],
+      "allows": [
+        "nationalWonderType:eastIndiaCompany"
+      ]
     },
     {
       "key": "goalType:culturalSingularity",
@@ -14396,7 +14411,10 @@
       "gains": [],
       "upgradesFrom": [],
       "specials": [],
-      "actions": []
+      "actions": [],
+      "allows": [
+        "nationalWonderType:tsarBomba"
+      ]
     },
     {
       "key": "goalType:oceanVoyages",
@@ -14529,7 +14547,10 @@
       "gains": [],
       "upgradesFrom": [],
       "specials": [],
-      "actions": []
+      "actions": [],
+      "allows": [
+        "nationalWonderType:spaceport"
+      ]
     },
     {
       "key": "goalType:theEnlightenment",
@@ -14783,7 +14804,10 @@
       "gains": [],
       "upgradesFrom": [],
       "specials": [],
-      "actions": []
+      "actions": [],
+      "allows": [
+        "nationalWonderType:largeLanguageModel"
+      ]
     },
     {
       "key": "godType:godOfFaith",
@@ -16545,7 +16569,7 @@
       "category": "improvementCategory:outpost",
       "description": "A base is a modern military or logistical installation built to project force, sustain operations, and coordinate communications. Facilities include depots, workshops, fuel farms, hospitals, barracks, and command posts linked by radio and later digital networks. Coastal or air access enables rapid throughput of materiel and personnel. During World War II, U.S. Pacific island bases supported amphibious advances with runways, docks, and repair yards. RAF desert bases sustained air superiority and supply in North Africa. The Soviet Union developed Arctic bases for polar navigation, radar coverage, and strategic aviation. Postwar, bases anchored alliance commitments, prepositioned stocks, and hosted training and joint commands. Defensive perimeters, hardened storage, and layered air defense protect critical functions.",
       "requires": [
-        "technologyType:radio",
+        "technologyType:stainlessSteel",
         "domainType:land"
       ],
       "yields": [
@@ -34635,7 +34659,6 @@
         "url": "/media/quotes/nationalWonderType/campusMartius.mp3"
       },
       "requires": [
-        "technologyType:standingArmy",
         "goalType:veniVidiVici"
       ],
       "yields": [
@@ -34667,7 +34690,7 @@
         "url": "/media/quotes/nationalWonderType/carcassonne.mp3"
       },
       "requires": [
-        "technologyType:castles",
+        "elevationType:hill",
         "goalType:feudalLords"
       ],
       "yields": [
@@ -34699,7 +34722,6 @@
         "url": "/media/quotes/nationalWonderType/carnegieSteel.mp3"
       },
       "requires": [
-        "technologyType:steelMilling",
         "goalType:industrialMight"
       ],
       "yields": [
@@ -34729,7 +34751,6 @@
         "url": "/media/quotes/nationalWonderType/codexManesse.mp3"
       },
       "requires": [
-        "technologyType:chivalry",
         "goalType:tournaments"
       ],
       "yields": [
@@ -34790,7 +34811,7 @@
         "url": "/media/quotes/nationalWonderType/eastIndiaCompany.mp3"
       },
       "requires": [
-        "technologyType:colonialism",
+        "goalType:colonialEmpire",
         "terrainType:coast"
       ],
       "yields": [
@@ -34905,7 +34926,6 @@
         "url": "/media/quotes/nationalWonderType/generalStaff.mp3"
       },
       "requires": [
-        "technologyType:repeatingRifles",
         "goalType:worldWar"
       ],
       "yields": [
@@ -34937,7 +34957,6 @@
         "url": "/media/quotes/nationalWonderType/geoglyph.mp3"
       },
       "requires": [
-        "technologyType:tradition",
         "goalType:firstCities"
       ],
       "yields": [
@@ -34967,7 +34986,6 @@
         "url": "/media/quotes/nationalWonderType/greatEpic.mp3"
       },
       "requires": [
-        "technologyType:drama",
         "goalType:wondersOfTheWorld"
       ],
       "yields": [
@@ -34997,7 +35015,6 @@
         "url": "/media/quotes/nationalWonderType/greatMarket.mp3"
       },
       "requires": [
-        "technologyType:currency",
         "goalType:tradeNetwork"
       ],
       "yields": [
@@ -35029,7 +35046,6 @@
         "url": "/media/quotes/nationalWonderType/highCourt.mp3"
       },
       "requires": [
-        "technologyType:bureaucracy",
         "goalType:urbanSociety"
       ],
       "yields": [
@@ -35152,7 +35168,7 @@
         "url": "/media/quotes/nationalWonderType/largeLanguageModel.mp3"
       },
       "requires": [
-        "technologyType:artificialIntelligence"
+        "goalType:worldWideWeb"
       ],
       "yields": [
         {
@@ -35204,7 +35220,7 @@
         "url": "/media/quotes/nationalWonderType/marineInstitute.mp3"
       },
       "requires": [
-        "technologyType:hydrodynamics",
+        "technologyType:submarines",
         "terrainType:coast"
       ],
       "yields": [
@@ -35358,7 +35374,7 @@
         "url": "/media/quotes/nationalWonderType/nationalChurch.mp3"
       },
       "requires": [
-        "technologyType:radio"
+        "technologyType:artDeco"
       ],
       "yields": [
         {
@@ -35420,7 +35436,7 @@
         "url": "/media/quotes/nationalWonderType/nationalLibrary.mp3"
       },
       "requires": [
-        "technologyType:universalSuffrage"
+        "technologyType:liberalism"
       ],
       "yields": [
         {
@@ -35566,7 +35582,6 @@
         "url": "/media/quotes/nationalWonderType/royalPalace.mp3"
       },
       "requires": [
-        "technologyType:buttress",
         "goalType:mandateOfHeaven"
       ],
       "yields": [
@@ -35596,7 +35611,6 @@
         "url": "/media/quotes/nationalWonderType/royalSociety.mp3"
       },
       "requires": [
-        "technologyType:scientificMethod",
         "goalType:theEnlightenment"
       ],
       "yields": [
@@ -35626,7 +35640,6 @@
         "url": "/media/quotes/nationalWonderType/schoolOfSocrates.mp3"
       },
       "requires": [
-        "technologyType:philosophy",
         "goalType:greatPhilosophers"
       ],
       "yields": [
@@ -35656,7 +35669,7 @@
         "url": "/media/quotes/nationalWonderType/spaceport.mp3"
       },
       "requires": [
-        "technologyType:privateSpaceFlight"
+        "goalType:spaceRace"
       ],
       "yields": [
         {
@@ -35741,7 +35754,6 @@
         "url": "/media/quotes/nationalWonderType/templeMount.mp3"
       },
       "requires": [
-        "technologyType:organizedReligion",
         "goalType:pantheonOfGods"
       ],
       "yields": [
@@ -35825,7 +35837,7 @@
         "url": "/media/quotes/nationalWonderType/tsarBomba.mp3"
       },
       "requires": [
-        "technologyType:thermonuclearDevice"
+        "goalType:nuclearDeterrence"
       ],
       "yields": [],
       "gains": [],
@@ -35846,7 +35858,6 @@
         "url": "/media/quotes/nationalWonderType/voyageOfMagellan.mp3"
       },
       "requires": [
-        "technologyType:carvelHulls",
         "terrainType:coast",
         "goalType:oceanVoyages"
       ],
@@ -40687,7 +40698,7 @@
       "category": "platformCategory:submersible",
       "description": "A submarine is an underwater naval vessel capable of submerged propulsion and extended operations. During the industrial era, inventors moved from hand-powered craft to practical machines. The French Plongeur (1863) introduced mechanical propulsion with compressed air. The Spanish Ictíneo II (1864) tested air regeneration and improved hull form. The Confederate CSS Hunley (1864) carried out the first combat sinking by a submersible. John Holland’s Holland VI (1897) set the diesel-electric pattern with internal combustion for surface running, batteries for submerged movement, and torpedoes as primary armament. By World War I, submarines served as commerce raiders and fleet scouts. Periscopes, hydrophones, and fire control advanced rapidly. Interwar designs improved endurance and hull strength. World War II mass production and snorkels extended submerged cruising and set the stage for postwar innovation.",
       "requires": [
-        "technologyType:hydrodynamics",
+        "technologyType:submarines",
         "resourceType:oil"
       ],
       "yields": [
@@ -40951,13 +40962,58 @@
       ]
     },
     {
+      "key": "policyType:aggressive",
+      "name": "Aggressive",
+      "concept": "conceptType:policy",
+      "category": "policyCategory:foreignAffairs",
+      "description": "",
+      "requires": [
+        "technologyType:slings"
+      ],
+      "yields": [
+        {
+          "type": "yieldType:influence",
+          "method": "percent",
+          "amount": 20,
+          "for": [
+            "conceptType:city"
+          ],
+          "vs": []
+        },
+        {
+          "type": "yieldType:faith",
+          "method": "percent",
+          "amount": -10,
+          "for": [
+            "conceptType:city"
+          ],
+          "vs": []
+        },
+        {
+          "type": "yieldType:strength",
+          "method": "percent",
+          "amount": -10,
+          "for": [
+            "conceptType:unit"
+          ],
+          "vs": []
+        }
+      ],
+      "gains": [],
+      "upgradesFrom": [],
+      "specials": [
+        "specialType:cannotJoinIncidents"
+      ],
+      "actions": []
+    },
+    {
       "key": "policyType:atheist",
       "name": "Atheist",
       "concept": "conceptType:policy",
       "category": "policyCategory:faith",
       "description": "Atheist policy seeks to exclude religious authority from the state and promote secular, often scientific, worldviews. The Soviet Union pursued state atheism, closed or repurposed houses of worship, and subordinated permitted activity to party oversight. Albania under Enver Hoxha declared itself an atheist state and banned public religious practice. During the French Revolution, dechristianization and civic cults challenged clerical power before later settlements. The People’s Republic of China encourages secular public life while licensing and supervising religious bodies. Measures range from education campaigns to legal restrictions on clergy and property. Outcomes include rapid secularization, diasporic religious resilience, and periodic accommodation.",
       "requires": [
-        "technologyType:liberalism"
+        "technologyType:universalSuffrage"
       ],
       "yields": [
         {
@@ -41038,7 +41094,7 @@
       "category": "policyCategory:leadership",
       "description": "Dictatorship consolidates authority in a single ruler or junta, using coercion, censorship, and control of institutions. Nazi Germany fused party and state, pursued total war, and committed genocidal crimes. Stalin’s Soviet Union enforced rapid industrialization and collectivization through terror and planned targets. North Korea entrenched dynastic rule, a command economy, and pervasive surveillance. Pinochet’s Chile installed military rule after a coup, repressing opposition while adopting neoliberal reforms. Dictatorships arise through coups, revolutions, or wartime states of emergency. They often claim order and modernization while curtailing rights. Endings include defeat in war, elite splits, popular uprisings, or negotiated transitions.",
       "requires": [
-        "technologyType:settlements"
+        "technologyType:tradition"
       ],
       "yields": [
         {
@@ -41190,6 +41246,51 @@
       "actions": []
     },
     {
+      "key": "policyType:expansionist",
+      "name": "Expansionist",
+      "concept": "conceptType:policy",
+      "category": "policyCategory:foreignAffairs",
+      "description": "",
+      "requires": [
+        "technologyType:philosophy"
+      ],
+      "yields": [
+        {
+          "type": "yieldType:influence",
+          "method": "percent",
+          "amount": 20,
+          "for": [
+            "conceptType:city"
+          ],
+          "vs": []
+        },
+        {
+          "type": "yieldType:faith",
+          "method": "percent",
+          "amount": -10,
+          "for": [
+            "conceptType:city"
+          ],
+          "vs": []
+        },
+        {
+          "type": "yieldType:strength",
+          "method": "percent",
+          "amount": -10,
+          "for": [
+            "conceptType:unit"
+          ],
+          "vs": []
+        }
+      ],
+      "gains": [],
+      "upgradesFrom": [],
+      "specials": [
+        "specialType:cannotJoinIncidents"
+      ],
+      "actions": []
+    },
+    {
       "key": "policyType:federation",
       "name": "Federation",
       "concept": "conceptType:policy",
@@ -41284,7 +41385,7 @@
       "category": "policyCategory:faith",
       "description": "Freedom of religion denotes legal protection for belief, worship, and nonbelief. The policy limits government establishment and bans coercion in matters of conscience. Early precedents include the Edict of Nantes, which granted restricted toleration to French Protestants, and the pluralist Dutch Republic after the Reformation. The U.S. First Amendment created a durable model combining nonestablishment with free exercise. Contemporary secular constitutions protect minority communities and enable voluntary institutions. Implementation varies. Some states retain blasphemy laws or registration regimes that burden small groups. Durable pluralism tends to correlate with commercial openness, urbanization, and independent courts that enforce neutral rules.",
       "requires": [
-        "technologyType:liberalism"
+        "technologyType:universalSuffrage"
       ],
       "yields": [
         {
@@ -41355,6 +41456,51 @@
       "upgradesFrom": [],
       "specials": [
         "specialType:forcedStateReligion"
+      ],
+      "actions": []
+    },
+    {
+      "key": "policyType:ideological",
+      "name": "Ideological",
+      "concept": "conceptType:policy",
+      "category": "policyCategory:foreignAffairs",
+      "description": "",
+      "requires": [
+        "technologyType:philosophy"
+      ],
+      "yields": [
+        {
+          "type": "yieldType:influence",
+          "method": "percent",
+          "amount": 20,
+          "for": [
+            "conceptType:city"
+          ],
+          "vs": []
+        },
+        {
+          "type": "yieldType:faith",
+          "method": "percent",
+          "amount": -10,
+          "for": [
+            "conceptType:city"
+          ],
+          "vs": []
+        },
+        {
+          "type": "yieldType:strength",
+          "method": "percent",
+          "amount": -10,
+          "for": [
+            "conceptType:unit"
+          ],
+          "vs": []
+        }
+      ],
+      "gains": [],
+      "upgradesFrom": [],
+      "specials": [
+        "specialType:cannotJoinIncidents"
       ],
       "actions": []
     },
@@ -41585,6 +41731,51 @@
       "upgradesFrom": [],
       "specials": [
         "specialType:cannotBuildUnits"
+      ],
+      "actions": []
+    },
+    {
+      "key": "policyType:neutrality",
+      "name": "Neutrality",
+      "concept": "conceptType:policy",
+      "category": "policyCategory:foreignAffairs",
+      "description": "",
+      "requires": [
+        "technologyType:writing"
+      ],
+      "yields": [
+        {
+          "type": "yieldType:influence",
+          "method": "percent",
+          "amount": 20,
+          "for": [
+            "conceptType:city"
+          ],
+          "vs": []
+        },
+        {
+          "type": "yieldType:faith",
+          "method": "percent",
+          "amount": -10,
+          "for": [
+            "conceptType:city"
+          ],
+          "vs": []
+        },
+        {
+          "type": "yieldType:strength",
+          "method": "percent",
+          "amount": -10,
+          "for": [
+            "conceptType:unit"
+          ],
+          "vs": []
+        }
+      ],
+      "gains": [],
+      "upgradesFrom": [],
+      "specials": [
+        "specialType:cannotJoinIncidents"
       ],
       "actions": []
     },
@@ -41926,6 +42117,51 @@
       "upgradesFrom": [],
       "specials": [
         "specialType:forcedStateReligion"
+      ],
+      "actions": []
+    },
+    {
+      "key": "policyType:statusQuo",
+      "name": "Status Quo",
+      "concept": "conceptType:policy",
+      "category": "policyCategory:foreignAffairs",
+      "description": "",
+      "requires": [
+        "technologyType:tradition"
+      ],
+      "yields": [
+        {
+          "type": "yieldType:influence",
+          "method": "percent",
+          "amount": 20,
+          "for": [
+            "conceptType:city"
+          ],
+          "vs": []
+        },
+        {
+          "type": "yieldType:faith",
+          "method": "percent",
+          "amount": -10,
+          "for": [
+            "conceptType:city"
+          ],
+          "vs": []
+        },
+        {
+          "type": "yieldType:strength",
+          "method": "percent",
+          "amount": -10,
+          "for": [
+            "conceptType:unit"
+          ],
+          "vs": []
+        }
+      ],
+      "gains": [],
+      "upgradesFrom": [],
+      "specials": [
+        "specialType:cannotJoinIncidents"
       ],
       "actions": []
     },
@@ -47565,6 +47801,25 @@
       ]
     },
     {
+      "key": "specialType:cannotJoinIncidents",
+      "name": "Cannot join Incidents",
+      "concept": "conceptType:special",
+      "description": "",
+      "requires": [],
+      "yields": [],
+      "gains": [],
+      "upgradesFrom": [],
+      "specials": [],
+      "actions": [],
+      "relatesTo": [
+        "policyType:neutrality",
+        "policyType:statusQuo",
+        "policyType:ideological",
+        "policyType:expansionist",
+        "policyType:aggressive"
+      ]
+    },
+    {
       "key": "specialType:cannotKillLandUnits",
       "name": "Cannot kill Land Units",
       "concept": "conceptType:special",
@@ -49061,7 +49316,7 @@
       "x": 2,
       "y": 98,
       "requires": [
-        "technologyType:hydrodynamics",
+        "technologyType:submarines",
         "technologyType:antibiotics"
       ],
       "yields": [
@@ -49207,11 +49462,11 @@
       "name": "Arches",
       "concept": "conceptType:technology",
       "category": "eraType:iron",
-      "description": "",
+      "description": "Classical arches used wedge-shaped stone voussoirs set over wooden centering and locked by a keystone to redirect vertical loads into lateral thrust carried by piers or abutments. Builders employed stone, brick, and Roman concrete, enabling durable spans in bridges, aqueduct arcades, gates, drains, and vaulted substructures. Repeated arches formed arcades and supported barrel and groin vaults, extending the technique into large interior spaces. Construction required precise stone cutting, mortar bonding, and careful foundation work to resist spreading forces. Roman military engineers and state-sponsored projects standardized arch use across roads and water systems, allowing infrastructure to cross rivers, valleys, and uneven terrain while supporting urban expansion, logistics, and monumentality.",
       "image": "/media/images/technologyType/arches.jpg",
       "quote": {
-        "text": "",
-        "source": "",
+        "text": "Build so it endures.",
+        "source": "Vitruvius, 15 BCE",
         "url": "/media/quotes/technologyType/arches.mp3"
       },
       "x": 4,
@@ -49308,6 +49563,7 @@
       "actions": [],
       "allows": [
         "improvementType:nationalPark",
+        "nationalWonderType:nationalChurch",
         "technologyType:fission",
         "technologyType:massMedia",
         "worldWonderType:empireStateBuilding"
@@ -49386,7 +49642,6 @@
         "equipmentType:aIDrone",
         "equipmentType:aITorpedo",
         "equipmentType:droneSwarm",
-        "nationalWonderType:largeLanguageModel",
         "technologyType:aIProcessing",
         "technologyType:aIAnalysis"
       ]
@@ -49440,17 +49695,16 @@
         "source": "Physics lecture, University of Cambridge, ca. 1923",
         "url": "/media/quotes/technologyType/atomicTheory.mp3"
       },
-      "x": 2,
-      "y": 93,
+      "x": 0,
+      "y": 91,
       "requires": [
-        "technologyType:trenchWarfare",
-        "technologyType:stainlessSteel"
+        "technologyType:trenchWarfare"
       ],
       "yields": [
         {
           "type": "yieldType:scienceCost",
           "method": "lump",
-          "amount": 540,
+          "amount": 510,
           "for": [],
           "vs": []
         }
@@ -49726,7 +49980,6 @@
         "buildingType:magistrate",
         "improvementType:estate",
         "nationalWonderType:parliament",
-        "nationalWonderType:highCourt",
         "technologyType:steelMilling",
         "technologyType:medicine",
         "worldWonderType:oldBailey"
@@ -49764,7 +50017,6 @@
       "actions": [],
       "allows": [
         "buildingType:cathedral",
-        "nationalWonderType:royalPalace",
         "technologyType:gunpowder",
         "technologyType:fundamentalism",
         "worldWonderType:notreDame"
@@ -49875,7 +50127,6 @@
       "specials": [],
       "actions": [],
       "allows": [
-        "nationalWonderType:voyageOfMagellan",
         "platformType:carvel",
         "technologyType:militaryDiscipline"
       ]
@@ -49914,7 +50165,6 @@
       "allows": [
         "buildingType:castle",
         "equipmentType:trebuchet",
-        "nationalWonderType:carcassonne",
         "stockpileType:diseaseProjectile",
         "technologyType:clinkerHulls",
         "technologyType:divineRight"
@@ -49989,7 +50239,6 @@
       "actions": [],
       "allows": [
         "stockpileType:gasProjectile",
-        "technologyType:trenchWarfare",
         "technologyType:stainlessSteel",
         "technologyType:oilRefining",
         "worldWonderType:neuschwanstein"
@@ -50027,7 +50276,6 @@
       "actions": [],
       "allows": [
         "improvementType:huntingGround",
-        "nationalWonderType:codexManesse",
         "nationalWonderType:tournamentGrounds",
         "technologyType:divineRight",
         "worldWonderType:porcelainTower"
@@ -50254,7 +50502,6 @@
         "buildingType:port",
         "equipmentType:colonist",
         "improvementType:colony",
-        "nationalWonderType:eastIndiaCompany",
         "technologyType:cartography",
         "technologyType:pistols"
       ]
@@ -50563,7 +50810,6 @@
       "actions": [],
       "allows": [
         "buildingType:market",
-        "nationalWonderType:greatMarket",
         "technologyType:shipEngineering",
         "technologyType:sports",
         "worldWonderType:granaryOfHarappa"
@@ -50752,7 +50998,6 @@
       "actions": [],
       "allows": [
         "buildingType:amphitheater",
-        "nationalWonderType:greatEpic",
         "technologyType:mathematics",
         "worldWonderType:tombOfMausolus"
       ]
@@ -50866,7 +51111,6 @@
       "actions": [],
       "allows": [
         "buildingType:stockExchange",
-        "buildingType:departmentStore",
         "equipmentType:capitalist",
         "nationalWonderType:nationalBank",
         "nationalWonderType:tradeDelegation",
@@ -50940,6 +51184,7 @@
       "specials": [],
       "actions": [],
       "allows": [
+        "buildingType:departmentStore",
         "buildingType:coalPowerPlant",
         "technologyType:liberalism",
         "worldWonderType:eiffelTower"
@@ -51556,11 +51801,11 @@
       "name": "Guilds",
       "concept": "conceptType:technology",
       "category": "eraType:medieval",
-      "description": "",
+      "description": "Early medieval guilds organized artisans and merchants into recognized associations that regulated production, training, and trade within towns and emerging urban economies. Members shared standards for quality, tools, and methods, while masters supervised workshops employing apprentices and journeymen under customary rules governing advancement and conduct. Guild statutes controlled prices, weights, and access to markets, and authorities granted privileges such as monopolies over specific crafts in return for taxes, service, or civic obligations. Guilds also maintained mutual aid, religious observances, and collective representation before municipal or lordly officials. This structure stabilized skilled production, supported urban growth, and integrated economic activity with local governance and social order.",
       "image": "/media/images/technologyType/guilds.jpg",
       "quote": {
-        "text": "",
-        "source": "",
+        "text": "Each craft shall have its proper rules and masters.",
+        "source": "Étienne Boileau, 1268",
         "url": "/media/quotes/technologyType/guilds.mp3"
       },
       "x": 10,
@@ -51751,16 +51996,17 @@
         "source": "U.S. Bureau of Reclamation engineer, ca. 1935",
         "url": "/media/quotes/technologyType/hydrodynamics.mp3"
       },
-      "x": 0,
-      "y": 95,
+      "x": 2,
+      "y": 93,
       "requires": [
-        "technologyType:atomicTheory"
+        "technologyType:atomicTheory",
+        "technologyType:stainlessSteel"
       ],
       "yields": [
         {
           "type": "yieldType:scienceCost",
           "method": "lump",
-          "amount": 570,
+          "amount": 540,
           "for": [],
           "vs": []
         }
@@ -51772,12 +52018,9 @@
       "allows": [
         "buildingType:drydock",
         "buildingType:hydroPowerPlant",
-        "equipmentType:torpedo",
         "improvementType:dieselBoats",
-        "nationalWonderType:marineInstitute",
         "platformType:heavyDiesel",
-        "platformType:submarine",
-        "technologyType:aluminumMilling",
+        "technologyType:submarines",
         "worldWonderType:panamaCanal",
         "worldWonderType:hooverDam"
       ]
@@ -52075,10 +52318,10 @@
       "specials": [],
       "actions": [],
       "allows": [
+        "buildingType:embassyQuarter",
+        "nationalWonderType:nationalLibrary",
         "policyType:laissezFaire",
         "policyType:open",
-        "policyType:freedomOfReligion",
-        "policyType:atheist",
         "technologyType:combustion",
         "technologyType:universalSuffrage"
       ]
@@ -52950,7 +53193,6 @@
       "allows": [
         "buildingType:temple",
         "equipmentType:priest",
-        "nationalWonderType:templeMount",
         "policyType:dogmatic",
         "policyType:stateReligion",
         "technologyType:bronzeCasting",
@@ -52990,7 +53232,8 @@
       "specials": [],
       "actions": [],
       "allows": [
-        "nationalWonderType:schoolOfSocrates",
+        "policyType:ideological",
+        "policyType:expansionist",
         "technologyType:arches",
         "technologyType:mathematics",
         "worldWonderType:petra"
@@ -53179,7 +53422,6 @@
       "specials": [],
       "actions": [],
       "allows": [
-        "nationalWonderType:spaceport",
         "technologyType:aIAnalysis",
         "technologyType:weaponizedLasers"
       ]
@@ -53189,11 +53431,11 @@
       "name": "Public Works",
       "concept": "conceptType:technology",
       "category": "eraType:classical",
-      "description": "",
+      "description": "Classical public works organized state-directed construction of roads, aqueducts, sewers, harbors, walls, and civic buildings to support urban life, sanitation, defense, and administration. Magistrates such as Roman censors and aediles oversaw planning, contracting, and maintenance, while military engineers, skilled laborers, and conscripted or enslaved workers carried out construction using standardized methods in stone, brick, and concrete. Road networks employed graded surfaces, drainage, and milestones to regulate movement and communication, while aqueducts and sewers managed water supply and waste removal. These projects required taxation, legal authority, and logistical coordination across regions, allowing governments to sustain population density, facilitate trade and military deployment, and express civic order and state capacity through durable shared infrastructure.",
       "image": "/media/images/technologyType/publicWorks.jpg",
       "quote": {
-        "text": "",
-        "source": "",
+        "text": "The welfare of the people shall be the supreme law.",
+        "source": "Cicero, 52 BCE",
         "url": "/media/quotes/technologyType/publicWorks.mp3"
       },
       "x": 8,
@@ -53255,8 +53497,6 @@
       "allows": [
         "buildingType:cinema",
         "equipmentType:spy",
-        "improvementType:base",
-        "nationalWonderType:nationalChurch",
         "technologyType:aerodynamics",
         "worldWonderType:hollywood"
       ]
@@ -53368,9 +53608,11 @@
       "specials": [],
       "actions": [],
       "allows": [
+        "buildingType:policeStation",
         "equipmentType:rifle",
+        "equipmentType:aTRifle",
         "equipmentType:aAGun",
-        "nationalWonderType:generalStaff",
+        "technologyType:trenchWarfare",
         "technologyType:chemistry"
       ]
     },
@@ -53759,7 +54001,6 @@
       "allows": [
         "improvementType:fertilizedFarm",
         "improvementType:fertilizedPlantation",
-        "nationalWonderType:royalSociety",
         "technologyType:industrialization"
       ]
     },
@@ -53833,7 +54074,6 @@
         "buildingType:governor",
         "equipmentType:tribe",
         "policyType:oligarchy",
-        "policyType:dictatorship",
         "technologyType:tradition",
         "technologyType:pitMining"
       ]
@@ -53986,6 +54226,7 @@
       "actions": [],
       "allows": [
         "equipmentType:sling",
+        "policyType:aggressive",
         "technologyType:sieging"
       ]
     },
@@ -54081,6 +54322,7 @@
       "x": 4,
       "y": 91,
       "requires": [
+        "technologyType:trenchWarfare",
         "technologyType:chemistry"
       ],
       "yields": [
@@ -54097,9 +54339,11 @@
       "specials": [],
       "actions": [],
       "allows": [
+        "equipmentType:aTGun",
+        "improvementType:base",
         "improvementType:suspensionBridge",
         "nationalWonderType:industrialFund",
-        "technologyType:atomicTheory",
+        "technologyType:hydrodynamics",
         "technologyType:trackedTreads"
       ]
     },
@@ -54108,11 +54352,11 @@
       "name": "Standing Army",
       "concept": "conceptType:technology",
       "category": "eraType:classical",
-      "description": "",
+      "description": "Classical standing armies maintained permanent, state-supported forces of trained infantry, cavalry, and specialists under centralized command, replacing temporary levies with long-term service, standardized equipment, and regular discipline. States such as Achaemenid Persia, Hellenistic kingdoms, and later Rome organized units into fixed formations with defined ranks, pay, and supply systems sustained through taxation and administrative oversight. Soldiers trained in coordinated drill, formation maneuver, and siege operations, while officers enforced hierarchy, logistics, and battlefield control. Permanent garrisons secured frontiers, suppressed revolt, and protected infrastructure and rulers. This institutionalization of military service enabled sustained campaigns, territorial control, and projection of authority, tying military power directly to state organization and political stability.",
       "image": "/media/images/technologyType/standingArmy.jpg",
       "quote": {
-        "text": "",
-        "source": "",
+        "text": "He who wishes for peace must prepare for war.",
+        "source": "Vegetius, ca. 400 CE",
         "url": "/media/quotes/technologyType/standingArmy.mp3"
       },
       "x": 2,
@@ -54134,7 +54378,6 @@
       "specials": [],
       "actions": [],
       "allows": [
-        "nationalWonderType:campusMartius",
         "policyType:professional",
         "technologyType:steel"
       ]
@@ -54361,7 +54604,6 @@
       "allows": [
         "buildingType:steelMill",
         "improvementType:cantileverBridge",
-        "nationalWonderType:carnegieSteel",
         "platformType:heavySteamer",
         "technologyType:railroad",
         "technologyType:replaceableParts",
@@ -54404,6 +54646,43 @@
         "equipmentType:raiders",
         "technologyType:tradeCaravans",
         "worldWonderType:alhambra"
+      ]
+    },
+    {
+      "key": "technologyType:submarines",
+      "name": "Submarines",
+      "concept": "conceptType:technology",
+      "category": "eraType:modern",
+      "description": "",
+      "image": "/media/images/technologyType/submarines.jpg",
+      "quote": {
+        "text": "",
+        "source": "",
+        "url": "/media/quotes/technologyType/submarines.mp3"
+      },
+      "x": 0,
+      "y": 95,
+      "requires": [
+        "technologyType:hydrodynamics"
+      ],
+      "yields": [
+        {
+          "type": "yieldType:scienceCost",
+          "method": "lump",
+          "amount": 570,
+          "for": [],
+          "vs": []
+        }
+      ],
+      "gains": [],
+      "upgradesFrom": [],
+      "specials": [],
+      "actions": [],
+      "allows": [
+        "equipmentType:torpedo",
+        "nationalWonderType:marineInstitute",
+        "platformType:submarine",
+        "technologyType:aluminumMilling"
       ]
     },
     {
@@ -54548,7 +54827,6 @@
       "actions": [],
       "allows": [
         "nationalWonderType:operationIvy",
-        "nationalWonderType:tsarBomba",
         "stockpileType:hydrogenBomb",
         "technologyType:nuclearPropulsion"
       ]
@@ -54624,7 +54902,6 @@
       "specials": [],
       "actions": [],
       "allows": [
-        "equipmentType:aTGun",
         "equipmentType:tractor",
         "improvementType:mechanizedFarm",
         "improvementType:mechanizedPlantation",
@@ -54747,7 +55024,8 @@
       "actions": [],
       "allows": [
         "buildingType:obelisk",
-        "nationalWonderType:geoglyph",
+        "policyType:dictatorship",
+        "policyType:statusQuo",
         "technologyType:copperWorking",
         "technologyType:wheel",
         "worldWonderType:gobekliTepe"
@@ -54830,7 +55108,7 @@
       "key": "technologyType:trenchWarfare",
       "name": "Trench Warfare",
       "concept": "conceptType:technology",
-      "category": "eraType:modern",
+      "category": "eraType:imperial",
       "description": "Trench warfare is a system of field fortification and positional combat marked by deep trenches, parapets, and barbed wire. It dominated the Western Front in World War I after mobile operations stalled in late 1914. Defensive firepower from machine guns and rapid artillery caused high casualties in assaults. Battles such as Verdun (1916) and the Somme involved prolonged bombardments, saps, mines, and creeping barrages. Chemical agents and improved mortars added to the attritional character. At Gallipoli (1915–1916), entrenchments constrained both sides on difficult terrain. Solutions later emphasized infiltration tactics, tanks, coordinated artillery, air reconnaissance, and flexible defense to restore mobility.",
       "image": "/media/images/technologyType/trenchWarfare.jpg",
       "quote": {
@@ -54838,17 +55116,17 @@
         "source": "John McCrae, In Flanders Fields, 1915",
         "url": "/media/quotes/technologyType/trenchWarfare.mp3"
       },
-      "x": 0,
-      "y": 91,
+      "x": 2,
+      "y": 88,
       "requires": [
         "technologyType:artillery",
-        "technologyType:chemistry"
+        "technologyType:repeatingRifles"
       ],
       "yields": [
         {
           "type": "yieldType:scienceCost",
           "method": "lump",
-          "amount": 510,
+          "amount": 506,
           "for": [],
           "vs": []
         }
@@ -54858,11 +55136,11 @@
       "specials": [],
       "actions": [],
       "allows": [
-        "equipmentType:aTRifle",
         "equipmentType:sniper",
         "equipmentType:mortar",
         "improvementType:trenches",
-        "technologyType:atomicTheory"
+        "technologyType:atomicTheory",
+        "technologyType:stainlessSteel"
       ]
     },
     {
@@ -54896,11 +55174,10 @@
       "specials": [],
       "actions": [],
       "allows": [
-        "buildingType:policeStation",
-        "buildingType:embassyQuarter",
         "equipmentType:migrant",
         "equipmentType:preacher",
-        "nationalWonderType:nationalLibrary",
+        "policyType:freedomOfReligion",
+        "policyType:atheist",
         "technologyType:flight"
       ]
     },
@@ -55199,6 +55476,7 @@
       "actions": [],
       "allows": [
         "buildingType:scribery",
+        "policyType:neutrality",
         "technologyType:bronzeSmithing",
         "technologyType:government"
       ]
@@ -62258,6 +62536,19 @@
         "policyType:stateReligion",
         "policyType:freedomOfReligion",
         "policyType:atheist"
+      ]
+    },
+    {
+      "key": "policyCategory:foreignAffairs",
+      "name": "Foreign Affairs",
+      "concept": "conceptType:policy",
+      "description": "",
+      "relatesTo": [
+        "policyType:neutrality",
+        "policyType:statusQuo",
+        "policyType:ideological",
+        "policyType:expansionist",
+        "policyType:aggressive"
       ]
     },
     {

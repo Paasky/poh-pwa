@@ -158,7 +158,7 @@
       "source": "Victor Hugo, 1860",
       "url": "/media/quotes/nationalWonderType/nationalLibrary.mp3"
     },
-    "requires": ["technologyType:universalSuffrage"],
+    "requires": ["technologyType:liberalism"],
     "yields": [
       {
         "type": "yieldType:science",
@@ -380,7 +380,7 @@
       "source": "Louis XIV, 1685",
       "url": "/media/quotes/nationalWonderType/nationalChurch.mp3"
     },
-    "requires": ["technologyType:radio"],
+    "requires": ["technologyType:artDeco"],
     "yields": [
       {
         "type": "yieldType:faith",
@@ -756,7 +756,7 @@
       "source": "Jacques Cousteau, ca. 1950",
       "url": "/media/quotes/nationalWonderType/marineInstitute.mp3"
     },
-    "requires": ["technologyType:hydrodynamics", "terrainType:coast"],
+    "requires": ["technologyType:submarines", "terrainType:coast"],
     "yields": [
       {
         "type": "yieldType:food",

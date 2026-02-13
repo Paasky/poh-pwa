@@ -2308,6 +2308,28 @@
   {
     "category": "eraType:imperial",
     "concept": "conceptType:technology",
+    "description": "Trench warfare is a system of field fortification and positional combat marked by deep trenches, parapets, and barbed wire. It dominated the Western Front in World War I after mobile operations stalled in late 1914. Defensive firepower from machine guns and rapid artillery caused high casualties in assaults. Battles such as Verdun (1916) and the Somme involved prolonged bombardments, saps, mines, and creeping barrages. Chemical agents and improved mortars added to the attritional character. At Gallipoli (1915–1916), entrenchments constrained both sides on difficult terrain. Solutions later emphasized infiltration tactics, tanks, coordinated artillery, air reconnaissance, and flexible defense to restore mobility.",
+    "image": "/media/images/technologyType/trenchWarfare.jpg",
+    "key": "technologyType:trenchWarfare",
+    "name": "Trench Warfare",
+    "quote": {
+      "text": "In Flanders fields the poppies blow / Between the crosses, row on row.",
+      "source": "John McCrae, In Flanders Fields, 1915",
+      "url": "/media/quotes/technologyType/trenchWarfare.mp3"
+    },
+    "requires": ["technologyType:artillery", "technologyType:repeatingRifles"],
+    "x": 2,
+    "y": 88,
+    "yields": [
+      {
+        "type": "yieldType:scienceCost",
+        "amount": 506
+      }
+    ]
+  },
+  {
+    "category": "eraType:imperial",
+    "concept": "conceptType:technology",
     "description": "Industrial-era chemistry became a laboratory science connected to large-scale production. Building on Lavoisier’s stoichiometry and conservation, nineteenth‑century chemists refined analytic methods, glassware, and instrumentation. Dmitri Mendeleev’s periodic table (1869) organized elements by atomic weight and predicted new ones, guiding research and pedagogy. Organic chemistry grew rapidly after coal‑tar distillation; William Henry Perkin’s aniline dyes sparked a German-led synthetic colorant industry centered at BASF, Bayer, and Hoechst. Industrial chemistry scaled key reagents such as sulfuric acid and alkalis through Leblanc and later Solvay processes, lowering costs for textiles, paper, and metallurgy. Electrochemistry enabled chlorine and aluminum production. Pharmaceutical synthesis, fertilizer development, and explosives chemistry linked university laboratories with factory R&D. By 1900, professional societies, journals, and standardized nomenclature coordinated an international chemical enterprise.",
     "image": "/media/images/technologyType/chemistry.jpg",
     "key": "technologyType:chemistry",
@@ -2374,16 +2396,16 @@
   {
     "category": "eraType:modern",
     "concept": "conceptType:technology",
-    "description": "Trench warfare is a system of field fortification and positional combat marked by deep trenches, parapets, and barbed wire. It dominated the Western Front in World War I after mobile operations stalled in late 1914. Defensive firepower from machine guns and rapid artillery caused high casualties in assaults. Battles such as Verdun (1916) and the Somme involved prolonged bombardments, saps, mines, and creeping barrages. Chemical agents and improved mortars added to the attritional character. At Gallipoli (1915–1916), entrenchments constrained both sides on difficult terrain. Solutions later emphasized infiltration tactics, tanks, coordinated artillery, air reconnaissance, and flexible defense to restore mobility.",
-    "image": "/media/images/technologyType/trenchWarfare.jpg",
-    "key": "technologyType:trenchWarfare",
-    "name": "Trench Warfare",
+    "description": "Modern atomic theory in the early twentieth century located mass and positive charge in a compact nucleus with electrons occupying quantized states. Ernest Rutherford’s gold‑foil experiment (1911) demonstrated nuclear structure; Niels Bohr’s model (1913) applied quantum postulates to hydrogen spectra. Discovery of the neutron (1932) clarified isotopes and mass defects. Quantum mechanics in the 1920s–1930s replaced orbital pictures with wavefunctions and probabilistic interpretation, explaining chemical bonding and periodic behavior. Experimental tools—spectroscopy, scattering, cloud chambers, and later accelerators—validated subatomic particles and transitions. The framework unified physics and chemistry, enabling nuclear energy research, radiochemistry, semiconductor theory, and precise metrology.",
+    "image": "/media/images/technologyType/atomicTheory.jpg",
+    "key": "technologyType:atomicTheory",
+    "name": "Atomic Theory",
     "quote": {
-      "text": "In Flanders fields the poppies blow / Between the crosses, row on row.",
-      "source": "John McCrae, In Flanders Fields, 1915",
-      "url": "/media/quotes/technologyType/trenchWarfare.mp3"
+      "text": "Atoms are the bricks of the universe.",
+      "source": "Physics lecture, University of Cambridge, ca. 1923",
+      "url": "/media/quotes/technologyType/atomicTheory.mp3"
     },
-    "requires": ["technologyType:artillery", "technologyType:chemistry"],
+    "requires": ["technologyType:trenchWarfare"],
     "x": 0,
     "y": 91,
     "yields": [
@@ -2405,7 +2427,7 @@
       "source": "Sheffield steelworks slogan, ca. 1924",
       "url": "/media/quotes/technologyType/stainlessSteel.mp3"
     },
-    "requires": ["technologyType:chemistry"],
+    "requires": ["technologyType:trenchWarfare", "technologyType:chemistry"],
     "x": 4,
     "y": 91,
     "yields": [
@@ -2462,16 +2484,16 @@
   {
     "category": "eraType:modern",
     "concept": "conceptType:technology",
-    "description": "Modern atomic theory in the early twentieth century located mass and positive charge in a compact nucleus with electrons occupying quantized states. Ernest Rutherford’s gold‑foil experiment (1911) demonstrated nuclear structure; Niels Bohr’s model (1913) applied quantum postulates to hydrogen spectra. Discovery of the neutron (1932) clarified isotopes and mass defects. Quantum mechanics in the 1920s–1930s replaced orbital pictures with wavefunctions and probabilistic interpretation, explaining chemical bonding and periodic behavior. Experimental tools—spectroscopy, scattering, cloud chambers, and later accelerators—validated subatomic particles and transitions. The framework unified physics and chemistry, enabling nuclear energy research, radiochemistry, semiconductor theory, and precise metrology.",
-    "image": "/media/images/technologyType/atomicTheory.jpg",
-    "key": "technologyType:atomicTheory",
-    "name": "Atomic Theory",
+    "description": "Hydrodynamics studies fluid motion, forces, and energy exchange in liquids. Building on the Navier–Stokes framework and dimensional analysis, 20th-century research linked laboratory models to full-scale systems through similarity laws and Reynolds number scaling. Naval architects applied towing tanks and cavitation tunnels to refine hull forms, propellers, and rudders, reducing drag and avoiding destructive vapor bubble collapse. Engineers optimized pumps, valves, and hydraulic turbines for irrigation, power generation, and industry. Submarine design integrated boundary-layer control and fairing to manage flow separation and acoustic signatures. The field supported offshore platforms, river control, and flood forecasting by coupling theory with instrumented trials. Computational methods later extended analysis to transient flows, free-surface waves, and multiphase phenomena.",
+    "image": "/media/images/technologyType/hydrodynamics.jpg",
+    "key": "technologyType:hydrodynamics",
+    "name": "Hydrodynamics",
     "quote": {
-      "text": "Atoms are the bricks of the universe.",
-      "source": "Physics lecture, University of Cambridge, ca. 1923",
-      "url": "/media/quotes/technologyType/atomicTheory.mp3"
+      "text": "A dam is a fortress against the river.",
+      "source": "U.S. Bureau of Reclamation engineer, ca. 1935",
+      "url": "/media/quotes/technologyType/hydrodynamics.mp3"
     },
-    "requires": ["technologyType:trenchWarfare", "technologyType:stainlessSteel"],
+    "requires": ["technologyType:atomicTheory", "technologyType:stainlessSteel"],
     "x": 2,
     "y": 93,
     "yields": [
@@ -2550,16 +2572,16 @@
   {
     "category": "eraType:modern",
     "concept": "conceptType:technology",
-    "description": "Hydrodynamics studies fluid motion, forces, and energy exchange in liquids. Building on the Navier–Stokes framework and dimensional analysis, 20th-century research linked laboratory models to full-scale systems through similarity laws and Reynolds number scaling. Naval architects applied towing tanks and cavitation tunnels to refine hull forms, propellers, and rudders, reducing drag and avoiding destructive vapor bubble collapse. Engineers optimized pumps, valves, and hydraulic turbines for irrigation, power generation, and industry. Submarine design integrated boundary-layer control and fairing to manage flow separation and acoustic signatures. The field supported offshore platforms, river control, and flood forecasting by coupling theory with instrumented trials. Computational methods later extended analysis to transient flows, free-surface waves, and multiphase phenomena.",
-    "image": "/media/images/technologyType/hydrodynamics.jpg",
-    "key": "technologyType:hydrodynamics",
-    "name": "Hydrodynamics",
+    "description": "",
+    "image": "/media/images/technologyType/submarines.jpg",
+    "key": "technologyType:submarines",
+    "name": "Submarines",
     "quote": {
-      "text": "A dam is a fortress against the river.",
-      "source": "U.S. Bureau of Reclamation engineer, ca. 1935",
-      "url": "/media/quotes/technologyType/hydrodynamics.mp3"
+      "text": "",
+      "source": "",
+      "url": "/media/quotes/technologyType/submarines.mp3"
     },
-    "requires": ["technologyType:atomicTheory"],
+    "requires": ["technologyType:hydrodynamics"],
     "x": 0,
     "y": 95,
     "yields": [
@@ -2647,7 +2669,7 @@
       "source": "Aluminum on the March, 1956",
       "url": "/media/quotes/technologyType/aluminumMilling.mp3"
     },
-    "requires": ["technologyType:hydrodynamics", "technologyType:antibiotics"],
+    "requires": ["technologyType:submarines", "technologyType:antibiotics"],
     "x": 2,
     "y": 98,
     "yields": [
