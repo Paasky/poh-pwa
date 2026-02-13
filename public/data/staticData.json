@@ -1046,7 +1046,7 @@
       "description": "Barracks are purpose-built housing for soldiers of standing armies. They concentrate troops, streamline training, and reduce reliance on civilian billeting. In 16th–17th century Europe, rulers raised permanent regiments and built casernes near drill grounds and arsenals. The Ottoman Empire maintained large janissary barracks in Istanbul and provincial centers to support its elite infantry. France and Prussia expanded standardized barrack blocks with mess halls, magazines, and infirmaries during the 18th century. Colonial empires constructed barracks across India, North America, and Africa to anchor garrisons. Industrial urban growth led cities to place barracks on dedicated reservations with parade squares and transport links. The form professionalized military life by regulating diet, health, and discipline, while enabling rapid mobilization and centralized command.",
       "image": "/media/images/buildingType/barracks.jpg",
       "requires": [
-        "technologyType:firearms",
+        "technologyType:pistols",
         "domainType:land",
         "elevationType:flat"
       ],
@@ -12327,7 +12327,7 @@
         "platformType:satellite": "Spy Satellite"
       },
       "requires": [
-        "technologyType:spaceFlight",
+        "technologyType:stateSurveillance",
         "resourceType:electronics"
       ],
       "yields": [
@@ -12930,12 +12930,12 @@
         "goalType:spaceRace"
       ],
       "relatesTo": [
-        "technologyType:transistors",
         "technologyType:combinedArms",
+        "technologyType:transistors",
         "technologyType:spaceFlight",
         "technologyType:hollowCharge",
-        "technologyType:microchips",
         "technologyType:religiousRevival",
+        "technologyType:microchips",
         "technologyType:stateSurveillance",
         "technologyType:globalization",
         "technologyType:guidedOrdnance"
@@ -50465,11 +50465,10 @@
         "source": "Creedence Clearwater Revival, 1969",
         "url": "/media/quotes/technologyType/combinedArms.mp3"
       },
-      "x": 4,
+      "x": 0,
       "y": 105,
       "requires": [
-        "technologyType:plastics",
-        "technologyType:nuclearPropulsion"
+        "technologyType:plastics"
       ],
       "yields": [
         {
@@ -50488,7 +50487,6 @@
         "equipmentType:sMG",
         "equipmentType:catapultDeck",
         "platformType:helicopter",
-        "technologyType:microchips",
         "technologyType:religiousRevival"
       ]
     },
@@ -51289,7 +51287,6 @@
       "specials": [],
       "actions": [],
       "allows": [
-        "buildingType:barracks",
         "buildingType:firingRange",
         "equipmentType:arquebus",
         "equipmentType:handCannon",
@@ -51607,7 +51604,7 @@
       "x": 0,
       "y": 109,
       "requires": [
-        "technologyType:microchips"
+        "technologyType:religiousRevival"
       ],
       "yields": [
         {
@@ -52481,11 +52478,11 @@
         "source": "Gordon Moore, 1965",
         "url": "/media/quotes/technologyType/microchips.mp3"
       },
-      "x": 2,
+      "x": 6,
       "y": 107,
       "requires": [
         "technologyType:transistors",
-        "technologyType:combinedArms"
+        "technologyType:spaceFlight"
       ],
       "yields": [
         {
@@ -52502,7 +52499,6 @@
       "actions": [],
       "allows": [
         "buildingType:amusementPark",
-        "technologyType:globalization",
         "technologyType:guidedOrdnance",
         "worldWonderType:cERN"
       ]
@@ -52880,7 +52876,7 @@
       "allows": [
         "platformType:nuclearHull",
         "platformType:nuclearSub",
-        "technologyType:combinedArms",
+        "technologyType:transistors",
         "technologyType:spaceFlight"
       ]
     },
@@ -53151,6 +53147,7 @@
       "specials": [],
       "actions": [],
       "allows": [
+        "buildingType:barracks",
         "equipmentType:buccaneers",
         "technologyType:banking"
       ]
@@ -53227,8 +53224,8 @@
       "actions": [],
       "allows": [
         "buildingType:supermarket",
-        "technologyType:transistors",
         "technologyType:combinedArms",
+        "technologyType:transistors",
         "worldWonderType:unitedNations"
       ]
     },
@@ -53430,11 +53427,11 @@
         "source": "Martin Luther King, 1963",
         "url": "/media/quotes/technologyType/religiousRevival.mp3"
       },
-      "x": 6,
+      "x": 2,
       "y": 107,
       "requires": [
         "technologyType:combinedArms",
-        "technologyType:spaceFlight"
+        "technologyType:transistors"
       ],
       "yields": [
         {
@@ -53451,6 +53448,7 @@
       "actions": [],
       "allows": [
         "buildingType:megachurch",
+        "technologyType:globalization",
         "technologyType:guidedOrdnance",
         "worldWonderType:sagradaFamilia"
       ]
@@ -54181,11 +54179,10 @@
       "actions": [],
       "allows": [
         "equipmentType:commsSatellite",
-        "equipmentType:spySatellite",
         "nationalWonderType:spaceProgram",
         "platformType:iCBM",
         "platformType:satellite",
-        "technologyType:religiousRevival",
+        "technologyType:microchips",
         "technologyType:stateSurveillance"
       ]
     },
@@ -54332,6 +54329,7 @@
       "actions": [],
       "allows": [
         "buildingType:riotPolice",
+        "equipmentType:spySatellite",
         "technologyType:guidedOrdnance"
       ]
     },
@@ -54926,10 +54924,11 @@
         "source": "William Shockley, 1949",
         "url": "/media/quotes/technologyType/transistors.mp3"
       },
-      "x": 0,
+      "x": 4,
       "y": 105,
       "requires": [
-        "technologyType:plastics"
+        "technologyType:plastics",
+        "technologyType:nuclearPropulsion"
       ],
       "yields": [
         {
@@ -54946,6 +54945,7 @@
       "actions": [],
       "allows": [
         "buildingType:electronicsFactory",
+        "technologyType:religiousRevival",
         "technologyType:microchips",
         "worldWonderType:sydneyOperaHouse"
       ]

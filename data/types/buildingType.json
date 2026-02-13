@@ -1252,7 +1252,7 @@
     "image": "/media/images/buildingType/barracks.jpg",
     "key": "buildingType:barracks",
     "name": "Barracks",
-    "requires": ["technologyType:firearms", "domainType:land", "elevationType:flat"],
+    "requires": ["technologyType:pistols", "domainType:land", "elevationType:flat"],
     "upgradesFrom": ["buildingType:garrison"],
     "yields": [
       {

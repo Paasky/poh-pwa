@@ -2928,14 +2928,14 @@
   {
     "category": "eraType:digital",
     "concept": "conceptType:technology",
-    "description": "Transistors are semiconductor devices that switch or amplify signals by controlling charge carriers in doped materials. The 1947 Bell Labs point‑contact transistor proved solid‑state amplification. Junction and planar devices soon surpassed it. Miniaturization advanced through photolithography and improved silicon purity. This enabled transistor radios and early computers such as the IBM 1401. Integrated circuits grouped many transistors on one die and transformed computing, communications, and control. The MOSFET became dominant and scaled under Moore’s Law to billions per chip. Low power, ruggedness, and mass manufacturability let transistors displace vacuum tubes and anchor the global electronics industry.",
-    "image": "/media/images/technologyType/transistors.jpg",
-    "key": "technologyType:transistors",
-    "name": "Transistors",
+    "description": "Combined arms integrated infantry, cavalry, artillery, and later mechanized and air units into coordinated formations that applied complementary strengths against enemy forces. Commanders organized units to support one another, with infantry holding ground, cavalry or mobile forces maneuvering, and artillery disrupting formations and defenses at range. Communication systems, standardized drill, and staff planning enabled synchronized movement and timing across diverse units. Logistics supplied ammunition, equipment, and transport to sustain operations over distance. This coordination reduced the vulnerabilities of individual unit types and increased battlefield effectiveness. Combined arms allowed militaries to conduct offensive and defensive operations with greater flexibility, concentration of force, and operational control across complex and changing combat conditions.",
+    "image": "/media/images/technologyType/combinedArms.jpg",
+    "key": "technologyType:combinedArms",
+    "name": "Combined Arms",
     "quote": {
-      "text": "In these robot brains the transistor is the ideal nerve cell.",
-      "source": "William Shockley, 1949",
-      "url": "/media/quotes/technologyType/transistors.mp3"
+      "text": "I ain't no fortunate son...",
+      "source": "Creedence Clearwater Revival, 1969",
+      "url": "/media/quotes/technologyType/combinedArms.mp3"
     },
     "requires": ["technologyType:plastics"],
     "x": 0,
@@ -2950,14 +2950,14 @@
   {
     "category": "eraType:digital",
     "concept": "conceptType:technology",
-    "description": "Combined arms integrated infantry, cavalry, artillery, and later mechanized and air units into coordinated formations that applied complementary strengths against enemy forces. Commanders organized units to support one another, with infantry holding ground, cavalry or mobile forces maneuvering, and artillery disrupting formations and defenses at range. Communication systems, standardized drill, and staff planning enabled synchronized movement and timing across diverse units. Logistics supplied ammunition, equipment, and transport to sustain operations over distance. This coordination reduced the vulnerabilities of individual unit types and increased battlefield effectiveness. Combined arms allowed militaries to conduct offensive and defensive operations with greater flexibility, concentration of force, and operational control across complex and changing combat conditions.",
-    "image": "/media/images/technologyType/combinedArms.jpg",
-    "key": "technologyType:combinedArms",
-    "name": "Combined Arms",
+    "description": "Transistors are semiconductor devices that switch or amplify signals by controlling charge carriers in doped materials. The 1947 Bell Labs point‑contact transistor proved solid‑state amplification. Junction and planar devices soon surpassed it. Miniaturization advanced through photolithography and improved silicon purity. This enabled transistor radios and early computers such as the IBM 1401. Integrated circuits grouped many transistors on one die and transformed computing, communications, and control. The MOSFET became dominant and scaled under Moore’s Law to billions per chip. Low power, ruggedness, and mass manufacturability let transistors displace vacuum tubes and anchor the global electronics industry.",
+    "image": "/media/images/technologyType/transistors.jpg",
+    "key": "technologyType:transistors",
+    "name": "Transistors",
     "quote": {
-      "text": "I ain't no fortunate son...",
-      "source": "Creedence Clearwater Revival, 1969",
-      "url": "/media/quotes/technologyType/combinedArms.mp3"
+      "text": "In these robot brains the transistor is the ideal nerve cell.",
+      "source": "William Shockley, 1949",
+      "url": "/media/quotes/technologyType/transistors.mp3"
     },
     "requires": ["technologyType:plastics", "technologyType:nuclearPropulsion"],
     "x": 4,
@@ -3016,16 +3016,16 @@
   {
     "category": "eraType:digital",
     "concept": "conceptType:technology",
-    "description": "Integrated circuits compressed transistors, resistors, and interconnects onto semiconductor wafers. Jack Kilby and Robert Noyce introduced the concept and the planar process at the end of the 1950s, enabling reliable mass production at Fairchild. Early ICs powered avionics such as the Apollo guidance computer. The 1971 Intel 4004 marked the microprocessor’s arrival, integrating a CPU on a single chip. Scaling and photolithography advances produced large-scale and very-large-scale integration and fueled Moore’s law. Microchips transformed computing, communications, and control systems, from calculators and radios to mainframes and personal computers. By the late twentieth century, semiconductor fabrication, EDA tools, and global supply chains made microchips a strategic industry. Today, system-on-chip designs support mobile devices, data centers, and embedded systems.",
-    "image": "/media/images/technologyType/microchips.jpg",
-    "key": "technologyType:microchips",
-    "name": "Microchips",
+    "description": "",
+    "image": "/media/images/technologyType/religiousRevival.jpg",
+    "key": "technologyType:religiousRevival",
+    "name": "Religious Revival",
     "quote": {
-      "text": "Integrated circuits will lead to such wonders as home computers.",
-      "source": "Gordon Moore, 1965",
-      "url": "/media/quotes/technologyType/microchips.mp3"
+      "text": "I have a dream!",
+      "source": "Martin Luther King, 1963",
+      "url": "/media/quotes/technologyType/religiousRevival.mp3"
     },
-    "requires": ["technologyType:transistors", "technologyType:combinedArms"],
+    "requires": ["technologyType:combinedArms", "technologyType:transistors"],
     "x": 2,
     "y": 107,
     "yields": [
@@ -3038,16 +3038,16 @@
   {
     "category": "eraType:digital",
     "concept": "conceptType:technology",
-    "description": "",
-    "image": "/media/images/technologyType/religiousRevival.jpg",
-    "key": "technologyType:religiousRevival",
-    "name": "Religious Revival",
+    "description": "Integrated circuits compressed transistors, resistors, and interconnects onto semiconductor wafers. Jack Kilby and Robert Noyce introduced the concept and the planar process at the end of the 1950s, enabling reliable mass production at Fairchild. Early ICs powered avionics such as the Apollo guidance computer. The 1971 Intel 4004 marked the microprocessor’s arrival, integrating a CPU on a single chip. Scaling and photolithography advances produced large-scale and very-large-scale integration and fueled Moore’s law. Microchips transformed computing, communications, and control systems, from calculators and radios to mainframes and personal computers. By the late twentieth century, semiconductor fabrication, EDA tools, and global supply chains made microchips a strategic industry. Today, system-on-chip designs support mobile devices, data centers, and embedded systems.",
+    "image": "/media/images/technologyType/microchips.jpg",
+    "key": "technologyType:microchips",
+    "name": "Microchips",
     "quote": {
-      "text": "I have a dream!",
-      "source": "Martin Luther King, 1963",
-      "url": "/media/quotes/technologyType/religiousRevival.mp3"
+      "text": "Integrated circuits will lead to such wonders as home computers.",
+      "source": "Gordon Moore, 1965",
+      "url": "/media/quotes/technologyType/microchips.mp3"
     },
-    "requires": ["technologyType:combinedArms", "technologyType:spaceFlight"],
+    "requires": ["technologyType:transistors", "technologyType:spaceFlight"],
     "x": 6,
     "y": 107,
     "yields": [
@@ -3091,7 +3091,7 @@
       "source": "Kofi Annan, 1997",
       "url": "/media/quotes/technologyType/globalization.mp3"
     },
-    "requires": ["technologyType:microchips"],
+    "requires": ["technologyType:religiousRevival"],
     "x": 0,
     "y": 109,
     "yields": [

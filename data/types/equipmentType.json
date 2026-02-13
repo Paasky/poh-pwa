@@ -2800,7 +2800,7 @@
     "names": {
       "platformType:satellite": "Spy Satellite"
     },
-    "requires": ["technologyType:spaceFlight", "resourceType:electronics"],
+    "requires": ["technologyType:stateSurveillance", "resourceType:electronics"],
     "yields": [
       {
         "type": "yieldType:productionCost",
