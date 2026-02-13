@@ -130,13 +130,13 @@
         position: absolute;
         height: 1px;
         background: #30363d;
-        left: 60px;
+        left: 0;
         right: 0;
         pointer-events: none;
         opacity: 0.6;
         display: flex;
         align-items: center;
-        padding-left: 12px;
+        justify-content: center;
       }
 
       .era-separator h1 {
@@ -144,7 +144,7 @@
         font-weight: 600;
         color: #e6edf3;
         margin: 0;
-        padding: 0 8px;
+        padding: 0 12px;
         background: #0d1117;
         text-transform: uppercase;
         letter-spacing: 1px;
@@ -152,7 +152,7 @@
 
       #timeline {
         position: absolute;
-        left: 0;
+        left: -24px;
         top: 0;
         width: 60px;
         pointer-events: none;
@@ -465,13 +465,15 @@
           return `${fullYear}`;
         }
 
-        // Each y represents 12.5 turns, start at -1y to align with horizontal lines
-        for (let y = -1; y <= maxY; y++) {
-          const turn = Math.round(y * 12.5);
+        // Each y represents (50/7 = approx 7.14) turns, start at -1y to align with horizontal lines
+        // Position timeline at -1x
+        for (let y = 0; y <= maxY; y++) {
+          const turn = Math.round(y * (50/7));
           const year = getYearFromTurn(turn);
           const mark = document.createElement("div");
           mark.className = "timeline-mark";
-          mark.style.top = (PAD_Y + y * CELL_H) + "px";
+          mark.style.top = (PAD_Y + (y - 1) * CELL_H) + "px";
+          mark.style.left = (PAD_X - CELL_W) + "px";
           mark.textContent = formatYear(year);
           timelineContainer.appendChild(mark);
         }
