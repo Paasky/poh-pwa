@@ -13363,8 +13363,8 @@
         "goalType:mandateOfHeaven"
       ],
       "relatesTo": [
-        "technologyType:steelSmithing",
         "technologyType:clinkerHulls",
+        "technologyType:steelSmithing",
         "technologyType:divineRight",
         "technologyType:tradeCaravans",
         "technologyType:optics",
@@ -50075,7 +50075,7 @@
         "buildingType:castle",
         "equipmentType:trebuchet",
         "stockpileType:diseaseProjectile",
-        "technologyType:clinkerHulls",
+        "technologyType:steelSmithing",
         "technologyType:divineRight"
       ]
     },
@@ -50279,11 +50279,10 @@
         "source": "Old Norse proverb, ca. 1200",
         "url": "/media/quotes/technologyType/clinkerHulls.mp3"
       },
-      "x": 4,
+      "x": 0,
       "y": 49,
       "requires": [
-        "technologyType:machinery",
-        "technologyType:castles"
+        "technologyType:machinery"
       ],
       "yields": [
         {
@@ -50302,7 +50301,6 @@
         "equipmentType:raiders",
         "platformType:clinker",
         "technologyType:tradeCaravans",
-        "technologyType:optics",
         "worldWonderType:venetianArsenal"
       ]
     },
@@ -52274,8 +52272,8 @@
         "buildingType:windmill",
         "equipmentType:crossbow",
         "improvementType:feudalSawmill",
-        "technologyType:steelSmithing",
-        "technologyType:clinkerHulls"
+        "technologyType:clinkerHulls",
+        "technologyType:steelSmithing"
       ]
     },
     {
@@ -52977,7 +52975,7 @@
       "x": 6,
       "y": 51,
       "requires": [
-        "technologyType:clinkerHulls",
+        "technologyType:steelSmithing",
         "technologyType:divineRight"
       ],
       "yields": [
@@ -54500,10 +54498,11 @@
         "source": "Forging saying, ca. 1600",
         "url": "/media/quotes/technologyType/steelSmithing.mp3"
       },
-      "x": 0,
+      "x": 4,
       "y": 49,
       "requires": [
-        "technologyType:machinery"
+        "technologyType:machinery",
+        "technologyType:castles"
       ],
       "yields": [
         {
@@ -54522,6 +54521,7 @@
         "buildingType:forge",
         "equipmentType:longsword",
         "technologyType:tradeCaravans",
+        "technologyType:optics",
         "worldWonderType:alhambra"
       ]
     },

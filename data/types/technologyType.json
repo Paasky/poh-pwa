@@ -1273,14 +1273,14 @@
   {
     "category": "eraType:renaissance",
     "concept": "conceptType:technology",
-    "description": "Medieval steel smithing refined iron into controlled carbon alloys and then shaped them through forging and heat treatment. Smiths carburized bloomery iron in packed charcoal, welded composite billets, and forged blades that combined hard edges with tough cores. Pattern-welding persisted in early centuries before purer monosteels spread. Quenching in water or oil locked in hardness; tempering at measured colors reduced brittleness. Workshops in Solingen, Toledo, Damascus, and along the Volga traded steels and techniques. Armorers produced tempered plate harnesses, helmets, and mail using differential heat treatment and precise riveting. Blade makers developed grind profiles and fullers to balance strength and flexibility. Marks such as Ulfberht signaled quality and consistent carbon content. The craft supported military change by supplying reliable edged weapons, springs, tools, and later firearm components.",
-    "image": "/media/images/technologyType/steelSmithing.jpg",
-    "key": "technologyType:steelSmithing",
-    "name": "Steel Smithing",
+    "description": "Clinker, or lapstrake, construction fastened overlapping strakes along a light frame to form strong and flexible wooden hulls. Edge-riveted planks created longitudinal stiffness while allowing the shell to work in heavy seas. The method excelled for surf launching and shoal waters, common in the North Atlantic. Viking longships such as Gokstad and Oseberg used clinker hulls for speed, shallow draft, and beaching. From the thirteenth century, Hanseatic cogs adapted clinker sides to broad, capacious trading craft. Caulking with animal hair and tar sealed seams. Builders later combined clinker topsides with carvel bottoms or shifted entirely to carvel for larger artillery-bearing ships. North Sea traders continued clinker practice into the early modern era.",
+    "image": "/media/images/technologyType/clinkerHulls.jpg",
+    "key": "technologyType:clinkerHulls",
+    "name": "Clinker Hulls",
     "quote": {
-      "text": "Strike true, and the steel remembers.",
-      "source": "Forging saying, ca. 1600",
-      "url": "/media/quotes/technologyType/steelSmithing.mp3"
+      "text": "Fair is the ship, fast is the seam.",
+      "source": "Old Norse proverb, ca. 1200",
+      "url": "/media/quotes/technologyType/clinkerHulls.mp3"
     },
     "requires": ["technologyType:machinery"],
     "x": 0,
@@ -1295,14 +1295,14 @@
   {
     "category": "eraType:renaissance",
     "concept": "conceptType:technology",
-    "description": "Clinker, or lapstrake, construction fastened overlapping strakes along a light frame to form strong and flexible wooden hulls. Edge-riveted planks created longitudinal stiffness while allowing the shell to work in heavy seas. The method excelled for surf launching and shoal waters, common in the North Atlantic. Viking longships such as Gokstad and Oseberg used clinker hulls for speed, shallow draft, and beaching. From the thirteenth century, Hanseatic cogs adapted clinker sides to broad, capacious trading craft. Caulking with animal hair and tar sealed seams. Builders later combined clinker topsides with carvel bottoms or shifted entirely to carvel for larger artillery-bearing ships. North Sea traders continued clinker practice into the early modern era.",
-    "image": "/media/images/technologyType/clinkerHulls.jpg",
-    "key": "technologyType:clinkerHulls",
-    "name": "Clinker Hulls",
+    "description": "Medieval steel smithing refined iron into controlled carbon alloys and then shaped them through forging and heat treatment. Smiths carburized bloomery iron in packed charcoal, welded composite billets, and forged blades that combined hard edges with tough cores. Pattern-welding persisted in early centuries before purer monosteels spread. Quenching in water or oil locked in hardness; tempering at measured colors reduced brittleness. Workshops in Solingen, Toledo, Damascus, and along the Volga traded steels and techniques. Armorers produced tempered plate harnesses, helmets, and mail using differential heat treatment and precise riveting. Blade makers developed grind profiles and fullers to balance strength and flexibility. Marks such as Ulfberht signaled quality and consistent carbon content. The craft supported military change by supplying reliable edged weapons, springs, tools, and later firearm components.",
+    "image": "/media/images/technologyType/steelSmithing.jpg",
+    "key": "technologyType:steelSmithing",
+    "name": "Steel Smithing",
     "quote": {
-      "text": "Fair is the ship, fast is the seam.",
-      "source": "Old Norse proverb, ca. 1200",
-      "url": "/media/quotes/technologyType/clinkerHulls.mp3"
+      "text": "Strike true, and the steel remembers.",
+      "source": "Forging saying, ca. 1600",
+      "url": "/media/quotes/technologyType/steelSmithing.mp3"
     },
     "requires": ["technologyType:machinery", "technologyType:castles"],
     "x": 4,
@@ -1370,7 +1370,7 @@
       "source": "Ibn al-Haytham, 1020",
       "url": "/media/quotes/technologyType/optics.mp3"
     },
-    "requires": ["technologyType:clinkerHulls", "technologyType:divineRight"],
+    "requires": ["technologyType:steelSmithing", "technologyType:divineRight"],
     "x": 6,
     "y": 51,
     "yields": [
