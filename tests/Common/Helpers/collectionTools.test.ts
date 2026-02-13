@@ -403,13 +403,13 @@ describe("collectionTools", () => {
 
   describe("intersect edge cases", () => {
     it("throws for unknown type", () => {
-      expect(() => intersect({}, [])).toThrow("unknown collection type object");
+      expect(() => intersect({} as any, [])).toThrow("unknown collection type object");
     });
   });
 
   describe("union edge cases", () => {
     it("throws for unknown type", () => {
-      expect(() => union({}, [])).toThrow("unknown collection type object");
+      expect(() => union({} as any, [])).toThrow("unknown collection type object");
     });
   });
 
@@ -421,7 +421,7 @@ describe("collectionTools", () => {
 
   describe("takeRandomItem edge cases", () => {
     it("throws for unknown type", () => {
-      expect(() => takeRandomItem({})).toThrow("unknown collection type object");
+      expect(() => takeRandomItem({} as any)).toThrow("unknown collection type object");
     });
   });
 

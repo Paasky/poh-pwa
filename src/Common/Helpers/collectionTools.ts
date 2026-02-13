@@ -393,5 +393,8 @@ export function takeRandomItem<T>(collection: T[]): T | undefined;
 export function takeRandomItem<T>(collection: Set<T>): T | undefined;
 export function takeRandomItem<K, V>(collection: Map<K, V>): V | undefined;
 export function takeRandomItem(collection: any): any {
+  if (!Array.isArray(collection) && !(collection instanceof Set) && !(collection instanceof Map)) {
+    throw new Error(`unknown collection type ${typeof collection}`);
+  }
   return rng.take(collection);
 }

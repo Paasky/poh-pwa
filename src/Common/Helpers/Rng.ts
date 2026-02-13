@@ -113,9 +113,14 @@ export class Rng {
     }
 
     if (collection instanceof Set) {
-      const item = this.pick(collection);
-      if (item !== undefined) collection.delete(item);
-      return item;
+      let i = 0;
+      for (const item of collection) {
+        if (i === index) {
+          collection.delete(item);
+          return item as T;
+        }
+        i++;
+      }
     }
 
     if (collection instanceof Map) {

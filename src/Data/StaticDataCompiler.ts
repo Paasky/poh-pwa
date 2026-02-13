@@ -151,7 +151,7 @@ export class StaticDataCompiler {
     this.typeRegistry.forEach((obj) => {
       // Make sure referenced keys actually exist
       this.trackMissing(obj.key, obj.concept);
-      if (obj.category) this.trackMissing(obj.key, obj.category);
+      if (obj.category) this.trackMissing(obj.key, obj.category as StaticKey);
 
       // Back-Relation: requires -> allows
       const allRequires = obj.requires.flat() as StaticKey[];

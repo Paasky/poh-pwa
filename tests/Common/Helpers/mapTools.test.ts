@@ -116,8 +116,8 @@ describe("mapTools", () => {
       const tiles = store.getTiles();
 
       expect(getTile(size, { x: 1, y: 1 }, tiles)).toBe(tiles[Tile.getKey(1, 1)]);
-      expect(getTile(size, { x: 5, y: 1 }, tiles)).toBe(tiles[Tile.getKey(0, 1)]); // wraps
-      expect(getTile(size, { x: 1, y: 5 }, tiles)).toBeNull(); // out of bounds y
+      expect(getTile(size, { x: size.x, y: 1 }, tiles)).toBe(tiles[Tile.getKey(0, 1)]); // wraps
+      expect(getTile(size, { x: 1, y: size.y }, tiles)).toBeNull(); // out of bounds y
     });
   });
 

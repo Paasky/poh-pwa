@@ -40,23 +40,25 @@ describe("StaticDataCompiler", () => {
       // Any referenced concepts must be placed in one of these folders.
       fs.writeFileSync(
         path.join(categoriesDir, "cat1.json"),
-        JSON.stringify([{ key: "testCategory:cat1", name: "Cat 1", concept: "testType:concept1" }]),
+        JSON.stringify([
+          { key: "regionCategory:cat1", name: "Cat 1", concept: "conceptType:region" },
+        ]),
       );
 
       fs.writeFileSync(
         path.join(typesDir, "type1.json"),
         JSON.stringify([
           {
-            key: "testType:t1",
+            key: "regionType:t1",
             name: "Type 1",
-            concept: "testType:concept1",
-            category: "testCategory:cat1",
-            requires: ["testType:t2"],
+            concept: "conceptType:region",
+            category: "regionCategory:cat1",
+            requires: ["regionType:t2"],
           },
           {
-            key: "testType:concept1",
+            key: "conceptType:region",
             name: "Concept 1",
-            concept: "testType:concept1", // Self-reference is fine for tests
+            concept: "conceptType:region",
           },
         ]),
       );
@@ -65,11 +67,11 @@ describe("StaticDataCompiler", () => {
         path.join(typesSubfolder, "type2.json"),
         JSON.stringify([
           {
-            key: "testType:t2",
+            key: "regionType:t2",
             name: "Type 2",
-            concept: "testType:concept1",
-            upgradesFrom: ["testType:t1"],
-            gains: ["testType:t1"],
+            concept: "conceptType:region",
+            upgradesFrom: ["regionType:t1"],
+            gains: ["regionType:t1"],
           },
         ]),
       );
@@ -86,15 +88,15 @@ describe("StaticDataCompiler", () => {
       expect(writtenData.categories).toHaveLength(1);
       expect(writtenData.types).toHaveLength(3); // t1, t2, concept1
 
-      const cat1 = writtenData.categories.find((c: any) => c.key === "testCategory:cat1");
-      const t1 = writtenData.types.find((t: any) => t.key === "testType:t1");
-      const t2 = writtenData.types.find((t: any) => t.key === "testType:t2");
+      const cat1 = writtenData.categories.find((c: any) => c.key === "regionCategory:cat1");
+      const t1 = writtenData.types.find((t: any) => t.key === "regionType:t1");
+      const t2 = writtenData.types.find((t: any) => t.key === "regionType:t2");
 
       // Verify Back-relations
-      expect(t2.allows).toContain("testType:t1");
-      expect(t1.upgradesTo).toContain("testType:t2");
-      expect(cat1.relatesTo).toContain("testType:t1");
-      expect(t1.relatesTo).toContain("testType:t2");
+      expect(t2.allows).toContain("regionType:t1");
+      expect(t1.upgradesTo).toContain("regionType:t2");
+      expect(cat1.relatesTo).toContain("regionType:t1");
+      expect(t1.relatesTo).toContain("regionType:t2");
     });
   });
 
