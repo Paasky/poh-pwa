@@ -7299,10 +7299,9 @@
         "resourceType:tin",
         "resourceType:iron",
         "resourceType:coal",
-        "resourceType:rareEarthMetals",
         "resourceType:tungsten",
+        "resourceType:rareEarthMetals",
         "resourceType:aluminium",
-        "resourceType:graphite",
         "worldWonderType:hallstattSaltMines",
         "worldWonderType:gobekliTepe",
         "worldWonderType:parthenon",
@@ -12361,7 +12360,7 @@
         "platformType:human": "Thief"
       },
       "requires": [
-        "technologyType:copperWorking"
+        "technologyType:trade"
       ],
       "yields": [
         {
@@ -17326,7 +17325,7 @@
       "category": "improvementCategory:fort",
       "description": "The medieval fort combined earthworks, timber, and stone to secure territory against raids and sieges. Early motte‑and‑bailey designs raised a timber keep on an artificial mound with a palisaded courtyard. Stone castles evolved with curtain walls, gatehouses, and towers. Defensive features included arrow slits, hoardings, and later machicolations. Water management created moats and protected wells. Garrisons controlled roads, bridges, and markets, enforcing feudal authority and hosting courts. Crusader strongholds such as Krak des Chevaliers projected power along supply lines. Urban complexes like Carcassonne integrated walls with civic spaces. Siege engines, mining, and fire shaped an arms race in wall thickness and layout. The fort anchored administrative and military networks across medieval polities.",
       "requires": [
-        "technologyType:sieging",
+        "technologyType:copperWorking",
         "domainType:land"
       ],
       "yields": [
@@ -43987,7 +43986,8 @@
       "category": "resourceCategory:strategic",
       "description": "Aluminium is a lightweight, corrosion-resistant metal produced industrially through the Bayer refining of bauxite and the Hall-Héroult electrolytic process (1886). Before this innovation, the metal was rare and costly. Cheap electricity made large smelters viable, often near hydroelectric sites. During World War I and World War II, aluminium became essential for aircraft airframes and engines, prompting state-directed expansion in the United States, United Kingdom, and the Soviet bloc. Strategic stockpiles and scrap drives supplemented new production. Postwar, the metal underpinned civil aviation, power transmission, construction, and packaging. Its fabrication into sheets, extrusions, and alloys supported modern infrastructure and transportation. Governments treated smelters as critical industrial assets, securing ore, energy, and skilled labor to maintain continuous output.",
       "requires": [
-        "elevationType:hill"
+        "elevationType:hill",
+        "technologyType:aerodynamics"
       ],
       "yields": [
         {
@@ -44523,7 +44523,8 @@
       "category": "resourceCategory:strategic",
       "description": "Coal is a carbon-rich sedimentary fuel. It served heating needs in China and Europe and later powered industrial change. In eighteenth-century Britain, coal-fired engines drained mines, drove pumps, and turned factory machinery. Abraham Darby’s coke smelting advanced iron production, while Watt’s improved engine spread steam power. Railways burned coal to move freight and people across continents in the nineteenth century. Urban homes used coal for cooking and heat; gasworks distilled it into town gas for lighting. Coal smoke shaped city life and public health, prompting early air-quality laws. In the twentieth century it remained central to electricity generation and metallurgy, even as oil and gas expanded energy markets.",
       "requires": [
-        "elevationType:hill"
+        "elevationType:hill",
+        "technologyType:steel"
       ],
       "yields": [
         {
@@ -44622,7 +44623,8 @@
       "category": "resourceCategory:strategic",
       "description": "Copper is a soft, workable metal widely used since prehistory. Early communities exploited native copper and soon learned to smelt ores such as malachite. By the fourth and third millennia BCE it supported craft specialists and long-range exchange. Alloying with tin produced bronze, the standard material for tools, weapons, and vessels in many Bronze Age societies. Major sources included Timna in the southern Levant and Cyprus, a hub for eastern Mediterranean trade. Ingots circulated by sea, evidenced by Late Bronze Age shipwreck cargoes. Copper served in tools, ornaments, and fastenings, and could be recycled with little loss. In classical and medieval periods it supplied coinage alloys, plumbing, and decorative work. Iron displaced it for many tools, but copper and bronze remained important for art and durable fittings.",
       "requires": [
-        "elevationType:hill"
+        "elevationType:hill",
+        "technologyType:copperWorking"
       ],
       "yields": [
         {
@@ -45119,7 +45121,8 @@
           "terrainType:plains",
           "terrainType:sea",
           "terrainType:ocean"
-        ]
+        ],
+        "technologyType:dynamite"
       ],
       "yields": [
         {
@@ -45205,29 +45208,6 @@
       "actions": []
     },
     {
-      "key": "resourceType:graphite",
-      "name": "Graphite",
-      "concept": "conceptType:resource",
-      "category": "resourceCategory:strategic",
-      "description": "Graphite is a crystalline form of carbon with layered structure, electrical conductivity, and high-temperature stability. The Borrowdale deposit in England supplied high-purity material from the 16th to 19th centuries, enabling superior pencil leads. In the 19th century, graphite served as a dry lubricant for machinery and as a refractory material in crucibles. The 20th century introduced synthetic graphite and large electrodes for electric arc steelmaking. In nuclear history, graphite acted as a moderator and structural material, notably in Chicago Pile-1 (1942) and early reactor designs. Later applications included seals, battery anodes, and high-temperature composites. Natural and synthetic sources together sustained diverse industrial uses tied to metallurgy, energy, and precision manufacturing.",
-      "requires": [
-        "elevationType:hill"
-      ],
-      "yields": [
-        {
-          "type": "yieldType:gold",
-          "method": "lump",
-          "amount": 1,
-          "for": [],
-          "vs": []
-        }
-      ],
-      "gains": [],
-      "upgradesFrom": [],
-      "specials": [],
-      "actions": []
-    },
-    {
       "key": "resourceType:guineaPigs",
       "name": "Guinea Pigs",
       "concept": "conceptType:resource",
@@ -45261,7 +45241,8 @@
           "featureType:forest",
           "featureType:pineForest",
           "featureType:jungle"
-        ]
+        ],
+        "technologyType:woodWorking"
       ],
       "yields": [
         {
@@ -45385,7 +45366,8 @@
       "category": "resourceCategory:strategic",
       "description": "Iron became the dominant metal for tools, weapons, and infrastructure. Early smiths produced wrought iron in bloomeries from the late second millennium BCE, followed by carburized steels for edged weapons. After 1200 BCE, ironworking spread across the Mediterranean and temperate Eurasia. China developed cast iron and fining techniques by the Warring States period. Europe adopted the blast furnace in the late medieval era, supporting mass nails, fittings, and artillery. Roman construction had already used iron clamps and nails on a vast scale. The eighteenth century saw coke-fueled smelting and puddled wrought iron. Nineteenth-century railways, bridges, and machines relied on iron before mild steel displaced it. Iron remains foundational in modern alloys and engineering.",
       "requires": [
-        "elevationType:hill"
+        "elevationType:hill",
+        "technologyType:bronzeSmithing"
       ],
       "yields": [
         {
@@ -45818,7 +45800,8 @@
           "featureType:jungle",
           "terrainType:sea",
           "terrainType:ocean"
-        ]
+        ],
+        "technologyType:dynamite"
       ],
       "yields": [
         {
@@ -46297,7 +46280,8 @@
           "elevationType:hill",
           "terrainType:tundra",
           "featureType:jungle"
-        ]
+        ],
+        "technologyType:aluminumMilling"
       ],
       "yields": [
         {
@@ -46369,7 +46353,8 @@
       "category": "resourceCategory:strategic",
       "description": "Rubber is an elastic natural polymer harvested mainly from the latex of Hevea brasiliensis. Indigenous tapping began in the Amazon, but commercial scale developed after the 19th-century relocation of seeds to Kew and plantation systems in British Malaya and the Dutch East Indies. Charles Goodyear’s vulcanization process in 1839 stabilized rubber for industrial use. By the early 20th century it underpinned tires, belts, gaskets, and seals. Demand surged in World War I and again in World War II. Japanese occupation of Southeast Asia forced Allied emergency programs for synthetic rubber and strict rationing. After 1945, global automotive growth kept plantations and synthetic producers at the center of world trade. Rubber remained a strategic input for vehicle fleets, aviation ground gear, military equipment, and a wide range of industrial goods.",
       "requires": [
-        "featureType:jungle"
+        "featureType:jungle",
+        "technologyType:replaceableParts"
       ],
       "yields": [
         {
@@ -46849,7 +46834,8 @@
       "category": "resourceCategory:strategic",
       "description": "Tin is a scarce metal essential for making bronze. Small additions harden copper and improve casting. During the Bronze Age, demand drove long-distance exchange. Probable sources included Cornwall and Devon, Iberia, Brittany, the Erzgebirge, and Central Asia. Trade linked Atlantic Europe with the Mediterranean and Near East. The Uluburun shipwreck shows standardized copper and tin ingots in near-ideal ratios. Control of supply affected elite power, craft production, and warfare. After the Bronze Age, tin continued in pewter alloys, solders, and tinplate. Medieval and early modern mining in Cornwall fed European markets. The rarity of rich ores and the difficulty of tracing provenance make tin networks a key case in archaeometallurgy and ancient economic history.",
       "requires": [
-        "elevationType:hill"
+        "elevationType:hill",
+        "technologyType:copperWorking"
       ],
       "yields": [
         {
@@ -46921,7 +46907,8 @@
       "category": "resourceCategory:strategic",
       "description": "Tungsten is a dense, refractory metal noted for high hardness and the highest melting point among metals. Ores include wolframite and scheelite. Industrial uses developed with tungsten filaments in early incandescent bulbs, then expanded with tungsten carbide tooling for machining and mining. In both world wars, tungsten became a strategic material for armor-piercing cores and anti-armor ordnance. Its density and strength improved penetrators and gun barrels. Control of supply was a wartime objective, involving deposits in China, Portugal, Spain, and Southeast Asia. Postwar, tungsten carbide remained central to high-speed cutting and wear-resistant applications. The metal’s role in precision tooling linked it to modern manufacturing capacity, while military demand persisted for kinetic energy penetrators and high-temperature alloys in aerospace.",
       "requires": [
-        "elevationType:hill"
+        "elevationType:hill",
+        "technologyType:artillery"
       ],
       "yields": [
         {
@@ -46993,7 +46980,8 @@
         [
           "terrainType:desert",
           "terrainType:tundra"
-        ]
+        ],
+        "technologyType:atomicTheory"
       ],
       "yields": [
         {
@@ -49171,6 +49159,7 @@
       "allows": [
         "equipmentType:woodDeck",
         "platformType:monocoque",
+        "resourceType:aluminium",
         "technologyType:massMedia",
         "technologyType:civilDefense",
         "worldWonderType:everettFactory"
@@ -49283,6 +49272,7 @@
       "actions": [],
       "allows": [
         "buildingType:containerPort",
+        "resourceType:rareEarthMetals",
         "technologyType:automaticCarbines",
         "technologyType:thermonuclearDevice",
         "worldWonderType:baileyYard"
@@ -49628,6 +49618,7 @@
       "allows": [
         "buildingType:artilleryFactory",
         "equipmentType:howitzer",
+        "resourceType:tungsten",
         "technologyType:trenchWarfare",
         "worldWonderType:blohmVoss"
       ]
@@ -49664,6 +49655,7 @@
       "actions": [],
       "allows": [
         "buildingType:researchLab",
+        "resourceType:uranium",
         "technologyType:hydrodynamics",
         "technologyType:antibiotics",
         "worldWonderType:bellLabs"
@@ -49852,6 +49844,7 @@
       "allows": [
         "equipmentType:bronzeAxe",
         "equipmentType:bronzeRam",
+        "resourceType:iron",
         "technologyType:archery",
         "technologyType:organizedReligion"
       ]
@@ -50718,7 +50711,9 @@
       "specials": [],
       "actions": [],
       "allows": [
-        "equipmentType:thief",
+        "improvementType:fort",
+        "resourceType:copper",
+        "resourceType:tin",
         "technologyType:commerce"
       ]
     },
@@ -51057,6 +51052,8 @@
       "allows": [
         "equipmentType:musketMarines",
         "equipmentType:engineer",
+        "resourceType:gas",
+        "resourceType:oil",
         "technologyType:rifling",
         "worldWonderType:suomenlinna"
       ]
@@ -53565,6 +53562,7 @@
       "allows": [
         "buildingType:assemblyLine",
         "policyType:planned",
+        "resourceType:rubber",
         "technologyType:repeatingRifles"
       ]
     },
@@ -54104,7 +54102,6 @@
       "actions": [],
       "allows": [
         "equipmentType:batteringRam",
-        "improvementType:fort",
         "platformType:carriage",
         "technologyType:pottery"
       ]
@@ -54444,6 +54441,7 @@
       "allows": [
         "buildingType:garrison",
         "equipmentType:pike",
+        "resourceType:coal",
         "technologyType:engineering"
       ]
     },
@@ -54829,6 +54827,7 @@
       "allows": [
         "buildingType:townSquare",
         "equipmentType:trader",
+        "equipmentType:thief",
         "policyType:duties",
         "technologyType:commerce"
       ]
@@ -55282,6 +55281,7 @@
       "allows": [
         "buildingType:palisades",
         "improvementType:sawCamp",
+        "resourceType:hardwood",
         "technologyType:pitMining",
         "technologyType:warfare"
       ]
@@ -62765,11 +62765,10 @@
         "resourceType:gas",
         "resourceType:oil",
         "resourceType:rubber",
-        "resourceType:rareEarthMetals",
         "resourceType:tungsten",
+        "resourceType:rareEarthMetals",
         "resourceType:aluminium",
-        "resourceType:uranium",
-        "resourceType:graphite"
+        "resourceType:uranium"
       ]
     },
     {

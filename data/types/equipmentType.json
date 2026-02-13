@@ -3281,7 +3281,7 @@
     "names": {
       "platformType:human": "Thief"
     },
-    "requires": ["technologyType:copperWorking"],
+    "requires": ["technologyType:trade"],
     "yields": [
       {
         "type": "yieldType:productionCost",

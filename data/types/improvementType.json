@@ -1078,7 +1078,7 @@
     "description": "The medieval fort combined earthworks, timber, and stone to secure territory against raids and sieges. Early motte‑and‑bailey designs raised a timber keep on an artificial mound with a palisaded courtyard. Stone castles evolved with curtain walls, gatehouses, and towers. Defensive features included arrow slits, hoardings, and later machicolations. Water management created moats and protected wells. Garrisons controlled roads, bridges, and markets, enforcing feudal authority and hosting courts. Crusader strongholds such as Krak des Chevaliers projected power along supply lines. Urban complexes like Carcassonne integrated walls with civic spaces. Siege engines, mining, and fire shaped an arms race in wall thickness and layout. The fort anchored administrative and military networks across medieval polities.",
     "key": "improvementType:fort",
     "name": "Fort",
-    "requires": ["technologyType:sieging", "domainType:land"],
+    "requires": ["technologyType:copperWorking", "domainType:land"],
     "yields": [
       {
         "type": "yieldType:defense",
