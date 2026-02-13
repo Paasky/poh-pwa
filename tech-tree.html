@@ -126,6 +126,52 @@
         text-decoration: underline;
       }
 
+      .era-separator {
+        position: absolute;
+        height: 1px;
+        background: #30363d;
+        left: 60px;
+        right: 0;
+        pointer-events: none;
+        opacity: 0.6;
+        display: flex;
+        align-items: center;
+        padding-left: 12px;
+      }
+
+      .era-separator h1 {
+        font-size: 14px;
+        font-weight: 600;
+        color: #e6edf3;
+        margin: 0;
+        padding: 0 8px;
+        background: #0d1117;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      #timeline {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 60px;
+        pointer-events: none;
+        color: #8b949e;
+        font-size: 10px;
+      }
+
+      .timeline-mark {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        border-left: 3px solid #30363d;
+        display: flex;
+        align-items: center;
+        padding-left: 8px;
+        white-space: nowrap;
+      }
+
       #hud {
         position: fixed;
         bottom: 16px;
@@ -166,6 +212,8 @@
     <div id="viewport">
       <div id="canvas-wrap">
         <svg id="lines"></svg>
+        <div id="timeline"></div>
+        <div id="separators"></div>
         <div id="nodes"></div>
       </div>
     </div>
@@ -326,6 +374,107 @@
           container.appendChild(div);
           nodeEls[tech.key] = { el: div, tech, pos };
         });
+
+        // ── draw era separators ─────────────────────────────────────────────────────
+        const separatorsContainer = document.getElementById("separators");
+        // Era changes at y: 0, 7, 14, 21, 28, 35, 42, 49, 56, 63, 70, 77, 84, 91, 98, 105, 112, 119, 126
+        const eras = [
+          { y: 0, name: "Neolithic Era", category: "eraType:neolithic" },
+          { y: 7, name: "Copper Era", category: "eraType:copper" },
+          { y: 14, name: "Bronze Era", category: "eraType:bronze" },
+          { y: 21, name: "Late Bronze Era", category: "eraType:lateBronze" },
+          { y: 28, name: "Iron Era", category: "eraType:iron" },
+          { y: 35, name: "Classical Era", category: "eraType:classical" },
+          { y: 42, name: "Medieval Era", category: "eraType:medieval" },
+          { y: 49, name: "Renaissance Era", category: "eraType:renaissance" },
+          { y: 56, name: "Exploration Era", category: "eraType:exploration" },
+          { y: 63, name: "Colonial Era", category: "eraType:colonial" },
+          { y: 70, name: "Enlightenment Era", category: "eraType:enlightenment" },
+          { y: 77, name: "Industrial Era", category: "eraType:industrial" },
+          { y: 84, name: "Imperial Era", category: "eraType:imperial" },
+          { y: 91, name: "Modern Era", category: "eraType:modern" },
+          { y: 98, name: "Atomic Era", category: "eraType:atomic" },
+          { y: 105, name: "Digital Era", category: "eraType:digital" },
+          { y: 112, name: "Information Era", category: "eraType:information" },
+          { y: 119, name: "Post-Industrial Era", category: "eraType:postIndustrial" },
+          { y: 126, name: "Nano Era", category: "eraType:nano" },
+        ];
+
+        eras.forEach((era) => {
+          const separator = document.createElement("div");
+          separator.className = "era-separator";
+          // Place 1y above the first tech of the era
+          const yPos = PAD_Y + (era.y - 1) * CELL_H;
+          separator.style.top = yPos + "px";
+          separator.style.width = W + "px";
+
+          const heading = document.createElement("h1");
+          heading.textContent = era.name;
+          heading.style.color = eraColor(era.category);
+          separator.appendChild(heading);
+
+          separatorsContainer.appendChild(separator);
+        });
+
+        // ── draw vertical timeline ──────────────────────────────────────────────────
+        const timelineContainer = document.getElementById("timeline");
+
+        // Add getYearFromTurn function
+        const yearsPerTurnConfig = [
+          { start: -10000, end: -7000, yearsPerTurn: 60 },
+          { start: -7000, end: -4000, yearsPerTurn: 60 },
+          { start: -4000, end: -2500, yearsPerTurn: 30 },
+          { start: -2500, end: -1000, yearsPerTurn: 30 },
+          { start: -1000, end: -250, yearsPerTurn: 15 },
+          { start: -250, end: 500, yearsPerTurn: 15 },
+          { start: 500, end: 1000, yearsPerTurn: 10 },
+          { start: 1000, end: 1400, yearsPerTurn: 8 },
+          { start: 1400, end: 1600, yearsPerTurn: 4 },
+          { start: 1600, end: 1700, yearsPerTurn: 2 },
+          { start: 1700, end: 1775, yearsPerTurn: 1.5 },
+          { start: 1775, end: 1850, yearsPerTurn: 1.5 },
+          { start: 1850, end: 1900, yearsPerTurn: 1 },
+          { start: 1900, end: 1950, yearsPerTurn: 1 },
+          { start: 1950, end: 1975, yearsPerTurn: 0.5 },
+          { start: 1975, end: 2000, yearsPerTurn: 0.5 },
+          { start: 2000, end: 2015, yearsPerTurn: 0.333 },
+          { start: 2015, end: 2030, yearsPerTurn: 0.333 },
+          { start: 2030, end: 99999999, yearsPerTurn: 0.333 },
+        ];
+
+        function getYearFromTurn(turn) {
+          if (turn <= 0) return yearsPerTurnConfig[0].start;
+          let remainingTurns = turn;
+          for (const era of yearsPerTurnConfig) {
+            const yearsInEra = era.end - era.start;
+            const turnsInEra = yearsInEra / era.yearsPerTurn;
+            if (remainingTurns >= turnsInEra) {
+              remainingTurns -= turnsInEra;
+              continue;
+            }
+            return era.start + remainingTurns * era.yearsPerTurn;
+          }
+          const last = yearsPerTurnConfig[yearsPerTurnConfig.length - 1];
+          return last.start + remainingTurns * last.yearsPerTurn;
+        }
+
+        function formatYear(year) {
+          const fullYear = Math.round(year);
+          if (fullYear < 0) return `${-fullYear} BCE`;
+          if (fullYear < 1000) return `${fullYear} CE`;
+          return `${fullYear}`;
+        }
+
+        // Each y represents 12.5 turns, start at -1y to align with horizontal lines
+        for (let y = -1; y <= maxY; y++) {
+          const turn = Math.round(y * 12.5);
+          const year = getYearFromTurn(turn);
+          const mark = document.createElement("div");
+          mark.className = "timeline-mark";
+          mark.style.top = (PAD_Y + y * CELL_H) + "px";
+          mark.textContent = formatYear(year);
+          timelineContainer.appendChild(mark);
+        }
 
         // ── draw lines ──────────────────────────────────────────────────────────────
         // Build edges: for each tech, draw to each technologyType it `allows`
