@@ -215,6 +215,15 @@ export class DataBucket {
     this.buildObjectIndex(object);
   }
 
+  setObjects(objects: GameObject[]): void {
+    objects.forEach((obj) => this.objects.set(obj.key, obj));
+    this.dataLoader.buildBackRelations(objects, this.objects);
+    objects.forEach((obj) => {
+      this.buildObjectIndex(obj);
+      obj.onCreate();
+    });
+  }
+
   setRawObjects(objects: IRawGameObject[]): GameObject[] {
     const updates = new Map<GameKey, IRawGameObject>();
 

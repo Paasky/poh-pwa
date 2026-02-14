@@ -1,6 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { GameObjAttr, GameObject } from "@/Common/Models/_GameModel";
-import { type GameClass, type GameKey, type IRawGameObject, parseKey, } from "@/Common/Models/_GameTypes";
+import {
+  type GameClass,
+  type GameKey,
+  type IRawGameObject,
+  parseKey,
+} from "@/Common/Models/_GameTypes";
 import { Agenda } from "@/Common/Models/Agenda";
 import { Citizen } from "@/Common/Models/Citizen";
 import { City } from "@/Common/Models/City";
@@ -80,6 +85,10 @@ export class GameDataLoader {
     );
 
     return { created: createdObjects, updated: updatedObjects };
+  }
+
+  public buildBackRelations(objects: GameObject[], bucketObjects: Map<GameKey, GameObject>): void {
+    objects.forEach((obj) => this._buildBackRelations(obj, bucketObjects));
   }
 
   public removeRelations(obj: GameObject, objects: Map<GameKey, GameObject>): void {

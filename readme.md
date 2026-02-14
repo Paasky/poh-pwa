@@ -4,12 +4,28 @@
 
 ### 1.1 Required files
 
-Download media from Drive and copy to `public`
+Install Dropbox
 
-```
-public/media/images/buildingType/aircraftFactory.jpg
-public/textures/bump/sand.png
-... etc
+```bash
+wget https://www.dropbox.com/download?plat=lnx.x86_64 -O dropbox.tar.gz
+tar -xzf dropbox.tar.gz
+
+# Run dropbox to login
+~/.dropbox-dist/dropboxd
+
+# Stop & verify:
+Ctrl+C
+ls ~/Dropbox
+
+# Create symlink & verify
+ln -s ~/Dropbox/poh/media /path/to/poh-pwa/public/media
+ls -l /path/to/poh-pwa/public/media
+
+# Expected output:
+media -> /home/YOUR USER NAME/Dropbox/poh/media
+
+# Verify Dropbox is running (auto-sync active, do this after a system reboot)
+pgrep -a dropbox
 ```
 
 ### 1.2 Docker
@@ -27,6 +43,8 @@ Quickstart: `bash scripts/poh.sh`
 - `pnpm install`
 - `pnpm dev` then open http://localhost:5173
 - For a different port, run: `pnpm dev -- --port 3000`
+
+---
 
 ## 2. `./scripts/poh.sh` Docker helper
 
@@ -89,11 +107,11 @@ handled without extra steps.
 #### LAN mode (test on real devices)
 
 - Use `--lan` (or env `POH_LAN=1`) to publish on all interfaces instead of only localhost:
-  - `bash scripts/poh.sh dev-up --lan`
-  - Then open from another device: `http://<your-lan-ip>:5173/`
+    - `bash scripts/poh.sh dev-up --lan`
+    - Then open from another device: `http://<your-lan-ip>:5173/`
 - HMR over LAN: usually works out of the box. If you see HMR connection issues, set
   `VITE_HMR_HOST=<your-lan-ip>` before starting Dev Up. Example:
-  - `VITE_HMR_HOST=192.168.1.50 bash scripts/poh.sh dev-up --lan`
+    - `VITE_HMR_HOST=192.168.1.50 bash scripts/poh.sh dev-up --lan`
 - macOS: if prompted, allow Docker Desktop to accept incoming connections (System Settings → Network → Firewall).
 
 #### Notes
@@ -146,9 +164,9 @@ What runs under the hood (see package.json scripts):
 ## 4. Deployment
 
 - Build and push the production image to a registry:
-  - `docker build -t USER/poh-pwa:test . && docker push USER/poh-pwa:test`
-  - On server:
-    `docker pull USER/poh-pwa:test && docker run -d --name poh-pwa-test -p 80:80 --restart=always USER/poh-pwa:test`
-  - Promote to prod with tag `USER/poh-pwa:prod`.
+    - `docker build -t USER/poh-pwa:test . && docker push USER/poh-pwa:test`
+    - On server:
+      `docker pull USER/poh-pwa:test && docker run -d --name poh-pwa-test -p 80:80 --restart=always USER/poh-pwa:test`
+    - Promote to prod with tag `USER/poh-pwa:prod`.
 
 CI idea (later): GitHub Actions builds `:test` on main, `:prod` on release tags.

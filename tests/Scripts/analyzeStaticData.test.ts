@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { analyze } from "../../scripts/analyzeStaticData";
 import fs from "fs";
+import { analyze } from "../../scripts/tools/analyzeStaticData";
 
 vi.mock("fs", async () => {
   const actual = (await vi.importActual("fs")) as any;

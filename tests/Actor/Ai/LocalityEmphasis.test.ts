@@ -6,21 +6,28 @@ import { DenyEmphasis } from "@/Actor/Ai/Emphasis/Calculators/DenyEmphasis";
 import { RewardEmphasis } from "@/Actor/Ai/Emphasis/Calculators/RewardEmphasis";
 import { RiskEmphasis } from "@/Actor/Ai/Emphasis/Calculators/RiskEmphasis";
 import {
-  citizenRawData,
-  cityRawData,
-  constructionRawData,
+  createPlayer,
+  createTile,
+  createCity,
+  createUnitDesign,
+  createUnit,
+  createCitizen,
+  createConstruction,
   initTestDataBucket,
-  playerRawData,
-  tileRawData,
-  unitDesignRawData,
-  unitRawData,
 } from "../../_setup/dataHelpers";
 import { destroyDataBucket, useDataBucket } from "@/Data/useDataBucket";
-import { generateKey } from "@/Common/Models/_GameTypes";
+import { generateKey, type GameKey } from "@/Common/Models/_GameTypes";
 import { tileKey } from "@/Common/Helpers/mapTools";
 import { Locality } from "@/Actor/Ai/AiTypes";
 import { Player } from "@/Common/Models/Player";
 import { Tile } from "@/Common/Models/Tile";
+
+function setupPlayers(...keys: GameKey[]): void {
+  const bucket = useDataBucket();
+  const vikingType = bucket.getType("majorCultureType:viking");
+  const clusters = keys.map((key) => createPlayer({ cultureType: vikingType, key }));
+  bucket.setObjects(clusters.flatMap((c) => c.all));
+}
 
 describe("LocalityEmphasis Calculators", () => {
   let player = {} as Player;
@@ -42,36 +49,38 @@ describe("LocalityEmphasis Calculators", () => {
 
   beforeEach(async () => {
     await initTestDataBucket();
+    setupPlayers(playerKey1, playerKey2);
 
-    useDataBucket().setRawObjects([
-      ...playerRawData(playerKey1),
-      ...playerRawData(playerKey2),
-      ...tileRawData(tileKey1),
-      ...tileRawData(tileKey2),
-      ...tileRawData(tileKey3),
-      ...tileRawData(tileKey4),
-      ...cityRawData(cityKey1, {
+    const bucket = useDataBucket();
+    bucket.setObjects([
+      createTile({ x: 0, y: 0 }),
+      createTile({ x: 0, y: 1 }),
+      createTile({ x: 1, y: 0 }),
+      createTile({ x: 1, y: 1 }),
+      createCity({
+        key: cityKey1,
         playerKey: playerKey1,
         tileKey: tileKey1,
         name: "City 1",
         health: 100,
         isCapital: true,
       }),
-      ...cityRawData(cityKey2, {
+      createCity({
+        key: cityKey2,
         playerKey: playerKey2,
         tileKey: tileKey2,
         name: "City 2",
         health: 50,
         isCapital: false,
-        origPlayerKey: "player:1",
+        origPlayerKey: playerKey1,
       }),
     ]);
 
-    player = useDataBucket().getObject<Player>(playerKey1);
-    locality.tiles.add(useDataBucket().getObject<Tile>(tileKey1));
-    locality.tiles.add(useDataBucket().getObject<Tile>(tileKey2));
-    locality.tiles.add(useDataBucket().getObject<Tile>(tileKey3));
-    locality.tiles.add(useDataBucket().getObject<Tile>(tileKey4));
+    player = bucket.getObject<Player>(playerKey1);
+    locality.tiles.add(bucket.getObject<Tile>(tileKey1));
+    locality.tiles.add(bucket.getObject<Tile>(tileKey2));
+    locality.tiles.add(bucket.getObject<Tile>(tileKey3));
+    locality.tiles.add(bucket.getObject<Tile>(tileKey4));
   });
 
   afterEach(() => {
@@ -95,37 +104,42 @@ describe("LocalityEmphasis Calculators", () => {
       const unitKey2 = generateKey("unit");
 
       await initTestDataBucket();
-      useDataBucket().setRawObjects([
-        ...playerRawData(playerKey1),
-        ...playerRawData(playerKey2),
-        ...tileRawData(tileKey1),
-        ...tileRawData(tileKey2),
-        ...unitDesignRawData(designKey1, {
+      setupPlayers(playerKey1, playerKey2);
+
+      const bucket = useDataBucket();
+      bucket.setObjects([
+        createTile({ x: 0, y: 0 }),
+        createTile({ x: 0, y: 1 }),
+        createUnitDesign({
+          key: designKey1,
           playerKey: playerKey1,
-          platform: "platformType:human",
-          equipment: "equipmentType:rifle",
+          platform: bucket.getType("platformType:human"),
+          equipment: bucket.getType("equipmentType:rifle"),
         }),
-        ...unitDesignRawData(designKey2, {
+        createUnitDesign({
+          key: designKey2,
           playerKey: playerKey2,
-          platform: "platformType:human",
-          equipment: "equipmentType:rifle",
+          platform: bucket.getType("platformType:human"),
+          equipment: bucket.getType("equipmentType:rifle"),
         }),
-        ...unitRawData(unitKey1, {
+        createUnit({
+          key: unitKey1,
           playerKey: playerKey1,
           designKey: designKey1,
           tileKey: tileKey1,
         }),
-        ...unitRawData(unitKey2, {
+        createUnit({
+          key: unitKey2,
           playerKey: playerKey2,
           designKey: designKey2,
           tileKey: tileKey2,
         }),
       ]);
 
-      player = useDataBucket().getObject<Player>(playerKey1);
+      player = bucket.getObject<Player>(playerKey1);
       locality.tiles = new Set([
-        useDataBucket().getObject<Tile>(tileKey1),
-        useDataBucket().getObject<Tile>(tileKey2),
+        bucket.getObject<Tile>(tileKey1),
+        bucket.getObject<Tile>(tileKey2),
       ]);
 
       const calculator = new CapabilityEmphasis(player, locality);
@@ -146,44 +160,50 @@ describe("LocalityEmphasis Calculators", () => {
       const unitKey3 = generateKey("unit");
 
       await initTestDataBucket();
-      useDataBucket().setRawObjects([
-        ...playerRawData(playerKey1),
-        ...playerRawData(playerKey2),
-        ...tileRawData(tileKey1),
-        ...tileRawData(tileKey2),
-        ...tileRawData(tileKey3),
-        ...unitDesignRawData(designKey1, {
+      setupPlayers(playerKey1, playerKey2);
+
+      const bucket = useDataBucket();
+      bucket.setObjects([
+        createTile({ x: 0, y: 0 }),
+        createTile({ x: 0, y: 1 }),
+        createTile({ x: 1, y: 0 }),
+        createUnitDesign({
+          key: designKey1,
           playerKey: playerKey1,
-          platform: "platformType:human",
-          equipment: "equipmentType:rifle",
+          platform: bucket.getType("platformType:human"),
+          equipment: bucket.getType("equipmentType:rifle"),
         }),
-        ...unitDesignRawData(designKey2, {
+        createUnitDesign({
+          key: designKey2,
           playerKey: playerKey2,
-          platform: "platformType:human",
-          equipment: "equipmentType:rifle",
+          platform: bucket.getType("platformType:human"),
+          equipment: bucket.getType("equipmentType:rifle"),
         }),
-        ...unitRawData(unitKey1, {
+        createUnit({
+          key: unitKey1,
           playerKey: playerKey1,
           designKey: designKey1,
           tileKey: tileKey1,
         }),
-        ...unitRawData(unitKey2, {
+        createUnit({
+          key: unitKey2,
           playerKey: playerKey1,
           designKey: designKey1,
           tileKey: tileKey2,
         }),
-        ...unitRawData(unitKey3, {
+        createUnit({
+          key: unitKey3,
           playerKey: playerKey2,
           designKey: designKey2,
           tileKey: tileKey3,
         }),
       ]);
 
-      player = useDataBucket().getObject<Player>(playerKey1);
+      player = bucket.getObject<Player>(playerKey1);
       locality.tiles = new Set([
-        useDataBucket().getObject<Tile>(tileKey1),
-        useDataBucket().getObject<Tile>(tileKey2),
-        useDataBucket().getObject<Tile>(tileKey3),
+        bucket.getObject<Tile>(tileKey1),
+        bucket.getObject<Tile>(tileKey2),
+        bucket.getObject<Tile>(tileKey3),
       ]);
 
       const calculator = new CapabilityEmphasis(player, locality);
@@ -199,30 +219,35 @@ describe("LocalityEmphasis Calculators", () => {
       const citizenKey2 = generateKey("citizen");
 
       await initTestDataBucket();
-      useDataBucket().setRawObjects([
-        ...playerRawData(playerKey1),
-        ...playerRawData(playerKey2),
-        ...tileRawData(tileKey1),
-        ...tileRawData(tileKey2),
-        ...cityRawData(cityKey1, { playerKey: playerKey1, tileKey: tileKey1 }),
-        ...citizenRawData(citizenKey1, {
+      const vikingType = useDataBucket().getType("majorCultureType:viking");
+      const c1 = createPlayer({ cultureType: vikingType, key: playerKey1 });
+      const c2 = createPlayer({ cultureType: vikingType, key: playerKey2 });
+      const bucket = useDataBucket();
+      bucket.setObjects([...c1.all, ...c2.all]);
+      bucket.setObjects([
+        createTile({ x: 0, y: 0 }),
+        createTile({ x: 0, y: 1 }),
+        createCity({ key: cityKey1, playerKey: playerKey1, tileKey: tileKey1 }),
+        createCitizen({
+          key: citizenKey1,
           playerKey: playerKey1,
-          cultureKey: "culture:1",
+          cultureKey: c1.culture.key,
           cityKey: cityKey1,
           tileKey: tileKey1,
         }),
-        ...citizenRawData(citizenKey2, {
+        createCitizen({
+          key: citizenKey2,
           playerKey: playerKey2,
-          cultureKey: "culture:2",
+          cultureKey: c2.culture.key,
           cityKey: cityKey1,
           tileKey: tileKey2,
         }),
       ]);
 
-      player = useDataBucket().getObject<Player>(playerKey1);
+      player = bucket.getObject<Player>(playerKey1);
       locality.tiles = new Set([
-        useDataBucket().getObject<Tile>(tileKey1),
-        useDataBucket().getObject<Tile>(tileKey2),
+        bucket.getObject<Tile>(tileKey1),
+        bucket.getObject<Tile>(tileKey2),
       ]);
 
       const calculator = new CapabilityEmphasis(player, locality);
@@ -271,18 +296,16 @@ describe("LocalityEmphasis Calculators", () => {
 
     it("should calculate siege urgency when city health is low", async () => {
       await initTestDataBucket();
-      useDataBucket().setRawObjects([
-        ...playerRawData(playerKey1),
-        ...tileRawData(tileKey1),
-        ...cityRawData(cityKey1, {
-          playerKey: playerKey1,
-          tileKey: tileKey1,
-          health: 30,
-        }),
+      setupPlayers(playerKey1);
+
+      const bucket = useDataBucket();
+      bucket.setObjects([
+        createTile({ x: 0, y: 0 }),
+        createCity({ key: cityKey1, playerKey: playerKey1, tileKey: tileKey1, health: 30 }),
       ]);
 
-      player = useDataBucket().getObject<Player>(playerKey1);
-      locality.tiles = new Set([useDataBucket().getObject<Tile>(tileKey1)]);
+      player = bucket.getObject<Player>(playerKey1);
+      locality.tiles = new Set([bucket.getObject<Tile>(tileKey1)]);
       locality.tension = "safe";
 
       const calculator = new UrgencyEmphasis(player, locality);
@@ -296,18 +319,16 @@ describe("LocalityEmphasis Calculators", () => {
 
     it("should calculate siege urgency when city health is at 75", async () => {
       await initTestDataBucket();
-      useDataBucket().setRawObjects([
-        ...playerRawData(playerKey1),
-        ...tileRawData(tileKey1),
-        ...cityRawData(cityKey1, {
-          playerKey: playerKey1,
-          tileKey: tileKey1,
-          health: 75,
-        }),
+      setupPlayers(playerKey1);
+
+      const bucket = useDataBucket();
+      bucket.setObjects([
+        createTile({ x: 0, y: 0 }),
+        createCity({ key: cityKey1, playerKey: playerKey1, tileKey: tileKey1, health: 75 }),
       ]);
 
-      player = useDataBucket().getObject<Player>(playerKey1);
-      locality.tiles = new Set([useDataBucket().getObject<Tile>(tileKey1)]);
+      player = bucket.getObject<Player>(playerKey1);
+      locality.tiles = new Set([bucket.getObject<Tile>(tileKey1)]);
       locality.tension = "safe";
 
       const calculator = new UrgencyEmphasis(player, locality);
@@ -331,22 +352,28 @@ describe("LocalityEmphasis Calculators", () => {
 
     it("should calculate value for unused resources", async () => {
       await initTestDataBucket();
-      useDataBucket().setRawObjects([
-        ...playerRawData(playerKey1),
-        ...tileRawData(tileKey1, {
+      setupPlayers(playerKey1);
+
+      const bucket = useDataBucket();
+      bucket.setObjects([
+        createTile({
+          x: 0,
+          y: 0,
           playerKey: playerKey1,
-          resource: "resourceType:iron",
+          resource: bucket.getType("resourceType:iron"),
         }),
-        ...tileRawData(tileKey2, {
+        createTile({
+          x: 0,
+          y: 1,
           playerKey: playerKey1,
-          resource: "resourceType:copper",
+          resource: bucket.getType("resourceType:copper"),
         }),
       ]);
 
-      player = useDataBucket().getObject<Player>(playerKey1);
+      player = bucket.getObject<Player>(playerKey1);
       locality.tiles = new Set([
-        useDataBucket().getObject<Tile>(tileKey1),
-        useDataBucket().getObject<Tile>(tileKey2),
+        bucket.getObject<Tile>(tileKey1),
+        bucket.getObject<Tile>(tileKey2),
       ]);
 
       const calculator = new GainEmphasis(player, locality);
@@ -360,22 +387,28 @@ describe("LocalityEmphasis Calculators", () => {
 
     it("should calculate value for unimproved land", async () => {
       await initTestDataBucket();
-      useDataBucket().setRawObjects([
-        ...playerRawData(playerKey1),
-        ...tileRawData(tileKey1, {
+      setupPlayers(playerKey1);
+
+      const bucket = useDataBucket();
+      bucket.setObjects([
+        createTile({
+          x: 0,
+          y: 0,
           playerKey: playerKey1,
-          domain: "domainType:land",
+          domain: bucket.getType("domainType:land"),
         }),
-        ...tileRawData(tileKey2, {
+        createTile({
+          x: 0,
+          y: 1,
           playerKey: playerKey1,
-          domain: "domainType:land",
+          domain: bucket.getType("domainType:land"),
         }),
       ]);
 
-      player = useDataBucket().getObject<Player>(playerKey1);
+      player = bucket.getObject<Player>(playerKey1);
       locality.tiles = new Set([
-        useDataBucket().getObject<Tile>(tileKey1),
-        useDataBucket().getObject<Tile>(tileKey2),
+        bucket.getObject<Tile>(tileKey1),
+        bucket.getObject<Tile>(tileKey2),
       ]);
 
       const calculator = new GainEmphasis(player, locality);
@@ -391,25 +424,29 @@ describe("LocalityEmphasis Calculators", () => {
       const constructionKey1 = generateKey("construction");
 
       await initTestDataBucket();
-      useDataBucket().setRawObjects([
-        ...playerRawData(playerKey1),
-        ...tileRawData(tileKey1, {
+      setupPlayers(playerKey1);
+
+      const bucket = useDataBucket();
+      bucket.setObjects([
+        createTile({
+          x: 0,
+          y: 0,
           playerKey: playerKey1,
-          domain: "domainType:land",
+          domain: bucket.getType("domainType:land"),
         }),
-        ...tileRawData(tileKey2, {
+        createTile({
+          x: 0,
+          y: 1,
           playerKey: playerKey1,
-          domain: "domainType:land",
+          domain: bucket.getType("domainType:land"),
         }),
-        ...constructionRawData(constructionKey1, {
-          tileKey: tileKey1,
-        }),
+        createConstruction({ key: constructionKey1, tileKey: tileKey1 }),
       ]);
 
-      player = useDataBucket().getObject<Player>(playerKey1);
+      player = bucket.getObject<Player>(playerKey1);
       locality.tiles = new Set([
-        useDataBucket().getObject<Tile>(tileKey1),
-        useDataBucket().getObject<Tile>(tileKey2),
+        bucket.getObject<Tile>(tileKey1),
+        bucket.getObject<Tile>(tileKey2),
       ]);
 
       const calculator = new GainEmphasis(player, locality);
@@ -433,17 +470,20 @@ describe("LocalityEmphasis Calculators", () => {
 
     it("should calculate value for enemy value tiles", async () => {
       await initTestDataBucket();
-      useDataBucket().setRawObjects([
-        ...playerRawData(playerKey1),
-        ...playerRawData(playerKey2),
-        ...tileRawData(tileKey1, {
+      setupPlayers(playerKey1, playerKey2);
+
+      const bucket = useDataBucket();
+      bucket.setObjects([
+        createTile({
+          x: 0,
+          y: 0,
           playerKey: playerKey2,
-          resource: "resourceType:iron",
+          resource: bucket.getType("resourceType:iron"),
         }),
       ]);
 
-      player = useDataBucket().getObject<Player>(playerKey1);
-      locality.tiles = new Set([useDataBucket().getObject<Tile>(tileKey1)]);
+      player = bucket.getObject<Player>(playerKey1);
+      locality.tiles = new Set([bucket.getObject<Tile>(tileKey1)]);
 
       const calculator = new DenyEmphasis(player, locality);
       const result = calculator.calculate();
@@ -456,38 +496,50 @@ describe("LocalityEmphasis Calculators", () => {
 
     it("should calculate max value (100) for many enemy value tiles", async () => {
       await initTestDataBucket();
-      useDataBucket().setRawObjects([
-        ...playerRawData(playerKey1),
-        ...playerRawData(playerKey2),
-        ...tileRawData(tileKey1, {
+      setupPlayers(playerKey1, playerKey2);
+
+      const bucket = useDataBucket();
+      const tileKey5 = tileKey(2, 0);
+      bucket.setObjects([
+        createTile({
+          x: 0,
+          y: 0,
           playerKey: playerKey2,
-          resource: "resourceType:iron",
+          resource: bucket.getType("resourceType:iron"),
         }),
-        ...tileRawData(tileKey2, {
+        createTile({
+          x: 0,
+          y: 1,
           playerKey: playerKey2,
-          resource: "resourceType:copper",
+          resource: bucket.getType("resourceType:copper"),
         }),
-        ...tileRawData(tileKey3, {
+        createTile({
+          x: 1,
+          y: 0,
           playerKey: playerKey2,
-          resource: "resourceType:gold",
+          resource: bucket.getType("resourceType:gold"),
         }),
-        ...tileRawData(tileKey4, {
+        createTile({
+          x: 1,
+          y: 1,
           playerKey: playerKey2,
-          resource: "resourceType:silver",
+          resource: bucket.getType("resourceType:silver"),
         }),
-        ...tileRawData(tileKey(2, 0), {
+        createTile({
+          x: 2,
+          y: 0,
           playerKey: playerKey2,
-          resource: "resourceType:wheat",
+          resource: bucket.getType("resourceType:wheat"),
         }),
       ]);
 
-      player = useDataBucket().getObject<Player>(playerKey1);
+      player = bucket.getObject<Player>(playerKey1);
       locality.tiles = new Set([
-        useDataBucket().getObject<Tile>(tileKey1),
-        useDataBucket().getObject<Tile>(tileKey2),
-        useDataBucket().getObject<Tile>(tileKey3),
-        useDataBucket().getObject<Tile>(tileKey4),
-        useDataBucket().getObject<Tile>(tileKey(2, 0)),
+        bucket.getObject<Tile>(tileKey1),
+        bucket.getObject<Tile>(tileKey2),
+        bucket.getObject<Tile>(tileKey3),
+        bucket.getObject<Tile>(tileKey4),
+        bucket.getObject<Tile>(tileKey5),
       ]);
 
       const calculator = new DenyEmphasis(player, locality);
@@ -501,20 +553,24 @@ describe("LocalityEmphasis Calculators", () => {
   describe("RewardEmphasis", () => {
     it("should calculate min value (0) when all tiles known", async () => {
       await initTestDataBucket();
-      useDataBucket().setRawObjects([
-        ...playerRawData(playerKey1, {
-          knownTileKeys: new Set([tileKey1, tileKey2, tileKey3]),
-        }),
-        ...tileRawData(tileKey1),
-        ...tileRawData(tileKey2),
-        ...tileRawData(tileKey3),
+      const cluster1a = createPlayer({
+        cultureType: useDataBucket().getType("majorCultureType:viking"),
+        key: playerKey1,
+      });
+      cluster1a.player.knownTileKeys = new Set([tileKey1, tileKey2, tileKey3]);
+      const bucket1a = useDataBucket();
+      bucket1a.setObjects(cluster1a.all);
+      bucket1a.setObjects([
+        createTile({ x: 0, y: 0 }),
+        createTile({ x: 0, y: 1 }),
+        createTile({ x: 1, y: 0 }),
       ]);
 
-      player = useDataBucket().getObject<Player>(playerKey1);
+      player = bucket1a.getObject<Player>(playerKey1);
       locality.tiles = new Set([
-        useDataBucket().getObject<Tile>(tileKey1),
-        useDataBucket().getObject<Tile>(tileKey2),
-        useDataBucket().getObject<Tile>(tileKey3),
+        bucket1a.getObject<Tile>(tileKey1),
+        bucket1a.getObject<Tile>(tileKey2),
+        bucket1a.getObject<Tile>(tileKey3),
       ]);
 
       const calculator = new RewardEmphasis(player, locality);
@@ -526,13 +582,16 @@ describe("LocalityEmphasis Calculators", () => {
 
     it("should calculate mid value when some tiles unknown", async () => {
       await initTestDataBucket();
-      useDataBucket().setRawObjects([
-        ...playerRawData(playerKey1, {
-          knownTileKeys: new Set([tileKey1]),
-        }),
-        ...tileRawData(tileKey1),
-        ...tileRawData(tileKey2),
-        ...tileRawData(tileKey3),
+      const cluster1b = createPlayer({
+        cultureType: useDataBucket().getType("majorCultureType:viking"),
+        key: playerKey1,
+      });
+      cluster1b.player.knownTileKeys = new Set([tileKey1]);
+      useDataBucket().setObjects(cluster1b.all);
+      useDataBucket().setObjects([
+        createTile({ x: 0, y: 0 }),
+        createTile({ x: 0, y: 1 }),
+        createTile({ x: 1, y: 0 }),
       ]);
 
       player = useDataBucket().getObject<Player>(playerKey1);
@@ -552,13 +611,12 @@ describe("LocalityEmphasis Calculators", () => {
 
     it("should calculate max value (100) when all tiles unknown", async () => {
       await initTestDataBucket();
-      useDataBucket().setRawObjects([
-        ...playerRawData(playerKey1, {
-          knownTileKeys: new Set(),
-        }),
-        ...tileRawData(tileKey1),
-        ...tileRawData(tileKey2),
-      ]);
+      const cluster1c = createPlayer({
+        cultureType: useDataBucket().getType("majorCultureType:viking"),
+        key: playerKey1,
+      });
+      useDataBucket().setObjects(cluster1c.all);
+      useDataBucket().setObjects([createTile({ x: 0, y: 0 }), createTile({ x: 0, y: 1 })]);
 
       player = useDataBucket().getObject<Player>(playerKey1);
       locality.tiles = new Set([
@@ -590,24 +648,26 @@ describe("LocalityEmphasis Calculators", () => {
       const unitKey1 = generateKey("unit");
 
       await initTestDataBucket();
-      useDataBucket().setRawObjects([
-        ...playerRawData(playerKey1),
-        ...playerRawData(playerKey2),
-        ...tileRawData(tileKey1),
-        ...unitDesignRawData(designKey1, {
+      setupPlayers(playerKey1, playerKey2);
+      const bucket658 = useDataBucket();
+      bucket658.setObjects([
+        createTile({ x: 0, y: 0 }),
+        createUnitDesign({
+          key: designKey1,
           playerKey: playerKey2,
-          platform: "platformType:human",
-          equipment: "equipmentType:rifle",
+          platform: bucket658.getType("platformType:human"),
+          equipment: bucket658.getType("equipmentType:rifle"),
         }),
-        ...unitRawData(unitKey1, {
+        createUnit({
+          key: unitKey1,
           playerKey: playerKey2,
           designKey: designKey1,
           tileKey: tileKey1,
         }),
       ]);
 
-      player = useDataBucket().getObject<Player>(playerKey1);
-      locality.tiles = new Set([useDataBucket().getObject<Tile>(tileKey1)]);
+      player = bucket658.getObject<Player>(playerKey1);
+      locality.tiles = new Set([bucket658.getObject<Tile>(tileKey1)]);
       locality.tension = "safe";
 
       const calculator = new RiskEmphasis(player, locality);
@@ -621,16 +681,19 @@ describe("LocalityEmphasis Calculators", () => {
 
     it("should calculate value for our value tiles at risk", async () => {
       await initTestDataBucket();
-      useDataBucket().setRawObjects([
-        ...playerRawData(playerKey1),
-        ...tileRawData(tileKey1, {
+      setupPlayers(playerKey1);
+      const bucket691 = useDataBucket();
+      bucket691.setObjects([
+        createTile({
+          x: 0,
+          y: 0,
           playerKey: playerKey1,
-          resource: "resourceType:iron",
+          resource: bucket691.getType("resourceType:iron"),
         }),
       ]);
 
-      player = useDataBucket().getObject<Player>(playerKey1);
-      locality.tiles = new Set([useDataBucket().getObject<Tile>(tileKey1)]);
+      player = bucket691.getObject<Player>(playerKey1);
+      locality.tiles = new Set([bucket691.getObject<Tile>(tileKey1)]);
       locality.tension = "safe";
 
       const calculator = new RiskEmphasis(player, locality);
@@ -648,25 +711,30 @@ describe("LocalityEmphasis Calculators", () => {
       const unitKey2 = generateKey("unit");
 
       await initTestDataBucket();
-      useDataBucket().setRawObjects([
-        ...playerRawData(playerKey1),
-        ...playerRawData(playerKey2),
-        ...tileRawData(tileKey1, {
+      setupPlayers(playerKey1, playerKey2);
+      const bucket721 = useDataBucket();
+      bucket721.setObjects([
+        createTile({
+          x: 0,
+          y: 0,
           playerKey: playerKey1,
-          resource: "resourceType:iron",
+          resource: bucket721.getType("resourceType:iron"),
         }),
-        ...tileRawData(tileKey2),
-        ...unitDesignRawData(designKey1, {
+        createTile({ x: 0, y: 1 }),
+        createUnitDesign({
+          key: designKey1,
           playerKey: playerKey2,
-          platform: "platformType:human",
-          equipment: "equipmentType:rifle",
+          platform: bucket721.getType("platformType:human"),
+          equipment: bucket721.getType("equipmentType:rifle"),
         }),
-        ...unitRawData(unitKey1, {
+        createUnit({
+          key: unitKey1,
           playerKey: playerKey2,
           designKey: designKey1,
           tileKey: tileKey2,
         }),
-        ...unitRawData(unitKey2, {
+        createUnit({
+          key: unitKey2,
           playerKey: playerKey2,
           designKey: designKey1,
           tileKey: tileKey2,

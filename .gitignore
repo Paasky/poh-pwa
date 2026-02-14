@@ -1,8 +1,8 @@
 /.idea
 /dist
 /node_modules
-/public/media/
-/public/textures/
+/public/media*
+/public/textures*
 /.vite
 /coverage
 /.pnpm-store

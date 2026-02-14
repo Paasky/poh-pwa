@@ -122,6 +122,7 @@ export default defineConfig(async ({ command }) => {
     test: {
       environment: "happy-dom",
       setupFiles: ["./tests/_setup/vitest-canvas-mock.ts"],
+      exclude: ["**/node_modules/**", "**/_legacy_reference_only/**"],
     },
   };
 });

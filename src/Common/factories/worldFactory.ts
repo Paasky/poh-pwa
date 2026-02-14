@@ -2,13 +2,12 @@ import { ObjKey, WorldState, yearsPerTurnConfig } from "@/Common/Objects/World";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { TerraGenerator } from "@/Common/factories/TerraGenerator/terra-generator";
 import { shuffle, takeRandom } from "@/Common/Helpers/arrayTools";
-import { Player } from "@/Common/Models/Player";
 import { GameObject, generateKey, type IRawGameObject } from "@/Common/Models/_GameModel";
-import { Culture } from "@/Common/Models/Culture";
 import { UnitDesign } from "@/Common/Models/UnitDesign";
 import { Unit } from "@/Common/Models/Unit";
 import { Tile } from "@/Common/Models/Tile";
 import { MapGenConfig } from "@/App/stores/mapGenStore";
+import { createPlayer } from "@/Common/factories/models/player";
 
 export type WorldSize = {
   name: string;
@@ -81,7 +80,7 @@ export const createWorld = (
   } as { objects: IRawGameObject[]; world: WorldState };
 
   const objects = [] as GameObject[];
-  const players = [] as Player[];
+  const players = [] as ReturnType<typeof createPlayer>[];
 
   // Init global data
   const cultureTypes = bucket.getClassTypes("majorCultureType");
@@ -151,37 +150,29 @@ export const createWorld = (
     for (const tile of shuffle(continentData.majorStarts.game)) {
       if (players.length >= config.continents * config.majorsPerContinent) break;
 
-      const cultureKey = generateKey("culture");
-      const player = new Player(
-        generateKey("player"),
-        cultureKey,
-        generateKey("diplomacy"),
-        generateKey("government"),
-        generateKey("research"),
-        "Actor " + (players.length + 1),
-      );
-      players.push(player);
+      const cultureType = takeRandom(continentStartCultures);
+      const cluster = createPlayer({
+        cultureType,
+        userName: "Actor " + (players.length + 1),
+      });
+      players.push(cluster);
 
       if (!bundle.world.currentPlayerKey) {
-        bundle.world.currentPlayerKey = player.key;
-        player.isHuman = true;
+        bundle.world.currentPlayerKey = cluster.player.key;
+        cluster.player.isHuman = true;
       }
 
-      const cultureType = takeRandom(continentStartCultures);
-      const culture = new Culture(cultureKey, cultureType, player.key);
+      objects.push(...cluster.all);
 
-      objects.push(culture);
-      player.cultureKey = culture.key;
+      cluster.player.designKeys.add(warbandDesign.key);
+      cluster.player.designKeys.add(hunterDesign.key);
+      cluster.player.designKeys.add(workerDesign.key);
 
-      player.designKeys.add(warbandDesign.key);
-      player.designKeys.add(hunterDesign.key);
-      player.designKeys.add(workerDesign.key);
-
-      const hunter = new Unit(generateKey("unit"), hunterDesign.key, player.key, tile.key);
-      const tribe = new Unit(generateKey("unit"), tribeDesign.key, player.key, tile.key);
+      const hunter = new Unit(generateKey("unit"), hunterDesign.key, cluster.player.key, tile.key);
+      const tribe = new Unit(generateKey("unit"), tribeDesign.key, cluster.player.key, tile.key);
       objects.push(hunter, tribe);
-      player.unitKeys.add(hunter.key);
-      player.unitKeys.add(tribe.key);
+      cluster.player.unitKeys.add(hunter.key);
+      cluster.player.unitKeys.add(tribe.key);
       tile.unitKeys.add(hunter.key);
       tile.unitKeys.add(tribe.key);
       hunterDesign.unitKeys.add(hunter.key);
@@ -190,7 +181,7 @@ export const createWorld = (
   }
 
   // Validate players
-  for (const player of players) {
+  for (const { player } of players) {
     if (!player.cultureKey) {
       throw new Error(`Player ${player.key} has no culture`);
     }
