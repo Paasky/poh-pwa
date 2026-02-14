@@ -235,7 +235,7 @@ function verifySharedInvariants(app: any, expectedWorld: any, expectedObjects: a
   expect(players.size).toBe(expectedPlayerCount);
 
   // 4. Actor & Culture Integrity
-  const currentPlayer = bucket.getObject<Player>(bucket.world.currentPlayerKey);
+  const currentPlayer = bucket.getObject<Player>(bucket.world.currentPlayerKey!);
   expect(currentPlayer).toBeDefined();
   expect(currentPlayer.name).toBe("Ragnar Lodbrok - Viking [Test Player]");
 
