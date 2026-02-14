@@ -8,6 +8,7 @@ import {
   restartRequiredSettingKeys,
 } from "@/Actor/Human/EngineSettings";
 import { WeatherType } from "@/Actor/Human/Environment/weather";
+import { hourFrom2400, hourTo2400 } from "@/Common/Helpers/time";
 import UiSelect from "@/App/components/Ui/UiSelect.vue";
 import UiSlider from "@/App/components/Ui/UiSlider.vue";
 import UiSwitch from "@/App/components/Ui/UiSwitch.vue";
@@ -15,6 +16,7 @@ import router from "@/App/router";
 import UiButton from "@/App/components/Ui/UiButton.vue";
 import UiTabs from "@/App/components/Ui/UiTabs.vue";
 import UiDialog from "@/App/components/Ui/UiDialog.vue";
+import { IconKey } from "@/Common/Static/Icon";
 
 // Use modern defineModel for v-model binding (no local mirror ref needed)
 const open = defineModel<boolean>({ required: true });
@@ -50,16 +52,52 @@ function closeDialog() {
 
 // Time-of-day UX: expose an hour slider (0..23), map to/from 0..2400 in store
 const hour24 = computed<number>({
-  get: () => Math.round((settings.engineSettings.timeOfDay2400 ?? 0) / 100),
+  get: () => hourFrom2400(settings.engineSettings.timeOfDay2400 ?? 0),
   set: (h: number) => {
-    settings.engineSettings.timeOfDay2400 = Math.max(0, Math.min(23, Math.round(h))) * 100;
+    settings.engineSettings.timeOfDay2400 = hourTo2400(h);
   },
 });
 
-function formattHour(h: number): string {
-  const hh = Math.max(0, Math.min(23, Math.round(h)));
-  return `${hh.toString().padStart(2, "0")}:00`;
-}
+const tabItems: { label: string; value: string; icon: IconKey }[] = [
+  { label: "Game", value: "game", icon: "world" },
+  { label: "Graphics", value: "graphics", icon: "settings" },
+];
+
+const autoSaveFrequencyItems = [
+  { title: "Every Turn", value: 1 },
+  { title: "Every 5 Turns", value: 5 },
+  { title: "Every 10 Turns", value: 10 },
+  { title: "Disabled", value: 0 },
+];
+
+const monthItems = [
+  { title: "1", value: 1 },
+  { title: "2", value: 2 },
+  { title: "3", value: 3 },
+  { title: "4", value: 4 },
+  { title: "5", value: 5 },
+  { title: "6", value: 6 },
+  { title: "7", value: 7 },
+  { title: "8", value: 8 },
+  { title: "9", value: 9 },
+  { title: "10", value: 10 },
+  { title: "11", value: 11 },
+  { title: "12", value: 12 },
+];
+
+const weatherItems = [
+  { title: "Sunny", value: WeatherType.Sunny },
+  { title: "Half-Cloud", value: WeatherType.HalfCloud },
+  { title: "Foggy", value: WeatherType.Foggy },
+  { title: "Rainy", value: WeatherType.Rainy },
+  { title: "Thunderstorm", value: WeatherType.Thunderstorm },
+];
+
+const powerPreferenceItems = [
+  { title: "Default", value: "default" },
+  { title: "High Performance", value: "high-performance" },
+  { title: "Low Power", value: "low-power" },
+];
 </script>
 
 <template>
@@ -69,13 +107,7 @@ function formattHour(h: number): string {
     </template>
 
     <div class="d-flex flex-column ga-5">
-      <UiTabs
-        v-model="tab"
-        :items="[
-          { label: 'Game', value: 'game', icon: 'world' },
-          { label: 'Graphics', value: 'graphics', icon: 'settings' },
-        ]"
-      />
+      <UiTabs v-model="tab" :items="tabItems" />
 
       <v-window v-model="tab">
         <!-- Game tab -->
@@ -87,12 +119,7 @@ function formattHour(h: number): string {
               <div class="d-flex flex-column ga-4">
                 <UiSelect
                   v-model="settings.engineSettings.autoSaveFrequency"
-                  :items="[
-                    { title: 'Every Turn', value: 1 },
-                    { title: 'Every 5 Turns', value: 5 },
-                    { title: 'Every 10 Turns', value: 10 },
-                    { title: 'Disabled', value: 0 },
-                  ]"
+                  :items="autoSaveFrequencyItems"
                   label="Frequency"
                 />
                 <UiSlider
@@ -124,7 +151,7 @@ function formattHour(h: number): string {
                     :min="0"
                     :max="23"
                     :step="1"
-                    v-model.number="hour24"
+                    v-model="hour24"
                     label="Time of day"
                   />
                   <UiSwitch
@@ -134,20 +161,12 @@ function formattHour(h: number): string {
                 </div>
                 <div class="d-flex flex-wrap ga-4">
                   <UiSelect
-                    :items="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]"
-                    v-model.number="settings.engineSettings.month"
+                    :items="monthItems"
+                    v-model="settings.engineSettings.month"
                     label="Month (1–12)"
                   />
                   <UiSelect
-                    :items="[
-                      { title: 'Sunny', value: WeatherType.Sunny },
-                      { title: 'Half-Cloud', value: WeatherType.HalfCloud },
-                      { title: 'Foggy', value: WeatherType.Foggy },
-                      { title: 'Rainy', value: WeatherType.Rainy },
-                      { title: 'Thunderstorm', value: WeatherType.Thunderstorm },
-                    ]"
-                    item-title="title"
-                    item-value="value"
+                    :items="weatherItems"
                     v-model="settings.engineSettings.weatherType"
                     label="Weather"
                   />
@@ -190,7 +209,7 @@ function formattHour(h: number): string {
                 item-value="id"
                 v-model="dialog.localPresetId.value"
                 label="Quality Preset"
-                @update:model-value="(v: string) => dialog.loadPreset(v)"
+                @update:model-value="(v: string | undefined) => v && dialog.loadPreset(v)"
               />
             </div>
 
@@ -203,7 +222,7 @@ function formattHour(h: number): string {
                   :min="0.5"
                   :max="2"
                   :step="0.25"
-                  v-model.number="dialog.localGraphicsSettings.renderScale"
+                  v-model="dialog.localGraphicsSettings.renderScale"
                   label="Render scale"
                 />
                 <UiSwitch
@@ -234,7 +253,7 @@ function formattHour(h: number): string {
                   :label="labelFor('disableWebGL2Support', 'Disable WebGL2')"
                 />
                 <UiSelect
-                  :items="['default', 'high-performance', 'low-power']"
+                  :items="powerPreferenceItems"
                   v-model="dialog.localGraphicsSettings.powerPreference"
                   :label="labelFor('powerPreference', 'Power preference')"
                 />
@@ -253,7 +272,7 @@ function formattHour(h: number): string {
                   :min="0"
                   :max="1"
                   :step="0.1"
-                  v-model.number="dialog.localGraphicsSettings.bloomThreshold"
+                  v-model="dialog.localGraphicsSettings.bloomThreshold"
                   label="Bloom threshold"
                 />
                 <UiSlider
@@ -261,7 +280,7 @@ function formattHour(h: number): string {
                   :min="0"
                   :max="1"
                   :step="0.1"
-                  v-model.number="dialog.localGraphicsSettings.bloomWeight"
+                  v-model="dialog.localGraphicsSettings.bloomWeight"
                   label="Bloom weight"
                 />
               </div>

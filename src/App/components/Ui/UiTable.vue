@@ -1,8 +1,8 @@
 <script setup lang="ts">
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { computed, ref, useAttrs } from "vue";
-import { TableColumn } from "@/Common/types/uiComponents";
 import UiIcon from "@/App/components/Ui/UiIcon.vue";
+import { TableColumn } from "@/App/components/types";
 
 const props = withDefaults(
   defineProps<{

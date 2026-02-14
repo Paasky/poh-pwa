@@ -120,7 +120,7 @@ const progressBg = computed(() => {
       <v-tooltip :text="type.name" content-class="text-grey bg-grey-darken-4" location="bottom">
         <template #activator="{ props: tip }">
           <div v-bind="tip" class="d-flex align-center">
-            <UiIcon :icon="type.key" size="xs" class="mx-1" />
+            <UiIcon :icon="type.icon" size="xs" class="mx-1" />
             <div v-if="opts?.showName">{{ type.name }}</div>
           </div>
         </template>
@@ -140,7 +140,7 @@ const progressBg = computed(() => {
         <v-tooltip :text="type.name" content-class="text-grey bg-grey-darken-4" location="bottom">
           <template #activator="{ props: tip }">
             <div class="d-flex align-center ga-1 px-2 h-100" v-bind="tip">
-              <UiIcon :icon="type.key" size="xs" />
+              <UiIcon :icon="type.icon" size="xs" />
               <span class="text-caption font-weight-bold" style="text-shadow: 0 0 2px black">
                 {{ amount(y) }} / {{ y.max }}
               </span>
@@ -152,13 +152,13 @@ const progressBg = computed(() => {
       </template>
     </v-progress-linear>
 
-    <div v-if="y.for.length" class="d-flex align-center ga-1">
+    <div v-if="y.for.size" class="d-flex align-center ga-1">
       for
-      <UiObjectChips :types="y.for" />
+      <UiObjectChips :types="Array.from(y.for)" />
     </div>
-    <div v-if="y.vs.length" class="d-flex align-center ga-1">
+    <div v-if="y.vs.size" class="d-flex align-center ga-1">
       vs
-      <UiObjectChips :types="y.vs" />
+      <UiObjectChips :types="Array.from(y.vs)" />
     </div>
   </div>
 </template>

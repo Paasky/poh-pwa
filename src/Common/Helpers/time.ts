@@ -78,3 +78,26 @@ export function formatYear(year: number): string {
 
   return `${season} ${fullYear}`;
 }
+
+/**
+ * Maps hour (0-23) to 2400-format (0-2300).
+ */
+export function hourTo2400(hour: number): number {
+  const hh = Math.max(0, Math.min(23, Math.round(hour)));
+  return hh * 100;
+}
+
+/**
+ * Maps 2400-format (0-2300) to hour (0-23).
+ */
+export function hourFrom2400(val2400: number): number {
+  return Math.round((val2400 ?? 0) / 100);
+}
+
+/**
+ * Formats an hour (0-23) as "HH:00".
+ */
+export function formatHour(h: number): string {
+  const hh = Math.max(0, Math.min(23, Math.round(h)));
+  return `${hh.toString().padStart(2, "0")}:00`;
+}

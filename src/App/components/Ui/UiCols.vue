@@ -9,7 +9,7 @@ const props = withDefaults(
 );
 
 if (props.cols.left + props.cols.right !== 12) {
-  console.warn(`UiCols: left (${props.cols.left}) + right (${props.cols.right}) must equal 12.`);
+  throw Error(`UiCols: left (${props.cols.left}) + right (${props.cols.right}) must equal 12.`);
 }
 </script>
 

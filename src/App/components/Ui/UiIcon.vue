@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import { getIcon, type IconKey } from "@/Common/Static/Icon";
-import type { ObjectIcon } from "@/Common/Objects/World";
+import { getIcon, type IconKey, ObjectIcon } from "@/Common/Static/Icon";
 
 const props = withDefaults(
   defineProps<{

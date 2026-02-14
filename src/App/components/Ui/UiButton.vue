@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import type { IconKey } from "@/Common/Static/Icon";
-import type { ObjectIcon } from "@/Common/Objects/World";
+import type { IconKey, ObjectIcon } from "@/Common/Static/Icon";
 import UiIcon from "@/App/components/Ui/UiIcon.vue";
 import UiTooltip from "@/App/components/Ui/UiTooltip.vue";
 
@@ -37,7 +36,13 @@ const props = withDefaults(
     isDisabled: false,
     size: "small",
     rounded: "lg",
+    icon: undefined,
+    iconColor: undefined,
+    text: "",
+    effectText: "",
+    effectClass: "",
     effectIsUnder: false,
+    tooltip: "",
   },
 );
 

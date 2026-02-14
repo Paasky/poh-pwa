@@ -28,8 +28,6 @@ import { clock, wrapTime2400 } from "@/Actor/Human/Environment/clock";
 import { EngineSettings } from "@/Actor/Human/EngineSettings";
 import { clamp, wrapInclusive } from "@/Common/Helpers/math";
 
-export { WeatherType };
-
 export type EnvironmentServiceConfig = {
   /** URL (relative to site root) of prefiltered .env environment texture placed under /public for offline use. */
   environmentTextureUrl: string;

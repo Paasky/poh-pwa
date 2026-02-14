@@ -22,10 +22,10 @@ const platformIcon = computed(() => d.value?.platform.icon.icon.iconName);
 const equipmentIcon = computed(() => d.value?.equipment.icon.icon.iconName);
 
 const domainColor = computed(() => {
-  const domain = d.value?.domainKey();
-  if (domain === "domainType:water") return "lightBlue";
-  if (domain === "domainType:air") return "lightBlue"; // fallback for now if cyan is missing
-  if (domain === "domainType:space") return "lightPurple";
+  const domain = d.value?.domain;
+  if (domain?.key === "domainType:water") return "lightBlue";
+  if (domain?.key === "domainType:air") return "lightBlue"; // fallback for now if cyan is missing
+  if (domain?.key === "domainType:space") return "lightPurple";
   return "gray";
 });
 

@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { ObjKey, PohObject, TypeKey } from "@/Common/Objects/World";
 import { useDataBucket } from "@/Data/useDataBucket";
-import { TypeObject } from "@/Common/Objects/TypeObject";
 import { useEncyclopediaStore } from "@/App/components/Encyclopedia/encyclopediaStore";
+import { StaticKey, TypeKey } from "@/Common/Static/StaticEnums";
+import { TypeObject } from "@/Common/Static/Objects/TypeObject";
 
 const props = defineProps<{
-  type: string | ObjKey | PohObject;
+  type: StaticKey | TypeObject;
   // optional visual size; defaults match previous behavior
   size?: string;
 }>();
@@ -72,7 +72,7 @@ const border = computed(() => {
 
     // world wonder: bright yellow
     "conceptType:worldWonder": "#aa0",
-  } as Record<ObjKey, string>;
+  } as Record<StaticKey, string>;
 
   // default: dark gray
   return lib[t.value.concept] ?? lib[t.value.key] ?? "#333";

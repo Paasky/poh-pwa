@@ -6,6 +6,8 @@ import UiYields from "@/App/components/Ui/UiYields.vue";
 import UiButton from "@/App/components/Ui/UiButton.vue";
 import UiTypeChip from "@/App/components/Ui/UiTypeChip.vue";
 import UiGameObjChip from "@/App/components/Ui/UiGameObjChip.vue";
+import UiIcon from "@/App/components/Ui/UiIcon.vue";
+import { GameObject } from "@/Common/Models/_GameModel";
 
 const unit = defineModel<Unit>({ required: true });
 const context = useCurrentContext();
@@ -31,7 +33,7 @@ const context = useCurrentContext();
         <div class="d-flex ga-1">
           <UiTypeChip :type="unit.design.platform" />
           <UiTypeChip :type="unit.design.equipment" />
-          <UiGameObjChip :obj="unit.player" />
+          <UiGameObjChip :obj="unit.player as GameObject" />
         </div>
       </div>
     </div>
@@ -53,7 +55,7 @@ const context = useCurrentContext();
         text="Move"
         :type="context.actionMode.value === 'move' ? 'warning' : 'primary'"
         @click="context.actionMode.value = context.actionMode.value === 'move' ? undefined : 'move'"
-        :is-disabled="unit.movement.moves.value <= 0"
+        :is-disabled="unit.movement.moves <= 0"
       />
       <!-- TODO: Add more actions here -->
     </div>

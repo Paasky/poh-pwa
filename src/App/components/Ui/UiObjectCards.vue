@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import UiObjectCard from "@/App/components/Ui/UiObjectCard.vue";
-import type { TypeObject } from "@/Common/Objects/TypeObject";
+import { TypeObject } from "@/Common/Static/Objects/TypeObject";
 
 // noinspection JSUnusedGlobalSymbols
 withDefaults(
@@ -16,8 +16,8 @@ withDefaults(
     cardStyle?: string;
   }>(),
   {
-    selected: () => [],
-    selectable: () => [],
+    selected: () => new Set<TypeObject>(),
+    selectable: () => new Set<TypeObject>(),
     selectPos: "hidden",
     withSpacer: false,
     showOrBetween: true,
