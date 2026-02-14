@@ -1,9 +1,9 @@
-import { TypeClass } from "@/Common/Objects/TypeObject";
-import { Yield, Yields } from "@/Common/Static/Objects/Yields";
-import { CatKey, roundToTenth, TypeKey } from "@/Common/Objects/World";
+import { buildYield, Yield, Yields, YieldTypeKey } from "@/Common/Static/Objects/Yields";
 import { TypeStorage } from "@/Common/Objects/TypeStorage";
 import { Construction } from "@/Common/Models/Construction";
 import { UnitDesign } from "@/Common/Models/UnitDesign";
+import { CatKey, TypeClass } from "@/Common/Static/StaticEnums";
+import { roundToTenth } from "@/Common/Helpers/basicMath";
 
 export abstract class QueueItem {
   item: Construction | UnitDesign;
@@ -34,16 +34,16 @@ export class TrainingQueueItem extends QueueItem {
 
 export abstract class Queue {
   protected _items: QueueItem[] = [];
-  primaryYieldKey: TypeKey;
-  secondaryYieldKey: TypeKey;
+  primaryYieldKey: YieldTypeKey;
+  secondaryYieldKey: YieldTypeKey;
 
-  protected constructor(primaryYieldKey: TypeKey, secondaryYieldKey: TypeKey) {
+  protected constructor(primaryYieldKey: YieldTypeKey, secondaryYieldKey: YieldTypeKey) {
     this.primaryYieldKey = primaryYieldKey;
     this.secondaryYieldKey = secondaryYieldKey;
   }
 
   get items(): QueueItem[] {
-    return this._items.slice();
+    return this._items;
   }
 
   // Returns overflow, if any
@@ -96,23 +96,20 @@ export abstract class Queue {
     if (amount > 0) cityYields.take(this.primaryYieldKey, amount);
     const extraYield =
       amount > 0
-        ? ({
+        ? buildYield({
             type: this.primaryYieldKey,
             amount: amount,
-            method: "lump",
-            for: [],
-            vs: [],
-          } as Yield)
+          })
         : null;
 
     // Add and apply modifiers
     const forObjs =
       queueItem.item.class === "construction"
-        ? [(queueItem.item as Construction).type]
+        ? new Set([(queueItem.item as Construction).type])
         : (queueItem.item as UnitDesign).types;
 
     const turnYields = cityYieldMods
-      .only(["yieldType:production"], forObjs)
+      .only(new Set(["yieldType:production"]), forObjs)
       .add(...([myProduction, extraYield].filter(Boolean) as Yield[]))
       .flatten();
 
@@ -151,13 +148,10 @@ export class ConstructionQueue extends Queue {
     if (typeClass === "nationalWonderType" || typeClass === "worldWonderType") return null;
 
     // Buildings -> remaining productionCost in Gold * 2
-    return {
+    return buildYield({
       type: "yieldType:gold",
       amount: roundToTenth(queueItem.remaining * 2),
-      method: "lump",
-      for: [],
-      vs: [],
-    };
+    });
   }
 }
 
@@ -179,13 +173,10 @@ export class TrainingQueue extends Queue {
 
     // Missionary -> remaining productionCost * 2 in Faith
     if (equipmentCategory === "equipmentCategory:missionary") {
-      return {
+      return buildYield({
         type: "yieldType:faith",
         amount: roundToTenth(queueItem.remaining * 2),
-        method: "lump",
-        for: [],
-        vs: [],
-      };
+      });
     }
 
     // Diplomat/Spy -> remaining productionCost * 2 in Influence
@@ -193,13 +184,10 @@ export class TrainingQueue extends Queue {
       equipmentCategory === "equipmentCategory:diplomat" ||
       equipmentCategory === "equipmentCategory:spy"
     ) {
-      return {
+      return buildYield({
         type: "yieldType:influence",
         amount: roundToTenth(queueItem.remaining * 2),
-        method: "lump",
-        for: [],
-        vs: [],
-      };
+      });
     }
 
     // Worker/Settler -> remaining productionCost * 2 in Culture
@@ -207,22 +195,16 @@ export class TrainingQueue extends Queue {
       equipmentCategory === "equipmentCategory:worker" ||
       equipmentCategory === "equipmentCategory:settler"
     ) {
-      return {
+      return buildYield({
         type: "yieldType:culture",
         amount: roundToTenth(queueItem.remaining * 2),
-        method: "lump",
-        for: [],
-        vs: [],
-      };
+      });
     }
 
     // Other -> remaining productionCost * 2 in Gold
-    return {
+    return buildYield({
       type: "yieldType:gold",
       amount: roundToTenth(queueItem.remaining * 2),
-      method: "lump",
-      for: [],
-      vs: [],
-    };
+    });
   }
 }

@@ -16,6 +16,24 @@ export type Yield = {
   max?: number;
 };
 
+export function buildYield(options: {
+  type: YieldTypeKey;
+  amount: number;
+  method?: YieldMethod;
+  for?: Set<StaticKey> | StaticKey[];
+  vs?: Set<StaticKey> | StaticKey[];
+  max?: number;
+}) {
+  return {
+    type: options.type,
+    amount: options.amount,
+    method: options.method ?? "lump",
+    for: new Set(options.for ?? []),
+    vs: new Set(options.vs ?? []),
+    max: options.max,
+  };
+}
+
 // noinspection RedundantIfStatementJS
 export class Yields {
   // Organize yields by method and yield type

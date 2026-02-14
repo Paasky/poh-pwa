@@ -10,8 +10,7 @@ import { hasDataBucket } from "@/Data/useDataBucket";
 import { useCurrentContext } from "@/Common/composables/useCurrentContext";
 
 // Helpers
-import { formatSaveDate } from "@/Common/Helpers/time";
-import { formatYear } from "@/Common/Objects/World";
+import { formatSaveDate, formatYear } from "@/Common/Helpers/time";
 
 // Components
 import UiButton from "@/App/components/Ui/UiButton.vue";

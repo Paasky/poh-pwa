@@ -212,7 +212,7 @@ export class GameObject {
         continue;
       }
       if (attr.isTypeObjArray) {
-        out[attr.attrName] = value.map((v: TypeObject) => v.key);
+        out[attr.attrName] = Array.from(value as Set<TypeObject>).map((v) => v.key);
         continue;
       }
 

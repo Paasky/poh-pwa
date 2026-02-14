@@ -2,7 +2,7 @@
 import type { IconKey } from "@/Common/Static/Icon";
 import UiButton from "@/App/components/Ui/UiButton.vue";
 
-const modelValue = defineModel<string | number>();
+const modelValue = defineModel<string | number | null>();
 
 defineProps<{
   items: {

@@ -98,7 +98,7 @@ export const useAppStore = defineStore("app", {
         ),
       );
 
-      // Signal to Vue that the app is ready and sync URL <-> UI
+      await this.currentGame.ready;
       this.loaded = true;
       this.syncUiStateFromNav();
     },

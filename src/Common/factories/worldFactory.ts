@@ -1,4 +1,6 @@
-import { ObjKey, WorldState, yearsPerTurnConfig } from "@/Common/Objects/World";
+import { WorldState } from "@/Common/Objects/World";
+import { GameKey } from "@/Common/Models/_GameTypes";
+import { yearsPerTurnConfig } from "@/Common/Helpers/time";
 import { useDataBucket } from "@/Data/useDataBucket";
 import { TerraGenerator } from "@/Common/factories/TerraGenerator/terra-generator";
 import { shuffle, takeRandom } from "@/Common/Helpers/arrayTools";
@@ -75,7 +77,7 @@ export const createWorld = (
       size,
       turn: 0,
       year: yearsPerTurnConfig[0].start,
-      currentPlayerKey: "" as ObjKey,
+      currentPlayerKey: "" as GameKey,
     },
   } as { objects: IRawGameObject[]; world: WorldState };
 

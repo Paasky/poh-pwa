@@ -2,7 +2,8 @@ import { computed, ref } from "vue";
 import { defineStore } from "pinia";
 import { useDataBucket } from "@/Data/useDataBucket";
 import type { Player } from "@/Common/Models/Player";
-import { TableColumn } from "@/Common/types/uiComponents";
+import { useCurrentContext } from "@/Common/composables/useCurrentContext";
+import { TableColumn } from "@/App/components/types";
 
 export const useDiplomacyTabStore = defineStore("diplomacyTabStore", () => {
   const bucket = useDataBucket();

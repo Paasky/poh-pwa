@@ -18,6 +18,7 @@ import { rng } from "@/Common/Helpers/Rng";
 export class CurrentGame {
   bucket!: DataBucket;
   readonly id: string;
+  readonly ready: Promise<void>;
   currentPlayer?: Player;
   readonly aiBrains: Map<GameKey, Brain> = new Map();
 
@@ -81,7 +82,7 @@ export class CurrentGame {
       ...(props?.extraTasks ?? []),
     ];
 
-    asyncProcess(tasks, (task) => task.fn(), props?.progressCallback);
+    this.ready = asyncProcess(tasks, (task) => task.fn(), props?.progressCallback);
   }
 
   static newGameTask = (mapGenConfig: MapGenConfig): Task => {

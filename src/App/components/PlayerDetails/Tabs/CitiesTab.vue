@@ -7,7 +7,10 @@ import { usePlayerDetailsStore } from "@/App/components/PlayerDetails/playerDeta
 import { includes } from "@/Common/Helpers/textTools";
 import UiCols from "@/App/components/Ui/UiCols.vue";
 import { useCitiesTabStore } from "@/App/components/PlayerDetails/Tabs/citiesTabStore";
-import { TableColumn } from "@/Common/types/uiComponents";
+import { TableColumn } from "@/App/components/types";
+import UiIcon from "@/App/components/Ui/UiIcon.vue";
+import UiSelect from "@/App/components/Ui/UiSelect.vue";
+import { Yields } from "@/Common/Static/Objects/Yields";
 
 const detailsStore = usePlayerDetailsStore();
 const store = useCitiesTabStore();
@@ -120,20 +123,20 @@ const cityColumns = store.columns as unknown as TableColumn<City>[];
           <div class="d-flex align-center ga-4">
             <!-- Citizens count -->
             <v-tooltip
-              :text="`${(item as City).citizens.length} Citizens (pop. ${(item as City).pop.value})`"
+              :text="`${(item as City).citizens.size} Citizens (pop. ${(item as City).pop})`"
               location="bottom"
               content-class="text-grey bg-grey-darken-4"
             >
               <template #activator="{ props }">
                 <span class="d-inline-flex align-center ga-1" v-bind="props">
                   <UiIcon icon="users" color="white" size="sm" />
-                  {{ (item as City).citizens.length }}
+                  {{ (item as City).citizens.size }}
                 </span>
               </template>
             </v-tooltip>
 
             <!-- Holy city for religions -->
-            <template v-for="religion in (item as City).holyCityFors" :key="religion.key">
+            <template v-for="religion in (item as City).holyCityFors.values()" :key="religion.key">
               <v-tooltip
                 :text="religion.name"
                 location="bottom"
@@ -220,7 +223,7 @@ const cityColumns = store.columns as unknown as TableColumn<City>[];
             variant="elevated"
             color="secondary"
           >
-            <UiYields :yields="current.yields" :opts="{ posLumpIsNeutral: true }" />
+            <UiYields :yields="current.yields as Yields" :opts="{ posLumpIsNeutral: true }" />
           </v-card>
         </div>
 
@@ -238,12 +241,12 @@ const cityColumns = store.columns as unknown as TableColumn<City>[];
               :items="current.constructableTypes"
               item-title="name"
               return-object
-              :model-value="(current.constructionQueue.queue[0]?.item as any) ?? null"
+              :model-value="(current.constructionQueue.items[0]?.item as any) ?? null"
               label="Construction"
             />
           </v-col>
           <v-col aria-colspan="1">
-            <div v-for="qItem of current.constructionQueue.queue.slice(1)" :key="qItem.item.key">
+            <div v-for="qItem of current.constructionQueue.items.slice(1)" :key="qItem.item.key">
               {{ qItem.item.name }}
             </div>
           </v-col>
@@ -253,12 +256,12 @@ const cityColumns = store.columns as unknown as TableColumn<City>[];
               :items="current.trainableDesigns"
               item-title="name"
               return-object
-              :model-value="(current.trainingQueue.queue[0]?.item as any) ?? null"
+              :model-value="(current.trainingQueue.items[0]?.item as any) ?? null"
               label="Training"
             />
           </v-col>
           <v-col aria-colspan="1">
-            <div v-for="qItem of current.trainingQueue.queue.slice(1)" :key="qItem.item.key">
+            <div v-for="qItem of current.trainingQueue.items.slice(1)" :key="qItem.item.key">
               {{ qItem.item.name }}
             </div>
           </v-col>
@@ -278,15 +281,15 @@ const cityColumns = store.columns as unknown as TableColumn<City>[];
               </tr>
             </thead>
             <tbody>
-              <tr v-for="citizen in current.citizens" :key="citizen.key">
+              <tr v-for="citizen in current.citizens.values()" :key="citizen.key">
                 <td class="border-e border-b-0">{{ citizen.culture.type.name }}</td>
-                <td class="border-e border-b-0">{{ citizen.religion.value?.name ?? "-" }}</td>
-                <td class="border-e border-b-0">{{ citizen.policy.value?.name ?? "-" }}</td>
+                <td class="border-e border-b-0">{{ citizen.religion?.name ?? "-" }}</td>
+                <td class="border-e border-b-0">{{ citizen.policy?.name ?? "-" }}</td>
                 <td class="border-e border-b-0">
-                  {{ citizen.work.value?.name ?? (citizen as any).tile.construction?.name ?? "-" }}
+                  {{ citizen.tile.construction?.name ?? "-" }}
                 </td>
                 <td class="border-e border-b-0">
-                  <UiYields :yields="citizen.yields" :opts="{ posLumpIsNeutral: true }" />
+                  <UiYields :yields="citizen.yields as Yields" :opts="{ posLumpIsNeutral: true }" />
                 </td>
               </tr>
             </tbody>
